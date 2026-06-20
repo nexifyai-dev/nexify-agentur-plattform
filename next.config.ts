@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
+  redirects: async () => [
+    { source: "/arbeitsweise", destination: "/prozess", permanent: true },
+    { source: "/ueber-pascal", destination: "/ueber-mich", permanent: true },
+    { source: "/projekte", destination: "/referenzen", permanent: true },
+    { source: "/leistungen/unternehmenswebsites", destination: "/leistungen/websites", permanent: true },
+    { source: "/leistungen/ai-gestuetzte-agenten", destination: "/leistungen/ai-agenten", permanent: true },
+  ],
 };
 
 export default nextConfig;
