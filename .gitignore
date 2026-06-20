@@ -10,3 +10,5 @@ out
 
 tsconfig.tsbuildinfo
 .nexify-backup/
+playwright-report/
+test-results/
