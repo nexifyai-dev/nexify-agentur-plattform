@@ -40,10 +40,9 @@ Diese Vorgabe ist verbindlich fuer die Website in diesem Repository. Sie ueberse
 ## Pflichtpruefung vor Push
 
 ```bash
-npm run test
-npm run typecheck
-npm run lint
-npm run build
+npm run test:all
 ```
 
-Nach Vercel-Preview zusaetzlich Browser-Screenshots fuer Desktop, Tablet und Mobile pruefen.
+`npm run test:all` umfasst Contract-Tests, TypeScript, ESLint, Production-Build und Playwright-Browser-Design-Audit auf den Pflichtbreiten 320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1480 und 1920 px. Screenshots werden unter `test-results/design-audit/` erzeugt.
+
+Wichtig: Dieses Gate minimiert Designfehler technisch stark, kann aber keine mathematische 100-%-Garantie fuer unbekannte kuenftige Inhalte, Browser-Bugs oder manuelle Spaetveraenderungen geben.
