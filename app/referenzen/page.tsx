@@ -1,0 +1,20 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight, Building2, CalendarCheck2, FileSearch, ShoppingCart, Workflow } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+export const metadata: Metadata = { title: "Projektarten", description: "Ausgewählte Projektarten und technische Schwerpunkte aus Websites, Portalen, Buchung, Commerce und Automatisierung." };
+
+const examples = [
+  { icon: Building2, title: "B2B-Unternehmensportale", text: "Mehrsprachige Informations-, Anfrage- und Dokumentenstrecken mit klarer Kundenführung." },
+  { icon: CalendarCheck2, title: "Buchungs- und Serviceflows", text: "Verfügbarkeit, Terminlogik, Formulare, Benachrichtigungen und nachvollziehbare Fehlerpfade." },
+  { icon: ShoppingCart, title: "Commerce und große Kataloge", text: "Produktdaten, Filter, Suche, Import, Checkout und Integrationen für wachsende Sortimente." },
+  { icon: Workflow, title: "Interne Automatisierung", text: "Wiederkehrende E-Mail-, Dokument-, Daten- und Freigabeprozesse mit Monitoring." },
+  { icon: FileSearch, title: "Recherche- und Wissenssysteme", text: "Strukturierte Quellen, durchsuchbares Wissen, Rollen, Evidence und kontrollierte AI-Unterstützung." },
+];
+
+export default function ReferencesPage() {
+  return <main><section className="subpage-hero"><div className="site-container"><Badge>Projektarten statt erfundener Erfolgsmeldungen</Badge><h1>Erfahrung zeigt sich im Umgang mit realer Komplexität.</h1><p>Vertrauliche Kundenprojekte werden nicht ungefragt als Marketingmaterial genutzt. Diese Übersicht zeigt deshalb typische Aufgabenfelder und technische Schwerpunkte.</p></div></section><section className="site-container grid gap-5 pb-8 md:grid-cols-2 lg:grid-cols-3">{examples.map(({ icon: Icon, title, text }) => <Card className="project-card" key={title}><Icon /><h2>{title}</h2><p>{text}</p></Card>)}</section><section className="section site-container"><div className="cta-panel"><div><p className="kicker">Passender als jede Hochglanz-Referenz</p><h2>Starten Sie mit Ihrem konkreten Problem.</h2><p>Nach einer kurzen Einordnung erhalten Sie eine sachliche Empfehlung, welche Lösung sinnvoll ist und wie viele Arbeitstage realistisch sind.</p></div><Button asChild size="lg"><Link href="/kontakt">Projekt einordnen lassen <ArrowRight className="size-4" /></Link></Button></div></section></main>;
+}
