@@ -56,6 +56,10 @@ npm run dev
 
 Danach: `http://localhost:3000`
 
+## Design-Vorgabe
+
+Siehe `docs/DESIGN_VORGABE.md`. Diese Datei ist die technische Vorgabe fuer Layout, Responsive-Verhalten, Farbgebrauch und Copy-Positionierung.
+
 ## Produktionsprüfung
 
 ```bash
