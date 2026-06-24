@@ -1,0 +1,23 @@
+FROM python:3.12-slim-bookworm AS runner
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN adduser --system --uid 1001 hermes
+
+COPY apps/hermes-webui/ .
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN mkdir -p /data/hermes && chown -R hermes:hermes /app /data/hermes
+
+USER hermes
+ENV HERMES_WEBUI_STATE_DIR=/data/hermes
+ENV HERMES_WEBUI_PORT=8787
+ENV HERMES_WEBUI_HOST=0.0.0.0
+EXPOSE 8787
+CMD ["python3", "bootstrap.py"]
