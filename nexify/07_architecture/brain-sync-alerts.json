@@ -1,0 +1,35 @@
+[
+  {
+    "timestamp": "2026-06-23T08:04:29.761037+00:00",
+    "severity": "warning",
+    "check": "sync_recency",
+    "message": "Last sync 57 min ago (threshold: 30 min)",
+    "details": {
+      "age_minutes": 56.9,
+      "report": "/workspace/nexifyai-platform/services/automations/cron/output/brain-sync-20260623-0707.json"
+    }
+  },
+  {
+    "timestamp": "2026-06-23T08:04:29.761053+00:00",
+    "severity": "warning",
+    "check": "sync_trend",
+    "message": "Sync trend degraded: 8/10 successful (80%)",
+    "details": {
+      "success_count": 8,
+      "total_count": 10,
+      "success_rate": 0.8,
+      "reports_analyzed": 10
+    }
+  },
+  {
+    "timestamp": "2026-06-23T08:04:29.761056+00:00",
+    "severity": "warning",
+    "check": "brain_qdrant_consistency",
+    "message": "Memory count drift: current=2004, last_report=1839 (drift=165)",
+    "details": {
+      "current": 2004,
+      "last_report": 1839,
+      "drift": 165
+    }
+  }
+]

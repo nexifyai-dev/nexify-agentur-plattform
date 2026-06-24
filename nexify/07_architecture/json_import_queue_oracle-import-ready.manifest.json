@@ -1,0 +1,9 @@
+{
+  "total": 403,
+  "import_ready": 403,
+  "blocked": 0,
+  "date": "2026-06-11T16:45:00+0200",
+  "source_files": 23,
+  "conflicts": 88,
+  "next_safe_action": "Review rules, then execute brain_import + agentmemory_import"
+}

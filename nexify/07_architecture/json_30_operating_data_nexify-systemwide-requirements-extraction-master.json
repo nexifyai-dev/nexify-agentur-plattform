@@ -1,0 +1,35 @@
+{
+  "master_id": "NEXIFY-REQUIREMENTS-EXTRACTION-V1",
+  "status": "AKTIV",
+  "scope": "NEXIFY_INTERNAL",
+  "updated": "2026-06-11",
+  "sources": [
+    "/workspace/nexify/",
+    "/workspace/Auftragsfach",
+    "Brain",
+    "agentmemory",
+    "Oracle",
+    "Kanban",
+    "Evidence",
+    "Chats",
+    "Handoffs",
+    "Logs",
+    "GitHub (nexifyai-platform only)"
+  ],
+  "requirement_categories": [
+    "Agenturziel", "Kundenwert", "Wirtschaftlichkeit", "Vertrieb", "Support",
+    "Projektbearbeitung", "Datenschutz", "Sicherheit", "Betrieb", "Monitoring",
+    "Fehlervermeidung", "Kostenoptimierung", "Tool-Nutzung", "Skill-Nutzung",
+    "MCP-Rechte", "Prompt-Governance", "Kundenprojektgrenzen"
+  ],
+  "requirement_fields": [
+    "requirement_id", "source_path", "source_type", "source_timestamp",
+    "original_statement", "interpreted_human_intent", "system_area",
+    "project_scope", "customer_scope", "business_value", "technical_value",
+    "risk_if_ignored", "existing_solution", "missing_solution",
+    "overcomplexity_detected", "simpler_target_solution", "dependencies",
+    "affected_agents", "affected_tools", "affected_mcp", "affected_skills",
+    "security_relevance", "privacy_relevance", "customer_boundary_relevance",
+    "approval_required", "priority", "status", "next_safe_action", "evidence_ref"
+  ]
+}

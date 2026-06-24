@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-06-20T14:42:00Z",
+  "phase": "agentic-ai-langlauf-phase4-final",
+  "blockers_resolved": {
+    "P0_2_brain_write_key": {
+      "status": "RESOLVED",
+      "source": "/root/.nexify/brain-write.env (via INDEX.md reference chain)",
+      "token_valid": true,
+      "brain_after_reindex": 1238,
+      "oracle_rules_imported": 403,
+      "import_errors": 0,
+      "collections": {"nexifyai_brain": 1191, "nexifyai_memories": 47}
+    },
+    "P0_3_gateway_systemd": {
+      "status": "DOCUMENTED",
+      "current_state": "Gateway running on port 8642 (inode), no restart protection",
+      "fix_requires": "Host-level systemd unit deployment",
+      "service_template": "in BLOCKERS.md"
+    }
+  },
+  "phase_summaries": {
+    "phase1_infra": "6 endpoints verified UP (Brain, Qdrant, agentmemory)",
+    "phase2_dispatch": "Dead Dispatch Chain fixed (int→task list bug), 10 deep-research tasks",
+    "phase3_launch": "start-runtime.sh built, Company Config, Integration Plan, Oracle in agentmemory",
+    "phase4_blockers": "Brain Token recovered, 403 rules imported, Gateway documented"
+  },
+  "total_fixes": 10,
+  "new_artifacts": [
+    "scripts/start-runtime.sh",
+    "scripts/bulk-import-oracle.py",
+    "ops/company-config.json",
+    "ops/BLOCKERS.md",
+    "ops/VPS-ADMIN-QUICKREF.md",
+    "ops/inject-brain-token.sh"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "task_id": "task-1781440666451-a7b5ff1f",
+  "correlation_id": "corr-phase5-final2-20260614T123746Z",
+  "causation_id": null,
+  "status": "rc=1",
+  "started_at_berlin": "finished:2026-06-14T12:41:11.780554+00:00",
+  "finished_at_berlin": "2026-06-14T12:41:11.781908+00:00",
+  "worker_id": "nexify-claude-worker-v1",
+  "model": "nexifyai-combo-llm",
+  "router": "http://127.0.0.1:20128/v1",
+  "exit_code": 1,
+  "summary": "Failed to authenticate. API Error: 401 Invalid API key",
+  "changed_files": [],
+  "tests": [],
+  "evidence_refs": [
+    "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440666451-a7b5ff1f.stdout.log",
+    "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440666451-a7b5ff1f.stderr.log"
+  ],
+  "brain_refs": [],
+  "supermemory_refs": [],
+  "open_blockers": [
+    "rc=1"
+  ],
+  "next_safe_action": "RETRY_SCHEDULED",
+  "retryable": true,
+  "error_class": "worker_subprocess_nonzero",
+  "redaction_status": "applied",
+  "stdout_path": "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440666451-a7b5ff1f.stdout.log",
+  "stderr_path": "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440666451-a7b5ff1f.stderr.log",
+  "duration_seconds": 205.29
+}

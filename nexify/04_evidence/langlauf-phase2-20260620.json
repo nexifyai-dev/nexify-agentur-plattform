@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-06-20T14:22:00Z",
+  "phase": "agentic-ai-langlauf-phase2",
+  "runtime_status": {
+    "modules": "25/25",
+    "workflows_tracked": 58,
+    "workflow_statuses": {"planned": 57, "synced": 1},
+    "dispatched_tasks": 10,
+    "evidence_files": 27,
+    "evidence_disk": "5.9M"
+  },
+  "fixes_applied": [
+    "planner_daemon.py: published int(len(tasks)) → actual task list (root cause of dead chain)",
+    "execution_dispatcher.py: TRIGGER_TASK_MAP extended (all/brain/incident → deep-research)",
+    "execution_dispatcher.py: default payload fallback for planner tasks without params",
+    "context_loader.py: threading.Lock for cache race condition",
+    "trigger_executor.py: ThreadPoolExecutor(10) massiv statt unbegrenzter Threads",
+    "trigger_executor.py: import urllib.request aus loop entfernt",
+    "workflow_state_engine.py: trigger.completed subscriber + ENG global + stats()",
+    "workflow_health.py: /proc fd leak gefixt + SyntaxError behoben",
+    "start_workflow_runtime.py: log X/X → X modules active",
+    "workflow_health_cron.py: robustes stdout parsing"
+  ],
+  "infra_status": {
+    "brain_api_9090": "UP (833 memories, 25+ categories)",
+    "qdrant_6333": "UP (4 collections)",
+    "agentmemory_db": "UP (24 entries, local SQLite)",
+    "workflow_runtime": "getestet, lauffaehig, dispatch-chain aktiv"
+  },
+  "open_items": [
+    "Supabase Key fehlt (P0-Blocker, aus system-state-snapshot)",
+    "Qdrant 403 oracle rules import pending (Brain-Token fehlt)",
+    "Runtime-Autostart fehlt (start_daemon.py + cron/systemd erforderlich)",
+    "Hermes skill vps-admin hat nur 2 skills (docker-expert, vulnerability-scanner) — mehr Bedarf?"
+  ]
+}

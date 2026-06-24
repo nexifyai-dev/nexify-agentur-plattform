@@ -1,0 +1,224 @@
+{
+  "evidence_id": "ev-trun-a38504b77a8e",
+  "timestamp": "2026-06-20T14:43:02.696817+00:00",
+  "date": "2026-06-20",
+  "type": "workflow_task_execution",
+  "status": "completed",
+  "run_id": "trun-a38504b77a8e",
+  "task_id": "deep-research",
+  "source": "trigger-exec",
+  "details": {
+    "task_id": "deep-research",
+    "run_id": "trun-a38504b77a8e",
+    "result": {
+      "success": true,
+      "query": "NeXify: brain",
+      "results": {
+        "collection": "nexifyai_brain",
+        "count": 10,
+        "query": "NeXify: brain",
+        "results": [
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Brain-Architekturprinzip-Definition: Brain ist im NeXify-Kontext der gesamte Wissens-, Speicher- und Entscheidungsaufbau des Systems. Brain ist nicht nur Technologie, sondern Architekturprinzip: Brain = agentmemory + Workspace-Dateien + Pending + Evidence + Kanban.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "def6b16a42ef48af",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-architekturprinzip-definition",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_BEGRIFF_DEFINITION_V1.md"
+            },
+            "score": 9,
+            "tokens": "oracle brain architekturprinzip definition brain ist im nexify kontext der gesamte wissens speicher und entscheidungsaufbau des systems brain ist nicht nur technologie sondern architekturprinzip brain agentmemory workspace dateien pending evidence kanban brain oracle_entry_id brain architekturprinzip definition binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke brain_begriff_definition_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Brain-First-Policy: BRAIN_FIRST = TRUE: Before any non-trivial architecture, code, configuration, runtime, deployment or documentation change with project impact: (1) Brain query against nexifyai_brain or nexifyai_memories, (2) verify relevant knowledge exists, (3) after the change: Brain store if new durable knowledge was created.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "392267f7908444e6",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-first-policy-mandatory",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_FIRST_POLICY_V1.md"
+            },
+            "score": 9,
+            "tokens": "oracle brain first policy brain_first true before any non trivial architecture code configuration runtime deployment or documentation change with project impact brain query against nexifyai_brain or nexifyai_memories verify relevant knowledge exists after the change brain store if new durable knowledge was created brain oracle_entry_id brain first policy mandatory binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke brain_first_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Brain definition \u2014 agentmemory, Qdrant, workspace files, pending import: Brain means the entire NeXify AI knowledge and memory architecture. It comprises: agentmemory (central memory layer, local Docker via iii-engine), Qdrant (legacy vector DB, being replaced), workspace files at /workspace/nexify/ (rulebooks, architecture, evidence), and pending imports at /workspace/nexify/12_agentmemory/ for later sync.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "47e9125b07754af2",
+            "metadata": {
+              "binding_level": "informational",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-gebot-definition-components",
+              "phase": "oracle_canonicalization",
+              "priority": 0,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_GEBOT_V1.md"
+            },
+            "score": 9,
+            "tokens": "oracle brain definition agentmemory qdrant workspace files pending import brain means the entire nexify ai knowledge and memory architecture it comprises agentmemory central memory layer local docker via iii engine qdrant legacy vector db being replaced workspace files at workspace nexify rulebooks architecture evidence and pending imports at workspace nexify 12_agentmemory for later sync brain oracle_entry_id brain gebot definition components binding_level informational priority scope systemwide source workspace nexify 03_regelwerke brain_gebot_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Query Brain before non-trivial work: Before any non-trivial coding, refactoring, debugging, deployment or review work, the agent must query the NeXify Brain (nexifyai_brain collection) for relevant context, prior decisions and stored knowledge. This applies to all agents (Claude Code, Goose CLI, Goose ACC). Brain-unavailable scenarios allow only safe read-only analysis or stop-and-report.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "cf4d4a3c2a40471a",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-first-001",
+              "phase": "oracle_canonicalization",
+              "priority": 0,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/brain-first-policy-v1.json"
+            },
+            "score": 9,
+            "tokens": "oracle query brain before non trivial work before any non trivial coding refactoring debugging deployment or review work the agent must query the nexify brain nexifyai_brain collection for relevant context prior decisions and stored knowledge this applies to all agents claude code goose cli goose acc brain unavailable scenarios allow only safe read only analysis or stop and report brain oracle_entry_id brain first 001 binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke brain first policy v1 json phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Store durable knowledge after changes: After completing meaningful changes, decisions or findings, the agent must store durable knowledge in the NeXify Brain (nexifyai_brain collection) using embedding-optimized structure. This includes design decisions, runtime findings, learned rules, configuration changes and problem resolutions. Do not store raw secrets.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "e2e35d4c46f34175",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-first-002",
+              "phase": "oracle_canonicalization",
+              "priority": 0,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/brain-first-policy-v1.json"
+            },
+            "score": 9,
+            "tokens": "oracle store durable knowledge after changes after completing meaningful changes decisions or findings the agent must store durable knowledge in the nexify brain nexifyai_brain collection using embedding optimized structure this includes design decisions runtime findings learned rules configuration changes and problem resolutions do not store raw secrets brain oracle_entry_id brain first 002 binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke brain first policy v1 json phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] No Systemmaster work without tested Brain: NO_SYSTEMMASTER_WORK_WITH_UNTESTED_BRAIN = TRUE. No systemmaster-level work (architecture, code, config, runtime, deployment) shall be performed without first testing that Brain is reachable and relevant knowledge has been queried.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "c2b2a48d5abc4566",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "no-untested-brain-work",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_FIRST_POLICY_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle no systemmaster work without tested brain no_systemmaster_work_with_untested_brain true no systemmaster level work architecture code config runtime deployment shall be performed without first testing that brain is reachable and relevant knowledge has been queried brain oracle_entry_id no untested brain work binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke brain_first_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] No done without Brain status update: NO_DONE_WITHOUT_BRAIN_STATUS = TRUE. No task shall be declared complete without updating Brain status with the outcome, findings and any new durable knowledge that resulted from the work.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "5587b27655684b7e",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "no-done-without-brain-status",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_FIRST_POLICY_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle no done without brain status update no_done_without_brain_status true no task shall be declared complete without updating brain status with the outcome findings and any new durable knowledge that resulted from the work brain oracle_entry_id no done without brain status binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke brain_first_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Mandatory Brain context check before every action: Before every action the agent MUST check Brain context availability in strict order: (1) if agentmemory available load memories, (2) if agentmemory unavailable check pending files, (3) if workspace files exist load context, (4) if no context available pause task do not guess.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "28d5f8c9cf184f36",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-context-check-before-action",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "agent",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_GEBOT_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle mandatory brain context check before every action before every action the agent must check brain context availability in strict order if agentmemory available load memories if agentmemory unavailable check pending files if workspace files exist load context if no context available pause task do not guess brain oracle_entry_id brain context check before action binding_level mandatory priority scope agent source workspace nexify 03_regelwerke brain_gebot_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Do not work without Brain, Memory, Evidence or Kanban decision: Do not work without a Brain, Memory, Evidence or Kanban decision. Do not act in isolation without a system picture.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "7c2ef50b8d5049c3",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-no-work-without-decision",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "agent",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_GEBOT_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle do not work without brain memory evidence or kanban decision do not work without brain memory evidence or kanban decision do not act in isolation without system picture brain oracle_entry_id brain no work without decision binding_level mandatory priority scope agent source workspace nexify 03_regelwerke brain_gebot_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Do not act in isolation without system picture: Do not act in isolation without a system picture. The agent must not operate without understanding the full system context from Brain, Memory, Evidence or Kanban.",
+            "created_at": "2026-06-11T12:28:11Z",
+            "id": "b5d2099ed9ba47db",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "brain-no-isolated-action",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "agent",
+              "source": "/workspace/nexify/03_regelwerke/BRAIN_GEBOT_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle do not act in isolation without system picture do not act in isolation without system picture the agent must not operate without understanding the full system context from brain memory evidence or kanban brain oracle_entry_id brain no isolated action binding_level mandatory priority scope agent source workspace nexify 03_regelwerke brain_gebot_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:11Z"
+          }
+        ]
+      },
+      "source": "brain_api",
+      "retries": 0
+    },
+    "error": null,
+    "triggered_at": "2026-06-20T14:43:02.696688+00:00"
+  },
+  "policy": {
+    "gate_used": true,
+    "gate_type": "PolicyGate V1",
+    "evidence_standard": "EVIDENCE_TEMPLATE_V1"
+  }
+}

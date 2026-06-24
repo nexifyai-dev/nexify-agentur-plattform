@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "title": "NeXify Skill Version Registry",
+    "version": "1.0.0",
+    "created": "2026-06-22",
+    "schema_ref": "/workspace/nexify/05_skills/VERSIONING_SCHEMA.md",
+    "status": "ACTIVE"
+  },
+  "skills": [
+    {
+      "skill_id": "SKILL-001",
+      "name": "9router-web-search",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "REGISTERED"
+    },
+    {
+      "skill_id": "SKILL-002",
+      "name": "NeXify Automation Rules",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-10",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-003",
+      "name": "NeXify Semantic Compression",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-004",
+      "name": "Andrej Karpathy Skills",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "REGISTERED"
+    },
+    {
+      "skill_id": "SKILL-005",
+      "name": "Brandkit",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-006",
+      "name": "Design Taste Frontend",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-007",
+      "name": "GPT Taste",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-008",
+      "name": "High End Visual Design",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-009",
+      "name": "Image to Code",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-010",
+      "name": "Industrial Brutalist UI",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-011",
+      "name": "Minimalist UI",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-012",
+      "name": "NeXify i18n German",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-013",
+      "name": "Redesign Existing Projects",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-014",
+      "name": "Stitch Design Taste",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-015",
+      "name": "find-skills",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-016",
+      "name": "goose-doc-guide",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-017",
+      "name": "full-output-enforcement",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-018",
+      "name": "emil-design-eng",
+      "version": "1.0.0",
+      "version_type": "INITIAL",
+      "last_modified": "2026-06-22",
+      "status": "ACTIVE"
+    },
+    {
+      "skill_id": "SKILL-019",
+      "name": "nexify-knowledge-data-engineer",
+      "version": "1.0.0-nexify",
+      "version_type": "INITIAL_NEXIFY",
+      "last_modified": "2026-06-14",
+      "status": "ACTIVE",
+      "original_version": "data-engineer@7d98bfc1..."
+    }
+  ]
+}

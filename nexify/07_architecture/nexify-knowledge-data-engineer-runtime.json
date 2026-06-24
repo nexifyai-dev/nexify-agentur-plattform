@@ -1,0 +1,64 @@
+{
+  "profile_id": "nexify-knowledge-data-engineer",
+  "version": "1.0.0-runtime",
+  "source_skill_sha256": "7d98bfc15f917e0b2522abe730914ce6c72a951233b3e18dd6babf555655e715",
+  "optimized_skill_sha256": "8657164ab46ab14edd0c4b240475a8ab30d80f21ba883c765cd1e2611bd82337",
+  "system_prompt_sha256": "6ec47ac17b0bfe96385f2dcf6785925b4d824b8a6eae55468c71905611ecc3dd",
+  "model_provider": "9router->nscale",
+  "model_id_router": "nscale/chat/openai/gpt-oss-120b",
+  "model_id_human": "openai/gpt-oss-120b",
+  "model_role": "supermemory_llm",
+  "model_discovery_verified": "9router GET /v1/models 2026-06-14 enthält 'nscale/chat/openai/gpt-oss-120b' als 14. Eintrag, owned_by=nscale/chat",
+  "embedding_provider": "9router->nscale",
+  "embedding_model_id": "nscale/Qwen/Qwen3-Embedding-8B",
+  "embedding_model_id_human": "Qwen3-Embedding-8B",
+  "embedding_model_role": "supermemory_embedding",
+  "embedding_model_note": "Kanonischer Pfad über 9Router unter 'nscale/Qwen/Qwen3-Embedding-8B'. Wird von NeXify-System als 'Embedding LLM' referenziert.",
+  "router_alias_target": "nexifyai-supermemory-knowledge-engineer",
+  "router_alias_status": "not_yet_created",
+  "router_alias_creation_gating": "offiziell bestaetigte Alias-Funktion + DB-Backup + Rollback + Modelltest + SSE/JSON ok",
+  "temperature": 0.1,
+  "top_p": 0.95,
+  "max_tokens": 4096,
+  "response_schema": {
+    "type": "object",
+    "$ref": "/workspace/nexify/05_skills/nexify-knowledge-data-engineer/schemas/knowledge-record.schema.json"
+  },
+  "enabled_scopes": [
+    "nexify_internal",
+    "shared_infrastructure",
+    "public_reference"
+  ],
+  "forbidden_scopes": [
+    "customer_project",
+    "personal_pascal"
+  ],
+  "forbidden_scopes_reason": "Customer- und Personal-Daten werden in dedizierten, getrennten Profilen verarbeitet, nicht im Allgemeinprofil.",
+  "created_at_berlin": "2026-06-14T15:22:00+02:00",
+  "last_verified_at_berlin": "2026-06-14T15:23:00+02:00",
+  "evidence_ref": "/workspace/nexify/10_evidence/supermemory/PHASE3_INSTALLATION_AND_COMPATIBILITY_2026-06-14.md",
+  "source_paths": {
+    "original_skill": "/workspace/nexify/05_skills/data-engineer/source/DATA_ENGINEER_ORIGINAL_UNMODIFIED.md",
+    "optimized_skill": "/workspace/nexify/05_skills/nexify-knowledge-data-engineer/SKILL.md",
+    "system_prompt": "/workspace/nexify/07_tools_cli/supermemory/prompts/NEXIFY_KNOWLEDGE_DATA_ENGINEER_SYSTEM_PROMPT.md",
+    "schema": "/workspace/nexify/05_skills/nexify-knowledge-data-engineer/schemas/knowledge-record.schema.json",
+    "agent_subprofile": "/workspace/nexify/.claude/agents/data-engineer.md",
+    "skill_symlink": "/workspace/nexify/.claude/skills/nexify-knowledge-data-engineer/SKILL.md"
+  },
+  "nscale_workbench_preset": {
+    "name": "NeXify Knowledge Data Engineer — Supermemory Processing",
+    "model_id": "nscale/chat/openai/gpt-oss-120b",
+    "system_prompt_path": "/workspace/nexify/07_tools_cli/supermemory/prompts/NEXIFY_KNOWLEDGE_DATA_ENGINEER_SYSTEM_PROMPT.md",
+    "temperature": 0.1,
+    "top_p": 0.95,
+    "max_tokens": 4096,
+    "version": "1.0.0",
+    "test_fall": "deterministische Wissens-Extraktion aus 1 Pilot-Record",
+    "baseline": "nicht erstellt — Workbench-Preset wird NICHT in Nscale gespeichert, da jede Workbench-Aktion kostenpflichtige Inferenz auslösen kann und keine Freigabe für NSCALE_FINE_TUNING / NSCALE_PAID_WORKBENCH_PRESET vorliegt.",
+    "status": "deferred_to_p1"
+  },
+  "nscale_fine_tuning_used": false,
+  "integration_type": "runtime_system_prompt_and_skill_profile",
+  "fallback_model": "ds/deepseek-reasoner",
+  "fallback_router_path": "http://127.0.0.1:20128/v1"
+}

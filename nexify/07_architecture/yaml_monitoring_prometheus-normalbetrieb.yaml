@@ -1,0 +1,101 @@
+# Prometheus Configuration for Normalbetrieb Phase
+# Generated: 2026-07-05
+# Phase: Normale Betriebsphase (ab 2026-07-07)
+
+global:
+  scrape_interval: 60s
+  evaluation_interval: 60s
+
+rule_files:
+  - "alerts-normalbetrieb.yml"
+
+scrape_configs:
+  # System Availability - 1min interval
+  - job_name: 'system-availability'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'high'
+
+  # API Performance - 5min interval
+  - job_name: 'api-performance'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:8080']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'
+
+  # Error Rate - 5min interval
+  - job_name: 'error-rate'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:8080']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'
+
+  # CPU/RAM/Disk - 5min interval
+  - job_name: 'system-resources'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'
+
+  # Brain API Health - 5min interval
+  - job_name: 'brain-api-health'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'high'
+
+  # Qdrant Health - 5min interval
+  - job_name: 'qdrant-health'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:6333']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'
+
+  # MongoDB Status - 5min interval
+  - job_name: 'mongodb-status'
+    scrape_interval: 300s
+    static_configs:
+      - targets: ['localhost:27017']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'
+
+  # Security Events - Realtime
+  - job_name: 'security-events'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'critical'
+
+  # Compliance - Daily (manual trigger)
+  - job_name: 'compliance'
+    scrape_interval: 86400s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'high'
+
+  # SSL Certificates - Daily
+  - job_name: 'ssl-certificates'
+    scrape_interval: 86400s
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          phase: 'normalbetrieb'
+          priority: 'medium'

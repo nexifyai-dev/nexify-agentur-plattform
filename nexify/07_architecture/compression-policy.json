@@ -1,0 +1,134 @@
+{
+  "policy": {
+    "name": "NeXify Semantic Compression Policy",
+    "version": "1.0.0",
+    "status": "active",
+    "created": "2026-06-11",
+    "last_reviewed": "2026-06-11"
+  },
+  "scopes": {
+    "allowed": {
+      "internal_agent_communication": {
+        "enabled": true,
+        "description": "Komprimierte Kommunikation zwischen Agenten (Agent → Agent)",
+        "max_compression_ratio": 85
+      },
+      "intermediate_results": {
+        "enabled": true,
+        "description": "Zwischenergebnisse in Pipelines (Step → Next Step)",
+        "max_compression_ratio": 80
+      },
+      "log_summaries": {
+        "enabled": true,
+        "description": "Log-Ausgaben für Debugging/Monitoring",
+        "max_compression_ratio": 75
+      },
+      "brain_drafting": {
+        "enabled": true,
+        "description": "Brain-Einträge in komprimierter Form",
+        "max_compression_ratio": 70
+      },
+      "tool_outputs": {
+        "enabled": true,
+        "description": "Tool-Call-Outputs (ausgenommen Commands)",
+        "max_compression_ratio": 85
+      }
+    },
+    "forbidden": {
+      "customer_communication": {
+        "enabled": false,
+        "description": "Kundenkommunikation — KEINE Kompression erlaubt"
+      },
+      "legal_texts": {
+        "enabled": false,
+        "description": "Rechtliche Texte, Verträge, AGB — KEINE Kompression erlaubt"
+      },
+      "final_reports": {
+        "enabled": false,
+        "description": "Finale Berichte, Reports, Dokumentation — KEINE Kompression erlaubt"
+      },
+      "commands": {
+        "enabled": false,
+        "description": "Shell-Befehle, Skripte — KEINE Kompression (Semantik-Schutz)"
+      },
+      "evidence_files": {
+        "enabled": false,
+        "description": "Evidence-Dateien — müssen vollständig bleiben"
+      }
+    }
+  },
+  "methods": {
+    "nexify_semantic_compression_prompt_v1": {
+      "enabled": true,
+      "type": "prompt",
+      "version": "V1",
+      "min_input_tokens": 1000,
+      "target_compression": "40-70%",
+      "output_format": "json"
+    },
+    "rtk": {
+      "enabled": false,
+      "type": "tool",
+      "status": "evaluation",
+      "source": "https://github.com/rtk-ai/rtk.git",
+      "target_compression": "60-90%",
+      "requires_install": true
+    },
+    "caveman": {
+      "enabled": false,
+      "type": "tool",
+      "status": "evaluation",
+      "source": "https://github.com/JuliusBrussee/caveman.git",
+      "target_compression": "50-80%",
+      "requires_install": true
+    }
+  },
+  "quality_gates": {
+    "max_compression_ratio": 90,
+    "min_input_tokens": 1000,
+    "require_loss_warning_check": true,
+    "require_review_for_critical": true,
+    "require_review_for_high": true,
+    "sample_review_rate": 10,
+    "sample_review_unit": "every_nth_compression"
+  },
+  "safety": {
+    "command_semantic_protection": {
+      "enabled": true,
+      "description": "Command-Outputs (Shell, Skripte) dürfen NIEMALS komprimiert werden"
+    },
+    "rollback_on_quality_failure": {
+      "enabled": true,
+      "description": "Bei Qualitätsverlust → automatisch auf unkomprimierte Version zurückfallen"
+    },
+    "audit_log": {
+      "enabled": true,
+      "path": "/workspace/nexify/10_evidence/compression/"
+    }
+  },
+  "monitoring": {
+    "metrics": {
+      "compression_ratio_avg": {
+        "description": "Durchschnittliche Kompressionsrate",
+        "alert_threshold": 90
+      },
+      "loss_warnings_total": {
+        "description": "Anzahl loss_warnings (nicht null)",
+        "alert_threshold": 5
+      },
+      "compression_calls_total": {
+        "description": "Anzahl Kompressionsaufrufe"
+      },
+      "errors_total": {
+        "description": "Anzahl Fehler bei Kompression",
+        "alert_threshold": 3
+      }
+    }
+  },
+  "references": [
+    "/workspace/nexify/07_tools_cli/compression/RTK_EVALUATION.md",
+    "/workspace/nexify/07_tools_cli/compression/CAVEMAN_EVALUATION.md",
+    "/workspace/nexify/07_tools_cli/compression/NEXIFY_SEMANTIC_COMPRESSION_PROMPT_V1.md",
+    "/workspace/nexify/10_evidence/compression/TOKEN_COMPRESSION_TEST_EVIDENCE.md"
+  ]
+}

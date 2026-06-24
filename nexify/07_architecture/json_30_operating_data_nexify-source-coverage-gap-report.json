@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "document": "NEXIFY Source Coverage Gap Report — Machine-readable",
+    "version": "2.0.0",
+    "date": "2026-06-11",
+    "source": "NEXIFY_SOURCE_COVERAGE_GAP_REPORT.md (v2.0.0)",
+    "language": "de",
+    "status": "ACTIVE"
+  },
+  "coverage": {
+    "repositories": { "total": 7, "covered": 7, "missing": 0, "coverage_pct": 100 },
+    "claude_plugins": { "total": 53, "covered": 51, "missing": 2, "coverage_pct": 96, "notes": "2 failed plugins" },
+    "nexify_core_skills": { "total": 3, "covered": 3, "missing": 0, "coverage_pct": 100 },
+    "agent_templates": { "total": 190, "covered": 190, "missing": 0, "coverage_pct": 100 },
+    "cli_tools": { "total": 30, "covered": 30, "missing": 0, "coverage_pct": 100 },
+    "docker_containers": { "total": 20, "covered": 20, "missing": 0, "coverage_pct": 100 },
+    "systemd_services": { "total": 3, "covered": 3, "missing": 0, "coverage_pct": 100 },
+    "brain_entries_nexifyai_brain": { "total": 618, "covered": 618, "missing": 0, "coverage_pct": 100 },
+    "claude_mem_plugin": { "total": 1, "covered": 0, "missing": 1, "coverage_pct": 0, "notes": "unconfigured" },
+    "agentmemory_observations": { "total": null, "covered": 0, "missing": "unlimited", "coverage_pct": 0, "notes": "keine Observations gespeichert" },
+    "mcp_configuration": { "total": 3, "covered": 0, "missing": 3, "coverage_pct": 0 },
+    "handoff_communication": { "total": null, "covered": 0, "missing": "unlimited", "coverage_pct": 0 },
+    "goose_skills": { "total": 19, "covered": 19, "missing": 0, "coverage_pct": 100 }
+  },
+  "critical_gaps": [
+    {
+      "id": "KL-01",
+      "area": "MCP-Konfiguration",
+      "description": "Keine MCP-Server in settings.json",
+      "impact": "Agenten können MCP-Tools nicht nutzen",
+      "next_action": "settings.json mit agentmemory MCP + claude-mem MCP befüllen"
+    },
+    {
+      "id": "KL-02",
+      "area": "Agentmemory",
+      "description": "0 Observations gespeichert",
+      "impact": "Kein agentennahes Gedächtnis",
+      "next_action": "Skill-Registry + State-Daten als Observations speichern"
+    },
+    {
+      "id": "KL-03",
+      "area": "Autopilot",
+      "description": "Loopt 407-char concept-Prompts",
+      "impact": "24/7-Verschwendung von Tokens",
+      "next_action": "Directive updaten + Neustart"
+    },
+    {
+      "id": "KL-04",
+      "area": "You.com Provider",
+      "description": "Nicht in 9Router DB aktiv",
+      "impact": "Web-Suche nicht funktionsfähig",
+      "next_action": "Dashboard-Eintrag"
+    }
+  ],
+  "medium_gaps": [
+    {
+      "id": "ML-01",
+      "area": "Shared State",
+      "description": "Veraltet (seit 2026-06-07)",
+      "impact": "Agenten laufen mit falschen Annahmen",
+      "next_action": "State auf aktuellen Stand bringen"
+    },
+    {
+      "id": "ML-02",
+      "area": "Skill-Registry",
+      "description": "Nur 262 Zeilen — nicht vollständig",
+      "impact": "Unvollständige Skill-Coverage",
+      "next_action": "Registry aus Catalog erweitern"
+    },
+    {
+      "id": "ML-03",
+      "area": "Handoff",
+      "description": "Kein Outbox-Inhalt",
+      "impact": "Keine Agenten-Kommunikation",
+      "next_action": "Handoff schreiben"
+    },
+    {
+      "id": "ML-04",
+      "area": "Plugin planetscale",
+      "description": "Failed to load",
+      "impact": "Kein PlanetScale-Zugriff",
+      "next_action": "Neu installieren"
+    },
+    {
+      "id": "ML-05",
+      "area": "Plugin ralph-wiggum",
+      "description": "Failed to load",
+      "impact": "Kein Marketing-Skill",
+      "next_action": "Neu installieren"
+    },
+    {
+      "id": "ML-06",
+      "area": "claude-mem Plugin",
+      "description": "Nicht konfiguriert",
+      "impact": "Kein MCP-Zugriff auf claude-mem",
+      "next_action": "MCP-Eintrag + Auth"
+    }
+  ],
+  "minor_gaps": [
+    { "id": "KN-01", "area": "Catalog-Parsing", "description": "type-counts zeigen 0", "next_action": "Parser reparieren" },
+    { "id": "KN-02", "area": "9Router Remote API", "description": "Braucht API-Key im Request", "next_action": "Key im Request mitgeben" },
+    { "id": "KN-03", "area": "Brain Pending Queue", "description": "Outbox existiert nicht", "next_action": "Verzeichnis anlegen" },
+    { "id": "KN-04", "area": "nexifyai_memories", "description": "0 Einträge", "next_action": "Erste Session speichern" },
+    { "id": "KN-05", "area": "Agent-Backups", "description": "Repos nicht in Betriebsregister", "next_action": "Aufräumen + dokumentieren" }
+  ]
+}

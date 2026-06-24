@@ -1,0 +1,378 @@
+[
+  {
+    "timestamp": "2026-06-23T08:03:39.614885+00:00",
+    "ci_id": "CI-008",
+    "title": "Automatisierte Brain-Sync-Validierung",
+    "checks": [
+      {
+        "check_name": "sync_recency",
+        "status": "warn",
+        "message": "Last sync 56 min ago (threshold: 30 min)",
+        "details": {
+          "age_minutes": 56.1,
+          "report": "/workspace/nexifyai-platform/services/automations/cron/output/brain-sync-20260623-0707.json"
+        }
+      },
+      {
+        "check_name": "sync_success",
+        "status": "pass",
+        "message": "Last sync successful (v3.0)",
+        "details": {
+          "brain_health": true,
+          "qdrant_health": true,
+          "workspace_sync": true,
+          "system_status_sync": true
+        }
+      },
+      {
+        "check_name": "brain_api_health",
+        "status": "pass",
+        "message": "Brain API healthy: 2004 memories, uptime 7.0h",
+        "details": {
+          "memory_count": 2004,
+          "uptime_seconds": 25123
+        }
+      },
+      {
+        "check_name": "qdrant_health",
+        "status": "pass",
+        "message": "Qdrant healthy: 4 collections (nexifyai_brain, nexifyai_memories, nexifyai_projects, nexifyai_rules)",
+        "details": {
+          "collections": [
+            "nexifyai_brain",
+            "nexifyai_memories",
+            "nexifyai_projects",
+            "nexifyai_rules"
+          ]
+        }
+      },
+      {
+        "check_name": "hash_cache_integrity",
+        "status": "pass",
+        "message": "Hash cache valid: 113 entries",
+        "details": {
+          "entry_count": 113
+        }
+      },
+      {
+        "check_name": "workspace_files_syncable",
+        "status": "pass",
+        "message": "Workspace ready: 94 files syncable across 4 dirs",
+        "details": {
+          "syncable_files": 94
+        }
+      },
+      {
+        "check_name": "sync_trend",
+        "status": "warn",
+        "message": "Sync trend degraded: 8/10 successful (80%)",
+        "details": {
+          "success_count": 8,
+          "total_count": 10,
+          "success_rate": 0.8,
+          "reports_analyzed": 10
+        }
+      },
+      {
+        "check_name": "brain_qdrant_consistency",
+        "status": "warn",
+        "message": "Memory count drift: current=2004, last_report=1839 (drift=165)",
+        "details": {
+          "current": 2004,
+          "last_report": 1839,
+          "drift": 165
+        }
+      }
+    ],
+    "summary": {
+      "total": 8,
+      "pass": 5,
+      "fail": 0,
+      "warn": 3,
+      "skip": 0,
+      "overall": "degraded"
+    }
+  },
+  {
+    "timestamp": "2026-06-23T08:03:53.045603+00:00",
+    "ci_id": "CI-008",
+    "title": "Automatisierte Brain-Sync-Validierung",
+    "checks": [
+      {
+        "check_name": "sync_recency",
+        "status": "warn",
+        "message": "Last sync 56 min ago (threshold: 30 min)",
+        "details": {
+          "age_minutes": 56.3,
+          "report": "/workspace/nexifyai-platform/services/automations/cron/output/brain-sync-20260623-0707.json"
+        }
+      },
+      {
+        "check_name": "sync_success",
+        "status": "pass",
+        "message": "Last sync successful (v3.0)",
+        "details": {
+          "brain_health": true,
+          "qdrant_health": true,
+          "workspace_sync": true,
+          "system_status_sync": true
+        }
+      },
+      {
+        "check_name": "brain_api_health",
+        "status": "pass",
+        "message": "Brain API healthy: 2004 memories, uptime 7.0h",
+        "details": {
+          "memory_count": 2004,
+          "uptime_seconds": 25136
+        }
+      },
+      {
+        "check_name": "qdrant_health",
+        "status": "pass",
+        "message": "Qdrant healthy: 4 collections (nexifyai_brain, nexifyai_memories, nexifyai_projects, nexifyai_rules)",
+        "details": {
+          "collections": [
+            "nexifyai_brain",
+            "nexifyai_memories",
+            "nexifyai_projects",
+            "nexifyai_rules"
+          ]
+        }
+      },
+      {
+        "check_name": "hash_cache_integrity",
+        "status": "pass",
+        "message": "Hash cache valid: 113 entries",
+        "details": {
+          "entry_count": 113
+        }
+      },
+      {
+        "check_name": "workspace_files_syncable",
+        "status": "pass",
+        "message": "Workspace ready: 94 files syncable across 4 dirs",
+        "details": {
+          "syncable_files": 94
+        }
+      },
+      {
+        "check_name": "sync_trend",
+        "status": "warn",
+        "message": "Sync trend degraded: 8/10 successful (80%)",
+        "details": {
+          "success_count": 8,
+          "total_count": 10,
+          "success_rate": 0.8,
+          "reports_analyzed": 10
+        }
+      },
+      {
+        "check_name": "brain_qdrant_consistency",
+        "status": "warn",
+        "message": "Memory count drift: current=2004, last_report=1839 (drift=165)",
+        "details": {
+          "current": 2004,
+          "last_report": 1839,
+          "drift": 165
+        }
+      }
+    ],
+    "summary": {
+      "total": 8,
+      "pass": 5,
+      "fail": 0,
+      "warn": 3,
+      "skip": 0,
+      "overall": "degraded"
+    }
+  },
+  {
+    "timestamp": "2026-06-23T08:03:54.673493+00:00",
+    "ci_id": "CI-008",
+    "title": "Automatisierte Brain-Sync-Validierung",
+    "checks": [
+      {
+        "check_name": "sync_recency",
+        "status": "warn",
+        "message": "Last sync 56 min ago (threshold: 30 min)",
+        "details": {
+          "age_minutes": 56.4,
+          "report": "/workspace/nexifyai-platform/services/automations/cron/output/brain-sync-20260623-0707.json"
+        }
+      },
+      {
+        "check_name": "sync_success",
+        "status": "pass",
+        "message": "Last sync successful (v3.0)",
+        "details": {
+          "brain_health": true,
+          "qdrant_health": true,
+          "workspace_sync": true,
+          "system_status_sync": true
+        }
+      },
+      {
+        "check_name": "brain_api_health",
+        "status": "pass",
+        "message": "Brain API healthy: 2004 memories, uptime 7.0h",
+        "details": {
+          "memory_count": 2004,
+          "uptime_seconds": 25138
+        }
+      },
+      {
+        "check_name": "qdrant_health",
+        "status": "pass",
+        "message": "Qdrant healthy: 4 collections (nexifyai_brain, nexifyai_memories, nexifyai_projects, nexifyai_rules)",
+        "details": {
+          "collections": [
+            "nexifyai_brain",
+            "nexifyai_memories",
+            "nexifyai_projects",
+            "nexifyai_rules"
+          ]
+        }
+      },
+      {
+        "check_name": "hash_cache_integrity",
+        "status": "pass",
+        "message": "Hash cache valid: 113 entries",
+        "details": {
+          "entry_count": 113
+        }
+      },
+      {
+        "check_name": "workspace_files_syncable",
+        "status": "pass",
+        "message": "Workspace ready: 94 files syncable across 4 dirs",
+        "details": {
+          "syncable_files": 94
+        }
+      },
+      {
+        "check_name": "sync_trend",
+        "status": "warn",
+        "message": "Sync trend degraded: 8/10 successful (80%)",
+        "details": {
+          "success_count": 8,
+          "total_count": 10,
+          "success_rate": 0.8,
+          "reports_analyzed": 10
+        }
+      },
+      {
+        "check_name": "brain_qdrant_consistency",
+        "status": "warn",
+        "message": "Memory count drift: current=2004, last_report=1839 (drift=165)",
+        "details": {
+          "current": 2004,
+          "last_report": 1839,
+          "drift": 165
+        }
+      }
+    ],
+    "summary": {
+      "total": 8,
+      "pass": 5,
+      "fail": 0,
+      "warn": 3,
+      "skip": 0,
+      "overall": "degraded"
+    }
+  },
+  {
+    "timestamp": "2026-06-23T08:04:29.761365+00:00",
+    "ci_id": "CI-008",
+    "title": "Automatisierte Brain-Sync-Validierung",
+    "checks": [
+      {
+        "check_name": "sync_recency",
+        "status": "warn",
+        "message": "Last sync 57 min ago (threshold: 30 min)",
+        "details": {
+          "age_minutes": 56.9,
+          "report": "/workspace/nexifyai-platform/services/automations/cron/output/brain-sync-20260623-0707.json"
+        }
+      },
+      {
+        "check_name": "sync_success",
+        "status": "pass",
+        "message": "Last sync successful (v3.0)",
+        "details": {
+          "brain_health": true,
+          "qdrant_health": true,
+          "workspace_sync": true,
+          "system_status_sync": true
+        }
+      },
+      {
+        "check_name": "brain_api_health",
+        "status": "pass",
+        "message": "Brain API healthy: 2004 memories, uptime 7.0h",
+        "details": {
+          "memory_count": 2004,
+          "uptime_seconds": 25173
+        }
+      },
+      {
+        "check_name": "qdrant_health",
+        "status": "pass",
+        "message": "Qdrant healthy: 4 collections (nexifyai_brain, nexifyai_memories, nexifyai_projects, nexifyai_rules)",
+        "details": {
+          "collections": [
+            "nexifyai_brain",
+            "nexifyai_memories",
+            "nexifyai_projects",
+            "nexifyai_rules"
+          ]
+        }
+      },
+      {
+        "check_name": "hash_cache_integrity",
+        "status": "pass",
+        "message": "Hash cache valid: 113 entries",
+        "details": {
+          "entry_count": 113
+        }
+      },
+      {
+        "check_name": "workspace_files_syncable",
+        "status": "pass",
+        "message": "Workspace ready: 96 files syncable across 4 dirs",
+        "details": {
+          "syncable_files": 96
+        }
+      },
+      {
+        "check_name": "sync_trend",
+        "status": "warn",
+        "message": "Sync trend degraded: 8/10 successful (80%)",
+        "details": {
+          "success_count": 8,
+          "total_count": 10,
+          "success_rate": 0.8,
+          "reports_analyzed": 10
+        }
+      },
+      {
+        "check_name": "brain_qdrant_consistency",
+        "status": "warn",
+        "message": "Memory count drift: current=2004, last_report=1839 (drift=165)",
+        "details": {
+          "current": 2004,
+          "last_report": 1839,
+          "drift": 165
+        }
+      }
+    ],
+    "summary": {
+      "total": 8,
+      "pass": 5,
+      "fail": 0,
+      "warn": 3,
+      "skip": 0,
+      "overall": "degraded"
+    }
+  }
+]

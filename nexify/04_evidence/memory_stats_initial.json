@@ -1,0 +1,51 @@
+{
+    "timestamp": "2026-06-22T00:00:00Z",
+    "brain": {
+        "total_entries": 1252,
+        "retention_days": 365,
+        "strategy": "soft_delete_then_archive",
+        "protected_categories": ["system", "preferences", "core_skills"],
+        "estimated_expiring_soon": 0
+    },
+    "qdrant": {
+        "total_points": 18841,
+        "total_collections": 4,
+        "retention_days": 180,
+        "strategy": "auto_delete_with_backup_and_reindex",
+        "protected_tag": "permanent"
+    },
+    "agentmemory": {
+        "retention_days": 30,
+        "strategy": "auto_delete_with_backup",
+        "protected_status": ["active", "pending"]
+    },
+    "retention_policy_version": "1.0",
+    "retention_summary": {
+        "brain": "365 Tage — Kanonisches Langzeitwissen",
+        "qdrant": "180 Tage — Suchindex / Vektor-Embeddings",
+        "agentmemory": "30 Tage — Runtime-Erfahrung & Sessions"
+    },
+    "backup_config": {
+        "brain": {
+            "format": "sqlite_dump",
+            "retention_days": 90,
+            "location": "/workspace/nexify/backups/brain/"
+        },
+        "qdrant": {
+            "format": "json_export",
+            "retention_days": 60,
+            "location": "/workspace/nexify/backups/qdrant/"
+        },
+        "agentmemory": {
+            "format": "json_export",
+            "retention_days": 30,
+            "location": "/workspace/nexify/backups/agentmemory/"
+        }
+    },
+    "cron_schedule": {
+        "agentmemory_cleanup": "0 4 * * * (daily 04:00 UTC)",
+        "qdrant_cleanup": "0 3 * * 0 (weekly Sunday 03:00 UTC)",
+        "brain_check": "0 5 * * 1 (weekly Monday 05:00 UTC)",
+        "statistics": "0 6 * * * (daily 06:00 UTC)"
+    }
+}

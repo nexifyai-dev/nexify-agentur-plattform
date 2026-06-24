@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-06-23T12:00:00Z",
+  "agent": "operations-agent",
+  "type": "external-tasks-documented",
+  "memories": [
+    {
+      "id": "MEMORY-028",
+      "type": "task-management",
+      "content": "5 externe Tasks identifiziert, dokumentiert und priorisiert: Cloudflare DNS (P0 BLOCKED), SSH-Key-Rotation (P0 OFFEN), Externe Service-Zugänge (P1 OFFEN), Headroom Fix (P1 DONE), Phase 4 (P0 DONE)",
+      "metadata": {
+        "source": "pascal-handlung",
+        "priority": "high",
+        "category": "external-tasks"
+      }
+    },
+    {
+      "id": "MEMORY-029",
+      "type": "project-status",
+      "content": "Kritischer Pfad für Phase 5 (Go-Live): Cloudflare DNS Fix + SSH-Key-Rotation müssen vor Go-Live abgeschlossen werden. Blocking-Tasks mit 48h Deadline.",
+      "metadata": {
+        "phase": "pre-golive",
+        "blockers": ["cloudflare-dns", "ssh-key-rotation"],
+        "priority": "critical"
+      }
+    },
+    {
+      "id": "MEMORY-030",
+      "type": "infrastructure",
+      "content": "Cloudflare DNS Status: API-Token ungültig (HTTP 401), Root-Domain zeigt auf 64.29.17.1 statt 64.29.17.65, www zeigt auf alte IP 216.198.79.1. Erfordert neuen Token im CF Dashboard.",
+      "metadata": {
+        "service": "cloudflare",
+        "status": "blocked",
+        "blocker": "invalid-api-token",
+        "priority": "p0"
+      }
+    },
+    {
+      "id": "MEMORY-031",
+      "type": "security",
+      "content": "SSH-Hardening abgeschlossen (Root-Login deaktiviert, Passwort-Auth deaktiviert, Key-Auth erzwungen). SSH-Key-Rotation steht aus — Ed25519 empfohlen, 90-Tage-Rotation.",
+      "metadata": {
+        "service": "ssh",
+        "hardening": "done",
+        "rotation": "pending",
+        "priority": "p0"
+      }
+    },
+    {
+      "id": "MEMORY-032",
+      "type": "infrastructure",
+      "content": "Headroom AI Proxy als systemd-Service aktiv: headroom-proxy.service, Port 8790, Version 0.27.0, enabled at boot, auto-restart.",
+      "metadata": {
+        "service": "headroom",
+        "status": "active",
+        "version": "0.27.0",
+        "port": 8790
+      }
+    }
+  ],
+  "kanban_updates": [
+    {
+      "id": "EXT-001",
+      "task": "Cloudflare DNS Fix",
+      "priority": "P0",
+      "status": "BLOCKED",
+      "owner": "pascal-ceo",
+      "blocker": "invalid-api-token"
+    },
+    {
+      "id": "EXT-002",
+      "task": "SSH-Key-Rotation",
+      "priority": "P0",
+      "status": "OPEN",
+      "owner": "pascal-ceo"
+    },
+    {
+      "id": "EXT-003",
+      "task": "Externe Service-Zugänge",
+      "priority": "P1",
+      "status": "OPEN",
+      "owner": "pascal-ceo"
+    },
+    {
+      "id": "EXT-004",
+      "task": "Headroom Fix Review",
+      "priority": "P1",
+      "status": "DONE",
+      "owner": "pascal-ceo"
+    },
+    {
+      "id": "EXT-005",
+      "task": "Phase 4 Bestätigung",
+      "priority": "P0",
+      "status": "DONE",
+      "owner": "pascal-ceo"
+    }
+  ],
+  "evidence": "/workspace/nexify/10_evidence/externe_tasks/EXTERNE_TASKS_REGISTER.md"
+}

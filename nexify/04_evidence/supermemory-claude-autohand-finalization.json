@@ -1,0 +1,62 @@
+{
+  "ts": "2026-06-14T11:42:00Z",
+  "scope": "nexify_internal",
+  "tags": ["p0", "supermemory", "claude-code", "autohand", "finalization"],
+  "checks": {
+    "shell_bootstrap_syntax": "ok",
+    "sm_claude_syntax": "ok",
+    "sm_autohand_syntax": "ok",
+    "supermemory_agent_syntax": "ok",
+    "run_local_sh_syntax": "ok",
+    "stop_local_sh_syntax": "ok",
+    "sm_claude_version": "2.1.173",
+    "sm_autohand_version": "0.9.1",
+    "supermemory_health": "ok",
+    "supermemory_health_url": "http://127.0.0.1:6767/health",
+    "nine_router_models": "ok",
+    "nine_router_base_url": "https://ai-router.nexifyai.cloud/v1",
+    "memory_roundtrip": "ok"
+  },
+  "files": {
+    "created": [
+      "/root/.bashrc.d/claude-code.sh",
+      "/root/.supermemory/env",
+      "/root/.supermemory/run-local.sh",
+      "/root/.supermemory/stop-local.sh",
+      "/root/.supermemory-claude/settings.json",
+      "/workspace/nexify/.claude/.supermemory-claude/config.json",
+      "/workspace/nexify/10_evidence/supermemory/SUPERMEMORY_CLAUDE_AUTOHAND_FINALIZATION.md",
+      "/workspace/nexify/10_evidence/supermemory/supermemory-claude-autohand-finalization.json",
+      "/workspace/nexify/10_evidence/supermemory/AGENTMEMORY_REMOVAL_AND_MIGRATION.md",
+      "/workspace/nexify/10_evidence/supermemory/CLAUDE_MEM_DECOMMISSION.md",
+      "/workspace/nexify/10_evidence/supermemory/CLAUDE_AUTH_CLEANUP.md",
+      "/workspace/nexify/10_evidence/supermemory/CLAUDE_MCP_ISSUES_REMEDIATION.md",
+      "/workspace/nexify/10_evidence/supermemory/MEMORY_ROUNDTRIP_TEST.md",
+      "/workspace/nexify/10_evidence/supermemory/SECRET_ROTATION_EVIDENCE.md"
+    ],
+    "changed": [
+      "/root/.bashrc",
+      "/root/.bashrc.d/hermes.sh",
+      "/root/.claude/settings.json",
+      "/workspace/nexify/.claude/settings.json",
+      "/workspace/nexify/.claude/settings.local.json",
+      "/root/.local/bin/sm-claude",
+      "/root/.local/bin/sm-autohand",
+      "/root/.local/bin/supermemory-agent",
+      "/root/.autohand/config.json",
+      "/root/supermemory/server.py",
+      "/root/.claude/mcp-needs-auth-cache.json"
+    ],
+    "archived": [
+      "/workspace/nexify/99_archiv/legacy_agentmemory/",
+      "/workspace/nexify/99_archiv/legacy_claude_mem/",
+      "/workspace/nexify/99_archiv/legacy_autohand/",
+      "/workspace/nexify/99_archiv/config_backups/supermemory_20260614_111816/"
+    ]
+  },
+  "known_limitations": [
+    "autohand_auth: requires interactive login (autohand.ai/cli-auth) — provider config is canonical but autohand does not read ANTHROPIC_API_KEY directly",
+    "claude_doctor: hangs on MCP health checks — verified via direct file inspection instead",
+    "coolify-agentmemory: docker container removed; if Coolify stack re-runs docker compose, container may reappear"
+  ]
+}

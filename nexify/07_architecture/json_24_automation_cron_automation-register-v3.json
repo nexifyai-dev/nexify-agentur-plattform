@@ -1,0 +1,72 @@
+[
+  {
+    "id": "AUTO-001",
+    "name": "Auftragsfach stündlich prüfen",
+    "trigger": "cron",
+    "schedule": "Mo-Fr 06-20 Europe/Berlin hourly",
+    "gate": "internal"
+  },
+  {
+    "id": "AUTO-002",
+    "name": "User-Chat-Driver Fortsetzung",
+    "trigger": "event agent:end/session waiting",
+    "schedule": "event",
+    "gate": "internal only"
+  },
+  {
+    "id": "AUTO-003",
+    "name": "Brain Sync Classifier",
+    "trigger": "task/evidence/chat completed",
+    "schedule": "event",
+    "gate": "policy"
+  },
+  {
+    "id": "AUTO-004",
+    "name": "Leadqualifizierung aus KI-Berater",
+    "trigger": "chat qualified",
+    "schedule": "event",
+    "gate": "privacy"
+  },
+  {
+    "id": "AUTO-005",
+    "name": "Angebotsentwurf erzeugen",
+    "trigger": "lead qualified",
+    "schedule": "event",
+    "gate": "review"
+  },
+  {
+    "id": "AUTO-006",
+    "name": "Resend Angebotsmail versenden",
+    "trigger": "offer approved",
+    "schedule": "event",
+    "gate": "mail approval"
+  },
+  {
+    "id": "AUTO-007",
+    "name": "GitHub/Vercel/Supabase/Cloudflare Drift Check",
+    "trigger": "cron",
+    "schedule": "daily",
+    "gate": "read-only"
+  },
+  {
+    "id": "AUTO-008",
+    "name": "Secret Presence Check",
+    "trigger": "cron",
+    "schedule": "daily",
+    "gate": "read-only-no-values"
+  },
+  {
+    "id": "AUTO-009",
+    "name": "Daily Executive Report",
+    "trigger": "cron",
+    "schedule": "daily 08:00 Europe/Berlin",
+    "gate": "internal"
+  },
+  {
+    "id": "AUTO-010",
+    "name": "Kanban Aging Check",
+    "trigger": "cron",
+    "schedule": "hourly business hours",
+    "gate": "internal"
+  }
+]

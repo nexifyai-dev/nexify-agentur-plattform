@@ -1,0 +1,126 @@
+{
+  "app": {
+    "name": "NeXify AI Work",
+    "tagline": "Chat it. Automate it.",
+    "short": "NeXify"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "chat": "KI-Chat",
+    "crm": "CRM",
+    "finance": "Buchhaltung",
+    "agents": "Agenten",
+    "kanban": "Aufgaben",
+    "monitor": "Monitoring",
+    "admin": "Admin",
+    "settings": "Einstellungen",
+    "portal": "Kundenportal",
+    "status": "System-Status",
+    "logout": "Abmelden",
+    "profile": "Profil"
+  },
+  "crm": {
+    "leads": "Lead-Liste",
+    "customers": "Kunden",
+    "quotes": "Angebote",
+    "contracts": "Verträge",
+    "new_lead": "Neuer Lead",
+    "new_quote": "Neues Angebot",
+    "lead_status": {
+      "new": "Neu",
+      "contacted": "Kontaktiert",
+      "qualified": "Qualifiziert",
+      "proposal": "Angebot erstellt",
+      "negotiation": "Verhandlung",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    }
+  },
+  "finance": {
+    "invoices": "Rechnungen",
+    "payments": "Zahlungen",
+    "wallet": "Wallet",
+    "costs": "Kosten",
+    "revenue": "Erlöse",
+    "invoice_status": {
+      "draft": "Entwurf",
+      "sent": "Gesendet",
+      "paid": "Bezahlt",
+      "overdue": "Überfällig",
+      "cancelled": "Storniert"
+    }
+  },
+  "monitor": {
+    "system_health": "System-Health",
+    "containers": "Container",
+    "services": "Dienste",
+    "logs": "Logs",
+    "audit": "Audit-Trail",
+    "all_ok": "Alle Dienste OK",
+    "warnings": "Warnungen",
+    "errors": "Fehler",
+    "uptime": "Betriebszeit",
+    "disk": "Speicher",
+    "memory": "Arbeitsspeicher",
+    "load": "Auslastung"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolgreich",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "close": "Schließen",
+    "yes": "Ja",
+    "no": "Nein",
+    "all": "Alle",
+    "none": "Keine",
+    "select": "Auswählen",
+    "required": "Pflichtfeld",
+    "optional": "Optional",
+    "no_results": "Keine Ergebnisse",
+    "show_more": "Mehr anzeigen",
+    "show_less": "Weniger anzeigen"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgot_password": "Passwort vergessen?",
+    "no_account": "Noch kein Konto?",
+    "register": "Registrieren",
+    "welcome_back": "Willkommen zurück",
+    "session_expired": "Sitzung abgelaufen. Bitte neu anmelden."
+  },
+  "portal": {
+    "my_contracts": "Meine Verträge",
+    "my_projects": "Meine Projekte",
+    "support": "Support",
+    "tickets": "Tickets",
+    "documents": "Dokumente",
+    "appointments": "Termine",
+    "messages": "Nachrichten",
+    "finance": "Finanzen",
+    "sign_contract": "Vertrag unterschreiben",
+    "new_ticket": "Neues Ticket"
+  },
+  "errors": {
+    "404_title": "Seite nicht gefunden",
+    "404_message": "Die angeforderte Seite existiert nicht.",
+    "500_title": "Server-Fehler",
+    "500_message": "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "network_error": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+    "session_expired": "Ihre Sitzung ist abgelaufen."
+  }
+}

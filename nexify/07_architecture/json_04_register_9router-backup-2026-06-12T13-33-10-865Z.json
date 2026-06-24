@@ -1,0 +1,193 @@
+{
+  "settings": {
+    "password": "$2b$10$XBcsI2NQH4A1Z6VJra7DDuutrIvst5tMGUqJKnCb7ZXZmSjIMoyPq",
+    "requireApiKey": true,
+    "comboStrategies": {
+      "nexifyai-combo-llm": {
+        "fallbackStrategy": "round-robin"
+      }
+    },
+    "comboStrategy": "fallback",
+    "comboStickyRoundRobinLimit": 3,
+    "cavemanEnabled": true,
+    "cavemanLevel": "full",
+    "outboundProxyEnabled": true,
+    "outboundProxyUrl": "",
+    "outboundNoProxy": "",
+    "rtkEnabled": true
+  },
+  "providerConnections": [
+    {
+      "apiKey": "sk-3096c64782334172a87c83c0dab96557",
+      "testStatus": "active",
+      "providerSpecificData": {
+        "connectionProxyEnabled": false,
+        "connectionProxyUrl": "",
+        "connectionNoProxy": ""
+      },
+      "modelLock_nexify-flash": null,
+      "errorCode": 402,
+      "backoffLevel": 0,
+      "modelLock_nexify-pro-max": null,
+      "modelLock_ds/deepseek-v4-pro": null,
+      "modelLock_ds/deepseek-v4-pro-max": null,
+      "modelLock_ds/deepseek-v4-pro-none": null,
+      "modelLock_deepseek-v4-pro": null,
+      "modelLock_deepseek-v4-pro-max": null,
+      "connectionProxyEnabled": false,
+      "connectionProxyUrl": "",
+      "modelLock_deepseek-chat": null,
+      "modelLock_deepseek-reasoner": null,
+      "modelLock_deepseek-v4-flash": null,
+      "id": "cd43bdde-cfb7-4192-8cde-be3dfb2755b8",
+      "provider": "deepseek",
+      "authType": "apikey",
+      "name": "DeepSeek ",
+      "email": null,
+      "priority": 1,
+      "isActive": true,
+      "createdAt": "2026-06-07T17:51:16.880Z",
+      "updatedAt": "2026-06-12T13:23:54.519Z"
+    },
+    {
+      "apiKey": "ydc-sk-9637c3eac0317192-6jHQwwCvB4vnWToAik6EzaiTxVXvwmFx-499e98e5",
+      "testStatus": "unavailable",
+      "backoffLevel": 0,
+      "connectionProxyEnabled": false,
+      "connectionProxyUrl": "",
+      "baseUrl": "https://api.you.com/v1/search",
+      "modelLock_search": "2026-06-11T15:22:54.785Z",
+      "lastError": "[401]: {\n    \"error\": {\n        \"message\": \"Incorrect API key provided: ydc-sk-9********************",
+      "errorCode": 401,
+      "lastErrorAt": "2026-06-11T15:20:54.785Z",
+      "id": "06190d1b-d313-4ba2-8c5b-ff57d1991777",
+      "provider": "youcom",
+      "authType": "apikey",
+      "name": "You.com Web Search",
+      "email": "",
+      "priority": 1,
+      "isActive": true,
+      "createdAt": "2026-06-09T18:53:41.000Z",
+      "updatedAt": "2026-06-11T15:20:54.786Z"
+    },
+    {
+      "apiKey": "eyJhbGciOiJBMjU2R0NNS1ciLCJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiaXYiOiJhYVlVaExnWU5hWmhHN3RrIiwia2lkIjoiYjB3MktJNkhpcGgyaWo5aTRaenFEaW9jN1RCeklVQlJrU2NKZTZwdDlXSSIsInRhZyI6Il9mYXFOS2NmbzBHSHZqRWF4aFFNblEiLCJ0eXAiOiJhdCtqd3QifQ.7Fq7SxwyNsOxDnt6aF66La9WSZIyMM7LhYvqSXH9Z-E.H_0zTMbWq6lrMZrO.EDA8uKSeJFFgWZd5UxUN7gAFF4FRcRvOnOQJKdpaXjndk0R8NqoBussUrC6AxhC_c3_2-WKhZ02zS_0R9j6LHHfbRMpat1Iaz_LTQC7pvxt_oZ_vQTKExFifeP9FdMwy0TcfuINm2mxpPTPxkrf_vAGlnmrQ7qr3cpx01MN7OdglWLFPx-7AjYHD8GbwVBeR7WTDTiCYphQ9SP10Q8-1Xqe-6mjjekPVXZ8-kiUIm_GLbB_TW91yqa9X7kgoV-HFKxTk0DJuNmPi4WAjZrLP7fGffNKqVChTpCzpQmrY2i0POBl6JX8D-kL_V8WMoRUr1Stz-SJBDuOPAOfjs903SYQDx4Gx7b5Fcx0CTnKmuDuD_2aXenMF_CqflbiJOWzWns5sSK7gHrsfsRTlIrjE5JiaJOvrO5k_WU3uzhoVCjvJlqc2WTgs0Ta8sNf5DAlAjPEU2XJWV_HJMa5ER_ITmqOIfYh6q2puvTnvPf910cyEOF1ujr0QEefcH7ruQ3cGn22OSnfurxa2bir48VsCI5s9Umx-kkKzn2z46f_JQNDk3XSzeFNmUmDBchHNB8ZMnGiU-iZ6Bog9sSQE5sAIWKJofxveTd_b1sDeSzxgEWYuNcvXtI8MGH9s3Nxnp_D2oBNXhdgPyaU43NU8RYxpMxScyBg7Okq4soKxTvvpgiEUWldHp2ykroGDFh4v9AicciblJ2Pq1YS1wGWgpsbj3Cup1De31lWoJwqe2bcZ8AbkhYfwUpfX7i-8ixrLZEkq19IBUIKeyzkvUNvR5ELQGwqFA2y650uu4FxeVHT3KDuudv_iM_4u4jyBWRSZFXZ5SezD16PiQGtPiQUp8xyOUNqIyDUUW0n8BpswDnKVcjs1sAL6Fn4mRCJft5UzEiM_.yZOwlwSe0sf-71fxr5uhjg",
+      "testStatus": "active",
+      "providerSpecificData": {
+        "baseUrl": "https://aiproxy.infaas-amd-dev.glo1.nscale.com",
+        "connectionProxyEnabled": false,
+        "connectionProxyUrl": "",
+        "connectionNoProxy": ""
+      },
+      "backoffLevel": 0,
+      "id": "0dc5ef7a-73f0-43fe-9ead-bcc18a18a6c3",
+      "provider": "nscale",
+      "authType": "apikey",
+      "name": "NScale AI",
+      "email": "",
+      "priority": 1,
+      "isActive": true,
+      "createdAt": "2026-06-11T11:42:33.000Z",
+      "updatedAt": "2026-06-11T11:42:33.000Z"
+    }
+  ],
+  "providerNodes": [
+    {
+      "provider": "youcom",
+      "connectionId": "06190d1b-d313-4ba2-8c5b-ff57d1991777",
+      "id": "c499754a-5a7d-4d0a-a294-ec5a13a77604",
+      "type": "webSearch",
+      "name": "youcom/search",
+      "createdAt": "2026-06-11 15:11:31",
+      "updatedAt": "2026-06-11 15:11:31"
+    }
+  ],
+  "proxyPools": [],
+  "apiKeys": [
+    {
+      "id": "6e898026-4991-4a19-9a4a-e02535762891",
+      "key": "sk-97034a83a8033b14-ijhhux-4a3f10ba",
+      "name": "system",
+      "machineId": "97034a83a8033b14",
+      "isActive": true,
+      "createdAt": "2026-06-07T17:46:51.671Z"
+    },
+    {
+      "id": "48bff496-e8b5-4ad8-b85a-e972bcc53048",
+      "key": "sk-97034a83a8033b14-lun295-ea7fc449",
+      "name": "nutzer",
+      "machineId": "97034a83a8033b14",
+      "isActive": true,
+      "createdAt": "2026-06-07T22:15:30.421Z"
+    },
+    {
+      "id": "b5744637-5d31-4e5c-bc6f-49cfb257c08c",
+      "key": "sk-970...c449",
+      "name": "nutzer",
+      "machineId": "97034a83a8033b14",
+      "isActive": true,
+      "createdAt": "2026-06-09T19:06:22.000Z"
+    },
+    {
+      "id": "fbc98055-c769-4958-b1d4-b231569a06ca",
+      "key": "sk-97034a83a8033b14-evpb1d-ef639619",
+      "name": "goose-ai-cli",
+      "machineId": "97034a83a8033b14",
+      "isActive": true,
+      "createdAt": "2026-06-10T15:14:35.037Z"
+    },
+    {
+      "id": "e2d5d702-ea02-4feb-beef-41b1100ab4ec",
+      "key": "sk-97034a83a8033b14-5egxwa-39eea87d",
+      "name": "claude-code",
+      "machineId": "97034a83a8033b14",
+      "isActive": true,
+      "createdAt": "2026-06-11T09:27:01.856Z"
+    }
+  ],
+  "combos": [
+    {
+      "id": "bda2f35b-3caa-44e3-92d9-e2f580bd1e8f",
+      "name": "nexifyai-combo-llm",
+      "kind": null,
+      "models": [
+        "ds/deepseek-reasoner",
+        "ds/deepseek-v4-flash"
+      ],
+      "createdAt": "2026-06-07T17:52:54.110Z",
+      "updatedAt": "2026-06-12T12:25:31.175Z"
+    }
+  ],
+  "modelAliases": {
+    "nexifyai-combo-llm": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/nexifyai-combo-llm",
+    "MiniMax-M3": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/minimax/MiniMax-M3",
+    "MiniMax-M2.7": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/minimax/MiniMax-M2.7",
+    "MiniMax-M2.5": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/minimax/MiniMax-M2.5",
+    "MiniMax-M2.1": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/minimax/MiniMax-M2.1",
+    "deepseek-v4-pro": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-v4-pro",
+    "deepseek-v4-pro-max": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-v4-pro-max",
+    "deepseek-v4-pro-none": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-v4-pro-none",
+    "deepseek-v4-flash": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-v4-flash",
+    "deepseek-chat": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-chat",
+    "deepseek-reasoner": "anthropic-compatible-1118bd3b-dd3e-43bd-af43-2ed538400d9f/ds/deepseek-reasoner",
+    "nexifyai-nexifyai-combo-llm": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/nexifyai-combo-llm",
+    "nexifyai-MiniMax-M3": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/minimax/MiniMax-M3",
+    "nexifyai-MiniMax-M2.7": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/minimax/MiniMax-M2.7",
+    "nexifyai-MiniMax-M2.5": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/minimax/MiniMax-M2.5",
+    "nexifyai-MiniMax-M2.1": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/minimax/MiniMax-M2.1",
+    "nexifyai-deepseek-v4-pro": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-v4-pro",
+    "nexifyai-deepseek-v4-pro-max": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-v4-pro-max",
+    "nexifyai-deepseek-v4-pro-none": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-v4-pro-none",
+    "nexifyai-deepseek-v4-flash": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-v4-flash",
+    "nexifyai-deepseek-chat": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-chat",
+    "nexifyai-deepseek-reasoner": "openai-compatible-responses-4e250a2d-d29a-4738-8077-13371b5613ab/nexifyai/ds/deepseek-reasoner",
+    "nemotron-3-ultra-550b-a55b:free": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nemotron-3-super-120b-a12b:free": "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+    "kimi-k2.6:free": "openrouter/moonshotai/kimi-k2.6:free",
+    "nex-n2-pro:free": "openrouter/nex-agi/nex-n2-pro:free",
+    "qwen3-coder:free": "openrouter/qwen/qwen3-coder:free"
+  },
+  "customModels": [],
+  "mitmAlias": {},
+  "pricing": {}
+}
