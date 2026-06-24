@@ -10,8 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN adduser --system --uid 1001 hermes
 
-COPY apps/hermes-webui/ .
+# Copy only what we need first for better caching
+COPY apps/hermes-webui/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY apps/hermes-webui/ .
 
 RUN mkdir -p /data/hermes && chown -R hermes:hermes /app /data/hermes
 
