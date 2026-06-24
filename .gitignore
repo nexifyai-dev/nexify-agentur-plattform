@@ -1,14 +1,52 @@
-node_modules
-.next
-out
-.env
-.env.*
-!.env.example
-*.log
-.DS_Store
-.vercel
+# NeXify AI Monorepo — .gitignore
 
-tsconfig.tsbuildinfo
-.nexify-backup/
-playwright-report/
-test-results/
+# Dependencies
+node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+.pnpm/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+env/
+venv/
+*.egg-info/
+
+# Next.js
+.next/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+infra/.env.vps
+
+# Docker
+.docker/
+
+# Logs
+*.log
+logs/
+
+# Subtree artifacts (kept in .git)
+apps/hermes-webui/.git/
+apps/paperclip/.git/
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
