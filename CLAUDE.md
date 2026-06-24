@@ -83,13 +83,35 @@ nexifyai-cloud/
 
 **Traefik:** Bestehend (`traefik-vsrs`), nicht Teil dieses Compose.
 
+## Governance & Betriebsabläuche (docs/governance/)
+
+Alle Regelwerke, SOPs, Policies, Workflows und Produktionsabläufe sind unter `docs/governance/` integriert.
+
+Hauptkategorien:
+- `01_regelwerke/` — Kern-Regeln, Verbote, Normenregister
+- `02_sops/` — Standard Operating Procedures (7 SOPs + 2 Register)
+- `03_checklisten/` — Pre-Task (6 Gates), Post-Go-Live, Compliance
+- `06_sicherheit_policies/` — Security, Tenant-Isolation, Change-Management, DR
+- `07_audits_reports/` — System-Audits, Deviation-Reports
+- `10_quality_gates/` — Production-Gates, HITL-Gate, CI-CD-Compliance
+- `13_betriebshandbuch/` — Betriebsanleitung V3, Normalbetrieb
+- `14_production/` — Production-Skripte, Docker-Compose, Cron-Register
+
+Zentrale Dokumente:
+- `docs/governance/GOVERNANCE.md` — Übersicht + Produktionsablauf + Incident-Response
+- `docs/governance/03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` — 6-Gate-Check
+- `docs/governance/01_regelwerke/VERBOTE_UND_PFLICHTREGELN_V2.md` — Verbindliche Verbote
+
+**Verpflichtend:** Vor jeder Aufgabe: `bash docs/governance/03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh`
+
 ## Workflow
 
 1. Lokal in `~/monorepo/` entwickeln
-2. Docker-Compose up für lokale Tests
-3. Feature-Branch pushen → GitHub Actions build & smoke
-4. PR nach `main` → Merge → Automatischer Deploy auf VPS
-5. Health-Check nach Deploy + Rollback bei Failure
+2. Pre-Task 6 Gates ausführen (`PRE_TASK_CHECKLIST_AUTOMATION.sh`)
+3. Docker-Compose up für lokale Tests
+4. Feature-Branch pushen → GitHub Actions build & smoke
+5. PR nach `main` → Merge → Automatischer Deploy auf VPS
+6. Health-Check nach Deploy + Rollback bei Failure
 
 ## Skills (laden vor Arbeit)
 
