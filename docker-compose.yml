@@ -1,9 +1,3 @@
-# NeXify AI — Docker Compose (VPS Production)
-# Bindet an bestehenden Traefik (traefik-vsrs) an — kein eigener Reverse Proxy.
-# Services nutzen host-Netzwerk-Bindings + Traefik-Dynamic-Config im bestehenden Verzeichnis.
-# Start: docker compose up -d --build
-# Status: docker compose ps
-
 services:
   website:
     build:
@@ -13,67 +7,9 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000"
-    env_file:
-      - ./infra/.env.vps
-    networks:
-      - nexify-default
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 15s
-
-  hermes-webui:
-    build:
-      context: .
-      dockerfile: deploy/docker/Dockerfile.hermes
-    container_name: nexify-hermes
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:8787:8787"
-    env_file:
-      - ./infra/.env.vps
-    volumes:
-      - hermes-data:/data/hermes
-    networks:
-      - nexify-default
-    healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8787/health')"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 20s
-
-  paperclip:
-    build:
-      context: .
-      dockerfile: deploy/docker/Dockerfile.paperclip
-    container_name: nexify-paperclip
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:3100:3100"
-    env_file:
-      - ./infra/.env.vps
-    volumes:
-      - paperclip-data:/data/paperclip
-    networks:
-      - nexify-default
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3100/api/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-
-# Traefik-Routen werden über deploy/traefik/dynamic-monorepo.yml verwaltet.
-# Diese Datei ins bestehende /docker/traefik-vsrs/dynamic/ kopieren oder symlinken.
-# Der bestehende Traefik (host-Netzwerk) routet dann automatisch zu den localhost-Ports.
-
-volumes:
-  hermes-data:
-  paperclip-data:
-
-networks:
-  nexify-default:
-    driver: bridge
