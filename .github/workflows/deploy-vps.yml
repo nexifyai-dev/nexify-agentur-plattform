@@ -1,0 +1,88 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  # === BUILD & SMOKE ===
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Website
+      - name: Build & push website
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.website
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/nexify-website:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/nexify-website:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Hermes
+      - name: Build & push hermes
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.hermes
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/nexify-hermes:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/nexify-hermes:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Paperclip
+      - name: Build & push paperclip
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.paperclip
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/nexify-paperclip:${{ env.IMAGE_TAG }},ghcr.io/${{ github.repository_owner }}/nexify-paperclip:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # === DEPLOY TO VPS ===
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/nexifyai-cloud
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            docker compose pull
+            docker compose down --timeout 30
+            docker compose up -d --remove-orphans
+            sleep 15
+            bash infra/scripts/health-check.sh
