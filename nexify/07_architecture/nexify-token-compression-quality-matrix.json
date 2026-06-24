@@ -1,0 +1,18 @@
+{
+  "id": "nexify-token-compression-quality-matrix",
+  "date": "2026-06-12",
+  "recommendations": {
+    "rtk_for_tool_outputs": true,
+    "rtk_for_audit_evidence": false,
+    "caveman_global_aggressive": false,
+    "caveman_moderate_internal": true
+  },
+  "matrix": {
+    "git_diff": {"rtk_saving_pct": 60, "caveman_moderate_pct": 50, "caveman_full_pct": 30, "quality_risk": "details"},
+    "grep": {"rtk_saving_pct": 70, "caveman_moderate_pct": 60, "caveman_full_pct": 40, "quality_risk": "low"},
+    "ls_la": {"rtk_saving_pct": 80, "caveman_moderate_pct": 70, "caveman_full_pct": 60, "quality_risk": "low"},
+    "log_analysis": {"rtk_saving_pct": 50, "caveman_moderate_pct": 40, "caveman_full_pct": 20, "quality_risk": "readability"},
+    "evidence_text": {"rtk_saving_pct": 0, "caveman_moderate_pct": 0, "caveman_full_pct": 0, "quality_risk": "unacceptable"},
+    "regelwerk": {"rtk_saving_pct": 0, "caveman_moderate_pct": 20, "caveman_full_pct": 0, "quality_risk": "meaning_risk"}
+  }
+}

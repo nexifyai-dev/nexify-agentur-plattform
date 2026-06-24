@@ -1,0 +1,240 @@
+{
+  "evidence_id": "ev-trun-b4f8bffc25c9",
+  "timestamp": "2026-06-21T19:45:41.216654+00:00",
+  "date": "2026-06-21",
+  "type": "workflow_task_execution",
+  "status": "completed",
+  "run_id": "trun-b4f8bffc25c9",
+  "task_id": "deep-research",
+  "source": "trigger-exec",
+  "details": {
+    "task_id": "deep-research",
+    "run_id": "trun-b4f8bffc25c9",
+    "result": {
+      "success": true,
+      "query": "NeXify system health status update",
+      "results": {
+        "collection": "nexifyai_brain",
+        "count": 10,
+        "query": "NeXify system health status update",
+        "results": [
+          {
+            "category": "system-status",
+            "collection": "nexifyai_brain",
+            "content": "Vollzugriff via SSH root@srv1243952 hergestellt. Hermes updated a7983d5->85ad7c9. Brain Write Token verified. Alle 7 Blockaden geloest: B1 agent-system access, B2 Brain Write Token, B3 nexify-bridge, B4 secrets, B5 gateway phantom, B6 hermes update, ENV corruption. Alle Dienste ggruen: Gateway 200, WebUI 302, Brain 200, Qdrant 200, Agentmemory 200. 25+ Container healthy. Disk 20%.",
+            "created_at": "2026-06-20T15:41:02Z",
+            "id": "891d4cbf53ad4742",
+            "metadata": {},
+            "score": 14,
+            "tokens": "vollzugriff via ssh root srv1243952 hergestellt hermes updated a7983d5 85ad7c9 brain write token verified alle blockaden geloest b1 agent system access b2 brain write token b3 nexify bridge b4 secrets b5 gateway phantom b6 hermes update env corruption alle dienste ggruen gateway 200 webui 302 brain 200 qdrant 200 agentmemory 200 25 container healthy disk 20 system status",
+            "updated_at": "2026-06-20T15:41:02Z"
+          },
+          {
+            "category": "system-status",
+            "collection": "nexifyai_brain",
+            "content": "NeXify Systemstatus 2026-06-11T15:00+02:00 \u2014 Brain: 619 Eintr\u00e4ge gesund, agentmemory: 0.9.26 aktiv (circuit closed, 275 Funktionen), 9Router: nexifyai-combo-llm aktiv, Bun: 1.3.14 installiert, SSH-Keepalive: Client+Server aktiviert, 25 Quelldokumente in 30_operating_data, 23 offene Gaps identifiziert, 10 Governance-Dateien",
+            "created_at": "2026-06-11T15:09:21Z",
+            "id": "290e06e4935642a1",
+            "metadata": {
+              "components": {
+                "9router": "active",
+                "agentmemory": "healthy",
+                "brain": "619",
+                "bun": "1.3.14",
+                "ssh": "keepalive"
+              },
+              "source": "claude-code",
+              "timestamp": "2026-06-11T15:00:00+02:00"
+            },
+            "score": 13,
+            "tokens": "nexify systemstatus 2026 06 11t15 00 02 00 brain 619 eintr\u00e4ge gesund agentmemory 26 aktiv circuit closed 275 funktionen 9router nexifyai combo llm aktiv bun 14 installiert ssh keepalive client server aktiviert 25 quelldokumente in 30_operating_data 23 offene gaps identifiziert 10 governance dateien system status source claude code timestamp 2026 06 11t15 00 00 02 00 components brain 619 agentmemory healthy 9router active bun 14 ssh keepalive",
+            "updated_at": "2026-06-11T15:09:21Z"
+          },
+          {
+            "category": "autopilot-iteration",
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot Iteration 20 \u2014 2026-06-11\n\n**Run-ID:** iteration-20-brain-autopilot-20260611T1317Z\n**UTC:** 2026-06-11T13:17:00Z\n**Berlin:** 2026-06-11T15:17:00+0200\n**Executor:** claude_code\n**Scope:** nexify_internal\n\n## Systemstatus\n\n- Brain: 200, 482 memories, 2 collections, uptime 4653s\n- Brain Write Token: working (brain-write.env mode 600)\n- brain-token.env: MISSING (altes Problem, seit Iteration 19 unver\u00e4ndert)\n- Meta-Prompt: SHA match (db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99) \u2713\n- systemd Timers: 10 active, alle gr\u00fcn\n- Brain Queue Worker: inactive (kein systemd unit)\n- Disk: 81G/387G (21%)\n- RAM: 3.5G/31Gi\n- Load: 1.06\n\n## Aktionen\n\n1. **Pflichten geladen** \u2014 using-superpowers, nexify-working-discipline, nexify-i18n-german-default, Meta-Prompt\n2. **Brain gequeryed** \u2014 Iteration 19 Report gefunden, 11 offene Risiken best\u00e4tigt\n3. **Shared State gelesen** \u2014 aktuell seit 2026-06-07, keine \u00c4nderungen\n4. **Handoffs gepr\u00fcft** \u2014 32 stale H2-Handoffs bereits archiviert (Iteration 19), keine neuen in Outbox\n5. **Task Registry gepr\u00fcft** \u2014 N\u00e4chster P0-Task: P0-LUECKE-005 Oracle-Canonicalization (READY)\n6. **Workspace-Status** \u2014 /workspace/nexify/ vorhanden mit 17 Unterverzeichnissen\n7. **Pending Queue** \u2014 agentmemory-Pending-Eintr\u00e4ge (API-Auth erforderlich, unver\u00e4ndert)\n\n## Offene Risiken (11, unver\u00e4ndert zu Iteration 19)\n\n1. brain-token.env fehlt (nur brain-write.env mit BRAIN_WRITE_TOKEN vorhanden)\n2. agentmemory systemd inactive (manuelle Prozesse laufend, Entscheidung ausstehend)\n3. You.com MCP nicht konfiguriert (Key vorhanden, blockiert)\n4. PII-Log-Patch bereit, nicht deployed\n5. Brand-Migration wartet auf 7 Vorbedingungen\n6. nexifyai-platform compose nicht gestartet (env fehlt)\n7. bookando.de DNS broken (1blu A-Record fehlt)\n8. api.nexifyai.cloud:443 nicht erreichbar\n9. traefik.nexifyai.cloud ohne Cloudflare Access (KRITISCH)\n10. work.nexifyai.cloud ohne Cloudflare Access\n11. brain.nexifyai.cloud ohne Cloudflare Access\n\n## N\u00e4chste Aktionen (laut Task Registry)\n\n1. **P0-LUECKE-005** Oracle-Canonicalization \u2014 READY, n\u00e4chster Task laut Registry\n2. **P0-LUECKE-006** Customer-Project-Isolation-Policies\n3. **P0-LUECKE-007** Operations-Policies\n4. **P0-LUECKE-010** Finance/Cost/Value/Margin-Register\n\nHinweis: Oracle-Canonicalization ben\u00f6tigt Lesezugriff auf /workspace/nexify/30_operating_data/ (blockiert).\n\n## Tags\n\nautopilot, iteration-20, system-health-check, brain-sync, oracle-canonicalization-pending",
+            "created_at": "2026-06-11T13:20:20Z",
+            "id": "637fb148d5da4090",
+            "metadata": {
+              "follow_up_required": true,
+              "organization": "nexifyai by NeXify",
+              "result_type": "iteration",
+              "scope": "nexify_internal",
+              "source_agent": "claude_code",
+              "tags": [
+                "autopilot",
+                "iteration-20",
+                "system-health-check"
+              ],
+              "timestamp_utc": "2026-06-11T13:17:00Z"
+            },
+            "score": 11,
+            "tokens": "autopilot iteration 20 2026 06 11 run id iteration 20 brain autopilot 20260611t1317z utc 2026 06 11t13 17 00z berlin 2026 06 11t15 17 00 0200 executor claude_code scope nexify_internal systemstatus brain 200 482 memories collections uptime 4653s brain write token working brain write env mode 600 brain token env missing altes problem seit iteration 19 unver\u00e4ndert meta prompt sha match db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99 systemd timers 10 active alle gr\u00fcn brain queue worker inactive kein systemd unit disk 81g 387g 21 ram 5g 31gi load 06 aktionen pflichten geladen using superpowers nexify working discipline nexify i18n german default meta prompt brain gequeryed iteration 19 report gefunden 11 offene risiken best\u00e4tigt shared state gelesen aktuell seit 2026 06 07 keine \u00e4nderungen handoffs gepr\u00fcft 32 stale h2 handoffs bereits archiviert iteration 19 keine neuen in outbox task registry gepr\u00fcft n\u00e4chster p0 task p0 luecke 005 oracle canonicalization ready workspace status workspace nexify vorhanden mit 17 unterverzeichnissen pending queue agentmemory pending eintr\u00e4ge api auth erforderlich unver\u00e4ndert offene risiken 11 unver\u00e4ndert zu iteration 19 brain token env fehlt nur brain write env mit brain_write_token vorhanden agentmemory systemd inactive manuelle prozesse laufend entscheidung ausstehend you com mcp nicht konfiguriert key vorhanden blockiert pii log patch bereit nicht deployed brand migration wartet auf vorbedingungen nexifyai platform compose nicht gestartet env fehlt bookando de dns broken 1blu record fehlt api nexifyai cloud 443 nicht erreichbar traefik nexifyai cloud ohne cloudflare access kritisch 10 work nexifyai cloud ohne cloudflare access 11 brain nexifyai cloud ohne cloudflare access n\u00e4chste aktionen laut task registry p0 luecke 005 oracle canonicalization ready n\u00e4chster task laut registry p0 luecke 006 customer project isolation policies p0 luecke 007 operations policies p0 luecke 010 finance cost value margin register hinweis oracle canonicalization ben\u00f6tigt lesezugriff auf workspace nexify 30_operating_data blockiert tags autopilot iteration 20 system health check brain sync oracle canonicalization pending autopilot iteration timestamp_utc 2026 06 11t13 17 00z source_agent claude_code organization nexifyai by nexify scope nexify_internal result_type iteration follow_up_required true tags autopilot iteration 20 system health check",
+            "updated_at": "2026-06-11T13:20:20Z"
+          },
+          {
+            "category": "autopilot-iteration",
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot Iteration 23 \u2014 2026-06-11\n\n**Run-ID:** iteration-23-brain-autopilot-20260611T1327Z\n**UTC:** 2026-06-11T13:27:00Z\n**Berlin:** 2026-06-11T15:27:00+0200\n**Executor:** claude_code\n**Scope:** nexify_internal\n**Workspace:** /workspace/nexify\n\n## Systemstatus\n\n- Brain: 200, 487 memories, 2 collections, uptime 5179s\n- Brain Write Token: \u2705 functional\n- 9Router: v0.4.71, 11 Docker container, alle Up 14-23h\n- systemd Timers: 10 active, alle gr\u00fcn\n- Brain Queue Worker: \u2705 alle Durchl\u00e4ufe gr\u00fcn\n- Host: uptime 1d 4h, load 0.71, RAM 3.5G/31Gi, Disk 81G/387G (21%)\n- Meta-Prompt: SHA match (db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99) \u2705\n- nexify-api: Container frisch gestartet\n\n## Aktionen\n\n1. **Pflichten geladen** \u2014 using-superpowers, nexify-i18n-german-default, Meta-Prompt\n2. **Brain gequeryed** \u2014 Iterationen 19-22 gefunden\n3. **Shared State gelesen** \u2014 letzte Aktualisierung 2026-06-07, unver\u00e4ndert\n4. **Handoffs gepr\u00fcft** \u2014 outbox leer, stale archiviert\n5. **Gap Closure Register** \u2014 8 Gaps (GAP-07 CLOSED, rest OPEN)\n6. **Oracle Canonicalization** \u2014 403/403 Regeln, 2 Konflikte, 2 Quellen, 0 Tasks\n7. **Workspace** \u2014 /workspace/nexify/ mit 25 Verzeichnissen, 13 Registern\n\n## Offene Risiken (11, unver\u00e4ndert)\n\n1. brain-token.env fehlt\n2. agentmemory systemd inactive\n3. You.com MCP nicht konfiguriert\n4. PII-Log-Patch nicht deployed\n5. Brand-Migration wartet auf 7 Vorbedingungen\n6. nexifyai-platform compose nicht gestartet\n7. bookando.de DNS broken\n8. api.nexifyai.cloud:443 nicht erreichbar\n9. traefik.nexifyai.cloud ohne Cloudflare Access (KRITISCH)\n10. work.nexifyai.cloud ohne Cloudflare Access\n11. brain.nexifyai.cloud ohne Cloudflare Access\n\n## N\u00e4chste P0-Tasks\n\n1. P0-LUECKE-005 Oracle-Canonicalization \u2014 403 Regeln, 2 Konflikte, 0 Tasks\n2. P0-LUECKE-006 Customer-Project-Isolation-Policies\n3. P0-LUECKE-007 Operations-Policies\n4. P0-LUECKE-010 Finance/Cost/Value/Margin-Register\n\n## Tags\n\nautopilot, iteration-23, system-health-check, brain-sync, oracle-canonicalization-pending, 11-open-risks",
+            "created_at": "2026-06-11T13:27:59Z",
+            "id": "5942be9754844c59",
+            "metadata": {
+              "iteration": 23,
+              "organization": "nexifyai by NeXify",
+              "result_type": "iteration",
+              "scope": "nexify_internal",
+              "source_agent": "claude_code",
+              "tags": [
+                "autopilot",
+                "iteration-23",
+                "system-health-check"
+              ],
+              "timestamp_utc": "2026-06-11T13:27:00Z"
+            },
+            "score": 11,
+            "tokens": "autopilot iteration 23 2026 06 11 run id iteration 23 brain autopilot 20260611t1327z utc 2026 06 11t13 27 00z berlin 2026 06 11t15 27 00 0200 executor claude_code scope nexify_internal workspace workspace nexify systemstatus brain 200 487 memories collections uptime 5179s brain write token functional 9router v0 71 11 docker container alle up 14 23h systemd timers 10 active alle gr\u00fcn brain queue worker alle durchl\u00e4ufe gr\u00fcn host uptime 1d 4h load 71 ram 5g 31gi disk 81g 387g 21 meta prompt sha match db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99 nexify api container frisch gestartet aktionen pflichten geladen using superpowers nexify i18n german default meta prompt brain gequeryed iterationen 19 22 gefunden shared state gelesen letzte aktualisierung 2026 06 07 unver\u00e4ndert handoffs gepr\u00fcft outbox leer stale archiviert gap closure register gaps gap 07 closed rest open oracle canonicalization 403 403 regeln konflikte quellen tasks workspace workspace nexify mit 25 verzeichnissen 13 registern offene risiken 11 unver\u00e4ndert brain token env fehlt agentmemory systemd inactive you com mcp nicht konfiguriert pii log patch nicht deployed brand migration wartet auf vorbedingungen nexifyai platform compose nicht gestartet bookando de dns broken api nexifyai cloud 443 nicht erreichbar traefik nexifyai cloud ohne cloudflare access kritisch 10 work nexifyai cloud ohne cloudflare access 11 brain nexifyai cloud ohne cloudflare access n\u00e4chste p0 tasks p0 luecke 005 oracle canonicalization 403 regeln konflikte tasks p0 luecke 006 customer project isolation policies p0 luecke 007 operations policies p0 luecke 010 finance cost value margin register tags autopilot iteration 23 system health check brain sync oracle canonicalization pending 11 open risks autopilot iteration timestamp_utc 2026 06 11t13 27 00z source_agent claude_code scope nexify_internal result_type iteration iteration 23 tags autopilot iteration 23 system health check organization nexifyai by nexify",
+            "updated_at": "2026-06-11T13:27:59Z"
+          },
+          {
+            "category": "autopilot-iteration",
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot Iteration 35 \u2014 2026-06-11\n\n**Run-ID:** iteration-35-concept-20260611T1406Z\n**UTC:** 2026-06-11T14:06:00Z\n**Berlin:** 2026-06-11T16:06:00+0200\n**Executor:** claude_code\n**Scope:** nexify_internal\n**Workspace:** /workspace/nexify\n\n## Systemstatus\n\n- Brain: 200, 610 memories, 2 collections, uptime variabel\n- Brain Write Token: funktioniert\n- 9Router: v0.4.71, 11 Container, alle Up\n- systemd Timers: 10 active, alle gr\u00fcn\n- Meta-Prompt: SHA match (db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99)\n- Disk: 81G/387G (21%)\n- RAM: 3.5G/31Gi\n- Load: niedrig\n\n## Aktionen\n\n1. Systemweite Vollanalyse: workspace, brain, gaps, risks, blueprint, requirements, data sources\n2. Quellen gelesen: Systemmaster Total Concept V1, Meta-Prompt, System Blueprint, Data Source Map, Complexity Reduction Register, Gap Closure Register, Requirements Extraction Master\n3. Handoffs gepr\u00fcft: Inbox leer, Stale vorhanden (20260611/)\n4. Offene Risiken: 11, unver\u00e4ndert seit Iteration 19\n5. Gaps: 7 open (GAP-07 CLOSED)\n\n## Feststellung\n\nAlle 11 Risiken stagnieren seit Iteration 19. Cloudflare Access f\u00fcr 3 Subdomains bleibt KRITISCH. Kein neuer Fortschritt, da F\u00fchrungsfreigabe erforderlich. Autopilot-Zyklus setzt sich fort mit System-Health-Checks.\n\n## Tags\n\nautopilot, iteration-35, system-health-check, concept, 11-open-risks, stagnant",
+            "created_at": "2026-06-11T14:07:54Z",
+            "id": "3c83cb89d282480e",
+            "metadata": {
+              "iteration": 35,
+              "organization": "nexifyai by NeXify",
+              "result_type": "iteration",
+              "scope": "nexify_internal",
+              "source_agent": "claude_code",
+              "tags": [
+                "autopilot",
+                "iteration-35",
+                "system-health-check",
+                "concept",
+                "11-open-risks",
+                "stagnant"
+              ],
+              "timestamp_utc": "2026-06-11T14:06:00Z"
+            },
+            "score": 11,
+            "tokens": "autopilot iteration 35 2026 06 11 run id iteration 35 concept 20260611t1406z utc 2026 06 11t14 06 00z berlin 2026 06 11t16 06 00 0200 executor claude_code scope nexify_internal workspace workspace nexify systemstatus brain 200 610 memories collections uptime variabel brain write token funktioniert 9router v0 71 11 container alle up systemd timers 10 active alle gr\u00fcn meta prompt sha match db9c9dc68dbcd1b4b30e919439cde91a61a812eb36b21f84d0da92dcbf2efc99 disk 81g 387g 21 ram 5g 31gi load niedrig aktionen systemweite vollanalyse workspace brain gaps risks blueprint requirements data sources quellen gelesen systemmaster total concept v1 meta prompt system blueprint data source map complexity reduction register gap closure register requirements extraction master handoffs gepr\u00fcft inbox leer stale vorhanden 20260611 offene risiken 11 unver\u00e4ndert seit iteration 19 gaps open gap 07 closed feststellung alle 11 risiken stagnieren seit iteration 19 cloudflare access f\u00fcr subdomains bleibt kritisch kein neuer fortschritt da f\u00fchrungsfreigabe erforderlich autopilot zyklus setzt sich fort mit system health checks tags autopilot iteration 35 system health check concept 11 open risks stagnant autopilot iteration source_agent claude_code timestamp_utc 2026 06 11t14 06 00z iteration 35 scope nexify_internal organization nexifyai by nexify result_type iteration tags autopilot iteration 35 system health check concept 11 open risks stagnant",
+            "updated_at": "2026-06-11T14:07:54Z"
+          },
+          {
+            "category": "autopilot-iteration",
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot V5 Concept Iteration 51\n\n**UTC:** 2026-06-11T15:05:47Z | **Berlin:** 2026-06-11T17:05:47+0200\n**Executor:** claude_code | **Scope:** nexify_internal\n**Autonomiegrad:** Vollautonom, concept mode\n\n## Systemhealth\n\n- Brain: 619 memories, uptime 11121s, Write-Token OK\n- 9Router: v0.4.71, 11 Container\n- systemd Timers: 10 active, alle gr\u00fcn\n- Docker: 22 Container, alle Up (inkl. nexifyai-platform Supabase 12 Container ~1h)\n- Meta-Prompt SHA: Match db9c9dc6\n- Disk: 90G/387G (24%), RAM: 5.4G/31Gi, Load: 1.20\n\n## Konzept-Kern\n\nNeXify AI = vollst\u00e4ndig agentische KI-Agentur. 3 Ausf\u00fchrungsoberfl\u00e4chen (Claude Code, Goose CLI, Goose ACC) auf gemeinsamer Systemmaster-Ebene. 21 Komponenten im Blueprint. 14 Datenquellen kartiert. 403 Regeln kanonisiert. 11 Risiken (3 kritisch: CF Access). 7 Gaps offen. 5 P0-Tasks READY.\n\n## Autopilot-Status\n\n51 Iterationen seit v5-Start (2026-06-11T13:09Z). ~15 executed, 0 failures. Concept-Mode abgeschlossen. N\u00e4chste Iteration: Action-Mode \u2014 P0-LUECKE-007 Operations-Policies erstellen.\n\n## Architecture Critique\n\n1. Autopilot-Doppelstruktur (v4 log + v5 concept) \u2192 Brain als Single Source\n2. Rule-Duplizierung (403 Oracle + 25 Regelwerke) \u2192 Oracle = Source of Truth\n3. agentmemory 0 Observations trotz aktivem Container \u2192 initial bef\u00fcllen\n4. CLAUDE.md zu lang (~500 lines) \u2192 komprimieren\n\n## N\u00e4chste Aktionen\n\nAutonom: P0-LUECKE-007 Operations-Policies, GAP-05 Evidence, GAP-02/03 Kundenprofile.\nGate-pflichtig: CF Access (KRITISCH), You.com Rotation, PII-Deploy, Git Push.\nSp\u00e4ter: KWP Keys, Hostinger MCP, agentmemory systemd.",
+            "created_at": "2026-06-11T15:09:16Z",
+            "id": "cb2c19394d894e89",
+            "metadata": {
+              "iteration": 51,
+              "scope": "nexify_internal",
+              "source_agent": "claude_code",
+              "tags": [
+                "autopilot",
+                "v5",
+                "concept",
+                "iteration-51",
+                "system-health-check",
+                "supabase-live",
+                "action-pivot"
+              ]
+            },
+            "score": 11,
+            "tokens": "autopilot v5 concept iteration 51 utc 2026 06 11t15 05 47z berlin 2026 06 11t17 05 47 0200 executor claude_code scope nexify_internal autonomiegrad vollautonom concept mode systemhealth brain 619 memories uptime 11121s write token ok 9router v0 71 11 container systemd timers 10 active alle gr\u00fcn docker 22 container alle up inkl nexifyai platform supabase 12 container 1h meta prompt sha match db9c9dc6 disk 90g 387g 24 ram 4g 31gi load 20 konzept kern nexify ai vollst\u00e4ndig agentische ki agentur ausf\u00fchrungsoberfl\u00e4chen claude code goose cli goose acc auf gemeinsamer systemmaster ebene 21 komponenten im blueprint 14 datenquellen kartiert 403 regeln kanonisiert 11 risiken kritisch cf access gaps offen p0 tasks ready autopilot status 51 iterationen seit v5 start 2026 06 11t13 09z 15 executed failures concept mode abgeschlossen n\u00e4chste iteration action mode p0 luecke 007 operations policies erstellen architecture critique autopilot doppelstruktur v4 log v5 concept brain als single source rule duplizierung 403 oracle 25 regelwerke oracle source of truth agentmemory observations trotz aktivem container initial bef\u00fcllen claude md zu lang 500 lines komprimieren n\u00e4chste aktionen autonom p0 luecke 007 operations policies gap 05 evidence gap 02 03 kundenprofile gate pflichtig cf access kritisch you com rotation pii deploy git push sp\u00e4ter kwp keys hostinger mcp agentmemory systemd autopilot iteration iteration 51 scope nexify_internal source_agent claude_code tags autopilot v5 concept iteration 51 system health check supabase live action pivot",
+            "updated_at": "2026-06-11T15:09:16Z"
+          },
+          {
+            "category": null,
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot Iteration 21 \u2014 2026-06-11\n\n**Run-ID:** iteration-21-brain-autopilot-20260611T1322Z\n**UTC:** 2026-06-11T13:22:00Z\n**Berlin:** 2026-06-11T15:22:00+0200\n**Executor:** claude_code\n**Scope:** nexify_internal\n**Workspace:** /workspace/nexify\n\n## Systemstatus\n\n- Brain: 200, 483 memories, 2 collections, uptime 4857s, schema_version 1.0\n- Brain Write: \u2705 functional (token length 43)\n- Brain API correct paths: /health, /categories, /stats (NOT /api/brain/ prefix)\n- 9Router: running v0.4.71, HTTP 401 (auth protected)\n- Traefik: auf Port 80 (Brain nicht mehr direkt auf 80)\n- Docker Runtime: 11 containers, all Up 14-23h\n- Host: uptime 1d 4h, load 0.90\n\n## Key Findings\n\n1. **Brain API-Pfad-Korrektur best\u00e4tigt**:  Prefix funktioniert NICHT.  und  direkt sind korrekt. Fruhere GOOSE.md-Korrektur (2026-06-08) war falsch \u2014 tatsachliche Brain-API-Urls sind direkt, nicht unter /api/brain/.\n\n2. **Stage-1-Testtasks (15 Stuck)**: Alle Status 'unknown', nie ausgefuhrt. Erstellt 2026-06-07 von nexify-agent-architect-expert. TT-S1-001 bis TT-S1-015 vorhanden als JSON-Dateien.\n\n3. **Keine Experten-Definitionen**: /root/.nexify/agent-system/experts/Expert-*.md existiert nicht. Stage-1-Experten nie erstellt/aktiviert.\n\n4. **Brain Pending Queue**: Leer. Alle Payloads processed/migrated. Keine neuen pending entries.\n\n5. **You.com**: Weiterhin blockiert (Key-Rotation steht aus). Keine YOU im env.\n\n6. **PII-Patch**: bookando-backend hat PII-exc_info in server.py, aber kein Workspace-Write ohne Freigabe.\n\n7. **Shared State veraltet**: Letzte Aktualisierung 2026-06-07. Counters/run_log referenzieren veraltete Daten (brain_delta: 22, brain_actual: 67 \u2014 jetzt 483).\n\n## Gates Blocking Progress\n\n1. ~~You.com Key Rotation~~ (muss Nutzer machen)\n2. ~~Stage-1-Tests manuell ausfuhren~~ (15 Tasks, nie gestartet)\n3. ~~Shared State aktualisieren~~ (veraltet seit 2026-06-07)\n4. ~~Stage-1-Experten erstellen~~ (nie angelegt)\n5. Brain API Path Korrektur in GOOSE.md (falscher Prefix dokumentiert)\n\n## Empfohlene nchste Aktion\n\nShared State aktualisieren + Stage-1-Testtasks ausfuhren + Stage-1-Experten erstellen.",
+            "created_at": "2026-06-11T13:23:42Z",
+            "id": "ddc50f417dbf4235",
+            "metadata": {
+              "categories": [
+                "autopilot-iteration",
+                "system-scan"
+              ],
+              "iteration": 21,
+              "run_id": "iteration-21-brain-autopilot-20260611T1322Z",
+              "scope": "nexify_internal",
+              "tags": [
+                "autopilot",
+                "iteration-21",
+                "brain-api-path",
+                "stage-1-tasks"
+              ]
+            },
+            "score": 10,
+            "tokens": "autopilot iteration 21 2026 06 11 run id iteration 21 brain autopilot 20260611t1322z utc 2026 06 11t13 22 00z berlin 2026 06 11t15 22 00 0200 executor claude_code scope nexify_internal workspace workspace nexify systemstatus brain 200 483 memories collections uptime 4857s schema_version brain write functional token length 43 brain api correct paths health categories stats not api brain prefix 9router running v0 71 http 401 auth protected traefik auf port 80 brain nicht mehr direkt auf 80 docker runtime 11 containers all up 14 23h host uptime 1d 4h load 90 key findings brain api pfad korrektur best\u00e4tigt prefix funktioniert nicht und direkt sind korrekt fruhere goose md korrektur 2026 06 08 war falsch tatsachliche brain api urls sind direkt nicht unter api brain stage testtasks 15 stuck alle status unknown nie ausgefuhrt erstellt 2026 06 07 von nexify agent architect expert tt s1 001 bis tt s1 015 vorhanden als json dateien keine experten definitionen root nexify agent system experts expert md existiert nicht stage experten nie erstellt aktiviert brain pending queue leer alle payloads processed migrated keine neuen pending entries you com weiterhin blockiert key rotation steht aus keine you im env pii patch bookando backend hat pii exc_info in server py aber kein workspace write ohne freigabe shared state veraltet letzte aktualisierung 2026 06 07 counters run_log referenzieren veraltete daten brain_delta 22 brain_actual 67 jetzt 483 gates blocking progress you com key rotation muss nutzer machen stage tests manuell ausfuhren 15 tasks nie gestartet shared state aktualisieren veraltet seit 2026 06 07 stage experten erstellen nie angelegt brain api path korrektur in goose md falscher prefix dokumentiert empfohlene nchste aktion shared state aktualisieren stage testtasks ausfuhren stage experten erstellen iteration 21 scope nexify_internal run_id iteration 21 brain autopilot 20260611t1322z categories autopilot iteration system scan tags autopilot iteration 21 brain api path stage tasks",
+            "updated_at": "2026-06-11T13:23:42Z"
+          },
+          {
+            "category": "operating-data",
+            "collection": "nexifyai_brain",
+            "content": "{\n  \"master_id\": \"NEXIFY-REQUIREMENTS-EXTRACTION-V1\",\n  \"status\": \"AKTIV\",\n  \"scope\": \"NEXIFY_INTERNAL\",\n  \"updated\": \"2026-06-11\",\n  \"sources\": [\n    \"/workspace/nexify/\",\n    \"/workspace/Auftragsfach\",\n    \"Brain\",\n    \"agentmemory\",\n    \"Oracle\",\n    \"Kanban\",\n    \"Evidence\",\n    \"Chats\",\n    \"Handoffs\",\n    \"Logs\",\n    \"GitHub (nexifyai-platform only)\"\n  ],\n  \"requirement_categories\": [\n    \"Agenturziel\", \"Kundenwert\", \"Wirtschaftlichkeit\", \"Vertrieb\", \"Support\",\n    \"Projektbearbeitung\", \"Datenschutz\", \"Sicherheit\", \"Betrieb\", \"Monitoring\",\n    \"Fehlervermeidung\", \"Kostenoptimierung\", \"Tool-Nutzung\", \"Skill-Nutzung\",\n    \"MCP-Rechte\", \"Prompt-Governance\", \"Kundenprojektgrenzen\"\n  ],\n  \"requirement_fields\": [\n    \"requirement_id\", \"source_path\", \"source_type\", \"source_timestamp\",\n    \"original_statement\", \"interpreted_human_intent\", \"system_area\",\n    \"project_scope\", \"customer_scope\", \"business_value\", \"technical_value\",\n    \"risk_if_ignored\", \"existing_solution\", \"missing_solution\",\n    \"overcomplexity_detected\", \"simpler_target_solution\", \"dependencies\",\n    \"affected_agents\", \"affected_tools\", \"affected_mcp\", \"affected_skills\",\n    \"security_relevance\", \"privacy_relevance\", \"customer_boundary_relevance\",\n    \"approval_required\", \"priority\", \"status\", \"next_safe_action\", \"evidence_ref\"\n  ]\n}",
+            "created_at": "2026-06-11T13:32:38Z",
+            "id": "baaf7474078644d7",
+            "metadata": {
+              "category": "operating-data",
+              "filesize": 1320,
+              "filetype": "json",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/30_operating_data/nexify-systemwide-requirements-extraction-master.json"
+            },
+            "score": 10,
+            "tokens": "master_id nexify requirements extraction v1 status aktiv scope nexify_internal updated 2026 06 11 sources workspace nexify workspace auftragsfach brain agentmemory oracle kanban evidence chats handoffs logs github nexifyai platform only requirement_categories agenturziel kundenwert wirtschaftlichkeit vertrieb support projektbearbeitung datenschutz sicherheit betrieb monitoring fehlervermeidung kostenoptimierung tool nutzung skill nutzung mcp rechte prompt governance kundenprojektgrenzen requirement_fields requirement_id source_path source_type source_timestamp original_statement interpreted_human_intent system_area project_scope customer_scope business_value technical_value risk_if_ignored existing_solution missing_solution overcomplexity_detected simpler_target_solution dependencies affected_agents affected_tools affected_mcp affected_skills security_relevance privacy_relevance customer_boundary_relevance approval_required priority status next_safe_action evidence_ref operating data path workspace nexify 30_operating_data nexify systemwide requirements extraction master json category operating data filetype json filesize 1320 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:38Z"
+          },
+          {
+            "category": "process",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Post-change health check must follow standard template: After every change to covered systems, a post-change health check must be documented using the standard template: Change-ID, Timestamp, System Status, Response Time, Error Rate, Last Restart, Metrics with before/after values, Dependency Status, Rollback Decision, Gate Approval, and Next Check time.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "1561a83f0efe43ff",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "post-change-health-check-template",
+              "phase": "oracle_canonicalization",
+              "priority": 3,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/NO_FULL_CRASH_POLICY_V1.md"
+            },
+            "score": 9,
+            "tokens": "oracle post change health check must follow standard template after every change to covered systems post change health check must be documented using the standard template change id timestamp system status response time error rate last restart metrics with before after values dependency status rollback decision gate approval and next check time process oracle_entry_id post change health check template binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke no_full_crash_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "oracle-rule",
+            "collection": "nexifyai_brain",
+            "content": "# ORACLE AGENT DISPATCH POLICY V1\n\n**Status:** \ud83d\udfe2 Entwurf / Draft\n**Version:** 1.0.0\n**Datum:** 2026-06-11\n**Autor:** Subagent 20260611_5\n**Audit-Pflicht:** Ja\n\n---\n\n## 1. \u00dcberblick\n\nDiese Policy definiert, wie **Aufgaben im NeXify-System an Sub-Agenten verteilt** werden.\nOracle ist der zentrale Dispatcher f\u00fcr alle Aufgaben \u2014 sowohl f\u00fcr Kundenauftr\u00e4ge als auch\nf\u00fcr interne Arbeiten und Sub-Aufgaben.\n\n> **Leitsatz:** Oracle verteilt. Agenten arbeiten. Oracle pr\u00fcft. Kein Agent dispatht sich selbst.\n\n---\n\n## 2. Dispatch-Prozess\n\n### 2.1 Aufgaben-Quellen\n\n| Quelle | Beispiele | Priorit\u00e4t |\n|--------|----------|-----------|\n| **Frage-Routing** | \"Beantworte diese technische Frage\" | P1\u2013P4 |\n| **Kundenauftrag** | \"Richte Subdomain ein\" | P1\u2013P2 |\n| **Interner Auftrag** | \"F\u00fchre Audit durch\" | P2\u2013P3 |\n| **System-Ereignis** | \"Health-Check fehlgeschlagen\" | P1 |\n| **Geplante Aufgabe** | \"W\u00f6chentliches Backup\" | P3 |\n| **Agenten-R\u00fcckfrage** | \"Brauche Hilfe bei Task X\" | P1\u2013P2 |\n| **Automatisierung** | \"Trigger Workflow Y\" | P2 |\n\n### 2.2 Dispatch-Entscheidung\n\n```\nAufgabe eingehend\n  \u2193\n1. **Komplexit\u00e4t bewerten**\n   - Einfach: Ein Agent, keine Koordination\n   - Mittel: Ein Agent, mit Koordination\n   - Komplex: Mehrere Agenten, orchestriert\n\n2. **Fachgebiet bestimmen**\n   - Technisch \u2192 Goose Systemmaster\n   - Infrastruktur \u2192 Admin/Infra\n   - Governance \u2192 Promptmaster\n   - Audit \u2192 Kilo/Crush\n   - Kunde \u2192 Hermes Automation\n   - Wissen \u2192 Oracle selbst\n\n3. **Skill-Anforderungen pr\u00fcfen**\n   - Welche Skills werden ben\u00f6tigt?\n   - Welcher Agent hat diese Skills geladen?\n\n4. **Verf\u00fcgbarkeit pr\u00fcfen**\n   - Ist der Agent aktuell frei?\n   - Warteschlangen-L\u00e4nge des Agents\n\n5. **Lastverteilung**\n   - Mehrere Agents gleichen Typs verf\u00fcgbar?\n   - Round-Robin oder Least-Loaded\n\n6. **Zuweisung**\n   - Aufgabe generieren\n   - Agent zuweisen\n   - In Kanban eintragen\n   - Agent benachrichtigen\n```\n\n---\n\n## 3. Agenten-Matrix\n\n| Agent | Geeignet f\u00fcr | Max.",
+            "created_at": "2026-06-11T13:32:36Z",
+            "id": "1a276d244f2a4fb8",
+            "metadata": {
+              "category": "oracle-rule",
+              "filesize": 6925,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/31_oracle/ORACLE_AGENT_DISPATCH_POLICY.md"
+            },
+            "score": 9,
+            "tokens": "oracle agent dispatch policy v1 status entwurf draft version datum 2026 06 11 autor subagent 20260611_5 audit pflicht ja \u00fcberblick diese policy definiert wie aufgaben im nexify system an sub agenten verteilt werden oracle ist der zentrale dispatcher f\u00fcr alle aufgaben sowohl f\u00fcr kundenauftr\u00e4ge als auch f\u00fcr interne arbeiten und sub aufgaben leitsatz oracle verteilt agenten arbeiten oracle pr\u00fcft kein agent dispatht sich selbst dispatch prozess aufgaben quellen quelle beispiele priorit\u00e4t frage routing beantworte diese technische frage p1 p4 kundenauftrag richte subdomain ein p1 p2 interner auftrag f\u00fchre audit durch p2 p3 system ereignis health check fehlgeschlagen p1 geplante aufgabe w\u00f6chentliches backup p3 agenten r\u00fcckfrage brauche hilfe bei task p1 p2 automatisierung trigger workflow p2 dispatch entscheidung aufgabe eingehend komplexit\u00e4t bewerten einfach ein agent keine koordination mittel ein agent mit koordination komplex mehrere agenten orchestriert fachgebiet bestimmen technisch goose systemmaster infrastruktur admin infra governance promptmaster audit kilo crush kunde hermes automation wissen oracle selbst skill anforderungen pr\u00fcfen welche skills werden ben\u00f6tigt welcher agent hat diese skills geladen verf\u00fcgbarkeit pr\u00fcfen ist der agent aktuell frei warteschlangen l\u00e4nge des agents lastverteilung mehrere agents gleichen typs verf\u00fcgbar round robin oder least loaded zuweisung aufgabe generieren agent zuweisen in kanban eintragen agent benachrichtigen agenten matrix agent geeignet f\u00fcr max oracle rule path workspace nexify 31_oracle oracle_agent_dispatch_policy md category oracle rule filetype md filesize 6925 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:36Z"
+          }
+        ]
+      },
+      "source": "brain_api",
+      "retries": 0
+    },
+    "error": null,
+    "triggered_at": "2026-06-21T19:45:41.216446+00:00"
+  },
+  "policy": {
+    "gate_used": true,
+    "gate_type": "PolicyGate V1",
+    "evidence_standard": "EVIDENCE_TEMPLATE_V1"
+  }
+}

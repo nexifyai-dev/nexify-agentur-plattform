@@ -1,0 +1,27 @@
+{
+  "evidence_id": "ev-trun-f009c4b796e8",
+  "timestamp": "2026-06-20T14:18:26.383285+00:00",
+  "date": "2026-06-20",
+  "type": "workflow_task_execution",
+  "status": "completed",
+  "run_id": "trun-f009c4b796e8",
+  "task_id": "deep-research",
+  "source": "trigger-exec",
+  "details": {
+    "task_id": "deep-research",
+    "run_id": "trun-f009c4b796e8",
+    "result": {
+      "success": false,
+      "error": "HTTP Error 400: Bad Request",
+      "source": "brain_api_failed",
+      "retries": 2
+    },
+    "error": null,
+    "triggered_at": "2026-06-20T14:18:26.383223+00:00"
+  },
+  "policy": {
+    "gate_used": true,
+    "gate_type": "PolicyGate V1",
+    "evidence_standard": "EVIDENCE_TEMPLATE_V1"
+  }
+}

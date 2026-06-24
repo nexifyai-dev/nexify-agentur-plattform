@@ -1,0 +1,51 @@
+{
+  "snapshot_id": "post-hypercare-transition-plan-20260623",
+  "timestamp": "2026-06-23T12:00:00Z",
+  "agent": "systemmaster-agent",
+  "category": "transition-plan",
+  "entries": [
+    {
+      "id": "transition-plan-created",
+      "type": "milestone",
+      "content": "Post-Hypercare Übergangsplan erstellt. Phase B: Stabilisierung (5 Tage, 2026-06-30 bis 2026-07-05) mit reduzierten Monitoring-Frequenzen. Phase C: Übergang Normalbetrieb (2 Tage, 2026-07-05 bis 2026-07-07) mit finalen Anpassungen. Normale Betriebsphase ab 2026-07-07 definiert mit Monitoring, Support und Eskalationspfaden.",
+      "tags": ["transition", "post-hypercare", "phase-b", "phase-c", "normal-operations", "plan"],
+      "importance": "critical"
+    },
+    {
+      "id": "phase-b-stabilization",
+      "type": "definition",
+      "content": "Phase B: Stabilisierung definiert. Dauer: 5 Tage (2026-06-30 bis 2026-07-05). Monitoring-Frequenzen reduziert: Verfügbarkeit 30s, Performance 1min, Error Rate 1min, CPU/RAM/Disk 1min, Brain API 1min, Qdrant 1min, MongoDB 1min, Compliance 2-stündlich. Reports: Morning + Evening (kein Midday). Support: On-Call Business Hours, Response P0 <5min, P1 <15min.",
+      "tags": ["phase-b", "stabilization", "monitoring", "support", "definition"],
+      "importance": "high"
+    },
+    {
+      "id": "phase-c-transition",
+      "type": "definition",
+      "content": "Phase C: Übergang Normalbetrieb definiert. Dauer: 2 Tage (2026-07-05 bis 2026-07-07). Monitoring-Frequenzen final: Verfügbarkeit 1min, Performance 5min, Error Rate 5min, CPU/RAM/Disk 5min, Brain API 5min, Qdrant 5min, MongoDB 5min, Compliance täglich. Reports: Morning (kein Evening). Support: On-Call Business Hours, Response P0 <15min, P1 <30min.",
+      "tags": ["phase-c", "transition", "monitoring", "support", "definition"],
+      "importance": "high"
+    },
+    {
+      "id": "normal-operations-defined",
+      "type": "definition",
+      "content": "Normale Betriebsphase definiert. Ab 2026-07-07. Monitoring: Verfügbarkeit 1min, Performance 5min, Error Rate 5min, CPU/RAM/Disk 5min, Brain API 5min, Qdrant 5min, MongoDB 5min, Security Echtzeit, Compliance täglich, SSL täglich. Reports: Morning täglich, Weekly Review, Monthly Review. Support: 24/7 Hotline, Chat Business Hours, Ticket <1h P0/<4h P1, On-Call Business Hours <15min P0.",
+      "tags": ["normal-operations", "monitoring", "support", "definition"],
+      "importance": "high"
+    },
+    {
+      "id": "escalation-paths-defined",
+      "type": "definition",
+      "content": "Eskalationspfade definiert für alle Phasen. P0: Totalausfall <1min Erkennung, <15min Reaktion, <1h Lösung. P1: Kritischer Fehler <5min Erkennung, <30min Reaktion, <2h Lösung. P2: Performance <15min Erkennung, <1h Reaktion, <4h Lösung. P3: Sicherheit <5min Erkennung, <30min Reaktion, <2h Lösung. P4: Compliance <4h Erkennung, <2h Reaktion, <8h Lösung.",
+      "tags": ["escalation", "support", "definition", "priorities"],
+      "importance": "high"
+    },
+    {
+      "id": "transition-criteria-defined",
+      "type": "definition",
+      "content": "Übergangskriterien definiert. Phase A→B: Verfügbarkeit >99.9% (7 Tage), 0 P0-Incidents, Response <500ms, Error <1%, Compliance 100%, keine P0/P1 Issues. Phase B→C: Verfügbarkeit >99.9% (5 Tage), 0 P0-Incidents. Phase C→Normal: Verfügbarkeit >99.9% (2 Tage), 0 P0-Incidents. Rollback-Szenarien definiert für P0-Incidents, Performance-Degradation >20%, Compliance-Verstöße.",
+      "tags": ["criteria", "transition", "rollback", "definition"],
+      "importance": "high"
+    }
+  ],
+  "total_entries": 6
+}

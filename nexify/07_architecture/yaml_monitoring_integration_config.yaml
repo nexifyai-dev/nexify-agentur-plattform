@@ -1,0 +1,190 @@
+# NeXify AI OS — Monitoring Integration Configuration
+# INT-003, INT-004: Prometheus scrape targets for all services
+# Datei: integration_config.yaml
+# Anwendung: In prometheus.yml einbinden oder als separate Datei referenzieren
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'nexify-ai-os'
+    environment: 'production'
+
+# Scrape configs for all NeXify services
+scrape_configs:
+  # === Core Services ===
+  - job_name: 'brain-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['127.0.0.1:9090']
+        labels:
+          service: 'brain-api'
+          layer: 'core'
+          tier: 'critical'
+
+  - job_name: 'qdrant'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['127.0.0.1:6333']
+        labels:
+          service: 'qdrant'
+          layer: 'data'
+          tier: 'critical'
+
+  - job_name: 'hermes-webui'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['127.0.0.1:3080']
+        labels:
+          service: 'hermes-webui'
+          layer: 'ui'
+          tier: 'important'
+
+  # === Monitoring Stack ===
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['127.0.0.1:9091']
+        labels:
+          service: 'prometheus'
+          layer: 'monitoring'
+          tier: 'critical'
+
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['127.0.0.1:3001']
+        labels:
+          service: 'grafana'
+          layer: 'monitoring'
+          tier: 'important'
+
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['127.0.0.1:9093']
+        labels:
+          service: 'alertmanager'
+          layer: 'monitoring'
+          tier: 'critical'
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['127.0.0.1:9100']
+        labels:
+          service: 'node-exporter'
+          layer: 'monitoring'
+          tier: 'important'
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['127.0.0.1:8081']
+        labels:
+          service: 'cadvisor'
+          layer: 'monitoring'
+          tier: 'important'
+
+  - job_name: 'blackbox-exporter'
+    static_configs:
+      - targets: ['127.0.0.1:9115']
+        labels:
+          service: 'blackbox-exporter'
+          layer: 'monitoring'
+          tier: 'important'
+
+  # === Infrastructure ===
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['127.0.0.1:6379']
+        labels:
+          service: 'redis'
+          layer: 'infrastructure'
+          tier: 'important'
+
+  # === Custom Health-Check Metrics ===
+  - job_name: 'nexify-health-check'
+    file_sd_configs:
+      - files:
+          - '/workspace/nexify/07_tools_cli/health-check/logs/metrics.prom'
+        refresh_interval: 5m
+
+  # === Blackbox Probes (HTTP/TCP) ===
+  - job_name: 'blackbox-http'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - 'http://127.0.0.1:9090/health'
+          - 'http://127.0.0.1:6333/healthz'
+          - 'http://127.0.0.1:3080/health'
+          - 'http://127.0.0.1:3001/api/health'
+          - 'http://127.0.0.1:9091/-/healthy'
+          - 'http://127.0.0.1:9093/-/healthy'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+
+  - job_name: 'blackbox-tcp'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+          - '127.0.0.1:6379'  # Redis
+          - '127.0.0.1:6333'  # Qdrant gRPC
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+
+# === Alerting Rules (additional) ===
+# Extend alertmanager.yml with these rules
+alerting_rules:
+  - alert: ServiceDown
+    expr: nexify_service_health == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Service {{ $labels.service }} is DOWN"
+      description: "{{ $labels.service }} has been unhealthy for more than 1 minute"
+
+  - alert: HighResponseTime
+    expr: nexify_service_response_time_ms > 1000
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High response time on {{ $labels.service }}"
+      description: "{{ $labels.service }} response time is {{ $value }}ms (threshold: 1000ms)"
+
+  - alert: DiskUsageHigh
+    expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 20
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Disk usage above 80%"
+      description: "Only {{ $value }}% disk space remaining"
+
+  - alert: HealthCheckFailures
+    expr: nexify_health_check_unhealthy > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "{{ $value }} services are unhealthy"
+
+  - alert: BackupOverdue
+    expr: time() - nexify_last_backup_timestamp > 86400
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Backup is overdue"
+      description: "Last backup was more than 24 hours ago"

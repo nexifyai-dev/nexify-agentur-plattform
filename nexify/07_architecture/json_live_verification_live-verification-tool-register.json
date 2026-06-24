@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "id": "NLVL-REG-TOOL-001",
+    "name": "NeXify Live Verification Tool Register",
+    "version": "1.0",
+    "date": "2026-06-11",
+    "status": "aktiv",
+    "brain_category": "claude-code-infrastructure"
+  },
+  "tools": {
+    "typescript_nextjs_frontend": [
+      {"name": "TypeScript", "version": "5.x", "category": "type", "command": "tsc --noEmit", "status": "aktiv"},
+      {"name": "ESLint", "version": "9.x", "category": "lint", "command": "eslint . --max-warnings=0", "status": "aktiv"},
+      {"name": "Biome", "version": "1.x", "category": "lint/format", "command": "biome check .", "status": "aktiv"},
+      {"name": "Oxlint", "version": "0.x", "category": "lint", "command": "oxlint .", "status": "optional"},
+      {"name": "Knip", "version": "5.x", "category": "deadcode", "command": "knip", "status": "aktiv"},
+      {"name": "Vitest", "version": "3.x", "category": "test", "command": "vitest run", "status": "aktiv"},
+      {"name": "Storybook", "version": "8.x", "category": "ui-test", "command": "vitest --project=storybook", "status": "aktiv"},
+      {"name": "Playwright", "version": "1.58+", "category": "e2e", "command": "playwright test", "status": "aktiv"},
+      {"name": "axe-core", "version": "4.x", "category": "a11y", "command": "playwright test tests/a11y", "status": "aktiv"},
+      {"name": "Lighthouse CI", "version": "11.x", "category": "perf/seo", "command": "lhci autorun", "status": "aktiv"},
+      {"name": "React Scan", "version": "-", "category": "perf", "command": "dev-only", "status": "optional"}
+    ],
+    "python_backend": [
+      {"name": "Ruff", "version": "0.x", "category": "lint/format", "command": "ruff check .", "status": "aktiv"},
+      {"name": "Pyright", "version": "1.x", "category": "type", "command": "pyright", "status": "aktiv"},
+      {"name": "pytest", "version": "8.x", "category": "test", "command": "pytest -q", "status": "aktiv"},
+      {"name": "coverage", "version": "7.x", "category": "test-abdeckung", "command": "pytest --cov", "status": "aktiv"},
+      {"name": "bandit", "version": "1.x", "category": "security", "command": "bandit -r .", "status": "aktiv"},
+      {"name": "pip-audit", "version": "2.x", "category": "deps", "command": "pip-audit", "status": "aktiv"},
+      {"name": "uv", "version": "0.x", "category": "lock-check", "command": "uv lock --check", "status": "aktiv"}
+    ],
+    "api_contract": [
+      {"name": "OpenAPI 3.1", "version": "-", "category": "spec", "command": "manuell", "status": "aktiv"},
+      {"name": "Spectral", "version": "6.x", "category": "lint", "command": "spectral lint openapi.yaml", "status": "aktiv"},
+      {"name": "Schemathesis", "version": "3.x", "category": "fuzz", "command": "schemathesis run", "status": "aktiv"},
+      {"name": "Pact", "version": "-", "category": "contract", "command": "pact-broker can-i-deploy", "status": "optional"}
+    ],
+    "security_supply_chain": [
+      {"name": "Gitleaks", "version": "8.x", "category": "secrets", "command": "gitleaks detect --redact --source .", "status": "aktiv"},
+      {"name": "Semgrep", "version": "1.x", "category": "sast", "command": "semgrep scan --config auto", "status": "aktiv"},
+      {"name": "CodeQL", "version": "-", "category": "code-scan", "command": "github-action", "status": "aktiv"},
+      {"name": "Dependabot", "version": "-", "category": "deps", "command": "github", "status": "aktiv"},
+      {"name": "Trivy", "version": "0.x", "category": "vuln", "command": "trivy fs .", "status": "aktiv"},
+      {"name": "pnpm audit", "version": "-", "category": "deps", "command": "pnpm audit --audit-level moderate", "status": "aktiv"},
+      {"name": "OSV-Scanner", "version": "1.x", "category": "deps", "command": "osv-scanner -r .", "status": "optional"}
+    ],
+    "runtime_monitoring": [
+      {"name": "OpenTelemetry", "category": "tracing", "status": "aktiv"},
+      {"name": "Sentry/GlitchTip", "category": "errors", "status": "aktiv"},
+      {"name": "Prometheus", "version": "2.x", "category": "metrics", "status": "aktiv"},
+      {"name": "Grafana", "version": "11.x", "category": "dashboards", "status": "aktiv"},
+      {"name": "Uptime Kuma", "category": "uptime", "status": "aktiv"},
+      {"name": "Vercel Logs", "category": "deploy/runtime", "status": "aktiv"},
+      {"name": "Brain Logs", "category": "service", "status": "aktiv"},
+      {"name": "9Router Logs", "category": "routing", "status": "aktiv"}
+    ]
+  }
+}

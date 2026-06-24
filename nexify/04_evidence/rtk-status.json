@@ -1,0 +1,31 @@
+{
+  "id": "rtk-status-check",
+  "date": "2026-06-23",
+  "status": "OPERATIONAL",
+  "components": {
+    "rtk_analyzer": {
+      "path": "~/.hermes/skills/hermes/token-saver/references/scripts/rtk.py",
+      "status": "OK",
+      "features": ["session_analysis", "config_display", "waste_detection"]
+    },
+    "caveman_output_compressor": {
+      "path": "~/.hermes/skills/hermes/token-saver/references/scripts/caveman.py",
+      "status": "OK",
+      "features": ["article_removal", "filler_removal", "pleasantry_removal", "phrase_compression"],
+      "compression_rate": "7-9% (conservative), 40-70% (aggressive with full caveman skill)"
+    },
+    "input_filter": {
+      "path": "~/.hermes/skills/hermes/token-saver/references/scripts/input-filter.py",
+      "status": "OK",
+      "features": ["grep_filter", "git_filter", "tree_filter", "logs_filter"],
+      "compression_rates": {
+        "git_diff": "54%",
+        "logs": "57%",
+        "tree": "18%"
+      }
+    }
+  },
+  "skill_location": "~/.hermes/skills/hermes/token-saver/",
+  "rtk_in_9router_db": false,
+  "rtk_type": "hermes_skill_not_9router_feature"
+}

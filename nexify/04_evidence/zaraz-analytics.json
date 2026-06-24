@@ -1,0 +1,27 @@
+{
+  "zaraz": {
+    "tools": {
+      "googleAnalytics": {
+        "enabled": true,
+        "settings": {
+          "measurementId": "G-XXXXXXXXXX"
+        }
+      }
+    },
+    "analytics": {
+      "enabled": true,
+      "type": "web-vitals"
+    }
+  },
+  "webAnalytics": {
+    "enabled": true,
+    "snippet": "<script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"NEXIFY_TOKEN\"}'></script>",
+    "features": {
+      "coreWebVitals": true,
+      "pageViews": true,
+      "visitors": true,
+      "noCookies": true,
+      "gdprCompliant": true
+    }
+  }
+}

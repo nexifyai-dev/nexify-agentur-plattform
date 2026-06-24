@@ -1,0 +1,21 @@
+{
+  "dispatcher_version": "1.0.0",
+  "running": false,
+  "auto_dispatch": true,
+  "dispatch_interval_seconds": 60,
+  "default_assignee": "agentur-admin",
+  "queues": {
+    "queue:orchestra": {"auto_dispatch": true, "priority": "P0"},
+    "queue:intake": {"auto_dispatch": true, "priority": "P1"},
+    "queue:auto": {"auto_dispatch": true, "priority": "P1"},
+    "queue:kanban": {"auto_dispatch": true, "priority": "P2"},
+    "queue:cortex": {"auto_dispatch": false, "priority": "P2"},
+    "queue:skills": {"auto_dispatch": false, "priority": "P2"},
+    "queue:ux": {"auto_dispatch": false, "priority": "P3"},
+    "queue:9router": {"auto_dispatch": true, "priority": "P1"},
+    "queue:infra": {"auto_dispatch": true, "priority": "P2"},
+    "queue:guard": {"auto_dispatch": false, "priority": "P2"},
+    "queue:sales": {"auto_dispatch": false, "priority": "P2"},
+    "queue:qr": {"auto_dispatch": true, "priority": "P2"}
+  }
+}

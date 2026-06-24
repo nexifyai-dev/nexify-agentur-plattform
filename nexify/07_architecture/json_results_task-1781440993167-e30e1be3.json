@@ -1,0 +1,31 @@
+{
+  "task_id": "task-1781440993167-e30e1be3",
+  "correlation_id": "corr-phase5-e2e-20260614T124313Z",
+  "causation_id": null,
+  "status": "rc=1",
+  "started_at_berlin": "finished:2026-06-14T12:43:43.665882+00:00",
+  "finished_at_berlin": "2026-06-14T12:43:43.666560+00:00",
+  "worker_id": "nexify-claude-worker-v1",
+  "model": "nexifyai-combo-llm",
+  "router": "http://127.0.0.1:20128/v1",
+  "exit_code": 1,
+  "summary": "Error: Reached max turns (1)",
+  "changed_files": [],
+  "tests": [],
+  "evidence_refs": [
+    "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440993167-e30e1be3.stdout.log",
+    "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440993167-e30e1be3.stderr.log"
+  ],
+  "brain_refs": [],
+  "supermemory_refs": [],
+  "open_blockers": [
+    "rc=1"
+  ],
+  "next_safe_action": "RETRY_SCHEDULED",
+  "retryable": true,
+  "error_class": "worker_subprocess_nonzero",
+  "redaction_status": "applied",
+  "stdout_path": "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440993167-e30e1be3.stdout.log",
+  "stderr_path": "/workspace/nexify/10_evidence/mcp/worker_output/task-1781440993167-e30e1be3.stderr.log",
+  "duration_seconds": 30.46
+}

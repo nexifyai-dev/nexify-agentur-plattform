@@ -1,0 +1,84 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "panels": [
+    {
+      "title": "Security Events",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(auth_failures_total[5m])",
+          "legendFormat": "Failed Logins/s"
+        },
+        {
+          "expr": "rate(auth_successes_total[5m])",
+          "legendFormat": "Successful Logins/s"
+        }
+      ]
+    },
+    {
+      "title": "SSL Certificate Expiry",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "(probe_ssl_earliest_cert_expiry - time()) / 86400",
+          "legendFormat": "Days"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "d",
+          "thresholds": {
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 30 },
+              { "color": "green", "value": 60 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "Endpoint Availability",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "probe_success",
+          "legendFormat": "{{ instance }}",
+          "format": "table",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "title": "Firewall Activity",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_netstat_TcpExt_ListenDrops[5m])",
+          "legendFormat": "Connection Drops"
+        },
+        {
+          "expr": "rate(node_netstat_TcpExt_SyncookiesFailed[5m])",
+          "legendFormat": "SYN Flood Attempts"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["nexify", "security"],
+  "time": { "from": "now-24h", "to": "now" },
+  "title": "NeXify Security Dashboard",
+  "uid": "nexify-security",
+  "version": 1
+}

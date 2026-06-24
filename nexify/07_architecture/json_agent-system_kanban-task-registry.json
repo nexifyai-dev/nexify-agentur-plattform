@@ -1,0 +1,86 @@
+{
+  "registry_version": "1.0.0",
+  "last_updated": "2026-06-23T23:59:00Z",
+  "notes": "Brain/Agentmemory finalisiert mit Phase B Status. Externe Tasks priorisiert (EXT-001, EXT-002 P0).",
+  "queues": {
+    "queue:orchestra": {"team": "orchestra", "profile": "ceo", "tasks": []},
+    "queue:intake": {"team": "intake", "profile": "agentur-admin", "tasks": []},
+    "queue:auto": {"team": "auto", "profile": "automation-agent", "tasks": []},
+    "queue:kanban": {"team": "kanban", "profile": "workflow-agent", "tasks": []},
+    "queue:cortex": {"team": "cortex", "profile": "mcp-agent", "tasks": []},
+    "queue:skills": {"team": "skills", "profile": "expert-dev", "tasks": []},
+    "queue:ux": {"team": "ux", "profile": "expert-design", "tasks": []},
+    "queue:9router": {"team": "9router", "profile": "network-engineer", "tasks": []},
+    "queue:infra": {"team": "infra", "profile": "network-engineer", "tasks": []},
+    "queue:guard": {"team": "guard", "profile": "cso", "tasks": []},
+    "queue:sales": {"team": "sales", "profile": "ceo", "tasks": []},
+    "queue:qr": {"team": "qr", "profile": "cto", "tasks": []}
+  },
+  "tasks": [
+    {
+      "id": "TASK-POST-HYPERCARE-001",
+      "title": "Post-Hypercare Übergang finalisieren",
+      "status": "DONE",
+      "priority": "CRITICAL",
+      "assigned_to": "Systemmaster Agent",
+      "created": "2026-06-23T12:00:00Z",
+      "completed": "2026-06-23T23:55:00Z",
+      "description": "Post-Hypercare Übergang finalisieren und Brain/Agentmemory aktualisieren",
+      "deliverables": [
+        "/workspace/nexify/10_evidence/hypercare/POST_HYPERCARE_TRANSITION_PLAN.md",
+        "/workspace/nexify/10_evidence/hypercare/POST_HYPERCARE_FINALIZATION_EVIDENCE.md",
+        "/workspace/nexify/12_agentmemory/agentmemory-post-hypercare-finalization-20260623.json",
+        "/workspace/nexify/11_brain_sync/pending/post-hypercare-finalization-20260623.json"
+      ],
+      "evidence": {
+        "system_status": "VOLL OPERATIONAL",
+        "compliance_status": "PARTIALLY_COMPLIANT (57%)",
+        "lessons_learned": "6/6 implementiert",
+        "brain_memories": 1957,
+        "agentmemory_entries": 13,
+        "transition_phases": "Phase A → B → C → Normalbetrieb definiert"
+      }
+    },
+    {
+      "id": "EXT-001",
+      "title": "Cloudflare DNS konfigurieren",
+      "status": "OPEN",
+      "priority": "P0",
+      "assigned_to": "Pascal",
+      "created": "2026-06-23T23:59:00Z",
+      "description": "DNS-Einträge für nexifyai.cloud korrekt konfigurieren",
+      "deadline": "2026-06-25",
+      "category": "EXTERNAL",
+      "owner": "Pascal (Handlung)"
+    },
+    {
+      "id": "EXT-002",
+      "title": "SSH-Key-Rotation durchführen",
+      "status": "OPEN",
+      "priority": "P0",
+      "assigned_to": "Pascal",
+      "created": "2026-06-23T23:59:00Z",
+      "description": "Alle SSH-Keys rotieren und neue Keys generieren",
+      "deadline": "2026-06-25",
+      "category": "EXTERNAL",
+      "owner": "Pascal (Handlung)"
+    },
+    {
+      "id": "EXT-003",
+      "title": "Service-Zugänge dokumentieren",
+      "status": "OPEN",
+      "priority": "P1",
+      "assigned_to": "Pascal",
+      "created": "2026-06-23T23:59:00Z",
+      "description": "Alle Service-Zugänge und Credentials dokumentieren",
+      "deadline": "2026-06-27",
+      "category": "EXTERNAL",
+      "owner": "Pascal (Handlung)"
+    }
+  ],
+  "dispatcher": {
+    "running": false,
+    "last_dispatch": "2026-06-23T23:59:00Z",
+    "auto_dispatch_interval_seconds": 60
+  }
+}

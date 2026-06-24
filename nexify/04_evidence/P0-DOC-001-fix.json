@@ -1,0 +1,21 @@
+{
+  "finding_id": "P0-DOC-001",
+  "title": "Dockerfiles running as root",
+  "status": "FIXED",
+  "fix_date": "2026-06-23T00:00:00Z",
+  "agent": "Security Agent (Hermes)",
+  "description": "bookando-api Dockerfile had no USER directive — container ran as root",
+  "files_analyzed": [
+    {"file": "bookando-api/Dockerfile", "was_root": true, "fixed": true},
+    {"file": "nexify-ai-platform/Dockerfile", "was_root": false, "note": "Already uses USER nextjs"},
+    {"file": "vorratsgesellschaften/Dockerfile", "was_root": false, "note": "Already uses USER nextjs"},
+    {"file": "9router/Dockerfile", "was_root": false, "note": "Uses su-exec to drop to node user"}
+  ],
+  "fix_applied": [
+    "Added groupadd appgroup + useradd appuser to bookando-api/Dockerfile",
+    "Added chown -R appuser:appgroup /app before USER directive",
+    "Added USER appuser directive"
+  ],
+  "verification": "Dockerfile now has USER appuser (line 25)",
+  "evidence_path": "/workspace/nexify/10_evidence/security/P0-DOC-001-fix.json"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "rtk-test-results",
+  "date": "2026-06-23",
+  "tests": [
+    {
+      "name": "caveman_output_compressor",
+      "input": "I would recommend that we implement a solution for the database connection issue. It is important to note that we need to ensure the connection pooling is properly configured.",
+      "output": "I would recommend that we implement a solution for database connection issue. It is important to note that we need to ensure connection pooling is properly configured.",
+      "input_tokens": 44,
+      "output_tokens": 41,
+      "reduction_pct": 7,
+      "status": "OK"
+    },
+    {
+      "name": "caveman_microservices",
+      "input": "The application uses a microservices architecture with the following components. The API gateway handles all incoming requests and routes them to the appropriate service. The authentication service is responsible for managing user sessions and JWT tokens.",
+      "output": "application uses a microservices architecture with following components. API gateway handles all incoming requests and routes them to appropriate service. authentication service is responsible for managing user sessions and JWT tokens.",
+      "input_tokens": 64,
+      "output_tokens": 58,
+      "reduction_pct": 9,
+      "status": "OK"
+    },
+    {
+      "name": "input_filter_git",
+      "input": "diff --git a/src/main.js b/src/main.js\nindex 1234567..abcdefg 100644\nBinary files /dev/null and b/test.png differ\n3 files changed, 10 insertions(+), 5 deletions(-)",
+      "output": "+++ b/src/main.js\n@@ -1,5 +1,6 @@\nindex 2345678..bcdefgh 100644",
+      "input_tokens": 102,
+      "output_tokens": 47,
+      "reduction_pct": 54,
+      "status": "OK"
+    },
+    {
+      "name": "input_filter_logs",
+      "input": "2026-06-23T10:00:00 ERROR Connection failed\n2026-06-23T10:00:01 DEBUG Retrying...\n2026-06-23T10:00:02 INFO Connection established\n2026-06-23T10:00:03 TRACE Heartbeat sent\n2026-06-23T10:00:04 WARN Timeout approaching\n2026-06-23T10:00:05 DEBUG Processing request\n2026-06-23T10:00:06 ERROR Query failed",
+      "output": "2026-06-23T10:00:00 ERROR Connection failed\n2026-06-23T10:00:04 WARN Timeout approaching\n2026-06-23T10:00:06 ERROR Query failed",
+      "input_tokens": 75,
+      "output_tokens": 32,
+      "reduction_pct": 57,
+      "status": "OK"
+    },
+    {
+      "name": "input_filter_tree",
+      "input": "src/\n  components/\n    App.js\n    Header.js\n  node_modules/\n    package1/\n    package2\n  utils/\n    helper.js\n.git/\n  objects/\n  refs/",
+      "output": "src/\n  components/\n    App.js\n    Header.js\n    package1/\n    package2\n  utils/\n    helper.js\n  objects/\n  refs/",
+      "input_tokens": 34,
+      "output_tokens": 28,
+      "reduction_pct": 18,
+      "status": "OK"
+    }
+  ],
+  "overall_status": "ALL_TESTS_PASSED",
+  "average_reduction": {
+    "caveman": "8%",
+    "input_filter_git": "54%",
+    "input_filter_logs": "57%",
+    "input_filter_tree": "18%"
+  }
+}

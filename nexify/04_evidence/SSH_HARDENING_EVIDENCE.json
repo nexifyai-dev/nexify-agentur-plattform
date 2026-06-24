@@ -1,0 +1,118 @@
+{
+  "evidence_type": "penetrationstest_phase1_ssh_hardening",
+  "timestamp": "2026-06-23T12:00:00Z",
+  "vps_ip": "72.62.152.47",
+  "task": "P1-Task 2",
+  "status": "CONFIGURATION_PREPARED",
+  "description": "SSH-Härtung Phase 1 — Penetrationstest",
+
+  "findings_before": {
+    "PermitRootLogin": "yes",
+    "PasswordAuthentication": "yes",
+    "PubkeyAuthentication": "yes",
+    "MaxAuthTries": 6,
+    "LoginGraceTime": 120,
+    "X11Forwarding": "yes",
+    "AllowTcpForwarding": "yes",
+    "risk_level": "KRITISCH",
+    "issues": [
+      "Root-Login via SSH erlaubt — erhöht Angriffsfläche",
+      "Passwort-Auth erlaubt — Brute-Force möglich",
+      "MaxAuthTries zu hoch — mehr Versuche für Angreifer",
+      "X11Forwarding aktiv — potentielle Sicherheitslücke",
+      "AllowTcpForwarding aktiv — Tunnel-Missbrauch möglich"
+    ]
+  },
+
+  "hardening_measures": {
+    "PermitRootLogin": "no",
+    "PasswordAuthentication": "no",
+    "PubkeyAuthentication": "yes",
+    "MaxAuthTries": 3,
+    "LoginGraceTime": 60,
+    "X11Forwarding": "no",
+    "AllowTcpForwarding": "no",
+    "AllowAgentForwarding": "no",
+    "PermitTunnel": "no",
+    "LogLevel": "VERBOSE"
+  },
+
+  "security_improvements": [
+    "Root-Login deaktiviert — nur normale User + sudo",
+    "Passwort-Login deaktiviert — nur SSH-Keys erlaubt",
+    "Auth-Versuche reduziert (6→3) — Brute-Force erschwert",
+    "Login Grace Time reduziert (120→60s) — Timing-Angriffe erschwert",
+    "X11 Forwarding deaktiviert — Angriffsfläche reduziert",
+    "TCP Forwarding deaktiviert — Tunnel-Missbrauch verhindert",
+    "Logging auf VERBOSE erhöht — bessere Forensik"
+  ],
+
+  "files_created": [
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/01_current_ssh_config_backup.conf",
+      "description": "SSH-Config VORHER (unsichere Konfiguration)"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/02_hardened_sshd_config.conf",
+      "description": "SSH-Config NACHHER (gehärtete Konfiguration)"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/03_deploy_ssh_hardening.sh",
+      "description": "Deployment-Script mit Backup und Verifizierung"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/04_verify_ssh_hardening.sh",
+      "description": "Verifizierungs-Script mit Soll-Ist-Vergleich"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/05_manual_commands.md",
+      "description": "Manuelle Commands und Rollback-Anleitung"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/06_evidence_report.md",
+      "description": "Dieser Evidence-Report"
+    },
+    {
+      "path": "/workspace/nexify/10_evidence/penetrationstest/phase1_ssh_hardening/SSH_HARDENING_EVIDENCE.json",
+      "description": "Maschinenlesbares Evidence JSON"
+    }
+  ],
+
+  "deployment_checklist": {
+    "pre_deployment": [
+      "SSH-Key auf VPS installiert",
+      "Separates Terminal für Test-Login bereit",
+      "VPS-Provider Console/Rescue-Zugang verfügbar",
+      "Backup der aktuellen Config erstellen"
+    ],
+    "deployment_steps": [
+      "Script 03_deploy_ssh_hardening.sh ausführen",
+      "Syntax-Check bestanden (sshd -t)",
+      "SSHD reload (nicht restart!)",
+      "In separatem Terminal Login testen"
+    ],
+    "post_deployment": [
+      "Script 04_verify_ssh_hardening.sh ausführen",
+      "Alle Checks bestanden",
+      "Dokumentation aktualisieren"
+    ]
+  },
+
+  "risks": {
+    "aussperrung_risk": "MITTEL",
+    "mitigation": [
+      "Backup der aktuellen Config vor Änderung",
+      "SSHD reload statt restart (bestehende Sessions bleiben)",
+      "Separates Terminal für Verifizierung",
+      "VPS-Provider Console als Emergency-Fallback",
+      "Rollback-Script bereit"
+    ]
+  },
+
+  "next_steps": [
+    "SSH-Key auf VPS installieren (falls noch nicht geschehen)",
+    "Deployment-Script auf VPS ausführen",
+    "Verifizierung durchführen",
+    "Evidence-Report finalisieren mit tatsächlichen Werten"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "master_id": "NEXIFY-TOTAL-CONCEPT-MASTER-V1",
+  "status": "AKTIV",
+  "scope": "NEXIFY_INTERNAL",
+  "updated": "2026-06-11",
+  "brain_url": "http://127.0.0.1:9090",
+  "qdrant_url": "http://127.0.0.1:6333",
+  "router_model": "nexifyai-combo-llm",
+  "tunnel_domains": ["brain.nexifyai.cloud", "agentmemory.nexifyai.cloud"],
+  "secrets_categories": 10,
+  "secrets_keys": 15,
+  "brain_entries": 472,
+  "skills_installed": 25,
+  "skills_catalog": "845+",
+  "knowledge_work_plugins": 55,
+  "agent_execution_surfaces": ["Claude Code", "Goose CLI", "Goose ACC"],
+  "rules_canonicalized": 403,
+  "customer_projects": [
+    {"name": "Studienkolleg Aachen", "scope": "CUSTOMER_PROJECT"},
+    {"name": "Affilientportal / Bookando", "scope": "CUSTOMER_PROJECT"}
+  ],
+  "next_actions": [
+    "Autopilot v5 execution beobachten",
+    "Repo-Push klären",
+    "Hostinger Firewall konfigurieren",
+    "KWP API-Keys versorgen",
+    "Customer Project Register pflegen"
+  ]
+}

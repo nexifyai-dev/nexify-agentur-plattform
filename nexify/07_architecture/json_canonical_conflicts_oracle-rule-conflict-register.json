@@ -1,0 +1,539 @@
+{
+  "conflicts": [
+    {
+      "a": "evidence-keine-aktion-ohne-evidence",
+      "b": "feedback-self-optimization-principle",
+      "cat": "governance",
+      "desc": "evidence-keine-aktion-ohne-evidence(mandatory) vs feedback-self-optimization-principle(informational)"
+    },
+    {
+      "a": "evidence-keine-aktion-ohne-evidence",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "evidence-keine-aktion-ohne-evidence(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "evidence-keine-aktion-ohne-evidence",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "evidence-keine-aktion-ohne-evidence(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "evidence-keine-aktion-ohne-evidence",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "evidence-keine-aktion-ohne-evidence(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "evidence-keine-aktion-ohne-evidence",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "evidence-keine-aktion-ohne-evidence(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "evidence-template-pflicht",
+      "b": "feedback-self-optimization-principle",
+      "cat": "governance",
+      "desc": "evidence-template-pflicht(mandatory) vs feedback-self-optimization-principle(informational)"
+    },
+    {
+      "a": "evidence-template-pflicht",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "evidence-template-pflicht(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "evidence-template-pflicht",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "evidence-template-pflicht(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "evidence-template-pflicht",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "evidence-template-pflicht(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "evidence-template-pflicht",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "evidence-template-pflicht(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "evidence-mindestabschnitte-pflicht",
+      "b": "feedback-self-optimization-principle",
+      "cat": "governance",
+      "desc": "evidence-mindestabschnitte-pflicht(mandatory) vs feedback-self-optimization-principle(informational)"
+    },
+    {
+      "a": "evidence-mindestabschnitte-pflicht",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "evidence-mindestabschnitte-pflicht(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "evidence-mindestabschnitte-pflicht",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "evidence-mindestabschnitte-pflicht(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "evidence-mindestabschnitte-pflicht",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "evidence-mindestabschnitte-pflicht(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "evidence-mindestabschnitte-pflicht",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "evidence-mindestabschnitte-pflicht(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "evidence-verknuepfungspflicht",
+      "b": "feedback-self-optimization-principle",
+      "cat": "governance",
+      "desc": "evidence-verknuepfungspflicht(mandatory) vs feedback-self-optimization-principle(informational)"
+    },
+    {
+      "a": "evidence-verknuepfungspflicht",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "evidence-verknuepfungspflicht(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "evidence-verknuepfungspflicht",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "evidence-verknuepfungspflicht(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "evidence-verknuepfungspflicht",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "evidence-verknuepfungspflicht(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "evidence-verknuepfungspflicht",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "evidence-verknuepfungspflicht(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "evidence-audit-pflicht",
+      "b": "feedback-self-optimization-principle",
+      "cat": "governance",
+      "desc": "evidence-audit-pflicht(mandatory) vs feedback-self-optimization-principle(informational)"
+    },
+    {
+      "a": "evidence-audit-pflicht",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "evidence-audit-pflicht(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "evidence-audit-pflicht",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "evidence-audit-pflicht(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "evidence-audit-pflicht",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "evidence-audit-pflicht(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "evidence-audit-pflicht",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "evidence-audit-pflicht(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "konflikt-register-zweck",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs konflikt-register-zweck(mandatory)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "konflikt-register-changelog",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs konflikt-register-changelog(mandatory)"
+    },
+    {
+      "a": "feedback-self-optimization-principle",
+      "b": "risk-level-low",
+      "cat": "governance",
+      "desc": "feedback-self-optimization-principle(informational) vs risk-level-low(mandatory)"
+    },
+    {
+      "a": "konflikt-register-zweck",
+      "b": "konflikt-register-active-conflicts-k003",
+      "cat": "governance",
+      "desc": "konflikt-register-zweck(mandatory) vs konflikt-register-active-conflicts-k003(recommended)"
+    },
+    {
+      "a": "konflikt-register-zweck",
+      "b": "konflikt-register-active-conflicts-k004",
+      "cat": "governance",
+      "desc": "konflikt-register-zweck(mandatory) vs konflikt-register-active-conflicts-k004(recommended)"
+    },
+    {
+      "a": "konflikt-register-zweck",
+      "b": "konflikt-register-active-conflicts-k005",
+      "cat": "governance",
+      "desc": "konflikt-register-zweck(mandatory) vs konflikt-register-active-conflicts-k005(recommended)"
+    },
+    {
+      "a": "konflikt-register-zweck",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "konflikt-register-zweck(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k003",
+      "b": "konflikt-register-changelog",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k003(recommended) vs konflikt-register-changelog(mandatory)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k003",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k003(recommended) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k003",
+      "b": "risk-level-low",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k003(recommended) vs risk-level-low(mandatory)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k004",
+      "b": "konflikt-register-changelog",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k004(recommended) vs konflikt-register-changelog(mandatory)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k004",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k004(recommended) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k004",
+      "b": "risk-level-low",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k004(recommended) vs risk-level-low(mandatory)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k005",
+      "b": "konflikt-register-changelog",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k005(recommended) vs konflikt-register-changelog(mandatory)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k005",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k005(recommended) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "konflikt-register-active-conflicts-k005",
+      "b": "risk-level-low",
+      "cat": "governance",
+      "desc": "konflikt-register-active-conflicts-k005(recommended) vs risk-level-low(mandatory)"
+    },
+    {
+      "a": "konflikt-register-changelog",
+      "b": "skill-governance-rule-hierarchy",
+      "cat": "governance",
+      "desc": "konflikt-register-changelog(mandatory) vs skill-governance-rule-hierarchy(informational)"
+    },
+    {
+      "a": "skill-governance-rule-hierarchy",
+      "b": "risk-level-low",
+      "cat": "governance",
+      "desc": "skill-governance-rule-hierarchy(informational) vs risk-level-low(mandatory)"
+    },
+    {
+      "a": "brain-exception-read-only",
+      "b": "evidence-speicherort",
+      "cat": "process",
+      "desc": "brain-exception-read-only(recommended) vs evidence-speicherort(mandatory)"
+    },
+    {
+      "a": "brain-exception-read-only",
+      "b": "sync-interval-low",
+      "cat": "process",
+      "desc": "brain-exception-read-only(recommended) vs sync-interval-low(mandatory)"
+    },
+    {
+      "a": "brain-exception-read-only",
+      "b": "dringlichkeit-p4-niedrig",
+      "cat": "process",
+      "desc": "brain-exception-read-only(recommended) vs dringlichkeit-p4-niedrig(informational)"
+    },
+    {
+      "a": "brain-exception-read-only",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "brain-exception-read-only(recommended) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "agenten-test-in-isolation",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs agenten-test-in-isolation(recommended)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "dringlichkeit-p4-niedrig",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs dringlichkeit-p4-niedrig(informational)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "reporting-wochenbericht",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs reporting-wochenbericht(recommended)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "reporting-monatsbericht",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs reporting-monatsbericht(recommended)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "reporting-quartals-review",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs reporting-quartals-review(recommended)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "evidence-speicherort",
+      "b": "exception-trivial-operation",
+      "cat": "process",
+      "desc": "evidence-speicherort(mandatory) vs exception-trivial-operation(recommended)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "agenten-test-in-isolation",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs agenten-test-in-isolation(recommended)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "dringlichkeit-p4-niedrig",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs dringlichkeit-p4-niedrig(informational)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "reporting-wochenbericht",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs reporting-wochenbericht(recommended)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "reporting-monatsbericht",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs reporting-monatsbericht(recommended)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "reporting-quartals-review",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs reporting-quartals-review(recommended)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "sync-interval-low",
+      "b": "exception-trivial-operation",
+      "cat": "process",
+      "desc": "sync-interval-low(mandatory) vs exception-trivial-operation(recommended)"
+    },
+    {
+      "a": "agenten-test-in-isolation",
+      "b": "dringlichkeit-p4-niedrig",
+      "cat": "process",
+      "desc": "agenten-test-in-isolation(recommended) vs dringlichkeit-p4-niedrig(informational)"
+    },
+    {
+      "a": "agenten-test-in-isolation",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "agenten-test-in-isolation(recommended) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "dringlichkeit-p4-niedrig",
+      "b": "reporting-wochenbericht",
+      "cat": "process",
+      "desc": "dringlichkeit-p4-niedrig(informational) vs reporting-wochenbericht(recommended)"
+    },
+    {
+      "a": "dringlichkeit-p4-niedrig",
+      "b": "reporting-monatsbericht",
+      "cat": "process",
+      "desc": "dringlichkeit-p4-niedrig(informational) vs reporting-monatsbericht(recommended)"
+    },
+    {
+      "a": "dringlichkeit-p4-niedrig",
+      "b": "reporting-quartals-review",
+      "cat": "process",
+      "desc": "dringlichkeit-p4-niedrig(informational) vs reporting-quartals-review(recommended)"
+    },
+    {
+      "a": "dringlichkeit-p4-niedrig",
+      "b": "exception-trivial-operation",
+      "cat": "process",
+      "desc": "dringlichkeit-p4-niedrig(informational) vs exception-trivial-operation(recommended)"
+    },
+    {
+      "a": "reporting-wochenbericht",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "reporting-wochenbericht(recommended) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "reporting-monatsbericht",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "reporting-monatsbericht(recommended) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "reporting-quartals-review",
+      "b": "dokument-status-entwurf",
+      "cat": "process",
+      "desc": "reporting-quartals-review(recommended) vs dokument-status-entwurf(informational)"
+    },
+    {
+      "a": "dokument-status-entwurf",
+      "b": "exception-trivial-operation",
+      "cat": "process",
+      "desc": "dokument-status-entwurf(informational) vs exception-trivial-operation(recommended)"
+    },
+    {
+      "a": "audit-type-ui",
+      "b": "positive-surprise-allowed-registers",
+      "cat": "quality",
+      "desc": "audit-type-ui(mandatory) vs positive-surprise-allowed-registers(recommended)"
+    },
+    {
+      "a": "audit-type-ui",
+      "b": "metrik-change-request-durchlaufzeit",
+      "cat": "quality",
+      "desc": "audit-type-ui(mandatory) vs metrik-change-request-durchlaufzeit(informational)"
+    },
+    {
+      "a": "audit-type-ui",
+      "b": "metrik-approval-rate",
+      "cat": "quality",
+      "desc": "audit-type-ui(mandatory) vs metrik-approval-rate(informational)"
+    },
+    {
+      "a": "audit-type-ui",
+      "b": "metrik-rollback-rate",
+      "cat": "quality",
+      "desc": "audit-type-ui(mandatory) vs metrik-rollback-rate(informational)"
+    },
+    {
+      "a": "audit-type-ui",
+      "b": "metrik-claudemd-aenderungsfrequenz",
+      "cat": "quality",
+      "desc": "audit-type-ui(mandatory) vs metrik-claudemd-aenderungsfrequenz(informational)"
+    },
+    {
+      "a": "positive-surprise-allowed-registers",
+      "b": "metrik-change-request-durchlaufzeit",
+      "cat": "quality",
+      "desc": "positive-surprise-allowed-registers(recommended) vs metrik-change-request-durchlaufzeit(informational)"
+    },
+    {
+      "a": "positive-surprise-allowed-registers",
+      "b": "metrik-approval-rate",
+      "cat": "quality",
+      "desc": "positive-surprise-allowed-registers(recommended) vs metrik-approval-rate(informational)"
+    },
+    {
+      "a": "positive-surprise-allowed-registers",
+      "b": "metrik-rollback-rate",
+      "cat": "quality",
+      "desc": "positive-surprise-allowed-registers(recommended) vs metrik-rollback-rate(informational)"
+    },
+    {
+      "a": "positive-surprise-allowed-registers",
+      "b": "metrik-claudemd-aenderungsfrequenz",
+      "cat": "quality",
+      "desc": "positive-surprise-allowed-registers(recommended) vs metrik-claudemd-aenderungsfrequenz(informational)"
+    },
+    {
+      "a": "brain-gebot-definition-components",
+      "b": "brain-first-001",
+      "cat": "brain",
+      "desc": "brain-gebot-definition-components(informational) vs brain-first-001(mandatory)"
+    },
+    {
+      "a": "brain-gebot-definition-components",
+      "b": "brain-first-002",
+      "cat": "brain",
+      "desc": "brain-gebot-definition-components(informational) vs brain-first-002(mandatory)"
+    },
+    {
+      "a": "brain-gebot-definition-components",
+      "b": "brain-first-003",
+      "cat": "brain",
+      "desc": "brain-gebot-definition-components(informational) vs brain-first-003(mandatory)"
+    },
+    {
+      "a": "brain-gebot-definition-components",
+      "b": "brain-first-004",
+      "cat": "brain",
+      "desc": "brain-gebot-definition-components(informational) vs brain-first-004(mandatory)"
+    },
+    {
+      "a": "brain-component-inventory",
+      "b": "verknuepfung-regelwerks-index",
+      "cat": "architecture",
+      "desc": "brain-component-inventory(informational) vs verknuepfung-regelwerks-index(mandatory)"
+    }
+  ],
+  "summary": {
+    "sources": 23,
+    "rules_raw": 403,
+    "rules_unique": 403,
+    "duplicates": 0,
+    "conflicts": 88
+  }
+}

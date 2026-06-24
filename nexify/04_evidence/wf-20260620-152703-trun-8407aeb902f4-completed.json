@@ -1,0 +1,222 @@
+{
+  "evidence_id": "ev-trun-8407aeb902f4",
+  "timestamp": "2026-06-20T15:27:03.434168+00:00",
+  "date": "2026-06-20",
+  "type": "workflow_task_execution",
+  "status": "completed",
+  "run_id": "trun-8407aeb902f4",
+  "task_id": "deep-research",
+  "source": "trigger-exec",
+  "details": {
+    "task_id": "deep-research",
+    "run_id": "trun-8407aeb902f4",
+    "result": {
+      "success": true,
+      "query": "NeXify: all",
+      "results": {
+        "collection": "nexifyai_brain",
+        "count": 10,
+        "query": "NeXify: all",
+        "results": [
+          {
+            "category": "evidence",
+            "collection": "nexifyai_brain",
+            "content": "# Brain Pending/Fallback \u2014 Evidence\n\n**Datum (Berlin):** 2026-06-11 14:00 +0200\n\n## Pending-Queue-Stand\n\n| Queue | Pfad | Status |\n|---|---|---|\n| Brain Pending Operating Data | /workspace/nexify/11_brain_sync/brain-pending-operating-data.json | \u2705 VORHANDEN |\n| agentmemory Pending Current Session | /workspace/nexify/12_agentmemory/agentmemory-pending-current-session.json | \u2705 VORHANDEN |\n| agentmemory Pending Operating Data | /workspace/nexify/12_agentmemory/agentmemory-pending-operating-data.json | \u2705 VORHANDEN |\n| agentmemory Pending Regelwerke | /workspace/nexify/12_agentmemory/agentmemory-pending-regelwerke.json | \u2705 VORHANDEN |\n\n## Brain-Fallback-Kette\n1. Brain API (http://127.0.0.1:9090) \u2014 prim\u00e4r\n2. Qdrant direkt (http://127.0.0.1:6333) \u2014 Fallback bei Brain-API-Ausfall\n3. Lokale Pending-Dateien \u2014 wenn kein Store m\u00f6glich\n\n## Status\n\u2705 Pending-Infrastruktur vollst\u00e4ndig und betriebsbereit.",
+            "created_at": "2026-06-11T13:32:39Z",
+            "id": "dbedab80574f4e52",
+            "metadata": {
+              "category": "evidence",
+              "filesize": 923,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/10_evidence/brain/BRAIN_PENDING_FALLBACK_EVIDENCE_2026-06-11.md"
+            },
+            "score": 6,
+            "tokens": "brain pending fallback evidence datum berlin 2026 06 11 14 00 0200 pending queue stand queue pfad status brain pending operating data workspace nexify 11_brain_sync brain pending operating data json vorhanden agentmemory pending current session workspace nexify 12_agentmemory agentmemory pending current session json vorhanden agentmemory pending operating data workspace nexify 12_agentmemory agentmemory pending operating data json vorhanden agentmemory pending regelwerke workspace nexify 12_agentmemory agentmemory pending regelwerke json vorhanden brain fallback kette brain api http 127 9090 prim\u00e4r qdrant direkt http 127 6333 fallback bei brain api ausfall lokale pending dateien wenn kein store m\u00f6glich status pending infrastruktur vollst\u00e4ndig und betriebsbereit evidence path workspace nexify 10_evidence brain brain_pending_fallback_evidence_2026 06 11 md category evidence filetype md filesize 923 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:39Z"
+          },
+          {
+            "category": "memory",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] agentmemory als zentrale und einzige Memory-Schicht: agentmemory ist die zentrale und einzige Memory-Schicht fuer alle Agenten im NeXify-System. Lokales, agenten-spezifisches Gedaechtnis ausserhalb von agentmemory ist nicht erlaubt.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "c65ed6a1f91d4ec0",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "agentmemory-central-memory-layer",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/MEMORY_PFLICHT_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle agentmemory als zentrale und einzige memory schicht agentmemory ist die zentrale und einzige memory schicht fuer alle agenten im nexify system lokales agenten spezifisches gedaechtnis ausserhalb von agentmemory ist nicht erlaubt memory oracle_entry_id agentmemory central memory layer binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke memory_pflicht_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Gesch\u00fctzte Prompts nur mit Promptmaster-Review \u00e4nderbar: Folgende Prompts d\u00fcrfen NIEMALS ohne Promptmaster-Review ge\u00e4ndert werden: System-Instructions (Identity), CLAUDE.md, GOOSE.md, GOOSE_NEXIFY_AUTOMATION_RULES.md, alle Dateien in /workspace/nexify/01_agenten_seele/, alle Dateien in /workspace/nexify/03_regelwerke/, 9Router-Config-Prompts, NeXify Semantic Compression Prompt, Promptmaster Governance selbst.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "a684f654258c48ee",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "protected-prompts-list",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/NEXIFY_PROMPT_VERANKERUNG_REGISTER.md"
+            },
+            "score": 5,
+            "tokens": "oracle gesch\u00fctzte prompts nur mit promptmaster review \u00e4nderbar folgende prompts d\u00fcrfen niemals ohne promptmaster review ge\u00e4ndert werden system instructions identity claude md goose md goose_nexify_automation_rules md alle dateien in workspace nexify 01_agenten_seele alle dateien in workspace nexify 03_regelwerke 9router config prompts nexify semantic compression prompt promptmaster governance selbst governance oracle_entry_id protected prompts list binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke nexify_prompt_verankerung_register md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Register dokumentiert Prompt-Verankerungen und \u00c4nderungsbefugnisse: Das NEXIFY PROMPT VERANKERUNG REGISTER dokumentiert, welche Systemprompts, Konfigurationen und Agentenanweisungen in welcher Datei verankert sind und wer sie \u00e4ndern darf. Es dient als zentrale Nachverfolgung aller Prompt-\u00c4nderungen.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "93c6a012edd64827",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "register-purpose-documentation",
+              "phase": "oracle_canonicalization",
+              "priority": 3,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/NEXIFY_PROMPT_VERANKERUNG_REGISTER.md"
+            },
+            "score": 5,
+            "tokens": "oracle register dokumentiert prompt verankerungen und \u00e4nderungsbefugnisse das nexify prompt verankerung register dokumentiert welche systemprompts konfigurationen und agentenanweisungen in welcher datei verankert sind und wer sie \u00e4ndern darf es dient als zentrale nachverfolgung aller prompt \u00e4nderungen governance oracle_entry_id register purpose documentation binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke nexify_prompt_verankerung_register md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] NEXIFY_NO_BLOCKING_CONFIRMATIONS = TRUE: Blocking confirmations are disabled system-wide. No prompt shall block execution for non-gated operations.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "02b2d16909dc43b2",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "nexify-no-blocking-confirmations",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/NONINTERACTIVE_EXECUTION_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle nexify_no_blocking_confirmations true blocking confirmations are disabled system wide no prompt shall block execution for non gated operations governance oracle_entry_id nexify no blocking confirmations binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke noninteractive_execution_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] NEXIFY_NONINTERACTIVE_BY_DEFAULT = TRUE: All execution runs in noninteractive mode by default. No interactive prompts are shown during automated execution.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "214f50dcb18a4183",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "nexify-noninteractive-by-default",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/NONINTERACTIVE_EXECUTION_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle nexify_noninteractive_by_default true all execution runs in noninteractive mode by default no interactive prompts are shown during automated execution governance oracle_entry_id nexify noninteractive by default binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke noninteractive_execution_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] NEXIFY_SAFE_INTERNAL_AUTO_APPROVAL = TRUE: Safe internal operations are automatically approved without human intervention. No gate check required for safe internal commands.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "b881aa4a2c3840b8",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "nexify-safe-internal-auto-approval",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/NONINTERACTIVE_EXECUTION_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle nexify_safe_internal_auto_approval true safe internal operations are automatically approved without human intervention no gate check required for safe internal commands governance oracle_entry_id nexify safe internal auto approval binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke noninteractive_execution_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] NEXIFY_GATE_TASKS_DO_NOT_BLOCK_SAFE_WORK = TRUE: Gated tasks awaiting approval must not block parallel safe work. Safe operations continue while gate approvals are pending.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "4c675bcc6978421c",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "nexify-gate-tasks-no-block-safe-work",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/NONINTERACTIVE_EXECUTION_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle nexify_gate_tasks_do_not_block_safe_work true gated tasks awaiting approval must not block parallel safe work safe operations continue while gate approvals are pending governance oracle_entry_id nexify gate tasks no block safe work binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke noninteractive_execution_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "process",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] DOCS operations execute automatically: All documentation operations (writing MD/JSON files in /workspace/nexify) execute automatically without approval.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "3659448df58c4e6d",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "decision-docs-auto",
+              "phase": "oracle_canonicalization",
+              "priority": 4,
+              "scope": "nexify_internal",
+              "source": "/workspace/nexify/03_regelwerke/NONINTERACTIVE_EXECUTION_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle docs operations execute automatically all documentation operations writing md json files in workspace nexify execute automatically without approval process oracle_entry_id decision docs auto binding_level mandatory priority scope nexify_internal source workspace nexify 03_regelwerke noninteractive_execution_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "governance",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] No change may risk full crash \u2014 safe path required: No change to critical NeXify systems may risk a full crash. Every change must have a documented, tested, and evidence-backed safe path. This policy is binding for all NeXify systems with rank 3 (after Operational Constitution) and is enforced via automated CI/Gate.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "a717d4f1472c4173",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "no-full-crash-policy-mandatory",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/NO_FULL_CRASH_POLICY_V1.md"
+            },
+            "score": 5,
+            "tokens": "oracle no change may risk full crash safe path required no change to critical nexify systems may risk full crash every change must have documented tested and evidence backed safe path this policy is binding for all nexify systems with rank after operational constitution and is enforced via automated ci gate governance oracle_entry_id no full crash policy mandatory binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke no_full_crash_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          }
+        ]
+      },
+      "source": "brain_api",
+      "retries": 0
+    },
+    "error": null,
+    "triggered_at": "2026-06-20T15:27:03.434042+00:00"
+  },
+  "policy": {
+    "gate_used": true,
+    "gate_type": "PolicyGate V1",
+    "evidence_standard": "EVIDENCE_TEMPLATE_V1"
+  }
+}

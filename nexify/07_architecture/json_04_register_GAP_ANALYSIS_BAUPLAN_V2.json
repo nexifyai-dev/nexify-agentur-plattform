@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "version": "2.0.0",
+    "created": "2026-06-20T14:45:00Z",
+    "based_on": "BAUPLAN_V2_FINAL.md — Verbindlicher Bauplan 08.05.2026",
+    "current_state": "SHARED_AGENT_STATE.json — Letzter Ist-Stand",
+    "source": "Hermes Agent (network-engineer) — Agentic AI Langlauf"
+  },
+  "ist_vs_soll": {
+    "traefik": {"ist": "Nicht aktiv (kein Docker-Zugriff)", "soll": "Zentraler Router", "lücke": "MUSS eingerichtet werden (VPS)"},
+    "admin_nexifyai_cloud": {"ist": "Nicht aktiv", "soll": "Admin-Cockpit Port 8400", "lücke": "MUSS aufgesetzt werden"},
+    "ai_fabrik_nexifyai_cloud": {"ist": "Paperclip konfiguriert aber nicht aktiv", "soll": "KI-Fabrik Port 3100", "lücke": "Paperclip-Adapter fixen + starten"},
+    "frontend_nexify_automate": {"ist": "Nicht verbunden", "soll": "www.nexify-automate.com", "lücke": "Next.js-Frontend aufsetzen oder Vercel anbinden"},
+    "notebook_nexifyai_cloud": {"ist": "open-notebook-y3ih existiert", "soll": "Notebook Port 8502", "lücke": "Prüfen ob läuft + DNS"},
+    "supabase_nexifyai_cloud": {"ist": "Supabase läuft als Docker-Stack", "soll": "Zentraler Datenkern", "lücke": "DNS/Proxy prüfen"},
+    "analytics_nexifyai_cloud": {"ist": "Umami nicht aktiv geprüft", "soll": "Umami Analytics", "lücke": "Prüfen + DNS"},
+    "branding_nexifyai_by_nexify": {"ist": "Kein einheitliches Branding", "soll": "NeXifyAI by NeXify – Chat it. Automate it.", "lücke": "Design-System-Migration nötig"},
+    "design_system": {"ist": "Graphite-Design-System (bisher)", "soll": "Deep Navy / NeXify Blue / Teal / Inter", "lücke": "Farbwelt + Typografie-Upgrade"},
+    "honcho_memory": {"ist": "Nicht aktiv (nicht im MCP)", "soll": "Agent-Memory", "lücke": "Honcho einrichten oder anbinden"},
+    "oracle_systemplaner_cycle": {"ist": "Oracle existiert (Supabase), Systemplaner als Skill", "soll": "Autonomer Aufbaukreis", "lücke": "Prozess automatisieren"},
+    "customer_portal": {"ist": "Nicht vorhanden", "soll": "/portal mit Supabase-Auth", "lücke": "Phase 2"},
+    "support_chat": {"ist": "Nicht angebunden", "soll": "LiveChat über Hermes", "lücke": "Phase 2"},
+    "ticket_system": {"ist": "Kein support_tickets in Supabase", "soll": "support_tickets + Paperclip", "lücke": "Phase 2"},
+    "partnerbereich": {"ist": "Nicht vorhanden", "soll": "Phase 3", "lücke": "Phase 3"},
+    "old_admin_integration": {"ist": "Alte Admin-Seite existiert aber nicht eingebunden", "soll": "CRM, Buchhaltung etc. in Gesamtlösung", "lücke": "Inventur + Migration nötig"}
+  },
+  "gaps_summary": {
+    "total_gaps": 17,
+    "phase_0_ready": ["traefik_setup", "ai_fabrik_start", "admin_cockpit", "branding_design_system"],
+    "phase_1_ready": ["dns_proxy_prüfung", "honcho_einrichtung", "oracle_automatisierung"],
+    "phase_2_ready": ["customer_portal", "support_chat", "ticket_system", "old_admin_integration"],
+    "phase_3_ready": ["partnerbereich"]
+  }
+}

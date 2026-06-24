@@ -1,0 +1,406 @@
+{
+  "meta": {
+    "document": "nexify-application-script-tool-inventory.json",
+    "title": "NeXify Application Script Tool Inventory — JSON-Version",
+    "description": "Strukturiertes JSON-Inventar aller Apps, Scripte, Tools, CLIs im NeXify-System",
+    "system_identity": "NeXify AI Systemmaster / Agentic Master",
+    "stand": "2026-06-11",
+    "revision": "1.0.0",
+    "classification": "INTERNAL — NEXIFY CORE",
+    "base_path": "/workspace/nexify/30_operating_data/",
+    "rule_note": "KEINE Secrets/Werte — nur Referenzen. KEINE Produktiv-Änderungen — nur Dokumentation.",
+    "total_entries": 34
+  },
+  "categories": {
+    "tools_clis": {
+      "source": "/workspace/nexify/07_tools_cli/",
+      "description": "Tools und CLIs aus dem 07_tools_cli-Verzeichnis",
+      "count": 6,
+      "items": [
+        {
+          "item_id": "TCLI-001",
+          "name": "9Router",
+          "type": "KI-Router / Central Routing Layer",
+          "path": "/workspace/nexify/07_tools_cli/9router/",
+          "function": "Zentrales KI-Gateway. 7 Modelle, 5 Provider. Standard: nexifyai-combo-llm. 4-stufige Fallback-Kette.",
+          "status": "ACTIVE",
+          "dependencies": ["NEXIFY_ROUTER_KEY", "DeepSeek", "OpenAI", "Anthropic", "Google", "Meta"],
+          "owner_agent": "Systemagent 20260610_25"
+        },
+        {
+          "item_id": "TCLI-002",
+          "name": "Hermes CLI",
+          "type": "Terminal-CLI + WebUI",
+          "path": "/workspace/nexify/07_tools_cli/hermes/",
+          "function": "Sekundäres CLI. 9Router-only. Plugin-System. Workstation-Reporting. Im Rebranding.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory (MCP + Plugin)", "NEXIFY_ROUTER_KEY"],
+          "owner_agent": "Pascal (manuell)"
+        },
+        {
+          "item_id": "TCLI-003",
+          "name": "Goose CLI",
+          "type": "Terminal-CLI (manuell)",
+          "path": "/workspace/nexify/07_tools_cli/goose/",
+          "function": "Primäres Terminal-Tool. Chat, Code, Review, Planung, Debugging. 3 Pflicht-Skills.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory (MCP + Skill)", "Policy Gate", "Evidence System", "Skills (3 Pflicht)", "NEXIFY_ROUTER_KEY"],
+          "owner_agent": "Pascal (manuell)"
+        },
+        {
+          "item_id": "TCLI-004",
+          "name": "Kilo CLI",
+          "type": "Terminal-CLI (All-in-one agentic engineering)",
+          "path": "/workspace/nexify/07_tools_cli/kilo/",
+          "function": "Primärer Coding-Agent. 6 Modi. 500+ Modelle. 500+ MCP-Server. MIT.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory (MCP geplant)", "NEXIFY_ROUTER_KEY"],
+          "owner_agent": "Pascal (manuell)"
+        },
+        {
+          "item_id": "TCLI-005",
+          "name": "Crush",
+          "type": "Terminal-TUI",
+          "path": "/workspace/nexify/07_tools_cli/crush/",
+          "function": "Code-Reviews (READ_ONLY, PLAN, DIFF, TEST, REFACTOR). LSP-Kontext. Go.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory (MCP geplant)", "NEXIFY_ROUTER_KEY"],
+          "owner_agent": "Pascal (manuell)"
+        },
+        {
+          "item_id": "TCLI-006",
+          "name": "Cloudflare DNS",
+          "type": "DNS-Konfigurations-Tool",
+          "path": "/workspace/nexify/07_tools_cli/cloudflare_dns/",
+          "function": "DNS-Verwaltung. 2 Domains. SSL Full (strict). HSTS. 10+ Pläne.",
+          "status": "PLAN_ONLY",
+          "dependencies": ["Cloudflare API", "Let's Encrypt", "Vercel"],
+          "owner_agent": "Systemagent (Netzwerk)"
+        }
+      ]
+    },
+    "dispatcher_components": {
+      "source": "/workspace/nexify/09_dispatcher/",
+      "description": "Dispatcher-Komponenten aus dem 09_dispatcher-Verzeichnis",
+      "count": 4,
+      "items": [
+        {
+          "item_id": "DSP-001",
+          "name": "Goose Auto Chat System",
+          "type": "Orchestrator (2-Ebenen)",
+          "path": "/workspace/nexify/09_dispatcher/goose_auto_chat/",
+          "function": "Automatisierte Chat-Fortsetzung. 2 Ebenen. 6 Komponenten. SQLite-DB. Kill-Switch.",
+          "status": "ACTIVE",
+          "dependencies": ["Goose CLI", "Hermes/Workstation", "9Router", "agentmemory", "SQLite", "Policy Gate", "Loop Guard"],
+          "owner_agent": "Automationssystem"
+        },
+        {
+          "item_id": "DSP-002",
+          "name": "Automation Controller",
+          "type": "Task-Controller (Zustandsmaschine)",
+          "path": "/workspace/nexify/09_dispatcher/automation_controller/",
+          "function": "State-Machine: IDLE→PROCESSING→REVIEW→COMPLETE. Queue P0-P3. Cycle-Count.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory", "Dispatcher", "Policy Gate", "Loop Guard", "Evidence System"],
+          "owner_agent": "Automationssystem"
+        },
+        {
+          "item_id": "DSP-003",
+          "name": "Chat Operator",
+          "type": "12-Step Auto-Injection Pipeline",
+          "path": "/workspace/nexify/09_dispatcher/chat_operator/",
+          "function": "12-stufige Pipeline für automatische USER-Message-Injektion.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "agentmemory", "Hermes", "Loop Guard", "Policy Gate", "Evidence Store", "Kanban", "NEXIFY_ROUTER_KEY"],
+          "owner_agent": "Automationssystem"
+        },
+        {
+          "item_id": "DSP-004",
+          "name": "Connection Recovery",
+          "type": "Wiederherstellungs-/Präventionssystem",
+          "path": "/workspace/nexify/09_dispatcher/connection_recovery/",
+          "function": "5 Regeln: Kein Abbruch, Dateien vor Response, Keine Doppelarbeit, tmux, Heartbeat.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory (State-Recovery)", "tmux", "Goose CLI"],
+          "owner_agent": "Automationssystem"
+        }
+      ]
+    },
+    "ui_components": {
+      "source": "/workspace/nexify/07_ui_ci/",
+      "description": "UI-Komponenten aus dem 07_ui_ci-Verzeichnis",
+      "count": 7,
+      "items": [
+        {
+          "item_id": "UI-001",
+          "name": "NeXify AI Workstation",
+          "type": "WebUI (Browser)",
+          "path": "/workspace/nexify/07_ui_ci/",
+          "function": "Operator-Shell im Browser. Chat, Sessions, Dashboard, Kanban. Graphite Design.",
+          "status": "ACTIVE",
+          "dependencies": ["Hermes WebUI Fork", "nexify-overlay", "Docker", "systemd"],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-002",
+          "name": "Graphite Design System",
+          "type": "Design-System (CSS-Variablen)",
+          "path": "/workspace/nexify/07_ui_ci/GRAPHITE_DESIGN_SYSTEM_V1.md",
+          "function": "Design-Token: 8 Farben, 4 Fonts, 8px-Grid, 4 Border-Radien.",
+          "status": "ACTIVE",
+          "dependencies": [],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-003",
+          "name": "German UI Text Registry",
+          "type": "i18n-Textsammlung",
+          "path": "/workspace/nexify/07_ui_ci/GERMAN_UI_TEXT_REGISTRY.md",
+          "function": "Deutsche UI-Texte (DACH-Norm).",
+          "status": "ACTIVE",
+          "dependencies": ["Workstation UI"],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-004",
+          "name": "Component Quality Checklist",
+          "type": "Qualitäts-Checkliste",
+          "path": "/workspace/nexify/07_ui_ci/COMPONENT_QUALITY_CHECKLIST.md",
+          "function": "Checkliste für UI-Komponenten-Qualität.",
+          "status": "ACTIVE",
+          "dependencies": [],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-005",
+          "name": "Hermes Rebranding Plan",
+          "type": "Migrationsplan",
+          "path": "/workspace/nexify/07_ui_ci/HERMES_REBRANDING_PLAN.md",
+          "function": "Plan: Hermes WebUI → NeXify Workstation. P0/P1/P2.",
+          "status": "ACTIVE",
+          "dependencies": ["Workstation UI", "nexify-overlay"],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-006",
+          "name": "Workstation UI Audit",
+          "type": "Audit-Bericht",
+          "path": "/workspace/nexify/07_ui_ci/WORKSTATION_UI_AUDIT.md",
+          "function": "9 Komponenten, 6 Probleme (UI-001 bis UI-006). P0/P1/P2 Fix-Liste.",
+          "status": "ACTIVE",
+          "dependencies": ["Workstation UI"],
+          "owner_agent": "Pascal (Design)"
+        },
+        {
+          "item_id": "UI-007",
+          "name": "UI Spacing and Layout Fixes",
+          "type": "Fix-Liste",
+          "path": "/workspace/nexify/07_ui_ci/UI_SPACING_AND_LAYOUT_FIXES.md",
+          "function": "Bekannte Spacing- und Layout-Probleme.",
+          "status": "ACTIVE",
+          "dependencies": ["Workstation UI"],
+          "owner_agent": "Pascal (Design)"
+        }
+      ]
+    },
+    "skills": {
+      "source": "/workspace/nexify/05_skills/",
+      "description": "Goose-Skills aus dem 05_skills-Verzeichnis",
+      "count": 4,
+      "items": [
+        {
+          "item_id": "SKL-001",
+          "name": "nexify-agentmemory",
+          "type": "Goose Skill (Pflicht)",
+          "path": "/workspace/nexify/05_skills/goose/",
+          "function": "Memory-Integration. Stellt agentmemory-MCP-Tools bereit.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory", "Goose CLI/ACC"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SKL-002",
+          "name": "nexify-policy-gate",
+          "type": "Goose Skill (Pflicht)",
+          "path": "/workspace/nexify/05_skills/goose/",
+          "function": "Policy-Prüfung. allowed_actions, allowed_files, allowed_commands.",
+          "status": "ACTIVE",
+          "dependencies": ["Policy Gate System", "Goose CLI/ACC"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SKL-003",
+          "name": "nexify-evidence",
+          "type": "Goose Skill (Pflicht)",
+          "path": "/workspace/nexify/05_skills/goose/",
+          "function": "Evidence-Erzeugung. Template + Automatismen.",
+          "status": "ACTIVE",
+          "dependencies": ["Evidence System", "Goose CLI/ACC"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SKL-004",
+          "name": "nexify-9router",
+          "type": "Goose Skill (optional)",
+          "path": "/workspace/nexify/05_skills/goose/",
+          "function": "Routing-Konfiguration. Modell-Auswahl, Fallback.",
+          "status": "ACTIVE",
+          "dependencies": ["9Router", "Goose CLI/ACC"],
+          "owner_agent": "Systemagent"
+        }
+      ]
+    },
+    "agentmemory_components": {
+      "source": "/workspace/nexify/12_agentmemory/",
+      "description": "Agentmemory-Komponenten aus dem 12_agentmemory-Verzeichnis",
+      "count": 6,
+      "items": [
+        {
+          "item_id": "MEM-001",
+          "name": "agentmemory Server",
+          "type": "Memory-Server (iii-engine)",
+          "path": "/workspace/nexify/12_agentmemory/",
+          "function": "Zentrale Memory-Schicht. 53 MCP-Tools. 126 REST-Endpoints. 8 Kategorien. Docker.",
+          "status": "ACTIVE (v0.9.26)",
+          "dependencies": ["iii-engine", "SQLite", "MCP-Protokoll", "Docker"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "MEM-002",
+          "name": "agentmemory_helper.py",
+          "type": "Python-Helper-Skript",
+          "path": "/workspace/nexify/12_agentmemory/agentmemory_helper.py",
+          "function": "Batch-Operationen und Tests via docker exec → REST API.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory Server", "Python"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "MEM-003",
+          "name": "agentmemory MCP Fix/Blocker",
+          "type": "Dokumentation",
+          "path": "/workspace/nexify/12_agentmemory/AGENTMEMORY_MCP_BLOCKER_OR_FIX.md",
+          "function": "Dokumentation MCP-Probleme und Lösungen.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory Server", "MCP-Protokoll"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "MEM-004",
+          "name": "agentmemory Secret Setup",
+          "type": "Setup-Anleitung",
+          "path": "/workspace/nexify/12_agentmemory/AGENTMEMORY_SECRET_SETUP_REQUIRED.md",
+          "function": "HMAC-Token, Umgebungsvariablen, Docker-Konfiguration.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory Server"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "MEM-005",
+          "name": "agentmemory Session State",
+          "type": "Status-Dokument",
+          "path": "/workspace/nexify/12_agentmemory/AGENTMEMORY_SESSION_STATE_CURRENT.md",
+          "function": "Aktueller Session-State für Recovery.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory Server"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "MEM-006",
+          "name": "agentmemory Pending JSON Files",
+          "type": "Pending-Daten (JSON)",
+          "path": "/workspace/nexify/12_agentmemory/agentmemory-pending-*-.json",
+          "function": "Pending-Operationen: current-session, operating-data, regelwerke.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory Server", "Brain Sync"],
+          "owner_agent": "Systemagent"
+        }
+      ]
+    },
+    "other_system_components": {
+      "description": "Weitere Systemkomponenten (systemweit)",
+      "count": 7,
+      "items": [
+        {
+          "item_id": "SYS-001",
+          "name": "Dispatcher",
+          "type": "Event-basiertes Dispatch-System",
+          "path": "/workspace/nexify/09_dispatcher/DISPATCHER_ARCHITEKTUR_V1.md",
+          "function": "Task-Verteilung über P0-P3. Policy Gate. Rollback-fähig.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory", "Policy Gate", "Event Bus"],
+          "owner_agent": "Automationssystem"
+        },
+        {
+          "item_id": "SYS-002",
+          "name": "Evidence System",
+          "type": "Audit- und Dokumentationssystem",
+          "path": "/workspace/nexify/10_evidence/",
+          "function": "20+ Evidence-Dateien in 10+ Kategorien. Template-basiert.",
+          "status": "ACTIVE",
+          "dependencies": ["Alle Agenten"],
+          "owner_agent": "Alle Agenten"
+        },
+        {
+          "item_id": "SYS-003",
+          "name": "Brain Sync",
+          "type": "Synchronisationssystem",
+          "path": "/workspace/nexify/11_brain_sync/",
+          "function": "Migration Alt (Brain/Qdrant) → Neu (agentmemory). Phase 1.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory", "Brain/Qdrant"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SYS-004",
+          "name": "Kanban / Task Registry",
+          "type": "Task-Management",
+          "path": "/workspace/nexify/08_kanban_tasks/",
+          "function": "Task-Registry mit CRUD, Lifecycle, Event-Integration.",
+          "status": "ACTIVE",
+          "dependencies": ["Dispatcher", "agentmemory", "Evidence System", "QR-Prozess"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SYS-005",
+          "name": "Regelwerke",
+          "type": "Policy-/Regel-System",
+          "path": "/workspace/nexify/03_regelwerke/",
+          "function": "12+ Kernregelwerke. In agentmemory geladen.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory", "Evidence System", "Policy Gate"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SYS-006",
+          "name": "Team/Agent Souls",
+          "type": "Team-Definition",
+          "path": "/workspace/nexify/01_agenten_seele/TEAM_SYSTEM_V1.md",
+          "function": "Teams 01-12. Basis für Dispatcher-Routing.",
+          "status": "ACTIVE",
+          "dependencies": ["agentmemory", "Dispatcher"],
+          "owner_agent": "Systemagent"
+        },
+        {
+          "item_id": "SYS-007",
+          "name": "Prüfverfahren/Review",
+          "type": "QS-Prozess",
+          "path": "/workspace/nexify/20_pruefverfahren/REVIEW_QR_PROZESS_V1.md",
+          "function": "review:required→passed/failed→Evidence-Archivierung.",
+          "status": "ACTIVE",
+          "dependencies": ["Dispatcher", "Kanban", "Evidence System", "agentmemory"],
+          "owner_agent": "QR-Team (Team 12)"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "tools_clis": {"count": 6, "source": "/workspace/nexify/07_tools_cli/"},
+    "dispatcher_components": {"count": 4, "source": "/workspace/nexify/09_dispatcher/"},
+    "ui_components": {"count": 7, "source": "/workspace/nexify/07_ui_ci/"},
+    "skills": {"count": 4, "source": "/workspace/nexify/05_skills/"},
+    "agentmemory_components": {"count": 6, "source": "/workspace/nexify/12_agentmemory/"},
+    "other_system_components": {"count": 7, "source": "Systemweit"},
+    "total": 34
+  }
+}

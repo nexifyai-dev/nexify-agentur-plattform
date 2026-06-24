@@ -1,0 +1,27 @@
+{
+  "id": "chatgpt-mcp-connector-setup-data",
+  "date": "2026-06-12",
+  "status": "preparation",
+  "mcp_server_url": "https://mcp.nexifyai.cloud/mcp",
+  "transport": "streamable_http",
+  "auth_mode": "cloudflare_access_bearer",
+  "raw_shell_exposed": false,
+  "public_unauthenticated": false,
+  "tools": [
+    {"name": "get_status", "type": "read", "approval": false},
+    {"name": "list_open_blockers", "type": "read", "approval": false},
+    {"name": "read_latest_evidence", "type": "read", "approval": false},
+    {"name": "read_task_status", "type": "read", "approval": false},
+    {"name": "create_claude_task", "type": "write", "approval": true},
+    {"name": "continue_claude_task", "type": "write", "approval": true},
+    {"name": "approve_gate_package", "type": "write", "approval": true},
+    {"name": "sync_brain_agentmemory", "type": "write", "approval": true}
+  ],
+  "next_steps": [
+    "build-local-mcp-server",
+    "test-with-mcp-inspector",
+    "register-in-chatgpt-developer-mode",
+    "test-read-tools",
+    "activate-write-tools-gated"
+  ]
+}
