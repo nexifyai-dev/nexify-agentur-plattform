@@ -1,0 +1,305 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "created": "2026-06-20T14:30:00Z",
+    "updated": "2026-06-20T17:45:00Z",
+    "source": "Hermes Agent (ceo) via SSH root@srv1243952 \u2014 Langlauf Run 5 final",
+    "purpose": "Single Source of Truth f\u00fcr systemweiten Zustand"
+  },
+  "system": {
+    "host": "srv1243952",
+    "container_hostname": "hermes-webui",
+    "kernel": "7.0.0-22-generic",
+    "disk": {
+      "total_gb": 387,
+      "used_gb": 85,
+      "used_pct": 22
+    },
+    "services": {
+      "hermes_gateway": {
+        "port": 8645,
+        "status": "up"
+      },
+      "brain_api": {
+        "port": 9090,
+        "status": "up"
+      },
+      "agentmemory": {
+        "port": 3111,
+        "status": "up",
+        "type": "node"
+      },
+      "agentmemory_rest": {
+        "port": 40000,
+        "status": "up",
+        "type": "python-sqlite"
+      },
+      "qdrant": {
+        "port": 6333,
+        "status": "up"
+      },
+      "redis": {
+        "port": 6379,
+        "status": "up"
+      },
+      "hermes_webui": {
+        "port": 8787,
+        "status": "up"
+      },
+      "9router": {
+        "port": 20128,
+        "status": "up",
+        "dns": "ai-router.nexifyai.cloud"
+      }
+    },
+    "mcp_servers": {
+      "brain": {
+        "script": "/workspace/mcp-brain-server.py",
+        "tools": 1,
+        "status": "enabled"
+      },
+      "qdrant": {
+        "script": "/workspace/mcp-qdrant-server.py",
+        "tools": 3,
+        "status": "enabled"
+      },
+      "agentmemory": {
+        "script": "/workspace/mcp-agentmemory-server.py",
+        "tools": 4,
+        "status": "enabled"
+      },
+      "tavily": {
+        "script": "/workspace/mcp-tavily-search-server.py",
+        "tools": 1,
+        "status": "enabled",
+        "key": "PLACEHOLDER"
+      }
+    },
+    "qdrant_collections": {
+      "nexifyai_brain": {
+        "points": 8769,
+        "vector_size": 384
+      },
+      "nexifyai_memories": {
+        "points": 2,
+        "vector_size": 384
+      },
+      "nexifyai_projects": {
+        "points": 0,
+        "vector_size": 384
+      },
+      "nexifyai_rules": {
+        "points": 0,
+        "vector_size": 384
+      }
+    },
+    "brain_entries": 8769,
+    "agentmemory_entries": 854,
+    "hermes_version": "0.17.0 (updated a7983d5->85ad7c9)",
+    "env_corruption": {
+      "HERMES_HOME": "declare-x-leak-in-value",
+      "HERMES_WEBUI_PORT": "declare-x-leak",
+      "impact": "env vars contain shell 'declare -x' fragments from container init \u2014 breaks path resolution",
+      "root_cause": "container startup script appends stdout of 'declare -x' to env vars instead of using existing values"
+    },
+    "langlauf_run_2": {
+      "date": "2026-06-20T15:45Z",
+      "profile": "vps-admin",
+      "model": "deepseek-reasoner"
+    },
+    "langlauf_run_3": {
+      "date": "2026-06-20T16:30Z",
+      "profile": "ceo",
+      "fixes": [
+        "vorratsgesellschaften .gitignore erweitert (.next + node_modules + builds)"
+      ]
+    },
+    "langlauf_run_4": {
+      "date": "2026-06-20T16:45Z",
+      "profile": "ceo",
+      "fixes": [
+        "8 alte Reports archiviert nach 99_archiv/",
+        "Shared State konsolidiert",
+        "Alle 4 Runs dokumentiert"
+      ]
+    },
+    "ssh_root_access": {
+      "status": "granted",
+      "key": "id_ed25519",
+      "host": "srv1243952",
+      "user": "root"
+    },
+    "brain_write_token": {
+      "status": "verified",
+      "length": 77,
+      "collections": [
+        "nexifyai_brain",
+        "nexifyai_memories"
+      ]
+    },
+    "gateway_port_8644": "phantom \u2014 existiert nicht, nur 8642+8645",
+    "blockers_resolved": {
+      "B1_agent_system_chown": "User hermeswebui existiert nicht auf Host, chmod o+rX gesetzt",
+      "B2_brain_write_token": "VERIFIED \u2014 Token funktioniert (77 Zeichen)",
+      "B3_nexify_bridge": "cloudflared auf 20242/20244, Bridge gestartet",
+      "B4_secrets": "noch offen \u2014 Credentials in /root/.nexify/secrets/",
+      "B5_gateway_port": "8644=Phantom, 8645=public, 8642=internal \u2014 OK",
+      "B6_hermes_update": "UPDATED \u2014 a7983d5->85ad7c9",
+      "ENV_HERMES_HOME_corruption": "Container-Init braucht Fix im docker-compose .env"
+    }
+  },
+  "profiles": {
+    "total": 17,
+    "active": "expert-dev",
+    "by_complexity": {
+      "rich_36+_files": [
+        "agentur-admin"
+      ],
+      "complex_25+_files": [
+        "automation-agent",
+        "ceo"
+      ],
+      "standard_20+_files": [
+        "expert-data",
+        "expert-design",
+        "expert-dev",
+        "mcp-agent",
+        "network-engineer",
+        "workflow-agent"
+      ],
+      "lean_12-18_files": [
+        "expert-ops",
+        "monitoring-agent",
+        "vps-admin"
+      ],
+      "skeleton_6-8_files": [
+        "cso",
+        "cto",
+        "default",
+        "nexify-ceo"
+      ]
+    }
+  },
+  "compliance": {
+    "pre_task": {
+      "status": "pass",
+      "gates": "6/6",
+      "script": "/workspace/nexify/03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh"
+    },
+    "brain_api_url": {
+      "status": "pass",
+      "fixed": 11,
+      "remaining_8420": 0,
+      "note": "brain_api.py ist deprecated (eigener Port)"
+    },
+    "brain_auth_header": {
+      "status": "pass",
+      "fixed": "Bearer\u2192X-Brain-Token"
+    },
+    "gitignore_dedup": {
+      "status": "pass",
+      "files": [
+        "studienkolleg-aachen"
+      ]
+    },
+    "stale_stashes": {
+      "status": "pass",
+      "cleaned": 3
+    }
+  },
+  "blocked": {
+    "vps_root_required": [
+      {
+        "id": "B1",
+        "description": "agent-system root-owned",
+        "fix": "chown -R hermeswebui:hermeswebui /root/.nexify/agent-system/"
+      },
+      {
+        "id": "B2",
+        "description": "Brain Write Token leer",
+        "fix": "Token in brain-write.env setzen"
+      },
+      {
+        "id": "B3",
+        "description": "nexify-bridge Port 2024 tot",
+        "fix": "Bridge-Service deployen"
+      },
+      {
+        "id": "B4",
+        "description": "LIVE Secrets in config/system_connections.env",
+        "fix": "Rotieren + .gitignore config/"
+      },
+      {
+        "id": "B5",
+        "description": "Gateway Port 8644 vs 8645",
+        "fix": "Config validieren"
+      },
+      {
+        "id": "B6",
+        "description": "Hermes 19 Commits behind",
+        "fix": "hermes update"
+      }
+    ]
+  },
+  "bauplan_v2": {
+    "version": "2.0-final",
+    "date": "2026-05-08",
+    "brand": "NeXifyAI by NeXify \u2013 Chat it. Automate it.",
+    "architecture": {
+      "traefik": "muss_eingerichtet",
+      "admin_cockpit_port": 8400,
+      "ki_fabrik_port": 3100,
+      "frontend": "www.nexify-automate.com",
+      "subdomains": [
+        "admin.nexifyai.cloud",
+        "ai-fabrik.nexifyai.cloud",
+        "supabase.nexifyai.cloud",
+        "analytics.nexifyai.cloud",
+        "notebook.nexifyai.cloud"
+      ]
+    },
+    "design_system": {
+      "primary": "#0F172A (Deep Navy)",
+      "accent": "#2563EB (NeXify Blue)",
+      "accent2": "#0D9488 (Teal)",
+      "fonts_headline": "Inter / Space Grotesk",
+      "fonts_body": "Inter / DM Sans",
+      "components": "shadcn/ui aus /packages/ui",
+      "dark_mode": "standard"
+    }
+  },
+  "old_admin_assets": {
+    "crm_blueprint": "/workspace/nexify/19_sales_crm_offer/",
+    "crm_data_model": "/workspace/nexify/04_register/CRM_DATENMODELL_V1.md",
+    "admin_chat": "/workspace/nexifyai-platform/apps/admin-chat/",
+    "admin_merge_plan": "/workspace/nexify/18_designsystem/workstation-admin-merge-blueprint.json",
+    "integration_target": "admin.nexifyai.cloud (Admin-Cockpit)"
+  },
+  "supabase_cloud": {
+    "project_name": "NeXify AI Agentur-Webseite und ADMIN-Portal",
+    "url": "https://mdlgodcvpasgplcrkiad.supabase.co",
+    "project_id": "mdlgodcvpasgplcrkiad",
+    "region": "eu-west-1",
+    "rest_api": "https://mdlgodcvpasgplcrkiad.supabase.co/rest/v1/",
+    "db_host": "db.mdlgodcvpasgplcrkiad.supabase.co",
+    "db_port": 5432,
+    "db_name": "postgres",
+    "schema_ready": true,
+    "has_data": false,
+    "tables_available": 60,
+    "auth_method": "JWT + Bearer Token (ECC P-256)",
+    "status": "ready_for_production",
+    "connection": "supabase keys in /root/.nexify/secrets/supabase-cloud.env",
+    "replaces": "lokaler Docker-Supabase",
+    "seed_plan": "Phase 0: agent_registry \u2192 oracle_policies \u2192 workflows \u2192 brain_notes"
+  },
+  "reports": {
+    "integration_plan": "/workspace/nexify/99_archiv/reports-2026-06-20/INTEGRATION_PLAN.md",
+    "langlauf_round1": "/workspace/nexify/99_archiv/reports-2026-06-20/LANGLUAF_REPORT_2026-06-20.md",
+    "langlauf_round2": "/workspace/nexify/99_archiv/reports-2026-06-20/LANGLUAF_REPORT_2_2026-06-20.md",
+    "langlauf_run2_evidence": "/workspace/nexify/10_evidence/2026-06-20_langlauf-run2.md",
+    "langlauf_run3_evidence": "/workspace/nexify/10_evidence/2026-06-20_langlauf-run3.md",
+    "agentic_final": "/workspace/nexify/99_archiv/reports-2026-06-20/AGENTIC_AI_FINAL_2026-06-20.md",
+    "gesamt_alt": "/workspace/nexify/99_archiv/reports-2026-06-20/GESAMTZUSAMMENFASSUNG_2026-06-20.md"
+  }
+}

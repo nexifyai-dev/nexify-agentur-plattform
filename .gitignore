@@ -1,14 +1,9 @@
-node_modules
-.next
-out
+node_modules/
+.next/
+out/
 .env
 .env.*
 !.env.example
 *.log
 .DS_Store
 .vercel
-
-tsconfig.tsbuildinfo
-.nexify-backup/
-playwright-report/
-test-results/

@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "document": "Customer Project Isolation Policy — Machine-readable",
+    "version": "1.0.0",
+    "date": "2026-06-11",
+    "source": "CUSTOMER_PROJECT_ISOLATION_POLICY.md",
+    "language": "de",
+    "status": "BINDING",
+    "scope": "CUSTOMER_PROJECT"
+  },
+  "registered_projects": [
+    {
+      "id": "CP-001",
+      "name": "Studienkolleg Aachen",
+      "repo_type": "GitHub (privat)",
+      "deployment": "GitHub Pages",
+      "scope": "CUSTOMER_PROJECT"
+    },
+    {
+      "id": "CP-002",
+      "name": "Affilientportal / Bookando",
+      "repo_type": "GitHub (privat)",
+      "deployment": "app.bookando.de",
+      "scope": "CUSTOMER_PROJECT"
+    }
+  ],
+  "separation_rules": {
+    "code_separation": {
+      "forbidden": [
+        "Kundenprojekt-Code in /workspace/nexify/ kopieren",
+        "Kundenprojekt-Logik als NeXify-Standard ausrollen"
+      ],
+      "allowed": "Kopien nur in Kundenprojekt-Repos"
+    },
+    "data_separation": {
+      "forbidden": [
+        "Kundendaten ins allgemeine Brain (nexifyai_brain) mischen",
+        "Kunden-PII in Logs, Evidence oder Handoffs"
+      ],
+      "allowed": [
+        "Brain-Metadaten: nur Projektstatus, keine Inhaltsdaten",
+        "Brain-Einträge mit Scope CUSTOMER_PROJECT, Kategorie customer-data"
+      ]
+    },
+    "agent_separation": {
+      "forbidden": [
+        "Kundenprojekt-Agenten in /root/.claude/agents/",
+        "Kundenprojekt-Skills in /root/.claude/skills/"
+      ],
+      "allowed": "Kundenprojekte nutzen projektlokale .claude/ Ordner"
+    },
+    "secret_separation": {
+      "forbidden": [
+        "Kunden-Secrets in /root/.nexify/secrets/",
+        "Kunden-API-Keys in Host-Umgebungsvariablen"
+      ],
+      "allowed": "Kunden-Secrets nur in projektlokalen .env Dateien (nie committed)"
+    },
+    "tool_mcp_separation": {
+      "forbidden": [
+        "Kundenprojekte installieren keine globalen MCP-Server",
+        "Keine Kundenprojekt-Webhooks in globaler Infrastruktur"
+      ],
+      "allowed": "Tools pro Projekt: lokal installiert, projektweit deklariert"
+    }
+  },
+  "shared_infrastructure": [
+    { "service": "Hostinger VDS", "allowed": true, "condition": "Getrennte Docker-Compose Projekte" },
+    { "service": "Cloudflare DNS", "allowed": true, "condition": "Getrennte Zonen" },
+    { "service": "Vercel", "allowed": true, "condition": "Getrennte Teams/Projekte" },
+    { "service": "Brain (Read)", "allowed": true, "condition": "Nur Metadaten" },
+    { "service": "9Router", "allowed": true, "condition": "Getrennte API-Keys" },
+    { "service": "Resend", "allowed": true, "condition": "Getrennte API-Keys" }
+  ],
+  "forbidden_activities": [
+    "Code/Libraries von Kundenprojekt in Kern übernehmen",
+    "Kundendaten in Brain/Agentmemory ohne Scope-Tag",
+    "Kundenlogik als NeXify-Standard ausrollen",
+    "Kundenprojekt in Workstation integrieren",
+    "Kunden-Secrets mit Klarwerten speichern",
+    "Kundenprojekte untereinander vermischen"
+  ],
+  "audit_rules": {
+    "audit_path_per_project": true,
+    "isolation_check_per_deploy": true,
+    "violation_severity": "P0-incident"
+  }
+}

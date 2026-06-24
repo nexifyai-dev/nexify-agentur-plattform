@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "id": "NLVL-POL-001",
+    "name": "NeXify Live Verification Policy",
+    "version": "1.0",
+    "date": "2026-06-11",
+    "status": "in-kraft",
+    "classification": "nexify-intern",
+    "brain_category": "claude-code-infrastructure"
+  },
+  "principles": [
+    "live-verification-during-creation",
+    "official-docs-first",
+    "no-change-without-matching-check",
+    "gate-pflicht"
+  ],
+  "required_tools": {
+    "typescript_nextjs_frontend": [
+      "typescript-strict", "tsc-noEmit", "eslint-flat-config", "biome",
+      "oxlint", "knip", "vitest", "storybook-vitest-addon",
+      "playwright-ui-mode", "playwright-trace", "axe-core", "lighthouse-ci",
+      "react-scan"
+    ],
+    "python_backend": [
+      "ruff", "pyright", "pytest", "coverage", "bandit",
+      "pip-audit", "uv-lock-check"
+    ],
+    "api_contract": [
+      "openapi-3.1", "spectral", "schemathesis", "pact"
+    ],
+    "security_supply_chain": [
+      "gitleaks", "semgrep", "codeql", "dependabot", "trivy",
+      "pnpm-audit", "pip-audit", "osv-scanner"
+    ],
+    "runtime_monitoring": [
+      "opentelemetry", "sentry-glitchtip", "prometheus-grafana",
+      "uptime-kuma", "vercel-logs", "brain-logs", "9router-logs"
+    ]
+  },
+  "gate_checks": {
+    "typecheck": "required",
+    "lint": "required",
+    "build": "required",
+    "test": "required",
+    "security_criticals": "required",
+    "e2e": "required",
+    "lighthouse": "required",
+    "api_contract": "required",
+    "secret_scan": "required",
+    "evidence": "required"
+  },
+  "finding_schema": {
+    "finding_id": "string",
+    "source_tool": "string",
+    "severity": "P0|P1|P2|P3",
+    "category": "type|lint|ui|api|security|secret|runtime|deployment",
+    "file": "string",
+    "route": "string",
+    "component": "string",
+    "error": "string",
+    "reproduction": "string",
+    "evidence_path": "string",
+    "brain_sync": "pending|done|not_relevant",
+    "agentmemory_sync": "pending|done|not_relevant",
+    "kanban_task": "string",
+    "status": "open|fixed|verified|accepted_risk"
+  },
+  "traffic_light": {
+    "green": "all-gates-passed",
+    "yellow": "warnings-no-blocker",
+    "red": "blocker-no-merge-deploy",
+    "blue": "waiting-approval",
+    "grey": "source-unavailable-fallback-active"
+  },
+  "prohibited": [
+    "code-without-testplan",
+    "ui-change-without-screenshot-playwright",
+    "api-change-without-openapi-contract",
+    "config-change-without-official-docs",
+    "security-change-without-secret-sast-scan",
+    "done-without-evidence"
+  ]
+}

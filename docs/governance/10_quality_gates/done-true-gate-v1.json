@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": "NLVL-GATE-001",
+    "name": "DONE_TRUE Gate Extension",
+    "version": "1.0",
+    "date": "2026-06-11",
+    "status": "in-kraft",
+    "brain_category": "claude-code-infrastructure"
+  },
+  "gates": {
+    "typecheck": { "required": true, "description": "0 errors from tsc --noEmit" },
+    "lint": { "required": true, "description": "0 errors, warnings documented" },
+    "build": { "required": true, "description": "Build successful" },
+    "unit_tests": { "required": true, "description": "All unit/component tests pass" },
+    "e2e_tests": { "required": "if-ui-changed", "description": "E2E tests pass when UI changed" },
+    "security_scan": { "required": true, "description": "0 criticals, secrets checked" },
+    "api_contract": { "required": "if-api-changed", "description": "API contract valid when API changed" },
+    "evidence": { "required": true, "description": "Evidence written to /workspace/nexify/10_evidence/" },
+    "brain": { "required": true, "description": "Findings stored in Nexify Brain" },
+    "kanban": { "required": true, "description": "Kanban tasks updated" }
+  },
+  "verdicts": {
+    "done_true": "All required gates passed",
+    "done_false": "One or more required gates not passed - task stays open",
+    "done_partial": "Non-critical gates have warnings - review before claiming done"
+  }
+}
