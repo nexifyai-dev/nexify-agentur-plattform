@@ -1,0 +1,206 @@
+# =============================================================================
+# NeXify AI OS — Docker Compose Production
+# ID: NX-PROD-002 | Version: 1.0.0 | Stand: 2026-06-23
+# Zweck: Produktionsreife Container-Orchestrierung
+# =============================================================================
+
+version: "3.9"
+
+x-common: &common
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+  healthcheck:
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 10s
+
+networks:
+  nexify-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  brain-data:
+  qdrant-data:
+  grafana-data:
+  prometheus-data:
+  loki-data:
+  backup-data:
+
+services:
+  # === Layer 1: Core ===
+  
+  brain:
+    <<: *common
+    image: nexify/brain:latest
+    container_name: nexify-brain
+    ports:
+      - "9090:9090"
+    volumes:
+      - brain-data:/data
+    networks:
+      - nexify-net
+    environment:
+      - NEXIFY_MODE=production
+      - NEXIFY_LOG_LEVEL=info
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "2.0"
+        reservations:
+          memory: 512M
+
+  qdrant:
+    <<: *common
+    image: qdrant/qdrant:latest
+    container_name: nexify-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - nexify-net
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+
+  9router:
+    <<: *common
+    image: nexify/9router:latest
+    container_name: nexify-9router
+    ports:
+      - "8080:8080"
+    networks:
+      - nexify-net
+    environment:
+      - NEXIFY_BRAIN_URL=http://brain:9090
+      - NEXIFY_MODE=production
+    depends_on:
+      brain:
+        condition: service_healthy
+
+  # === Layer 2: Monitoring ===
+
+  prometheus:
+    <<: *common
+    image: prom/prometheus:latest
+    container_name: nexify-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - nexify-net
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  grafana:
+    <<: *common
+    image: grafana/grafana:latest
+    container_name: nexify-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - nexify-net
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_pw
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+
+  loki:
+    <<: *common
+    image: grafana/loki:latest
+    container_name: nexify-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-data:/loki
+    networks:
+      - nexify-net
+
+  # === Layer 3: Security ===
+
+  crowdsec:
+    <<: *common
+    image: crowdsecurity/crowdsec:latest
+    container_name: nexify-crowdsec
+    volumes:
+      - /var/log:/var/log:ro
+      - crowdsec-data:/etc/crowdsec
+    networks:
+      - nexify-net
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+  # === Layer 6: Analytics ===
+
+  plausible:
+    <<: *common
+    image: plausible/analytics:latest
+    container_name: nexify-plausible
+    ports:
+      - "8000:8000"
+    networks:
+      - nexify-net
+    environment:
+      - BASE_URL=https://analytics.nexifyai.cloud
+      - SECRET_KEY_FILE=/run/secrets/plausible_secret
+
+  # === Layer 7: Infrastructure ===
+
+  caddy:
+    <<: *common
+    image: caddy:latest
+    container_name: nexify-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - nexify-net
+
+  # === Layer 4: Backup ===
+
+  backup:
+    <<: *common
+    image: nexify/backup:latest
+    container_name: nexify-backup
+    volumes:
+      - backup-data:/backups
+      - /workspace/nexify:/source:ro
+    networks:
+      - nexify-net
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *
+      - BACKUP_RETENTION=7
+    profiles:
+      - backup
+
+secrets:
+  grafana_admin_pw:
+    file: ./secrets/grafana_admin_pw.txt
+  plausible_secret:
+    file: ./secrets/plausible_secret.txt
