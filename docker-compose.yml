@@ -1,44 +1,22 @@
 # NeXify AI — Docker Compose (VPS Production)
+# Bindet an bestehenden Traefik (traefik-vsrs) an — kein eigener Reverse Proxy.
+# Services nutzen host-Netzwerk-Bindings + Traefik-Dynamic-Config im bestehenden Verzeichnis.
 # Start: docker compose up -d --build
 # Status: docker compose ps
 
 services:
-  traefik:
-    image: traefik:v3.1
-    container_name: traefik
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./deploy/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./deploy/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-      - traefik-certs:/certs
-    networks:
-      - web
-    healthcheck:
-      test: ["CMD", "traefik", "healthcheck", "--ping"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-
   website:
     build:
       context: .
       dockerfile: deploy/docker/Dockerfile.website
     container_name: nexify-website
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
     env_file:
       - ./infra/.env.vps
     networks:
-      - web
-    depends_on:
-      traefik:
-        condition: service_healthy
-    labels:
-      - "traefik.enable=true"
+      - nexify-default
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 30s
@@ -52,17 +30,14 @@ services:
       dockerfile: deploy/docker/Dockerfile.hermes
     container_name: nexify-hermes
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:8787:8787"
     env_file:
       - ./infra/.env.vps
     volumes:
       - hermes-data:/data/hermes
     networks:
-      - web
-    depends_on:
-      traefik:
-        condition: service_healthy
-    labels:
-      - "traefik.enable=true"
+      - nexify-default
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8787/health')"]
       interval: 30s
@@ -76,17 +51,14 @@ services:
       dockerfile: deploy/docker/Dockerfile.paperclip
     container_name: nexify-paperclip
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:3100:3100"
     env_file:
       - ./infra/.env.vps
     volumes:
       - paperclip-data:/data/paperclip
     networks:
-      - web
-    depends_on:
-      traefik:
-        condition: service_healthy
-    labels:
-      - "traefik.enable=true"
+      - nexify-default
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3100/api/health"]
       interval: 30s
@@ -94,11 +66,14 @@ services:
       retries: 3
       start_period: 15s
 
+# Traefik-Routen werden über deploy/traefik/dynamic-monorepo.yml verwaltet.
+# Diese Datei ins bestehende /docker/traefik-vsrs/dynamic/ kopieren oder symlinken.
+# Der bestehende Traefik (host-Netzwerk) routet dann automatisch zu den localhost-Ports.
+
 volumes:
-  traefik-certs:
   hermes-data:
   paperclip-data:
 
 networks:
-  web:
+  nexify-default:
     driver: bridge

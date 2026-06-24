@@ -1,0 +1,72 @@
+# NeXify AI Monorepo — Traefik Dynamic Config
+# Kopieren nach: /docker/traefik-vsrs/dynamic/nexifyai-monorepo.yml
+# Bestehender Traefik (traefik-vsrs) nutzt providers.file + watch=true → auto-reload.
+# Services sind auf localhost gebunden, Traefik routet via host-Netzwerk weiter.
+
+http:
+  routers:
+    # === Website (NeXify Marketing) ===
+    nexifyai-website:
+      rule: "Host(`nexifyai.cloud`) || Host(`www.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      priority: 15
+      middlewares:
+        - website-secHeaders
+        - website-rateLimit
+      service: nexifyai-website-svc
+      tls:
+        certResolver: letsencrypt
+
+    # === Hermes WebUI (Agent Chat) ===
+    nexifyai-hermes:
+      rule: "Host(`webui.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - website-secHeaders
+      service: nexifyai-hermes-svc
+      tls:
+        certResolver: letsencrypt
+
+    # === Paperclip AI (Operations) ===
+    nexifyai-paperclip:
+      rule: "Host(`app.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      middlewares:
+        - website-secHeaders
+      service: nexifyai-paperclip-svc
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    nexifyai-website-svc:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3000"
+        passHostHeader: true
+        healthCheck:
+          path: /api/health
+          interval: 30s
+          timeout: 5s
+
+    nexifyai-hermes-svc:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8787"
+        passHostHeader: true
+        healthCheck:
+          path: /health
+          interval: 30s
+          timeout: 5s
+
+    nexifyai-paperclip-svc:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3100"
+        passHostHeader: true
+        healthCheck:
+          path: /api/health
+          interval: 30s
+          timeout: 5s

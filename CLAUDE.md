@@ -52,14 +52,36 @@ nexifyai-cloud/
 9. **Tests + Docs sync.** Änderungen → Tests + Docs aktualisieren.
 10. **Tenant-Trennung.** Kundenprojekte bleiben in `/workspace/customers/`. Dieses Repo ist reine NeXify-Infrastruktur.
 
+## VPS-Infrastruktur (72.62.152.47)
+
+**Bestehender Traefik (`traefik-vsrs`) übernimmt Reverse-Proxy + TLS.**
+- Dynamic-Config-Verzeichnis: `/docker/traefik-vsrs/dynamic/`
+- Let's Encrypt: Volume `traefik-vsrs_traefik-letsencrypt`
+- Host-Netzwerk-Modus, `providers.docker=true` + `providers.file.watch=true`
+- **Kein eigener Traefik starten.** Monorepo-Services binden auf `127.0.0.1:<port>`.
+- Dynamic-Config `deploy/traefik/dynamic-monorepo.yml` wird via `deploy.sh` nach `/docker/traefik-vsrs/dynamic/nexifyai-monorepo.yml` kopiert → Traefik lädt automatisch neu.
+
+**Bestehende Routes (nicht überschreiben):**
+- `work.nexifyai.cloud` → Hermes (aktuell 32769)
+- `chat.nexifyai.cloud` → Open WebUI (3080)
+- `api.nexifyai.cloud` → Nexify API (8001)
+- `nexifyai.cloud` → Website Preview (3020)
+- `vorschau.nexifyai.cloud` → Website Preview (3020)
+
+**Neue Monorepo-Routes:**
+- `nexifyai.cloud` → Website (127.0.0.1:3000) — **ersetzt aktuelles Preview**
+- `webui.nexifyai.cloud` → Hermes (127.0.0.1:8787)
+- `app.nexifyai.cloud` → Paperclip (127.0.0.1:3100)
+
 ## Docker-Compose-Dienste
 
-| Service | Container | Port | Health |
-|---------|-----------|------|--------|
-| `website` | `ghcr.io/nexifyai-dev/website` | 3000 | `:3000/api/health` |
-| `hermes-webui` | `ghcr.io/nexifyai-dev/hermes-webui` | 8787 | `:8787/health` |
-| `paperclip` | `ghcr.io/nexifyai-dev/paperclip` | 3100 | `:3100/api/health` |
-| `traefik` | `traefik:v3.1` | 80/443/8080 | Dashboard |
+| Service | Container | Port | Health | Traefik-Route |
+|---------|-----------|------|--------|---------------|
+| `website` | nexify-website | 127.0.0.1:3000 | `/api/health` | `nexifyai.cloud` |
+| `hermes-webui` | nexify-hermes | 127.0.0.1:8787 | `/health` | `webui.nexifyai.cloud` |
+| `paperclip` | nexify-paperclip | 127.0.0.1:3100 | `/api/health` | `app.nexifyai.cloud` |
+
+**Traefik:** Bestehend (`traefik-vsrs`), nicht Teil dieses Compose.
 
 ## Workflow
 
