@@ -1,0 +1,21 @@
+name: Monorepo Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Website
+        run: |
+          echo "Deploy triggered at $(date)"
+          echo "Website: Docker build & push (optional)"
+
+      - name: Notify VPS
+        run: |
+          curl -fsS -m 10 https://hc-ping.com/ping 2>/dev/null || true
