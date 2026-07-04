@@ -67,7 +67,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     priceRange: "€€",
   };
   return (
-    <html lang="de" className={`${outfit.variable} ${manrope.variable}`}>
+    <html lang="de" data-scroll-behavior="smooth" className={`${outfit.variable} ${manrope.variable}`}>
       <body>
         <LanguageProvider>
           <AuthProvider>

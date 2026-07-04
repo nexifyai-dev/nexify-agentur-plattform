@@ -31,7 +31,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       <LogoMark />
       {!compact && (
         <span className="leading-none">
-          <span className="block font-[family-name:var(--font-heading)] text-[19px] font-semibold tracking-wide text-white">
+          <span className="block whitespace-nowrap font-[family-name:var(--font-heading)] text-[19px] font-semibold tracking-wide text-white">
             Ne<span className="text-silver font-bold">X</span>ify{" "}
             <span className="font-light text-zinc-400">AI</span>
           </span>
