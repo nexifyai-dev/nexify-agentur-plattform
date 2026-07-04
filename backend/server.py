@@ -157,20 +157,40 @@ SYSTEM_PROMPT = f"""Du bist der offizielle AI-Berater von NeXify AI und trittst 
 
 {COMPANY_KNOWLEDGE}
 
-DEINE AUFGABE:
-- Berate Besucher professionell, freundlich und auf Augenhoehe. Du bist Vertriebsprofi UND technischer Experte.
+DEINE ROLLE:
+- Du fuehrst eine echte, individuelle Bedarfsanalyse – wie im persoenlichen Erstgespraech einer Premium-Agentur. Der Besucher soll sich verstanden, ernst genommen und individuell betreut fuehlen. Du bist Senior-Berater UND technischer Experte.
 - Antworte in der Sprache des Nutzers (Deutsch oder Niederlaendisch). Standardsprache: {{language}}.
-- Stelle gezielte Qualifizierungsfragen (eine pro Nachricht): Was fuer ein Projekt? Welche Ziele? Zeitrahmen? Budgetrahmen?
-- Rechne Preise transparent vor: Arbeitstage x 999 EUR netto. Nenne immer Spannen, keine verbindlichen Festpreise.
-- Sobald du genug weisst (Projekttyp + grober Umfang), biete AKTIV an, ein unverbindliches, schriftliches Angebot zu erstellen und per E-Mail zu senden. Sage dann woertlich, dass der Nutzer auf den Button "Angebot per E-Mail erhalten" im Chat klicken kann.
-- Wuenscht der Nutzer ein persoenliches Gespraech oder einen Anruf, verweise auf die Rueckruf-Seite unter /rueckruf – dort kann er verbindlich einen Telefontermin in einem freien Zeitfenster buchen.
-- Halte Antworten kompakt (max. 120 Woerter), nutze kurze Absaetze. Keine Markdown-Ueberschriften, keine Emojis.
-- Bleibe ehrlich: keine erfundenen Referenzen, keine Garantien, B2B only.
+
+BEDARFSANALYSE (natuerlich und gespraechig fuehren, NIEMALS wie einen Fragebogen abarbeiten):
+Klaere im Gespraechsverlauf diese Punkte – maximal 1-2 gezielte Fragen pro Nachricht:
+1. Unternehmen & Branche: Was macht das Unternehmen, wer ist die Zielgruppe?
+2. Ziel: Was soll das Projekt konkret bewirken (mehr Anfragen, Verkauf, Entlastung, Prozesse)?
+3. Projekttyp & Kernfunktionen: Website, Shop, App oder Automatisierung? Welche Funktionen sind wichtig?
+4. Bestehendes: Gibt es bereits Website, CI/Logo, Inhalte, Systeme (Shop, ERP, CRM)?
+5. Stil & Vorbilder: Designrichtung, Beispiele, die gefallen?
+6. Zeitrahmen & Besonderheiten.
+WICHTIG:
+- Gehe auf JEDE Antwort konkret ein: Spiegle kurz, was du verstanden hast, und liefere sofort fachlichen Mehrwert – eine kleine Empfehlung oder Best Practice fuer GENAU seine Branche und Situation.
+- Stelle keine Frage doppelt. Rechne Preise transparent vor: Arbeitstage x 999 EUR netto, immer als Spanne.
+
+ANGEBOTS-FREIGABE (STRIKT EINHALTEN):
+- Biete das schriftliche Angebot ERST an, wenn du mindestens kennst: Unternehmen/Branche, Projektziel, Projekttyp und die wichtigsten gewuenschten Funktionen. Vorher NIEMALS.
+- Sind diese Punkte geklaert: Fasse den verstandenen Bedarf in 2-3 Saetzen zusammen, kuendige ein individuell zugeschnittenes Angebot an und verweise auf den Button "Angebot per E-Mail erhalten" im Chat. Haenge dann als allerletzte Zeichen deiner Nachricht exakt diesen Marker an: [ANGEBOT_BEREIT]
+- Der Marker ist ein unsichtbares Systemsignal. Setze ihn ab Angebotsreife in JEDER weiteren Nachricht ans Ende.
+- Wuenscht der Nutzer ein persoenliches Gespraech oder einen Anruf: verweise auf die Rueckruf-Seite /rueckruf – dort bucht er einen festen Telefontermin, Pascal Courbois ruft persoenlich an.
+
+STIL: kompakt (max. 130 Woerter), kurze Absaetze, keine Markdown-Ueberschriften, keine Emojis. Ehrlich bleiben: keine erfundenen Referenzen, keine Garantien, B2B only.
 """
 
-OFFER_PROMPT = """Erstelle aus dem bisherigen Gespraech ein strukturiertes Angebot als reines JSON (keine Erklaerung, kein Markdown-Zaun) in der Sprache "{language}" mit exakt diesen Feldern:
-{{"title": "...", "intro": "2-3 Saetze persoenliche Einleitung an {name}", "items": [{{"name": "...", "description": "1-2 Saetze", "days_min": 1, "days_max": 2}}], "assumptions": ["..."], "next_steps": ["..."]}}
-Regeln: Tagessatz 999 EUR netto. Nutze realistische Arbeitstage gemaess Leistungskatalog. Maximal 5 Positionen. Wenn das Gespraech wenig Details enthaelt, erstelle ein sinnvolles Standard-Angebot fuer das besprochene Thema."""
+OFFER_READY_MARKER = "[ANGEBOT_BEREIT]"
+
+OFFER_PROMPT = """Erstelle aus dem gesamten bisherigen Beratungsgespraech ein INDIVIDUELLES Premium-Angebot als reines JSON (keine Erklaerung, kein Markdown-Zaun) in der Sprache "{language}" mit exakt diesen Feldern:
+{{"title": "praegnanter Projekttitel mit Bezug zum Unternehmen des Kunden", "intro": "3-4 Saetze persoenliche Einleitung an {name}: nimm konkret Bezug auf sein Unternehmen, seine Branche und die im Gespraech genannten Ziele", "summary": ["4-7 Stichpunkte: die im Gespraech geaeusserten Anforderungen und Wuensche des Kunden"], "items": [{{"name": "...", "description": "2-3 Saetze, konkret auf die besprochenen Beduerfnisse zugeschnitten – nenne Branche, Funktionen und Ziele aus dem Gespraech", "days_min": 1, "days_max": 2}}], "recommendation": "2-3 Saetze persoenliche Experten-Empfehlung fuer genau diesen Kunden (sinnvolle Prioritaeten, empfohlene erste Ausbaustufe, was sich besonders lohnt)", "assumptions": ["..."], "next_steps": ["..."]}}
+REGELN:
+- Tagessatz 999 EUR netto, realistische Arbeitstage gemaess Leistungskatalog, maximal 5 Positionen.
+- JEDE Position muss erkennbar aus dem Gespraech abgeleitet sein – keine generischen Fuellpositionen.
+- Nicht besprochene Details: KEINE stillen Annahmen im Leistungsumfang – fuehre sie transparent unter assumptions auf.
+- Schreibe warm, persoenlich und professionell. Der Kunde muss spueren, dass dieses Angebot exklusiv fuer ihn erstellt wurde."""
 
 
 class ChatSessionCreate(BaseModel):
@@ -197,6 +217,7 @@ class OfferRequestIn(BaseModel):
     name: str
     email: EmailStr
     company: str | None = None
+    phone: str | None = None
     language: str = "de"
 
 
@@ -245,6 +266,15 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
         <td style="padding:14px 16px;border-bottom:1px solid #26262b;color:#e5e7eb;font-size:13px;white-space:nowrap;text-align:right;">{price}</td></tr>"""
     assumptions = "".join(f"<li style='padding:3px 0;color:#a1a1aa;font-size:13px;'>{a}</li>" for a in offer.get("assumptions", []))
     steps = "".join(f"<li style='padding:3px 0;color:#a1a1aa;font-size:13px;'>{s}</li>" for s in offer.get("next_steps", []))
+    summary_items = "".join(f"<li style='padding:3px 0;color:#d4d4d8;font-size:13px;'>{s}</li>" for s in offer.get("summary", []))
+    summary_html = f"""<tr><td style="padding:16px 32px 0;font-family:Arial,sans-serif;">
+  <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{'Uw wensen in het kort' if nl else 'Ihre Anforderungen im Überblick'}</div>
+  <ul style="margin:0;padding-left:18px;">{summary_items}</ul></td></tr>""" if summary_items else ""
+    reco_html = f"""<tr><td style="padding:14px 32px 4px;font-family:Arial,sans-serif;">
+  <div style="border-left:3px solid #c0c0c8;background:#141417;border-radius:8px;padding:14px 16px;">
+    <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{'Onze aanbeveling voor u' if nl else 'Unsere Empfehlung für Sie'}</div>
+    <div style="color:#d4d4d8;font-size:13px;line-height:1.7;">{offer.get('recommendation','')}</div>
+  </div></td></tr>""" if offer.get("recommendation") else ""
     t = {
         "subject_note": "Vrijblijvende offerte" if nl else "Unverbindliches Angebot",
         "scope": "Omvang & investering" if nl else "Umfang & Investition",
@@ -266,6 +296,7 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
   <h1 style="margin:0 0 12px;color:#ffffff;font-size:20px;font-weight:600;">{offer.get('title','')}</h1>
   <p style="margin:0;color:#a1a1aa;font-size:14px;line-height:1.7;">{offer.get('intro','')}</p>
 </td></tr>
+{summary_html}
 <tr><td style="padding:20px 32px;font-family:Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:10px;">{t['scope']}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #26262b;border-radius:12px;background:#141417;">{rows}
@@ -273,6 +304,7 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
   <td style="padding:16px;color:#ffffff;font-size:16px;font-weight:700;text-align:right;white-space:nowrap;">≈ € {price_total:,.0f}</td></tr></table>
   <div style="color:#71717a;font-size:11px;padding-top:8px;">{t['vat']}</div>
 </td></tr>
+{reco_html}
 <tr><td style="padding:8px 32px;font-family:Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{t['assumptions']}</div>
   <ul style="margin:0;padding-left:18px;">{assumptions}</ul>
@@ -413,6 +445,22 @@ def offer_pdf_bytes(offer: dict, name: str, company: str | None, language: str, 
     c.setFillColor(muted); c.setFont("Helvetica", 8)
     c.drawString(48, y, "excl. btw · dagtarief € 999 netto" if nl else "zzgl. USt. · Tagessatz € 999 netto")
     y -= 26
+
+    reco = offer.get("recommendation")
+    if reco:
+        lines_r = wrap(str(reco), "Helvetica", 9, W - 130)
+        box_h = 32 + len(lines_r) * 13
+        if y - box_h < 120:
+            c.showPage(); page_frame(); y = H - 130
+        c.setFillColor(panel); c.setStrokeColor(silver); c.setLineWidth(0.8)
+        c.roundRect(48, y - box_h, W - 96, box_h, 6, fill=1, stroke=1)
+        c.setFillColor(muted); c.setFont("Helvetica-Bold", 8)
+        c.drawString(60, y - 17, "ONZE AANBEVELING VOOR U" if nl else "UNSERE EMPFEHLUNG FÜR SIE")
+        c.setFillColor(HexColor("#d4d4d8")); c.setFont("Helvetica", 9)
+        yy = y - 31
+        for ln in lines_r:
+            c.drawString(60, yy, ln); yy -= 13
+        y -= box_h + 16
 
     for label, items in [
         ("AANNAMES" if nl else "ANNAHMEN", offer.get("assumptions", [])),
@@ -599,6 +647,8 @@ async def chat(body: ChatMessageIn):
 
     async def gen():
         full = []
+        hold = len(OFFER_READY_MARKER) + 8
+        pending = ""
         try:
             stream = await LLM.chat.completions.create(
                 model=MIMO_MODEL, messages=history, max_tokens=3000, stream=True,
@@ -608,14 +658,23 @@ async def chat(body: ChatMessageIn):
                 content = getattr(delta, "content", None) if delta else None
                 if content:
                     full.append(content)
-                    yield f"data: {json.dumps({'type': 'delta', 'content': content})}\n\n"
+                    pending += content
+                    if len(pending) > hold:
+                        emit, pending = pending[:-hold], pending[-hold:]
+                        yield f"data: {json.dumps({'type': 'delta', 'content': emit})}\n\n"
         except Exception as e:
             logger.error(f"chat stream error: {e}")
             yield f"data: {json.dumps({'type': 'error', 'content': str(e)})}\n\n"
         text = "".join(full)
+        ready = OFFER_READY_MARKER in text
+        tail = pending.replace(OFFER_READY_MARKER, "").rstrip()
+        if tail:
+            yield f"data: {json.dumps({'type': 'delta', 'content': tail})}\n\n"
         if text:
-            history.append({"role": "assistant", "content": text})
-            await save_message(body.session_id, "assistant", text)
+            clean = text.replace(OFFER_READY_MARKER, "").rstrip()
+            history.append({"role": "assistant", "content": clean})
+            await save_message(body.session_id, "assistant", clean)
+        yield f"data: {json.dumps({'type': 'offer_ready', 'ready': ready})}\n\n"
         yield f"data: {json.dumps({'type': 'done'})}\n\n"
 
     return StreamingResponse(gen(), media_type="text/event-stream",
@@ -716,8 +775,8 @@ async def request_offer(body: OfferRequestIn):
                     datetime.now(timezone.utc) + timedelta(hours=FOLLOWUP_HOURS),
                 )
                 await con.execute(
-                    "insert into nexify_leads (id,name,email,company,language,message,source) values ($1,$2,$3,$4,$5,$6,'chat_offer')",
-                    uuid.uuid4(), body.name, body.email, body.company, body.language, offer.get("title", ""),
+                    "insert into nexify_leads (id,name,email,company,phone,language,message,source) values ($1,$2,$3,$4,$5,$6,$7,'chat_offer')",
+                    uuid.uuid4(), body.name, body.email, body.company, body.phone, body.language, offer.get("title", ""),
                 )
         except Exception as e:
             logger.warning(f"offer insert failed: {e}")

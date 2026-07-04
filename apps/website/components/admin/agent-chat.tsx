@@ -43,7 +43,18 @@ export function AgentChat() {
     setBusy(true);
     setMsgs((m) => [...m, { id: `tmp-${Date.now()}`, role: "user", content: text, created_at: new Date().toISOString() }]);
     try {
-      await api("/api/admin/agent/chat", { method: "POST", body: JSON.stringify({ message: text }) });
+      const res = await api("/api/admin/agent/chat", { method: "POST", body: JSON.stringify({ message: text }) });
+      if (res.status === "busy") {
+        setMsgs((m) => [...m, { id: `busy-${Date.now()}`, role: "assistant", content: "Ich arbeite gerade noch an einem anderen Auftrag – einen Moment bitte.", created_at: new Date().toISOString() }]);
+        setBusy(false);
+        return;
+      }
+      for (let i = 0; i < 120; i++) {
+        await new Promise((r) => setTimeout(r, 2500));
+        api("/api/admin/agent/history").then(setMsgs).catch(() => {});
+        const st = await api("/api/admin/agent/status").catch(() => ({ busy: true }));
+        if (!st.busy) break;
+      }
     } catch (e: any) {
       setMsgs((m) => [...m, { id: `err-${Date.now()}`, role: "assistant", content: `Fehler: ${e.message}`, created_at: new Date().toISOString() }]);
     }
