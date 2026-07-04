@@ -9,14 +9,14 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const T = {
   de: {
-    title: "NOVA – Ihr KI-Berater",
+    title: "NeXify AI – Ihr AI-Berater",
     status: "Online · antwortet sofort",
     greeting:
-      "Guten Tag! Ich bin NOVA, der KI-Berater von NeXify AI. Ich berate Sie zu Websites, Onlineshops, Web-Apps und AI-Automatisierung – und erstelle Ihnen auf Wunsch sofort ein unverbindliches Angebot per E-Mail. Woran arbeiten Sie gerade?",
-    placeholder: "Ihre Nachricht an NOVA …",
+      "Guten Tag! Ich bin NeXify AI – Ihr persönlicher AI-Berater. Ich berate Sie zu Websites, Onlineshops, Web-Apps und AI-Automatisierung – und erstelle Ihnen auf Wunsch sofort ein unverbindliches Angebot per E-Mail. Woran arbeiten Sie gerade?",
+    placeholder: "Ihre Nachricht …",
     offerBtn: "Angebot per E-Mail erhalten",
     offerTitle: "Unverbindliches Angebot anfordern",
-    offerText: "NOVA fasst unser Gespräch zu einem strukturierten Angebot zusammen und sendet es Ihnen sofort per E-Mail.",
+    offerText: "NeXify AI fasst unser Gespräch zu einem strukturierten Angebot zusammen und sendet es Ihnen sofort per E-Mail.",
     name: "Ihr Name *",
     email: "Ihre E-Mail *",
     companyField: "Firma (optional)",
@@ -28,14 +28,14 @@ const T = {
     cancel: "Zurück zum Chat",
   },
   nl: {
-    title: "NOVA – Uw AI-adviseur",
+    title: "NeXify AI – Uw AI-adviseur",
     status: "Online · antwoordt direct",
     greeting:
-      "Goedendag! Ik ben NOVA, de AI-adviseur van NeXify AI. Ik adviseer u over websites, webshops, web-apps en AI-automatisering – en stel desgewenst direct een vrijblijvende offerte per e-mail op. Waar werkt u momenteel aan?",
-    placeholder: "Uw bericht aan NOVA …",
+      "Goedendag! Ik ben NeXify AI – uw persoonlijke AI-adviseur. Ik adviseer u over websites, webshops, web-apps en AI-automatisering – en stel desgewenst direct een vrijblijvende offerte per e-mail op. Waar werkt u momenteel aan?",
+    placeholder: "Uw bericht …",
     offerBtn: "Offerte per e-mail ontvangen",
     offerTitle: "Vrijblijvende offerte aanvragen",
-    offerText: "NOVA vat ons gesprek samen in een gestructureerde offerte en stuurt deze direct per e-mail.",
+    offerText: "NeXify AI vat ons gesprek samen in een gestructureerde offerte en stuurt deze direct per e-mail.",
     name: "Uw naam *",
     email: "Uw e-mail *",
     companyField: "Bedrijf (optioneel)",

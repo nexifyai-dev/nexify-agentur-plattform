@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserRound } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useLang } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 
 const NAV = {
   de: [
@@ -30,6 +31,7 @@ const NAV = {
 
 export function SiteHeader() {
   const { lang, setLang } = useLang();
+  const { user } = useAuth();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -85,6 +87,15 @@ export function SiteHeader() {
               </button>
             ))}
           </div>
+
+          <Link
+            href={user && typeof user === "object" ? (user.role === "admin" ? "/admin" : "/konto") : "/login"}
+            className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+            aria-label={lang === "nl" ? "Account" : "Konto"}
+            data-testid="header-account-link"
+          >
+            <UserRound size={16} />
+          </Link>
 
           <Link href="/kontakt" className="btn-primary hidden !px-6 !py-2.5 !text-[13px] md:inline-flex" data-testid="header-cta">
             {lang === "nl" ? "Project starten" : "Projekt starten"}

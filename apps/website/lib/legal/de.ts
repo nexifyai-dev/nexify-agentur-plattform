@@ -106,9 +106,9 @@ export const legalDe: Record<string, LegalPageData> = {
         ],
       },
       {
-        heading: "5. KI-Berater „NOVA“ (Live-Chat)",
+        heading: "5. KI-Berater „NeXify AI“ (Live-Chat)",
         paragraphs: [
-          "Auf dieser Website steht ein KI-gestützter Berater („NOVA“) zur Verfügung. Bei Nutzung des Chats werden Ihre Chat-Nachrichten sowie eine zufällig erzeugte Sitzungskennung verarbeitet und gespeichert, um den Gesprächsverlauf bereitzustellen, Anfragen zu qualifizieren und auf Wunsch ein Angebot zu erstellen.",
+          "Auf dieser Website steht ein KI-gestützter Berater („NeXify AI“) zur Verfügung. Bei Nutzung des Chats werden Ihre Chat-Nachrichten sowie eine zufällig erzeugte Sitzungskennung verarbeitet und gespeichert, um den Gesprächsverlauf bereitzustellen, Anfragen zu qualifizieren und auf Wunsch ein Angebot zu erstellen.",
           "Zur Erzeugung der Antworten werden Chat-Inhalte an ein KI-Sprachmodell (Large Language Model) eines spezialisierten Anbieters übermittelt. Übermitteln Sie im Chat bitte keine sensiblen oder besonders schutzbedürftigen Daten. Die Chat-Inhalte werden nicht zur allgemeinen Modellschulung freigegeben, soweit dies nicht ausdrücklich vereinbart und rechtlich zulässig ist.",
           "Geben Sie im Chat freiwillig Name, E-Mail-Adresse und Firma an, um ein Angebot zu erhalten, werden diese Daten zur Erstellung und Zusendung des Angebots sowie für eine angemessene geschäftliche Nachverfolgung (Follow-up-E-Mail) verwendet.",
           "Rechtsgrundlagen: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen auf Ihre Anfrage) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an effizienter Erstberatung). Sie sind nicht verpflichtet, den Chat zu nutzen – alle Anliegen können alternativ per E-Mail oder Telefon gestellt werden.",
@@ -185,7 +185,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "2. Vertragsschluss und Leistungsumfang",
         paragraphs: [
-          "Angebote sind freibleibend, sofern sie nicht ausdrücklich als verbindlich bezeichnet werden. Dies gilt auch für automatisiert erstellte Angebotsindikationen des KI-Beraters NOVA, die stets unverbindliche Orientierungen darstellen. Ein Vertrag entsteht durch Annahme, Auftragsbestätigung oder Beginn der vereinbarten Leistung.",
+          "Angebote sind freibleibend, sofern sie nicht ausdrücklich als verbindlich bezeichnet werden. Dies gilt auch für automatisiert erstellte Angebotsindikationen des KI-Beraters NeXify AI, die stets unverbindliche Orientierungen darstellen. Ein Vertrag entsteht durch Annahme, Auftragsbestätigung oder Beginn der vereinbarten Leistung.",
           "Maßgeblich sind Angebot, Leistungsbeschreibung, vereinbarte Akzeptanzkriterien und dokumentierte Änderungen. Nicht ausdrücklich eingeschlossene Leistungen gelten als Zusatzaufwand.",
         ],
       },
@@ -285,7 +285,7 @@ export const legalDe: Record<string, LegalPageData> = {
   "ki-hinweise": {
     slug: "ki-hinweise",
     title: "Hinweise zu AI-gestützter Arbeit",
-    intro: "Wie NeXifyAI moderne AI-Werkzeuge einsetzt – transparent erklärt, inklusive des KI-Beraters NOVA auf dieser Website.",
+    intro: "Wie NeXifyAI moderne AI-Werkzeuge einsetzt – transparent erklärt, inklusive des KI-Beraters NeXify AI auf dieser Website.",
     updated: "Juni 2026",
     sections: [
       {
@@ -295,11 +295,11 @@ export const legalDe: Record<string, LegalPageData> = {
         ],
       },
       {
-        heading: "Der KI-Berater NOVA auf dieser Website",
+        heading: "Der NeXify AI Berater auf dieser Website",
         paragraphs: [
-          "NOVA ist ein KI-gestützter Beratungs- und Vertriebsassistent. Er beantwortet Fragen zu Leistungen und Preisen, qualifiziert Anfragen und kann auf ausdrücklichen Wunsch ein unverbindliches Angebot erstellen und per E-Mail versenden.",
-          "Sie interagieren dabei mit einem automatisierten System, nicht mit einem Menschen. Alle von NOVA erstellten Angebote sind unverbindliche Indikationen; verbindliche Angebote werden ausschließlich von Pascal Courbois persönlich geprüft und bestätigt.",
-          "NOVA kann Fehler machen. Bei Unklarheiten oder wichtigen Entscheidungen kontaktieren Sie uns bitte direkt per E-Mail oder Telefon.",
+          "NeXify AI ist ein KI-gestützter Beratungs- und Vertriebsassistent. Er beantwortet Fragen zu Leistungen und Preisen, qualifiziert Anfragen und kann auf ausdrücklichen Wunsch ein unverbindliches Angebot erstellen und per E-Mail versenden.",
+          "Sie interagieren dabei mit einem automatisierten System, nicht mit einem Menschen. Alle von NeXify AI erstellten Angebote sind unverbindliche Indikationen; verbindliche Angebote werden ausschließlich von Pascal Courbois persönlich geprüft und bestätigt.",
+          "Der AI-Berater kann Fehler machen. Bei Unklarheiten oder wichtigen Entscheidungen kontaktieren Sie uns bitte direkt per E-Mail oder Telefon.",
         ],
       },
       {
@@ -316,7 +316,7 @@ export const legalDe: Record<string, LegalPageData> = {
         heading: "Daten und Vertraulichkeit",
         paragraphs: [
           "Vertrauliche oder personenbezogene Daten werden nur im erforderlichen Umfang verarbeitet. Modell-, Hosting- und Datenverarbeitungswege werden passend zum Projekt gewählt. Kundendaten werden nicht bewusst zur allgemeinen Modellschulung freigegeben, sofern dies nicht ausdrücklich vereinbart und rechtlich zulässig ist.",
-          "Details zur Datenverarbeitung im Chat finden Sie in der Datenschutzerklärung, Abschnitt „KI-Berater NOVA“.",
+          "Details zur Datenverarbeitung im Chat finden Sie in der Datenschutzerklärung, Abschnitt „NeXify AI Berater“.",
         ],
       },
       {

@@ -16,6 +16,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr
 from openai import AsyncOpenAI
 
+import portal
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
 
@@ -38,6 +40,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(portal.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
@@ -63,7 +66,52 @@ create table if not exists nexify_offers (
   email_id text, followup_at timestamptz, followup_sent boolean default false,
   created_at timestamptz default now()
 );
+create table if not exists nexify_users (
+  id uuid primary key,
+  email text unique not null,
+  password_hash text not null,
+  name text, company text, phone text,
+  language text default 'de', role text default 'customer',
+  created_at timestamptz default now()
+);
+create table if not exists nexify_offer_messages (
+  id uuid primary key, offer_id uuid, sender text, body text, created_at timestamptz default now()
+);
+alter table nexify_offers add column if not exists payment_order_id text;
+alter table nexify_offers add column if not exists payment_checkout_url text;
+alter table nexify_offers add column if not exists payment_status text;
+alter table nexify_offers add column if not exists payment_amount numeric;
 """
+
+LEGAL_FOOTER = """NeXifyAI by NeXify – Chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>support@nexify-automate.com · +31 6 133 188 56"""
+
+
+def ci_email(title: str, body_html: str, cta_label: str | None = None, cta_url: str | None = None, language: str = "de") -> str:
+    nl = language == "nl"
+    cta = ""
+    if cta_label and cta_url:
+        cta = f"""<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px;"><tr><td style="border-radius:999px;background:linear-gradient(120deg,#e4e4e7,#ffffff 45%,#c4c4cc);">
+        <a href="{cta_url}" style="display:inline-block;padding:13px 30px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#09090b;text-decoration:none;">{cta_label}</a></td></tr></table>"""
+    legal_note = ("Deze e-mail is gericht aan ondernemers (B2B). Vrijblijvende indicaties vormen geen bindend aanbod. Privacyverklaring: nexifyai.cloud/datenschutz"
+                  if nl else "Diese E-Mail richtet sich an Unternehmer (B2B). Unverbindliche Indikationen stellen kein bindendes Angebot dar. Datenschutz: nexifyai.cloud/datenschutz")
+    return f"""<!doctype html><html><body style="margin:0;padding:0;background:#0a0a0a;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 12px;"><tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
+<tr><td style="padding:28px 32px 18px;border-bottom:1px solid #26262b;">
+  <div style="font-family:Georgia,serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
+  <div style="font-family:Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div>
+</td></tr>
+<tr><td style="padding:28px 32px 8px;font-family:Arial,sans-serif;">
+  <h1 style="margin:0 0 14px;color:#ffffff;font-size:19px;font-weight:600;">{title}</h1>
+  <div style="color:#a1a1aa;font-size:14px;line-height:1.8;">{body_html}</div>
+  {cta}
+</td></tr>
+<tr><td style="padding:20px 32px 26px;font-family:Arial,sans-serif;">
+  <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{legal_note}</p>
+</td></tr>
+<tr><td style="padding:18px 32px;border-top:1px solid #26262b;font-family:Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">{LEGAL_FOOTER}</td></tr>
+</table></td></tr></table></body></html>"""
+
 
 COMPANY_KNOWLEDGE = """
 UNTERNEHMEN: NeXifyAI by NeXify – Chat it. Automate it. | Inhaber: Pascal Courbois | Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande | KvK 90483944 | BTW NL865786276B01 | support@nexify-automate.com | +31 6 133 188 56 | Ausschliesslich B2B.
@@ -81,7 +129,7 @@ PROZESS: 1) Ziel & Nutzen klaeren 2) Konzept & Festpreisrahmen 3) AI-gestuetzte 
 TECHNOLOGIE: Next.js, React, TypeScript, moderne Datenbanken, Supabase, Vercel oder Self-Hosting.
 """
 
-SYSTEM_PROMPT = f"""Du bist NOVA, der proaktive KI-Berater von NeXify AI – einer Premium-Agentur fuer AI-gestuetzte Websites, Shops, Apps und Automatisierung.
+SYSTEM_PROMPT = f"""Du bist der offizielle AI-Berater von NeXify AI und trittst unter dem Namen "NeXify AI" auf – einer Premium-Agentur fuer AI-gestuetzte Websites, Shops, Apps und Automatisierung. Nenne dich niemals anders (kein NOVA, kein Assistent-Name).
 
 {COMPANY_KNOWLEDGE}
 
@@ -378,9 +426,10 @@ async def request_offer(body: OfferRequestIn):
     if INTERNAL_NOTIFY_EMAIL:
         asyncio.create_task(send_email(
             INTERNAL_NOTIFY_EMAIL,
-            f"NOVA hat ein Angebot erstellt: {body.name} ({body.email})",
+            f"NeXify AI Berater hat ein Angebot erstellt: {body.name} ({body.email})",
             f"<p>Angebot <b>{offer.get('title','')}</b> wurde an {body.name} ({body.email}, Firma: {body.company or '-'}) gesendet.<br/>Richtpreis: € {price_total:,}<br/>Session: {body.session_id}</p>",
         ))
+    asyncio.create_task(send_account_invite(str(offer_id), body.name, body.email, body.language))
     return {
         "status": "sent" if email_id else "generated",
         "offer_id": str(offer_id),
@@ -388,6 +437,35 @@ async def request_offer(body: OfferRequestIn):
         "price_total": price_total,
         "email_sent": bool(email_id),
     }
+
+
+async def send_account_invite(offer_id: str, name: str, email: str, language: str):
+    nl = language == "nl"
+    pool = await db()
+    existing = None
+    if pool:
+        try:
+            async with pool.acquire() as con:
+                existing = await con.fetchrow("select id from nexify_users where email = $1", email.lower())
+        except Exception as e:
+            logger.warning(f"invite lookup failed: {e}")
+    frontend = os.environ.get("FRONTEND_URL", "")
+    if existing:
+        cta_url = f"{frontend}/login"
+        cta_label = "Naar het klantportaal" if nl else "Zum Kundenportal"
+        body = (f"Beste {name},<br/><br/>uw nieuwe offerte staat klaar in uw klantportaal. Daar kunt u de offerte inzien, aannemen of afwijzen, vragen stellen en uw gegevens beheren."
+                if nl else
+                f"Guten Tag {name},<br/><br/>Ihr neues Angebot liegt in Ihrem Kundenportal bereit. Dort können Sie das Angebot einsehen, annehmen oder ablehnen, Rückfragen stellen und Ihre Daten verwalten.")
+        title = "Uw offerte staat klaar in het klantportaal" if nl else "Ihr Angebot liegt im Kundenportal bereit"
+    else:
+        token = portal.create_invite_token(email.lower(), offer_id)
+        cta_url = f"{frontend}/registrieren?token={token}"
+        cta_label = "Klantaccount aanmaken" if nl else "Kundenkonto jetzt anlegen"
+        body = (f"Beste {name},<br/><br/>maak in één minuut uw persoonlijke klantaccount aan. Daar kunt u uw offerte inzien, aannemen of afwijzen, vragen stellen, nieuwe offertes aanvragen en uw gegevens beheren – overzichtelijk op één plek."
+                if nl else
+                f"Guten Tag {name},<br/><br/>legen Sie in einer Minute Ihr persönliches Kundenkonto an. Dort können Sie Ihr Angebot einsehen, annehmen oder ablehnen, Rückfragen stellen, neue Angebote anfordern und Ihre Daten verwalten – übersichtlich an einem Ort.")
+        title = "Uw persoonlijke klantaccount bij NeXify AI" if nl else "Ihr persönliches Kundenkonto bei NeXify AI"
+    await send_email(email, title, ci_email(title, body, cta_label=cta_label, cta_url=cta_url, language=language))
 
 
 async def followup_worker():
@@ -431,6 +509,8 @@ async def startup():
     except Exception as e:
         DB_POOL = None
         logger.error(f"Supabase connection failed: {e}")
+    portal.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    await portal.seed_admin(db)
     asyncio.create_task(followup_worker())
 
 

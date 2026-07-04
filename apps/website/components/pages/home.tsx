@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, Quote } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { ICONS } from "@/components/icon-map";
 import { LogoMark } from "@/components/logo";
+import { HeroVisual } from "@/components/hero-visual";
 import { useContent } from "@/lib/content";
 
 export function HomePage() {
@@ -16,7 +17,8 @@ export function HomePage() {
       <section className="relative overflow-hidden pb-24 pt-44">
         <div className="hero-grid-bg" />
         <div className="pointer-events-none absolute left-1/2 top-[-320px] h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[140px]" />
-        <div className="site-container relative">
+        <div className="site-container relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400" data-testid="hero-badge">
               <span className="inline-block size-1.5 rounded-full bg-emerald-400" />
@@ -43,6 +45,14 @@ export function HomePage() {
               </Link>
             </div>
           </Reveal>
+          </div>
+
+          <Reveal delay={250}>
+            <HeroVisual />
+          </Reveal>
+        </div>
+
+        <div className="site-container relative">
 
           <Reveal delay={400}>
             <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 lg:grid-cols-4" data-testid="hero-stats">
