@@ -350,7 +350,17 @@ export const legalNl: Record<string, LegalPageData> = {
         bullets: [
           "nexify-lang (localStorage): slaat uw taalkeuze DE/NL op – tot verwijdering door u.",
           "nova-greeted (localStorage): onthoudt dat de chatassistent zich al heeft voorgesteld, om herhaald automatisch openen te voorkomen.",
+          "nexify-consent (localStorage): slaat uw keuze in de cookiebanner op (categorieën en tijdstip van de beslissing) – tot verwijdering of wijziging door u.",
           "Sessie-ID van de chat: technische koppeling van uw gespreksverloop tijdens het gebruik.",
+          "Inlogcookie van het klantportaal (HttpOnly): houdt uw sessie na het inloggen in stand; technisch noodzakelijk voor het portaal.",
+        ],
+      },
+      {
+        heading: "Uw cookie-instellingen (toestemmingsbeheer)",
+        paragraphs: [
+          "Bij uw eerste bezoek aan deze website kunt u via de cookiebanner kiezen welke categorieën u toestaat: „Noodzakelijk” (altijd actief), „Statistiek” en „Marketing”. Uw beslissing wordt uitsluitend lokaal in uw browser opgeslagen (nexify-consent) en niet aan derden doorgegeven.",
+          "De categorieën Statistiek en Marketing staan standaard uit (opt-in in de zin van art. 6 lid 1 sub a AVG en art. 11.7a Telecommunicatiewet). Zolang u geen toestemming geeft, worden geen bijbehorende diensten geladen. Momenteel zet deze website in beide categorieën geen diensten in; zij zijn bedoeld voor mogelijke toekomstige uitbreidingen en zouden vóór activering hier transparant worden benoemd.",
+          "U kunt uw keuze op elk moment met werking voor de toekomst wijzigen of intrekken: via de link „Cookie-instellingen” in de voettekst van elke pagina.",
         ],
       },
       {

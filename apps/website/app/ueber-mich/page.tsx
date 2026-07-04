@@ -3,7 +3,7 @@ import { AboutPage } from "@/components/pages/about";
 
 export const metadata: Metadata = {
   title: "Über mich — Pascal Courbois, der Fachmann hinter NeXify AI",
-  description: "Ein Ansprechpartner für Strategie, Design, Entwicklung und Betrieb. Aus Venlo für DE, AT, CH und NL – persönlich, verbindlich, AI-beschleunigt.",
+  description: "Deutscher aus der Grenzregion Limburg, seit 5+ Jahren in den Niederlanden. 20+ Jahre Erfahrung in IT, Programmierung, Kaufmannswesen und Vertrieb (Telekom, Vodafone, Postcon). Persönlich, verbindlich, AI-beschleunigt – für DE, AT, CH und NL.",
 };
 
 export default function Page() {

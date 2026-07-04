@@ -126,6 +126,16 @@ export function SiteFooter() {
                 {lang === "nl" ? "Terugbelafspraak boeken →" : "Rückruf-Termin buchen →"}
               </Link>
             </li>
+            <li>
+              <button
+                type="button"
+                className="transition-colors hover:text-white"
+                onClick={() => window.dispatchEvent(new CustomEvent("nexify-open-consent"))}
+                data-testid="footer-cookie-settings"
+              >
+                {lang === "nl" ? "Cookie-instellingen" : "Cookie-Einstellungen"}
+              </button>
+            </li>
             <li className="pt-2 text-xs text-zinc-600">
               KvK {company.kvk} · BTW {company.vatId}
             </li>

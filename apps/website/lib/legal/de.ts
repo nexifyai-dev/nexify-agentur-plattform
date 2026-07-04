@@ -351,7 +351,17 @@ export const legalDe: Record<string, LegalPageData> = {
         bullets: [
           "nexify-lang (localStorage): speichert Ihre Sprachwahl DE/NL – bis zur Löschung durch Sie.",
           "nova-greeted (localStorage): merkt sich, dass sich der Chat-Assistent bereits vorgestellt hat, um wiederholtes automatisches Öffnen zu vermeiden.",
+          "nexify-consent (localStorage): speichert Ihre Auswahl im Cookie-Banner (Kategorien und Zeitpunkt der Entscheidung) – bis zur Löschung oder Änderung durch Sie.",
           "Sitzungskennung des Chats: technische Zuordnung Ihres Gesprächsverlaufs während der Nutzung.",
+          "Anmelde-Cookie des Kundenportals (HttpOnly): hält Ihre Sitzung nach dem Login aufrecht; technisch notwendig für den Portalbetrieb.",
+        ],
+      },
+      {
+        heading: "Ihre Cookie-Einstellungen (Einwilligungs-Manager)",
+        paragraphs: [
+          "Beim ersten Besuch dieser Website können Sie über den Cookie-Banner wählen, welche Kategorien Sie zulassen: „Notwendig“ (immer aktiv), „Statistik“ und „Marketing“. Ihre Entscheidung wird ausschließlich lokal in Ihrem Browser gespeichert (nexify-consent) und nicht an Dritte übermittelt.",
+          "Die Kategorien Statistik und Marketing sind standardmäßig deaktiviert (Opt-in im Sinne von Art. 6 Abs. 1 lit. a DSGVO bzw. § 25 TDDDG). Solange Sie nicht einwilligen, werden keine entsprechenden Dienste geladen. Derzeit setzt diese Website in beiden Kategorien keine Dienste ein; sie sind für mögliche künftige Erweiterungen vorgesehen und würden vor Aktivierung hier transparent benannt.",
+          "Sie können Ihre Auswahl jederzeit mit Wirkung für die Zukunft ändern oder widerrufen: über den Link „Cookie-Einstellungen“ im Seitenfuß jeder Seite.",
         ],
       },
       {

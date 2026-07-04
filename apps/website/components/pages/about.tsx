@@ -57,6 +57,22 @@ export function AboutPage() {
         </div>
 
         <Reveal>
+          <h2 className="mt-24 font-[family-name:var(--font-heading)] text-2xl font-medium text-white">{t.about.journeyTitle}</h2>
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-zinc-400">{t.about.journeyIntro}</p>
+        </Reveal>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {t.about.journey.map((j, i) => (
+            <Reveal key={i} delay={i * 90}>
+              <div className="glass glass-lift h-full p-6" data-testid={`journey-card-${i}`}>
+                <div className="font-[family-name:var(--font-heading)] text-3xl font-light text-zinc-700">0{i + 1}</div>
+                <h3 className="mt-3 text-[15px] font-semibold text-white">{j.title}</h3>
+                <p className="mt-2 text-[13.5px] leading-relaxed text-zinc-500">{j.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal>
           <h2 className="mt-24 font-[family-name:var(--font-heading)] text-2xl font-medium text-white">{t.about.principlesTitle}</h2>
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

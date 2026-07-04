@@ -464,17 +464,29 @@ export const de = {
   about: {
     eyebrow: "Über mich",
     title: "Pascal Courbois – Fachmann hinter NeXify AI",
-    intro: "Ein Ansprechpartner für Strategie, Design, Entwicklung und Betrieb. Persönlich, verbindlich, AI-beschleunigt.",
+    intro: "Deutscher aus der Grenzregion Limburg, seit über fünf Jahren in den Niederlanden zu Hause – mit mehr als 20 Jahren Berufs- und Praxiserfahrung in IT, Kaufmannswesen und Vertrieb. Ein Ansprechpartner für Strategie, Design, Entwicklung und Betrieb.",
     paragraphs: [
+      "Ich bin Pascal Courbois – Deutscher aus der Grenzregion Limburg, mit einer Niederländerin verheiratet und seit gut fünf Jahren in den Niederlanden zu Hause. Ich lebe und arbeite täglich in beiden Kulturen und Sprachen. Für Sie bedeutet das: Beratung, Angebote und Kommunikation auf Deutsch oder Niederländisch – ohne Übersetzungsverluste und mit echtem Verständnis für beide Märkte.",
+      "In mehr als 20 Jahren Berufs- und Praxiserfahrung habe ich beide Seiten der Digitalisierung kennengelernt: die technische in IT und Programmierung – und die unternehmerische im kaufmännischen Bereich. Dazu kommt jahrelange Vertriebserfahrung, unter anderem bei der Telekom Deutschland, Vodafone und Postcon Deutschland. Ich weiß daher nicht nur, wie Software gebaut wird, sondern auch, wie Kunden denken, wie Abläufe in Unternehmen wirklich funktionieren und woran Projekte in der Praxis scheitern – und genau dieses Verständnis fließt in jedes Projekt ein.",
       "NeXify AI ist die Antwort auf eine einfache Beobachtung: Die meisten Digitalprojekte sind zu teuer, dauern zu lange und verlieren zwischen den Abteilungen einer Agentur an Qualität. Als erfahrener Entwickler und Berater führe ich Konzeption, Architektur, Umsetzung und Qualitätskontrolle in einer Hand zusammen.",
       "Modernste AI-Werkzeuge – dieselben, die auch hinter NeXify AI stehen – beschleunigen Recherche, Code, Tests und Dokumentation um ein Vielfaches. So entstehen in Tagen Ergebnisse, für die klassische Prozesse Monate brauchen. Die fachliche Verantwortung bleibt dabei immer bei mir persönlich.",
       "Ich arbeite von Venlo aus für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden – auf Deutsch und Niederländisch, ausschließlich B2B, immer mit transparentem Tagessatz und schriftlicher Scope-Klarheit vor Projektbeginn.",
     ],
     facts: [
-      { label: "Standort", value: "Venlo, Niederlande" },
+      { label: "Herkunft", value: "Deutscher · Grenzregion Limburg" },
+      { label: "Standort", value: "Venlo, Niederlande (seit 5+ Jahren)" },
+      { label: "Erfahrung", value: "20+ Jahre IT, Handel & Vertrieb" },
       { label: "Sprachen", value: "Deutsch, Nederlands, Englisch" },
       { label: "Markt", value: "DE · AT · CH · NL" },
       { label: "Modell", value: "B2B, 999 € netto/Tag" },
+    ],
+    journeyTitle: "Erfahrung, die Sie spüren",
+    journeyIntro: "Mehr als 20 Jahre Praxis – technisch, kaufmännisch und im Vertrieb. Diese Kombination ist selten und macht den Unterschied zwischen einer Website und einem Werkzeug, das verkauft.",
+    journey: [
+      { title: "IT & Entwicklung", text: "Über zwei Jahrzehnte Praxis in IT und Programmierung – von soliden Systemen bis zu modernen AI-Architekturen. Technik ist bei mir kein Blackbox-Versprechen, sondern Handwerk mit Verantwortung." },
+      { title: "Kaufmännische Praxis", text: "Kalkulation, Prozesse, Verantwortung: Ich habe selbst kaufmännisch gearbeitet und weiß, wie Entscheidungen in Unternehmen fallen – und was eine Investition wirklich rechtfertigen muss." },
+      { title: "Vertrieb auf Konzernniveau", text: "Jahrelange Vertriebserfahrung u. a. bei Telekom Deutschland, Vodafone und Postcon Deutschland. Ich verstehe Zielgruppen, Kundenbedürfnisse und wie aus Interesse messbarer Umsatz wird." },
+      { title: "Zwei Länder, eine Region", text: "Als Deutscher in den Niederlanden, mit einer Niederländerin verheiratet, verbinde ich beide Geschäftskulturen – ideal für Unternehmen im deutsch-niederländischen Wirtschaftsraum." },
     ],
     principlesTitle: "Meine Arbeitsprinzipien",
     principles: [
