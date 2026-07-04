@@ -40,7 +40,7 @@ export const de = {
       { value: "999 €", label: "netto pro Arbeitstag – keine versteckten Kosten" },
       { value: "1–3", label: "Tage bis zur fertigen Website" },
       { value: "100 %", label: "persönliche Verantwortung, keine Übergabeketten" },
-      { value: "24/7", label: "KI-Berater NOVA für Ihr Anliegen" },
+      { value: "24/7", label: "NeXify AI Berater für Ihr Anliegen" },
     ],
     pillarsEyebrow: "Warum NeXify AI",
     pillarsTitle: "Ein Fachmann. Moderne AI. Messbare Ergebnisse.",
@@ -70,9 +70,9 @@ export const de = {
     quotesTitle: "Was Zusammenarbeit mit NeXify AI bedeutet",
     ctaBandTitle: "Bereit für Ihr Projekt?",
     ctaBandText:
-      "Beschreiben Sie Ihr Vorhaben – Sie erhalten innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Festpreisrahmen. Oder fragen Sie NOVA, unseren KI-Berater, direkt im Chat.",
+      "Beschreiben Sie Ihr Vorhaben – Sie erhalten innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Festpreisrahmen. Oder fragen Sie NeXify AI, unseren AI-Berater, direkt im Chat.",
     ctaBandBtn: "Jetzt Anfrage senden",
-    ctaBandBtn2: "Mit NOVA chatten",
+    ctaBandBtn2: "Mit NeXify AI chatten",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-Agenten", "Automatisierung", "E-Commerce", "Web-Apps", "Mobile Apps", "SEO", "Cloud-Infrastruktur", "API-Integration"],
   },
   services: [
@@ -195,7 +195,7 @@ export const de = {
       shortTitle: "AI-Agenten",
       eyebrow: "Werkzeuge, Regeln und Nachweise statt unkontrollierter Chatbots.",
       description:
-        "Agentische Lösungen erhalten eindeutige Rollen, Datenzugriffe, Freigaben, Tests und Protokolle. So entstehen belastbare Assistenten und Operatoren statt Demo-Chats – wie NOVA, der KI-Berater auf dieser Website.",
+        "Agentische Lösungen erhalten eindeutige Rollen, Datenzugriffe, Freigaben, Tests und Protokolle. So entstehen belastbare Assistenten und Operatoren statt Demo-Chats – wie NeXify AI, der KI-Berater auf dieser Website.",
       promise: "AI unterstützt die Arbeit – fachliche Verantwortung, Grenzen und Kontrolle bleiben sichtbar.",
       days: "ab 3 Arbeitstagen",
       minDays: 3,
@@ -285,7 +285,7 @@ export const de = {
         icon: "Bot",
         title: "AI & Agenten",
         text: "Produktionsreife AI-Integrationen mit Kontrolle, Protokollen und Freigaben.",
-        points: ["GPT, Claude & Gemini Integration", "RAG-Wissensanbindung", "AI-Berater wie NOVA", "Angebots- & E-Mail-Automatisierung", "Evaluation & Guardrails"],
+        points: ["GPT, Claude & Gemini Integration", "RAG-Wissensanbindung", "AI-Berater wie NeXify AI", "Angebots- & E-Mail-Automatisierung", "Evaluation & Guardrails"],
       },
       {
         icon: "ShieldCheck",
@@ -294,10 +294,10 @@ export const de = {
         points: ["Vercel & Self-Hosting (Docker/Traefik)", "Cloudflare CDN & Schutz", "SSL, Security-Header, Hardening", "DSGVO-konforme Datenflüsse", "Transaktionale E-Mails (Resend)"],
       },
     ],
-    novaTitle: "NOVA – der KI-Berater dieser Website",
+    novaTitle: "NeXify AI – Ihr AI-Berater auf dieser Website",
     novaText:
-      "Was Sie rechts unten im Chat erleben, ist ein Beispiel unserer AI-Agenten-Leistung: NOVA berät Besucher in zwei Sprachen, qualifiziert Anfragen, erstellt strukturierte Angebote und versendet sie automatisch per E-Mail – inklusive Nachfassen. Dieselbe Technologie bauen wir für Ihr Unternehmen.",
-    novaBtn: "NOVA jetzt testen",
+      "Was Sie rechts unten im Chat erleben, ist ein Beispiel unserer AI-Agenten-Leistung: NeXify AI berät Besucher in zwei Sprachen, qualifiziert Anfragen, erstellt strukturierte Angebote und versendet sie automatisch per E-Mail – inklusive Nachfassen. Dieselbe Technologie bauen wir für Ihr Unternehmen.",
+    novaBtn: "NeXify AI jetzt testen",
   },
   references: {
     eyebrow: "Referenzen & Ergebnisse",
@@ -371,11 +371,11 @@ export const de = {
       {
         tag: "AI-Agenten",
         readTime: "6 Min.",
-        title: "Vom Chatbot zum Vertriebsagenten: Was NOVA anders macht",
+        title: "Vom Chatbot zum Vertriebsagenten: Was NeXify AI anders macht",
         excerpt: "Die meisten Website-Chatbots beantworten FAQs. Ein echter AI-Agent qualifiziert, berät und erstellt Angebote.",
         body: [
           "Ein klassischer Chatbot ist eine Suchmaske mit Sprechblase. Ein AI-Agent dagegen hat eine Rolle, ein Ziel und Werkzeuge: Er kennt das Leistungsportfolio, rechnet Preise transparent vor, stellt Qualifizierungsfragen und erstellt am Ende ein strukturiertes Angebot.",
-          "NOVA – der Berater auf dieser Website – zeigt das Prinzip live: Das Gespräch wird gespeichert, das Angebot als E-Mail versendet, und nach 24 Stunden folgt automatisch ein freundliches Nachfassen. Aus einem anonymen Besucher wird ein dokumentierter Lead.",
+          "NeXify AI – der Berater auf dieser Website – zeigt das Prinzip live: Das Gespräch wird gespeichert, das Angebot als E-Mail versendet, und nach 24 Stunden folgt automatisch ein freundliches Nachfassen. Aus einem anonymen Besucher wird ein dokumentierter Lead.",
           "Wichtig sind die Leitplanken: keine erfundenen Zusagen, klare Preislogik, Protokollierung jeder Interaktion. AI im Vertrieb funktioniert nur mit Kontrolle – dann aber außerordentlich gut.",
         ],
       },
@@ -417,7 +417,7 @@ export const de = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Häufige Fragen, ehrliche Antworten",
-    intro: "Alles Wichtige zu Arbeitsweise, Preisen, AI-Einsatz und Zusammenarbeit – kompakt beantwortet. Ihre Frage fehlt? NOVA im Chat oder das Kontaktformular helfen sofort.",
+    intro: "Alles Wichtige zu Arbeitsweise, Preisen, AI-Einsatz und Zusammenarbeit – kompakt beantwortet. Ihre Frage fehlt? der NeXify AI Chat oder das Kontaktformular helfen sofort.",
   },
   faqs: [
     {
@@ -453,8 +453,8 @@ export const de = {
       a: "Je nach Ziel unter anderem Next.js, React, TypeScript, Supabase/PostgreSQL, moderne APIs, Vercel oder geeignete Self-Hosting-Infrastruktur. Technologie folgt dem Betrieb – nicht umgekehrt.",
     },
     {
-      q: "Was ist NOVA und was kann der KI-Berater?",
-      a: "NOVA ist der AI-Vertriebsagent dieser Website. Er berät auf Deutsch und Niederländisch, qualifiziert Anfragen, erstellt strukturierte unverbindliche Angebote und sendet sie per E-Mail – inklusive automatischem Nachfassen. Dieselbe Technologie bauen wir auch für Ihr Unternehmen.",
+      q: "Was kann der NeXify AI Berater?",
+      a: "NeXify AI ist der AI-Vertriebsagent dieser Website. Er berät auf Deutsch und Niederländisch, qualifiziert Anfragen, erstellt strukturierte unverbindliche Angebote und sendet sie per E-Mail – inklusive automatischem Nachfassen. Dieselbe Technologie bauen wir auch für Ihr Unternehmen.",
     },
     {
       q: "Wie läuft die Zusammenarbeit nach dem Go-Live weiter?",
@@ -467,7 +467,7 @@ export const de = {
     intro: "Ein Ansprechpartner für Strategie, Design, Entwicklung und Betrieb. Persönlich, verbindlich, AI-beschleunigt.",
     paragraphs: [
       "NeXify AI ist die Antwort auf eine einfache Beobachtung: Die meisten Digitalprojekte sind zu teuer, dauern zu lange und verlieren zwischen den Abteilungen einer Agentur an Qualität. Als erfahrener Entwickler und Berater führe ich Konzeption, Architektur, Umsetzung und Qualitätskontrolle in einer Hand zusammen.",
-      "Modernste AI-Werkzeuge – dieselben, die auch hinter NOVA stehen – beschleunigen Recherche, Code, Tests und Dokumentation um ein Vielfaches. So entstehen in Tagen Ergebnisse, für die klassische Prozesse Monate brauchen. Die fachliche Verantwortung bleibt dabei immer bei mir persönlich.",
+      "Modernste AI-Werkzeuge – dieselben, die auch hinter NeXify AI stehen – beschleunigen Recherche, Code, Tests und Dokumentation um ein Vielfaches. So entstehen in Tagen Ergebnisse, für die klassische Prozesse Monate brauchen. Die fachliche Verantwortung bleibt dabei immer bei mir persönlich.",
       "Ich arbeite von Venlo aus für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden – auf Deutsch und Niederländisch, ausschließlich B2B, immer mit transparentem Tagessatz und schriftlicher Scope-Klarheit vor Projektbeginn.",
     ],
     facts: [
@@ -487,7 +487,7 @@ export const de = {
   contact: {
     eyebrow: "Kontakt",
     title: "Erzählen Sie mir von Ihrem Projekt",
-    intro: "Sie erhalten innerhalb eines Werktags eine persönliche, qualifizierte Antwort mit ehrlicher Einschätzung und Aufwandsspanne. Alternativ berät Sie NOVA im Chat sofort – rund um die Uhr.",
+    intro: "Sie erhalten innerhalb eines Werktags eine persönliche, qualifizierte Antwort mit ehrlicher Einschätzung und Aufwandsspanne. Alternativ berät Sie der NeXify AI Chat sofort – rund um die Uhr.",
     name: "Ihr Name *",
     email: "E-Mail-Adresse *",
     companyField: "Unternehmen",

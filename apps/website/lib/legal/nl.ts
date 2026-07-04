@@ -105,9 +105,9 @@ export const legalNl: Record<string, LegalPageData> = {
         ],
       },
       {
-        heading: "5. AI-adviseur „NOVA” (livechat)",
+        heading: "5. AI-adviseur „NeXify AI” (livechat)",
         paragraphs: [
-          "Op deze website is een AI-ondersteunde adviseur („NOVA”) beschikbaar. Bij gebruik van de chat worden uw chatberichten en een willekeurig gegenereerde sessie-ID verwerkt en opgeslagen om het gespreksverloop aan te bieden, aanvragen te kwalificeren en op verzoek een offerte op te stellen.",
+          "Op deze website is een AI-ondersteunde adviseur („NeXify AI”) beschikbaar. Bij gebruik van de chat worden uw chatberichten en een willekeurig gegenereerde sessie-ID verwerkt en opgeslagen om het gespreksverloop aan te bieden, aanvragen te kwalificeren en op verzoek een offerte op te stellen.",
           "Voor het genereren van antwoorden worden chatinhouden doorgegeven aan een AI-taalmodel (Large Language Model) van een gespecialiseerde aanbieder. Deel in de chat a.u.b. geen gevoelige of bijzondere persoonsgegevens. De chatinhouden worden niet vrijgegeven voor algemene modeltraining, tenzij uitdrukkelijk overeengekomen en wettelijk toegestaan.",
           "Geeft u in de chat vrijwillig naam, e-mailadres en bedrijf op om een offerte te ontvangen, dan worden deze gegevens gebruikt voor het opstellen en toezenden van de offerte en voor een passende zakelijke opvolging (follow-up-e-mail).",
           "Rechtsgronden: art. 6 lid 1 sub b AVG (precontractuele maatregelen op uw verzoek) en art. 6 lid 1 sub f AVG (gerechtvaardigd belang bij efficiënt eerste advies). U bent niet verplicht de chat te gebruiken – alle vragen kunnen ook per e-mail of telefoon worden gesteld.",
@@ -184,7 +184,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "2. Totstandkoming en omvang van de overeenkomst",
         paragraphs: [
-          "Offertes zijn vrijblijvend, tenzij uitdrukkelijk als bindend aangeduid. Dit geldt ook voor automatisch gegenereerde offerte-indicaties van de AI-adviseur NOVA, die altijd vrijblijvende oriëntaties vormen. Een overeenkomst komt tot stand door aanvaarding, opdrachtbevestiging of aanvang van de overeengekomen dienst.",
+          "Offertes zijn vrijblijvend, tenzij uitdrukkelijk als bindend aangeduid. Dit geldt ook voor automatisch gegenereerde offerte-indicaties van de NeXify AI adviseur, die altijd vrijblijvende oriëntaties vormen. Een overeenkomst komt tot stand door aanvaarding, opdrachtbevestiging of aanvang van de overeengekomen dienst.",
           "Bepalend zijn offerte, dienstbeschrijving, overeengekomen acceptatiecriteria en gedocumenteerde wijzigingen. Niet uitdrukkelijk inbegrepen diensten gelden als meerwerk.",
         ],
       },
@@ -284,7 +284,7 @@ export const legalNl: Record<string, LegalPageData> = {
   "ki-hinweise": {
     slug: "ki-hinweise",
     title: "AI-verklaring",
-    intro: "Hoe NeXifyAI moderne AI-tools inzet – transparant uitgelegd, inclusief de AI-adviseur NOVA op deze website.",
+    intro: "Hoe NeXifyAI moderne AI-tools inzet – transparant uitgelegd, inclusief de NeXify AI adviseur op deze website.",
     updated: "Juni 2026",
     sections: [
       {
@@ -294,11 +294,11 @@ export const legalNl: Record<string, LegalPageData> = {
         ],
       },
       {
-        heading: "De AI-adviseur NOVA op deze website",
+        heading: "De NeXify AI adviseur op deze website",
         paragraphs: [
-          "NOVA is een AI-ondersteunde advies- en salesassistent. Hij beantwoordt vragen over diensten en prijzen, kwalificeert aanvragen en kan op uitdrukkelijk verzoek een vrijblijvende offerte opstellen en per e-mail versturen.",
-          "U communiceert daarbij met een geautomatiseerd systeem, niet met een mens. Alle door NOVA opgestelde offertes zijn vrijblijvende indicaties; bindende offertes worden uitsluitend door Pascal Courbois persoonlijk getoetst en bevestigd.",
-          "NOVA kan fouten maken. Bij onduidelijkheden of belangrijke beslissingen kunt u ons het beste rechtstreeks per e-mail of telefoon benaderen.",
+          "NeXify AI is een AI-ondersteunde advies- en salesassistent. Hij beantwoordt vragen over diensten en prijzen, kwalificeert aanvragen en kan op uitdrukkelijk verzoek een vrijblijvende offerte opstellen en per e-mail versturen.",
+          "U communiceert daarbij met een geautomatiseerd systeem, niet met een mens. Alle door NeXify AI opgestelde offertes zijn vrijblijvende indicaties; bindende offertes worden uitsluitend door Pascal Courbois persoonlijk getoetst en bevestigd.",
+          "De AI-adviseur kan fouten maken. Bij onduidelijkheden of belangrijke beslissingen kunt u ons het beste rechtstreeks per e-mail of telefoon benaderen.",
         ],
       },
       {
@@ -315,7 +315,7 @@ export const legalNl: Record<string, LegalPageData> = {
         heading: "Data en vertrouwelijkheid",
         paragraphs: [
           "Vertrouwelijke gegevens of persoonsgegevens worden alleen in de vereiste omvang verwerkt. Model-, hosting- en dataverwerkingsroutes worden passend bij het project gekozen. Klantgegevens worden niet bewust vrijgegeven voor algemene modeltraining, tenzij uitdrukkelijk overeengekomen en wettelijk toegestaan.",
-          "Details over de gegevensverwerking in de chat vindt u in de privacyverklaring, sectie „AI-adviseur NOVA”.",
+          "Details over de gegevensverwerking in de chat vindt u in de privacyverklaring, sectie „NeXify AI adviseur”.",
         ],
       },
       {

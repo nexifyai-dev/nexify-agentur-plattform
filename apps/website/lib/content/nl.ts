@@ -23,7 +23,7 @@ export const nl: Dict = {
       { value: "€ 999", label: "netto per werkdag – geen verborgen kosten" },
       { value: "1–3", label: "dagen tot een complete website" },
       { value: "100 %", label: "persoonlijke verantwoordelijkheid, geen overdrachtsketens" },
-      { value: "24/7", label: "AI-adviseur NOVA voor uw vraag" },
+      { value: "24/7", label: "NeXify AI adviseur voor uw vraag" },
     ],
     pillarsEyebrow: "Waarom NeXify AI",
     pillarsTitle: "Eén vakman. Moderne AI. Meetbare resultaten.",
@@ -53,9 +53,9 @@ export const nl: Dict = {
     quotesTitle: "Wat samenwerken met NeXify AI betekent",
     ctaBandTitle: "Klaar voor uw project?",
     ctaBandText:
-      "Beschrijf uw plan – u ontvangt binnen één werkdag een eerlijke inschatting met urenraming en prijsindicatie. Of vraag het direct aan NOVA, onze AI-adviseur in de chat.",
+      "Beschrijf uw plan – u ontvangt binnen één werkdag een eerlijke inschatting met urenraming en prijsindicatie. Of vraag het direct aan NeXify AI, onze AI-adviseur in de chat.",
     ctaBandBtn: "Aanvraag versturen",
-    ctaBandBtn2: "Chat met NOVA",
+    ctaBandBtn2: "Chat met NeXify AI",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-agenten", "Automatisering", "E-commerce", "Web-apps", "Mobile apps", "SEO", "Cloud-infrastructuur", "API-integratie"],
   },
   services: [
@@ -178,7 +178,7 @@ export const nl: Dict = {
       shortTitle: "AI-agenten",
       eyebrow: "Tools, regels en bewijsvoering in plaats van ongecontroleerde chatbots.",
       description:
-        "Agent-oplossingen krijgen eenduidige rollen, datatoegang, goedkeuringen, tests en logging. Zo ontstaan betrouwbare assistenten en operators in plaats van demo-chats – zoals NOVA, de AI-adviseur op deze website.",
+        "Agent-oplossingen krijgen eenduidige rollen, datatoegang, goedkeuringen, tests en logging. Zo ontstaan betrouwbare assistenten en operators in plaats van demo-chats – zoals NeXify AI, de AI-adviseur op deze website.",
       promise: "AI ondersteunt het werk – vakinhoudelijke verantwoordelijkheid, grenzen en controle blijven zichtbaar.",
       days: "vanaf 3 werkdagen",
       minDays: 3,
@@ -268,7 +268,7 @@ export const nl: Dict = {
         icon: "Bot",
         title: "AI & agenten",
         text: "Productierijpe AI-integraties met controle, logging en goedkeuringen.",
-        points: ["GPT-, Claude- & Gemini-integratie", "RAG-kenniskoppeling", "AI-adviseurs zoals NOVA", "Offerte- & e-mailautomatisering", "Evaluatie & guardrails"],
+        points: ["GPT-, Claude- & Gemini-integratie", "RAG-kenniskoppeling", "AI-adviseurs zoals NeXify AI", "Offerte- & e-mailautomatisering", "Evaluatie & guardrails"],
       },
       {
         icon: "ShieldCheck",
@@ -277,10 +277,10 @@ export const nl: Dict = {
         points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & bescherming", "SSL, security-headers, hardening", "AVG-conforme datastromen", "Transactionele e-mails (Resend)"],
       },
     ],
-    novaTitle: "NOVA – de AI-adviseur van deze website",
+    novaTitle: "NeXify AI – uw AI-adviseur op deze website",
     novaText:
-      "Wat u rechtsonder in de chat ervaart, is een voorbeeld van onze AI-agent-dienst: NOVA adviseert bezoekers in twee talen, kwalificeert aanvragen, stelt gestructureerde offertes op en verstuurt ze automatisch per e-mail – inclusief opvolging. Dezelfde technologie bouwen wij voor uw bedrijf.",
-    novaBtn: "NOVA nu testen",
+      "Wat u rechtsonder in de chat ervaart, is een voorbeeld van onze AI-agent-dienst: NeXify AI adviseert bezoekers in twee talen, kwalificeert aanvragen, stelt gestructureerde offertes op en verstuurt ze automatisch per e-mail – inclusief opvolging. Dezelfde technologie bouwen wij voor uw bedrijf.",
+    novaBtn: "NeXify AI nu testen",
   },
   references: {
     eyebrow: "Referenties & resultaten",
@@ -354,11 +354,11 @@ export const nl: Dict = {
       {
         tag: "AI-agenten",
         readTime: "6 min.",
-        title: "Van chatbot naar salesagent: wat NOVA anders doet",
+        title: "Van chatbot naar salesagent: wat NeXify AI anders doet",
         excerpt: "De meeste website-chatbots beantwoorden FAQ's. Een echte AI-agent kwalificeert, adviseert en stelt offertes op.",
         body: [
           "Een klassieke chatbot is een zoekvenster met een tekstballon. Een AI-agent daarentegen heeft een rol, een doel en tools: hij kent het dienstenportfolio, rekent prijzen transparant voor, stelt kwalificatievragen en stelt uiteindelijk een gestructureerde offerte op.",
-          "NOVA – de adviseur op deze website – toont het principe live: het gesprek wordt opgeslagen, de offerte per e-mail verzonden, en na 24 uur volgt automatisch een vriendelijke opvolging. Van een anonieme bezoeker wordt een gedocumenteerde lead.",
+          "NeXify AI – de adviseur op deze website – toont het principe live: het gesprek wordt opgeslagen, de offerte per e-mail verzonden, en na 24 uur volgt automatisch een vriendelijke opvolging. Van een anonieme bezoeker wordt een gedocumenteerde lead.",
           "Belangrijk zijn de vangrails: geen verzonnen toezeggingen, duidelijke prijslogica, logging van elke interactie. AI in sales werkt alleen met controle – maar dan buitengewoon goed.",
         ],
       },
@@ -400,7 +400,7 @@ export const nl: Dict = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Veelgestelde vragen, eerlijke antwoorden",
-    intro: "Alles over werkwijze, prijzen, AI-inzet en samenwerking – compact beantwoord. Mist u een vraag? NOVA in de chat of het contactformulier helpen direct.",
+    intro: "Alles over werkwijze, prijzen, AI-inzet en samenwerking – compact beantwoord. Mist u een vraag? de NeXify AI chat of het contactformulier helpen direct.",
   },
   faqs: [
     {
@@ -436,8 +436,8 @@ export const nl: Dict = {
       a: "Afhankelijk van het doel onder andere Next.js, React, TypeScript, Supabase/PostgreSQL, moderne API's, Vercel of passende self-hosting infrastructuur. Technologie volgt het bedrijf – niet andersom.",
     },
     {
-      q: "Wat is NOVA en wat kan de AI-adviseur?",
-      a: "NOVA is de AI-salesagent van deze website. Hij adviseert in het Duits en Nederlands, kwalificeert aanvragen, stelt gestructureerde vrijblijvende offertes op en verstuurt ze per e-mail – inclusief automatische opvolging. Dezelfde technologie bouwen wij ook voor uw bedrijf.",
+      q: "Wat kan de NeXify AI adviseur?",
+      a: "NeXify AI is de AI-salesagent van deze website. Hij adviseert in het Duits en Nederlands, kwalificeert aanvragen, stelt gestructureerde vrijblijvende offertes op en verstuurt ze per e-mail – inclusief automatische opvolging. Dezelfde technologie bouwen wij ook voor uw bedrijf.",
     },
     {
       q: "Hoe gaat de samenwerking na de livegang verder?",
@@ -450,7 +450,7 @@ export const nl: Dict = {
     intro: "Eén aanspreekpunt voor strategie, design, ontwikkeling en beheer. Persoonlijk, betrouwbaar, AI-versneld.",
     paragraphs: [
       "NeXify AI is het antwoord op een simpele observatie: de meeste digitale projecten zijn te duur, duren te lang en verliezen kwaliteit tussen de afdelingen van een bureau. Als ervaren ontwikkelaar en adviseur verenig ik concept, architectuur, uitvoering en kwaliteitscontrole in één hand.",
-      "De modernste AI-tools – dezelfde die achter NOVA staan – versnellen onderzoek, code, tests en documentatie vele malen. Zo ontstaan in dagen resultaten waar klassieke processen maanden voor nodig hebben. De vakinhoudelijke verantwoordelijkheid blijft daarbij altijd persoonlijk bij mij.",
+      "De modernste AI-tools – dezelfde die achter NeXify AI staan – versnellen onderzoek, code, tests en documentatie vele malen. Zo ontstaan in dagen resultaten waar klassieke processen maanden voor nodig hebben. De vakinhoudelijke verantwoordelijkheid blijft daarbij altijd persoonlijk bij mij.",
       "Ik werk vanuit Venlo voor bedrijven in Duitsland, Oostenrijk, Zwitserland en Nederland – in het Duits en Nederlands, uitsluitend B2B, altijd met een transparant dagtarief en schriftelijke scope-duidelijkheid vóór projectstart.",
     ],
     facts: [
@@ -470,7 +470,7 @@ export const nl: Dict = {
   contact: {
     eyebrow: "Contact",
     title: "Vertel mij over uw project",
-    intro: "U ontvangt binnen één werkdag een persoonlijk, gekwalificeerd antwoord met een eerlijke inschatting en urenraming. Of laat u direct adviseren door NOVA in de chat – 24/7.",
+    intro: "U ontvangt binnen één werkdag een persoonlijk, gekwalificeerd antwoord met een eerlijke inschatting en urenraming. Of laat u direct adviseren door de NeXify AI chat – 24/7.",
     name: "Uw naam *",
     email: "E-mailadres *",
     companyField: "Bedrijf",
