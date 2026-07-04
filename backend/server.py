@@ -577,6 +577,14 @@ async def health():
     return {"status": "ok", "db": "supabase" if pool else "unavailable", "time": datetime.now(timezone.utc).isoformat()}
 
 
+@app.exception_handler(ValueError)
+async def value_error_handler(request: Request, exc: ValueError):
+    from fastapi.responses import JSONResponse
+    if "UUID" in str(exc):
+        return JSONResponse(status_code=400, content={"detail": "Ungültige ID"})
+    return JSONResponse(status_code=500, content={"detail": "Interner Fehler"})
+
+
 def _strip_html(html: str) -> str:
     import re
     text = re.sub(r"<(style|script)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
