@@ -10,13 +10,15 @@ from datetime import datetime, timezone, timedelta
 
 import asyncpg
 import resend
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr
 from openai import AsyncOpenAI
 
 import portal
+import booking
+import agent as agent_mod
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
@@ -41,6 +43,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(portal.router)
+app.include_router(booking.router)
+app.include_router(agent_mod.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
@@ -81,9 +85,29 @@ alter table nexify_offers add column if not exists payment_order_id text;
 alter table nexify_offers add column if not exists payment_checkout_url text;
 alter table nexify_offers add column if not exists payment_status text;
 alter table nexify_offers add column if not exists payment_amount numeric;
+create table if not exists nexify_tickets (
+  id uuid primary key, user_id uuid, name text, email text, subject text,
+  language text default 'de', status text default 'open', source text default 'portal',
+  created_at timestamptz default now()
+);
+create table if not exists nexify_ticket_messages (
+  id uuid primary key, ticket_id uuid, sender text, body text, created_at timestamptz default now()
+);
+create table if not exists nexify_slots (
+  id uuid primary key, start_at timestamptz not null, duration_min int default 30,
+  status text default 'free', name text, email text, phone text, company text, topic text,
+  language text default 'de', booked_at timestamptz, created_at timestamptz default now()
+);
+create table if not exists nexify_agent_messages (
+  id uuid primary key, role text, content text, created_at timestamptz default now()
+);
+create table if not exists nexify_agent_tasks (
+  id uuid primary key, title text, instruction text, run_at timestamptz, status text default 'pending',
+  result text, created_at timestamptz default now()
+);
 """
 
-LEGAL_FOOTER = """NeXifyAI by NeXify – Chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>support@nexify-automate.com · +31 6 133 188 56"""
+LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
 
 
 def ci_email(title: str, body_html: str, cta_label: str | None = None, cta_url: str | None = None, language: str = "de") -> str:
@@ -114,7 +138,7 @@ def ci_email(title: str, body_html: str, cta_label: str | None = None, cta_url: 
 
 
 COMPANY_KNOWLEDGE = """
-UNTERNEHMEN: NeXifyAI by NeXify – Chat it. Automate it. | Inhaber: Pascal Courbois | Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande | KvK 90483944 | BTW NL865786276B01 | support@nexify-automate.com | +31 6 133 188 56 | Ausschliesslich B2B.
+UNTERNEHMEN: NeXify AI by NeXify – chat it. Automate it. | Inhaber: Pascal Courbois | Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande | KvK 90483944 | BTW NL865786276B01 | mail@nexifyai.cloud | +31 6 133 188 56 | Ausschliesslich B2B.
 TAGESSATZ: 999 EUR netto pro Arbeitstag (bis zu 8 Fachstunden). Preise zzgl. USt.; bei EU-B2B ggf. Reverse-Charge.
 LEISTUNGEN (Richtdauer in Arbeitstagen):
 1. Landingpage – 1 Tag (999 EUR): Premium UI/UX, responsive, Leadformular, technisches SEO.
@@ -139,6 +163,7 @@ DEINE AUFGABE:
 - Stelle gezielte Qualifizierungsfragen (eine pro Nachricht): Was fuer ein Projekt? Welche Ziele? Zeitrahmen? Budgetrahmen?
 - Rechne Preise transparent vor: Arbeitstage x 999 EUR netto. Nenne immer Spannen, keine verbindlichen Festpreise.
 - Sobald du genug weisst (Projekttyp + grober Umfang), biete AKTIV an, ein unverbindliches, schriftliches Angebot zu erstellen und per E-Mail zu senden. Sage dann woertlich, dass der Nutzer auf den Button "Angebot per E-Mail erhalten" im Chat klicken kann.
+- Wuenscht der Nutzer ein persoenliches Gespraech oder einen Anruf, verweise auf die Rueckruf-Seite unter /rueckruf – dort kann er verbindlich einen Telefontermin in einem freien Zeitfenster buchen.
 - Halte Antworten kompakt (max. 120 Woerter), nutze kurze Absaetze. Keine Markdown-Ueberschriften, keine Emojis.
 - Bleibe ehrlich: keine erfundenen Referenzen, keine Garantien, B2B only.
 """
@@ -261,7 +286,7 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
   <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{t['legal']}</p>
 </td></tr>
 <tr><td style="padding:20px 32px;border-top:1px solid #26262b;font-family:Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">
-NeXifyAI by NeXify – Chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>support@nexify-automate.com · +31 6 133 188 56
+NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56
 </td></tr>
 </table></td></tr></table></body></html>"""
 
@@ -282,9 +307,14 @@ def followup_email_html(offer_row, language: str) -> str:
 </td></tr></table></body></html>"""
 
 
-async def send_email(to: str, subject: str, html: str) -> str | None:
+async def send_email(to: str, subject: str, html: str, attachments: list | None = None) -> str | None:
     try:
         params = {"from": SENDER_EMAIL, "to": [to], "subject": subject, "html": html}
+        reply_to = os.environ.get("REPLY_TO_EMAIL")
+        if reply_to:
+            params["reply_to"] = [reply_to]
+        if attachments:
+            params["attachments"] = attachments
         result = await asyncio.to_thread(resend.Emails.send, params)
         return result.get("id")
     except Exception as e:
@@ -292,10 +322,260 @@ async def send_email(to: str, subject: str, html: str) -> str | None:
         return None
 
 
+def offer_pdf_bytes(offer: dict, name: str, company: str | None, language: str, price_total: int) -> bytes:
+    import io
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.colors import HexColor
+    from reportlab.pdfgen import canvas as pdfcanvas
+
+    nl = language == "nl"
+    buf = io.BytesIO()
+    c = pdfcanvas.Canvas(buf, pagesize=A4)
+    W, H = A4
+    bg, panel, line = HexColor("#0a0a0c"), HexColor("#141417"), HexColor("#2a2a30")
+    white, silver, muted = HexColor("#fafafa"), HexColor("#c0c0c8"), HexColor("#8f8f98")
+
+    def page_frame():
+        c.setFillColor(bg); c.rect(0, 0, W, H, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("Times-Bold", 22)
+        c.drawString(48, H - 64, "NeXify")
+        c.setFillColor(silver); c.drawString(48 + c.stringWidth("NeXify", "Times-Bold", 22) + 4, H - 64, "AI")
+        c.setFillColor(muted); c.setFont("Helvetica", 7)
+        c.drawString(48, H - 78, "NEXIFY AI BY NEXIFY  ·  CHAT IT. AUTOMATE IT.")
+        c.setStrokeColor(line); c.setLineWidth(0.7); c.line(48, H - 92, W - 48, H - 92)
+        c.setFillColor(muted); c.setFont("Helvetica", 7)
+        footer = "NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois · Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01"
+        c.drawCentredString(W / 2, 42, footer)
+        c.drawCentredString(W / 2, 32, "mail@nexifyai.cloud · +31 6 133 188 56 · nexifyai.cloud")
+
+    def wrap(text, font, size, max_w):
+        words, lines, cur = (text or "").split(), [], ""
+        for w in words:
+            test = (cur + " " + w).strip()
+            if c.stringWidth(test, font, size) <= max_w:
+                cur = test
+            else:
+                lines.append(cur); cur = w
+        if cur:
+            lines.append(cur)
+        return lines
+
+    page_frame()
+    y = H - 130
+    c.setFillColor(muted); c.setFont("Helvetica-Bold", 8)
+    c.drawString(48, y, ("VRIJBLIJVENDE OFFERTE" if nl else "UNVERBINDLICHES ANGEBOT") + "  ·  " + datetime.now(timezone.utc).strftime("%d.%m.%Y"))
+    y -= 26
+    c.setFillColor(white); c.setFont("Helvetica-Bold", 17)
+    for ln in wrap(offer.get("title", ""), "Helvetica-Bold", 17, W - 96):
+        c.drawString(48, y, ln); y -= 22
+    y -= 4
+    c.setFillColor(muted); c.setFont("Helvetica", 9.5)
+    c.drawString(48, y, f"{'Voor' if nl else 'Für'}: {name}" + (f" · {company}" if company else ""))
+    y -= 24
+    c.setFillColor(HexColor("#d4d4d8")); c.setFont("Helvetica", 10)
+    for ln in wrap(offer.get("intro", ""), "Helvetica", 10, W - 96):
+        c.drawString(48, y, ln); y -= 15
+    y -= 14
+
+    c.setFillColor(muted); c.setFont("Helvetica-Bold", 8)
+    c.drawString(48, y, "OMVANG & INVESTERING" if nl else "UMFANG & INVESTITION")
+    y -= 12
+    for it in offer.get("items", []):
+        dmin, dmax = it.get("days_min", 1), it.get("days_max", it.get("days_min", 1))
+        rows = wrap(it.get("description", ""), "Helvetica", 8.5, W - 250)
+        box_h = 34 + len(rows) * 11
+        c.setFillColor(panel); c.setStrokeColor(line)
+        c.roundRect(48, y - box_h, W - 96, box_h, 6, fill=1, stroke=1)
+        c.setFillColor(white); c.setFont("Helvetica-Bold", 10.5)
+        c.drawString(60, y - 18, str(it.get("name", "")))
+        c.setFillColor(muted); c.setFont("Helvetica", 8.5)
+        yy = y - 32
+        for ln in rows:
+            c.drawString(60, yy, ln); yy -= 11
+        days = f"{dmin}" if dmin == dmax else f"{dmin}–{dmax}"
+        pmin, pmax = round(dmin * 999), round(dmax * 999)
+        price = f"€ {pmin:,.0f}".replace(",", ".") if dmin == dmax else f"€ {pmin:,.0f} – € {pmax:,.0f}".replace(",", ".")
+        c.setFillColor(silver); c.setFont("Helvetica-Bold", 9)
+        c.drawRightString(W - 60, y - 18, price)
+        c.setFillColor(muted); c.setFont("Helvetica", 8)
+        c.drawRightString(W - 60, y - 30, f"{days} {'werkdagen' if nl else 'Arbeitstage'}")
+        y -= box_h + 8
+        if y < 160:
+            c.showPage(); page_frame(); y = H - 130
+
+    y -= 6
+    c.setStrokeColor(line); c.line(48, y, W - 48, y)
+    y -= 22
+    c.setFillColor(white); c.setFont("Helvetica-Bold", 12)
+    c.drawString(48, y, "Richtprijs totaal (netto)" if nl else "Richtpreis gesamt (netto)")
+    c.drawRightString(W - 48, y, f"≈ € {price_total:,.0f}".replace(",", "."))
+    y -= 14
+    c.setFillColor(muted); c.setFont("Helvetica", 8)
+    c.drawString(48, y, "excl. btw · dagtarief € 999 netto" if nl else "zzgl. USt. · Tagessatz € 999 netto")
+    y -= 26
+
+    for label, items in [
+        ("AANNAMES" if nl else "ANNAHMEN", offer.get("assumptions", [])),
+        ("VOLGENDE STAPPEN" if nl else "NÄCHSTE SCHRITTE", offer.get("next_steps", [])),
+    ]:
+        if not items:
+            continue
+        if y < 140:
+            c.showPage(); page_frame(); y = H - 130
+        c.setFillColor(muted); c.setFont("Helvetica-Bold", 8)
+        c.drawString(48, y, label); y -= 14
+        c.setFillColor(HexColor("#a1a1aa")); c.setFont("Helvetica", 9)
+        for it in items:
+            for ln in wrap("•  " + str(it), "Helvetica", 9, W - 110):
+                c.drawString(56, y, ln); y -= 13
+        y -= 10
+
+    if y < 110:
+        c.showPage(); page_frame(); y = H - 130
+    c.setFillColor(muted); c.setFont("Helvetica-Oblique", 7.5)
+    legal = ("Dit is een vrijblijvende indicatie, uitsluitend B2B. Een bindende offerte volgt na definitieve scope-afstemming. Geldigheid: 30 dagen."
+             if nl else "Dies ist eine unverbindliche Indikation, ausschließlich B2B. Ein verbindliches Angebot folgt nach finaler Scope-Abstimmung. Gültigkeit: 30 Tage.")
+    for ln in wrap(legal, "Helvetica-Oblique", 7.5, W - 96):
+        c.drawString(48, y, ln); y -= 10
+
+    c.save()
+    return buf.getvalue()
+
+
+TICKET_AI_MIN = int(os.environ.get("TICKET_AI_DELAY_MIN_SECONDS", "180"))
+TICKET_AI_MAX = int(os.environ.get("TICKET_AI_DELAY_MAX_SECONDS", "1800"))
+
+SUPPORT_PROMPT = """Du bist der AI-Support von "NeXify AI by NeXify – chat it. Automate it." (Premium-Agentur fuer Websites, Shops, Apps, AI-Automatisierung; Tagessatz 999 EUR netto, B2B, Inhaber Pascal Courbois, mail@nexifyai.cloud, +31 6 133 188 56).
+Beantworte die folgende Support-Anfrage professionell, konkret und hilfreich in der Sprache der Anfrage (Deutsch oder Niederlaendisch). Max. 180 Woerter, keine Emojis, kein Markdown. Wenn die Anfrage menschliche Pruefung erfordert (Vertraege, Beschwerden, individuelle Preiszusagen), kuendige an, dass sich Pascal Courbois persoenlich meldet. Unterschreibe nicht (Signatur wird automatisch ergaenzt)."""
+
+
+async def ai_ticket_reply(ticket_id: str, delay_seconds: int | None = None):
+    import random
+    delay = delay_seconds if delay_seconds is not None else random.randint(TICKET_AI_MIN, TICKET_AI_MAX)
+    logger.info(f"ticket {ticket_id}: AI reply scheduled in {delay}s")
+    await asyncio.sleep(delay)
+    pool = await db()
+    if not pool:
+        return
+    try:
+        async with pool.acquire() as con:
+            ticket = await con.fetchrow("select * from nexify_tickets where id = $1", uuid.UUID(ticket_id))
+            if not ticket:
+                return
+            msgs = await con.fetch("select * from nexify_ticket_messages where ticket_id = $1 order by created_at asc", uuid.UUID(ticket_id))
+            if msgs and msgs[-1]["sender"] in ("ai", "admin"):
+                return
+        thread = "\n\n".join(f"[{m['sender']}] {m['body']}" for m in msgs)
+        reply = await llm_complete([
+            {"role": "system", "content": SUPPORT_PROMPT},
+            {"role": "user", "content": f"Betreff: {ticket['subject']}\nName: {ticket['name']}\n\nVerlauf:\n{thread}"},
+        ], max_tokens=2500)
+        async with pool.acquire() as con:
+            await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'ai',$3)", uuid.uuid4(), uuid.UUID(ticket_id), reply)
+            await con.execute("update nexify_tickets set status='answered' where id=$1", uuid.UUID(ticket_id))
+        nl = ticket["language"] == "nl"
+        greeting = f"Beste {ticket['name']}," if nl else f"Guten Tag {ticket['name']},"
+        sig = ("Met vriendelijke groet<br/><b>NeXify AI Support</b><br/>NeXify AI by NeXify – chat it. Automate it." if nl
+               else "Mit besten Grüßen<br/><b>NeXify AI Support</b><br/>NeXify AI by NeXify – chat it. Automate it.")
+        body = f"<p>{greeting}</p><p>{reply.replace(chr(10), '<br/>')}</p><p style='margin-top:18px;'>{sig}</p>"
+        subject = f"Re: {ticket['subject']} – NeXify AI Support"
+        await send_email(ticket["email"], subject, ci_email(subject, body, cta_label="Naar het klantportaal" if nl else "Zum Kundenportal", cta_url=f"{os.environ.get('FRONTEND_URL','')}/konto", language=ticket["language"]))
+        logger.info(f"ticket {ticket_id}: AI reply sent")
+    except Exception as e:
+        logger.error(f"ai_ticket_reply failed: {e}")
+
+
 @app.get("/api/health")
 async def health():
     pool = await db()
     return {"status": "ok", "db": "supabase" if pool else "unavailable", "time": datetime.now(timezone.utc).isoformat()}
+
+
+def _strip_html(html: str) -> str:
+    import re
+    text = re.sub(r"<(style|script)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
+    text = re.sub(r"<br\s*/?>|</p>|</div>", "\n", text, flags=re.I)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return re.sub(r"[ \t]+", " ", text).strip()
+
+
+def _guess_language(text: str) -> str:
+    t = f" {text.lower()} "
+    nl_hits = sum(t.count(f" {w} ") for w in ("de", "het", "een", "wij", "graag", "offerte", "bedankt", "vriendelijke", "goedemorgen", "kunnen", "jullie", "ik"))
+    de_hits = sum(t.count(f" {w} ") for w in ("der", "die", "das", "und", "wir", "bitte", "danke", "angebot", "freundlichen", "können", "ich", "sie"))
+    return "nl" if nl_hits > de_hits else "de"
+
+
+async def process_inbound_email(data: dict):
+    import re
+    from email.utils import parseaddr
+    email_id = data.get("email_id")
+    from_name, from_addr = parseaddr(data.get("from") or "")
+    from_addr = (from_addr or "").lower()
+    subject = data.get("subject") or "(kein Betreff)"
+    if not from_addr or from_addr.endswith("@nexifyai.cloud") or from_addr.endswith("@resend.dev"):
+        return
+    text = ""
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            r = await client.get(f"https://api.resend.com/emails/receiving/{email_id}",
+                                 headers={"Authorization": f"Bearer {RESEND_API_KEY}"})
+        if r.status_code == 200:
+            d = r.json()
+            subject = d.get("subject") or subject
+            text = d.get("text") or _strip_html(d.get("html") or "")
+            if not from_name:
+                from_name = parseaddr(d.get("headers", {}).get("from", ""))[0]
+    except Exception as e:
+        logger.warning(f"inbound content fetch failed: {e}")
+    if not text:
+        text = "(Inhalt konnte nicht geladen werden – siehe Resend-Dashboard)"
+    text = text[:6000]
+    name = from_name or from_addr.split("@")[0]
+    language = _guess_language(f"{subject} {text}")
+    pool = await db()
+    if not pool:
+        return
+    ticket_id = None
+    clean_subject = re.sub(r"^(re|aw|fwd?|antw)\s*:\s*", "", subject, flags=re.I).strip()
+    async with pool.acquire() as con:
+        existing = await con.fetchrow(
+            "select id from nexify_tickets where lower(email)=$1 and lower(subject) like $2 order by created_at desc limit 1",
+            from_addr, f"%{clean_subject.lower()[:60]}%") if clean_subject else None
+        if existing and subject.lower().startswith(("re:", "aw:", "antw:")):
+            ticket_id = existing["id"]
+            await con.execute("update nexify_tickets set status='open' where id=$1", ticket_id)
+        else:
+            ticket_id = uuid.uuid4()
+            await con.execute(
+                "insert into nexify_tickets (id,name,email,subject,language,source) values ($1,$2,$3,$4,$5,'email')",
+                ticket_id, name, from_addr, subject[:250], language)
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)",
+                          uuid.uuid4(), ticket_id, text)
+        has_lead = await con.fetchval("select 1 from nexify_leads where lower(email)=$1 limit 1", from_addr)
+        if not has_lead:
+            await con.execute(
+                "insert into nexify_leads (id,name,email,language,message,source) values ($1,$2,$3,$4,$5,'email')",
+                uuid.uuid4(), name, from_addr, language, f"E-Mail an mail@nexifyai.cloud: {subject}")
+    asyncio.create_task(ai_ticket_reply(str(ticket_id)))
+    if INTERNAL_NOTIFY_EMAIL:
+        asyncio.create_task(send_email(
+            INTERNAL_NOTIFY_EMAIL, f"Eingehende E-Mail: {subject} ({from_addr})",
+            ci_email("Eingehende E-Mail", f"<p><b>{name}</b> ({from_addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{text[:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>", cta_label="Im CRM öffnen", cta_url=f"{os.environ.get('FRONTEND_URL','')}/admin")))
+    logger.info(f"inbound email processed: ticket {ticket_id} from {from_addr}")
+
+
+@app.post("/api/webhooks/resend-inbound")
+async def resend_inbound(request: Request):
+    try:
+        payload = await request.json()
+    except Exception:
+        return {"status": "ignored"}
+    if payload.get("type") != "email.received":
+        return {"status": "ignored"}
+    asyncio.create_task(process_inbound_email(payload.get("data") or {}))
+    return {"status": "ok"}
 
 
 @app.post("/api/chat/session")
@@ -345,6 +625,7 @@ async def chat(body: ChatMessageIn):
 @app.post("/api/contact")
 async def contact(body: ContactIn):
     lead_id = uuid.uuid4()
+    ticket_id = uuid.uuid4()
     pool = await db()
     if pool:
         try:
@@ -353,6 +634,16 @@ async def contact(body: ContactIn):
                     "insert into nexify_leads (id,name,email,company,phone,language,message,source) values ($1,$2,$3,$4,$5,$6,$7,'contact')",
                     lead_id, body.name, body.email, body.company, body.phone, body.language, body.message,
                 )
+                subject_t = "Kontaktanfrage über die Website" if body.language != "nl" else "Contactaanvraag via de website"
+                await con.execute(
+                    "insert into nexify_tickets (id,name,email,subject,language,source) values ($1,$2,$3,$4,$5,'contact')",
+                    ticket_id, body.name, body.email, subject_t, body.language,
+                )
+                await con.execute(
+                    "insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)",
+                    uuid.uuid4(), ticket_id, body.message,
+                )
+            asyncio.create_task(ai_ticket_reply(str(ticket_id)))
         except Exception as e:
             logger.warning(f"lead insert failed: {e}")
     nl = body.language == "nl"
@@ -403,7 +694,14 @@ async def request_offer(body: OfferRequestIn):
     nl = body.language == "nl"
     subject = f"Uw vrijblijvende offerte van NeXify AI – {offer.get('title', '')}" if nl else f"Ihr unverbindliches Angebot von NeXify AI – {offer.get('title', '')}"
     html = offer_email_html(offer, body.name, body.language, price_total)
-    email_id = await send_email(body.email, subject, html)
+    try:
+        import base64
+        pdf = offer_pdf_bytes(offer, body.name, body.company, body.language, price_total)
+        attachments = [{"filename": "NeXify-AI-Angebot.pdf" if body.language != "nl" else "NeXify-AI-Offerte.pdf", "content": base64.b64encode(pdf).decode()}]
+    except Exception as e:
+        logger.error(f"pdf generation failed: {e}")
+        attachments = None
+    email_id = await send_email(body.email, subject, html, attachments=attachments)
 
     offer_id = uuid.uuid4()
     pool = await db()
@@ -509,9 +807,17 @@ async def startup():
     except Exception as e:
         DB_POOL = None
         logger.error(f"Supabase connection failed: {e}")
-    portal.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    portal.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""), extras={
+        "offer_pdf": offer_pdf_bytes,
+        "offer_email_html": offer_email_html,
+        "send_account_invite": send_account_invite,
+        "ai_ticket_reply": ai_ticket_reply,
+    })
     await portal.seed_admin(db)
+    booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    agent_mod.init(db, LLM, MIMO_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     asyncio.create_task(followup_worker())
+    asyncio.create_task(agent_mod.task_worker())
 
 
 @app.on_event("shutdown")

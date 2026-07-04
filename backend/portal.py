@@ -17,16 +17,18 @@ _DB = None
 _SEND_EMAIL = None
 _CI_EMAIL = None
 FRONTEND_URL = ""
+_EXTRAS: dict = {}
 JWT_ALGORITHM = "HS256"
 LOGIN_ATTEMPTS: dict[str, list] = {}
 
 
-def init(db_getter, send_email, ci_email, frontend_url: str):
-    global _DB, _SEND_EMAIL, _CI_EMAIL, FRONTEND_URL
+def init(db_getter, send_email, ci_email, frontend_url: str, extras: dict | None = None):
+    global _DB, _SEND_EMAIL, _CI_EMAIL, FRONTEND_URL, _EXTRAS
     _DB = db_getter
     _SEND_EMAIL = send_email
     _CI_EMAIL = ci_email
     FRONTEND_URL = frontend_url
+    _EXTRAS = extras or {}
 
 
 def secret() -> str:
@@ -261,6 +263,8 @@ async def offer_decision(offer_id: str, body: DecisionIn, user: dict = Depends(g
         row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
         if not row:
             raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+        if row["payment_status"] in ("completed", "pending", "processing", "authorised"):
+            raise HTTPException(status_code=400, detail="Für dieses Angebot wurde bereits eine Zahlung gestartet.")
         await con.execute("update nexify_offers set status=$1 where id=$2", body.decision, uuid.UUID(offer_id))
         if body.note:
             await con.execute(
@@ -357,6 +361,45 @@ async def admin_leads(_: dict = Depends(get_admin)):
     } for r in rows]
 
 
+class LeadUpdateIn(BaseModel):
+    name: str | None = None
+    email: str | None = None
+    company: str | None = None
+    phone: str | None = None
+    language: str | None = None
+    status: str | None = None
+    message: str | None = None
+
+
+async def update_lead_core(lead_id: str, fields: dict) -> dict:
+    allowed = {k: v for k, v in fields.items() if k in ("name", "email", "company", "phone", "language", "status", "message") and v is not None}
+    if not allowed:
+        return {"status": "unchanged"}
+    sets = ", ".join(f"{k}=${i + 2}" for i, k in enumerate(allowed))
+    pool = await _DB()
+    async with pool.acquire() as con:
+        res = await con.execute(f"update nexify_leads set {sets} where id=$1", uuid.UUID(lead_id), *allowed.values())
+    return {"status": "updated" if res.endswith("1") else "not_found", "fields": list(allowed.keys())}
+
+
+@router.put("/api/admin/leads/{lead_id}")
+async def admin_update_lead(lead_id: str, body: LeadUpdateIn, _: dict = Depends(get_admin)):
+    result = await update_lead_core(lead_id, body.model_dump())
+    if result["status"] == "not_found":
+        raise HTTPException(status_code=404, detail="Lead nicht gefunden.")
+    return result
+
+
+@router.delete("/api/admin/leads/{lead_id}")
+async def admin_delete_lead(lead_id: str, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        res = await con.execute("delete from nexify_leads where id=$1", uuid.UUID(lead_id))
+    if not res.endswith("1"):
+        raise HTTPException(status_code=404, detail="Lead nicht gefunden.")
+    return {"status": "deleted"}
+
+
 @router.get("/api/admin/offers")
 async def admin_offers(_: dict = Depends(get_admin)):
     pool = await _DB()
@@ -365,24 +408,31 @@ async def admin_offers(_: dict = Depends(get_admin)):
     return [offer_dict(r) for r in rows]
 
 
-@router.post("/api/admin/offers/{offer_id}/messages")
-async def admin_offer_reply(offer_id: str, body: MessageIn, admin: dict = Depends(get_admin)):
+async def offer_reply_core(offer_id: str, body_text: str) -> dict:
     pool = await _DB()
     async with pool.acquire() as con:
         row = await con.fetchrow("select * from nexify_offers where id = $1", uuid.UUID(offer_id))
         if not row:
-            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+            return {"error": "Angebot nicht gefunden."}
         mid = uuid.uuid4()
-        await con.execute("insert into nexify_offer_messages (id,offer_id,sender,body) values ($1,$2,'admin',$3)", mid, uuid.UUID(offer_id), body.body)
+        await con.execute("insert into nexify_offer_messages (id,offer_id,sender,body) values ($1,$2,'admin',$3)", mid, uuid.UUID(offer_id), body_text)
     nl = row["language"] == "nl"
     offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
     subject = f"Antwort zu Ihrem Angebot – {offer.get('title','NeXify AI')}" if not nl else f"Reactie op uw offerte – {offer.get('title','NeXify AI')}"
     greeting = f"Beste {row['name']}," if nl else f"Guten Tag {row['name']},"
-    asyncio.create_task(_SEND_EMAIL(
+    email_id = await _SEND_EMAIL(
         row["email"], subject,
-        _CI_EMAIL(subject, f"<p>{greeting}</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body.body}</p><p>{'Met vriendelijke groet' if nl else 'Mit besten Grüßen'},<br/>Pascal Courbois · NeXify AI</p>", cta_label="Zum Kundenportal" if not nl else "Naar het klantportaal", cta_url=f"{FRONTEND_URL}/konto"),
-    ))
-    return {"status": "ok", "id": str(mid)}
+        _CI_EMAIL(subject, f"<p>{greeting}</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body_text}</p><p>{'Met vriendelijke groet' if nl else 'Mit besten Grüßen'},<br/>Pascal Courbois · NeXify AI</p>", cta_label="Zum Kundenportal" if not nl else "Naar het klantportaal", cta_url=f"{FRONTEND_URL}/konto"),
+    )
+    return {"status": "ok", "id": str(mid), "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/offers/{offer_id}/messages")
+async def admin_offer_reply(offer_id: str, body: MessageIn, admin: dict = Depends(get_admin)):
+    result = await offer_reply_core(offer_id, body.body)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
 
 
 @router.get("/api/admin/sessions")
@@ -488,6 +538,207 @@ async def payment_status(offer_id: str, user: dict = Depends(get_current_user)):
             _CI_EMAIL("Zahlung eingegangen", f"<p><b>{user['name']}</b> ({user['email']}) hat die Anzahlung (1. Arbeitstag, € 999) für „{offer.get('title','')}“ bezahlt.</p>", cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin"),
         ))
     return {"status": state}
+
+
+@router.get("/api/portal/offers/{offer_id}/pdf")
+async def offer_pdf(offer_id: str, user: dict = Depends(get_current_user)):
+    from fastapi.responses import Response as RawResponse
+    pool = await _DB()
+    async with pool.acquire() as con:
+        if user["role"] == "admin":
+            row = await con.fetchrow("select * from nexify_offers where id = $1", uuid.UUID(offer_id))
+        else:
+            row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+    if not row:
+        raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    pdf = _EXTRAS["offer_pdf"](offer, row["name"], row["company"], row["language"], int(row["price_total"] or 0))
+    fname = "NeXify-AI-Offerte.pdf" if row["language"] == "nl" else "NeXify-AI-Angebot.pdf"
+    return RawResponse(content=pdf, media_type="application/pdf", headers={"Content-Disposition": f'inline; filename="{fname}"'})
+
+
+class TicketIn(BaseModel):
+    subject: str
+    body: str
+
+
+@router.get("/api/portal/tickets")
+async def my_tickets(user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_tickets where lower(email) = $1 order by created_at desc", user["email"].lower())
+    return [{"id": str(r["id"]), "subject": r["subject"], "status": r["status"], "language": r["language"], "source": r["source"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/portal/tickets")
+async def create_ticket(body: TicketIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    tid = uuid.uuid4()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_tickets (id,user_id,name,email,subject,language,source) values ($1,$2,$3,$4,$5,$6,'portal')",
+            tid, uuid.UUID(user["id"]), user["name"], user["email"], body.subject, user["language"],
+        )
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)", uuid.uuid4(), tid, body.body)
+    asyncio.create_task(_EXTRAS["ai_ticket_reply"](str(tid)))
+    asyncio.create_task(_SEND_EMAIL(
+        os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+        f"Neues Support-Ticket: {body.subject} ({user['email']})",
+        _CI_EMAIL("Neues Support-Ticket", f"<p><b>{user['name']}</b> ({user['email']}):</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body.body}</p>", cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin"),
+    ))
+    return {"id": str(tid), "status": "open"}
+
+
+@router.get("/api/portal/tickets/{ticket_id}/messages")
+async def ticket_messages(ticket_id: str, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1", uuid.UUID(ticket_id))
+        if not t or (user["role"] != "admin" and t["email"].lower() != user["email"].lower()):
+            raise HTTPException(status_code=404, detail="Ticket nicht gefunden.")
+        rows = await con.fetch("select * from nexify_ticket_messages where ticket_id = $1 order by created_at asc", uuid.UUID(ticket_id))
+    return [{"id": str(r["id"]), "sender": r["sender"], "body": r["body"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/portal/tickets/{ticket_id}/messages")
+async def ticket_reply(ticket_id: str, body: MessageIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1 and lower(email) = $2", uuid.UUID(ticket_id), user["email"].lower())
+        if not t:
+            raise HTTPException(status_code=404, detail="Ticket nicht gefunden.")
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)", uuid.uuid4(), uuid.UUID(ticket_id), body.body)
+        await con.execute("update nexify_tickets set status='open' where id=$1", uuid.UUID(ticket_id))
+    asyncio.create_task(_EXTRAS["ai_ticket_reply"](ticket_id))
+    return {"status": "ok"}
+
+
+class ProspectIn(BaseModel):
+    name: str
+    email: EmailStr
+    company: str | None = None
+    phone: str | None = None
+    language: str = "de"
+    note: str | None = None
+
+
+async def prospect_core(name: str, email: str, company: str | None, phone: str | None, language: str = "de", note: str | None = None) -> dict:
+    email = email.lower().strip()
+    pool = await _DB()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_leads (id,name,email,company,phone,language,message,source) values ($1,$2,$3,$4,$5,$6,$7,'manual')",
+            uuid.uuid4(), name, email, company, phone, language, note or "Manuell angelegt",
+        )
+        existing = await con.fetchrow("select id from nexify_users where email = $1", email)
+    nl = language == "nl"
+    if existing:
+        return {"status": "lead_created", "note": "Konto existiert bereits – keine Einladung gesendet."}
+    token = create_invite_token(email, "")
+    title = "Welkom bij NeXify AI – uw persoonlijke toegang" if nl else "Willkommen bei NeXify AI – Ihr persönlicher Zugang"
+    welcome = (
+        f"Beste {name},<br/><br/>hartelijk dank voor uw interesse in <b>NeXify AI by NeXify – chat it. Automate it.</b> Wij hebben u persoonlijk als contact in ons systeem opgenomen, zodat u direct toegang krijgt tot uw eigen klantportaal.<br/><br/>Kies eenvoudig een wachtwoord en profiteer van alle voordelen: offertes inzien en beheren, vragen stellen, support-tickets openen en uw gegevens op elk moment aanpassen.<br/><br/>Met vriendelijke groet<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it."
+        if nl else
+        f"Guten Tag {name},<br/><br/>vielen Dank für Ihr Interesse an <b>NeXify AI by NeXify – chat it. Automate it.</b> Wir haben Sie persönlich als Kontakt in unserem System aufgenommen, damit Sie direkten Zugang zu Ihrem eigenen Kundenportal erhalten.<br/><br/>Vergeben Sie einfach ein Passwort und profitieren Sie von allen Vorteilen: Angebote einsehen und verwalten, Rückfragen stellen, Support-Tickets eröffnen und Ihre Daten jederzeit selbst pflegen.<br/><br/>Mit besten Grüßen<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it."
+    )
+    email_id = await _SEND_EMAIL(email, title, _CI_EMAIL(title, welcome, cta_label="Wachtwoord aanmaken" if nl else "Passwort jetzt anlegen", cta_url=f"{FRONTEND_URL}/registrieren?token={token}", language=language))
+    return {"status": "invited", "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/prospects")
+async def create_prospect(body: ProspectIn, admin: dict = Depends(get_admin)):
+    return await prospect_core(body.name, body.email, body.company, body.phone, body.language, body.note)
+
+
+class ManualOfferItem(BaseModel):
+    name: str
+    description: str = ""
+    days_min: float = 1
+    days_max: float = 1
+
+
+class ManualOfferIn(BaseModel):
+    name: str
+    email: EmailStr
+    company: str | None = None
+    language: str = "de"
+    title: str
+    intro: str = ""
+    items: list[ManualOfferItem]
+    assumptions: list[str] = []
+    next_steps: list[str] = []
+
+
+async def offer_core(name: str, email: str, company: str | None, language: str, title: str, intro: str,
+                     items: list[dict], assumptions: list[str], next_steps: list[str]) -> dict:
+    import base64
+    offer = {"title": title, "intro": intro, "items": items, "assumptions": assumptions, "next_steps": next_steps}
+    total_min = sum(float(i.get("days_min", 1)) for i in items)
+    total_max = sum(float(i.get("days_max", i.get("days_min", 1))) for i in items)
+    price_total = round((total_min + total_max) / 2) * 999
+    offer_id = uuid.uuid4()
+    nl = language == "nl"
+    subject = f"Uw offerte van NeXify AI – {title}" if nl else f"Ihr Angebot von NeXify AI – {title}"
+    html = _EXTRAS["offer_email_html"](offer, name, language, price_total)
+    try:
+        pdf = _EXTRAS["offer_pdf"](offer, name, company, language, price_total)
+        attachments = [{"filename": "NeXify-AI-Offerte.pdf" if nl else "NeXify-AI-Angebot.pdf", "content": base64.b64encode(pdf).decode()}]
+    except Exception as e:
+        logger.error(f"manual offer pdf failed: {e}")
+        attachments = None
+    email_id = await _SEND_EMAIL(email, subject, html, attachments=attachments)
+    pool = await _DB()
+    async with pool.acquire() as con:
+        await con.execute(
+            """insert into nexify_offers (id,session_id,name,email,company,language,offer_json,price_total,email_id,followup_at)
+               values ($1,null,$2,$3,$4,$5,$6,$7,$8, now() + interval '24 hours')""",
+            offer_id, name, email.lower(), company, language, json.dumps(offer), price_total, email_id,
+        )
+    asyncio.create_task(_EXTRAS["send_account_invite"](str(offer_id), name, email.lower(), language))
+    return {"status": "sent" if email_id else "created", "offer_id": str(offer_id), "price_total": price_total, "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/offers/create")
+async def create_manual_offer(body: ManualOfferIn, admin: dict = Depends(get_admin)):
+    return await offer_core(body.name, body.email.lower(), body.company, body.language, body.title, body.intro,
+                            [i.model_dump() for i in body.items], body.assumptions, body.next_steps)
+
+
+@router.get("/api/admin/tickets")
+async def admin_tickets(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            """select t.*, count(m.id) as msg_count from nexify_tickets t
+               left join nexify_ticket_messages m on m.ticket_id = t.id
+               group by t.id order by t.created_at desc limit 200"""
+        )
+    return [{"id": str(r["id"]), "name": r["name"], "email": r["email"], "subject": r["subject"], "status": r["status"], "language": r["language"], "source": r["source"], "msg_count": r["msg_count"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+async def ticket_reply_core(ticket_id: str, body_text: str) -> dict:
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1", uuid.UUID(ticket_id))
+        if not t:
+            return {"error": "Ticket nicht gefunden."}
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'admin',$3)", uuid.uuid4(), uuid.UUID(ticket_id), body_text)
+        await con.execute("update nexify_tickets set status='answered' where id=$1", uuid.UUID(ticket_id))
+    nl = t["language"] == "nl"
+    subject = f"Re: {t['subject']} – NeXify AI"
+    greeting = f"Beste {t['name']}," if nl else f"Guten Tag {t['name']},"
+    sig = ("Met vriendelijke groet<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it." if nl
+           else "Mit besten Grüßen<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it.")
+    email_id = await _SEND_EMAIL(t["email"], subject, _CI_EMAIL(subject, f"<p>{greeting}</p><p>{body_text.replace(chr(10), '<br/>')}</p><p style='margin-top:18px;'>{sig}</p>", cta_label="Naar het klantportaal" if nl else "Zum Kundenportal", cta_url=f"{FRONTEND_URL}/konto", language=t["language"]))
+    return {"status": "ok", "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/tickets/{ticket_id}/messages")
+async def admin_ticket_reply(ticket_id: str, body: MessageIn, admin: dict = Depends(get_admin)):
+    result = await ticket_reply_core(ticket_id, body.body)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
 
 
 async def seed_admin(db_getter):

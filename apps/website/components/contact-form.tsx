@@ -40,12 +40,12 @@ export function ContactForm() {
   return (
     <form onSubmit={submit} className="glass space-y-4 p-8 md:p-10" data-testid="contact-form">
       <div className="grid gap-4 sm:grid-cols-2">
-        <input className="field" required placeholder={t.contact.name} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="contact-name-input" />
-        <input className="field" required type="email" placeholder={t.contact.email} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="contact-email-input" />
-        <input className="field" placeholder={t.contact.companyField} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} data-testid="contact-company-input" />
-        <input className="field" placeholder={t.contact.phone} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} data-testid="contact-phone-input" />
+        <input className="field" required placeholder={t.contact.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="contact-name-input" />
+        <input className="field" required type="email" placeholder={t.contact.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="contact-email-input" />
+        <input className="field" placeholder={t.contact.companyField} value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} data-testid="contact-company-input" />
+        <input className="field" placeholder={t.contact.phone} value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} data-testid="contact-phone-input" />
       </div>
-      <textarea className="field min-h-36" required placeholder={t.contact.messagePlaceholder} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} data-testid="contact-message-input" />
+      <textarea className="field min-h-36" required placeholder={t.contact.messagePlaceholder} value={form.message} onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))} data-testid="contact-message-input" />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-xs text-zinc-600">{t.contact.b2bNote}</p>
         <button type="submit" className="btn-primary" disabled={state === "sending"} data-testid="contact-submit-btn">
@@ -65,6 +65,16 @@ export function ContactSidebar() {
   const t = useContent();
   return (
     <div className="space-y-5">
+      <div className="glass overflow-hidden">
+        <div className="flex items-end gap-4 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,rgba(255,255,255,0.07),transparent)] px-6 pt-5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pascal.png" alt="Pascal Courbois" className="w-24 drop-shadow-[0_12px_30px_rgba(0,0,0,0.6)]" data-testid="contact-portrait" />
+          <div className="pb-4">
+            <div className="text-sm font-semibold text-white">Pascal Courbois</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">NeXify AI by NeXify</div>
+          </div>
+        </div>
+      </div>
       <div className="glass p-7">
         <h2 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.contact.directTitle}</h2>
         <div className="mt-4 space-y-3">

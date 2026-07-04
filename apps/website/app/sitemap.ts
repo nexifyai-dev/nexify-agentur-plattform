@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { company } from "@/lib/company";
 
 const routes = [
-  "", "/leistungen", "/preise", "/prozess", "/plattform", "/referenzen", "/wissen", "/faq", "/ueber-mich", "/kontakt",
+  "", "/leistungen", "/preise", "/prozess", "/plattform", "/referenzen", "/wissen", "/faq", "/ueber-mich", "/kontakt", "/rueckruf",
   "/impressum", "/datenschutz", "/agb", "/avv", "/widerruf", "/cookie-richtlinie", "/ki-hinweise",
 ];
 

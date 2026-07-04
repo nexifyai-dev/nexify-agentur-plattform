@@ -121,6 +121,11 @@ export function SiteFooter() {
                 {company.phone}
               </a>
             </li>
+            <li>
+              <Link href="/rueckruf" className="font-semibold text-zinc-300 transition-colors hover:text-white" data-testid="footer-callback-link">
+                {lang === "nl" ? "Terugbelafspraak boeken →" : "Rückruf-Termin buchen →"}
+              </Link>
+            </li>
             <li className="pt-2 text-xs text-zinc-600">
               KvK {company.kvk} · BTW {company.vatId}
             </li>

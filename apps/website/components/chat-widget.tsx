@@ -223,9 +223,9 @@ export function ChatWidget() {
                 </div>
                 <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">{t.offerText}</p>
                 <div className="mt-3 space-y-2">
-                  <input className="field !py-2.5 !text-[13px]" placeholder={t.name} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="offer-name-input" />
-                  <input className="field !py-2.5 !text-[13px]" type="email" placeholder={t.email} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="offer-email-input" />
-                  <input className="field !py-2.5 !text-[13px]" placeholder={t.companyField} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} data-testid="offer-company-input" />
+                  <input className="field !py-2.5 !text-[13px]" placeholder={t.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="offer-name-input" />
+                  <input className="field !py-2.5 !text-[13px]" type="email" placeholder={t.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="offer-email-input" />
+                  <input className="field !py-2.5 !text-[13px]" placeholder={t.companyField} value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} data-testid="offer-company-input" />
                   <button className="btn-primary w-full !py-2.5 !text-[13px]" onClick={requestOffer} disabled={offerState === "sending" || !form.name || !form.email} data-testid="offer-submit-btn">
                     {offerState === "sending" ? t.sending : t.sendOffer}
                   </button>

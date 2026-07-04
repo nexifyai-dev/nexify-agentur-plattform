@@ -58,10 +58,10 @@ function RegisterForm() {
         </p>
       )}
       <form onSubmit={submit} className="mt-8 space-y-4">
-        <input className="field" required placeholder={nl ? "Naam" : "Name"} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="register-name-input" />
-        <input className="field" type="email" required placeholder="E-Mail" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="register-email-input" />
-        <input className="field" placeholder={nl ? "Bedrijf (optioneel)" : "Firma (optional)"} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} data-testid="register-company-input" />
-        <input className="field" type="password" required minLength={8} placeholder={nl ? "Wachtwoord (min. 8 tekens)" : "Passwort (min. 8 Zeichen)"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} data-testid="register-password-input" />
+        <input className="field" required placeholder={nl ? "Naam" : "Name"} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="register-name-input" />
+        <input className="field" type="email" required placeholder="E-Mail" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="register-email-input" />
+        <input className="field" placeholder={nl ? "Bedrijf (optioneel)" : "Firma (optional)"} value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} data-testid="register-company-input" />
+        <input className="field" type="password" required minLength={8} placeholder={nl ? "Wachtwoord (min. 8 tekens)" : "Passwort (min. 8 Zeichen)"} value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} data-testid="register-password-input" />
         {error && <p className="text-sm text-red-400" data-testid="register-error">{error}</p>}
         <button type="submit" className="btn-primary w-full" disabled={loading} data-testid="register-submit-btn">
           {loading ? "…" : nl ? "Account aanmaken" : "Konto erstellen"}
