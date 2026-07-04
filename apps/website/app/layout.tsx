@@ -3,6 +3,7 @@ import { Outfit, Manrope } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
+import { CookieConsent } from "@/components/cookie-consent";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/i18n";
 import { AuthProvider } from "@/lib/auth";
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div id="main-content">{children}</div>
           <SiteFooter />
           <ChatWidget />
+          <CookieConsent />
           <PwaRegister />
           </AuthProvider>
         </LanguageProvider>

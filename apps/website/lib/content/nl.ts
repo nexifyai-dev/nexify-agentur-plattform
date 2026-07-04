@@ -447,17 +447,29 @@ export const nl: Dict = {
   about: {
     eyebrow: "Over mij",
     title: "Pascal Courbois – de vakman achter NeXify AI",
-    intro: "Eén aanspreekpunt voor strategie, design, ontwikkeling en beheer. Persoonlijk, betrouwbaar, AI-versneld.",
+    intro: "Duitser uit de grensregio Limburg, sinds ruim vijf jaar thuis in Nederland – met meer dan 20 jaar beroeps- en praktijkervaring in IT, commercie en sales. Eén aanspreekpunt voor strategie, design, ontwikkeling en beheer.",
     paragraphs: [
+      "Ik ben Pascal Courbois – Duitser uit de grensregio Limburg, getrouwd met een Nederlandse en sinds ruim vijf jaar thuis in Nederland. Ik leef en werk dagelijks in beide culturen en talen. Voor u betekent dat: advies, offertes en communicatie in het Duits of Nederlands – zonder vertaalverlies en met écht begrip voor beide markten.",
+      "In meer dan 20 jaar beroeps- en praktijkervaring heb ik beide kanten van de digitalisering leren kennen: de technische in IT en programmeren – en de ondernemerskant in commerciële functies. Daarbij komt jarenlange saleservaring, onder andere bij Telekom Deutschland, Vodafone en Postcon Deutschland. Ik weet dus niet alleen hoe software wordt gebouwd, maar ook hoe klanten denken, hoe processen in bedrijven écht lopen en waar projecten in de praktijk op stuklopen – precies dat inzicht vloeit in elk project.",
       "NeXify AI is het antwoord op een simpele observatie: de meeste digitale projecten zijn te duur, duren te lang en verliezen kwaliteit tussen de afdelingen van een bureau. Als ervaren ontwikkelaar en adviseur verenig ik concept, architectuur, uitvoering en kwaliteitscontrole in één hand.",
       "De modernste AI-tools – dezelfde die achter NeXify AI staan – versnellen onderzoek, code, tests en documentatie vele malen. Zo ontstaan in dagen resultaten waar klassieke processen maanden voor nodig hebben. De vakinhoudelijke verantwoordelijkheid blijft daarbij altijd persoonlijk bij mij.",
       "Ik werk vanuit Venlo voor bedrijven in Duitsland, Oostenrijk, Zwitserland en Nederland – in het Duits en Nederlands, uitsluitend B2B, altijd met een transparant dagtarief en schriftelijke scope-duidelijkheid vóór projectstart.",
     ],
     facts: [
-      { label: "Locatie", value: "Venlo, Nederland" },
+      { label: "Afkomst", value: "Duitser · grensregio Limburg" },
+      { label: "Locatie", value: "Venlo, Nederland (5+ jaar)" },
+      { label: "Ervaring", value: "20+ jaar IT, commercie & sales" },
       { label: "Talen", value: "Duits, Nederlands, Engels" },
       { label: "Markt", value: "DE · AT · CH · NL" },
       { label: "Model", value: "B2B, € 999 netto/dag" },
+    ],
+    journeyTitle: "Ervaring die u merkt",
+    journeyIntro: "Meer dan 20 jaar praktijk – technisch, commercieel en in sales. Die combinatie is zeldzaam en maakt het verschil tussen een website en een instrument dat verkoopt.",
+    journey: [
+      { title: "IT & ontwikkeling", text: "Ruim twee decennia praktijk in IT en programmeren – van solide systemen tot moderne AI-architecturen. Techniek is bij mij geen black box, maar vakmanschap met verantwoordelijkheid." },
+      { title: "Commerciële praktijk", text: "Calculatie, processen, verantwoordelijkheid: ik heb zelf commercieel gewerkt en weet hoe beslissingen in bedrijven vallen – en wat een investering écht moet rechtvaardigen." },
+      { title: "Sales op concernniveau", text: "Jarenlange saleservaring o.a. bij Telekom Deutschland, Vodafone en Postcon Deutschland. Ik begrijp doelgroepen, klantbehoeften en hoe van interesse meetbare omzet wordt." },
+      { title: "Twee landen, één regio", text: "Als Duitser in Nederland, getrouwd met een Nederlandse, verbind ik beide zakelijke culturen – ideaal voor bedrijven in de Duits-Nederlandse economische regio." },
     ],
     principlesTitle: "Mijn werkprincipes",
     principles: [

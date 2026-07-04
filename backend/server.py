@@ -139,6 +139,7 @@ def ci_email(title: str, body_html: str, cta_label: str | None = None, cta_url: 
 
 COMPANY_KNOWLEDGE = """
 UNTERNEHMEN: NeXify AI by NeXify – chat it. Automate it. | Inhaber: Pascal Courbois | Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande | KvK 90483944 | BTW NL865786276B01 | mail@nexifyai.cloud | +31 6 133 188 56 | Ausschliesslich B2B.
+INHABER-PROFIL: Pascal Courbois ist Deutscher aus der Grenzregion Limburg, mit einer Niederlaenderin verheiratet und lebt seit gut 5 Jahren in den Niederlanden (Venlo) – zuhause in beiden Kulturen und Sprachen. Mehr als 20 Jahre Berufs- und Praxiserfahrung: IT und Programmierung, kaufmaennischer Bereich sowie jahrelange Vertriebserfahrung u.a. bei Telekom Deutschland, Vodafone und Postcon Deutschland. Daraus resultiert ein tiefes Verstaendnis fuer Unternehmensablaeufe, Vertrieb und Kundenbeduerfnisse in DE und NL – nutze das aktiv als Vertrauensargument, wenn es zum Gespraech passt.
 TAGESSATZ: 999 EUR netto pro Arbeitstag (bis zu 8 Fachstunden). Preise zzgl. USt.; bei EU-B2B ggf. Reverse-Charge.
 LEISTUNGEN (Richtdauer in Arbeitstagen):
 1. Landingpage – 1 Tag (999 EUR): Premium UI/UX, responsive, Leadformular, technisches SEO.

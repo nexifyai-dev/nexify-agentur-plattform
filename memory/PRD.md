@@ -19,6 +19,8 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 9. Inbound-E-Mail-Webhook (`POST /api/webhooks/resend-inbound`): eingehende Mails → Ticket + Lead + zeitversetzte KI-Antwort (5–30 Min) ✅ (Resend-Dashboard-Setup durch User nötig, siehe unten)
 10. Kontaktformular → Lead + Ticket + verzögerte KI-Antwort ✅
 11. PWA (manifest, sw.js), SEO (OG-Image, Favicon, Sitemap inkl. /rueckruf, Metadata) ✅
+11b. **Cookie-Consent-Manager** (components/cookie-consent.tsx): Banner mit Kategorien Notwendig/Statistik/Marketing (Opt-in), localStorage `nexify-consent`, wieder öffenbar via Footer-Link „Cookie-Einstellungen“; Cookie-Rechtstexte DE (§25 TDDDG) + NL (Telecommunicatiewet) entsprechend erweitert ✅
+11c. **Über-mich ausgebaut**: Pascal-Story (Deutscher aus Grenzregion Limburg, mit Niederländerin verheiratet, 5+ Jahre NL, 20+ Jahre IT/kaufmännisch/Vertrieb bei Telekom/Vodafone/Postcon), Journey-Karten, erweiterte Facts; Story auch in COMPANY_KNOWLEDGE (Chat-AI) + Agent-Prompt integriert ✅
 12. pascal.png NUR auf /ueber-mich, rechtsbündig, linker Freiraum mit Logo/Tagline/Chip gefüllt ✅ (Startseiten-Hero = SVG-Orbital, zurückgesetzt auf Nutzerwunsch)
 13. Social-Media-Grafiken zum Download unter /brand/ (WhatsApp-Profil 500×500, FB-Profil 720×720, FB-Titelbild 1640×624, WhatsApp-Status 1080×1920) ✅
 14. **Vercel-Deployment live**: Projekt "website", Domains www.nexifyai.cloud (primär), nexifyai.cloud, nexify-automate.com, www.nexify-automate.com (Apex → www Redirect). API via Next-Rewrite-Proxy (`BACKEND_ORIGIN`-Env auf Vercel) ✅
