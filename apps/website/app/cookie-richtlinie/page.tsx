@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/legal-page";
-import { legalPages } from "@/lib/legal-content";
+import { LegalPageView } from "@/components/legal-page";
 
-const page = legalPages["cookie-richtlinie"];
-export const metadata: Metadata = { title: page.title, description: page.intro, robots: { index: true, follow: true } };
-export default function Page() { return <LegalPage page={page} />; }
+export const metadata: Metadata = { title: "Cookie-Richtlinie / Cookiebeleid", description: "Cookie- und Speicherhinweise: datensparsame Nutzung ohne standardmäßiges Marketing-Tracking." };
+export default function Page() {
+  return <LegalPageView slug="cookie-richtlinie" />;
+}

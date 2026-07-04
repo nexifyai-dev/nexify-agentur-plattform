@@ -1,40 +1,139 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { Brand } from "@/components/brand";
-import { company, nav, services } from "@/lib/site-data";
+import { Logo } from "@/components/logo";
+import { company } from "@/lib/company";
+import { useLang } from "@/lib/i18n";
+
+const T = {
+  de: {
+    tagline: "Premium-Websites, Shops, Apps und AI-Automatisierung – persönlich verantwortet, AI-beschleunigt, transparent zum Tagessatz.",
+    nav: "Navigation",
+    services: "Leistungen",
+    legal: "Rechtliches",
+    contact: "Kontakt",
+    links: [
+      { label: "Leistungen", href: "/leistungen" },
+      { label: "Preise", href: "/preise" },
+      { label: "Prozess", href: "/prozess" },
+      { label: "Plattform", href: "/plattform" },
+      { label: "Referenzen", href: "/referenzen" },
+      { label: "Wissen", href: "/wissen" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Über mich", href: "/ueber-mich" },
+    ],
+    legalLinks: [
+      { label: "Impressum", href: "/impressum" },
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "AGB", href: "/agb" },
+      { label: "AVV", href: "/avv" },
+      { label: "Widerruf", href: "/widerruf" },
+      { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+    ],
+    b2b: "Angebote richten sich ausschließlich an Unternehmen (B2B).",
+    rights: "Alle Rechte vorbehalten.",
+  },
+  nl: {
+    tagline: "Premium websites, shops, apps en AI-automatisering – persoonlijk verantwoord, AI-versneld, transparant tegen dagtarief.",
+    nav: "Navigatie",
+    services: "Diensten",
+    legal: "Juridisch",
+    contact: "Contact",
+    links: [
+      { label: "Diensten", href: "/leistungen" },
+      { label: "Prijzen", href: "/preise" },
+      { label: "Proces", href: "/prozess" },
+      { label: "Platform", href: "/plattform" },
+      { label: "Referenties", href: "/referenzen" },
+      { label: "Kennis", href: "/wissen" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Over mij", href: "/ueber-mich" },
+    ],
+    legalLinks: [
+      { label: "Colofon", href: "/impressum" },
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Algemene voorwaarden", href: "/agb" },
+      { label: "Verwerkersovereenkomst", href: "/avv" },
+      { label: "Herroeping", href: "/widerruf" },
+      { label: "Cookiebeleid", href: "/cookie-richtlinie" },
+      { label: "AI-verklaring", href: "/ki-hinweise" },
+    ],
+    b2b: "Aanbiedingen zijn uitsluitend gericht op ondernemingen (B2B).",
+    rights: "Alle rechten voorbehouden.",
+  },
+};
 
 export function SiteFooter() {
+  const { lang } = useLang();
+  const t = T[lang];
+
   return (
-    <footer className="mt-24 border-t border-white/[0.08] bg-black/25">
-      <div className="site-container grid gap-12 py-16 lg:grid-cols-[1.3fr_.8fr_.8fr_1fr]">
-        <div>
-          <Brand />
-          <p className="mt-5 max-w-sm text-sm leading-6 text-white/48">AI-gestützte Websites, Shops, Apps und Automatisierungen – persönlich konzipiert, entwickelt und geprüft.</p>
-          <p className="mt-6 text-xs uppercase tracking-[0.16em] text-white/28">Ausschließlich B2B</p>
+    <footer className="mt-28 border-t border-white/8 bg-black/40" data-testid="site-footer">
+      <div className="site-container grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
+        <div className="max-w-xs">
+          <Logo />
+          <p className="mt-5 text-sm leading-relaxed text-zinc-500">{t.tagline}</p>
         </div>
+
         <div>
-          <p className="footer-title">Navigation</p>
-          <div className="mt-4 grid gap-3">{nav.map((item) => <Link className="footer-link" key={item.href} href={item.href}>{item.label}</Link>)}</div>
+          <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.nav}</h3>
+          <ul className="mt-5 space-y-2.5">
+            {t.links.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-sm text-zinc-400 transition-colors hover:text-white">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
+
         <div>
-          <p className="footer-title">Leistungen</p>
-          <div className="mt-4 grid gap-3">{services.slice(0, 5).map((item) => <Link className="footer-link" key={item.slug} href={`/leistungen/${item.slug}`}>{item.shortTitle}</Link>)}</div>
+          <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.legal}</h3>
+          <ul className="mt-5 space-y-2.5">
+            {t.legalLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-sm text-zinc-400 transition-colors hover:text-white" data-testid={`footer-legal-${l.href.slice(1)}`}>
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
+
         <div>
-          <p className="footer-title">Kontakt</p>
-          <div className="mt-4 grid gap-3 text-sm text-white/55">
-            <a href={`mailto:${company.email}`} className="footer-contact"><Mail className="size-4" />{company.email}</a>
-            <a href={`tel:${company.phoneHref}`} className="footer-contact"><Phone className="size-4" />{company.phone}</a>
-            <span className="footer-contact items-start"><MapPin className="mt-0.5 size-4 shrink-0" />{company.address}<br />{company.postalCity}, {company.country}</span>
-          </div>
+          <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.contact}</h3>
+          <ul className="mt-5 space-y-2.5 text-sm text-zinc-400">
+            <li>{company.legalName}</li>
+            <li>{company.owner}</li>
+            <li>
+              {company.address}, {company.postalCity}
+            </li>
+            <li>{lang === "nl" ? company.countryNl : company.country}</li>
+            <li>
+              <a href={`mailto:${company.email}`} className="transition-colors hover:text-white">
+                {company.email}
+              </a>
+            </li>
+            <li>
+              <a href={`tel:${company.phoneHref}`} className="transition-colors hover:text-white">
+                {company.phone}
+              </a>
+            </li>
+            <li className="pt-2 text-xs text-zinc-600">
+              KvK {company.kvk} · BTW {company.vatId}
+            </li>
+          </ul>
         </div>
       </div>
-      <div className="border-t border-white/[0.06]">
-        <div className="site-container flex flex-col gap-5 py-6 text-xs text-white/35 md:flex-row md:items-center md:justify-between">
-          <span>© {new Date().getFullYear()} {company.legalName}</span>
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link href="/impressum">Impressum</Link><Link href="/datenschutz">Datenschutz</Link><Link href="/agb">AGB</Link><Link href="/ki-hinweise">AI-Hinweise</Link><Link href="/cookie-richtlinie">Cookies</Link><Link href="/avv" className="inline-flex items-center gap-1">AVV <ArrowUpRight className="size-3" /></Link>
-          </div>
+
+      <div className="border-t border-white/8">
+        <div className="site-container flex flex-col items-start justify-between gap-2 py-6 text-xs text-zinc-600 md:flex-row md:items-center">
+          <span>
+            © {new Date().getFullYear()} {company.legalName}. {t.rights}
+          </span>
+          <span>{t.b2b}</span>
         </div>
       </div>
     </footer>

@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
+  allowedDevOrigins: [
+    "rebranding-hub-2.preview.emergentagent.com",
+    "rebranding-hub-2.cluster-12.preview.emergentcf.cloud",
+    "*.preview.emergentagent.com",
+    "*.preview.emergentcf.cloud",
+  ],
   poweredByHeader: false,
   compress: true,
   experimental: {

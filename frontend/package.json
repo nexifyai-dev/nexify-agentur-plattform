@@ -1,0 +1,7 @@
+{
+  "name": "nexify-frontend-shim",
+  "private": true,
+  "scripts": {
+    "start": "cd /app/apps/website && npx next dev -H 0.0.0.0 -p 3000"
+  }
+}

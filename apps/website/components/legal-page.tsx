@@ -1,29 +1,50 @@
-import { Badge } from "@/components/ui/badge";
-import type { LegalPage as LegalPageType } from "@/lib/legal-content";
+"use client";
 
-export function LegalPage({ page }: { page: LegalPageType }) {
+import { legalDe } from "@/lib/legal/de";
+import { legalNl } from "@/lib/legal/nl";
+import { useLang } from "@/lib/i18n";
+
+export function LegalPageView({ slug }: { slug: string }) {
+  const { lang } = useLang();
+  const page = (lang === "nl" ? legalNl : legalDe)[slug];
+  if (!page) return null;
+  const updatedLabel = lang === "nl" ? "Laatst bijgewerkt" : "Stand";
+
   return (
-    <main>
-      <section className="subpage-hero compact">
-        <div className="site-container max-w-4xl">
-          <Badge>Rechtliche Informationen</Badge>
-          <h1>{page.title}</h1>
-          <p>{page.intro}</p>
-          <span className="mt-6 block text-xs uppercase tracking-[0.15em] text-white/30">Stand: {page.updated}</span>
+    <main className="pb-10 pt-36" data-testid={`legal-page-${slug}`}>
+      <div className="site-container">
+        <div className="max-w-3xl">
+          <span className="eyebrow">{lang === "nl" ? "Juridisch" : "Rechtliches"}</span>
+          <h1 className="mt-4 font-[family-name:var(--font-heading)] text-4xl font-light tracking-tight text-white sm:text-5xl">{page.title}</h1>
+          <p className="mt-5 text-lg leading-relaxed text-zinc-400">{page.intro}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-zinc-600">
+            {updatedLabel}: {page.updated}
+          </p>
+
+          <div className="mt-12 space-y-10">
+            {page.sections.map((s, i) => (
+              <section key={i}>
+                <h2 className="font-[family-name:var(--font-heading)] text-xl font-medium text-white">{s.heading}</h2>
+                {s.paragraphs?.map((p, j) => (
+                  <p key={j} className="mt-3 text-[15px] leading-[1.85] text-zinc-400">
+                    {p}
+                  </p>
+                ))}
+                {s.bullets && (
+                  <ul className="mt-3 space-y-2">
+                    {s.bullets.map((b, j) => (
+                      <li key={j} className="flex gap-3 text-[15px] leading-relaxed text-zinc-400">
+                        <span className="mt-[9px] block size-1 shrink-0 rounded-full bg-zinc-500" />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
         </div>
-      </section>
-      <section className="site-container max-w-4xl pb-12">
-        <div className="legal-document">
-          {page.sections.map((section) => (
-            <section key={section.heading}>
-              <h2>{section.heading}</h2>
-              {section.paragraphs?.map((p) => <p key={p}>{p}</p>)}
-              {section.bullets && <ul>{section.bullets.map((item) => <li key={item}>{item}</li>)}</ul>}
-            </section>
-          ))}
-        </div>
-        <p className="mt-8 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5 text-xs leading-5 text-white/35">Diese Website-Fassung bildet die aktuell bereitgestellten Unternehmens- und Prozessangaben ab. Projektbezogene Verträge, steuerliche Behandlung und Auftragsverarbeitung können zusätzliche Vereinbarungen erfordern.</p>
-      </section>
+      </div>
     </main>
   );
 }
