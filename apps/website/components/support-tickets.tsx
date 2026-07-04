@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ChevronDown, LifeBuoy, Send } from "lucide-react";
 import { api } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
+import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Ticket = { id: string; subject: string; status: string; source: string; created_at: string };
 type Msg = { id: string; sender: string; body: string; created_at: string };
@@ -63,7 +64,7 @@ function TicketRow({ t, labels }: { t: Ticket; labels: (typeof T)["de"] }) {
                   <div className="mb-0.5 text-[10px] font-bold uppercase tracking-wider opacity-60">
                     {m.sender === "customer" ? labels.you : m.sender === "ai" ? labels.ai : labels.admin}
                   </div>
-                  <span className="whitespace-pre-wrap">{m.body}</span>
+                  {m.sender === "customer" ? <span className="whitespace-pre-wrap">{m.body}</span> : <ChatMarkdown content={m.body} />}
                 </div>
               </div>
             ))}

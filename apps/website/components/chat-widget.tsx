@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Sparkles, X, Send, FileText, CheckCircle2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
 import { useLang } from "@/lib/i18n";
+import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -203,13 +204,15 @@ export function ChatWidget() {
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   data-testid={`chat-msg-${m.role}`}
-                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-[13.5px] leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[13.5px] leading-relaxed ${
                     m.role === "user"
-                      ? "rounded-br-md bg-gradient-to-br from-zinc-100 to-zinc-300 text-black"
+                      ? "whitespace-pre-wrap rounded-br-md bg-gradient-to-br from-zinc-100 to-zinc-300 text-black"
                       : "rounded-bl-md border border-white/10 bg-white/[0.05] text-zinc-200"
                   }`}
                 >
-                  {m.content || (
+                  {m.content ? (
+                    m.role === "assistant" ? <ChatMarkdown content={m.content} /> : m.content
+                  ) : (
                     <span className="flex gap-1 py-1">
                       <span className="typing-dot" />
                       <span className="typing-dot" />
