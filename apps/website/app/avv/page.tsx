@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/legal-page";
-import { legalPages } from "@/lib/legal-content";
+import { LegalPageView } from "@/components/legal-page";
 
-const page = legalPages["avv"];
-export const metadata: Metadata = { title: page.title, description: page.intro, robots: { index: true, follow: true } };
-export default function Page() { return <LegalPage page={page} />; }
+export const metadata: Metadata = { title: "Auftragsverarbeitung (AVV) / Verwerkersovereenkomst", description: "Grundsätze der Auftragsverarbeitung nach Art. 28 DSGVO: Bestandteile, Unterauftragsverarbeiter und technische Maßnahmen." };
+export default function Page() {
+  return <LegalPageView slug="avv" />;
+}

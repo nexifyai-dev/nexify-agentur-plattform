@@ -1,7 +1,17 @@
 import type { MetadataRoute } from "next";
-import { legalPages } from "@/lib/legal-content";
-import { company, services } from "@/lib/site-data";
+import { company } from "@/lib/company";
+
+const routes = [
+  "", "/leistungen", "/preise", "/prozess", "/plattform", "/referenzen", "/wissen", "/faq", "/ueber-mich", "/kontakt",
+  "/impressum", "/datenschutz", "/agb", "/avv", "/widerruf", "/cookie-richtlinie", "/ki-hinweise",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["", "/leistungen", "/preise", "/prozess", "/ueber-mich", "/kontakt", "/faq", "/referenzen", "/plattform", "/wissen", ...services.map((s) => `/leistungen/${s.slug}`), ...Object.keys(legalPages).map((s) => `/${s}`)];
-  return paths.map((path) => ({ url: `${company.website}${path}`, lastModified: new Date(), changeFrequency: path === "" ? "weekly" : "monthly", priority: path === "" ? 1 : 0.7 }));
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? company.website;
+  return routes.map((r) => ({
+    url: `${base}${r}`,
+    lastModified: new Date(),
+    changeFrequency: r === "" ? "weekly" : "monthly",
+    priority: r === "" ? 1 : 0.7,
+  }));
 }

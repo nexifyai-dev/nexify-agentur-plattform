@@ -1,15 +1,24 @@
 import type { Metadata, Viewport } from "next";
+import { Outfit, Manrope } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { company } from "@/lib/site-data";
+import { ChatWidget } from "@/components/chat-widget";
+import { LanguageProvider } from "@/lib/i18n";
+import { company } from "@/lib/company";
 import "./globals.css";
 
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", weight: ["300", "400", "500", "600", "700"] });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", weight: ["400", "500", "600", "700", "800"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? company.website),
-  title: { default: "NeXify AI — AI-gestützte Websites, Apps & Automatisierung", template: "%s | NeXify AI" },
-  description: "AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 999 Euro netto.",
-  keywords: ["Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung", "AI-gestützte Automatisierung", "NeXify AI"],
+  title: { default: "NeXify AI — Premium Websites, Apps & AI-Automatisierung", template: "%s | NeXify AI" },
+  description:
+    "AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 999 Euro netto. Deutsch & Nederlands.",
+  keywords: [
+    "Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung",
+    "AI-gestützte Automatisierung", "AI-Agenten", "NeXify AI", "Venlo", "webontwikkeling", "AI-automatisering",
+  ],
   authors: [{ name: company.owner }],
   creator: company.owner,
   publisher: company.legalName,
@@ -17,15 +26,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "de_DE",
+    alternateLocale: "nl_NL",
     url: company.website,
     siteName: company.brand,
-    title: "NeXify AI — Fachmann. Moderne AI. Faire Projektdauer.",
+    title: "NeXify AI — Chat it. Automate it.",
     description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit.",
   },
   robots: { index: true, follow: true },
 };
 
-export const viewport: Viewport = { themeColor: "#08090a", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
@@ -41,12 +51,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     priceRange: "€€",
   };
   return (
-    <html lang="de">
+    <html lang="de" className={`${outfit.variable} ${manrope.variable}`}>
       <body>
-        <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
-        <SiteHeader />
-        <div id="main-content">{children}</div>
-        <SiteFooter />
+        <LanguageProvider>
+          <a className="skip-link" href="#main-content">
+            Zum Inhalt springen
+          </a>
+          <SiteHeader />
+          <div id="main-content">{children}</div>
+          <SiteFooter />
+          <ChatWidget />
+        </LanguageProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       </body>
     </html>

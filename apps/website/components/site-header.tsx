@@ -2,41 +2,120 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import { Brand } from "@/components/brand";
-import { Button } from "@/components/ui/button";
-import { nav } from "@/lib/site-data";
-import { cn } from "@/lib/utils";
+import { Logo } from "@/components/logo";
+import { useLang } from "@/lib/i18n";
+
+const NAV = {
+  de: [
+    { label: "Leistungen", href: "/leistungen" },
+    { label: "Preise", href: "/preise" },
+    { label: "Prozess", href: "/prozess" },
+    { label: "Plattform", href: "/plattform" },
+    { label: "Referenzen", href: "/referenzen" },
+    { label: "Wissen", href: "/wissen" },
+    { label: "Über mich", href: "/ueber-mich" },
+  ],
+  nl: [
+    { label: "Diensten", href: "/leistungen" },
+    { label: "Prijzen", href: "/preise" },
+    { label: "Proces", href: "/prozess" },
+    { label: "Platform", href: "/plattform" },
+    { label: "Referenties", href: "/referenzen" },
+    { label: "Kennis", href: "/wissen" },
+    { label: "Over mij", href: "/ueber-mich" },
+  ],
+};
 
 export function SiteHeader() {
+  const { lang, setLang } = useLang();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+
   return (
-    <header className="site-header">
-      <div className="site-container flex h-[76px] items-center justify-between gap-5">
-        <Brand />
-        <nav aria-label="Hauptnavigation" className="hidden items-center gap-7 lg:flex">
-          {nav.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link key={item.href} href={item.href} className={cn("nav-link", active && "is-active")}>{item.label}</Link>
-            );
-          })}
+    <header
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
+        scrolled ? "border-white/10 bg-black/70 backdrop-blur-2xl" : "border-transparent bg-transparent"
+      }`}
+      data-testid="site-header"
+    >
+      <div className="site-container flex h-[74px] items-center justify-between gap-4">
+        <Link href="/" aria-label="NeXify AI – Startseite" data-testid="header-logo-link">
+          <Logo />
+        </Link>
+
+        <nav className="hidden items-center gap-7 lg:flex" data-testid="header-nav">
+          {NAV[lang].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              data-testid={`nav-link-${item.href.slice(1)}`}
+              className={`text-[13px] font-medium transition-colors ${
+                pathname === item.href ? "text-white" : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
-        <div className="hidden items-center gap-3 lg:flex">
-          <span className="system-chip"><i /> Persönlich geführt</span>
-          <Button asChild size="sm"><Link href="/kontakt">Projekt anfragen</Link></Button>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center rounded-full border border-white/12 p-1" data-testid="lang-switcher">
+            {(["de", "nl"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                data-testid={`lang-switcher-${l}`}
+                className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+                  lang === l ? "bg-white text-black shadow-[0_0_14px_rgba(255,255,255,0.25)]" : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+
+          <Link href="/kontakt" className="btn-primary hidden !px-6 !py-2.5 !text-[13px] md:inline-flex" data-testid="header-cta">
+            {lang === "nl" ? "Project starten" : "Projekt starten"}
+          </Link>
+
+          <button
+            className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 text-white lg:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label="Menü"
+            data-testid="mobile-menu-toggle"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
-        <button type="button" aria-label={open ? "Menü schließen" : "Menü öffnen"} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/[0.03] lg:hidden">
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
       </div>
+
       {open && (
-        <div className="border-t border-white/[0.07] bg-[#0b0d0f]/98 px-5 py-5 lg:hidden">
-          <nav className="site-container grid gap-2" aria-label="Mobile Navigation">
-            {nav.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-white/75 hover:bg-white/[0.05] hover:text-white">{item.label}</Link>)}
-            <Button asChild className="mt-2"><Link href="/kontakt" onClick={() => setOpen(false)}>Projekt anfragen</Link></Button>
+        <div className="border-t border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden" data-testid="mobile-menu">
+          <nav className="site-container flex flex-col gap-1 py-4">
+            {NAV[lang].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-xl px-4 py-3 text-sm font-medium ${pathname === item.href ? "bg-white/5 text-white" : "text-zinc-400"}`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/kontakt" className="btn-primary mt-2 justify-center">
+              {lang === "nl" ? "Project starten" : "Projekt starten"}
+            </Link>
           </nav>
         </div>
       )}
