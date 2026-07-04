@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Bot, ChevronDown, Download, Send } from "lucide-react";
 import { api } from "@/lib/auth";
 import { API_BASE } from "@/lib/company";
+import { ChatMarkdown } from "@/components/chat-markdown";
 
 export type Offer = { id: string; name: string; email: string; company: string | null; language: string; offer: any; price_total: number | null; status: string; created_at: string };
 export type Session = { id: string; language: string; created_at: string; msg_count: number; last_at: string | null };
@@ -148,7 +149,7 @@ export function TicketAdminRow({ t }: { t: any }) {
             {msgs.map((m) => (
               <div key={m.id} className={`rounded-xl px-3.5 py-2 text-[13px] leading-relaxed ${m.sender === "customer" ? "bg-white/[0.06] text-white" : "bg-white/[0.02] text-zinc-400"}`}>
                 <span className="mr-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">{m.sender === "customer" ? "Kunde" : m.sender === "ai" ? "AI-Support" : "Admin"}</span>
-                <span className="whitespace-pre-wrap">{m.body}</span>
+                {m.sender === "customer" ? <span className="whitespace-pre-wrap">{m.body}</span> : <div className="mt-1"><ChatMarkdown content={m.body} /></div>}
               </div>
             ))}
           </div>

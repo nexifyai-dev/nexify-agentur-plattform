@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CalendarClock, Send, Sparkles, Wrench, XCircle } from "lucide-react";
 import { api } from "@/lib/auth";
+import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Msg = { id: string; role: string; content: string; created_at: string };
 type Task = { id: string; title: string; instruction: string; run_at: string; status: string; result: string | null };
@@ -99,7 +100,7 @@ export function AgentChat() {
             ) : (
               <div key={m.id} className={`max-w-[92%] rounded-2xl px-4 py-3 text-[13.5px] leading-relaxed ${m.role === "user" ? "ml-auto border border-white/15 bg-white/[0.07] text-white" : "bg-white/[0.03] text-zinc-300"}`} data-testid={`agent-msg-${m.role}`}>
                 <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-zinc-500">{m.role === "user" ? "Sie" : "Agent"}</span>
-                <span className="whitespace-pre-wrap">{m.content}</span>
+                {m.role === "user" ? <span className="whitespace-pre-wrap">{m.content}</span> : <ChatMarkdown content={m.content} />}
               </div>
             )
           )}
