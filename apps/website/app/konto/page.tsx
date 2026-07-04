@@ -6,6 +6,7 @@ import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, Mess
 import { api, useAuth } from "@/lib/auth";
 import { API_BASE } from "@/lib/company";
 import { useLang } from "@/lib/i18n";
+import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
 import { SupportTickets } from "@/components/support-tickets";
 
@@ -194,7 +195,7 @@ function OfferCard({ offer, t, onChanged }: { offer: Offer; t: (typeof T)["de"];
                 <div key={m.id} className={`flex ${m.sender === "customer" ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed ${m.sender === "customer" ? "bg-gradient-to-br from-zinc-100 to-zinc-300 text-black" : "border border-white/10 bg-white/[0.05] text-zinc-200"}`}>
                     <div className="mb-0.5 text-[10px] font-bold uppercase tracking-wider opacity-60">{m.sender === "customer" ? t.you : t.nexify}</div>
-                    {m.body}
+                    {m.sender === "customer" ? m.body : <ChatMarkdown content={m.body} />}
                   </div>
                 </div>
               ))}
