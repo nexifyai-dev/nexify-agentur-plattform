@@ -17,6 +17,7 @@ const NAV = {
     { label: "Referenzen", href: "/referenzen" },
     { label: "Wissen", href: "/wissen" },
     { label: "Über mich", href: "/ueber-mich" },
+    { label: "Rückruf", href: "/rueckruf" },
   ],
   nl: [
     { label: "Diensten", href: "/leistungen" },
@@ -26,6 +27,7 @@ const NAV = {
     { label: "Referenties", href: "/referenzen" },
     { label: "Kennis", href: "/wissen" },
     { label: "Over mij", href: "/ueber-mich" },
+    { label: "Terugbellen", href: "/rueckruf" },
   ],
 };
 

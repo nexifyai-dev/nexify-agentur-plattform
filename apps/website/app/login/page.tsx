@@ -41,8 +41,8 @@ export default function LoginPage() {
           {nl ? "Klantportaal & beheer" : "Kundenportal & Verwaltung"}
         </p>
         <form onSubmit={submit} className="mt-8 space-y-4">
-          <input className="field" type="email" required placeholder="E-Mail" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="login-email-input" />
-          <input className="field" type="password" required placeholder={nl ? "Wachtwoord" : "Passwort"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} data-testid="login-password-input" />
+          <input className="field" type="email" required placeholder="E-Mail" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="login-email-input" />
+          <input className="field" type="password" required placeholder={nl ? "Wachtwoord" : "Passwort"} value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} data-testid="login-password-input" />
           {error && <p className="text-sm text-red-400" data-testid="login-error">{error}</p>}
           <button type="submit" className="btn-primary w-full" disabled={loading} data-testid="login-submit-btn">
             {loading ? "…" : nl ? "Inloggen" : "Anmelden"}

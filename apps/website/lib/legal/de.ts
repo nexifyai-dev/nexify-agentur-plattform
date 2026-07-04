@@ -2,10 +2,10 @@ export type LegalSection = { heading: string; paragraphs?: string[]; bullets?: s
 export type LegalPageData = { slug: string; title: string; intro: string; updated: string; sections: LegalSection[] };
 
 const C = {
-  legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – chat it. Automate it.",
   owner: "Pascal Courbois",
   address: "Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande",
-  email: "support@nexify-automate.com",
+  email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   kvk: "90483944",
   vat: "NL865786276B01",
@@ -15,7 +15,7 @@ export const legalDe: Record<string, LegalPageData> = {
   impressum: {
     slug: "impressum",
     title: "Impressum",
-    intro: "Anbieterkennzeichnung und Kontaktinformationen von NeXifyAI by NeXify – Chat it. Automate it.",
+    intro: "Anbieterkennzeichnung und Kontaktinformationen von NeXify AI by NeXify – chat it. Automate it.",
     updated: "Juni 2026",
     sections: [
       { heading: "Angaben zum Unternehmen", paragraphs: [C.legalName, `Eenmanszaak (Einzelunternehmen nach niederländischem Recht), Inhaber: ${C.owner}`, C.address] },
@@ -35,7 +35,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "Aufsicht und anwendbares Recht",
         paragraphs: [
-          "Als in den Niederlanden ansässiges Einzelunternehmen unterliegt NeXifyAI dem niederländischen Handels- und Gewerberecht. Zuständige Handelskammer ist die Kamer van Koophandel (KvK).",
+          "Als in den Niederlanden ansässiges Einzelunternehmen unterliegt NeXify AI dem niederländischen Handels- und Gewerberecht. Zuständige Handelskammer ist die Kamer van Koophandel (KvK).",
           "Für datenschutzrechtliche Belange ist die Autoriteit Persoonsgegevens (Den Haag, Niederlande) die zuständige Aufsichtsbehörde.",
         ],
       },
@@ -67,7 +67,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "Online-Streitbeilegung",
         paragraphs: [
-          "Da NeXifyAI ausschließlich B2B-Leistungen anbietet, besteht keine Verpflichtung und keine Teilnahme an Verbraucherschlichtungsverfahren. Anfragen zu Verträgen oder Leistungen können direkt an die oben genannte E-Mail-Adresse gerichtet werden.",
+          "Da NeXify AI ausschließlich B2B-Leistungen anbietet, besteht keine Verpflichtung und keine Teilnahme an Verbraucherschlichtungsverfahren. Anfragen zu Verträgen oder Leistungen können direkt an die oben genannte E-Mail-Adresse gerichtet werden.",
         ],
       },
     ],
@@ -85,7 +85,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "2. Grundsätze der Verarbeitung",
         paragraphs: [
-          "NeXifyAI verarbeitet personenbezogene Daten zweckgebunden, verhältnismäßig und nur so lange, wie dies für den jeweiligen Zweck, gesetzliche Pflichten oder die Wahrung berechtigter Interessen erforderlich ist (Art. 5 DSGVO).",
+          "NeXify AI verarbeitet personenbezogene Daten zweckgebunden, verhältnismäßig und nur so lange, wie dies für den jeweiligen Zweck, gesetzliche Pflichten oder die Wahrung berechtigter Interessen erforderlich ist (Art. 5 DSGVO).",
           "Diese Website ist grundsätzlich ohne Nutzerkonto und ohne Marketing-Tracking nutzbar. Nicht notwendige Analyse- oder Werbecookies werden nicht standardmäßig eingesetzt.",
         ],
       },
@@ -136,7 +136,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "9. AI-gestützte Verarbeitung in Projekten",
         paragraphs: [
-          "NeXifyAI kann AI-gestützte Werkzeuge für Strukturierung, Entwürfe, Entwicklung, Tests und Dokumentation einsetzen. Personenbezogene oder vertrauliche Daten werden nur übertragen, wenn dies für den vereinbarten Zweck erforderlich, vertraglich zulässig und technisch angemessen abgesichert ist.",
+          "NeXify AI kann AI-gestützte Werkzeuge für Strukturierung, Entwürfe, Entwicklung, Tests und Dokumentation einsetzen. Personenbezogene oder vertrauliche Daten werden nur übertragen, wenn dies für den vereinbarten Zweck erforderlich, vertraglich zulässig und technisch angemessen abgesichert ist.",
           "AI-Ausgaben werden nicht ungeprüft als fachlich verbindliche Entscheidung behandelt. Weitere Hinweise stehen unter „KI-Hinweise“.",
         ],
       },
@@ -163,7 +163,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "12. Sicherheit und Aktualisierung",
         paragraphs: [
-          "NeXifyAI setzt angemessene technische und organisatorische Maßnahmen ein, darunter Transportverschlüsselung (TLS), Zugriffsbeschränkungen, Datensparsamkeit und regelmäßige Aktualisierungen. Kein Internetdienst kann jedoch absolute Sicherheit garantieren.",
+          "NeXify AI setzt angemessene technische und organisatorische Maßnahmen ein, darunter Transportverschlüsselung (TLS), Zugriffsbeschränkungen, Datensparsamkeit und regelmäßige Aktualisierungen. Kein Internetdienst kann jedoch absolute Sicherheit garantieren.",
           "Diese Erklärung wird angepasst, wenn Prozesse, Dienstleister oder rechtliche Anforderungen dies erfordern. Es gilt die jeweils auf dieser Seite veröffentlichte Fassung.",
         ],
       },
@@ -172,14 +172,14 @@ export const legalDe: Record<string, LegalPageData> = {
   agb: {
     slug: "agb",
     title: "Allgemeine Geschäftsbedingungen (B2B)",
-    intro: "Vertragsgrundlagen für Beratungs-, Entwicklungs-, Design-, Automatisierungs- und Betriebsleistungen von NeXifyAI.",
+    intro: "Vertragsgrundlagen für Beratungs-, Entwicklungs-, Design-, Automatisierungs- und Betriebsleistungen von NeXify AI.",
     updated: "Juni 2026",
     sections: [
       {
         heading: "1. Geltungsbereich und Unternehmerstatus",
         paragraphs: [
-          "Diese Bedingungen gelten für alle Verträge zwischen NeXifyAI und Unternehmern, juristischen Personen oder vergleichbaren Organisationen, die in Ausübung ihrer gewerblichen oder selbstständigen beruflichen Tätigkeit handeln. Verträge mit Verbrauchern werden nicht geschlossen.",
-          "Abweichende Bedingungen des Auftraggebers gelten nur, wenn NeXifyAI ihnen ausdrücklich in Textform zustimmt. Individuelle vertragliche Vereinbarungen haben Vorrang vor diesen Bedingungen.",
+          "Diese Bedingungen gelten für alle Verträge zwischen NeXify AI und Unternehmern, juristischen Personen oder vergleichbaren Organisationen, die in Ausübung ihrer gewerblichen oder selbstständigen beruflichen Tätigkeit handeln. Verträge mit Verbrauchern werden nicht geschlossen.",
+          "Abweichende Bedingungen des Auftraggebers gelten nur, wenn NeXify AI ihnen ausdrücklich in Textform zustimmt. Individuelle vertragliche Vereinbarungen haben Vorrang vor diesen Bedingungen.",
         ],
       },
       {
@@ -207,7 +207,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "5. AI-gestützte Arbeitsweise",
         paragraphs: [
-          "NeXifyAI setzt moderne AI-gestützte Entwicklungs-, Analyse- und Prüfwerkzeuge ein. Diese dienen der Beschleunigung und Qualitätssicherung. Die fachliche Verantwortung wird nicht an ein AI-System übertragen.",
+          "NeXify AI setzt moderne AI-gestützte Entwicklungs-, Analyse- und Prüfwerkzeuge ein. Diese dienen der Beschleunigung und Qualitätssicherung. Die fachliche Verantwortung wird nicht an ein AI-System übertragen.",
           "Soweit der Auftraggeber besondere Vorgaben zur Verarbeitung, Modellwahl, Datenresidenz oder Geheimhaltung hat, müssen diese vor Projektbeginn mitgeteilt und vereinbart werden.",
         ],
       },
@@ -228,42 +228,42 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "8. Nutzungsrechte und Open Source",
         paragraphs: [
-          "Nach vollständiger Zahlung erhält der Auftraggeber die vereinbarten Nutzungsrechte am individuell erstellten Werk. Vorbestehende Werkzeuge, generische Komponenten, Frameworks, Methoden und Know-how verbleiben bei ihren jeweiligen Rechteinhabern beziehungsweise NeXifyAI.",
+          "Nach vollständiger Zahlung erhält der Auftraggeber die vereinbarten Nutzungsrechte am individuell erstellten Werk. Vorbestehende Werkzeuge, generische Komponenten, Frameworks, Methoden und Know-how verbleiben bei ihren jeweiligen Rechteinhabern beziehungsweise NeXify AI.",
           "Open-Source-Komponenten und Dienste Dritter unterliegen ihren eigenen Lizenz- und Nutzungsbedingungen. Diese werden nicht durch den Projektvertrag ersetzt.",
         ],
       },
       {
         heading: "9. Drittanbieter und laufende Kosten",
         paragraphs: [
-          "Hosting, Domains, Zahlungsanbieter, App-Stores, externe APIs, AI-Modell-Nutzungskosten, Lizenzen, Transaktions- und Nutzungskosten sind nur enthalten, wenn dies ausdrücklich vereinbart ist. Änderungen, Ausfälle oder Einschränkungen von Drittanbietern liegen außerhalb des unmittelbaren Einflusses von NeXifyAI.",
+          "Hosting, Domains, Zahlungsanbieter, App-Stores, externe APIs, AI-Modell-Nutzungskosten, Lizenzen, Transaktions- und Nutzungskosten sind nur enthalten, wenn dies ausdrücklich vereinbart ist. Änderungen, Ausfälle oder Einschränkungen von Drittanbietern liegen außerhalb des unmittelbaren Einflusses von NeXify AI.",
         ],
       },
       {
         heading: "10. Gewährleistung und Haftung",
         paragraphs: [
-          "NeXifyAI behebt reproduzierbare Mängel innerhalb eines angemessenen Zeitraums. Kein Softwareprodukt ist unter allen denkbaren Bedingungen vollständig fehlerfrei; geschuldet ist die vereinbarte Beschaffenheit und fachgerechte Umsetzung.",
+          "NeXify AI behebt reproduzierbare Mängel innerhalb eines angemessenen Zeitraums. Kein Softwareprodukt ist unter allen denkbaren Bedingungen vollständig fehlerfrei; geschuldet ist die vereinbarte Beschaffenheit und fachgerechte Umsetzung.",
           "Unbeschränkte Haftung gilt bei Vorsatz, grober Fahrlässigkeit, Verletzung von Leben, Körper oder Gesundheit sowie zwingender gesetzlicher Haftung. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vertragstypisch vorhersehbaren Schaden begrenzt; im Übrigen ist die Haftung für leichte Fahrlässigkeit ausgeschlossen.",
-          "Für Datenverlust haftet NeXifyAI nur in dem Umfang, der auch bei ordnungsgemäßer, regelmäßiger Datensicherung durch den Auftraggeber eingetreten wäre.",
+          "Für Datenverlust haftet NeXify AI nur in dem Umfang, der auch bei ordnungsgemäßer, regelmäßiger Datensicherung durch den Auftraggeber eingetreten wäre.",
         ],
       },
       {
         heading: "11. Zahlung",
         paragraphs: [
           "Rechnungen sind innerhalb der ausgewiesenen Frist ohne Abzug zahlbar. Bei größeren Vorhaben können Abschläge, Vorauszahlungen oder Meilensteinzahlungen vereinbart werden.",
-          "Bei Zahlungsverzug gelten die gesetzlichen B2B-Folgen einschließlich Verzugszinsen und angemessener Inkasso- beziehungsweise Rechtsverfolgungskosten. NeXifyAI kann Leistungen bei erheblichem Zahlungsrückstand nach Ankündigung aussetzen.",
+          "Bei Zahlungsverzug gelten die gesetzlichen B2B-Folgen einschließlich Verzugszinsen und angemessener Inkasso- beziehungsweise Rechtsverfolgungskosten. NeXify AI kann Leistungen bei erheblichem Zahlungsrückstand nach Ankündigung aussetzen.",
         ],
       },
       {
         heading: "12. Vertraulichkeit und Datenschutz",
         paragraphs: [
           "Beide Parteien behandeln nicht öffentliche Geschäfts- und Projektdaten vertraulich. Die Vertraulichkeit gilt über das Vertragsende hinaus fort.",
-          "Soweit NeXifyAI personenbezogene Daten im Auftrag verarbeitet, wird eine Vereinbarung zur Auftragsverarbeitung nach Art. 28 DSGVO geschlossen (siehe Seite „AVV“).",
+          "Soweit NeXify AI personenbezogene Daten im Auftrag verarbeitet, wird eine Vereinbarung zur Auftragsverarbeitung nach Art. 28 DSGVO geschlossen (siehe Seite „AVV“).",
         ],
       },
       {
         heading: "13. Referenznennung",
         paragraphs: [
-          "NeXifyAI darf den Auftraggeber nach Projektabschluss mit Name und Logo als Referenz nennen, sofern der Auftraggeber dem nicht widerspricht oder etwas anderes vereinbart wurde. Vertrauliche Projektdetails werden dabei nicht offengelegt.",
+          "NeXify AI darf den Auftraggeber nach Projektabschluss mit Name und Logo als Referenz nennen, sofern der Auftraggeber dem nicht widerspricht oder etwas anderes vereinbart wurde. Vertrauliche Projektdetails werden dabei nicht offengelegt.",
         ],
       },
       {
@@ -276,7 +276,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "15. Recht, Gerichtsstand und Schlussbestimmungen",
         paragraphs: [
-          "Es gilt niederländisches Recht unter Ausschluss des UN-Kaufrechts und kollisionsrechtlicher Verweisungen, soweit keine zwingenden Vorschriften entgegenstehen. Gerichtsstand für Kaufleute und vergleichbare B2B-Auftraggeber ist der Sitz von NeXifyAI, soweit zulässig.",
+          "Es gilt niederländisches Recht unter Ausschluss des UN-Kaufrechts und kollisionsrechtlicher Verweisungen, soweit keine zwingenden Vorschriften entgegenstehen. Gerichtsstand für Kaufleute und vergleichbare B2B-Auftraggeber ist der Sitz von NeXify AI, soweit zulässig.",
           "Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. Anstelle der unwirksamen Bestimmung gilt die gesetzlich zulässige Regelung, die dem wirtschaftlichen Zweck am nächsten kommt.",
         ],
       },
@@ -285,13 +285,13 @@ export const legalDe: Record<string, LegalPageData> = {
   "ki-hinweise": {
     slug: "ki-hinweise",
     title: "Hinweise zu AI-gestützter Arbeit",
-    intro: "Wie NeXifyAI moderne AI-Werkzeuge einsetzt – transparent erklärt, inklusive des KI-Beraters NeXify AI auf dieser Website.",
+    intro: "Wie NeXify AI moderne AI-Werkzeuge einsetzt – transparent erklärt, inklusive des KI-Beraters NeXify AI auf dieser Website.",
     updated: "Juni 2026",
     sections: [
       {
         heading: "AI-gestützt statt AI-abgegeben",
         paragraphs: [
-          "NeXifyAI nutzt AI-Werkzeuge für Recherche, Strukturierung, Entwürfe, Entwicklungsunterstützung, Tests, Übersetzungen und Dokumentation. Diese Werkzeuge beschleunigen Arbeitsschritte, ersetzen aber nicht fachliche Verantwortung, Prüfung und Freigabe.",
+          "NeXify AI nutzt AI-Werkzeuge für Recherche, Strukturierung, Entwürfe, Entwicklungsunterstützung, Tests, Übersetzungen und Dokumentation. Diese Werkzeuge beschleunigen Arbeitsschritte, ersetzen aber nicht fachliche Verantwortung, Prüfung und Freigabe.",
         ],
       },
       {
@@ -322,14 +322,14 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "EU AI Act und Transparenz",
         paragraphs: [
-          "NeXifyAI verfolgt die Anforderungen der EU-KI-Verordnung (AI Act) und setzt deren Transparenzpflichten um: Nutzer werden darüber informiert, wenn sie mit einem KI-System interagieren, und KI-generierte Angebotsindikationen werden als solche gekennzeichnet.",
+          "NeXify AI verfolgt die Anforderungen der EU-KI-Verordnung (AI Act) und setzt deren Transparenzpflichten um: Nutzer werden darüber informiert, wenn sie mit einem KI-System interagieren, und KI-generierte Angebotsindikationen werden als solche gekennzeichnet.",
           "Bei Kundenprojekten mit KI-Komponenten beraten wir zur Risikoklassifizierung und zu den jeweils geltenden Pflichten.",
         ],
       },
       {
         heading: "Grenzen",
         paragraphs: [
-          "AI-Systeme können unvollständige, veraltete oder falsche Ergebnisse erzeugen. NeXifyAI begegnet diesem Risiko durch Quellenprüfung, Tests, Review, begrenzte Rechte und nachvollziehbare Arbeitsstände. Eine absolute Fehlerfreiheit kann nicht garantiert werden.",
+          "AI-Systeme können unvollständige, veraltete oder falsche Ergebnisse erzeugen. NeXify AI begegnet diesem Risiko durch Quellenprüfung, Tests, Review, begrenzte Rechte und nachvollziehbare Arbeitsstände. Eine absolute Fehlerfreiheit kann nicht garantiert werden.",
         ],
       },
     ],
@@ -377,13 +377,13 @@ export const legalDe: Record<string, LegalPageData> = {
   avv: {
     slug: "avv",
     title: "Auftragsverarbeitung (AVV)",
-    intro: "Grundsätze für Projekte, in denen NeXifyAI personenbezogene Daten im Auftrag eines Kunden verarbeitet (Art. 28 DSGVO).",
+    intro: "Grundsätze für Projekte, in denen NeXify AI personenbezogene Daten im Auftrag eines Kunden verarbeitet (Art. 28 DSGVO).",
     updated: "Juni 2026",
     sections: [
       {
         heading: "Wann eine AVV erforderlich ist",
         paragraphs: [
-          "Eine Vereinbarung zur Auftragsverarbeitung wird geschlossen, wenn NeXifyAI personenbezogene Daten ausschließlich nach dokumentierter Weisung des Kunden verarbeitet und die gesetzlichen Voraussetzungen einer Auftragsverarbeitung vorliegen – etwa beim Betrieb von Web-Apps, Shops oder Automatisierungen mit Kundendaten.",
+          "Eine Vereinbarung zur Auftragsverarbeitung wird geschlossen, wenn NeXify AI personenbezogene Daten ausschließlich nach dokumentierter Weisung des Kunden verarbeitet und die gesetzlichen Voraussetzungen einer Auftragsverarbeitung vorliegen – etwa beim Betrieb von Web-Apps, Shops oder Automatisierungen mit Kundendaten.",
         ],
       },
       {
@@ -430,7 +430,7 @@ export const legalDe: Record<string, LegalPageData> = {
   widerruf: {
     slug: "widerruf",
     title: "Hinweis zum Widerrufsrecht",
-    intro: "NeXifyAI bietet Leistungen ausschließlich im unternehmerischen Geschäftsverkehr (B2B) an.",
+    intro: "NeXify AI bietet Leistungen ausschließlich im unternehmerischen Geschäftsverkehr (B2B) an.",
     updated: "Juni 2026",
     sections: [
       {

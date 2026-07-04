@@ -1,7 +1,7 @@
 export const company = {
   brand: "NeXify AI",
   descriptor: "Chat it. Automate it.",
-  legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – chat it. Automate it.",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",
   role: "Inhaber / Directeur",
@@ -9,7 +9,7 @@ export const company = {
   postalCity: "5921 JA Venlo",
   country: "Niederlande",
   countryNl: "Nederland",
-  email: "support@nexify-automate.com",
+  email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   phoneHref: "+31613318856",
   website: "https://nexifyai.cloud",

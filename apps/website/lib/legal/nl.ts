@@ -1,10 +1,10 @@
 import type { LegalPageData } from "./de";
 
 const C = {
-  legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – chat it. Automate it.",
   owner: "Pascal Courbois",
   address: "Graaf van Loonstraat 1E, 5921 JA Venlo, Nederland",
-  email: "support@nexify-automate.com",
+  email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   kvk: "90483944",
   vat: "NL865786276B01",
@@ -14,7 +14,7 @@ export const legalNl: Record<string, LegalPageData> = {
   impressum: {
     slug: "impressum",
     title: "Colofon",
-    intro: "Aanbiedersidentificatie en contactgegevens van NeXifyAI by NeXify – Chat it. Automate it.",
+    intro: "Aanbiedersidentificatie en contactgegevens van NeXify AI by NeXify – chat it. Automate it.",
     updated: "Juni 2026",
     sections: [
       { heading: "Bedrijfsgegevens", paragraphs: [C.legalName, `Eenmanszaak naar Nederlands recht, eigenaar: ${C.owner}`, C.address] },
@@ -34,7 +34,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "Toezicht en toepasselijk recht",
         paragraphs: [
-          "Als in Nederland gevestigde eenmanszaak valt NeXifyAI onder het Nederlandse handels- en ondernemingsrecht. Bevoegde kamer is de Kamer van Koophandel (KvK).",
+          "Als in Nederland gevestigde eenmanszaak valt NeXify AI onder het Nederlandse handels- en ondernemingsrecht. Bevoegde kamer is de Kamer van Koophandel (KvK).",
           "Voor privacyrechtelijke aangelegenheden is de Autoriteit Persoonsgegevens (Den Haag) de bevoegde toezichthouder.",
         ],
       },
@@ -66,7 +66,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "Onlinegeschillenbeslechting",
         paragraphs: [
-          "Aangezien NeXifyAI uitsluitend B2B-diensten aanbiedt, bestaat er geen verplichting tot en geen deelname aan consumentengeschillenprocedures. Vragen over overeenkomsten of diensten kunnen rechtstreeks aan het bovengenoemde e-mailadres worden gericht.",
+          "Aangezien NeXify AI uitsluitend B2B-diensten aanbiedt, bestaat er geen verplichting tot en geen deelname aan consumentengeschillenprocedures. Vragen over overeenkomsten of diensten kunnen rechtstreeks aan het bovengenoemde e-mailadres worden gericht.",
         ],
       },
     ],
@@ -84,7 +84,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "2. Uitgangspunten van de verwerking",
         paragraphs: [
-          "NeXifyAI verwerkt persoonsgegevens doelgebonden, proportioneel en slechts zolang dit voor het betreffende doel, wettelijke verplichtingen of de behartiging van gerechtvaardigde belangen noodzakelijk is (art. 5 AVG).",
+          "NeXify AI verwerkt persoonsgegevens doelgebonden, proportioneel en slechts zolang dit voor het betreffende doel, wettelijke verplichtingen of de behartiging van gerechtvaardigde belangen noodzakelijk is (art. 5 AVG).",
           "Deze website is in principe zonder gebruikersaccount en zonder marketing-tracking te gebruiken. Niet-noodzakelijke analyse- of advertentiecookies worden niet standaard ingezet.",
         ],
       },
@@ -135,7 +135,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "9. AI-ondersteunde verwerking in projecten",
         paragraphs: [
-          "NeXifyAI kan AI-ondersteunde tools inzetten voor structurering, concepten, ontwikkeling, tests en documentatie. Persoonsgegevens of vertrouwelijke gegevens worden alleen doorgegeven als dit voor het overeengekomen doel noodzakelijk, contractueel toegestaan en technisch passend beveiligd is.",
+          "NeXify AI kan AI-ondersteunde tools inzetten voor structurering, concepten, ontwikkeling, tests en documentatie. Persoonsgegevens of vertrouwelijke gegevens worden alleen doorgegeven als dit voor het overeengekomen doel noodzakelijk, contractueel toegestaan en technisch passend beveiligd is.",
           "AI-uitvoer wordt niet ongecontroleerd als vakinhoudelijk bindende beslissing behandeld. Meer informatie vindt u onder „AI-verklaring”.",
         ],
       },
@@ -162,7 +162,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "12. Beveiliging en actualisering",
         paragraphs: [
-          "NeXifyAI hanteert passende technische en organisatorische maatregelen, waaronder transportversleuteling (TLS), toegangsbeperkingen, dataminimalisatie en regelmatige updates. Geen enkele internetdienst kan echter absolute veiligheid garanderen.",
+          "NeXify AI hanteert passende technische en organisatorische maatregelen, waaronder transportversleuteling (TLS), toegangsbeperkingen, dataminimalisatie en regelmatige updates. Geen enkele internetdienst kan echter absolute veiligheid garanderen.",
           "Deze verklaring wordt aangepast wanneer processen, dienstverleners of wettelijke vereisten dit vereisen. De op deze pagina gepubliceerde versie is telkens van toepassing.",
         ],
       },
@@ -171,14 +171,14 @@ export const legalNl: Record<string, LegalPageData> = {
   agb: {
     slug: "agb",
     title: "Algemene voorwaarden (B2B)",
-    intro: "Contractuele basis voor advies-, ontwikkelings-, design-, automatiserings- en beheerdiensten van NeXifyAI.",
+    intro: "Contractuele basis voor advies-, ontwikkelings-, design-, automatiserings- en beheerdiensten van NeXify AI.",
     updated: "Juni 2026",
     sections: [
       {
         heading: "1. Toepassingsgebied en ondernemersstatus",
         paragraphs: [
-          "Deze voorwaarden gelden voor alle overeenkomsten tussen NeXifyAI en ondernemers, rechtspersonen of vergelijkbare organisaties die handelen in de uitoefening van hun bedrijf of zelfstandig beroep. Overeenkomsten met consumenten worden niet gesloten.",
-          "Afwijkende voorwaarden van de opdrachtgever gelden alleen indien NeXifyAI daar uitdrukkelijk schriftelijk mee instemt. Individuele contractuele afspraken hebben voorrang op deze voorwaarden.",
+          "Deze voorwaarden gelden voor alle overeenkomsten tussen NeXify AI en ondernemers, rechtspersonen of vergelijkbare organisaties die handelen in de uitoefening van hun bedrijf of zelfstandig beroep. Overeenkomsten met consumenten worden niet gesloten.",
+          "Afwijkende voorwaarden van de opdrachtgever gelden alleen indien NeXify AI daar uitdrukkelijk schriftelijk mee instemt. Individuele contractuele afspraken hebben voorrang op deze voorwaarden.",
         ],
       },
       {
@@ -206,7 +206,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "5. AI-ondersteunde werkwijze",
         paragraphs: [
-          "NeXifyAI zet moderne AI-ondersteunde ontwikkel-, analyse- en controletools in. Deze dienen versnelling en kwaliteitsborging. De vakinhoudelijke verantwoordelijkheid wordt niet aan een AI-systeem overgedragen.",
+          "NeXify AI zet moderne AI-ondersteunde ontwikkel-, analyse- en controletools in. Deze dienen versnelling en kwaliteitsborging. De vakinhoudelijke verantwoordelijkheid wordt niet aan een AI-systeem overgedragen.",
           "Voor zover de opdrachtgever bijzondere eisen heeft aan verwerking, modelkeuze, datalocatie of geheimhouding, moeten deze vóór projectstart worden gemeld en overeengekomen.",
         ],
       },
@@ -227,42 +227,42 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "8. Gebruiksrechten en open source",
         paragraphs: [
-          "Na volledige betaling verkrijgt de opdrachtgever de overeengekomen gebruiksrechten op het individueel gemaakte werk. Reeds bestaande tools, generieke componenten, frameworks, methoden en knowhow blijven bij hun respectieve rechthebbenden resp. NeXifyAI.",
+          "Na volledige betaling verkrijgt de opdrachtgever de overeengekomen gebruiksrechten op het individueel gemaakte werk. Reeds bestaande tools, generieke componenten, frameworks, methoden en knowhow blijven bij hun respectieve rechthebbenden resp. NeXify AI.",
           "Open-source-componenten en diensten van derden vallen onder hun eigen licentie- en gebruiksvoorwaarden. Deze worden niet door de projectovereenkomst vervangen.",
         ],
       },
       {
         heading: "9. Derden en doorlopende kosten",
         paragraphs: [
-          "Hosting, domeinen, betaalproviders, app-stores, externe API's, AI-model-gebruikskosten, licenties, transactie- en gebruikskosten zijn alleen inbegrepen indien uitdrukkelijk overeengekomen. Wijzigingen, storingen of beperkingen van derden liggen buiten de directe invloed van NeXifyAI.",
+          "Hosting, domeinen, betaalproviders, app-stores, externe API's, AI-model-gebruikskosten, licenties, transactie- en gebruikskosten zijn alleen inbegrepen indien uitdrukkelijk overeengekomen. Wijzigingen, storingen of beperkingen van derden liggen buiten de directe invloed van NeXify AI.",
         ],
       },
       {
         heading: "10. Garantie en aansprakelijkheid",
         paragraphs: [
-          "NeXifyAI herstelt reproduceerbare gebreken binnen een redelijke termijn. Geen softwareproduct is onder alle denkbare omstandigheden volledig foutloos; verschuldigd is de overeengekomen kwaliteit en vakkundige uitvoering.",
+          "NeXify AI herstelt reproduceerbare gebreken binnen een redelijke termijn. Geen softwareproduct is onder alle denkbare omstandigheden volledig foutloos; verschuldigd is de overeengekomen kwaliteit en vakkundige uitvoering.",
           "Onbeperkte aansprakelijkheid geldt bij opzet, grove nalatigheid, letsel aan leven, lichaam of gezondheid en dwingende wettelijke aansprakelijkheid. Bij licht nalatige schending van wezenlijke contractuele verplichtingen is de aansprakelijkheid beperkt tot de contracttypisch voorzienbare schade; overigens is aansprakelijkheid voor lichte nalatigheid uitgesloten.",
-          "Voor gegevensverlies is NeXifyAI slechts aansprakelijk in de omvang die ook bij correcte, regelmatige back-ups door de opdrachtgever zou zijn opgetreden.",
+          "Voor gegevensverlies is NeXify AI slechts aansprakelijk in de omvang die ook bij correcte, regelmatige back-ups door de opdrachtgever zou zijn opgetreden.",
         ],
       },
       {
         heading: "11. Betaling",
         paragraphs: [
           "Facturen zijn binnen de vermelde termijn zonder aftrek betaalbaar. Bij grotere projecten kunnen termijnbetalingen, vooruitbetalingen of milestone-betalingen worden overeengekomen.",
-          "Bij betalingsverzuim gelden de wettelijke B2B-gevolgen inclusief vertragingsrente en redelijke incasso- resp. proceskosten. NeXifyAI kan diensten bij aanzienlijke betalingsachterstand na aankondiging opschorten.",
+          "Bij betalingsverzuim gelden de wettelijke B2B-gevolgen inclusief vertragingsrente en redelijke incasso- resp. proceskosten. NeXify AI kan diensten bij aanzienlijke betalingsachterstand na aankondiging opschorten.",
         ],
       },
       {
         heading: "12. Vertrouwelijkheid en gegevensbescherming",
         paragraphs: [
           "Beide partijen behandelen niet-openbare bedrijfs- en projectgegevens vertrouwelijk. De vertrouwelijkheid blijft na het einde van de overeenkomst voortbestaan.",
-          "Voor zover NeXifyAI persoonsgegevens in opdracht verwerkt, wordt een verwerkersovereenkomst conform art. 28 AVG gesloten (zie pagina „Verwerkersovereenkomst”).",
+          "Voor zover NeXify AI persoonsgegevens in opdracht verwerkt, wordt een verwerkersovereenkomst conform art. 28 AVG gesloten (zie pagina „Verwerkersovereenkomst”).",
         ],
       },
       {
         heading: "13. Referentievermelding",
         paragraphs: [
-          "NeXifyAI mag de opdrachtgever na projectafronding met naam en logo als referentie vermelden, tenzij de opdrachtgever hiertegen bezwaar maakt of iets anders is overeengekomen. Vertrouwelijke projectdetails worden daarbij niet openbaar gemaakt.",
+          "NeXify AI mag de opdrachtgever na projectafronding met naam en logo als referentie vermelden, tenzij de opdrachtgever hiertegen bezwaar maakt of iets anders is overeengekomen. Vertrouwelijke projectdetails worden daarbij niet openbaar gemaakt.",
         ],
       },
       {
@@ -275,7 +275,7 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "15. Recht, bevoegde rechter en slotbepalingen",
         paragraphs: [
-          "Nederlands recht is van toepassing met uitsluiting van het Weens Koopverdrag en conflictenrechtelijke verwijzingen, voor zover geen dwingende bepalingen zich daartegen verzetten. Bevoegde rechter voor B2B-opdrachtgevers is de vestigingsplaats van NeXifyAI, voor zover toelaatbaar.",
+          "Nederlands recht is van toepassing met uitsluiting van het Weens Koopverdrag en conflictenrechtelijke verwijzingen, voor zover geen dwingende bepalingen zich daartegen verzetten. Bevoegde rechter voor B2B-opdrachtgevers is de vestigingsplaats van NeXify AI, voor zover toelaatbaar.",
           "Indien afzonderlijke bepalingen ongeldig zijn, blijft de geldigheid van de overige bepalingen onaangetast. In plaats van de ongeldige bepaling geldt de wettelijk toelaatbare regeling die het economische doel het dichtst benadert.",
         ],
       },
@@ -284,13 +284,13 @@ export const legalNl: Record<string, LegalPageData> = {
   "ki-hinweise": {
     slug: "ki-hinweise",
     title: "AI-verklaring",
-    intro: "Hoe NeXifyAI moderne AI-tools inzet – transparant uitgelegd, inclusief de NeXify AI adviseur op deze website.",
+    intro: "Hoe NeXify AI moderne AI-tools inzet – transparant uitgelegd, inclusief de NeXify AI adviseur op deze website.",
     updated: "Juni 2026",
     sections: [
       {
         heading: "AI-ondersteund in plaats van AI-uitbesteed",
         paragraphs: [
-          "NeXifyAI gebruikt AI-tools voor onderzoek, structurering, concepten, ontwikkelingsondersteuning, tests, vertalingen en documentatie. Deze tools versnellen werkstappen, maar vervangen geen vakinhoudelijke verantwoordelijkheid, controle en goedkeuring.",
+          "NeXify AI gebruikt AI-tools voor onderzoek, structurering, concepten, ontwikkelingsondersteuning, tests, vertalingen en documentatie. Deze tools versnellen werkstappen, maar vervangen geen vakinhoudelijke verantwoordelijkheid, controle en goedkeuring.",
         ],
       },
       {
@@ -321,14 +321,14 @@ export const legalNl: Record<string, LegalPageData> = {
       {
         heading: "EU AI Act en transparantie",
         paragraphs: [
-          "NeXifyAI volgt de vereisten van de EU-AI-verordening (AI Act) en implementeert de transparantieverplichtingen: gebruikers worden geïnformeerd wanneer zij met een AI-systeem communiceren, en AI-gegenereerde offerte-indicaties worden als zodanig gemarkeerd.",
+          "NeXify AI volgt de vereisten van de EU-AI-verordening (AI Act) en implementeert de transparantieverplichtingen: gebruikers worden geïnformeerd wanneer zij met een AI-systeem communiceren, en AI-gegenereerde offerte-indicaties worden als zodanig gemarkeerd.",
           "Bij klantprojecten met AI-componenten adviseren wij over risicoclassificatie en de telkens geldende verplichtingen.",
         ],
       },
       {
         heading: "Grenzen",
         paragraphs: [
-          "AI-systemen kunnen onvolledige, verouderde of onjuiste resultaten genereren. NeXifyAI beperkt dit risico door bronnencontrole, tests, review, beperkte rechten en navolgbare werkstanden. Absolute foutloosheid kan niet worden gegarandeerd.",
+          "AI-systemen kunnen onvolledige, verouderde of onjuiste resultaten genereren. NeXify AI beperkt dit risico door bronnencontrole, tests, review, beperkte rechten en navolgbare werkstanden. Absolute foutloosheid kan niet worden gegarandeerd.",
         ],
       },
     ],
@@ -376,13 +376,13 @@ export const legalNl: Record<string, LegalPageData> = {
   avv: {
     slug: "avv",
     title: "Verwerkersovereenkomst",
-    intro: "Uitgangspunten voor projecten waarin NeXifyAI persoonsgegevens in opdracht van een klant verwerkt (art. 28 AVG).",
+    intro: "Uitgangspunten voor projecten waarin NeXify AI persoonsgegevens in opdracht van een klant verwerkt (art. 28 AVG).",
     updated: "Juni 2026",
     sections: [
       {
         heading: "Wanneer een verwerkersovereenkomst vereist is",
         paragraphs: [
-          "Een verwerkersovereenkomst wordt gesloten wanneer NeXifyAI persoonsgegevens uitsluitend volgens gedocumenteerde instructie van de klant verwerkt en aan de wettelijke voorwaarden van verwerking in opdracht is voldaan – bijvoorbeeld bij het beheer van web-apps, shops of automatiseringen met klantgegevens.",
+          "Een verwerkersovereenkomst wordt gesloten wanneer NeXify AI persoonsgegevens uitsluitend volgens gedocumenteerde instructie van de klant verwerkt en aan de wettelijke voorwaarden van verwerking in opdracht is voldaan – bijvoorbeeld bij het beheer van web-apps, shops of automatiseringen met klantgegevens.",
         ],
       },
       {
@@ -429,7 +429,7 @@ export const legalNl: Record<string, LegalPageData> = {
   widerruf: {
     slug: "widerruf",
     title: "Informatie over herroepingsrecht",
-    intro: "NeXifyAI biedt diensten uitsluitend aan in het zakelijke verkeer (B2B).",
+    intro: "NeXify AI biedt diensten uitsluitend aan in het zakelijke verkeer (B2B).",
     updated: "Juni 2026",
     sections: [
       {

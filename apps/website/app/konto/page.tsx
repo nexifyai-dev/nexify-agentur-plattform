@@ -2,9 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircle2, ChevronDown, CreditCard, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
+import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
 import { api, useAuth } from "@/lib/auth";
+import { API_BASE } from "@/lib/company";
 import { useLang } from "@/lib/i18n";
+import { PortalTour } from "@/components/portal-tour";
+import { SupportTickets } from "@/components/support-tickets";
 
 type Offer = {
   id: string; name: string; email: string; company: string | null; language: string;
@@ -123,6 +126,15 @@ function OfferCard({ offer, t, onChanged }: { offer: Offer; t: (typeof T)["de"];
 
       {open && (
         <div className="border-t border-white/10 p-6">
+          <a
+            href={`${API_BASE}/api/portal/offers/${offer.id}/pdf`}
+            target="_blank"
+            rel="noreferrer"
+            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-[12px] font-semibold text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+            data-testid="offer-pdf-link"
+          >
+            <Download size={13} /> PDF
+          </a>
           {offer.offer?.intro && <p className="text-sm leading-relaxed text-zinc-400">{offer.offer.intro}</p>}
           <div className="mt-4 space-y-2">
             {offer.offer?.items?.map((it, i) => (
@@ -247,6 +259,7 @@ export default function PortalPage() {
 
   return (
     <main className="pb-10 pt-36" data-testid="portal-page">
+      <PortalTour />
       <div className="site-container">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -274,6 +287,8 @@ export default function PortalPage() {
                 {t.requestBtn}
               </button>
             </div>
+
+            <SupportTickets />
           </div>
 
           <div className="glass h-fit p-6" data-testid="portal-profile">
@@ -281,10 +296,10 @@ export default function PortalPage() {
               <UserIcon size={13} /> {t.profile}
             </h2>
             <div className="mt-4 space-y-3">
-              <input className="field" placeholder={t.name} value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} data-testid="profile-name-input" />
+              <input className="field" placeholder={t.name} value={profile.name} onChange={(e) => setProfile((p) => ({ ...p, name: e.target.value }))} data-testid="profile-name-input" />
               <input className="field" disabled value={user.email} />
-              <input className="field" placeholder={t.company} value={profile.company} onChange={(e) => setProfile({ ...profile, company: e.target.value })} data-testid="profile-company-input" />
-              <input className="field" placeholder={t.phone} value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} data-testid="profile-phone-input" />
+              <input className="field" placeholder={t.company} value={profile.company} onChange={(e) => setProfile((p) => ({ ...p, company: e.target.value }))} data-testid="profile-company-input" />
+              <input className="field" placeholder={t.phone} value={profile.phone} onChange={(e) => setProfile((p) => ({ ...p, phone: e.target.value }))} data-testid="profile-phone-input" />
               <button className="btn-primary w-full !py-2.5 !text-[13px]" onClick={saveProfile} data-testid="profile-save-btn">
                 {saved ? t.saved : t.save}
               </button>

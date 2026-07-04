@@ -3,6 +3,7 @@ import { Outfit, Manrope } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
+import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/i18n";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
@@ -32,8 +33,21 @@ export const metadata: Metadata = {
     siteName: company.brand,
     title: "NeXify AI — Chat it. Automate it.",
     description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI — Chat it. Automate it." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NeXify AI — Chat it. Automate it.",
+    description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 999 / Arbeitstag netto.",
+    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "NeXify AI" },
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "48x48" }, { url: "/icon.svg", type: "image/svg+xml" }, { url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark" };
@@ -63,6 +77,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div id="main-content">{children}</div>
           <SiteFooter />
           <ChatWidget />
+          <PwaRegister />
           </AuthProvider>
         </LanguageProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
