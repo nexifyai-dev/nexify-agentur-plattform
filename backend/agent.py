@@ -311,13 +311,34 @@ class AgentChatIn(BaseModel):
     message: str
 
 
+AGENT_BUSY = {"busy": False}
+
+
 @router.post("/api/admin/agent/chat")
 async def agent_chat(body: AgentChatIn, _: dict = Depends(portal.get_admin)):
-    try:
-        return await run_agent(body.message)
-    except Exception as e:
-        logger.error(f"agent chat failed: {e}")
-        return {"reply": f"Der Agent ist auf einen Fehler gestoßen: {e}", "actions": []}
+    if AGENT_BUSY["busy"]:
+        return {"status": "busy"}
+    AGENT_BUSY["busy"] = True
+
+    async def _run():
+        try:
+            await run_agent(body.message)
+        except Exception as e:
+            logger.error(f"agent chat failed: {e}")
+            try:
+                await _save_agent_msg("assistant", f"Der Agent ist auf einen Fehler gestoßen: {e}")
+            except Exception:
+                pass
+        finally:
+            AGENT_BUSY["busy"] = False
+
+    asyncio.create_task(_run())
+    return {"status": "accepted"}
+
+
+@router.get("/api/admin/agent/status")
+async def agent_status(_: dict = Depends(portal.get_admin)):
+    return {"busy": AGENT_BUSY["busy"]}
 
 
 @router.get("/api/admin/agent/history")

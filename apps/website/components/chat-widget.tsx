@@ -12,17 +12,18 @@ const T = {
     title: "NeXify AI – Ihr AI-Berater",
     status: "Online · antwortet sofort",
     greeting:
-      "Guten Tag! Ich bin NeXify AI – Ihr persönlicher AI-Berater. Ich berate Sie zu Websites, Onlineshops, Web-Apps und AI-Automatisierung – und erstelle Ihnen auf Wunsch sofort ein unverbindliches Angebot per E-Mail. Woran arbeiten Sie gerade?",
+      "Guten Tag! Ich bin NeXify AI – Ihr persönlicher AI-Berater. Damit ich Sie wirklich individuell beraten und Ihnen ein maßgeschneidertes Angebot erstellen kann, erzählen Sie mir gern kurz: Was macht Ihr Unternehmen – und woran denken Sie gerade? Eine Website, ein Shop, eine App oder eine Automatisierung?",
     placeholder: "Ihre Nachricht …",
     offerBtn: "Angebot per E-Mail erhalten",
-    offerTitle: "Unverbindliches Angebot anfordern",
-    offerText: "NeXify AI fasst unser Gespräch zu einem strukturierten Angebot zusammen und sendet es Ihnen sofort per E-Mail.",
+    offerTitle: "Ihr individuelles Angebot anfordern",
+    offerText: "NeXify AI erstellt aus unserer Bedarfsanalyse ein exklusiv auf Sie zugeschnittenes Angebot – inklusive PDF – und sendet es Ihnen sofort per E-Mail.",
     name: "Ihr Name *",
     email: "Ihre E-Mail *",
     companyField: "Firma (optional)",
-    sendOffer: "Angebot jetzt senden",
-    sending: "Wird erstellt …",
-    offerSent: "Ihr Angebot ist unterwegs! Prüfen Sie Ihr Postfach – wir melden uns außerdem persönlich bei Ihnen.",
+    phoneField: "Telefon (optional, für persönliche Rückfragen)",
+    sendOffer: "Individuelles Angebot jetzt senden",
+    sending: "Ihr Angebot wird individuell erstellt …",
+    offerSent: "Ihr individuelles Angebot ist unterwegs! Prüfen Sie Ihr Postfach – Pascal Courbois meldet sich zudem persönlich bei Ihnen. Lieber direkt sprechen? Unter /rueckruf buchen Sie einen festen Telefontermin.",
     offerGenerated: "Ihr Angebot wurde erstellt. Der E-Mail-Versand wird kurzfristig nachgeholt – wir melden uns persönlich.",
     error: "Verbindung unterbrochen – bitte erneut versuchen.",
     cancel: "Zurück zum Chat",
@@ -31,17 +32,18 @@ const T = {
     title: "NeXify AI – Uw AI-adviseur",
     status: "Online · antwoordt direct",
     greeting:
-      "Goedendag! Ik ben NeXify AI – uw persoonlijke AI-adviseur. Ik adviseer u over websites, webshops, web-apps en AI-automatisering – en stel desgewenst direct een vrijblijvende offerte per e-mail op. Waar werkt u momenteel aan?",
+      "Goedendag! Ik ben NeXify AI – uw persoonlijke AI-adviseur. Zodat ik u echt individueel kan adviseren en een offerte op maat kan opstellen: vertel mij kort wat uw bedrijf doet – en waar denkt u aan? Een website, een webshop, een app of automatisering?",
     placeholder: "Uw bericht …",
     offerBtn: "Offerte per e-mail ontvangen",
-    offerTitle: "Vrijblijvende offerte aanvragen",
-    offerText: "NeXify AI vat ons gesprek samen in een gestructureerde offerte en stuurt deze direct per e-mail.",
+    offerTitle: "Uw individuele offerte aanvragen",
+    offerText: "NeXify AI stelt op basis van onze behoefteanalyse een exclusief op u toegesneden offerte op – inclusief PDF – en stuurt deze direct per e-mail.",
     name: "Uw naam *",
     email: "Uw e-mail *",
     companyField: "Bedrijf (optioneel)",
-    sendOffer: "Offerte nu versturen",
-    sending: "Wordt opgesteld …",
-    offerSent: "Uw offerte is onderweg! Controleer uw inbox – wij nemen bovendien persoonlijk contact op.",
+    phoneField: "Telefoon (optioneel, voor persoonlijk contact)",
+    sendOffer: "Individuele offerte nu versturen",
+    sending: "Uw offerte wordt op maat opgesteld …",
+    offerSent: "Uw individuele offerte is onderweg! Controleer uw inbox – Pascal Courbois neemt bovendien persoonlijk contact op. Liever direct spreken? Via /rueckruf boekt u een vaste telefonische afspraak.",
     offerGenerated: "Uw offerte is opgesteld. De e-mail volgt spoedig – wij nemen persoonlijk contact op.",
     error: "Verbinding onderbroken – probeer het opnieuw.",
     cancel: "Terug naar de chat",
@@ -57,8 +59,9 @@ export function ChatWidget() {
   const [streaming, setStreaming] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showOffer, setShowOffer] = useState(false);
+  const [offerReady, setOfferReady] = useState(false);
   const [offerState, setOfferState] = useState<"idle" | "sending" | "sent" | "generated">("idle");
-  const [form, setForm] = useState({ name: "", email: "", company: "" });
+  const [form, setForm] = useState({ name: "", email: "", company: "", phone: "" });
   const scrollRef = useRef<HTMLDivElement>(null);
   const openedOnce = useRef(false);
 
@@ -131,6 +134,7 @@ export function ChatWidget() {
               return copy;
             });
           }
+          if (ev.type === "offer_ready" && ev.ready) setOfferReady(true);
         }
       }
       if (!acc) throw new Error("empty");
@@ -152,7 +156,7 @@ export function ChatWidget() {
       const res = await fetch(`${API_BASE}/api/offers/request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sid, name: form.name, email: form.email, company: form.company || null, language: lang }),
+        body: JSON.stringify({ session_id: sid, name: form.name, email: form.email, company: form.company || null, phone: form.phone || null, language: lang }),
       });
       if (!res.ok) throw new Error("failed");
       const data = await res.json();
@@ -226,6 +230,7 @@ export function ChatWidget() {
                   <input className="field !py-2.5 !text-[13px]" placeholder={t.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="offer-name-input" />
                   <input className="field !py-2.5 !text-[13px]" type="email" placeholder={t.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="offer-email-input" />
                   <input className="field !py-2.5 !text-[13px]" placeholder={t.companyField} value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} data-testid="offer-company-input" />
+                  <input className="field !py-2.5 !text-[13px]" type="tel" placeholder={t.phoneField} value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} data-testid="offer-phone-input" />
                   <button className="btn-primary w-full !py-2.5 !text-[13px]" onClick={requestOffer} disabled={offerState === "sending" || !form.name || !form.email} data-testid="offer-submit-btn">
                     {offerState === "sending" ? t.sending : t.sendOffer}
                   </button>
@@ -244,7 +249,7 @@ export function ChatWidget() {
           </div>
 
           <div className="border-t border-white/10 px-4 py-3">
-            {!showOffer && offerState !== "sent" && offerState !== "generated" && messages.length >= 2 && (
+            {!showOffer && offerState !== "sent" && offerState !== "generated" && (offerReady || messages.filter((m) => m.role === "user").length >= 4) && (
               <button
                 className="mb-2.5 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] py-2 text-xs font-semibold text-zinc-300 transition-all hover:border-white/30 hover:text-white"
                 onClick={() => setShowOffer(true)}

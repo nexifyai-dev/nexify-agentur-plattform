@@ -32,6 +32,10 @@ const nextConfig: NextConfig = {
     { source: "/leistungen/unternehmenswebsites", destination: "/leistungen/websites", permanent: true },
     { source: "/leistungen/ai-gestuetzte-agenten", destination: "/leistungen/ai-agenten", permanent: true },
   ],
+  rewrites: async () =>
+    process.env.BACKEND_ORIGIN
+      ? [{ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` }]
+      : [],
 };
 
 export default nextConfig;
