@@ -1,0 +1,104 @@
+{
+  "theme": "Dark",
+  "archetype": "5 (Luxury)",
+  "mood": "Mega elegant, extreme high-quality, modern, impressive (WoW effect)",
+  "brand_name": "NeXify AI",
+  "typography": {
+    "headings": {
+      "fontFamily": "Outfit, sans-serif",
+      "weights": ["300", "500", "700"],
+      "classes": "tracking-tight text-white",
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-light",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-medium",
+      "h3": "text-xl sm:text-2xl font-medium"
+    },
+    "body": {
+      "fontFamily": "Manrope, sans-serif",
+      "classes": "text-zinc-400 leading-relaxed",
+      "base": "text-base md:text-lg",
+      "small": "text-sm text-zinc-500 uppercase tracking-[0.2em]"
+    }
+  },
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "rgba(255, 255, 255, 0.03)",
+    "surface_border": "rgba(255, 255, 255, 0.1)",
+    "accent_primary": "#E0E0E0",
+    "accent_secondary": "#9E9E9E",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A1A1AA"
+  },
+  "layout": {
+    "spacing_scale": "p-4, p-8, p-12, p-24, p-32",
+    "container_padding": "px-6 lg:px-12",
+    "grid_strategy": "Bento Grid (Mode A) for marketing sections. Asymmetrical spans, gap-8 to gap-12."
+  },
+  "surface_styles": {
+    "cards": "bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:-translate-y-1 hover:border-white/20 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
+    "header": "fixed top-0 w-full z-50 bg-black/60 backdrop-blur-2xl border-b border-white/10",
+    "buttons_primary": "bg-gradient-to-r from-gray-200 via-white to-gray-200 text-black font-semibold rounded-full px-8 py-3 hover:scale-105 transition-transform flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+  },
+  "components": {
+    "proactive_ai_chat": "Floating crystal glassmorphism widget (bottom right). Uses Shadcn Popover/Dialog. Incorporate a silver pulse effect. Must simulate proactively offering and creating proposals for clients.",
+    "language_switcher": "Shadcn DropdownMenu in the header. Toggle between DE and NL. State must reflect globally across all text.",
+    "pricing_calculator": "Shadcn Slider and Input components inside a technical, high-end Bento grid card. Real-time updates for cost savings/ROI.",
+    "legal_pages": "Dense, clean text layouts. Left-aligned, readable max-w-3xl containers with generous line-height."
+  },
+  "media": {
+    "hero_backgrounds": [
+      {
+        "url": "https://images.unsplash.com/photo-1709377058964-929af7f2d02f",
+        "description": "Dark Silver Wavy Lines for main hero section background",
+        "category": "hero"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1517241034903-9a4c3ab12f00",
+        "description": "Black and white wavy shapes for secondary sections",
+        "category": "background"
+      }
+    ],
+    "tech_visuals": [
+      {
+        "url": "https://images.unsplash.com/photo-1716436329836-208bea5a55e6",
+        "description": "AI chip, good for platform overview",
+        "category": "platform"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1716436330152-a58390897652",
+        "description": "AI node close up for process/services",
+        "category": "services"
+      }
+    ],
+    "corporate_office": [
+      {
+        "url": "https://images.unsplash.com/photo-1610900347586-df4a2de5331d",
+        "description": "Modern dark corporate office architecture for 'About Us' section",
+        "category": "about"
+      }
+    ]
+  },
+  "pages_structure": [
+    "Hero/Homepage (WOW effect, immersive silver dark theme, dynamic text)",
+    "Services / Leistungen (Extensive details, bento layout cards)",
+    "Pricing & Calculator / Preise (Interactive sliders to calculate ROI/Costs)",
+    "Platform / Plattformübersicht (Visual tech breakdown)",
+    "Process / Prozess (Step-by-step timeline execution)",
+    "References / Referenzen (Testimonials in crystal glass cards)",
+    "Knowledge/Blog / Wissen (Grid of articles with silver hover effects)",
+    "FAQ (Shadcn Accordion)",
+    "About / Über uns (Agency background, mission, corporate imagery)",
+    "Contact / Kontakt (Shadcn Forms, dark elegant inputs)",
+    "Legal Pages (Impressum, AGB, Datenschutz, AVV, Widerruf, Cookie-Richtlinie, KI-Hinweise)"
+  ],
+  "instructions_to_main_agent": [
+    "Implement a 'mega edles Darkdesign' (mega luxury dark design) using Archetype 5 (Luxury) principles.",
+    "Rebrand as 'NeXify AI'. Create a purely typographic, high-end logo in the header using the 'Outfit' font with a subtle silver gradient.",
+    "Ensure full bilingual structure (DE/NL) using a context provider or i18n library. The language switcher must work seamlessly.",
+    "Build an interactive pricing calculator using Shadcn UI components. Ensure sliding values dynamically update the final price.",
+    "Build the proactive AI live chat widget. It must feel 'alive'—perhaps popping up after a few seconds with a personalized offer generation hook.",
+    "Use generous padding (py-24, py-32) for sections to allow the dark luxury theme to breathe. Never cram content.",
+    "Use 'lenis' for smooth scrolling to give the site a premium momentum feel.",
+    "All interactive elements MUST include a 'data-testid' attribute (e.g., data-testid='lang-switcher-de', data-testid='hero-cta').",
+    "Avoid standard Shadcn Vercel-like borders. Override them with 'border-white/10' and 'bg-white/5' for true glassmorphism."
+  ]
+}
