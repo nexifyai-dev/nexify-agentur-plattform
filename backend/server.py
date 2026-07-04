@@ -19,6 +19,8 @@ from openai import AsyncOpenAI
 import portal
 import booking
 import agent as agent_mod
+import email_agent
+from memory import mem_add, mem_search
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
@@ -182,6 +184,8 @@ ANGEBOTS-FREIGABE (STRIKT EINHALTEN):
 
 STIL & FORMATIERUNG:
 - Kompakt (max. 130 Woerter), keine Emojis. Ehrlich bleiben: keine erfundenen Referenzen, keine Garantien, B2B only.
+- SPRACHE: Schreibe IMMER korrektes Deutsch mit echten Umlauten und Eszett (ä, ö, ü, ß) – NIEMALS Ersatzschreibweisen wie ae, oe, ue, ss. Beispiel: "für" statt "fuer", "können" statt "koennen". Auf Niederlaendisch: korrektes, natuerliches Niederlaendisch.
+- ANREDE: Sieze den Nutzer KONSEQUENT (Sie-Form, niederlaendisch: u-Form). Niemals duzen.
 - Strukturiere deine Antworten fuer beste Lesbarkeit: kurze Absaetze (2-3 Saetze), getrennt durch Leerzeilen.
 - Hebe zentrale Begriffe, Preise und Zeitraeume mit **Fettschrift** hervor (sparsam, 1-3 pro Nachricht).
 - Nutze fuer Aufzaehlungen (Leistungen, Optionen, naechste Schritte) eine Liste mit "- " am Zeilenanfang, max. 5 Punkte, jeder Punkt eine Zeile.
@@ -194,6 +198,7 @@ OFFER_READY_MARKER = "[ANGEBOT_BEREIT]"
 OFFER_PROMPT = """Erstelle aus dem gesamten bisherigen Beratungsgespraech ein INDIVIDUELLES Premium-Angebot als reines JSON (keine Erklaerung, kein Markdown-Zaun) in der Sprache "{language}" mit exakt diesen Feldern:
 {{"title": "praegnanter Projekttitel mit Bezug zum Unternehmen des Kunden", "intro": "3-4 Saetze persoenliche Einleitung an {name}: nimm konkret Bezug auf sein Unternehmen, seine Branche und die im Gespraech genannten Ziele", "summary": ["4-7 Stichpunkte: die im Gespraech geaeusserten Anforderungen und Wuensche des Kunden"], "items": [{{"name": "...", "description": "2-3 Saetze, konkret auf die besprochenen Beduerfnisse zugeschnitten – nenne Branche, Funktionen und Ziele aus dem Gespraech", "days_min": 1, "days_max": 2}}], "recommendation": "2-3 Saetze persoenliche Experten-Empfehlung fuer genau diesen Kunden (sinnvolle Prioritaeten, empfohlene erste Ausbaustufe, was sich besonders lohnt)", "assumptions": ["..."], "next_steps": ["..."]}}
 REGELN:
+- Schreibe IMMER korrekte Umlaute und Eszett (ä, ö, ü, ß) – niemals Ersatzschreibweisen wie ae, oe, ue, ss.
 - Tagessatz 999 EUR netto, realistische Arbeitstage gemaess Leistungskatalog, maximal 5 Positionen.
 - JEDE Position muss erkennbar aus dem Gespraech abgeleitet sein – keine generischen Fuellpositionen.
 - Nicht besprochene Details: KEINE stillen Annahmen im Leistungsumfang – fuehre sie transparent unter assumptions auf.
@@ -346,6 +351,22 @@ def followup_email_html(offer_row, language: str) -> str:
 </td></tr></table></body></html>"""
 
 
+def _smtp_send(to: str, subject: str, html: str) -> str:
+    import smtplib
+    from email.mime.text import MIMEText
+    msg = MIMEText(html, "html", "utf-8")
+    msg["Subject"] = subject
+    msg["From"] = SENDER_EMAIL
+    msg["To"] = to
+    reply_to = os.environ.get("REPLY_TO_EMAIL")
+    if reply_to:
+        msg["Reply-To"] = reply_to
+    with smtplib.SMTP_SSL(os.environ.get("SMTP_HOST", "smtp.hostinger.com"), int(os.environ.get("SMTP_PORT", "465"))) as s:
+        s.login(os.environ["IMAP_USER"], os.environ["IMAP_PASSWORD"])
+        s.send_message(msg)
+    return "smtp"
+
+
 async def send_email(to: str, subject: str, html: str, attachments: list | None = None) -> str | None:
     try:
         params = {"from": SENDER_EMAIL, "to": [to], "subject": subject, "html": html}
@@ -357,8 +378,12 @@ async def send_email(to: str, subject: str, html: str, attachments: list | None 
         result = await asyncio.to_thread(resend.Emails.send, params)
         return result.get("id")
     except Exception as e:
-        logger.error(f"resend send failed: {e}")
-        return None
+        logger.error(f"resend send failed: {e} – trying Hostinger SMTP fallback")
+        try:
+            return await asyncio.to_thread(_smtp_send, to, subject, html)
+        except Exception as e2:
+            logger.error(f"smtp fallback failed: {e2}")
+            return None
 
 
 def offer_pdf_bytes(offer: dict, name: str, company: str | None, language: str, price_total: int) -> bytes:
@@ -501,7 +526,7 @@ TICKET_AI_MIN = int(os.environ.get("TICKET_AI_DELAY_MIN_SECONDS", "180"))
 TICKET_AI_MAX = int(os.environ.get("TICKET_AI_DELAY_MAX_SECONDS", "1800"))
 
 SUPPORT_PROMPT = """Du bist der AI-Support von "NeXify AI by NeXify – chat it. Automate it." (Premium-Agentur fuer Websites, Shops, Apps, AI-Automatisierung; Tagessatz 999 EUR netto, B2B, Inhaber Pascal Courbois, mail@nexifyai.cloud, +31 6 133 188 56).
-Beantworte die folgende Support-Anfrage professionell, konkret und hilfreich in der Sprache der Anfrage (Deutsch oder Niederlaendisch). Max. 180 Woerter, keine Emojis, kein Markdown. Wenn die Anfrage menschliche Pruefung erfordert (Vertraege, Beschwerden, individuelle Preiszusagen), kuendige an, dass sich Pascal Courbois persoenlich meldet. Unterschreibe nicht (Signatur wird automatisch ergaenzt)."""
+Beantworte die folgende Support-Anfrage professionell, konkret und hilfreich in der Sprache der Anfrage (Deutsch oder Niederlaendisch). Schreibe IMMER korrekte Umlaute und Eszett (ä, ö, ü, ß) – niemals ae/oe/ue/ss. Max. 180 Woerter, keine Emojis, kein Markdown. Wenn die Anfrage menschliche Pruefung erfordert (Vertraege, Beschwerden, individuelle Preiszusagen), kuendige an, dass sich Pascal Courbois persoenlich meldet. Unterschreibe nicht (Signatur wird automatisch ergaenzt)."""
 
 
 async def ai_ticket_reply(ticket_id: str, delay_seconds: int | None = None):
@@ -521,10 +546,16 @@ async def ai_ticket_reply(ticket_id: str, delay_seconds: int | None = None):
             if msgs and msgs[-1]["sender"] in ("ai", "admin"):
                 return
         thread = "\n\n".join(f"[{m['sender']}] {m['body']}" for m in msgs)
+        memories = await mem_search(ticket["email"], f"{ticket['subject']} {msgs[-1]['body'][:300]}")
+        mem_block = ("\n\nBEKANNTE INFORMATIONEN UEBER DIESEN KUNDEN aus frueheren Kontakten (nutze sie fuer eine persoenlichere Antwort, erwaehne die Quelle nicht):\n- " + "\n- ".join(memories)) if memories else ""
         reply = await llm_complete([
             {"role": "system", "content": SUPPORT_PROMPT},
-            {"role": "user", "content": f"Betreff: {ticket['subject']}\nName: {ticket['name']}\n\nVerlauf:\n{thread}"},
+            {"role": "user", "content": f"Betreff: {ticket['subject']}\nName: {ticket['name']}\n\nVerlauf:\n{thread}{mem_block}"},
         ], max_tokens=2500)
+        asyncio.create_task(mem_add(ticket["email"], [
+            {"role": "user", "content": f"Support-Anfrage ({ticket['subject']}): {msgs[-1]['body'][:1500]}"},
+            {"role": "assistant", "content": reply[:1500]},
+        ], {"source": "support_ticket"}))
         async with pool.acquire() as con:
             await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'ai',$3)", uuid.uuid4(), uuid.UUID(ticket_id), reply)
             await con.execute("update nexify_tickets set status='answered' where id=$1", uuid.UUID(ticket_id))
@@ -794,6 +825,9 @@ async def request_offer(body: OfferRequestIn):
             f"<p>Angebot <b>{offer.get('title','')}</b> wurde an {body.name} ({body.email}, Firma: {body.company or '-'}) gesendet.<br/>Richtpreis: € {price_total:,}<br/>Session: {body.session_id}</p>",
         ))
     asyncio.create_task(send_account_invite(str(offer_id), body.name, body.email, body.language))
+    convo = [m for m in history if m["role"] in ("user", "assistant")][-12:]
+    if convo:
+        asyncio.create_task(mem_add(body.email, convo, {"source": "offer_chat", "offer_title": offer.get("title", "")}))
     return {
         "status": "sent" if email_id else "generated",
         "offer_id": str(offer_id),
@@ -882,8 +916,10 @@ async def startup():
     await portal.seed_admin(db)
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     agent_mod.init(db, LLM, MIMO_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
+    asyncio.create_task(email_agent.email_worker())
 
 
 @app.on_event("shutdown")
