@@ -1,0 +1,39 @@
+{
+  "summary": "Independent verification of the 'nexifyai' wrapper-script bugfix on the external NeXify AI Platform (https://app.nexifyai.cloud). All 4 backend tests PASSED in 152.81s. Login (better-auth), agent listing, Developer agent wakeup+run, and CEO agent regression run all succeeded end-to-end. The previously reported error 'Failed to start command \"nexifyai\" in \".\"' is fully resolved.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_nexify_agent_wakeup.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Adapter execution code lives on VPS (paperclip-nexify container /app/server/node_modules/hermes-paperclip-adapter/dist/server/execute.js) - not in local /app repo. Ensure the docker-committed image containing the /usr/local/bin/nexifyai wrapper is what the production deployment pulls (verify container image tag/digest is pinned to the committed version, otherwise a restart could revert the fix).",
+    "Recommend adding a startup-time sanity check inside the paperclip container: `command -v nexifyai || echo 'MISSING WRAPPER'` in an entrypoint hook, so silent regressions are surfaced immediately."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_nexify_agent_wakeup.py"
+  ],
+  "success_rate": {
+    "backend": "100% (4/4 pytest tests passed)",
+    "frontend": "not tested (backend-only per request)"
+  },
+  "test_credentials": "mail@nexifyai.cloud / 1def!xO2022!! (better-auth email sign-in, __Secure-paperclip-default.session_token cookie). Company 150dc80b-d302-4d66-8102-142299652c2a, Developer agent 5b78974e-1cc4-49f8-8807-118181714e16, CEO agent ac23ed0a-c87a-4e83-a930-90be7aae1ef2.",
+  "seed_data_creation": "None. Two real heartbeat runs were created against production as part of verification: Developer run e757cff9-583a-48f0-8e7c-ec2d0e5cd87d (succeeded, exitCode 0) and CEO run a6be2152-7385-4898-9983-de0736f29d1c (succeeded, exitCode 0).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "External target only (https://app.nexifyai.cloud) - the local /app FastAPI backend is NOT under test. All POST /wakeup requests REQUIRE 'Origin: https://app.nexifyai.cloud' header (otherwise 403 'Board mutation requires trusted browser origin'). Session cookie is __Secure-* prefixed and only works over HTTPS. Agent runs perform real LLM work and can take 1-4 minutes. Reusable pytest suite at /app/backend/tests/test_nexify_agent_wakeup.py.",
+  "rca of the issue": {
+    "bug": "Agent 'NeXify AI Developer' failed with 'Failed to start command \"nexifyai\" in \".\"' because the hermes adapter (execute.js) spawns `nexifyai chat -q ... -Q` but no `nexifyai` binary was on PATH inside the paperclip-nexify container.",
+    "fix_applied_by_main_agent": "Created /usr/local/bin/nexifyai wrapper script inside the container and persisted the change via `docker commit` into the image.",
+    "verification": "Testing agent independently signed in via better-auth, POSTed to /api/agents/{developerId}/wakeup with Origin header, polled /api/heartbeat-runs/{id} until terminal state. Result: status='succeeded', exitCode=0, error=null. No occurrence of 'Failed to start command' in the run's error field. Regression run on CEO agent (which uses cmd 'hermes' instead of 'nexifyai') also succeeded, confirming no collateral damage.",
+    "mitigation_recommendation": "Bake the wrapper into the Dockerfile (not just docker-commit) and pin the image digest in the deployment manifest to prevent regression on future rebuilds."
+  }
+}
