@@ -23,7 +23,17 @@ export default function LoginPage() {
     try {
       const user = await api("/api/auth/login", { method: "POST", body: JSON.stringify(form) });
       setUser(user);
-      router.push(user.role === "admin" ? "/admin" : "/konto");
+      if (user.role === "admin") {
+        try {
+          const { url } = await api("/api/admin/webui-sso");
+          window.location.href = url;
+          return;
+        } catch {
+          router.push("/admin");
+        }
+      } else {
+        router.push("/konto");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
