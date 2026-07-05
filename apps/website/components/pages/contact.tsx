@@ -13,7 +13,7 @@ export function ContactPage() {
   const nl = lang === "nl";
 
   return (
-    <main className="pb-10 pt-36" data-testid="contact-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="contact-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.contact.eyebrow}</span>

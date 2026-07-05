@@ -252,7 +252,7 @@ export function ChatWidget() {
           </div>
 
           <div className="border-t border-white/10 px-4 py-3">
-            {!showOffer && offerState !== "sent" && offerState !== "generated" && (offerReady || messages.filter((m) => m.role === "user").length >= 4) && (
+            {!showOffer && offerState !== "sent" && offerState !== "generated" && (offerReady || messages.filter((m) => m.role === "user").length >= 3) && (
               <button
                 className="mb-2.5 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] py-2 text-xs font-semibold text-zinc-300 transition-all hover:border-white/30 hover:text-white"
                 onClick={() => setShowOffer(true)}

@@ -10,7 +10,7 @@ export function FaqPage() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <main className="pb-10 pt-36" data-testid="faq-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="faq-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.faqPage.eyebrow}</span>

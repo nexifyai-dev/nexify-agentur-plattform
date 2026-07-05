@@ -100,7 +100,7 @@ export function CallbackPage() {
 
   if (booked) {
     return (
-      <main className="pb-24 pt-40" data-testid="callback-page">
+      <main className="pb-16 pt-28 md:pb-24 md:pt-40" data-testid="callback-page">
         <div className="site-container max-w-xl text-center">
           <Reveal>
             <div className="glass p-12" data-testid="booking-success">
@@ -118,7 +118,7 @@ export function CallbackPage() {
   }
 
   return (
-    <main className="pb-24 pt-36" data-testid="callback-page">
+    <main className="pb-16 pt-28 md:pb-24 md:pt-36" data-testid="callback-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.eyebrow}</span>

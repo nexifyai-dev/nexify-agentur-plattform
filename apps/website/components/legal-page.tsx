@@ -11,7 +11,7 @@ export function LegalPageView({ slug }: { slug: string }) {
   const updatedLabel = lang === "nl" ? "Laatst bijgewerkt" : "Stand";
 
   return (
-    <main className="pb-10 pt-36" data-testid={`legal-page-${slug}`}>
+    <main className="pb-10 pt-28 md:pt-36" data-testid={`legal-page-${slug}`}>
       <div className="site-container">
         <div className="max-w-3xl">
           <span className="eyebrow">{lang === "nl" ? "Juridisch" : "Rechtliches"}</span>
