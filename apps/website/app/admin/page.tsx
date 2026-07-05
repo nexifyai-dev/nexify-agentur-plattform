@@ -38,6 +38,22 @@ export default function AdminPage() {
   const [tickets, setTickets] = useState<AdminTicket[]>([]);
   const [mail, setMail] = useState({ to: "", subject: "", body: "" });
   const [mailState, setMailState] = useState("");
+  const [ssoBusy, setSsoBusy] = useState(false);
+
+  const openWebui = useCallback(async () => {
+    setSsoBusy(true);
+    const win = window.open("", "_blank");
+    try {
+      const { url } = await api("/api/admin/webui-sso");
+      if (win) win.location.href = url;
+      else window.location.href = url;
+    } catch {
+      if (win) win.location.href = WEBUI_URL;
+      else window.location.href = WEBUI_URL;
+    } finally {
+      setSsoBusy(false);
+    }
+  }, []);
 
   const loadLeads = useCallback(() => api("/api/admin/leads").then(setLeads).catch(() => {}), []);
 
@@ -97,15 +113,14 @@ export default function AdminPage() {
             <h1 className="mt-3 font-[family-name:var(--font-heading)] text-4xl font-light text-white">NeXify Cockpit</h1>
           </div>
           <div className="flex items-center gap-2.5">
-            <a
-              href={WEBUI_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={openWebui}
+              disabled={ssoBusy}
               className="btn-primary !py-2.5 !text-[13px]"
               data-testid="open-hermes-webui-btn"
             >
-              <Sparkles size={14} /> NeXify AI ADMIN öffnen
-            </a>
+              <Sparkles size={14} /> {ssoBusy ? "Öffne …" : "NeXify AI ADMIN öffnen"}
+            </button>
             <button className="btn-ghost !py-2.5 !text-[13px]" onClick={logout} data-testid="admin-logout-btn">
               <LogOut size={14} /> Abmelden
             </button>

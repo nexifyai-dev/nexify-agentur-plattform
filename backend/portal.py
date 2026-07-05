@@ -189,6 +189,19 @@ async def logout(response: Response):
     return {"status": "ok"}
 
 
+@router.get("/api/admin/webui-sso")
+async def webui_sso(_: dict = Depends(get_admin)):
+    import hmac, hashlib, time, secrets
+    sso_secret = os.environ.get("WEBUI_SSO_SECRET")
+    base_url = os.environ.get("WEBUI_SSO_URL")
+    if not sso_secret or not base_url:
+        raise HTTPException(status_code=503, detail="SSO nicht konfiguriert")
+    msg = f"{int(time.time()) + 60}:{secrets.token_hex(8)}"
+    sig = hmac.new(sso_secret.encode(), msg.encode(), hashlib.sha256).hexdigest()
+    return {"url": f"{base_url}?t={msg}.{sig}"}
+
+
+
 @router.get("/api/auth/me")
 async def me(user: dict = Depends(get_current_user)):
     return user
