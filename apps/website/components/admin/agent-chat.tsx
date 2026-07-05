@@ -11,7 +11,7 @@ type Task = { id: string; title: string; instruction: string; run_at: string; st
 const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" });
 
 function ActionChip({ content }: { content: string }) {
-  let a: any = null;
+  let a: { tool?: string; ok?: boolean; summary?: string } | null = null;
   try { a = JSON.parse(content); } catch { return null; }
   if (!a?.tool) return null;
   return (
@@ -69,8 +69,8 @@ export function AgentChat() {
         const st = await api("/api/admin/agent/status").catch(() => ({ busy: true }));
         if (!st.busy) break;
       }
-    } catch (e: any) {
-      setMsgs((m) => [...m, { id: `err-${Date.now()}`, role: "assistant", content: `Fehler: ${e.message}`, created_at: new Date().toISOString() }]);
+    } catch (e) {
+      setMsgs((m) => [...m, { id: `err-${Date.now()}`, role: "assistant", content: `Fehler: ${e instanceof Error ? e.message : String(e)}`, created_at: new Date().toISOString() }]);
     }
     setBusy(false);
     load();

@@ -14,7 +14,7 @@ const AuthContext = createContext<{ user: User | null | false; setUser: (u: User
 export function apiErr(detail: unknown): string {
   if (detail == null) return "Etwas ist schiefgelaufen. Bitte erneut versuchen.";
   if (typeof detail === "string") return detail;
-  if (Array.isArray(detail)) return detail.map((e: any) => (e && typeof e.msg === "string" ? e.msg : JSON.stringify(e))).join(" ");
+  if (Array.isArray(detail)) return detail.map((e: unknown) => (e && typeof e === "object" && "msg" in e && typeof e.msg === "string" ? e.msg : JSON.stringify(e))).join(" ");
   return String(detail);
 }
 
@@ -25,7 +25,7 @@ export async function api(path: string, options: RequestInit = {}) {
     ...options,
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(apiErr((data as any)?.detail));
+  if (!res.ok) throw new Error(apiErr((data as { detail?: unknown })?.detail));
   return data;
 }
 

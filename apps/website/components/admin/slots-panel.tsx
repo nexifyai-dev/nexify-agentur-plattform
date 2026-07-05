@@ -26,8 +26,8 @@ export function SlotsPanel() {
       setWhen("");
       load();
       setTimeout(() => setState(""), 2500);
-    } catch (e: any) {
-      setState(e.message);
+    } catch (e) {
+      setState(e instanceof Error ? e.message : String(e));
     }
   };
 

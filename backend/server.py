@@ -253,6 +253,9 @@ async def save_message(session_id: str, role: str, content: str):
 
 def get_history(session_id: str, language: str) -> list[dict]:
     if session_id not in HISTORY:
+        if len(HISTORY) > 500:
+            for old_key in list(HISTORY.keys())[:100]:
+                HISTORY.pop(old_key, None)
         HISTORY[session_id] = [
             {"role": "system", "content": SYSTEM_PROMPT.replace("{language}", "Niederlaendisch" if language == "nl" else "Deutsch")}
         ]

@@ -51,7 +51,7 @@ function StatusBadge({ status, t }: { status: string; t: (typeof T)["de"] }) {
   };
   return (
     <span className={`rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-widest ${map[status] ?? map.sent}`} data-testid="offer-status-badge">
-      {(t as any)[status] ?? status}
+      {(t as Record<string, string>)[status] ?? status}
     </span>
   );
 }
@@ -93,8 +93,8 @@ function OfferCard({ offer, t, onChanged }: { offer: Offer; t: (typeof T)["de"];
     try {
       const d = await api(`/api/portal/offers/${offer.id}/pay`, { method: "POST" });
       if (d.checkout_url) window.location.href = d.checkout_url;
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }

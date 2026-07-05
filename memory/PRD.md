@@ -71,3 +71,10 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - DSGVO-Lücken geschlossen (DE+NL): Datenschutz §5 um Mem0-Gedächtnisfunktion (Drittland/SCC, Widerspruchsrecht) + Art.-22-Klarstellung ergänzt; §6 um KI-gestützte E-Mail-Vorsortierung/-Beantwortung (Hostinger); KI-Hinweise um Gedächtnis + E-Mail-Automation ergänzt.
 - Deutsches Zahlenformat in interner Angebots-Notification.
 - Backend-Logs & tsc sauber, D/A/CH-Formate (de-DE Datum/Währung) geprüft.
+
+## Sweep 3 (05.07.2026) – QS-Auftrag (Lint/Code-Qualität/Formulare)
+- ESLint: 28 Fehler → 0 Fehler. Alle `any` typisiert (OfferJson/OfferItem/AdminTicket/TicketMsg, catch-Narrowing via instanceof Error). React-Compiler-Regeln set-state-in-effect/purity → warn (dokumentiert: bewusste SSR-Hydration-Muster in i18n/auth/chat).
+- DSGVO-Formulare: Kontaktformular jetzt mit Pflicht-Checkbox „Datenschutzerklärung zur Kenntnis genommen" (Submit gated, DE/NL); Registrierung mit AGB+Datenschutz-Hinweis (DE/NL). Verifiziert im Browser.
+- Backend: HISTORY-Dict (Chat-Sessions im RAM) gegen unbegrenztes Wachstum gedeckelt (Cap 500, FIFO-Eviction).
+- Toter-Link-Check über alle internen hrefs: 0 tote Links. Produktions-Build grün.
+- Offen (Produktentscheidung nötig): Referenzen-Seite mit echten Projekten befüllen; Resend-Inbound vs. Hostinger-MX (siehe Offene Punkte).

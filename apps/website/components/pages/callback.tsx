@@ -92,8 +92,8 @@ export function CallbackPage() {
       });
       setBooked(d.formatted);
       setState("");
-    } catch (e: any) {
-      setState(e.message);
+    } catch (e) {
+      setState(e instanceof Error ? e.message : String(e));
       api("/api/booking/slots").then(setSlots).catch(() => {});
     }
   };

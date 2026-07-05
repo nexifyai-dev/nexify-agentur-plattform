@@ -22,8 +22,8 @@ export function CreateOfferForm({ onDone }: { onDone: () => void }) {
       setF({ name: "", email: "", company: "", language: "de", title: "", intro: "" });
       setItems([{ name: "", description: "", days_min: 1, days_max: 1 }]);
       onDone();
-    } catch (e: any) {
-      setState(e.message);
+    } catch (e) {
+      setState(e instanceof Error ? e.message : String(e));
     }
   };
 
@@ -74,8 +74,8 @@ export function ProspectForm() {
       const d = await api("/api/admin/prospects", { method: "POST", body: JSON.stringify({ ...f, company: f.company || null, phone: f.phone || null, note: f.note || null }) });
       setState(d.status === "invited" ? "invited" : d.note ?? "ok");
       setF({ name: "", email: "", company: "", phone: "", language: "de", note: "" });
-    } catch (e: any) {
-      setState(e.message);
+    } catch (e) {
+      setState(e instanceof Error ? e.message : String(e));
     }
   };
   return (
