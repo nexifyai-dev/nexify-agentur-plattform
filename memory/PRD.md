@@ -78,3 +78,8 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - Backend: HISTORY-Dict (Chat-Sessions im RAM) gegen unbegrenztes Wachstum gedeckelt (Cap 500, FIFO-Eviction).
 - Toter-Link-Check über alle internen hrefs: 0 tote Links. Produktions-Build grün.
 - Offen (Produktentscheidung nötig): Referenzen-Seite mit echten Projekten befüllen; Resend-Inbound vs. Hostinger-MX (siehe Offene Punkte).
+
+## Feature: AI-Projektplaner (05.07.2026)
+- `/preise`: neue Sektion `ProjectPlanner` (components/project-planner.tsx, DE/NL) – Projekttyp-Karten mit Live-Preisspannen, geführte Eingabe (Branche, Ziel, Feature-Chips, Details), AI generiert Projektplan (Module mit Tagen/€, erster Struktur-Entwurf, 5 Phasen, Empfehlung, Gesamtspanne).
+- Backend: `POST /api/planner/plan` (server.py) – LLM-Plan als JSON, legt Chat-Session an und seeded HISTORY, sodass das bestehende `POST /api/offers/request` daraus das vollwertige individuelle Angebot (PDF, E-Mail, Lead, Konto-Einladung, Mem0) erzeugt.
+- E2E getestet: Plan-Generierung (Bäckerei-Szenario, branchenspezifische Struktur inkl. Allergene) + Angebot aus Planner-Session (Steuerberatung, status sent). Mobile ohne Overflow, tsc/lint sauber.

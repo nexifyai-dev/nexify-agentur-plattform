@@ -233,6 +233,15 @@ class OfferRequestIn(BaseModel):
     language: str = "de"
 
 
+class PlannerIn(BaseModel):
+    project_type: str
+    industry: str
+    goal: str
+    features: list[str] = []
+    details: str | None = None
+    language: str = "de"
+
+
 async def db() -> asyncpg.Pool | None:
     return DB_POOL
 
@@ -673,6 +682,63 @@ async def resend_inbound(request: Request):
         return {"status": "ignored"}
     asyncio.create_task(process_inbound_email(payload.get("data") or {}))
     return {"status": "ok"}
+
+
+PLANNER_PROMPT = """Du bist der AI-Projektplaner von NeXify AI. Erstelle aus den Angaben des Interessenten einen professionellen, individuellen Projektplan als reines JSON (keine Erklaerung, kein Markdown-Zaun) in der Sprache "{language}" mit exakt diesen Feldern:
+{{"title": "praegnanter Projekttitel mit Branchenbezug", "summary": "3-4 Saetze: was gebaut wird, fuer wen und welchen Nutzen es bringt – konkret auf Branche und Ziel bezogen", "modules": [{{"name": "...", "description": "1-2 Saetze konkret", "days_min": 1, "days_max": 2}}], "structure": ["erster inhaltlicher Entwurf: bei Websites/Shops die empfohlene Seiten-/Kategoriestruktur, bei Apps/Automatisierung die Kernscreens bzw. Workflow-Schritte – 5-9 Punkte"], "phases": [{{"name": "Phase", "text": "1 Satz"}}], "recommendation": "2-3 Saetze Experten-Empfehlung: sinnvolle erste Ausbaustufe, Prioritaeten, was sich besonders lohnt"}}
+REGELN:
+- Schreibe IMMER korrekte Umlaute und Eszett (ä, ö, ü, ß), Sie-Form (NL: u-Form).
+- Tagessatz 999 EUR netto. Realistische Arbeitstage gemaess Leistungskatalog: Landingpage 1 Tag, Unternehmenswebsite 2-3, Onlineshop 6-8, Enterprise-Commerce ab 12, Web-App 6-8, Mobile App 6-8, AI-Automatisierung ab 1, AI-Agenten ab 3.
+- 3-5 Module, jedes erkennbar aus den Angaben abgeleitet, keine generischen Fuellpositionen.
+- 4-5 Phasen entlang des NeXify-Prozesses (Ziel klaeren, Konzept, Umsetzung, Tests/Abnahme, Uebergabe)."""
+
+
+@app.post("/api/planner/plan")
+async def planner_plan(body: PlannerIn):
+    session_id = str(uuid.uuid4())
+    pool = await db()
+    if pool:
+        try:
+            async with pool.acquire() as con:
+                await con.execute("insert into nexify_chat_sessions (id, language) values ($1,$2)", uuid.UUID(session_id), body.language)
+        except Exception as e:
+            logger.warning(f"planner session insert failed: {e}")
+    brief = (
+        f"Projekttyp: {body.project_type}\nBranche: {body.industry}\nZiel: {body.goal}\n"
+        f"Gewuenschte Funktionen: {', '.join(body.features) if body.features else 'keine Angabe'}\n"
+        f"Weitere Details: {body.details or 'keine'}"
+    )
+    try:
+        raw = await llm_complete([
+            {"role": "system", "content": PLANNER_PROMPT.format(language=body.language)},
+            {"role": "user", "content": brief},
+        ], max_tokens=3000)
+    except Exception as e:
+        logger.error(f"planner llm failed: {e}")
+        raise HTTPException(status_code=502, detail="plan generation failed")
+    raw = raw.strip()
+    start, end = raw.find("{"), raw.rfind("}")
+    if start == -1 or end == -1:
+        raise HTTPException(status_code=502, detail="plan parse failed")
+    try:
+        plan = json.loads(raw[start:end + 1])
+    except Exception:
+        raise HTTPException(status_code=502, detail="plan parse failed")
+    days_min = sum(int(m.get("days_min", 1)) for m in plan.get("modules", []))
+    days_max = sum(int(m.get("days_max", m.get("days_min", 1))) for m in plan.get("modules", []))
+    history = get_history(session_id, body.language)
+    history.append({"role": "user", "content": f"[AI-Projektplaner ausgefuellt]\n{brief}"})
+    history.append({"role": "assistant", "content": f"Ich habe folgenden Projektplan erstellt: {json.dumps(plan, ensure_ascii=False)[:2500]}"})
+    await save_message(session_id, "user", f"[AI-Projektplaner]\n{brief}")
+    await save_message(session_id, "assistant", f"Projektplan: {plan.get('title','')} ({days_min}-{days_max} Arbeitstage)")
+    return {
+        "session_id": session_id,
+        "plan": plan,
+        "days_min": days_min,
+        "days_max": days_max,
+        "price_min": days_min * 999,
+        "price_max": days_max * 999,
+    }
 
 
 @app.post("/api/chat/session")
