@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check, Minus } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { ProjectPlanner } from "@/components/project-planner";
 import { useContent } from "@/lib/content";
 
 const fmt = (n: number) => `€ ${n.toLocaleString("de-DE")}`;
@@ -139,6 +140,12 @@ export function PricingPage() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal>
+          <div className="mt-16">
+            <ProjectPlanner />
+          </div>
+        </Reveal>
 
         <p className="mt-10 text-sm text-zinc-600">{t.pricing.vatNote}</p>
       </div>
