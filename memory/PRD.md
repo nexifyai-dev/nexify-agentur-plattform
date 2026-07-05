@@ -105,3 +105,11 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - P1: Autonome E-Mail-Verarbeitung läuft bereits (email_agent.py) — Integration/Sichtbarkeit im Hermes-ADMIN prüfen.
 - P2: PDF-Angebote direkt aus Hermes WebUI.
 - Backlog: Revolut-E2E, Referenzen-Seite.
+
+## Session 05.07.2026 (Fork 2, Teil 2) – ADMIN-Konsolidierung (a) + 9router
+- **User-Entscheid**: (a) SSO-Embed des bestehenden Admin-Cockpits in die Hermes WebUI JETZT; (b) native Hermes-Panels erst am Gesamt-Ende.
+- **CRM-SSO-Rückweg live** (bidirektional, same-tab): Neuer WebUI-Sidebar-Tab „CRM & Agentur" (data-testid webui-crm-tab, index.html host-persistent) → WebUI-Route `/crm` (One-Time-HMAC, CRM_SSO_SECRET) → FastAPI `GET /api/auth/sso-consume` (portal.py: HMAC + Nonce-Replay-Schutz + set_auth_cookies) → 302 /admin eingeloggt. Rückweg existierte bereits („NeXify AI ADMIN öffnen"). Secrets: CRM_SSO_SECRET in backend/.env + /root/hermes-webui-nexify/.env, CRM_ADMIN_URL=https://www.nexifyai.cloud. KEINE Next.js/Vercel-Änderung nötig.
+- **9router-Vollintegration**: Alle 21 Modelle im WebUI-Model-Picker (Gruppe AI-ROUTER.NEXIFYAI.CLOUD, live auto-detected). Funktionsmatrix: ds/*, vercel/zai/glm-5.2, nexifyai-combo-llm ✅; mimo/* = 402 (MiMo-Guthaben leer, User-Thema); xmtp/* = 401 (Upstream-Key im 9router ungültig).
+- **Phantom-Provider-Bug (iteration_6) strukturell behoben**: OPENAI_API_KEY enthielt den 9router-Key → falsche „openai"-Provider-Karten → „No active credentials"-Fehler. Fix: OPENAI_API_KEY aus hermes .env, HERMES_HOME/.env, compose entfernt + Image-Default via compose `OPENAI_API_KEY=` (leer) überschrieben (docker commit hatte alte Env eingebrannt — Merke: bei commit-basierten Images env-Overrides im compose setzen!). Provider mit Key jetzt exakt: custom:ai-router + xiaomi.
+- **Testing (iteration_8.json, 6/6 PASS)**: SSO-Security 5/5 via testing_agent (Replay/Fake/Cookie-Schutz), 9router 2/2 via testing_agent, CRM-Browser-E2E + Chat-Streaming (13.2 t/s) + DIN-Alias- & NL-Regression via Selbsttest.
+- **P2-Härtung (Backlog, aus Code-Review)**: SSO-Nonces persistieren (DB statt RAM); Admin-Identität in HMAC-Token einbetten statt „ältester Admin".

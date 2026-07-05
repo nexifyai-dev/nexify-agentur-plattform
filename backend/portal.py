@@ -201,6 +201,44 @@ async def webui_sso(_: dict = Depends(get_admin)):
     return {"url": f"{base_url}?t={msg}.{sig}"}
 
 
+SSO_NONCES: dict[str, float] = {}
+
+
+@router.get("/api/auth/sso-consume")
+async def sso_consume(t: str = ""):
+    """Rückweg-SSO: Hermes WebUI -> CRM/Admin (One-Time-HMAC, same-tab)."""
+    import hmac, hashlib, time
+    from fastapi.responses import RedirectResponse
+
+    def _fail():
+        return RedirectResponse("/login?sso=invalid", status_code=302)
+
+    sso_secret = os.environ.get("CRM_SSO_SECRET")
+    if not sso_secret or not t:
+        return _fail()
+    try:
+        msg, sig = t.rsplit(".", 1)
+        exp_str, nonce = msg.split(":", 1)
+        expected = hmac.new(sso_secret.encode(), msg.encode(), hashlib.sha256).hexdigest()
+        now = time.time()
+        for k in [k for k, v in SSO_NONCES.items() if v < now]:
+            SSO_NONCES.pop(k, None)
+        if not hmac.compare_digest(sig, expected) or int(exp_str) < now or nonce in SSO_NONCES:
+            return _fail()
+        SSO_NONCES[nonce] = now + 300
+    except Exception:
+        return _fail()
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
+    if not row:
+        return _fail()
+    resp = RedirectResponse("/admin", status_code=302)
+    resp.headers["Cache-Control"] = "no-store"
+    set_auth_cookies(resp, str(row["id"]), row["email"], row["role"])
+    return resp
+
+
 
 @router.get("/api/auth/me")
 async def me(user: dict = Depends(get_current_user)):
