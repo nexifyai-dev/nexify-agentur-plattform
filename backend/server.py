@@ -52,6 +52,14 @@ DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
 LLM = AsyncOpenAI(base_url=MIMO_BASE_URL, api_key=MIMO_API_KEY)
 
+NINEROUTER_BASE_URL = os.environ.get("NINEROUTER_BASE_URL")
+NINEROUTER_API_KEY = os.environ.get("NINEROUTER_API_KEY")
+NINEROUTER_MODEL = os.environ.get("NINEROUTER_MODEL", "ds/deepseek-v4-pro")
+LLM_FALLBACK = (
+    AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
+    if NINEROUTER_BASE_URL and NINEROUTER_API_KEY else None
+)
+
 SCHEMA = """
 create table if not exists nexify_leads (
   id uuid primary key,
@@ -272,8 +280,28 @@ def get_history(session_id: str, language: str) -> list[dict]:
 
 
 async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
-    resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
-    return resp.choices[0].message.content or ""
+    try:
+        resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
+        content = resp.choices[0].message.content or ""
+        if content.strip():
+            return content
+        raise RuntimeError("empty LLM response")
+    except Exception as e:
+        if not LLM_FALLBACK:
+            raise
+        logger.warning(f"primary LLM failed ({e}); routing via 9router fallback ({NINEROUTER_MODEL})")
+        resp = await LLM_FALLBACK.chat.completions.create(model=NINEROUTER_MODEL, messages=messages, max_tokens=max_tokens)
+        return resp.choices[0].message.content or ""
+
+
+async def open_chat_stream(messages: list[dict], max_tokens: int):
+    try:
+        return await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+    except Exception as e:
+        if not LLM_FALLBACK:
+            raise
+        logger.warning(f"primary chat stream failed ({e}); routing via 9router fallback ({NINEROUTER_MODEL})")
+        return await LLM_FALLBACK.chat.completions.create(model=NINEROUTER_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
 
 
 def offer_email_html(offer: dict, name: str, language: str, price_total: int) -> str:
@@ -765,9 +793,7 @@ async def chat(body: ChatMessageIn):
         hold = len(OFFER_READY_MARKER) + 8
         pending = ""
         try:
-            stream = await LLM.chat.completions.create(
-                model=MIMO_MODEL, messages=history, max_tokens=3000, stream=True,
-            )
+            stream = await open_chat_stream(history, 3000)
             async for chunk in stream:
                 delta = chunk.choices[0].delta if chunk.choices else None
                 content = getattr(delta, "content", None) if delta else None

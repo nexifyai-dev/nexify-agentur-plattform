@@ -83,3 +83,11 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - `/preise`: neue Sektion `ProjectPlanner` (components/project-planner.tsx, DE/NL) – Projekttyp-Karten mit Live-Preisspannen, geführte Eingabe (Branche, Ziel, Feature-Chips, Details), AI generiert Projektplan (Module mit Tagen/€, erster Struktur-Entwurf, 5 Phasen, Empfehlung, Gesamtspanne).
 - Backend: `POST /api/planner/plan` (server.py) – LLM-Plan als JSON, legt Chat-Session an und seeded HISTORY, sodass das bestehende `POST /api/offers/request` daraus das vollwertige individuelle Angebot (PDF, E-Mail, Lead, Konto-Einladung, Mem0) erzeugt.
 - E2E getestet: Plan-Generierung (Bäckerei-Szenario, branchenspezifische Struktur inkl. Allergene) + Angebot aus Planner-Session (Steuerberatung, status sent). Mobile ohne Overflow, tsc/lint sauber.
+
+## VPS-Infrastruktur & 9router-Integration (05.07.2026)
+- **SSH-Zugang zum Produktions-VPS** eingerichtet (srv1243952 / 72.62.152.47) via Hostinger-API. Details + Ops-Runbook in `/app/memory/VPS_INFRA.md`.
+- **5 crash-loopende systemd-Dienste behoben** (0 failed danach, Last 11→8): hermes-gateway (130k+ Restarts, Lock-Konflikt → autoritativ+reboot-sicher), nexify-gateway (systemd-Redirect-Bug → disabled), cloudflared-brain (Tunnel-Duplikat → disabled), cloudflared-dns (proxy-dns abgeschafft → natives DoT), cloudflared-paperclip (YAML-Fix → ai-team wieder erreichbar). Backups unter /root/config-backups/.
+- **9router verifiziert**: 7 Provider, 21 Modelle, bereits als Hermes-LLM-Backend verdrahtet. Extern erreichbar via ai-router.nexifyai.cloud.
+- **Website-9router-Integration**: `server.py` `llm_complete()`+`open_chat_stream()` mit Auto-Fallback (MiMo primär → 9router `ds/deepseek-chat` bei Fehler/leerer Antwort). Verifiziert. Schützt vor MiMo-Guthaben-Ausfall (mimo sk-Konto aktuell 402).
+- Routing-Erkenntnis: Website läuft auf Vercel; alle *.nexifyai.cloud-Dienste via Cloudflare-Tunnel (nicht nginx). webui/work.nexifyai.cloud = gebrandete Hermes WebUI (:8787) = „NeXify AI ADMIN".
+- **Offen (P1/P2)**: SSO Website-ADMIN→WebUI (Hermes-Auth-Fähigkeit prüfen), Design-Transfer CI→Hermes WebUI (custom.css).
