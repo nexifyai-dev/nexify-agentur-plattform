@@ -91,3 +91,17 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - **Website-9router-Integration**: `server.py` `llm_complete()`+`open_chat_stream()` mit Auto-Fallback (MiMo primär → 9router `ds/deepseek-chat` bei Fehler/leerer Antwort). Verifiziert. Schützt vor MiMo-Guthaben-Ausfall (mimo sk-Konto aktuell 402).
 - Routing-Erkenntnis: Website läuft auf Vercel; alle *.nexifyai.cloud-Dienste via Cloudflare-Tunnel (nicht nginx). webui/work.nexifyai.cloud = gebrandete Hermes WebUI (:8787) = „NeXify AI ADMIN".
 - **Offen (P1/P2)**: SSO Website-ADMIN→WebUI (Hermes-Auth-Fähigkeit prüfen), Design-Transfer CI→Hermes WebUI (custom.css).
+
+## Session 05.07.2026 (Fork 2) – VPS/Fabrik-Stabilisierung
+- **P0 Paperclip-Agent-Fix verifiziert**: `Failed to start command "nexifyai"` behoben. Wrapper `/usr/local/bin/nexifyai` (exec hermes) dreifach persistiert: docker commit `paperclip-nexify:latest`, Dockerfile `/workspace/paperclip-by-nexifyai/Dockerfile` (COPY scripts/nexifyai), Skript im Build-Repo. Unabhängig verifiziert durch testing_agent (iteration_7.json, 4/4 PASS: Login, Agentenliste, Developer-Run succeeded/exitCode 0, CEO-Regression succeeded).
+- **DIN NX-900-03 API-GAPs geschlossen** (Hermes WebUI, webui.nexifyai.cloud): NEU `GET /api/kanban/tasks` (+?status=), `GET /api/tasks` (Alias), `GET /api/agents`, `GET /api/brain` (+category/collection/limit), `GET /api/brain/search?q=` (Proxy auf nexify-brain :9090, dort NEU `GET /memories`). Alle hinter Auth (401 ohne Session). Patches in /apptoo (rsync-Quelle) + docker commit `hermes-webui-nexify-hermes-webui-1:with-deps`. Brain-Patch auf Host /opt/nexify/brain/server.py (systemd, persistent).
+- **NL (Nederlands) i18n komplett**: 1.290 Keys DE→NL automatisiert via 9router (ds/deepseek-chat) mit Key-Paritäts-Validierung + Bisektion, in `/root/hermes-webui-nexify/static/i18n.js` (host-persistent) als `nl:`-Locale eingefügt. Login-Locale "nl" in routes.py ergänzt. UI verifiziert (Screenshot: "Hoe kan ik helpen?"). Paperclip/Fabrik hat upstream-natives nl.json (i18next) — nichts nötig.
+- **Cloudflare-Cache-Root-Cause behoben**: Statische Assets wurden mit `?v=unknown` + `immutable, max-age=1y` am CF-Edge eingefroren (Updates kamen nie an). Fix: (1) CF-Purge prefix webui.nexifyai.cloud/static/, (2) nexify-prestart.sh stempelt jetzt pro Boot `__version__ = 'nexify-<timestamp>'` in /apptoo/api/_version.py → Asset-URLs rotieren pro Neustart.
+- WebUI-Sprache auf de zurückgesetzt (nl als Option verfügbar).
+
+### Offen (nächste Session)
+- P1: Migration alte ADMIN-Panels (CRM/Leads, Angebote, Termine, Tickets, Queen-Board) in Hermes WebUI — Architektur-Entscheid nötig: SSO-Embed vs. native Panels.
+- P2: 9router-Modelle als Provider in Hermes-WebUI-Settings konfigurierbar.
+- P1: Autonome E-Mail-Verarbeitung läuft bereits (email_agent.py) — Integration/Sichtbarkeit im Hermes-ADMIN prüfen.
+- P2: PDF-Angebote direkt aus Hermes WebUI.
+- Backlog: Revolut-E2E, Referenzen-Seite.
