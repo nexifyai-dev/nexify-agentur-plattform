@@ -43,11 +43,13 @@
 - Code: `server.py` `llm_complete()` + `open_chat_stream()` fangen Fehler/leere Antwort ab → 9router. Verifiziert (401→Fallback liefert sauberes Deutsch).
 
 ## Offen (P1/P2)
-- **SSO – Analyse abgeschlossen (05.07.)**: Hermes WebUI (`/app/api/auth.py`,`routes.py`) nutzt Passwort (PBKDF2, `HERMES_WEBUI_PASSWORD`) + Passkeys + HMAC-signierte Session-Cookies (`{token}.{sig}`, sig=HMAC(signing_key,token)). KEIN generisches OIDC/Trusted-Header-User-Login. `oauth.py` = nur Provider-Onboarding (Codex/Claude), NICHT User-Login. `/api/auth/sso` = 401 (catch-all, kein echter SSO-Ingress).
-  → Phase-1 (LIVE): rollen-geschützter Button „NeXify AI ADMIN öffnen" im Website-Admin (`app/admin/page.tsx`, `NEXT_PUBLIC_WEBUI_URL`, default webui.nexifyai.cloud).
-  → Phase-2 (echtes Auto-Login): erfordert NEUEN SSO-Endpoint IN der Hermes WebUI, der einen HMAC-Token der Website (shared secret) verifiziert und eine Session mintet (nutzt vorhandenes `_signing_key()`/`_sessions`). Änderung am proprietären Code + Image-Rebuild nötig → Nutzer-Entscheidung ausstehend.
-- **Design-Transfer – WICHTIGE KLÄRUNG**: `webui.nexifyai.cloud` + `work` = **Hermes WebUI** (:8787, custom, Login-HTML in `routes.py`). Das `nexify-webui`-Open-WebUI (:3090, WEBUI_NAME „NeXify AI by NeXify", custom.css-Mount) ist NICHT getunnelt/aktiv. custom.css greift nur bei Open WebUI. Ziel-WebUI + Persistenzweg (Image-Rebuild) mit Nutzer klären.
-- MiMo-sk-Konto: umgangen – Website läuft jetzt primär über 9router-Combo, MiMo (token-plan) nur noch Fallback.
+- **SSO – UMGESETZT & E2E-verifiziert (05.07.)**: Website-Admin → Einmal-HMAC-Token (60s, Nonce gegen Replay) → Hermes-WebUI `/api/auth/sso` → `create_session()` + Cookie → eingeloggt.
+  - WebUI-Patch (Basis-Repo `/root/hermes-webui-nexify`): `api/auth.py` PUBLIC_PATHS + `api/routes.py` `handle_get` SSO-Block + Nonce-Store (Marker `# NEXIFY-SSO`). Secret `HERMES_WEBUI_SSO_SECRET` in dessen `.env` (via env_file). Image `docker compose build && up -d`. Backup: `/root/config-backups/*-webui-sso`.
+  - Website: `portal.py` `GET /api/admin/webui-sso` (admin-gated, mintet Token) + `app/admin/page.tsx` Button `openWebui()`. Secret gespiegelt in `/app/backend/.env` (`WEBUI_SSO_SECRET`, `WEBUI_SSO_URL`).
+  - ⚠️ `HERMES_WEBUI_PASSWORD` im Container leer → manueller Passwort-Login evtl. nicht nutzbar; SSO ist der vorgesehene Weg. Bei Bedarf Passwort in `/root/hermes-webui-nexify/.env` setzen.
+- **Design-Transfer – Login UMGESETZT (05.07.)**: `_LOGIN_PAGE_HTML` in `routes.py` auf NeXify-CI rethemt (#09090b, Silber-Logo/Button, Outfit+Manrope via Google Fonts). Verifiziert. Marker `--silver:#d4d4d8`.
+  - OFFEN: Voller App-Shell-Retheme (`nexify-overlay/static/style.css`, 374 KB) – große Einzelaufgabe; Shell trägt bereits „NeXify AI"-Branding.
+- MiMo-sk-Konto: umgangen – Website primär über 9router-Combo, MiMo (token-plan) nur Fallback.
 
 ## Website-LLM (mein /app-Backend) – 9router als Primär (05.07. aktualisiert)
 - Primär: 9router Combo. `PRIMARY_MODEL=nexifyai-combo-llm`, `NINEROUTER_BASE_URL=https://ai-router.nexifyai.cloud/v1`, Key=system-key.
