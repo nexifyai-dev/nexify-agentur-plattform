@@ -111,12 +111,15 @@ export const legalNl: Record<string, LegalPageData> = {
           "Voor het genereren van antwoorden worden chatinhouden doorgegeven aan een AI-taalmodel (Large Language Model) van een gespecialiseerde aanbieder. Deel in de chat a.u.b. geen gevoelige of bijzondere persoonsgegevens. De chatinhouden worden niet vrijgegeven voor algemene modeltraining, tenzij uitdrukkelijk overeengekomen en wettelijk toegestaan.",
           "Geeft u in de chat vrijwillig naam, e-mailadres en bedrijf op om een offerte te ontvangen, dan worden deze gegevens gebruikt voor het opstellen en toezenden van de offerte en voor een passende zakelijke opvolging (follow-up-e-mail).",
           "Rechtsgronden: art. 6 lid 1 sub b AVG (precontractuele maatregelen op uw verzoek) en art. 6 lid 1 sub f AVG (gerechtvaardigd belang bij efficiënt eerste advies). U bent niet verplicht de chat te gebruiken – alle vragen kunnen ook per e-mail of telefoon worden gesteld.",
+          "Geheugenfunctie: Om terugkerende geïnteresseerden en klanten over meerdere contactmomenten heen individueel te kunnen adviseren, kunnen kerninhouden van gesprekken (bijv. branche, projectdoelen, voorkeuren) in verdichte vorm als notities worden opgeslagen. Hiervoor wordt de gespecialiseerde dienst Mem0 (Mem0 AI, VS) ingezet; de doorgifte vindt plaats op basis van EU-standaardcontractbepalingen (art. 46 lid 2 sub c AVG). Rechtsgrond voor de opslag is art. 6 lid 1 sub f AVG (gerechtvaardigd belang bij gepersonaliseerde, efficiënte begeleiding). U kunt te allen tijde vormvrij bezwaar maken (mail@nexifyai.cloud); de notities worden dan gewist.",
+          "Geen geautomatiseerde besluitvorming in de zin van art. 22 AVG: de AI-adviseur neemt geen besluiten met rechtsgevolgen of vergelijkbaar aanzienlijke gevolgen. Offertes zijn vrijblijvende indicaties en worden vóór het sluiten van een overeenkomst altijd door een mens gecontroleerd.",
         ],
       },
       {
         heading: "6. E-mailverzending en dienstverleners",
         paragraphs: [
           "Voor de technische verzending van formulierbevestigingen, offertes en transactionele e-mails wordt een gespecialiseerde e-maildienst (Resend) ingezet. Daarbij worden alleen de voor verzending, bezorging en misbruikbescherming noodzakelijke gegevens verwerkt (ontvangstadres, inhoud, bezorgstatus).",
+          "Inkomende e-mails aan mail@nexifyai.cloud (postvak bij Hostinger) worden voor efficiënte afhandeling AI-ondersteund voorgesorteerd (bijv. herkenning van ongewenste reclame) en bij zakelijke aanvragen geautomatiseerd beantwoord. In het geautomatiseerde antwoordproces communiceert u met een AI-systeem; persoonlijke behandeling door Pascal Courbois vindt te allen tijde op verzoek plaats en bij alle zaken die menselijke beoordeling vereisen. Rechtsgronden: art. 6 lid 1 sub b en sub f AVG (efficiënte afhandeling van inkomende zakelijke communicatie).",
           "Dienstverleners worden zorgvuldig geselecteerd, contractueel gebonden (art. 28 AVG) en alleen in de vereiste omvang ingezet. Bij doorgiften buiten de Europese Economische Ruimte worden passende waarborgen (bijv. EU-standaardcontractbepalingen) en aanvullende beschermingsmaatregelen getoetst.",
         ],
       },
@@ -298,6 +301,7 @@ export const legalNl: Record<string, LegalPageData> = {
         paragraphs: [
           "NeXify AI is een AI-ondersteunde advies- en salesassistent. Hij beantwoordt vragen over diensten en prijzen, kwalificeert aanvragen en kan op uitdrukkelijk verzoek een vrijblijvende offerte opstellen en per e-mail versturen.",
           "U communiceert daarbij met een geautomatiseerd systeem, niet met een mens. Alle door NeXify AI opgestelde offertes zijn vrijblijvende indicaties; bindende offertes worden uitsluitend door Pascal Courbois persoonlijk getoetst en bevestigd.",
+          "De assistent beschikt over een geheugenfunctie: kerninhouden van gesprekken kunnen worden opgeslagen, zodat u bij een volgend contact niet opnieuw hoeft te beginnen. Daarnaast kunnen e-mails aan mail@nexifyai.cloud AI-ondersteund worden voorgesorteerd en beantwoord. Details en bezwaarmogelijkheden vindt u in de privacyverklaring.",
           "De AI-adviseur kan fouten maken. Bij onduidelijkheden of belangrijke beslissingen kunt u ons het beste rechtstreeks per e-mail of telefoon benaderen.",
         ],
       },

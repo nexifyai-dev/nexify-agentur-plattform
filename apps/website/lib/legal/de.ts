@@ -112,12 +112,15 @@ export const legalDe: Record<string, LegalPageData> = {
           "Zur Erzeugung der Antworten werden Chat-Inhalte an ein KI-Sprachmodell (Large Language Model) eines spezialisierten Anbieters übermittelt. Übermitteln Sie im Chat bitte keine sensiblen oder besonders schutzbedürftigen Daten. Die Chat-Inhalte werden nicht zur allgemeinen Modellschulung freigegeben, soweit dies nicht ausdrücklich vereinbart und rechtlich zulässig ist.",
           "Geben Sie im Chat freiwillig Name, E-Mail-Adresse und Firma an, um ein Angebot zu erhalten, werden diese Daten zur Erstellung und Zusendung des Angebots sowie für eine angemessene geschäftliche Nachverfolgung (Follow-up-E-Mail) verwendet.",
           "Rechtsgrundlagen: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen auf Ihre Anfrage) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an effizienter Erstberatung). Sie sind nicht verpflichtet, den Chat zu nutzen – alle Anliegen können alternativ per E-Mail oder Telefon gestellt werden.",
+          "Gedächtnisfunktion: Um wiederkehrende Interessenten und Kunden über mehrere Kontakte hinweg individuell beraten zu können, können zentrale Gesprächsinhalte (z. B. Branche, Projektziele, Präferenzen) in verdichteter Form als Merkposten gespeichert werden. Hierfür wird der spezialisierte Dienst Mem0 (Mem0 AI, USA) eingesetzt; die Übermittlung erfolgt auf Grundlage von EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Rechtsgrundlage der Speicherung ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an personalisierter, effizienter Betreuung). Sie können dieser Speicherung jederzeit formlos widersprechen (mail@nexifyai.cloud); die Merkposten werden dann gelöscht.",
+          "Keine automatisierte Entscheidung im Sinne des Art. 22 DSGVO: Der KI-Berater trifft keine Entscheidungen mit Rechtswirkung oder ähnlich erheblicher Beeinträchtigung. Angebote sind unverbindliche Indikationen und werden vor Vertragsschluss stets menschlich geprüft.",
         ],
       },
       {
         heading: "6. E-Mail-Versand und Dienstleister",
         paragraphs: [
           "Für den technischen Versand von Formularbestätigungen, Angeboten und transaktionalen E-Mails wird ein spezialisierter E-Mail-Dienst (Resend) eingesetzt. Dabei werden nur die für Versand, Zustellung und Missbrauchsschutz notwendigen Daten verarbeitet (Empfängeradresse, Inhalt, Zustellstatus).",
+          "Eingehende E-Mails an mail@nexifyai.cloud (Postfach bei Hostinger) werden zur effizienten Bearbeitung KI-gestützt vorsortiert (z. B. Erkennung unerwünschter Werbung) und bei geschäftlichen Anfragen automatisiert beantwortet. Sie werden im automatisierten Antwortprozess mit einem KI-System kommunizieren; eine persönliche Bearbeitung durch Pascal Courbois erfolgt jederzeit auf Wunsch und bei allen Anliegen, die menschliche Prüfung erfordern. Rechtsgrundlagen: Art. 6 Abs. 1 lit. b und lit. f DSGVO (effiziente Bearbeitung eingehender Geschäftskommunikation).",
           "Dienstleister werden sorgfältig ausgewählt, vertraglich gebunden (Art. 28 DSGVO) und nur im erforderlichen Umfang eingesetzt. Bei Übermittlungen außerhalb des Europäischen Wirtschaftsraums werden geeignete Garantien (z. B. EU-Standardvertragsklauseln) und zusätzliche Schutzmaßnahmen geprüft.",
         ],
       },
@@ -299,6 +302,7 @@ export const legalDe: Record<string, LegalPageData> = {
         paragraphs: [
           "NeXify AI ist ein KI-gestützter Beratungs- und Vertriebsassistent. Er beantwortet Fragen zu Leistungen und Preisen, qualifiziert Anfragen und kann auf ausdrücklichen Wunsch ein unverbindliches Angebot erstellen und per E-Mail versenden.",
           "Sie interagieren dabei mit einem automatisierten System, nicht mit einem Menschen. Alle von NeXify AI erstellten Angebote sind unverbindliche Indikationen; verbindliche Angebote werden ausschließlich von Pascal Courbois persönlich geprüft und bestätigt.",
+          "Der Assistent verfügt über eine Gedächtnisfunktion: Zentrale Gesprächsinhalte können gespeichert werden, damit Sie bei erneutem Kontakt nicht von vorne beginnen müssen. Zudem können E-Mails an mail@nexifyai.cloud KI-gestützt vorsortiert und beantwortet werden. Details und Widerspruchsmöglichkeiten finden Sie in der Datenschutzerklärung.",
           "Der AI-Berater kann Fehler machen. Bei Unklarheiten oder wichtigen Entscheidungen kontaktieren Sie uns bitte direkt per E-Mail oder Telefon.",
         ],
       },
