@@ -14,7 +14,7 @@ export function HomePage() {
   return (
     <main data-testid="home-page">
       {/* HERO */}
-      <section className="relative overflow-hidden pb-24 pt-44">
+      <section className="relative overflow-hidden pb-16 pt-32 md:pb-24 md:pt-40 lg:pt-44">
         <div className="hero-grid-bg" />
         <div className="pointer-events-none absolute left-1/2 top-[-320px] h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[140px]" />
         <div className="site-container relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
@@ -55,7 +55,7 @@ export function HomePage() {
         <div className="site-container relative">
 
           <Reveal delay={400}>
-            <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 lg:grid-cols-4" data-testid="hero-stats">
+            <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:mt-20 lg:grid-cols-4" data-testid="hero-stats">
               {t.home.stats.map((s, i) => (
                 <div key={i} className="bg-[#0c0c0f] p-7">
                   <div className="text-silver font-[family-name:var(--font-heading)] text-3xl font-semibold">{s.value}</div>
@@ -81,7 +81,7 @@ export function HomePage() {
       </section>
 
       {/* PILLARS */}
-      <section className="py-28">
+      <section className="py-16 md:py-28">
         <div className="site-container">
           <Reveal>
             <span className="eyebrow">{t.home.pillarsEyebrow}</span>
@@ -107,7 +107,7 @@ export function HomePage() {
       </section>
 
       {/* SERVICES BENTO */}
-      <section className="py-16">
+      <section className="py-12 md:py-16">
         <div className="site-container">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
@@ -142,7 +142,7 @@ export function HomePage() {
       </section>
 
       {/* PROCESS PREVIEW */}
-      <section className="py-28">
+      <section className="py-16 md:py-28">
         <div className="site-container">
           <Reveal>
             <span className="eyebrow">{t.home.processEyebrow}</span>
@@ -163,7 +163,7 @@ export function HomePage() {
       </section>
 
       {/* QUOTES */}
-      <section className="py-16">
+      <section className="py-12 md:py-16">
         <div className="site-container">
           <Reveal>
             <span className="eyebrow">{t.home.quotesEyebrow}</span>
@@ -184,7 +184,7 @@ export function HomePage() {
       </section>
 
       {/* CTA BAND */}
-      <section className="py-28">
+      <section className="py-16 md:py-28">
         <div className="site-container">
           <Reveal>
             <div className="glass relative overflow-hidden p-12 text-center md:p-20" data-testid="cta-band">

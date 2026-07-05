@@ -9,7 +9,7 @@ export function PlatformPage() {
   const t = useContent();
 
   return (
-    <main className="pb-10 pt-36" data-testid="platform-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="platform-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.platform.eyebrow}</span>

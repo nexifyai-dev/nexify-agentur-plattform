@@ -53,3 +53,15 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - iteration_1/2: frühere Phasen; iteration_3 (04.07.2026): 100 % Backend (8/8 pytest) + 100 % Frontend (13/13 Flows)
 - Discovery-Gate + individualisiertes Angebot: manuell E2E verifiziert (Zahnarzt-Szenario, summary/recommendation im Angebot, Marker leakt nicht)
 - Live-Domain verifiziert: www.nexifyai.cloud (Seite, API-Proxy, Login, Stats)
+- iteration_5 (04.07.2026): Voller Bug-Sweep 100 % Backend (10/10) + 100 % Frontend (17 Seiten Desktop+Mobile, Chat, Auth, Booking, Cookies)
+
+## Session 05.07.2026 (Fork) – Umgesetzt
+- **Autonomer E-Mail-Agent** (`backend/email_agent.py`): pollt Hostinger IMAP alle 120s, LLM-Triage (spam/inquiry/other), Spam → Spam-Ordner, Anfragen → Ticket + Lead + Mem0 + zeitversetzte AI-Antwort (5–30 Min) + Admin-Notify. Läuft produktiv, sortiert korrekt.
+- **Mem0-Langzeitgedächtnis**: in ai_ticket_reply (Suche + Speichern) und /api/offers/request (Beratungsverlauf) integriert. Key in backend/.env.
+- **SMTP-Fallback**: send_email nutzt Hostinger SMTP (smtp.hostinger.com:465), wenn Resend fehlschlägt.
+- **Chat-Formatierung**: ChatMarkdown-Komponente (Fett, Listen, Absätze) in Chat-Widget, Konto, Support-Tickets, Admin-Panels, Agent-Chat inkl. Task-Results; Streaming ohne sichtbare `**`; Prompts: echte Umlaute (ä/ö/ü/ß) + konsequente Sie-Form.
+- **Bugfixes**: Mobile-Header (CTA !hidden md:!inline-flex, Logo nowrap, Burger sichtbar), UUID-ValueError → 400 statt 500, data-scroll-behavior, Admin-Passwort re-seeded + Login verifiziert.
+- **Spacing-System (8pt, Best Practice)**: Hero pt-32→44 responsiv, alle Seiten pt-28 md:pt-36, Home-Sections py-12/16 mobil → py-16/28 Desktop; vermessen & verifiziert (Mobile-Badge 251→203px).
+- **Admin-Chat-Scroll-Bug**: Root Cause scrollIntoView (Seiten-Scroll) + Poll-Re-Render → Container-only scrollTop + setMsgsIfChanged; scrollY konstant verifiziert.
+- Angebots-Button im Chat ab 3 Nutzer-Nachrichten (vorher 4).
+- WICHTIG: Produktion (Vercel) erhält Frontend-Fixes erst nach "Save to GitHub".

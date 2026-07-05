@@ -10,7 +10,7 @@ export function KnowledgePage() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <main className="pb-10 pt-36" data-testid="knowledge-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="knowledge-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.wissen.eyebrow}</span>

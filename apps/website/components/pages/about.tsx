@@ -8,7 +8,7 @@ export function AboutPage() {
   const t = useContent();
 
   return (
-    <main className="pb-10 pt-36" data-testid="about-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="about-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.about.eyebrow}</span>

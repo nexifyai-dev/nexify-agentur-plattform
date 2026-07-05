@@ -28,14 +28,27 @@ export function AgentChat() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const endRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const lastCount = useRef(0);
+
+  const setMsgsIfChanged = useCallback((next: Msg[]) => {
+    setMsgs((prev) => {
+      if (prev.length === next.length && prev[prev.length - 1]?.id === next[next.length - 1]?.id) return prev;
+      return next;
+    });
+  }, []);
 
   const load = useCallback(() => {
-    api("/api/admin/agent/history").then(setMsgs).catch(() => {});
+    api("/api/admin/agent/history").then(setMsgsIfChanged).catch(() => {});
     api("/api/admin/agent/tasks").then(setTasks).catch(() => {});
-  }, []);
+  }, [setMsgsIfChanged]);
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, busy]);
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el || msgs.length === lastCount.current) return;
+    lastCount.current = msgs.length;
+    el.scrollTop = el.scrollHeight;
+  }, [msgs]);
 
   const send = async () => {
     const text = input.trim();
@@ -52,7 +65,7 @@ export function AgentChat() {
       }
       for (let i = 0; i < 120; i++) {
         await new Promise((r) => setTimeout(r, 2500));
-        api("/api/admin/agent/history").then(setMsgs).catch(() => {});
+        api("/api/admin/agent/history").then(setMsgsIfChanged).catch(() => {});
         const st = await api("/api/admin/agent/status").catch(() => ({ busy: true }));
         if (!st.busy) break;
       }
@@ -83,7 +96,7 @@ export function AgentChat() {
             <div className="text-[11px] text-zinc-500">Vollzugriff auf CRM, Angebote, Tickets, Termine & E-Mail · plant eigene Folge-Tasks</div>
           </div>
         </div>
-        <div className="h-[480px] space-y-3 overflow-y-auto p-5" data-testid="agent-messages">
+          <div ref={boxRef} className="h-[480px] space-y-3 overflow-y-auto p-5" data-testid="agent-messages">
           {msgs.length === 0 && (
             <div className="space-y-2 text-[13px] leading-relaxed text-zinc-500">
               <p>Beispiele, was Sie mir auftragen können:</p>
@@ -110,7 +123,6 @@ export function AgentChat() {
               Agent arbeitet – liest Daten, führt Aktionen aus …
             </div>
           )}
-          <div ref={endRef} />
         </div>
         <div className="flex gap-2 border-t border-white/10 p-4">
           <textarea
@@ -161,7 +173,7 @@ export function AgentChat() {
                     <span className="text-[13px] font-semibold text-zinc-300">{t.title}</span>
                     <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest ${t.status === "done" ? "border-emerald-400/40 text-emerald-300" : t.status === "cancelled" ? "border-white/15 text-zinc-500" : "border-red-400/40 text-red-300"}`}>{t.status}</span>
                   </div>
-                  {t.result && <p className="mt-1.5 line-clamp-4 text-[12px] leading-relaxed text-zinc-500">{t.result}</p>}
+                  {t.result && <div className="mt-1.5 line-clamp-4 text-[12px] leading-relaxed text-zinc-500"><ChatMarkdown content={t.result} /></div>}
                 </div>
               ))}
             </div>

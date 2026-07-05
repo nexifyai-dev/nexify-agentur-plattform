@@ -14,7 +14,12 @@ function inline(text: string, keyBase: string): React.ReactNode[] {
 }
 
 export function ChatMarkdown({ content }: { content: string }) {
-  const blocks = content.replace(/\r/g, "").split(/\n{2,}/).filter((b) => b.trim());
+  let src = content.replace(/\r/g, "");
+  if (((src.match(/\*\*/g) || []).length) % 2 === 1) {
+    const idx = src.lastIndexOf("**");
+    src = src.slice(0, idx) + src.slice(idx + 2);
+  }
+  const blocks = src.split(/\n{2,}/).filter((b) => b.trim());
   return (
     <div className="space-y-2.5">
       {blocks.map((block, bi) => {

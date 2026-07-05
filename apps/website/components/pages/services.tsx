@@ -10,7 +10,7 @@ export function ServicesPage() {
   const t = useContent();
 
   return (
-    <main className="pb-10 pt-36" data-testid="services-page">
+    <main className="pb-10 pt-28 md:pt-36" data-testid="services-page">
       <div className="site-container">
         <Reveal>
           <span className="eyebrow">{t.servicesPage.eyebrow}</span>
