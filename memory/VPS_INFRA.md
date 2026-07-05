@@ -43,6 +43,13 @@
 - Code: `server.py` `llm_complete()` + `open_chat_stream()` fangen Fehler/leere Antwort ab → 9router. Verifiziert (401→Fallback liefert sauberes Deutsch).
 
 ## Offen (P1/P2)
-- SSO: Website-ADMIN-Login → webui.nexifyai.cloud (Hermes-WebUI-Auth-Fähigkeit: OIDC/Trusted-Header noch zu prüfen). Aktuell hat Hermes WebUI eigenen Login (HERMES_WEBUI_PASSWORD).
-- Design-Transfer Website-CI → Hermes WebUI (custom.css). WEBUI_NAME bereits „NeXify AI by NeXify".
-- MiMo-sk-Konto-Guthaben aufladen ODER 9router-Combo für Hermes säubern.
+- **SSO – Analyse abgeschlossen (05.07.)**: Hermes WebUI (`/app/api/auth.py`,`routes.py`) nutzt Passwort (PBKDF2, `HERMES_WEBUI_PASSWORD`) + Passkeys + HMAC-signierte Session-Cookies (`{token}.{sig}`, sig=HMAC(signing_key,token)). KEIN generisches OIDC/Trusted-Header-User-Login. `oauth.py` = nur Provider-Onboarding (Codex/Claude), NICHT User-Login. `/api/auth/sso` = 401 (catch-all, kein echter SSO-Ingress).
+  → Phase-1 (LIVE): rollen-geschützter Button „NeXify AI ADMIN öffnen" im Website-Admin (`app/admin/page.tsx`, `NEXT_PUBLIC_WEBUI_URL`, default webui.nexifyai.cloud).
+  → Phase-2 (echtes Auto-Login): erfordert NEUEN SSO-Endpoint IN der Hermes WebUI, der einen HMAC-Token der Website (shared secret) verifiziert und eine Session mintet (nutzt vorhandenes `_signing_key()`/`_sessions`). Änderung am proprietären Code + Image-Rebuild nötig → Nutzer-Entscheidung ausstehend.
+- **Design-Transfer – WICHTIGE KLÄRUNG**: `webui.nexifyai.cloud` + `work` = **Hermes WebUI** (:8787, custom, Login-HTML in `routes.py`). Das `nexify-webui`-Open-WebUI (:3090, WEBUI_NAME „NeXify AI by NeXify", custom.css-Mount) ist NICHT getunnelt/aktiv. custom.css greift nur bei Open WebUI. Ziel-WebUI + Persistenzweg (Image-Rebuild) mit Nutzer klären.
+- MiMo-sk-Konto: umgangen – Website läuft jetzt primär über 9router-Combo, MiMo (token-plan) nur noch Fallback.
+
+## Website-LLM (mein /app-Backend) – 9router als Primär (05.07. aktualisiert)
+- Primär: 9router Combo. `PRIMARY_MODEL=nexifyai-combo-llm`, `NINEROUTER_BASE_URL=https://ai-router.nexifyai.cloud/v1`, Key=system-key.
+- Fallback: MiMo direkt (`FALLBACK_MODEL=mimo-v2.5-pro`). Angebots-Preise serverseitig aus Tagen×999 (modellunabhängig korrekt).
+- Code: `server.py` `llm_complete()`+`open_chat_stream()`. Verifiziert (Planner/Chat über Combo OK).

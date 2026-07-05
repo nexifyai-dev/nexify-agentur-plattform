@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { BarChart3, Bot, FileText, LogOut, Users } from "lucide-react";
+import { BarChart3, Bot, FileText, LogOut, Sparkles, Users } from "lucide-react";
 import { api, useAuth } from "@/lib/auth";
+
+const WEBUI_URL = process.env.NEXT_PUBLIC_WEBUI_URL || "https://webui.nexifyai.cloud";
 import { OfferRow, SessionRow, TicketAdminRow, eur, type Offer, type Session, type AdminTicket } from "@/components/admin/panels";
 import { CreateOfferForm, ProspectForm } from "@/components/admin/forms";
 import { LeadsPanel, type Lead } from "@/components/admin/leads-panel";
@@ -94,9 +96,20 @@ export default function AdminPage() {
             <span className="eyebrow">CRM · {user.email}</span>
             <h1 className="mt-3 font-[family-name:var(--font-heading)] text-4xl font-light text-white">NeXify Cockpit</h1>
           </div>
-          <button className="btn-ghost !py-2.5 !text-[13px]" onClick={logout} data-testid="admin-logout-btn">
-            <LogOut size={14} /> Abmelden
-          </button>
+          <div className="flex items-center gap-2.5">
+            <a
+              href={WEBUI_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary !py-2.5 !text-[13px]"
+              data-testid="open-hermes-webui-btn"
+            >
+              <Sparkles size={14} /> NeXify AI ADMIN öffnen
+            </a>
+            <button className="btn-ghost !py-2.5 !text-[13px]" onClick={logout} data-testid="admin-logout-btn">
+              <LogOut size={14} /> Abmelden
+            </button>
+          </div>
         </div>
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" data-testid="admin-stats">

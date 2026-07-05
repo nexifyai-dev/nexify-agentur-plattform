@@ -50,15 +50,19 @@ app.include_router(agent_mod.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
-LLM = AsyncOpenAI(base_url=MIMO_BASE_URL, api_key=MIMO_API_KEY)
 
 NINEROUTER_BASE_URL = os.environ.get("NINEROUTER_BASE_URL")
 NINEROUTER_API_KEY = os.environ.get("NINEROUTER_API_KEY")
-NINEROUTER_MODEL = os.environ.get("NINEROUTER_MODEL", "ds/deepseek-v4-pro")
+PRIMARY_MODEL = os.environ.get("PRIMARY_MODEL", "nexifyai-combo-llm")
+
+# Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: MiMo direkt.
+LLM = AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
+MIMO_MODEL = PRIMARY_MODEL
 LLM_FALLBACK = (
-    AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
-    if NINEROUTER_BASE_URL and NINEROUTER_API_KEY else None
+    AsyncOpenAI(base_url=MIMO_BASE_URL, api_key=MIMO_API_KEY)
+    if MIMO_BASE_URL and MIMO_API_KEY else None
 )
+FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "mimo-v2.5-pro")
 
 SCHEMA = """
 create table if not exists nexify_leads (
@@ -289,19 +293,19 @@ async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
     except Exception as e:
         if not LLM_FALLBACK:
             raise
-        logger.warning(f"primary LLM failed ({e}); routing via 9router fallback ({NINEROUTER_MODEL})")
-        resp = await LLM_FALLBACK.chat.completions.create(model=NINEROUTER_MODEL, messages=messages, max_tokens=max_tokens)
+        logger.warning(f"primary LLM failed ({e}); routing via fallback ({FALLBACK_MODEL})")
+        resp = await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens)
         return resp.choices[0].message.content or ""
 
 
 async def open_chat_stream(messages: list[dict], max_tokens: int):
     try:
-        return await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+        return await LLM.chat.completions.create(model=PRIMARY_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
     except Exception as e:
         if not LLM_FALLBACK:
             raise
-        logger.warning(f"primary chat stream failed ({e}); routing via 9router fallback ({NINEROUTER_MODEL})")
-        return await LLM_FALLBACK.chat.completions.create(model=NINEROUTER_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+        logger.warning(f"primary chat stream failed ({e}); routing via fallback ({FALLBACK_MODEL})")
+        return await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
 
 
 def offer_email_html(offer: dict, name: str, language: str, price_total: int) -> str:
