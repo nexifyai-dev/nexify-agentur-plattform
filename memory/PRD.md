@@ -65,3 +65,9 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - **Admin-Chat-Scroll-Bug**: Root Cause scrollIntoView (Seiten-Scroll) + Poll-Re-Render → Container-only scrollTop + setMsgsIfChanged; scrollY konstant verifiziert.
 - Angebots-Button im Chat ab 3 Nutzer-Nachrichten (vorher 4).
 - WICHTIG: Produktion (Vercel) erhält Frontend-Fixes erst nach "Save to GitHub".
+
+## Sweep 2 (05.07.2026) – Ganzheitliches Audit
+- Accessibility: axe-core WCAG 2.0/2.1 A+AA auf 6 Kernseiten → 0 Verstöße.
+- DSGVO-Lücken geschlossen (DE+NL): Datenschutz §5 um Mem0-Gedächtnisfunktion (Drittland/SCC, Widerspruchsrecht) + Art.-22-Klarstellung ergänzt; §6 um KI-gestützte E-Mail-Vorsortierung/-Beantwortung (Hostinger); KI-Hinweise um Gedächtnis + E-Mail-Automation ergänzt.
+- Deutsches Zahlenformat in interner Angebots-Notification.
+- Backend-Logs & tsc sauber, D/A/CH-Formate (de-DE Datum/Währung) geprüft.

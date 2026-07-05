@@ -830,7 +830,7 @@ async def request_offer(body: OfferRequestIn):
         asyncio.create_task(send_email(
             INTERNAL_NOTIFY_EMAIL,
             f"NeXify AI Berater hat ein Angebot erstellt: {body.name} ({body.email})",
-            f"<p>Angebot <b>{offer.get('title','')}</b> wurde an {body.name} ({body.email}, Firma: {body.company or '-'}) gesendet.<br/>Richtpreis: € {price_total:,}<br/>Session: {body.session_id}</p>",
+            f"<p>Angebot <b>{offer.get('title','')}</b> wurde an {body.name} ({body.email}, Firma: {body.company or '-'}) gesendet.<br/>Richtpreis: € {price_total:,.0f}".replace(",", ".") + f"<br/>Session: {body.session_id}</p>",
         ))
     asyncio.create_task(send_account_invite(str(offer_id), body.name, body.email, body.language))
     convo = [m for m in history if m["role"] in ("user", "assistant")][-12:]
