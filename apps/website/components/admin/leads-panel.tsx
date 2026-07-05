@@ -23,8 +23,8 @@ function LeadCard({ l, onChanged, onEmail }: { l: Lead; onChanged: () => void; o
       setState("");
       setEdit(false);
       onChanged();
-    } catch (e: any) {
-      setState(e.message);
+    } catch (e) {
+      setState(e instanceof Error ? e.message : String(e));
     }
   };
 

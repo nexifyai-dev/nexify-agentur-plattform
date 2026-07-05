@@ -6,7 +6,9 @@ import { api } from "@/lib/auth";
 import { API_BASE } from "@/lib/company";
 import { ChatMarkdown } from "@/components/chat-markdown";
 
-export type Offer = { id: string; name: string; email: string; company: string | null; language: string; offer: any; price_total: number | null; status: string; created_at: string };
+export type OfferItem = { name: string; description: string; days_min: number; days_max: number };
+export type OfferJson = { title?: string; intro?: string; items?: OfferItem[]; next_steps?: string[] } | null;
+export type Offer = { id: string; name: string; email: string; company: string | null; language: string; offer: OfferJson; price_total: number | null; status: string; created_at: string };
 export type Session = { id: string; language: string; created_at: string; msg_count: number; last_at: string | null };
 
 export const fmtDate = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" });
@@ -16,7 +18,7 @@ const STATUS_LABEL: Record<string, string> = { sent: "Offen", followed_up: "Nach
 
 export function OfferRow({ o }: { o: Offer }) {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<any[]>([]);
+  const [msgs, setMsgs] = useState<TicketMsg[]>([]);
   const [reply, setReply] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -54,7 +56,7 @@ export function OfferRow({ o }: { o: Offer }) {
           </a>
           {o.offer?.items && (
             <div className="space-y-1.5">
-              {o.offer.items.map((it: any, i: number) => (
+              {o.offer.items.map((it: OfferItem, i: number) => (
                 <div key={i} className="flex justify-between gap-4 text-[13px]">
                   <span className="text-zinc-300">{it.name}</span>
                   <span className="shrink-0 text-zinc-500">{it.days_min === it.days_max ? it.days_min : `${it.days_min}–${it.days_max}`} Tage</span>
@@ -87,7 +89,7 @@ export function OfferRow({ o }: { o: Offer }) {
 
 export function SessionRow({ s }: { s: Session }) {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<any[]>([]);
+  const [msgs, setMsgs] = useState<{ id: string; role: string; content: string }[]>([]);
   useEffect(() => {
     if (open) api(`/api/admin/sessions/${s.id}/messages`).then(setMsgs).catch(() => {});
   }, [open, s.id]);
@@ -118,9 +120,12 @@ export function SessionRow({ s }: { s: Session }) {
   );
 }
 
-export function TicketAdminRow({ t }: { t: any }) {
+export type AdminTicket = { id: string; subject: string; name: string; email: string; status: string; source: string; created_at: string };
+export type TicketMsg = { id: string; sender: string; body: string; created_at: string };
+
+export function TicketAdminRow({ t }: { t: AdminTicket }) {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<any[]>([]);
+  const [msgs, setMsgs] = useState<TicketMsg[]>([]);
   const [reply, setReply] = useState("");
   const load = useCallback(() => api(`/api/portal/tickets/${t.id}/messages`).then(setMsgs).catch(() => {}), [t.id]);
   useEffect(() => { if (open) load(); }, [open, load]);

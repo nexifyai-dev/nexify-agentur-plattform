@@ -24,8 +24,8 @@ export default function LoginPage() {
       const user = await api("/api/auth/login", { method: "POST", body: JSON.stringify(form) });
       setUser(user);
       router.push(user.role === "admin" ? "/admin" : "/konto");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
     }
   };

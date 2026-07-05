@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { BarChart3, Bot, FileText, LogOut, Users } from "lucide-react";
 import { api, useAuth } from "@/lib/auth";
-import { OfferRow, SessionRow, TicketAdminRow, eur, type Offer, type Session } from "@/components/admin/panels";
+import { OfferRow, SessionRow, TicketAdminRow, eur, type Offer, type Session, type AdminTicket } from "@/components/admin/panels";
 import { CreateOfferForm, ProspectForm } from "@/components/admin/forms";
 import { LeadsPanel, type Lead } from "@/components/admin/leads-panel";
 import { SlotsPanel } from "@/components/admin/slots-panel";
@@ -33,7 +33,7 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<AdminTicket[]>([]);
   const [mail, setMail] = useState({ to: "", subject: "", body: "" });
   const [mailState, setMailState] = useState("");
 
@@ -59,8 +59,8 @@ export default function AdminPage() {
       await api("/api/admin/email", { method: "POST", body: JSON.stringify(mail) });
       setMailState("sent");
       setMail({ to: "", subject: "", body: "" });
-    } catch (e: any) {
-      setMailState(e.message);
+    } catch (e) {
+      setMailState(e instanceof Error ? e.message : String(e));
     }
   };
 

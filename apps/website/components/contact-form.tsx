@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight, CheckCircle2, Mail, Phone, Timer } from "lucide-react";
 import { API_BASE, company } from "@/lib/company";
 import { useLang } from "@/lib/i18n";
@@ -10,6 +11,7 @@ export function ContactForm() {
   const { lang } = useLang();
   const t = useContent();
   const [state, setState] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [privacy, setPrivacy] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", company: "", phone: "", message: "" });
 
   const submit = async (e: React.FormEvent) => {
@@ -46,9 +48,16 @@ export function ContactForm() {
         <input className="field" placeholder={t.contact.phone} value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} data-testid="contact-phone-input" />
       </div>
       <textarea className="field min-h-36" required placeholder={t.contact.messagePlaceholder} value={form.message} onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))} data-testid="contact-message-input" />
+      <label className="flex items-start gap-2.5 text-xs leading-relaxed text-zinc-500">
+        <input type="checkbox" required className="mt-0.5 accent-white" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} data-testid="contact-privacy-checkbox" />
+        <span>
+          {lang === "nl" ? "Ik heb de privacyverklaring gelezen. *" : "Ich habe die Datenschutzerklärung zur Kenntnis genommen. *"}{" "}
+          <Link href="/datenschutz" className="underline hover:text-white">{lang === "nl" ? "Privacyverklaring" : "Datenschutz"}</Link>
+        </span>
+      </label>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-xs text-zinc-600">{t.contact.b2bNote}</p>
-        <button type="submit" className="btn-primary" disabled={state === "sending"} data-testid="contact-submit-btn">
+        <button type="submit" className="btn-primary" disabled={state === "sending" || !privacy} data-testid="contact-submit-btn">
           {state === "sending" ? t.contact.sending : t.contact.submit} <ArrowRight size={15} />
         </button>
       </div>

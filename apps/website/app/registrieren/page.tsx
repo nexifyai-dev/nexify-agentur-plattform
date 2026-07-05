@@ -40,8 +40,8 @@ function RegisterForm() {
       });
       setUser(user);
       router.push("/konto");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
     }
   };
@@ -66,6 +66,13 @@ function RegisterForm() {
         <button type="submit" className="btn-primary w-full" disabled={loading} data-testid="register-submit-btn">
           {loading ? "…" : nl ? "Account aanmaken" : "Konto erstellen"}
         </button>
+        <p className="text-center text-[11px] leading-relaxed text-zinc-600">
+          {nl ? "Met het aanmaken van een account accepteert u onze " : "Mit der Registrierung akzeptieren Sie unsere "}
+          <Link href="/agb" className="underline hover:text-zinc-300">{nl ? "algemene voorwaarden" : "AGB"}</Link>
+          {nl ? " en nam u kennis van de " : " und nehmen die "}
+          <Link href="/datenschutz" className="underline hover:text-zinc-300">{nl ? "privacyverklaring" : "Datenschutzerklärung"}</Link>
+          {nl ? "." : " zur Kenntnis."}
+        </p>
       </form>
       <p className="mt-6 text-center text-sm text-zinc-500">
         {nl ? "Al een account?" : "Bereits ein Konto?"}{" "}
