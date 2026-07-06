@@ -1,0 +1,16 @@
+---
+name: "paperclip-converting-plans-to-tasks"
+description: "The Paperclip way of converting a plan into executable tasks. Use whenever you are asked to plan, scope, or break down work inside a Paperclip company. Industry-agnostic guidance on how to translate a plan into assigned issues with the right specialty, dependencies, and parallelization so Paperclip's executor can pick up the work — it does not prescribe a plan format. Pair with the `paperclip` skill, which covers the mechanics of writing the plan document and reassigning the issue."
+slug: "paperclip-converting-plans-to-tasks"
+metadata:
+  sources:
+    -
+      kind: "github-dir"
+      commit: null
+      path: "skills/paperclip-converting-plans-to-tasks"
+      repo: "paperclipai/paperclip"
+      trackingRef: "master"
+      url: "https://github.com/paperclipai/paperclip/tree/master/skills/paperclip-converting-plans-to-tasks"
+key: "paperclipai/paperclip/paperclip-converting-plans-to-tasks"
+---
+

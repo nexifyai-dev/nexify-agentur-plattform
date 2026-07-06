@@ -196,3 +196,32 @@ Erkannte Abweichungen aus visuellem/logischem Audit und behoben:
 - P1: Revolut-E2E mit echter Zahlung (User-Aktion)
 - P2: Native Hermes-CRM-Panels (nach Gesamt-Ende)
 - Backlog: Referenzen-Seite mit echten Projekten, 9router-Provider-Auffüllung (DeepSeek + MiMo)
+
+## Session 06.07.2026 (Fork 3, Teil 5) – Fabrik-Config Canonicalization
+
+User lieferte `nexify-ai.zip` = kanonischer Export der Paperclip-Fabrik-Company (88 Files: `.paperclip.yaml`, 6 Agent-Definitionen mit AGENTS.md/HEARTBEAT.md/SOUL.md/TOOLS.md, 74 Skills, images).
+
+### Erkannte Abweichung: Runtime vs. Canonical
+Die im Paperclip-Container aktive Company `150dc80b-…` hatte **veraltete, gekürzte Agent-Instructions**:
+| Agent | Runtime | Canonical | Delta |
+|---|---|---|---|
+| nexify-ai-developer | 25 Zeilen | 106 Zeilen | **+81** |
+| nexify-ai-ceo | 37 | 44 | +7 |
+| nexify-analyst | 24 | 32 | +8 |
+| nexify-architekt | 24 | 32 | +8 |
+| nexify-qa | 22 | 30 | +8 |
+| nexify-ops | 23 | 31 | +8 |
+
+### Aktion (best-practice, mit Backup)
+1. Kanonische Company → **doppelt versioniert**:
+   - `/app/fabrik/nexify-ai/` (im Emergent-Repo → GitHub) + `/app/fabrik/README.md` mit Restore-Verfahren
+   - `/root/nexify-ai-company/` auf VPS (rsync-Sync, Source-of-Truth für Restore)
+2. Runtime-Instructions **synced** aus Canonical (6/6 Agents; Backup unter `/root/config-backups/06-paperclip-runtime-20260706-033432/`)
+3. Paperclip-Container restart (`unless-stopped`-policy verifiziert)
+4. Health-Check: `{"status":"ok","deploymentMode":"authenticated","bootstrapStatus":"ready"}` ✅
+5. Endpoint-Sweep (final): webui 302, ai-router 307, work 302, api 404, open 200, dashboard 302, ai-team 403, www 200 — alle App-Level-Codes, keine 5xx ✅
+
+### Ergebnis
+- Die Fabrik läuft nun mit den **vollen, aktuellen Agent-Instructions** — insbesondere der Developer hat die kompletten 74 Skills-Referenzen wieder
+- Änderungen an der Fabrik-Config gehören ab jetzt in `/app/fabrik/nexify-ai/` (via Save-to-GitHub versionierbar), dann sync auf VPS mit `rsync -az --delete /app/fabrik/nexify-ai/ root@72.62.152.47:/root/nexify-ai-company/`
+- Watchdog stabil (seit Mask keine neuen Konflikte), CEO-Worker-Timer läuft alle 10 min
