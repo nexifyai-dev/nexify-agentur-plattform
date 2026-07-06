@@ -6,6 +6,7 @@ import email
 import imaplib
 import asyncio
 import logging
+from datetime import datetime, timezone
 from email.header import decode_header
 from email.utils import parseaddr
 
@@ -20,6 +21,56 @@ IMAP_PASSWORD = os.environ.get("IMAP_PASSWORD")
 POLL_SECONDS = int(os.environ.get("MAIL_POLL_SECONDS", "300"))
 
 _deps: dict = {}
+
+STATE: dict = {"enabled": False, "started_at": None, "last_poll": None, "polls": 0,
+              "processed": 0, "spam": 0, "inquiries": 0, "other": 0, "errors": 0}
+
+
+async def _ensure_table():
+    pool = await _deps["db"]()
+    if not pool:
+        return
+    async with pool.acquire() as con:
+        await con.execute("""
+            create table if not exists nexify_email_agent_log (
+                id uuid primary key,
+                ts timestamptz default now(),
+                from_addr text,
+                subject text,
+                category text,
+                action text,
+                detail text
+            )""")
+
+
+async def _log_action(m: dict, category: str, action: str, detail: str = ""):
+    try:
+        pool = await _deps["db"]()
+        if not pool:
+            return
+        async with pool.acquire() as con:
+            await con.execute(
+                "insert into nexify_email_agent_log (id,from_addr,subject,category,action,detail) values ($1,$2,$3,$4,$5,$6)",
+                uuid.uuid4(), m.get("from_addr", ""), (m.get("subject") or "")[:250], category, action, detail[:500])
+    except Exception as e:
+        logger.warning(f"email agent: log write failed: {e}")
+
+
+def get_status() -> dict:
+    return dict(STATE)
+
+
+async def get_log(limit: int = 50) -> list[dict]:
+    pool = await _deps["db"]()
+    if not pool:
+        return []
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            "select id,ts,from_addr,subject,category,action,detail from nexify_email_agent_log order by ts desc limit $1",
+            min(max(limit, 1), 200))
+    return [{"id": str(r["id"]), "ts": r["ts"].isoformat(), "from_addr": r["from_addr"],
+             "subject": r["subject"], "category": r["category"], "action": r["action"],
+             "detail": r["detail"]} for r in rows]
 
 
 def init(db, llm_complete, ai_ticket_reply, send_email, ci_email, frontend_url):
@@ -208,9 +259,12 @@ async def _handle(m: dict):
     if language not in ("de", "nl"):
         language = "de"
     logger.info(f"email agent: {addr} · '{m['subject'][:60]}' → {category} ({verdict.get('reason','')})")
+    STATE["processed"] += 1
 
     if category == "spam":
         moved = await asyncio.to_thread(_move_to_spam, m["message_id"])
+        STATE["spam"] += 1
+        await _log_action(m, "spam", "moved_to_spam" if moved else "move_failed", verdict.get("reason", ""))
         logger.info(f"email agent: spam from {addr} {'moved to spam folder' if moved else 'left in inbox (move failed)'}")
         return
 
@@ -218,6 +272,8 @@ async def _handle(m: dict):
         ticket_id = await _create_ticket(m, language)
         if not ticket_id:
             return
+        STATE["inquiries"] += 1
+        await _log_action(m, "inquiry", "ticket_created", f"Ticket {ticket_id}, AI-Antwort geplant")
         asyncio.create_task(mem_add(addr, [
             {"role": "user", "content": f"E-Mail von {m['from_name'] or addr} – Betreff: {m['subject']}\n{m['text'][:2000]}"},
         ], {"source": "email"}))
@@ -228,14 +284,21 @@ async def _handle(m: dict):
                               f"<p><b>{m['from_name'] or addr}</b> ({addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{m['text'][:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>",
                               cta_label="Im CRM öffnen", cta_url=f"{_deps['frontend_url']}/admin")))
         logger.info(f"email agent: inquiry from {addr} → ticket {ticket_id}, AI reply scheduled")
+        return
+
+    STATE["other"] += 1
+    await _log_action(m, "other", "ignored", verdict.get("reason", ""))
 
 
 async def _process_cycle():
     msgs = await asyncio.to_thread(_fetch_unseen)
+    STATE["last_poll"] = datetime.now(timezone.utc).isoformat()
+    STATE["polls"] += 1
     for m in msgs:
         try:
             await _handle(m)
         except Exception as e:
+            STATE["errors"] += 1
             logger.error(f"email agent: handling mail from {m.get('from_addr')} failed: {e}")
 
 
@@ -244,10 +307,17 @@ async def email_worker():
         logger.warning("email agent disabled: IMAP credentials missing")
         return
     await asyncio.sleep(10)
+    STATE["enabled"] = True
+    STATE["started_at"] = datetime.now(timezone.utc).isoformat()
+    try:
+        await _ensure_table()
+    except Exception as e:
+        logger.warning(f"email agent: table setup failed: {e}")
     logger.info(f"email agent started: polling {IMAP_USER} every {POLL_SECONDS}s")
     while True:
         try:
             await _process_cycle()
         except Exception as e:
+            STATE["errors"] += 1
             logger.error(f"email agent cycle failed: {e}")
         await asyncio.sleep(POLL_SECONDS)

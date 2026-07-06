@@ -69,6 +69,20 @@ def user_dict(row) -> dict:
 
 
 async def get_current_user(request: Request) -> dict:
+    svc = request.headers.get("X-Admin-Token")
+    if svc:
+        import hmac as _hmac
+        expected = os.environ.get("ADMIN_API_TOKEN")
+        if not expected or not _hmac.compare_digest(svc, expected):
+            raise HTTPException(status_code=401, detail="Invalid service token")
+        pool = await _DB()
+        if not pool:
+            raise HTTPException(status_code=503, detail="Database unavailable")
+        async with pool.acquire() as con:
+            row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
+        if not row:
+            raise HTTPException(status_code=401, detail="No admin user")
+        return user_dict(row)
     token = request.cookies.get("access_token")
     if not token:
         auth = request.headers.get("Authorization", "")
@@ -204,9 +218,36 @@ async def webui_sso(_: dict = Depends(get_admin)):
 SSO_NONCES: dict[str, float] = {}
 
 
+async def _nonce_consume(nonce: str, exp: float) -> bool:
+    """True = frisch (jetzt verbraucht), False = Replay. DB-persistent, RAM-Fallback."""
+    import time
+    now = time.time()
+    try:
+        pool = await _DB()
+        async with pool.acquire() as con:
+            await con.execute("""
+                create table if not exists nexify_sso_nonces (
+                    nonce text primary key,
+                    expires_at timestamptz not null
+                )""")
+            await con.execute("delete from nexify_sso_nonces where expires_at < now()")
+            inserted = await con.fetchval(
+                "insert into nexify_sso_nonces (nonce, expires_at) values ($1, to_timestamp($2)) on conflict do nothing returning nonce",
+                nonce, exp + 300)
+            return inserted is not None
+    except Exception:
+        for k in [k for k, v in SSO_NONCES.items() if v < now]:
+            SSO_NONCES.pop(k, None)
+        if nonce in SSO_NONCES:
+            return False
+        SSO_NONCES[nonce] = now + 300
+        return True
+
+
 @router.get("/api/auth/sso-consume")
 async def sso_consume(t: str = ""):
-    """Rückweg-SSO: Hermes WebUI -> CRM/Admin (One-Time-HMAC, same-tab)."""
+    """Rückweg-SSO: Hermes WebUI -> CRM/Admin (One-Time-HMAC, same-tab).
+    Token-Format: exp:nonce[:email].sig — email bindet die Admin-Identität."""
     import hmac, hashlib, time
     from fastapi.responses import RedirectResponse
 
@@ -218,25 +259,41 @@ async def sso_consume(t: str = ""):
         return _fail()
     try:
         msg, sig = t.rsplit(".", 1)
-        exp_str, nonce = msg.split(":", 1)
+        parts = msg.split(":", 2)
+        exp_str, nonce = parts[0], parts[1]
+        token_email = parts[2].strip().lower() if len(parts) > 2 else ""
         expected = hmac.new(sso_secret.encode(), msg.encode(), hashlib.sha256).hexdigest()
-        now = time.time()
-        for k in [k for k, v in SSO_NONCES.items() if v < now]:
-            SSO_NONCES.pop(k, None)
-        if not hmac.compare_digest(sig, expected) or int(exp_str) < now or nonce in SSO_NONCES:
+        exp = int(exp_str)
+        if not hmac.compare_digest(sig, expected) or exp < time.time():
             return _fail()
-        SSO_NONCES[nonce] = now + 300
+        if not await _nonce_consume(nonce, exp):
+            return _fail()
     except Exception:
         return _fail()
     pool = await _DB()
     async with pool.acquire() as con:
-        row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
+        if token_email:
+            row = await con.fetchrow("select * from nexify_users where lower(email) = $1 and role = 'admin'", token_email)
+        else:
+            row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
     if not row:
         return _fail()
     resp = RedirectResponse("/admin", status_code=302)
     resp.headers["Cache-Control"] = "no-store"
     set_auth_cookies(resp, str(row["id"]), row["email"], row["role"])
     return resp
+
+
+@router.get("/api/admin/email-agent/status")
+async def email_agent_status(_: dict = Depends(get_admin)):
+    import email_agent
+    return email_agent.get_status()
+
+
+@router.get("/api/admin/email-agent/log")
+async def email_agent_log(limit: int = 50, _: dict = Depends(get_admin)):
+    import email_agent
+    return await email_agent.get_log(limit)
 
 
 
