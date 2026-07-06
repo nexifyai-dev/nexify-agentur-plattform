@@ -225,3 +225,48 @@ Die im Paperclip-Container aktive Company `150dc80b-…` hatte **veraltete, gek�
 - Die Fabrik läuft nun mit den **vollen, aktuellen Agent-Instructions** — insbesondere der Developer hat die kompletten 74 Skills-Referenzen wieder
 - Änderungen an der Fabrik-Config gehören ab jetzt in `/app/fabrik/nexify-ai/` (via Save-to-GitHub versionierbar), dann sync auf VPS mit `rsync -az --delete /app/fabrik/nexify-ai/ root@72.62.152.47:/root/nexify-ai-company/`
 - Watchdog stabil (seit Mask keine neuen Konflikte), CEO-Worker-Timer läuft alle 10 min
+
+## Session 06.07.2026 (Fork 4) – Doku-Review, Provider-Fix, System-Härtung
+
+**Auftrag**: `NeXifyAI_Gesamtdokumentation_v1.0.zip` prüfen + sicherstellen, dass technisch alles funktioniert; weiterer Aufbau autonom ohne Chatsteuerung.
+
+### Behobene Probleme (alle E2E-verifiziert)
+1. **Hermes WebUI 401/402**: Provider `custom` von Hermes v0.17 nicht mehr unterstützt; leerer `OPENAI_API_KEY` im Container. → `openai-api`-Provider + ENV in Gateway-Dropin & Compose; alle Profile (agentur-admin, automation-agent, expert-data, ceo) auf `nexifyai-combo-llm`. `hermes chat -q` → "OK" ✅
+2. **VSK-Kundenseite 404**: Duplikat-Service `cloudflared-vsk-prod-local` (Catchall-404, gleiche Tunnel-ID) → gestoppt/gemaskt. vorratsgesellschaften-sofort-kaufen.de → 200 ✅
+3. **traefik-vsrs Restart-Loop** (Port 80 an bookando-proxy verloren) → compose down; alle Routen laufen direkt über Tunnel ✅
+4. **Main-Tunnel Remote-Config korrigiert** (headroom→8788, portal→404) + DNS `headroom.nexifyai.cloud` angelegt. Wichtig: Main-Tunnel ist REMOTE-managed – Ingress via CF-API ändern, nicht config.yml!
+5. **Fabrik-Agent-Timeouts**: timeoutSec 300→900 für alle 6 Agenten (Developer-Heartbeat = 54 LLM-Calls > 5 min). Wakeup-E2E: Developer + CEO succeeded ✅
+6. **CEO-Agent Auto-Approval**: fehlendes `--yolo` ergänzt → keine 120s-clarify-Timeouts mehr (volle Autonomie)
+7. **Offer-Endpoint 500/502**: Reasoning-Leak + JSON-Truncation → `_parse_json_lenient()`, Retry, max_tokens=9000, Prompt erzwingt JSON. Test: 41s, email_sent ✅
+8. **Testsuite**: veraltete Tests an Async-Agent-API angepasst; Gesamtstand 74 passed, 1 skipped
+
+### Doku-Abgleich (Zielarchitektur vs. Ist)
+✅ Qdrant 1.18.2 :6333, Redis :6379, PF-004 :13062, 9router :20128, Hermes-Gateway :8642
+❌ Nicht deployt (nur Zielbild in Doku): Temporal, Authentik, Traefik+LE (ersetzt durch CF-Tunnel). Hermes-Provider-Typ `custom` in Doku veraltet (jetzt `openai-api`).
+
+### Offen / Nächste Schritte
+- Revolut-Payment E2E (P1, braucht echten Zahltest durch User)
+- CRM-Panels nativ im Hermes-Stil neu bauen (P2, laut User ganz am Ende)
+- Alte WebUI-Chat-Sessions auf mimo-v2.5-pro gepinnt → User muss neue Session starten
+
+## Session 06.07.2026 (Fork 5) – Doku-Review-Abschluss & Restfehler-Behebung
+
+**Auftrag**: Fortsetzung Doku-Review + „technisch alles sicherstellen".
+
+### Behobene Probleme (alle E2E-verifiziert)
+1. **11 von 16 Hermes-Profil-Configs waren KORRUPT** (`/root/.hermes/profiles/*/config.yaml`): literale Zeilennummern-Prefixe (`1|model:`) + SSH-Kommentarblock mitten in Zeilen injiziert (zerschnittene `inline_shell`/`persistent_shell`) → ungültiges YAML. Alle repariert + validiert. Backup: `/root/config-backups/07-hermes-profiles/`.
+2. **Alle 16 Profile auf `nexifyai-combo-llm` normalisiert** (openai-api, localhost:20128, echter Key statt leerem `${OPENAI_API_KEY}`). agentur-admin hing auf `ds/deepseek-chat` (402), automation-agent/expert-data auf totem `mimo-v2.5-pro`. WebUI `/api/providers`: `active_provider=openai-api`, default combo ✅. `hermes chat` → „OK" ✅. Gateway restartet.
+3. **Remote-Tunnel-Ingress via CF-API korrigiert (v27)**: vorschau→:80 (war :3020), rag→:32781 (war :32770), headroom httpHostHeader. vorschau + rag extern wieder 200 ✅. `/root/.cloudflared/config.yml` trägt REMOTE-MANAGED-Warnung.
+4. **ragflow-Stack**: interner MySQL-DNS-Fehler → compose restart → 200 ✅.
+5. **agentmemory.service hing** (:3113 Accept-Queue voll) → restart → 200 lokal ✅.
+6. **`llm_complete` gehärtet** (server.py): 3 Retries, `reasoning_content`-Salvage, `<think>`-Strip → „offer parse failed" behoben, `/api/offers/request` 200 in ~42s ✅.
+7. **Fabrik-Approval-Blockade**: CEO-Runs timed_out (exit 130) wegen interaktiver Approval-Prompts. Fix: `approvals: {mode: yolo, timeout: 5}` in `/paperclip/.hermes/config.yaml` → CEO-Regressionstest 123s ✅. Merke: Paperclip nutzt `HERMES_HOME=/paperclip/.hermes`!
+8. **Tests**: Slot-Test epoch-eindeutige Timestamps, decision-flow Payment-Guard-Skip, Wakeup-Poll 600s+. Finale Läufe: 9/10 + CEO einzeln ✅ → alle vorherigen Failures behoben.
+
+### Doku-Review abgeschlossen
+Alle Runtime-prüfbaren Claims der `NeXifyAI_Gesamtdokumentation_v1.0` verifiziert (Qdrant/Redis/PF-004/9router/21 Modelle inkl. combo). Kap. 8 (MimoCode-Abgrenzung) rein konzeptionell. Abweichungen unverändert: Temporal/Authentik/Traefik nur Zielbild.
+
+### Offen / Nächste Schritte
+- Revolut-Payment E2E (P1, echter Zahltest durch User)
+- CRM-Panels nativ im Hermes-Stil (P2, ganz am Ende)
+- 9router-Provider-Auffüllung (DeepSeek + MiMo Guthaben leer — alles läuft über combo)

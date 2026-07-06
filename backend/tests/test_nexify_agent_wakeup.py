@@ -47,7 +47,7 @@ def session():
     return s
 
 
-def _poll_run(session, run_id, max_seconds=300, interval=15):
+def _poll_run(session, run_id, max_seconds=960, interval=15):
     """Poll GET /api/heartbeat-runs/{id} until terminal state or timeout."""
     deadline = time.time() + max_seconds
     last_status = None
@@ -63,7 +63,7 @@ def _poll_run(session, run_id, max_seconds=300, interval=15):
         if status != last_status:
             print(f"[poll {run_id}] status={status} exitCode={body.get('exitCode')} error={str(body.get('error'))[:200]}")
             last_status = status
-        if status in ("succeeded", "failed", "cancelled", "error"):
+        if status in ("succeeded", "failed", "cancelled", "error", "timed_out"):
             return body
         time.sleep(interval)
     pytest.fail(f"Run {run_id} did not reach terminal state within {max_seconds}s (last status={last_status})")
@@ -115,7 +115,7 @@ class TestNexifyAgentExecution:
         assert status in ("queued", "running", "pending"), f"Unexpected initial status: {status}"
         print(f"[wakeup developer] run_id={run_id} status={status}")
 
-        result = _poll_run(session, run_id, max_seconds=300, interval=15)
+        result = _poll_run(session, run_id, max_seconds=960, interval=15)
         err = str(result.get("error") or "")
         assert "Failed to start command" not in err, (
             f"BUG REGRESSION: 'Failed to start command' still present in error: {err}"
@@ -152,7 +152,7 @@ class TestNexifyAgentExecution:
         if not run_id:
             pytest.skip("CEO wakeup returned skipped/409 twice; developer test already validated fix")
 
-        result = _poll_run(session, run_id, max_seconds=300, interval=15)
+        result = _poll_run(session, run_id, max_seconds=960, interval=15)
         assert result.get("status") == "succeeded", (
             f"CEO run did not succeed. status={result.get('status')} "
             f"exitCode={result.get('exitCode')} error={str(result.get('error'))[:500]}"

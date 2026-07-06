@@ -6,6 +6,7 @@ Use requests + BASE_URL from env. Do NOT complete Revolut payment (production ke
 """
 import os
 import time
+from datetime import datetime, timedelta
 import uuid
 
 import pytest
@@ -34,8 +35,9 @@ class TestBooking:
         assert isinstance(r.json(), list)
 
     def test_admin_create_slot_and_double_book_409(self, admin_client):
-        # unique future timestamp
-        ts = f"2028-0{(int(time.time()) % 9) + 1}-15T09:0{int(time.time()) % 10}:00Z"
+        # unique future timestamp (minute-granular, epoch-based -> collision-free across runs)
+        base = datetime(2028, 1, 1) + timedelta(minutes=int(time.time()) % 1000000)
+        ts = base.strftime("%Y-%m-%dT%H:%M:00Z")
         r = admin_client.post(f"{BASE_URL}/api/admin/slots", json={"slots": [ts], "duration_min": 30})
         assert r.status_code == 200, r.text
         data = r.json()
@@ -116,15 +118,21 @@ class TestAgentChat:
             pytest.skip(f"Cloudflare/ingress 502 on agent chat (verified via UI E2E instead). last={r.status_code if r else 'none'}")
         assert r.status_code == 200, f"{r.status_code} {r.text[:400]}"
         data = r.json()
-        # Response shape: at least an assistant reply text
         assert isinstance(data, dict)
-        reply_text = data.get("reply") or data.get("message") or data.get("assistant") or ""
-        # tolerant assertion – some builds return {history:[...]}
-        if not reply_text:
-            hist = data.get("history") or data.get("messages") or []
-            if hist:
-                reply_text = hist[-1].get("content", "") if isinstance(hist[-1], dict) else str(hist[-1])
-        assert reply_text, f"no assistant reply in response: {data}"
+        # Async pattern: chat returns {'status': 'accepted'}; reply lands in history.
+        assert data.get("status") in ("accepted", "busy"), f"unexpected response: {data}"
+        if data.get("status") == "busy":
+            pytest.skip("agent busy with another run")
+        # Poll status until agent finished (max ~120s), then verify assistant reply in history
+        for _ in range(40):
+            st = admin_client.get(f"{BASE_URL}/api/admin/agent/status", timeout=30).json()
+            if not st.get("busy"):
+                break
+            time.sleep(3)
+        hist = admin_client.get(f"{BASE_URL}/api/admin/agent/history", timeout=30).json()
+        assert isinstance(hist, list) and hist, "empty agent history"
+        assistant_msgs = [m for m in hist if m.get("role") == "assistant" and m.get("content")]
+        assert assistant_msgs, f"no assistant reply in history (last entries: {hist[-3:]})"
 
     def test_agent_history_endpoint(self, admin_client):
         r = admin_client.get(f"{BASE_URL}/api/admin/agent/history")
