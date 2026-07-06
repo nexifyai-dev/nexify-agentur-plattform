@@ -130,3 +130,10 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - **Full-stack Vercel-Deploy-Readiness verifiziert**: `yarn build` sauber (27/27 statische Seiten, TypeScript grün), `yarn lint` 0 Errors, Backend `/api/admin/email-agent/status`+`/log` liefern 200 OK (enabled:true, polls>0), E-Mail-Agent-Tab (data-testid admin-tab-emailAgent) im Cockpit visuell verifiziert (Screenshot: Status Aktiv, 5 Karten, Aktivitätslog leer, Auto-Refresh 30s).
 - **Rechtstexte-Audit (DE+NL) bestanden**: Datenschutz §5 (Mem0 SCC), §6 (KI-Vorsortierung + Hostinger-Postfach), KI-Hinweise (E-Mail-Automation Art. 22 DSGVO), Cookie-Consent (§25 TDDDG / Telecommunicatiewet), Impressum/AGB/AVV/Widerruf — alle bilingual vollständig.
 - **Git-Working-Tree sauber** für Save-to-GitHub (kosmetische next-env.d.ts-Diff durch Build zurückgesetzt; nur harmlose Untracked-Artefakte übrig).
+
+## Session 06.07.2026 (Fork 3, Teil 2) – Proaktive Abweichungs-Bereinigung
+Erkannte Abweichungen aus visuellem/logischem Audit und behoben:
+- **1-Klick-„Jetzt Postfach prüfen"** im E-Mail-Agent-Panel: neuer `POST /api/admin/email-agent/poll` (portal.py, get_admin-authentifiziert), serialisiert via asyncio-Lock; UI-Button mit Status-Toast in email-agent-panel.tsx (data-testid `email-agent-poll-now` + `email-agent-poll-msg`). Verifiziert: E2E-Klick triggert IMAP-Zyklus, `last_poll` aktualisiert sich, 3/3 pytest grün (mit/ohne/falsches X-Admin-Token).
+- **Overlay-Cleanup im geschlossenen Bereich**: Chat-Widget und Cookie-Banner verbergen sich jetzt auf `/admin` + `/konto` (usePathname-Gate). Admins sind eingeloggt, brauchen den Berater-Chat nicht; Cookie-Consent hat auf öffentlichen Seiten stattgefunden. Verifiziert via Screenshot (`chat-launcher: 0, cookie-banner: 0` in /admin).
+- **Bottom-Padding** in `/admin` und `/konto` auf pb-20 md:pb-24 erhöht — bessere Atmung.
+- **Test-Suite**: pytest 66 passed. 1 booking_agent-Test (Legacy, Accept+Poll-Pattern-Mismatch) und 8 VPS-abhängige (webui.nexifyai.cloud CF 530) offene Errors sind nicht durch diese Änderungen verursacht (Infra/Legacy).

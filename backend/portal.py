@@ -296,6 +296,12 @@ async def email_agent_log(limit: int = 50, _: dict = Depends(get_admin)):
     return await email_agent.get_log(limit)
 
 
+@router.post("/api/admin/email-agent/poll")
+async def email_agent_poll(_: dict = Depends(get_admin)):
+    import email_agent
+    return await email_agent.trigger_poll()
+
+
 
 @router.get("/api/auth/me")
 async def me(user: dict = Depends(get_current_user)):

@@ -25,6 +25,8 @@ _deps: dict = {}
 STATE: dict = {"enabled": False, "started_at": None, "last_poll": None, "polls": 0,
               "processed": 0, "spam": 0, "inquiries": 0, "other": 0, "errors": 0}
 
+_poll_lock = asyncio.Lock()
+
 
 async def _ensure_table():
     pool = await _deps["db"]()
@@ -300,6 +302,26 @@ async def _process_cycle():
         except Exception as e:
             STATE["errors"] += 1
             logger.error(f"email agent: handling mail from {m.get('from_addr')} failed: {e}")
+    return len(msgs)
+
+
+async def trigger_poll() -> dict:
+    """Manual on-demand poll. Serialised via lock so admin clicks cannot stack."""
+    if not IMAP_USER or not IMAP_PASSWORD:
+        return {"ok": False, "reason": "imap_disabled"}
+    if _poll_lock.locked():
+        return {"ok": False, "reason": "already_running"}
+    async with _poll_lock:
+        try:
+            await _ensure_table()
+        except Exception:
+            pass
+        try:
+            found = await _process_cycle()
+        except Exception as e:
+            STATE["errors"] += 1
+            return {"ok": False, "reason": str(e)[:200]}
+    return {"ok": True, "found": int(found), "last_poll": STATE["last_poll"], "processed": STATE["processed"]}
 
 
 async def email_worker():
