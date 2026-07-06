@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "title": "NeXify AI — Websites & Software by an Expert · €999/day",
+    "description": "Personal B2B web development: websites, shops, apps and automation at a transparent daily rate."
+  },
+  "nav": {
+    "leistungen": "Services",
+    "preise": "Pricing",
+    "arbeitsweise": "Process",
+    "ueber": "About",
+    "kontakt": "Contact"
+  },
+  "header": {
+    "chip": "Personally managed",
+    "cta": "Request a project"
+  },
+  "hero": {
+    "badge": "Experience meets AI-powered speed",
+    "headline": "Websites and software by an expert.",
+    "highlight": "In days, not months.",
+    "description": "Pascal Courbois combines hands-on experience, clear accountability and cutting-edge AI-powered development. The result: high-quality websites, shops, web apps, mobile apps and automations at a transparent price.",
+    "cta": "Discuss your project",
+    "ctaSecondary": "View pricing",
+    "trust1": "Personally managed",
+    "trust2": "€999 net / working day",
+    "trust3": "B2B only"
+  },
+  "proof": {
+    "price": "net per working day",
+    "landing": "for a landing page",
+    "website": "for a website",
+    "shop": "for a shop or app MVP"
+  },
+  "services": {
+    "kicker": "Services",
+    "title": "Everything a digital product truly needs.",
+    "subtitle": "Strategy, design, development, integrations, testing and handover from one responsible hand. No anonymous production chain.",
+    "details": "View details"
+  },
+  "why": {
+    "kicker": "Why this price is possible",
+    "title": "Experience saves detours. AI saves lead time.",
+    "subtitle": "The price isn't lower because of less responsibility — it's lower because of less friction: no bloated teams, no handover loops, no months-long production cycles."
+  },
+  "process": {
+    "kicker": "Workflow",
+    "title": "A clear path from goal to verified result.",
+    "subtitle": "Scope is planned in working days upfront. Each phase produces visible decisions, results and reviews."
+  },
+  "calculator": {
+    "kicker": "Project calculator",
+    "title": "Transparency, not package fog.",
+    "description": "Choose the planned working days. The actual scope is defined before project start based on features, content, integrations and acceptance criteria.",
+    "days": "working days",
+    "day": "working day",
+    "netto": "Net",
+    "vat": "21% VAT",
+    "gross": "Gross incl. 21% VAT",
+    "note": "For cross-border B2B services within the EU, reverse charge may apply with a valid VAT ID."
+  },
+  "cta": {
+    "kicker": "Start with a clear cost estimate",
+    "title": "Describe your goal. You'll receive scope, working days and a price range.",
+    "description": "No non-binding sales pitch — a professional initial assessment: what's needed, what can wait, and how to implement it cost-effectively.",
+    "button": "Request a project",
+    "response": "Response to qualified inquiries typically within one business day",
+    "confidential": "Confidential B2B communication"
+  },
+  "faq": {
+    "kicker": "Frequently asked questions",
+    "title": "Clear answers before project start.",
+    "subtitle": "The most important points about pricing, scope and collaboration.",
+    "allQuestions": "View all questions"
+  },
+  "testimonials": {
+    "q1": "A complete website in three days — and the result looks like it was built by a large agency. Pascal immediately understood what we needed.",
+    "a1": "Managing Director",
+    "i1": "IT Consulting",
+    "q2": "Finally a developer who honestly says what makes sense and what doesn't. No tech jargon, just clear recommendations.",
+    "a2": "Owner",
+    "i2": "Retail",
+    "q3": "The price was transparent, the communication direct, the result on time. This is how collaboration should always work.",
+    "a3": "CTO",
+    "i3": "Technology"
+  },
+  "footer": {
+    "description": "AI-powered websites, shops, apps and automations — personally designed, developed and tested.",
+    "b2b": "B2B only",
+    "navigation": "Navigation",
+    "services": "Services",
+    "contact": "Contact",
+    "ready": "Ready to start your project?",
+    "readySub": "Free initial consultation · Response within 24h",
+    "cta": "Request a project"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found.",
+    "description": "The link may be outdated or the URL contains a typo.",
+    "back": "Back to homepage"
+  },
+  "loading": "Loading …",
+  "backToTop": "Top"
+}

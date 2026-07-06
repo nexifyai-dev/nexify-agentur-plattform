@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { CheckCircle2, LoaderCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export function ContactForm() {
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1] || "de";
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -34,19 +38,41 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} className="contact-form">
+    <form onSubmit={submit} className="contact-form" noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label><span>Name *</span><Input required name="name" autoComplete="name" placeholder="Vor- und Nachname" /></label>
-        <label><span>Unternehmen *</span><Input required name="company" autoComplete="organization" placeholder="Unternehmen" /></label>
-        <label><span>E-Mail *</span><Input required type="email" name="email" autoComplete="email" placeholder="name@unternehmen.de" /></label>
-        <label><span>Telefon</span><Input type="tel" name="phone" autoComplete="tel" placeholder="Optional" /></label>
+        <label htmlFor="contact-name"><span>Name *</span><Input required id="contact-name" name="name" autoComplete="name" placeholder="Vor- und Nachname" aria-required="true" /></label>
+        <label htmlFor="contact-company"><span>Unternehmen *</span><Input required id="contact-company" name="company" autoComplete="organization" placeholder="Unternehmen" aria-required="true" /></label>
+        <label htmlFor="contact-email"><span>E-Mail *</span><Input required id="contact-email" type="email" name="email" autoComplete="email" placeholder="name@unternehmen.de" aria-required="true" /></label>
+        <label htmlFor="contact-phone"><span>Telefon</span><Input id="contact-phone" type="tel" name="phone" autoComplete="tel" placeholder="Optional" /></label>
       </div>
-      <label><span>Projektart</span><select name="projectType" defaultValue="Website"><option>Landingpage</option><option>Unternehmenswebsite</option><option>Onlineshop</option><option>Web-App</option><option>Mobile App</option><option>Automatisierung</option><option>AI-Agent</option><option>Sonstiges</option></select></label>
-      <label><span>Was soll entstehen? *</span><Textarea required name="message" placeholder="Ziel, gewünschte Funktionen, bestehende Systeme und gewünschter Starttermin …" /></label>
+      <label htmlFor="contact-type"><span>Projektart</span>
+        <select id="contact-type" name="projectType" defaultValue="Website" aria-label="Projektart auswählen">
+          <option>Landingpage</option>
+          <option>Unternehmenswebsite</option>
+          <option>Onlineshop</option>
+          <option>Web-App</option>
+          <option>Mobile App</option>
+          <option>Automatisierung</option>
+          <option>AI-Agent</option>
+          <option>Sonstiges</option>
+        </select>
+      </label>
+      <label htmlFor="contact-message"><span>Was soll entstehen? *</span>
+        <Textarea required id="contact-message" name="message" placeholder="Ziel, gewünschte Funktionen, bestehende Systeme und gewünschter Starttermin …" aria-required="true" />
+      </label>
       <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-      <label className="consent"><input required type="checkbox" name="privacy" value="accepted" /><span>Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Angaben zur Bearbeitung der B2B-Anfrage zu.</span></label>
-      <Button type="submit" size="lg" disabled={status === "loading"}>{status === "loading" ? <LoaderCircle className="size-4 animate-spin" /> : <Send className="size-4" />} Anfrage senden</Button>
-      {message && <p role="status" className={status === "success" ? "form-success" : "form-error"}>{status === "success" && <CheckCircle2 className="size-4" />}{message}</p>}
+      <label className="consent" htmlFor="contact-privacy">
+        <input required id="contact-privacy" type="checkbox" name="privacy" value="accepted" aria-required="true" />
+        <span>Ich habe die <Link href={`/${locale}/datenschutz`} className="underline underline-offset-3">Datenschutzerklärung</Link> gelesen und stimme der Verarbeitung meiner Angaben zur Bearbeitung der B2B-Anfrage zu.</span>
+      </label>
+      <Button type="submit" size="lg" disabled={status === "loading"} aria-busy={status === "loading"}>
+        {status === "loading" ? <><LoaderCircle className="size-4 animate-spin" /> Wird gesendet …</> : <><Send className="size-4" /> Anfrage senden</>}
+      </Button>
+      {message && (
+        <p role="status" aria-live="polite" className={status === "success" ? "form-success" : "form-error"}>
+          {status === "success" && <CheckCircle2 className="size-4" />}{message}
+        </p>
+      )}
     </form>
   );
 }

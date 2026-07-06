@@ -233,10 +233,18 @@ export const faqs = [
     q: "Welche Technologien werden eingesetzt?",
     a: "Je nach Ziel unter anderem Next.js, React, TypeScript, Shadcn-basierte Designsysteme, moderne Datenbanken und APIs, Vercel oder geeignete Self-Hosting-Infrastruktur. Technologie folgt dem Betrieb – nicht umgekehrt.",
   },
+  {
+    q: "Was passiert nach der Übergabe?",
+    a: "Sie erhalten den vollständigen Quellcode, Dokumentation, Betriebsinformationen und eine priorisierte Liste sinnvoller nächster Schritte. Es gibt keinen Lock-in. Sie können den Code weiterentwickeln lassen, wo Sie wollen.",
+  },
+  {
+    q: "Kann ich ein konkretes Beispiel sehen?",
+    a: "Vertrauliche Kundenprojekte werden nicht ungefragt veröffentlicht. In einem kostenlosen Erstgespräch können wir aber über vergleichbare Projekte sprechen und Ihnen eine Referenz-URL zeigen, die für Ihre Branche relevant ist.",
+  },
 ];
 
 export const featurePillars = [
-  { title: "Ein Fachmann, ein Ergebnis", text: "Keine Übergabekette zwischen Vertrieb, Design, Entwicklung und QA. Verantwortung bleibt persönlich und nachvollziehbar.", icon: Code2 },
-  { title: "AI-gestützt, nicht AI-abgegeben", text: "AI verkürzt Recherche, Umsetzung und Prüfung. Erfahrung entscheidet, was richtig, wartbar und wirtschaftlich ist.", icon: Bot },
-  { title: "Transparenz pro Arbeitstag", text: "999 Euro netto pro Arbeitstag. Umfang, Annahmen und Mehrbedarf werden vor der Umsetzung sichtbar gemacht.", icon: ChartNoAxesCombined },
+  { title: "Ein Fachmann, ein Ergebnis", text: "Keine Übergabekette zwischen Vertrieb, Design, Entwicklung und QA. Derjenige, der Ihren Scope versteht, trifft auch die technischen Entscheidungen und prüft das Ergebnis.", icon: Code2 },
+  { title: "AI-gestützt, nicht AI-abgegeben", text: "AI verkürzt Recherche, Umsetzung und Prüfung um bis zu 60 %. Erfahrung entscheidet, was richtig, wartbar und wirtschaftlich ist. Keine Experimente auf Ihre Kosten.", icon: Bot },
+  { title: "Transparenz pro Arbeitstag", text: "999 Euro netto pro Arbeitstag. Keine versteckten Posten, keine nachträglichen Überraschungen. Umfang, Annahmen und Zusatzaufwand werden vor Beginn dokumentiert.", icon: ChartNoAxesCombined },
 ];

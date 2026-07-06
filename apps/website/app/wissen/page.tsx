@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, CircleDollarSign, Scale, ShieldCheck } from "lucide-react";
+import { Reveal, RevealGroup } from "@/components/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 
@@ -14,5 +15,25 @@ const topics = [
 ];
 
 export default function KnowledgePage() {
-  return <main><section className="subpage-hero"><div className="site-container"><Badge>Orientierung für Entscheider</Badge><h1>Technik verständlich. Preise nachvollziehbar. Verantwortung sichtbar.</h1><p>Kurze Grundlagen für Unternehmen, die digitale Produkte nicht nur einkaufen, sondern wirtschaftlich und dauerhaft betreiben wollen.</p></div></section><section className="site-container grid gap-5 pb-8 md:grid-cols-2">{topics.map(({ href, icon: Icon, title, text }) => <Link href={href} key={title}><Card className="knowledge-card"><Icon /><h2>{title}</h2><p>{text}</p><span>Weiterlesen <ArrowRight /></span></Card></Link>)}</section></main>;
+  return (
+    <main>
+      <section className="subpage-hero">
+        <div className="site-container">
+          <Reveal><Badge>Orientierung für Entscheider</Badge></Reveal>
+          <Reveal delay={100}><h1>Technik verständlich. Preise nachvollziehbar. Verantwortung sichtbar.</h1></Reveal>
+          <Reveal delay={200}><p>Kurze Grundlagen für Unternehmen, die digitale Produkte nicht nur einkaufen, sondern wirtschaftlich und dauerhaft betreiben wollen.</p></Reveal>
+        </div>
+      </section>
+
+      <section className="site-container grid gap-5 pb-8 md:grid-cols-2">
+        <RevealGroup stagger={80}>
+          {topics.map(({ href, icon: Icon, title, text }) => (
+            <Link href={href} key={title}>
+              <Card className="knowledge-card"><Icon /><h2>{title}</h2><p>{text}</p><span>Weiterlesen <ArrowRight /></span></Card>
+            </Link>
+          ))}
+        </RevealGroup>
+      </section>
+    </main>
+  );
 }
