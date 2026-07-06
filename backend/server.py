@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
+import re
 import json
 import uuid
 import asyncio
@@ -55,14 +56,12 @@ NINEROUTER_BASE_URL = os.environ.get("NINEROUTER_BASE_URL")
 NINEROUTER_API_KEY = os.environ.get("NINEROUTER_API_KEY")
 PRIMARY_MODEL = os.environ.get("PRIMARY_MODEL", "nexifyai-combo-llm")
 
-# Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: MiMo direkt.
+# Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: gleicher 9router mit backup-Modell.
+# Best-practice: alle LLM-Calls über den 9router — Combo hat interne Multi-Provider-Redundanz.
 LLM = AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
 MIMO_MODEL = PRIMARY_MODEL
-LLM_FALLBACK = (
-    AsyncOpenAI(base_url=MIMO_BASE_URL, api_key=MIMO_API_KEY)
-    if MIMO_BASE_URL and MIMO_API_KEY else None
-)
-FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "mimo-v2.5-pro")
+LLM_FALLBACK = LLM  # gleicher client → gleicher provider → nutzt Combo-Fallback intern
+FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", PRIMARY_MODEL)
 
 SCHEMA = """
 create table if not exists nexify_leads (
@@ -214,7 +213,9 @@ REGELN:
 - Tagessatz 999 EUR netto, realistische Arbeitstage gemaess Leistungskatalog, maximal 5 Positionen.
 - JEDE Position muss erkennbar aus dem Gespraech abgeleitet sein – keine generischen Fuellpositionen.
 - Nicht besprochene Details: KEINE stillen Annahmen im Leistungsumfang – fuehre sie transparent unter assumptions auf.
-- Schreibe warm, persoenlich und professionell. Der Kunde muss spueren, dass dieses Angebot exklusiv fuer ihn erstellt wurde."""
+- Schreibe warm, persoenlich und professionell. Der Kunde muss spueren, dass dieses Angebot exklusiv fuer ihn erstellt wurde.
+- Antworte AUSNAHMSLOS mit dem JSON-Objekt. Auch wenn Angaben fehlen: erstelle das bestmoegliche Angebot und liste offene Punkte unter assumptions. Stelle KEINE Rueckfragen.
+- Halte das JSON kompakt: kurze Saetze, keine ueberfluessigen Fuellwoerter."""
 
 
 class ChatSessionCreate(BaseModel):
@@ -283,19 +284,77 @@ def get_history(session_id: str, language: str) -> list[dict]:
     return HISTORY[session_id]
 
 
-async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
+def _extract_llm_content(resp) -> str:
+    msg = resp.choices[0].message
+    content = (msg.content or "").strip()
+    if not content:
+        rc = getattr(msg, "reasoning_content", None) or (getattr(msg, "model_extra", None) or {}).get("reasoning_content")
+        content = (rc or "").strip()
+    if "<think>" in content:
+        content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
+    return content
+
+
+def _parse_json_lenient(raw: str) -> dict | None:
+    raw = raw.strip()
+    if raw.startswith("```"):
+        parts = raw.split("```")
+        if len(parts) > 1:
+            raw = parts[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
     try:
-        resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
-        content = resp.choices[0].message.content or ""
-        if content.strip():
-            return content
-        raise RuntimeError("empty LLM response")
-    except Exception as e:
-        if not LLM_FALLBACK:
-            raise
-        logger.warning(f"primary LLM failed ({e}); routing via fallback ({FALLBACK_MODEL})")
-        resp = await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens)
-        return resp.choices[0].message.content or ""
+        obj = json.loads(raw)
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    candidates = []
+    depth, start = 0, -1
+    in_str, esc = False, False
+    for i, ch in enumerate(raw):
+        if esc:
+            esc = False
+            continue
+        if ch == "\\" and in_str:
+            esc = True
+            continue
+        if ch == '"':
+            in_str = not in_str
+            continue
+        if in_str:
+            continue
+        if ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}" and depth > 0:
+            depth -= 1
+            if depth == 0 and start != -1:
+                candidates.append(raw[start:i + 1])
+    for cand in reversed(candidates):
+        try:
+            obj = json.loads(cand)
+            if isinstance(obj, dict) and obj:
+                return obj
+        except Exception:
+            continue
+    return None
+
+
+async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
+    last_err: Exception | None = None
+    for attempt in range(3):
+        try:
+            resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
+            content = _extract_llm_content(resp)
+            if content:
+                return content
+            last_err = RuntimeError("empty LLM response")
+        except Exception as e:
+            last_err = e
+        logger.warning(f"llm_complete attempt {attempt + 1}/3 failed ({last_err}); retrying via {FALLBACK_MODEL}")
+    raise last_err
 
 
 async def open_chat_stream(messages: list[dict], max_tokens: int):
@@ -873,23 +932,20 @@ async def contact(body: ContactIn):
 async def request_offer(body: OfferRequestIn):
     history = get_history(body.session_id, body.language)
     prompt = OFFER_PROMPT.format(language=body.language, name=body.name)
-    try:
-        raw = await llm_complete(history + [{"role": "user", "content": prompt}], max_tokens=4000)
-    except Exception as e:
-        logger.error(f"offer llm failed: {e}")
-        raise HTTPException(status_code=502, detail="offer generation failed")
-    raw = raw.strip()
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    try:
-        offer = json.loads(raw)
-    except Exception:
-        start, end = raw.find("{"), raw.rfind("}")
-        if start == -1 or end == -1:
-            raise HTTPException(status_code=502, detail="offer parse failed")
-        offer = json.loads(raw[start:end + 1])
+    offer = None
+    for attempt in range(2):
+        try:
+            raw = await llm_complete(history + [{"role": "user", "content": prompt}], max_tokens=9000)
+        except Exception as e:
+            logger.error(f"offer llm failed: {e}")
+            raise HTTPException(status_code=502, detail="offer generation failed")
+        offer = _parse_json_lenient(raw)
+        if offer and offer.get("items"):
+            break
+        logger.warning(f"offer parse attempt {attempt + 1}/2 failed; raw head: {raw[:200]!r}")
+        offer = None
+    if not offer:
+        raise HTTPException(status_code=502, detail="offer parse failed")
 
     total_min = sum(int(i.get("days_min", 1)) for i in offer.get("items", []))
     total_max = sum(int(i.get("days_max", i.get("days_min", 1))) for i in offer.get("items", []))
