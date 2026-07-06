@@ -113,3 +113,15 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - **Phantom-Provider-Bug (iteration_6) strukturell behoben**: OPENAI_API_KEY enthielt den 9router-Key → falsche „openai"-Provider-Karten → „No active credentials"-Fehler. Fix: OPENAI_API_KEY aus hermes .env, HERMES_HOME/.env, compose entfernt + Image-Default via compose `OPENAI_API_KEY=` (leer) überschrieben (docker commit hatte alte Env eingebrannt — Merke: bei commit-basierten Images env-Overrides im compose setzen!). Provider mit Key jetzt exakt: custom:ai-router + xiaomi.
 - **Testing (iteration_8.json, 6/6 PASS)**: SSO-Security 5/5 via testing_agent (Replay/Fake/Cookie-Schutz), 9router 2/2 via testing_agent, CRM-Browser-E2E + Chat-Streaming (13.2 t/s) + DIN-Alias- & NL-Regression via Selbsttest.
 - **P2-Härtung (Backlog, aus Code-Review)**: SSO-Nonces persistieren (DB statt RAM); Admin-Identität in HMAC-Token einbetten statt „ältester Admin".
+
+## Session 06.07.2026 (Fork 2, Teil 3) – E-Mail-Agent-Dashboard, PDF aus WebUI, SSO-Härtung
+- **E-Mail-Agent-Sichtbarkeit (iteration_9, 6/6 PASS)**: email_agent.py führt jetzt STATE-Metriken + DB-Aktivitätslog (nexify_email_agent_log). Neue Admin-APIs GET /api/admin/email-agent/status + /log. Neuer Cockpit-Tab „E-Mail-Agent" (email-agent-panel.tsx, data-testid admin-tab-emailAgent) mit Status-Karten + Aktivitätslog, 30s-Auto-Refresh. ⚠️ PRODUKTIV erst nach „Save to GitHub" (Vercel) — Preview zeigt es bereits.
+- **PDF-Angebote aus der Hermes WebUI**: (a) via CRM-Tab → Angebote → PDF-Button (bestand schon, Admin-berechtigt, verifiziert %PDF). (b) NEU: Service-Token-Auth `X-Admin-Token` (ADMIN_API_TOKEN, hmac-verglichen) in get_current_user + Hermes-Skill `nexify-crm` (/root/.hermes/skills/nexify-crm/SKILL.md, Token als NEXIFY_CRM_API_TOKEN in HERMES_HOME/.env) — der WebUI-Chat-Agent kann Leads/Stats/Tickets lesen, Angebote erstellen (PDF+Mail automatisch) und PDFs abrufen.
+- **P2-SSO-Härtung verifiziert**: Nonces DB-persistent (nexify_sso_nonces, Pruning eingebaut; Replay nach Backend-Restart abgelehnt ✅). Admin-Identität (E-Mail) im HMAC-Token (Format exp:nonce:email.sig), beide Seiten (WebUI /crm + portal.py sso_consume) angepasst; CRM_ADMIN_EMAIL in hermes .env.
+- Review-Fix: enabled/started_at vor 10s-Startup-Sleep gesetzt (kein „Inaktiv"-Flackern).
+- Test-Infra: /app/backend/tests/test_iter9_email_agent_sso.py (13 pytest, alle grün).
+
+### Offen (nächste Session)
+- „Save to GitHub" durch User → Vercel-Deploy des E-Mail-Agent-Tabs auf www.nexifyai.cloud.
+- Native Hermes-Panels für CRM (b, am Gesamt-Ende laut User-Entscheid).
+- Backlog: Revolut-E2E, Referenzen-Seite, XMTP-Key im 9router erneuern, MiMo-Guthaben (402), CRM-Live-Badge am WebUI-Tab (Vorschlag), Cookie-Banner-Überlappung im Admin (minor).

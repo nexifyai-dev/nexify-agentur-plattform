@@ -306,9 +306,9 @@ async def email_worker():
     if not IMAP_USER or not IMAP_PASSWORD:
         logger.warning("email agent disabled: IMAP credentials missing")
         return
-    await asyncio.sleep(10)
     STATE["enabled"] = True
     STATE["started_at"] = datetime.now(timezone.utc).isoformat()
+    await asyncio.sleep(10)
     try:
         await _ensure_table()
     except Exception as e:
