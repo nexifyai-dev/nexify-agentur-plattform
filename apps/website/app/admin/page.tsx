@@ -11,9 +11,10 @@ import { CreateOfferForm, ProspectForm } from "@/components/admin/forms";
 import { LeadsPanel, type Lead } from "@/components/admin/leads-panel";
 import { SlotsPanel } from "@/components/admin/slots-panel";
 import { AgentChat } from "@/components/admin/agent-chat";
+import { EmailAgentPanel } from "@/components/admin/email-agent-panel";
 
 type Stats = { leads: number; offers: number; accepted: number; declined: number; chat_sessions: number; customers: number; pipeline_value: number; won_value: number };
-type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "createOffer" | "prospect" | "email";
+type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "createOffer" | "prospect" | "email" | "emailAgent";
 
 const TABS: [Tab, string][] = [
   ["agent", "AI-Agent"],
@@ -22,6 +23,7 @@ const TABS: [Tab, string][] = [
   ["slots", "Termine"],
   ["tickets", "Tickets"],
   ["chats", "KI-Chats"],
+  ["emailAgent", "E-Mail-Agent"],
   ["createOffer", "+ Angebot"],
   ["prospect", "+ Interessent"],
   ["email", "E-Mail"],
@@ -160,6 +162,8 @@ export default function AdminPage() {
           {tab === "tickets" && tickets.length === 0 && <p className="text-sm text-zinc-600">Keine Tickets vorhanden.</p>}
 
           {tab === "chats" && sessions.map((s) => <SessionRow key={s.id} s={s} />)}
+
+          {tab === "emailAgent" && <EmailAgentPanel />}
 
           {tab === "createOffer" && <CreateOfferForm onDone={() => api("/api/admin/offers").then(setOffers).catch(() => {})} />}
 
