@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Cookie, Settings2 } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
@@ -69,6 +70,7 @@ function Toggle({ on, disabled, onChange, testId }: { on: boolean; disabled?: bo
 }
 
 export function CookieConsent() {
+  const pathname = usePathname() || "";
   const { lang } = useLang();
   const t = T[lang];
   const [visible, setVisible] = useState(false);
@@ -77,11 +79,12 @@ export function CookieConsent() {
   const [marketing, setMarketing] = useState(false);
 
   useEffect(() => {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/konto")) return;
     if (!getConsent()) {
       const timer = setTimeout(() => setVisible(true), 800);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     const openHandler = () => {

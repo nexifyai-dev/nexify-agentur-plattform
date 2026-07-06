@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Sparkles, X, Send, FileText, CheckCircle2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
 import { useLang } from "@/lib/i18n";
@@ -52,6 +53,7 @@ const T = {
 };
 
 export function ChatWidget() {
+  const pathname = usePathname() || "";
   const { lang } = useLang();
   const t = T[lang];
   const [open, setOpen] = useState(false);
@@ -170,6 +172,9 @@ export function ChatWidget() {
       setShowOffer(false);
     }
   };
+
+  // Chat-Widget nur auf öffentlichen Kundenseiten – nicht in Admin/Konto (geschlossene Bereiche)
+  if (pathname.startsWith("/admin") || pathname.startsWith("/konto")) return null;
 
   return (
     <>

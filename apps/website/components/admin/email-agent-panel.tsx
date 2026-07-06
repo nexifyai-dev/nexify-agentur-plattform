@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Inbox, Mail, RefreshCw, ShieldAlert, Ticket } from "lucide-react";
+import { Inbox, Mail, PlayCircle, RefreshCw, ShieldAlert, Ticket } from "lucide-react";
 import { api } from "@/lib/auth";
 import { fmtDate } from "@/components/admin/panels";
 
@@ -27,6 +27,8 @@ export function EmailAgentPanel() {
   const [status, setStatus] = useState<AgentStatus | null>(null);
   const [log, setLog] = useState<LogRow[]>([]);
   const [busy, setBusy] = useState(false);
+  const [polling, setPolling] = useState(false);
+  const [pollMsg, setPollMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setBusy(true);
@@ -41,6 +43,29 @@ export function EmailAgentPanel() {
       setBusy(false);
     }
   }, []);
+
+  const pollNow = useCallback(async () => {
+    setPolling(true);
+    setPollMsg(null);
+    try {
+      const r = await api("/api/admin/email-agent/poll", { method: "POST" });
+      if (r?.ok) {
+        setPollMsg(r.found > 0 ? `Neue Nachrichten verarbeitet: ${r.found}` : "Postfach geprüft — keine neuen Mails.");
+        await load();
+      } else if (r?.reason === "already_running") {
+        setPollMsg("Ein Abruf läuft bereits — bitte einen Moment warten.");
+      } else if (r?.reason === "imap_disabled") {
+        setPollMsg("IMAP-Zugangsdaten fehlen im Backend.");
+      } else {
+        setPollMsg(`Fehler: ${r?.reason ?? "unbekannt"}`);
+      }
+    } catch (e) {
+      setPollMsg(e instanceof Error ? `Fehler: ${e.message}` : "Fehler beim Abruf");
+    } finally {
+      setPolling(false);
+      setTimeout(() => setPollMsg(null), 6000);
+    }
+  }, [load]);
 
   useEffect(() => {
     load();
@@ -70,6 +95,16 @@ export function EmailAgentPanel() {
           className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-[12px] font-semibold text-zinc-300 hover:border-white/30 hover:text-white disabled:opacity-50">
           <RefreshCw size={13} className={busy ? "animate-spin" : ""} /> Aktualisieren
         </button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button onClick={pollNow} disabled={polling || !status?.enabled} data-testid="email-agent-poll-now"
+          className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-[12px] font-semibold text-emerald-200 hover:border-emerald-400/60 hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-40">
+          <PlayCircle size={13} className={polling ? "animate-pulse" : ""} /> {polling ? "Prüfe Postfach…" : "Jetzt Postfach prüfen"}
+        </button>
+        {pollMsg && (
+          <span className="text-[12px] text-zinc-400" data-testid="email-agent-poll-msg">{pollMsg}</span>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">

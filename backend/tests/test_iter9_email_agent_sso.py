@@ -77,6 +77,39 @@ class TestEmailAgentAPI:
         assert r.status_code == 401
 
 
+# --------------------- TEST 2: Manual Poll Endpoint (Iter 10) ---------------------
+
+# Preview-Backend, weil neuer Endpoint erst nach Save-to-GitHub auf www.nexifyai.cloud landet.
+PREVIEW = "https://rebranding-hub-2.preview.emergentagent.com"
+
+
+class TestEmailAgentManualPoll:
+    def test_poll_with_token(self):
+        r = requests.post(
+            f"{PREVIEW}/api/admin/email-agent/poll",
+            headers={"X-Admin-Token": ADMIN_TOKEN},
+            timeout=60,  # IMAP-Zyklus kann dauern
+        )
+        assert r.status_code == 200, f"expected 200 got {r.status_code}: {r.text[:400]}"
+        data = r.json()
+        assert data.get("ok") is True, f"unexpected: {data}"
+        assert "last_poll" in data and data["last_poll"], f"no last_poll: {data}"
+        assert isinstance(data.get("found"), int)
+        assert isinstance(data.get("processed"), int)
+
+    def test_poll_no_token(self):
+        r = requests.post(f"{PREVIEW}/api/admin/email-agent/poll", timeout=15)
+        assert r.status_code == 401
+
+    def test_poll_wrong_token(self):
+        r = requests.post(
+            f"{PREVIEW}/api/admin/email-agent/poll",
+            headers={"X-Admin-Token": "wrong"},
+            timeout=15,
+        )
+        assert r.status_code == 401
+
+
 # ------------------------- TEST 3: Service-Token generally -------------------------
 
 class TestServiceTokenAuth:
