@@ -125,3 +125,8 @@ Vollumfängliches Premium-Rebranding der NeXify-AI-Website: Design, Inhalte, umf
 - „Save to GitHub" durch User → Vercel-Deploy des E-Mail-Agent-Tabs auf www.nexifyai.cloud.
 - Native Hermes-Panels für CRM (b, am Gesamt-Ende laut User-Entscheid).
 - Backlog: Revolut-E2E, Referenzen-Seite, XMTP-Key im 9router erneuern, MiMo-Guthaben (402), CRM-Live-Badge am WebUI-Tab (Vorschlag), Cookie-Banner-Überlappung im Admin (minor).
+
+## Session 06.07.2026 (Fork 3) – Pre-Save-to-GitHub Deploy-Readiness-Check
+- **Full-stack Vercel-Deploy-Readiness verifiziert**: `yarn build` sauber (27/27 statische Seiten, TypeScript grün), `yarn lint` 0 Errors, Backend `/api/admin/email-agent/status`+`/log` liefern 200 OK (enabled:true, polls>0), E-Mail-Agent-Tab (data-testid admin-tab-emailAgent) im Cockpit visuell verifiziert (Screenshot: Status Aktiv, 5 Karten, Aktivitätslog leer, Auto-Refresh 30s).
+- **Rechtstexte-Audit (DE+NL) bestanden**: Datenschutz §5 (Mem0 SCC), §6 (KI-Vorsortierung + Hostinger-Postfach), KI-Hinweise (E-Mail-Automation Art. 22 DSGVO), Cookie-Consent (§25 TDDDG / Telecommunicatiewet), Impressum/AGB/AVV/Widerruf — alle bilingual vollständig.
+- **Git-Working-Tree sauber** für Save-to-GitHub (kosmetische next-env.d.ts-Diff durch Build zurückgesetzt; nur harmlose Untracked-Artefakte übrig).
