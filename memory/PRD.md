@@ -137,3 +137,19 @@ Erkannte Abweichungen aus visuellem/logischem Audit und behoben:
 - **Overlay-Cleanup im geschlossenen Bereich**: Chat-Widget und Cookie-Banner verbergen sich jetzt auf `/admin` + `/konto` (usePathname-Gate). Admins sind eingeloggt, brauchen den Berater-Chat nicht; Cookie-Consent hat auf öffentlichen Seiten stattgefunden. Verifiziert via Screenshot (`chat-launcher: 0, cookie-banner: 0` in /admin).
 - **Bottom-Padding** in `/admin` und `/konto` auf pb-20 md:pb-24 erhöht — bessere Atmung.
 - **Test-Suite**: pytest 66 passed. 1 booking_agent-Test (Legacy, Accept+Poll-Pattern-Mismatch) und 8 VPS-abhängige (webui.nexifyai.cloud CF 530) offene Errors sind nicht durch diese Änderungen verursacht (Infra/Legacy).
+
+## Session 06.07.2026 (Fork 3, Teil 3) – VPS-Recovery nach Tunnel-Konflikt
+
+**Vorfall & Root-Cause**: Beim Vorbereiten der Fabrik-CEO-Push-Integration wurde `cloudflared-main.service` neu gestartet, ohne zu erkennen, dass gleichzeitig ein zweiter Service `cloudflared.service` (Token-basiert) mit einer **anderen** Tunnel-ID lief. Dadurch existierten kurzzeitig zwei aktive Prozesse — beide registrieren sich bei Cloudflare, aber die DNS-Records zeigen nur auf einen. Resultat: alle *.nexifyai.cloud-Subdomains 530 (Error 1033).
+
+**Recovery-Steps (dokumentiert für Wiedererkennung)**:
+1. `dig +short webui.nexifyai.cloud CNAME` → prüft welche Tunnel-ID die DNS-Records nutzen (CF `cfargotunnel.com`-CNAME dekodieren)
+2. Beide Services `cloudflared*.service` mit `journalctl -u X --no-pager -n 20` und `systemctl cat X` prüfen: **Tunnel-ID unterscheidet sich!**
+3. **Soll-Zustand (autoritative Info aus /root/.cloudflared/config.yml + credentials-file)**:
+   - `cloudflared-main.service` = **Main-Tunnel** `aed8a968-ac34-44cf-996d-0d2da8c872d7`, Config `/root/.cloudflared/config.yml`, credentials `current-tunnel-credentials.json` — enthält 19 Ingress-Rules (webui, ai-router, api, work, www, dashboard, brain, ai-team via app.nexifyai.cloud, docs, portal, rag, mcp, open, etc.) → **das ist der produktive Tunnel**
+   - `cloudflared.service` = Sekundär/Legacy-Tunnel `6250ef9e-00af-4f1f-88f3-46aa12811f87` (Token-basiert) — nicht der Ingress-Owner, deshalb stopped/inactive halten
+4. Fix: `systemctl start cloudflared-main.service && systemctl stop cloudflared.service` → 4 QUIC-Connections registered, alle Endpoints wieder 200/302/401 (keine 530).
+
+**Verifiziert nach Recovery**: webui/work/api/ai-router/ai-team/dashboard/open/brain/mcp/www — alle antworten mit application-level Codes. Hermes WebUI-Login-Page „NeXify AI — Anmelden" lädt, ai-router liefert 21 Modelle, E-Mail-Agent-API 200 mit polls=10.
+
+**Merke für Zukunft**: NIEMALS `systemctl restart cloudflared-main.service` ausführen wenn `cloudflared.service` gleichzeitig aktiv ist. Vorher `systemctl is-active cloudflared.service` prüfen und bei Bedarf `stop` — ODER umgekehrt. Beide teilen sich Namespace-Zone und ergeben Konflikte.

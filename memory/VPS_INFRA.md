@@ -8,9 +8,25 @@
 
 ## Routing (WICHTIG)
 - Öffentliche Website `nexifyai.cloud` + `www` → **Vercel** (CNAME vercel-dns, NICHT proxied). Nicht auf dem VPS!
-- Fast alle übrigen Subdomains → **Cloudflare Tunnel** `aed8a968-…` (Service `cloudflared-main.service`, Config `/root/.cloudflared/config.yml`). Ingress dort editieren, NICHT nginx.
+- Fast alle übrigen Subdomains → **Cloudflare Tunnel** `aed8a968-…` (Service `cloudflared-main.service`, Config `/root/.cloudflared/config.yml`, credentials `current-tunnel-credentials.json`). Ingress dort editieren, NICHT nginx.
 - SSL-Mode der Zone = flexible; Tunnel ist E2E-verschlüsselt.
 - Weitere Tunnel: `cloudflared-vsk*` (vorratsgesellschaften), `cloudflared-paperclip` (ai-team → :49916).
+
+## ⚠️ TUNNEL-KONFLIKT (Kritisch für Bots/Agenten)
+Es existieren ZWEI cloudflared-Services mit UNTERSCHIEDLICHEN Tunnel-IDs:
+- **cloudflared-main.service** = Tunnel `aed8a968-ac34-44cf-996d-0d2da8c872d7` → **PRODUKTIV**, hält 19 Ingress-Regeln (webui/work/api/ai-router/dashboard/brain/open/mcp/rag/docs/portal/etc.)
+- **cloudflared.service** = Tunnel `6250ef9e-00af-4f1f-88f3-46aa12811f87` (Token-basiert) → **LEGACY**, MUSS stopped/inactive bleiben
+
+DNS-Records zeigen ausschließlich auf `aed8a968…`. Wenn beide gleichzeitig laufen → Cloudflare 1033/530 auf allen Subdomains.
+
+**Vor JEDEM Restart eines cloudflared-Services: `systemctl status cloudflared.service cloudflared-main.service` prüfen. Immer nur EINEN aktiv halten (den Main).**
+
+Recovery bei 1033-Storm:
+```
+systemctl stop cloudflared.service
+systemctl restart cloudflared-main.service
+sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/null -w "$h: %{http_code}\n" https://$h.nexifyai.cloud; done
+```
 
 ## Kern-Endpoints (extern, verifiziert)
 - webui.nexifyai.cloud / work.nexifyai.cloud → Hermes WebUI (:8787, gebrandet „NeXify AI") – DAS ist das NeXify AI ADMIN
