@@ -266,7 +266,9 @@ Die im Paperclip-Container aktive Company `150dc80b-…` hatte **veraltete, gek�
 ### Doku-Review abgeschlossen
 Alle Runtime-prüfbaren Claims der `NeXifyAI_Gesamtdokumentation_v1.0` verifiziert (Qdrant/Redis/PF-004/9router/21 Modelle inkl. combo). Kap. 8 (MimoCode-Abgrenzung) rein konzeptionell. Abweichungen unverändert: Temporal/Authentik/Traefik nur Zielbild.
 
+### Nachtrag: Neuer MiMo Token-Plan-Key integriert (06.07.)
+User lieferte neuen `tp-`Key (Region AMS). 9router-Provider `xiaomi-tokenplan` stand auf `region: sgp` → 401. Fix: Region→ams in 9router-DB, Locks/Backoff resettet, toter Alt-Provider `xiaomi-mimo` deaktiviert. Verifiziert: xmtp/mimo-v2.5-pro ✅, DeepSeek ✅ (wieder Guthaben), combo ✅, Hermes-Chat E2E ✅. Combo-Fallback-Kette (ds → ds-max → xmtp → glm-5.2) komplett funktionsfähig.
+
 ### Offen / Nächste Schritte
 - Revolut-Payment E2E (P1, echter Zahltest durch User)
 - CRM-Panels nativ im Hermes-Stil (P2, ganz am Ende)
-- 9router-Provider-Auffüllung (DeepSeek + MiMo Guthaben leer — alles läuft über combo)
