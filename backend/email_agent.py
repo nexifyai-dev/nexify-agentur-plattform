@@ -276,6 +276,17 @@ async def _handle(m: dict):
             return
         STATE["inquiries"] += 1
         await _log_action(m, "inquiry", "ticket_created", f"Ticket {ticket_id}, AI-Antwort geplant")
+        # Fabrik CEO-Queue: proaktive Empfehlung anfordern (kein automatischer Versand)
+        try:
+            import portal
+            await portal.ceo_queue_enqueue(
+                kind="lead_inquiry",
+                ref_id=ticket_id,
+                subject=m["subject"][:250],
+                body_snippet=(m["text"] or "")[:2000],
+            )
+        except Exception as e:
+            logger.warning(f"email agent: ceo-queue enqueue failed: {e}")
         asyncio.create_task(mem_add(addr, [
             {"role": "user", "content": f"E-Mail von {m['from_name'] or addr} – Betreff: {m['subject']}\n{m['text'][:2000]}"},
         ], {"source": "email"}))

@@ -28,6 +28,17 @@ systemctl restart cloudflared-main.service
 sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/null -w "$h: %{http_code}\n" https://$h.nexifyai.cloud; done
 ```
 
+## ✅ Watchdog (installiert 06.07.2026, selbstheilend)
+- Script: `/usr/local/bin/nexify-tunnel-watchdog.sh` — prüft alle 60s (`nexify-tunnel-watchdog.timer`)
+- Legacy `cloudflared.service` per `systemctl mask` hart gesperrt (Unit-File backuped nach `/root/config-backups/06-tunnel-legacy/`)
+- Log: `/var/log/nexify-tunnel-watchdog.log` (logrotate weekly x4)
+
+## ✅ CEO-Agent-Worker (installiert 06.07.2026)
+- Script: `/usr/local/bin/nexify-ceo-worker.sh` — pollt alle 10 min (`nexify-ceo-worker.timer`)
+- Direkter 9router-Call (intern `127.0.0.1:20128`), Modell `nexifyai-combo-llm`, temp 0.4, stream:false
+- Auth: NEXIFY_CRM_API_TOKEN aus `/root/.hermes/.env`
+- Log: `/var/log/nexify-ceo-worker.log` (logrotate weekly x4)
+
 ## Kern-Endpoints (extern, verifiziert)
 - webui.nexifyai.cloud / work.nexifyai.cloud → Hermes WebUI (:8787, gebrandet „NeXify AI") – DAS ist das NeXify AI ADMIN
 - ai-router.nexifyai.cloud → 9router (:20128)

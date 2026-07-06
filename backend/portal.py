@@ -302,6 +302,196 @@ async def email_agent_poll(_: dict = Depends(get_admin)):
     return await email_agent.trigger_poll()
 
 
+# ---------------------- Fabrik CEO-Queue ----------------------
+# Autonome Empfehlungs-Pipeline: E-Mail-Agent inseriert bei jeder inquiry einen
+# Queue-Eintrag; ein VPS-Cron (Hermes-CLI mit nexify-crm-Skill) pollt, holt Kontext
+# via CRM-API und legt eine strukturierte Empfehlung zurück. Kein automatischer
+# Angebots-Versand — nur Draft für den Menschen.
+
+async def _ensure_ceo_queue_table():
+    pool = await _DB()
+    if not pool:
+        return
+    async with pool.acquire() as con:
+        await con.execute("""
+            create table if not exists nexify_ceo_queue (
+                id uuid primary key,
+                kind text not null,
+                ref_id uuid,
+                subject text,
+                body_snippet text,
+                status text not null default 'pending',
+                recommendation text,
+                claimed_by text,
+                claimed_at timestamptz,
+                created_at timestamptz default now(),
+                updated_at timestamptz default now()
+            )""")
+        await con.execute("create index if not exists nexify_ceo_queue_status_idx on nexify_ceo_queue(status, created_at desc)")
+
+
+async def ceo_queue_enqueue(kind: str, ref_id, subject: str, body_snippet: str) -> str | None:
+    """Internal helper: called by email_agent when a new inquiry arrives."""
+    pool = await _DB()
+    if not pool:
+        return None
+    try:
+        await _ensure_ceo_queue_table()
+    except Exception:
+        pass
+    qid = uuid.uuid4()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_ceo_queue (id,kind,ref_id,subject,body_snippet) values ($1,$2,$3,$4,$5)",
+            qid, kind[:30], ref_id, (subject or "")[:250], (body_snippet or "")[:2000])
+    return str(qid)
+
+
+@router.get("/api/admin/ceo-queue")
+async def ceo_queue_list(status: str = "pending", limit: int = 20, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    if not pool:
+        return []
+    await _ensure_ceo_queue_table()
+    if status not in ("pending", "processing", "done", "failed", "all"):
+        status = "pending"
+    limit = max(1, min(limit, 100))
+    async with pool.acquire() as con:
+        if status == "all":
+            rows = await con.fetch("select * from nexify_ceo_queue order by created_at desc limit $1", limit)
+        else:
+            rows = await con.fetch(
+                "select * from nexify_ceo_queue where status=$1 order by created_at desc limit $2", status, limit)
+    return [{
+        "id": str(r["id"]), "kind": r["kind"], "ref_id": str(r["ref_id"]) if r["ref_id"] else None,
+        "subject": r["subject"], "body_snippet": r["body_snippet"], "status": r["status"],
+        "recommendation": r["recommendation"], "claimed_by": r["claimed_by"],
+        "claimed_at": r["claimed_at"].isoformat() if r["claimed_at"] else None,
+        "created_at": r["created_at"].isoformat(), "updated_at": r["updated_at"].isoformat(),
+    } for r in rows]
+
+
+class CeoClaimIn(BaseModel):
+    worker_id: str | None = None
+
+
+@router.post("/api/admin/ceo-queue/{qid}/claim")
+async def ceo_queue_claim(qid: str, body: CeoClaimIn, _: dict = Depends(get_admin)):
+    """Atomar auf 'processing' setzen. Idempotent — returns 409 wenn schon geclaimed."""
+    pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="db unavailable")
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "update nexify_ceo_queue set status='processing', claimed_by=$1, claimed_at=now(), updated_at=now() "
+            "where id=$2 and status='pending' returning id, kind, ref_id, subject, body_snippet",
+            (body.worker_id or "hermes-cli")[:60], uuid.UUID(qid))
+    if not row:
+        raise HTTPException(status_code=409, detail="not pending or already claimed")
+    return {"ok": True, "id": str(row["id"]), "kind": row["kind"],
+            "ref_id": str(row["ref_id"]) if row["ref_id"] else None,
+            "subject": row["subject"], "body_snippet": row["body_snippet"]}
+
+
+class CeoCompleteIn(BaseModel):
+    recommendation: str
+    status: str = "done"  # done | failed
+
+
+@router.post("/api/admin/ceo-queue/{qid}/complete")
+async def ceo_queue_complete(qid: str, body: CeoCompleteIn, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="db unavailable")
+    status = "done" if body.status not in ("done", "failed") else body.status
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "update nexify_ceo_queue set status=$1, recommendation=$2, updated_at=now() where id=$3 returning id",
+            status, (body.recommendation or "")[:8000], uuid.UUID(qid))
+    if not row:
+        raise HTTPException(status_code=404, detail="queue entry not found")
+    return {"ok": True, "status": status}
+
+
+@router.get("/api/admin/ceo-recommendations")
+async def ceo_recommendations(limit: int = 30, _: dict = Depends(get_admin)):
+    """UI-facing list of latest recommendations (mixed status)."""
+    pool = await _DB()
+    if not pool:
+        return []
+    await _ensure_ceo_queue_table()
+    limit = max(1, min(limit, 100))
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            "select id,kind,ref_id,subject,body_snippet,status,recommendation,claimed_at,created_at,updated_at "
+            "from nexify_ceo_queue order by updated_at desc limit $1", limit)
+    return [{
+        "id": str(r["id"]), "kind": r["kind"], "ref_id": str(r["ref_id"]) if r["ref_id"] else None,
+        "subject": r["subject"], "body_snippet": r["body_snippet"], "status": r["status"],
+        "recommendation": r["recommendation"],
+        "claimed_at": r["claimed_at"].isoformat() if r["claimed_at"] else None,
+        "created_at": r["created_at"].isoformat(), "updated_at": r["updated_at"].isoformat(),
+    } for r in rows]
+
+
+# ---------------------- Infrastructure Health ----------------------
+# Best-practice: single admin-visible endpoint that surfaces the status of critical
+# subsystems. Frontend Admin panel can render a green/amber/red badge.
+
+@router.get("/api/admin/health/infra")
+async def health_infra(_: dict = Depends(get_admin)):
+    """Aggregated health of email-agent, ceo-queue and critical external endpoints."""
+    import email_agent as _email_agent
+    pool = await _DB()
+
+    # Email agent state
+    ea = _email_agent.get_status()
+
+    # CEO queue counts
+    q_counts = {"pending": 0, "processing": 0, "done": 0, "failed": 0}
+    last_done_at = None
+    if pool:
+        try:
+            await _ensure_ceo_queue_table()
+            async with pool.acquire() as con:
+                rows = await con.fetch(
+                    "select status, count(*)::int as n from nexify_ceo_queue group by status")
+                for r in rows:
+                    q_counts[r["status"]] = r["n"]
+                last = await con.fetchrow(
+                    "select updated_at from nexify_ceo_queue where status='done' order by updated_at desc limit 1")
+                if last:
+                    last_done_at = last["updated_at"].isoformat()
+        except Exception:
+            pass
+
+    # Basic degradation heuristic
+    degraded = []
+    if not ea.get("enabled"):
+        degraded.append("email_agent_disabled")
+    if ea.get("errors", 0) > 10:
+        degraded.append("email_agent_errors")
+    if q_counts["pending"] > 20:
+        degraded.append("ceo_queue_backlog")
+
+    return {
+        "ok": len(degraded) == 0,
+        "degraded": degraded,
+        "email_agent": {
+            "enabled": ea.get("enabled"),
+            "last_poll": ea.get("last_poll"),
+            "polls": ea.get("polls"),
+            "processed": ea.get("processed"),
+            "errors": ea.get("errors"),
+        },
+        "ceo_queue": {
+            "counts": q_counts,
+            "last_done_at": last_done_at,
+        },
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 
 @router.get("/api/auth/me")
 async def me(user: dict = Depends(get_current_user)):

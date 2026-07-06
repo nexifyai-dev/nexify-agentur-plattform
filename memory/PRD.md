@@ -153,3 +153,46 @@ Erkannte Abweichungen aus visuellem/logischem Audit und behoben:
 **Verifiziert nach Recovery**: webui/work/api/ai-router/ai-team/dashboard/open/brain/mcp/www — alle antworten mit application-level Codes. Hermes WebUI-Login-Page „NeXify AI — Anmelden" lädt, ai-router liefert 21 Modelle, E-Mail-Agent-API 200 mit polls=10.
 
 **Merke für Zukunft**: NIEMALS `systemctl restart cloudflared-main.service` ausführen wenn `cloudflared.service` gleichzeitig aktiv ist. Vorher `systemctl is-active cloudflared.service` prüfen und bei Bedarf `stop` — ODER umgekehrt. Beide teilen sich Namespace-Zone und ergeben Konflikte.
+
+## Session 06.07.2026 (Fork 3, Teil 4) – Fabrik-CEO-Push + Best-Practice-Härtung + Watchdog
+### Was gebaut wurde
+1. **Tunnel-Watchdog** (`/usr/local/bin/nexify-tunnel-watchdog.sh` + systemd-Timer, alle 60s):
+   - Prüft `cloudflared.service` (Legacy) — bei active → stop + disable, dann `cloudflared-main.service` neu registrieren
+   - Endpoint-Probe (webui/ai-router/work/api/open/dashboard) — logged Degradation
+   - Log in `/var/log/nexify-tunnel-watchdog.log`, logrotate weekly x4
+2. **Legacy cloudflared.service maskiert**: Unit-File nach `/root/config-backups/06-tunnel-legacy/` verschoben, `systemctl mask` → Symlink auf /dev/null → kann NIEMALS mehr starten
+3. **Fabrik-CEO-Queue** (Backend):
+   - Tabelle `nexify_ceo_queue` (id, kind, ref_id, subject, body_snippet, status, recommendation, claimed_by, claimed_at, created_at, updated_at) + Index auf (status, created_at)
+   - portal.ceo_queue_enqueue() interner helper (email_agent nutzt ihn auf jede Inquiry — kein DB-race dank in-Row lock)
+   - Endpoints (X-Admin-Token authenticated):
+     - `GET /api/admin/ceo-queue?status=pending|processing|done|failed|all&limit=100`
+     - `POST /api/admin/ceo-queue/{id}/claim` (atomar via `update where status='pending'`, gibt 409 bei bereits geclaimed)
+     - `POST /api/admin/ceo-queue/{id}/complete` (Body: recommendation, status=done|failed)
+     - `GET /api/admin/ceo-recommendations?limit=30` (UI-facing, alle Status gemischt)
+4. **CEO-Worker** (`/usr/local/bin/nexify-ceo-worker.sh` + systemd-Timer, alle 10 min):
+   - Preflight: nur wenn Pending > 0 (spart LLM-Calls)
+   - Direkter HTTP-Call an 9router intern (`127.0.0.1:20128`, Modell **`nexifyai-combo-llm`**, temp 0.4, stream:false) — KEIN Hermes-CLI mehr (der Ansatz war fragil: "no final response was produced")
+   - Best-Practices: 300s-timeout, Log-Rotation, idempotent (409-Handling), Retry-safe
+5. **Health-Endpunkt + Admin-Badge**:
+   - `GET /api/admin/health/infra` liefert `{ok, degraded[], email_agent{}, ceo_queue{counts, last_done_at}}`
+   - Admin-Cockpit-Header rendert `HealthBadge` (grün/amber/rot) mit 60s Auto-Refresh — data-testid `admin-health-badge`
+6. **Admin-Cockpit-Tab „CEO-Empfehlungen"**: `admin-tab-ceo` → CeoRecommendationsPanel mit 3 Statistik-Karten (pending/processing/done), Expandable-Liste, ChatMarkdown-Rendering, 45s-Auto-Refresh
+7. **DSGVO-Ergänzung DE+NL**: Datenschutz §6 um „Interner CEO-Agent (Fabrik-Empfehlungen)" erweitert — explicit „kein automatischer Angebotsversand → Art. 22 Abs. 1 DSGVO nicht berührt", Rechtsgrundlage Art. 6 Abs. 1 lit. f
+8. **Test-Coverage**: `tests/test_iter10_ceo_health.py` (4/4 grün): Lifecycle (enqueue via DB → GET → claim → 409 double-claim → complete → recommendations verify), Auth-Gates, Health-Shape, Health-Auth
+
+### E2E-Verifikation
+- 2 synthetische Cases (Restaurant, Kaffeerösterei) durch Worker verarbeitet — jeweils ~1000 Zeichen strukturierte Empfehlung (Kontext, 2-4 Positionen mit PT-Range, Preisrechnung Tage × 999 €, Risiken/Rückfragen, Nächster Schritt). LLM-Qualität hervorragend.
+- Admin-Panel Screenshot: „Alle Systeme grün" Badge + 4 Empfehlungen bereit + Expandable-Detail mit Markdown
+- Preview `www.nexifyai.cloud/api/admin/health/infra` liefert `ok:true, degraded:[]` ✅
+- Post-Test Cleanup: Alle synthetischen Rows entfernt (0 rows remaining) — Feature bereit für echte E-Mail-Anfragen
+
+### 402/Modell-Erkenntnisse (aktualisiert)
+- `ds/deepseek-chat` NEU AUCH 402 (Insufficient Balance) — DeepSeek-Provider im 9router jetzt leer, nicht nur MiMo
+- **Neuer Primär-Chat**: `nexifyai-combo-llm` (routet intern zu Vercel AI Gateway → GLM 5.2 → Fireworks) ✅
+- Fallback-Modell im CEO-Worker: nicht mehr nötig, da Combo bereits Multi-Provider-Fallback intern hat
+
+### Offen (nächste Session)
+- User: „Save to GitHub" → Vercel-Deploy des CEO-Empfehlungen-Tabs + Health-Badge auf www.nexifyai.cloud
+- P1: Revolut-E2E mit echter Zahlung (User-Aktion)
+- P2: Native Hermes-CRM-Panels (nach Gesamt-Ende)
+- Backlog: Referenzen-Seite mit echten Projekten, 9router-Provider-Auffüllung (DeepSeek + MiMo)

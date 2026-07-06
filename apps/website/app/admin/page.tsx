@@ -12,9 +12,11 @@ import { LeadsPanel, type Lead } from "@/components/admin/leads-panel";
 import { SlotsPanel } from "@/components/admin/slots-panel";
 import { AgentChat } from "@/components/admin/agent-chat";
 import { EmailAgentPanel } from "@/components/admin/email-agent-panel";
+import { CeoRecommendationsPanel } from "@/components/admin/ceo-recommendations-panel";
+import { HealthBadge } from "@/components/admin/health-badge";
 
 type Stats = { leads: number; offers: number; accepted: number; declined: number; chat_sessions: number; customers: number; pipeline_value: number; won_value: number };
-type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "createOffer" | "prospect" | "email" | "emailAgent";
+type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "createOffer" | "prospect" | "email" | "emailAgent" | "ceo";
 
 const TABS: [Tab, string][] = [
   ["agent", "AI-Agent"],
@@ -24,6 +26,7 @@ const TABS: [Tab, string][] = [
   ["tickets", "Tickets"],
   ["chats", "KI-Chats"],
   ["emailAgent", "E-Mail-Agent"],
+  ["ceo", "CEO-Empfehlungen"],
   ["createOffer", "+ Angebot"],
   ["prospect", "+ Interessent"],
   ["email", "E-Mail"],
@@ -115,6 +118,7 @@ export default function AdminPage() {
             <h1 className="mt-3 font-[family-name:var(--font-heading)] text-4xl font-light text-white">NeXify Cockpit</h1>
           </div>
           <div className="flex items-center gap-2.5">
+            <HealthBadge />
             <button
               onClick={openWebui}
               disabled={ssoBusy}
@@ -164,6 +168,7 @@ export default function AdminPage() {
           {tab === "chats" && sessions.map((s) => <SessionRow key={s.id} s={s} />)}
 
           {tab === "emailAgent" && <EmailAgentPanel />}
+          {tab === "ceo" && <CeoRecommendationsPanel />}
 
           {tab === "createOffer" && <CreateOfferForm onDone={() => api("/api/admin/offers").then(setOffers).catch(() => {})} />}
 
