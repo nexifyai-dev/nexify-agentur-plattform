@@ -1,0 +1,46 @@
+{
+  "summary": "All 6 tests PASS for session-3 features: (1) E-Mail-Agent-API status/log endpoints with X-Admin-Token service auth, (2) E-Mail-Agent tab in Cockpit /admin with panel, cards, log-empty state, refresh, (3) Service-Token auth on stats/offers/portal-PDF, (4) SSO hardening (DB-persisted nonces + admin email in HMAC token, replay blocked, tampered signature blocked), (5) Regression /admin tabs + stats + offer PDF button, (6) Regression SSO Hinweg Cockpit->WebUI unchanged. 13 backend pytest tests all pass. Browser tests on Preview confirm UI works end-to-end.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_details": {
+    "TEST1_email_agent_api": "PASS 6/6 (pytest, curl): GET /api/admin/email-agent/status with token -> 200 enabled=true (retry-with-backoff to allow 10s email_worker sleep + hot-reload); without token -> 401; wrong token -> 401. GET /api/admin/email-agent/log?limit=5 with token -> 200 [] (empty list ok); without -> 401; wrong -> 401.",
+    "TEST2_email_agent_tab_browser": "PASS (playwright on preview): [data-testid='admin-tab-emailAgent'] present in tab bar. Click -> [data-testid='email-agent-panel'] visible. Panel shows Status='Aktiv' (green emerald), 'Letzter Abruf' 06.07.26, Verarbeitet 0, 'Anfragen -> Tickets' 0, 'Spam aussortiert' 0. Section 'AKTIVITÄTSLOG' present with [data-testid='email-agent-log-empty'] 'Noch keine Aktivitäten protokolliert...'. Click [data-testid='email-agent-refresh'] -> no page errors, no failed API.",
+    "TEST3_service_token_auth": "PASS 2/2 (pytest): GET /api/admin/stats with token -> 200 fields leads=23, offers=7, pipeline_value present. GET /api/admin/offers with token -> 200 array (7 offers); first offer id 4e8b3890-... -> GET /api/portal/offers/{id}/pdf with token -> 200, Content-Type application/pdf, body starts with %PDF.",
+    "TEST4_sso_hardening": "PASS 4/4 (pytest+curl subprocess): (a) POST /api/auth/login with password only -> 200 hermes_session cookie. (b) GET /crm with cookie -> 302 to https://www.nexifyai.cloud/api/auth/sso-consume?t=<exp>:<nonce>:mail@nexifyai.cloud.<sig> - ADMIN EMAIL is embedded in the token as required. (c) First consume -> 302 /admin + Set-Cookie access_token+refresh_token. (d) Replay same token -> 302 /login?sso=invalid. (e) Tampered signature (last char flipped) -> 302 /login?sso=invalid.",
+    "TEST5_regression_admin_ui": "PASS (playwright): Stats cards on /admin render '23 Leads / 7 Angebote / 0 Angenommen / 27 Chat-Sessions / EUR 25.974 Pipeline / EUR 0 Gewonnen'. Tabs 'Leads', 'Angebote', 'Tickets' all render without errors. Expanding first offer row [data-testid='admin-offer-4e8b3890-...'] reveals [data-testid='admin-offer-pdf'] button.",
+    "TEST6_regression_hinweg": "PASS (pytest): GET https://www.nexifyai.cloud/api/admin/webui-sso with X-Admin-Token -> 200 with url field pointing to webui.nexifyai.cloud (Cockpit->WebUI SSO Hinweg unchanged)."
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter9_email_agent_sso.py",
+    "/app/test_reports/pytest/iter9_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "email_agent.py: STATE dict is process-local; when uvicorn/gunicorn runs multiple workers (currently single-worker) the counters (processed/spam/inquiries) would diverge per worker. Consider persisting the counters in the DB (nexify_email_agent_log has the raw data anyway) and computing status via SELECT COUNT/GROUP BY, or lock uvicorn to workers=1 explicitly.",
+    "email_agent.py:309 sleeps 10s before flipping enabled=True. During hot-reload/restart this creates a 10s window where /api/admin/email-agent/status returns enabled=false with started_at=null. Test suite works around with retry, but the UI Panel shows 'Aktiv/Inaktiv' - during those 10s users would see 'Inaktiv' briefly. Consider setting enabled=true synchronously before the sleep, or displaying 'Wird gestartet...' state.",
+    "portal.py sso_consume: adopted admin identity from HMAC token (session-3 fix). Good improvement - but the nonces are persisted in DB (Postgres nexify_sso_nonces per iter_8 review). Verify that stale nonces are pruned (else table grows unbounded).",
+    "email-agent-panel.tsx:31-43 - the load() callback silently swallows API errors (empty catch block). This masks 401/500 responses; consider surfacing errors to the user (toast) or at least a small 'Verbindung fehlgeschlagen' inline indicator.",
+    "email-agent-panel.tsx polls every 30s via setInterval - unmount cleanup is correct but each poll requests both status+log(limit=50) simultaneously. For a busy inbox this is 100 rows per poll = ~200 req/hour per open tab. Consider server-side event source or increasing interval to 60s.",
+    "Cookie consent banner ('Alle akzeptieren'/'Nur notwendige') overlaps the bottom of pages including the offers list on /admin. Not blocking (buttons above are clickable) but occludes footer content; consider docking it to top or dismiss-on-first-navigation."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter9_email_agent_sso.py (created)"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13 pytest tests, first run has flaky retry for email_worker 10s startup delay)",
+    "frontend": "100% (all TEST 2 + TEST 5 assertions passed on preview)"
+  },
+  "test_credentials": "Admin: mail@nexifyai.cloud / ***REDACTED*** (from /app/memory/test_credentials.md). WebUI: password-only ***REDACTED***. Service token X-Admin-Token: 10e5a1213fc000a71df803a6101a1285c7324a8feb33327b (from /app/backend/.env ADMIN_API_TOKEN).",
+  "seed_data_creation": "No offers/leads/emails created. Consumed 4 SSO one-time tokens during TEST 4 (nonces marked used in nexify_sso_nonces).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Preview URL https://rebranding-hub-2.preview.emergentagent.com/admin - login FLOW: DO NOT use /login form UI (redirects into some intermediate state); instead POST /api/auth/login {email,password} via fetch(credentials:'include') to get access_token httpOnly cookie, then goto /admin directly. Python requests library hangs when reading webui.nexifyai.cloud/crm response body (chunked 302 body never closes); use curl subprocess with -D and --max-time 5 to get headers only for redirect tests. email_worker() has 10s startup delay before enabled=true; test with retries. Offer expand: click [data-testid='admin-offer-{uuid}'] directly (there is no separate toggle button testid) to reveal admin-offer-pdf. All 8 admin-offer-* rows share the same expand pattern.",
+  "rca of the issue": "No new bugs. Session-3 features (E-Mail-Agent visibility + PDF via service token + P2 SSO hardening) all work as specified. Test infrastructure notes captured for future runs."
+}

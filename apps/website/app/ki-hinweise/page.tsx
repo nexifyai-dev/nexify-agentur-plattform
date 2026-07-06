@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/legal-page";
-import { legalPages } from "@/lib/legal-content";
+import { LegalPageView } from "@/components/legal-page";
 
-const page = legalPages["ki-hinweise"];
-export const metadata: Metadata = { title: page.title, description: page.intro, robots: { index: true, follow: true } };
-export default function Page() { return <LegalPage page={page} />; }
+export const metadata: Metadata = { title: "KI-Hinweise / AI-verklaring", description: "Transparenz zu AI-gestützter Arbeit bei NeXifyAI – inklusive des KI-Beraters NOVA, menschlicher Kontrolle und EU AI Act." };
+export default function Page() {
+  return <LegalPageView slug="ki-hinweise" />;
+}

@@ -1,0 +1,1066 @@
+import os
+import json
+import uuid
+import asyncio
+import logging
+from datetime import datetime, timezone, timedelta
+
+import jwt
+import bcrypt
+from fastapi import APIRouter, HTTPException, Request, Response, Depends
+from pydantic import BaseModel, EmailStr
+
+logger = logging.getLogger("nexify.portal")
+router = APIRouter()
+
+_DB = None
+_SEND_EMAIL = None
+_CI_EMAIL = None
+FRONTEND_URL = ""
+_EXTRAS: dict = {}
+JWT_ALGORITHM = "HS256"
+LOGIN_ATTEMPTS: dict[str, list] = {}
+
+
+def init(db_getter, send_email, ci_email, frontend_url: str, extras: dict | None = None):
+    global _DB, _SEND_EMAIL, _CI_EMAIL, FRONTEND_URL, _EXTRAS
+    _DB = db_getter
+    _SEND_EMAIL = send_email
+    _CI_EMAIL = ci_email
+    FRONTEND_URL = frontend_url
+    _EXTRAS = extras or {}
+
+
+def secret() -> str:
+    return os.environ["JWT_SECRET"]
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(plain: str, hashed: str) -> bool:
+    try:
+        return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+    except Exception:
+        return False
+
+
+def make_token(payload: dict, hours: int) -> str:
+    return jwt.encode({**payload, "exp": datetime.now(timezone.utc) + timedelta(hours=hours)}, secret(), algorithm=JWT_ALGORITHM)
+
+
+def create_invite_token(email: str, offer_id: str) -> str:
+    return make_token({"type": "invite", "email": email, "offer_id": offer_id}, hours=24 * 14)
+
+
+def set_auth_cookies(response: Response, user_id: str, email: str, role: str):
+    access = make_token({"type": "access", "sub": user_id, "email": email, "role": role}, hours=12)
+    refresh = make_token({"type": "refresh", "sub": user_id}, hours=24 * 7)
+    response.set_cookie("access_token", access, httponly=True, secure=True, samesite="lax", max_age=43200, path="/")
+    response.set_cookie("refresh_token", refresh, httponly=True, secure=True, samesite="lax", max_age=604800, path="/")
+
+
+def user_dict(row) -> dict:
+    return {
+        "id": str(row["id"]), "email": row["email"], "name": row["name"], "company": row["company"],
+        "phone": row["phone"], "language": row["language"], "role": row["role"],
+    }
+
+
+async def get_current_user(request: Request) -> dict:
+    svc = request.headers.get("X-Admin-Token")
+    if svc:
+        import hmac as _hmac
+        expected = os.environ.get("ADMIN_API_TOKEN")
+        if not expected or not _hmac.compare_digest(svc, expected):
+            raise HTTPException(status_code=401, detail="Invalid service token")
+        pool = await _DB()
+        if not pool:
+            raise HTTPException(status_code=503, detail="Database unavailable")
+        async with pool.acquire() as con:
+            row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
+        if not row:
+            raise HTTPException(status_code=401, detail="No admin user")
+        return user_dict(row)
+    token = request.cookies.get("access_token")
+    if not token:
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            token = auth[7:]
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(token, secret(), algorithms=[JWT_ALGORITHM])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    if payload.get("type") != "access":
+        raise HTTPException(status_code=401, detail="Invalid token type")
+    pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_users where id = $1", uuid.UUID(payload["sub"]))
+    if not row:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user_dict(row)
+
+
+async def get_admin(user: dict = Depends(get_current_user)) -> dict:
+    if user["role"] != "admin":
+        raise HTTPException(status_code=403, detail="Admin only")
+    return user
+
+
+class RegisterIn(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
+    company: str | None = None
+    phone: str | None = None
+    language: str = "de"
+    invite_token: str | None = None
+
+
+class LoginIn(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class ProfileIn(BaseModel):
+    name: str
+    company: str | None = None
+    phone: str | None = None
+    language: str = "de"
+
+
+class DecisionIn(BaseModel):
+    decision: str
+    note: str | None = None
+
+
+class MessageIn(BaseModel):
+    body: str
+
+
+class OfferRequestNewIn(BaseModel):
+    description: str
+
+
+class AdminEmailIn(BaseModel):
+    to: EmailStr
+    subject: str
+    body: str
+    language: str = "de"
+
+
+@router.post("/api/auth/register")
+async def register(body: RegisterIn, response: Response):
+    email = body.email.lower().strip()
+    if len(body.password) < 8:
+        raise HTTPException(status_code=400, detail="Passwort muss mindestens 8 Zeichen haben.")
+    pool = await _DB()
+    async with pool.acquire() as con:
+        existing = await con.fetchrow("select id from nexify_users where email = $1", email)
+        if existing:
+            raise HTTPException(status_code=409, detail="Für diese E-Mail existiert bereits ein Konto. Bitte einloggen.")
+        uid = uuid.uuid4()
+        await con.execute(
+            "insert into nexify_users (id,email,password_hash,name,company,phone,language,role) values ($1,$2,$3,$4,$5,$6,$7,'customer')",
+            uid, email, hash_password(body.password), body.name, body.company, body.phone, body.language,
+        )
+        row = await con.fetchrow("select * from nexify_users where id = $1", uid)
+    set_auth_cookies(response, str(uid), email, "customer")
+    return user_dict(row)
+
+
+@router.post("/api/auth/login")
+async def login(body: LoginIn, request: Request, response: Response):
+    email = body.email.lower().strip()
+    key = f"{request.client.host if request.client else 'x'}:{email}"
+    now = datetime.now(timezone.utc)
+    attempts = [t for t in LOGIN_ATTEMPTS.get(key, []) if (now - t).total_seconds() < 900]
+    if len(attempts) >= 5:
+        raise HTTPException(status_code=429, detail="Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen.")
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_users where email = $1", email)
+    if not row or not verify_password(body.password, row["password_hash"]):
+        attempts.append(now)
+        LOGIN_ATTEMPTS[key] = attempts
+        raise HTTPException(status_code=401, detail="E-Mail oder Passwort ist falsch.")
+    LOGIN_ATTEMPTS.pop(key, None)
+    set_auth_cookies(response, str(row["id"]), email, row["role"])
+    return user_dict(row)
+
+
+@router.post("/api/auth/logout")
+async def logout(response: Response):
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/")
+    return {"status": "ok"}
+
+
+@router.get("/api/admin/webui-sso")
+async def webui_sso(_: dict = Depends(get_admin)):
+    import hmac, hashlib, time, secrets
+    sso_secret = os.environ.get("WEBUI_SSO_SECRET")
+    base_url = os.environ.get("WEBUI_SSO_URL")
+    if not sso_secret or not base_url:
+        raise HTTPException(status_code=503, detail="SSO nicht konfiguriert")
+    msg = f"{int(time.time()) + 60}:{secrets.token_hex(8)}"
+    sig = hmac.new(sso_secret.encode(), msg.encode(), hashlib.sha256).hexdigest()
+    return {"url": f"{base_url}?t={msg}.{sig}"}
+
+
+SSO_NONCES: dict[str, float] = {}
+
+
+async def _nonce_consume(nonce: str, exp: float) -> bool:
+    """True = frisch (jetzt verbraucht), False = Replay. DB-persistent, RAM-Fallback."""
+    import time
+    now = time.time()
+    try:
+        pool = await _DB()
+        async with pool.acquire() as con:
+            await con.execute("""
+                create table if not exists nexify_sso_nonces (
+                    nonce text primary key,
+                    expires_at timestamptz not null
+                )""")
+            await con.execute("delete from nexify_sso_nonces where expires_at < now()")
+            inserted = await con.fetchval(
+                "insert into nexify_sso_nonces (nonce, expires_at) values ($1, to_timestamp($2)) on conflict do nothing returning nonce",
+                nonce, exp + 300)
+            return inserted is not None
+    except Exception:
+        for k in [k for k, v in SSO_NONCES.items() if v < now]:
+            SSO_NONCES.pop(k, None)
+        if nonce in SSO_NONCES:
+            return False
+        SSO_NONCES[nonce] = now + 300
+        return True
+
+
+@router.get("/api/auth/sso-consume")
+async def sso_consume(t: str = ""):
+    """Rückweg-SSO: Hermes WebUI -> CRM/Admin (One-Time-HMAC, same-tab).
+    Token-Format: exp:nonce[:email].sig — email bindet die Admin-Identität."""
+    import hmac, hashlib, time
+    from fastapi.responses import RedirectResponse
+
+    def _fail():
+        return RedirectResponse("/login?sso=invalid", status_code=302)
+
+    sso_secret = os.environ.get("CRM_SSO_SECRET")
+    if not sso_secret or not t:
+        return _fail()
+    try:
+        msg, sig = t.rsplit(".", 1)
+        parts = msg.split(":", 2)
+        exp_str, nonce = parts[0], parts[1]
+        token_email = parts[2].strip().lower() if len(parts) > 2 else ""
+        expected = hmac.new(sso_secret.encode(), msg.encode(), hashlib.sha256).hexdigest()
+        exp = int(exp_str)
+        if not hmac.compare_digest(sig, expected) or exp < time.time():
+            return _fail()
+        if not await _nonce_consume(nonce, exp):
+            return _fail()
+    except Exception:
+        return _fail()
+    pool = await _DB()
+    async with pool.acquire() as con:
+        if token_email:
+            row = await con.fetchrow("select * from nexify_users where lower(email) = $1 and role = 'admin'", token_email)
+        else:
+            row = await con.fetchrow("select * from nexify_users where role = 'admin' order by created_at limit 1")
+    if not row:
+        return _fail()
+    resp = RedirectResponse("/admin", status_code=302)
+    resp.headers["Cache-Control"] = "no-store"
+    set_auth_cookies(resp, str(row["id"]), row["email"], row["role"])
+    return resp
+
+
+@router.get("/api/admin/email-agent/status")
+async def email_agent_status(_: dict = Depends(get_admin)):
+    import email_agent
+    return email_agent.get_status()
+
+
+@router.get("/api/admin/email-agent/log")
+async def email_agent_log(limit: int = 50, _: dict = Depends(get_admin)):
+    import email_agent
+    return await email_agent.get_log(limit)
+
+
+@router.post("/api/admin/email-agent/poll")
+async def email_agent_poll(_: dict = Depends(get_admin)):
+    import email_agent
+    return await email_agent.trigger_poll()
+
+
+# ---------------------- Fabrik CEO-Queue ----------------------
+# Autonome Empfehlungs-Pipeline: E-Mail-Agent inseriert bei jeder inquiry einen
+# Queue-Eintrag; ein VPS-Cron (Hermes-CLI mit nexify-crm-Skill) pollt, holt Kontext
+# via CRM-API und legt eine strukturierte Empfehlung zurück. Kein automatischer
+# Angebots-Versand — nur Draft für den Menschen.
+
+async def _ensure_ceo_queue_table():
+    pool = await _DB()
+    if not pool:
+        return
+    async with pool.acquire() as con:
+        await con.execute("""
+            create table if not exists nexify_ceo_queue (
+                id uuid primary key,
+                kind text not null,
+                ref_id uuid,
+                subject text,
+                body_snippet text,
+                status text not null default 'pending',
+                recommendation text,
+                claimed_by text,
+                claimed_at timestamptz,
+                created_at timestamptz default now(),
+                updated_at timestamptz default now()
+            )""")
+        await con.execute("create index if not exists nexify_ceo_queue_status_idx on nexify_ceo_queue(status, created_at desc)")
+
+
+async def ceo_queue_enqueue(kind: str, ref_id, subject: str, body_snippet: str) -> str | None:
+    """Internal helper: called by email_agent when a new inquiry arrives."""
+    pool = await _DB()
+    if not pool:
+        return None
+    try:
+        await _ensure_ceo_queue_table()
+    except Exception:
+        pass
+    qid = uuid.uuid4()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_ceo_queue (id,kind,ref_id,subject,body_snippet) values ($1,$2,$3,$4,$5)",
+            qid, kind[:30], ref_id, (subject or "")[:250], (body_snippet or "")[:2000])
+    return str(qid)
+
+
+@router.get("/api/admin/ceo-queue")
+async def ceo_queue_list(status: str = "pending", limit: int = 20, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    if not pool:
+        return []
+    await _ensure_ceo_queue_table()
+    if status not in ("pending", "processing", "done", "failed", "all"):
+        status = "pending"
+    limit = max(1, min(limit, 100))
+    async with pool.acquire() as con:
+        if status == "all":
+            rows = await con.fetch("select * from nexify_ceo_queue order by created_at desc limit $1", limit)
+        else:
+            rows = await con.fetch(
+                "select * from nexify_ceo_queue where status=$1 order by created_at desc limit $2", status, limit)
+    return [{
+        "id": str(r["id"]), "kind": r["kind"], "ref_id": str(r["ref_id"]) if r["ref_id"] else None,
+        "subject": r["subject"], "body_snippet": r["body_snippet"], "status": r["status"],
+        "recommendation": r["recommendation"], "claimed_by": r["claimed_by"],
+        "claimed_at": r["claimed_at"].isoformat() if r["claimed_at"] else None,
+        "created_at": r["created_at"].isoformat(), "updated_at": r["updated_at"].isoformat(),
+    } for r in rows]
+
+
+class CeoClaimIn(BaseModel):
+    worker_id: str | None = None
+
+
+@router.post("/api/admin/ceo-queue/{qid}/claim")
+async def ceo_queue_claim(qid: str, body: CeoClaimIn, _: dict = Depends(get_admin)):
+    """Atomar auf 'processing' setzen. Idempotent — returns 409 wenn schon geclaimed."""
+    pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="db unavailable")
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "update nexify_ceo_queue set status='processing', claimed_by=$1, claimed_at=now(), updated_at=now() "
+            "where id=$2 and status='pending' returning id, kind, ref_id, subject, body_snippet",
+            (body.worker_id or "hermes-cli")[:60], uuid.UUID(qid))
+    if not row:
+        raise HTTPException(status_code=409, detail="not pending or already claimed")
+    return {"ok": True, "id": str(row["id"]), "kind": row["kind"],
+            "ref_id": str(row["ref_id"]) if row["ref_id"] else None,
+            "subject": row["subject"], "body_snippet": row["body_snippet"]}
+
+
+class CeoCompleteIn(BaseModel):
+    recommendation: str
+    status: str = "done"  # done | failed
+
+
+@router.post("/api/admin/ceo-queue/{qid}/complete")
+async def ceo_queue_complete(qid: str, body: CeoCompleteIn, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="db unavailable")
+    status = "done" if body.status not in ("done", "failed") else body.status
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "update nexify_ceo_queue set status=$1, recommendation=$2, updated_at=now() where id=$3 returning id",
+            status, (body.recommendation or "")[:8000], uuid.UUID(qid))
+    if not row:
+        raise HTTPException(status_code=404, detail="queue entry not found")
+    return {"ok": True, "status": status}
+
+
+@router.get("/api/admin/ceo-recommendations")
+async def ceo_recommendations(limit: int = 30, _: dict = Depends(get_admin)):
+    """UI-facing list of latest recommendations (mixed status)."""
+    pool = await _DB()
+    if not pool:
+        return []
+    await _ensure_ceo_queue_table()
+    limit = max(1, min(limit, 100))
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            "select id,kind,ref_id,subject,body_snippet,status,recommendation,claimed_at,created_at,updated_at "
+            "from nexify_ceo_queue order by updated_at desc limit $1", limit)
+    return [{
+        "id": str(r["id"]), "kind": r["kind"], "ref_id": str(r["ref_id"]) if r["ref_id"] else None,
+        "subject": r["subject"], "body_snippet": r["body_snippet"], "status": r["status"],
+        "recommendation": r["recommendation"],
+        "claimed_at": r["claimed_at"].isoformat() if r["claimed_at"] else None,
+        "created_at": r["created_at"].isoformat(), "updated_at": r["updated_at"].isoformat(),
+    } for r in rows]
+
+
+# ---------------------- Infrastructure Health ----------------------
+# Best-practice: single admin-visible endpoint that surfaces the status of critical
+# subsystems. Frontend Admin panel can render a green/amber/red badge.
+
+@router.get("/api/admin/health/infra")
+async def health_infra(_: dict = Depends(get_admin)):
+    """Aggregated health of email-agent, ceo-queue and critical external endpoints."""
+    import email_agent as _email_agent
+    pool = await _DB()
+
+    # Email agent state
+    ea = _email_agent.get_status()
+
+    # CEO queue counts
+    q_counts = {"pending": 0, "processing": 0, "done": 0, "failed": 0}
+    last_done_at = None
+    if pool:
+        try:
+            await _ensure_ceo_queue_table()
+            async with pool.acquire() as con:
+                rows = await con.fetch(
+                    "select status, count(*)::int as n from nexify_ceo_queue group by status")
+                for r in rows:
+                    q_counts[r["status"]] = r["n"]
+                last = await con.fetchrow(
+                    "select updated_at from nexify_ceo_queue where status='done' order by updated_at desc limit 1")
+                if last:
+                    last_done_at = last["updated_at"].isoformat()
+        except Exception:
+            pass
+
+    # Basic degradation heuristic
+    degraded = []
+    if not ea.get("enabled"):
+        degraded.append("email_agent_disabled")
+    if ea.get("errors", 0) > 10:
+        degraded.append("email_agent_errors")
+    if q_counts["pending"] > 20:
+        degraded.append("ceo_queue_backlog")
+
+    return {
+        "ok": len(degraded) == 0,
+        "degraded": degraded,
+        "email_agent": {
+            "enabled": ea.get("enabled"),
+            "last_poll": ea.get("last_poll"),
+            "polls": ea.get("polls"),
+            "processed": ea.get("processed"),
+            "errors": ea.get("errors"),
+        },
+        "ceo_queue": {
+            "counts": q_counts,
+            "last_done_at": last_done_at,
+        },
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+
+@router.get("/api/auth/me")
+async def me(user: dict = Depends(get_current_user)):
+    return user
+
+
+@router.post("/api/auth/refresh")
+async def refresh(request: Request, response: Response):
+    token = request.cookies.get("refresh_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="No refresh token")
+    try:
+        payload = jwt.decode(token, secret(), algorithms=[JWT_ALGORITHM])
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Invalid token type")
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_users where id = $1", uuid.UUID(payload["sub"]))
+    if not row:
+        raise HTTPException(status_code=401, detail="User not found")
+    set_auth_cookies(response, str(row["id"]), row["email"], row["role"])
+    return user_dict(row)
+
+
+@router.get("/api/auth/invite/{token}")
+async def invite_info(token: str):
+    try:
+        payload = jwt.decode(token, secret(), algorithms=[JWT_ALGORITHM])
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=400, detail="Einladungslink ungültig oder abgelaufen.")
+    if payload.get("type") != "invite":
+        raise HTTPException(status_code=400, detail="Ungültiger Token.")
+    return {"email": payload["email"], "offer_id": payload.get("offer_id")}
+
+
+@router.put("/api/auth/profile")
+async def update_profile(body: ProfileIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        await con.execute(
+            "update nexify_users set name=$1, company=$2, phone=$3, language=$4 where id=$5",
+            body.name, body.company, body.phone, body.language, uuid.UUID(user["id"]),
+        )
+        row = await con.fetchrow("select * from nexify_users where id = $1", uuid.UUID(user["id"]))
+    return user_dict(row)
+
+
+def offer_dict(row) -> dict:
+    return {
+        "id": str(row["id"]), "name": row["name"], "email": row["email"], "company": row["company"],
+        "language": row["language"], "offer": json.loads(row["offer_json"]) if row["offer_json"] else None,
+        "price_total": float(row["price_total"]) if row["price_total"] is not None else None,
+        "status": row["status"], "created_at": row["created_at"].isoformat(),
+    }
+
+
+@router.get("/api/portal/offers")
+async def my_offers(user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_offers where lower(email) = $1 order by created_at desc", user["email"].lower())
+    return [offer_dict(r) for r in rows]
+
+
+@router.post("/api/portal/offers/{offer_id}/decision")
+async def offer_decision(offer_id: str, body: DecisionIn, user: dict = Depends(get_current_user)):
+    if body.decision not in ("accepted", "declined"):
+        raise HTTPException(status_code=400, detail="decision must be accepted or declined")
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+        if not row:
+            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+        if row["payment_status"] in ("completed", "pending", "processing", "authorised"):
+            raise HTTPException(status_code=400, detail="Für dieses Angebot wurde bereits eine Zahlung gestartet.")
+        await con.execute("update nexify_offers set status=$1 where id=$2", body.decision, uuid.UUID(offer_id))
+        if body.note:
+            await con.execute(
+                "insert into nexify_offer_messages (id,offer_id,sender,body) values ($1,$2,'customer',$3)",
+                uuid.uuid4(), uuid.UUID(offer_id), body.note,
+            )
+    label = "ANGENOMMEN ✔" if body.decision == "accepted" else "ABGELEHNT ✕"
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    asyncio.create_task(_SEND_EMAIL(
+        os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+        f"Angebot {label}: {user['name']} ({user['email']})",
+        _CI_EMAIL(
+            f"Angebot {label}",
+            f"<p><b>{user['name']}</b> ({user['email']}, {user['company'] or '-'}) hat das Angebot „{offer.get('title','')}“ <b>{label}</b>.</p><p>Notiz: {body.note or '—'}</p>",
+            cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin",
+        ),
+    ))
+    return {"status": body.decision}
+
+
+@router.get("/api/portal/offers/{offer_id}/messages")
+async def offer_messages(offer_id: str, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        own = await con.fetchrow("select id from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+        if not own and user["role"] != "admin":
+            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+        rows = await con.fetch("select * from nexify_offer_messages where offer_id = $1 order by created_at asc", uuid.UUID(offer_id))
+    return [{"id": str(r["id"]), "sender": r["sender"], "body": r["body"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/portal/offers/{offer_id}/messages")
+async def post_offer_message(offer_id: str, body: MessageIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+        if not row:
+            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+        mid = uuid.uuid4()
+        await con.execute("insert into nexify_offer_messages (id,offer_id,sender,body) values ($1,$2,'customer',$3)", mid, uuid.UUID(offer_id), body.body)
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    asyncio.create_task(_SEND_EMAIL(
+        os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+        f"Neue Rückfrage zum Angebot von {user['name']}",
+        _CI_EMAIL("Neue Rückfrage", f"<p><b>{user['name']}</b> ({user['email']}) fragt zum Angebot „{offer.get('title','')}“:</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body.body}</p>", cta_label="Im CRM antworten", cta_url=f"{FRONTEND_URL}/admin"),
+    ))
+    return {"status": "ok", "id": str(mid)}
+
+
+@router.post("/api/portal/offers/request-new")
+async def request_new_offer(body: OfferRequestNewIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    lead_id = uuid.uuid4()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_leads (id,name,email,company,phone,language,message,source) values ($1,$2,$3,$4,$5,$6,$7,'portal_request')",
+            lead_id, user["name"], user["email"], user["company"], user["phone"], user["language"], body.description,
+        )
+    asyncio.create_task(_SEND_EMAIL(
+        os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+        f"Neue Angebotsanfrage aus dem Kundenportal: {user['name']}",
+        _CI_EMAIL("Neue Angebotsanfrage", f"<p><b>{user['name']}</b> ({user['email']}, {user['company'] or '-'}) bittet um ein neues Angebot:</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body.description}</p>", cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin"),
+    ))
+    nl = user["language"] == "nl"
+    return {"status": "ok", "message": "Aanvraag ontvangen – wij melden ons binnen één werkdag." if nl else "Anfrage erhalten – wir melden uns innerhalb eines Werktags."}
+
+
+# ---------------- ADMIN / CRM ----------------
+
+@router.get("/api/admin/stats")
+async def admin_stats(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        leads = await con.fetchval("select count(*) from nexify_leads")
+        offers = await con.fetchval("select count(*) from nexify_offers")
+        accepted = await con.fetchval("select count(*) from nexify_offers where status='accepted'")
+        declined = await con.fetchval("select count(*) from nexify_offers where status='declined'")
+        sessions = await con.fetchval("select count(*) from nexify_chat_sessions")
+        users = await con.fetchval("select count(*) from nexify_users where role='customer'")
+        pipeline = await con.fetchval("select coalesce(sum(price_total),0) from nexify_offers where status in ('sent','followed_up')")
+        won = await con.fetchval("select coalesce(sum(price_total),0) from nexify_offers where status='accepted'")
+    return {"leads": leads, "offers": offers, "accepted": accepted, "declined": declined, "chat_sessions": sessions, "customers": users, "pipeline_value": float(pipeline), "won_value": float(won)}
+
+
+@router.get("/api/admin/leads")
+async def admin_leads(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_leads order by created_at desc limit 200")
+    return [{
+        "id": str(r["id"]), "name": r["name"], "email": r["email"], "company": r["company"], "phone": r["phone"],
+        "language": r["language"], "message": r["message"], "source": r["source"], "status": r["status"],
+        "created_at": r["created_at"].isoformat(),
+    } for r in rows]
+
+
+class LeadUpdateIn(BaseModel):
+    name: str | None = None
+    email: str | None = None
+    company: str | None = None
+    phone: str | None = None
+    language: str | None = None
+    status: str | None = None
+    message: str | None = None
+
+
+async def update_lead_core(lead_id: str, fields: dict) -> dict:
+    allowed = {k: v for k, v in fields.items() if k in ("name", "email", "company", "phone", "language", "status", "message") and v is not None}
+    if not allowed:
+        return {"status": "unchanged"}
+    sets = ", ".join(f"{k}=${i + 2}" for i, k in enumerate(allowed))
+    pool = await _DB()
+    async with pool.acquire() as con:
+        res = await con.execute(f"update nexify_leads set {sets} where id=$1", uuid.UUID(lead_id), *allowed.values())
+    return {"status": "updated" if res.endswith("1") else "not_found", "fields": list(allowed.keys())}
+
+
+@router.put("/api/admin/leads/{lead_id}")
+async def admin_update_lead(lead_id: str, body: LeadUpdateIn, _: dict = Depends(get_admin)):
+    result = await update_lead_core(lead_id, body.model_dump())
+    if result["status"] == "not_found":
+        raise HTTPException(status_code=404, detail="Lead nicht gefunden.")
+    return result
+
+
+@router.delete("/api/admin/leads/{lead_id}")
+async def admin_delete_lead(lead_id: str, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        res = await con.execute("delete from nexify_leads where id=$1", uuid.UUID(lead_id))
+    if not res.endswith("1"):
+        raise HTTPException(status_code=404, detail="Lead nicht gefunden.")
+    return {"status": "deleted"}
+
+
+@router.get("/api/admin/offers")
+async def admin_offers(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_offers order by created_at desc limit 200")
+    return [offer_dict(r) for r in rows]
+
+
+async def offer_reply_core(offer_id: str, body_text: str) -> dict:
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_offers where id = $1", uuid.UUID(offer_id))
+        if not row:
+            return {"error": "Angebot nicht gefunden."}
+        mid = uuid.uuid4()
+        await con.execute("insert into nexify_offer_messages (id,offer_id,sender,body) values ($1,$2,'admin',$3)", mid, uuid.UUID(offer_id), body_text)
+    nl = row["language"] == "nl"
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    subject = f"Antwort zu Ihrem Angebot – {offer.get('title','NeXify AI')}" if not nl else f"Reactie op uw offerte – {offer.get('title','NeXify AI')}"
+    greeting = f"Beste {row['name']}," if nl else f"Guten Tag {row['name']},"
+    email_id = await _SEND_EMAIL(
+        row["email"], subject,
+        _CI_EMAIL(subject, f"<p>{greeting}</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body_text}</p><p>{'Met vriendelijke groet' if nl else 'Mit besten Grüßen'},<br/>Pascal Courbois · NeXify AI</p>", cta_label="Zum Kundenportal" if not nl else "Naar het klantportaal", cta_url=f"{FRONTEND_URL}/konto"),
+    )
+    return {"status": "ok", "id": str(mid), "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/offers/{offer_id}/messages")
+async def admin_offer_reply(offer_id: str, body: MessageIn, admin: dict = Depends(get_admin)):
+    result = await offer_reply_core(offer_id, body.body)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
+
+
+@router.get("/api/admin/sessions")
+async def admin_sessions(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            """select s.id, s.language, s.created_at, count(m.id) as msg_count, max(m.created_at) as last_at
+               from nexify_chat_sessions s left join nexify_chat_messages m on m.session_id = s.id
+               group by s.id order by coalesce(max(m.created_at), s.created_at) desc limit 100"""
+        )
+    return [{
+        "id": str(r["id"]), "language": r["language"], "created_at": r["created_at"].isoformat(),
+        "msg_count": r["msg_count"], "last_at": r["last_at"].isoformat() if r["last_at"] else None,
+    } for r in rows]
+
+
+@router.get("/api/admin/sessions/{session_id}/messages")
+async def admin_session_messages(session_id: str, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_chat_messages where session_id = $1 order by created_at asc", uuid.UUID(session_id))
+    return [{"id": str(r["id"]), "role": r["role"], "content": r["content"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/admin/email")
+async def admin_send_email(body: AdminEmailIn, admin: dict = Depends(get_admin)):
+    html = _CI_EMAIL(body.subject, "".join(f"<p>{p}</p>" for p in body.body.split("\n") if p.strip()))
+    email_id = await _SEND_EMAIL(body.to, body.subject, html)
+    if not email_id:
+        raise HTTPException(status_code=502, detail="E-Mail-Versand fehlgeschlagen.")
+    return {"status": "sent", "email_id": email_id}
+
+
+@router.post("/api/portal/offers/{offer_id}/pay")
+async def pay_offer(offer_id: str, user: dict = Depends(get_current_user)):
+    import httpx
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+    if not row:
+        raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+    if row["status"] != "accepted":
+        raise HTTPException(status_code=400, detail="Bitte nehmen Sie das Angebot zuerst an.")
+    if row["payment_status"] == "completed":
+        return {"status": "completed"}
+    if row["payment_checkout_url"] and row["payment_status"] in ("pending", "processing", "authorised"):
+        return {"checkout_url": row["payment_checkout_url"], "order_id": row["payment_order_id"]}
+    nl = row["language"] == "nl"
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    payload = {
+        "amount": 99900,
+        "currency": "EUR",
+        "capture_mode": "automatic",
+        "merchant_order_ext_ref": offer_id,
+        "description": f"NeXify AI – {'Aanbetaling 1e werkdag' if nl else 'Anzahlung 1. Arbeitstag'}: {offer.get('title','')[:100]}",
+        "redirect_url": f"{FRONTEND_URL}/konto?paid={offer_id}",
+    }
+    base = os.environ.get("REVOLUT_API_BASE", "https://merchant.revolut.com")
+    headers = {"Authorization": f"Bearer {os.environ['REVOLUT_SECRET_KEY']}", "Content-Type": "application/json", "Revolut-Api-Version": "2024-09-01"}
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        try:
+            resp = await client.post(f"{base}/api/orders", json=payload, headers=headers)
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=502, detail=f"Revolut nicht erreichbar: {e}")
+    if resp.status_code not in (200, 201):
+        logger.error(f"revolut order failed: {resp.status_code} {resp.text[:300]}")
+        raise HTTPException(status_code=502, detail="Zahlung konnte nicht initialisiert werden.")
+    data = resp.json()
+    async with pool.acquire() as con:
+        await con.execute(
+            "update nexify_offers set payment_order_id=$1, payment_checkout_url=$2, payment_status=$3, payment_amount=$4 where id=$5",
+            data["id"], data.get("checkout_url"), data.get("state", "pending").lower(), 999, uuid.UUID(offer_id),
+        )
+    return {"checkout_url": data.get("checkout_url"), "order_id": data["id"]}
+
+
+@router.get("/api/portal/offers/{offer_id}/payment-status")
+async def payment_status(offer_id: str, user: dict = Depends(get_current_user)):
+    import httpx
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+    if not row or not row["payment_order_id"]:
+        raise HTTPException(status_code=404, detail="Keine Zahlung vorhanden.")
+    base = os.environ.get("REVOLUT_API_BASE", "https://merchant.revolut.com")
+    headers = {"Authorization": f"Bearer {os.environ['REVOLUT_SECRET_KEY']}", "Revolut-Api-Version": "2024-09-01"}
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        try:
+            resp = await client.get(f"{base}/api/orders/{row['payment_order_id']}", headers=headers)
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=502, detail=f"Revolut nicht erreichbar: {e}")
+    if resp.status_code != 200:
+        raise HTTPException(status_code=502, detail="Status konnte nicht geprüft werden.")
+    state = resp.json().get("state", "pending").lower()
+    async with pool.acquire() as con:
+        await con.execute("update nexify_offers set payment_status=$1 where id=$2", state, uuid.UUID(offer_id))
+    if state == "completed" and row["payment_status"] != "completed":
+        offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+        asyncio.create_task(_SEND_EMAIL(
+            os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+            f"ZAHLUNG EINGEGANGEN: {user['name']} – € 999",
+            _CI_EMAIL("Zahlung eingegangen", f"<p><b>{user['name']}</b> ({user['email']}) hat die Anzahlung (1. Arbeitstag, € 999) für „{offer.get('title','')}“ bezahlt.</p>", cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin"),
+        ))
+    return {"status": state}
+
+
+@router.get("/api/portal/offers/{offer_id}/pdf")
+async def offer_pdf(offer_id: str, user: dict = Depends(get_current_user)):
+    from fastapi.responses import Response as RawResponse
+    pool = await _DB()
+    async with pool.acquire() as con:
+        if user["role"] == "admin":
+            row = await con.fetchrow("select * from nexify_offers where id = $1", uuid.UUID(offer_id))
+        else:
+            row = await con.fetchrow("select * from nexify_offers where id = $1 and lower(email) = $2", uuid.UUID(offer_id), user["email"].lower())
+    if not row:
+        raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    pdf = _EXTRAS["offer_pdf"](offer, row["name"], row["company"], row["language"], int(row["price_total"] or 0))
+    fname = "NeXify-AI-Offerte.pdf" if row["language"] == "nl" else "NeXify-AI-Angebot.pdf"
+    return RawResponse(content=pdf, media_type="application/pdf", headers={"Content-Disposition": f'inline; filename="{fname}"'})
+
+
+class TicketIn(BaseModel):
+    subject: str
+    body: str
+
+
+@router.get("/api/portal/tickets")
+async def my_tickets(user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch("select * from nexify_tickets where lower(email) = $1 order by created_at desc", user["email"].lower())
+    return [{"id": str(r["id"]), "subject": r["subject"], "status": r["status"], "language": r["language"], "source": r["source"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/portal/tickets")
+async def create_ticket(body: TicketIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    tid = uuid.uuid4()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_tickets (id,user_id,name,email,subject,language,source) values ($1,$2,$3,$4,$5,$6,'portal')",
+            tid, uuid.UUID(user["id"]), user["name"], user["email"], body.subject, user["language"],
+        )
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)", uuid.uuid4(), tid, body.body)
+    asyncio.create_task(_EXTRAS["ai_ticket_reply"](str(tid)))
+    asyncio.create_task(_SEND_EMAIL(
+        os.environ.get("INTERNAL_NOTIFY_EMAIL"),
+        f"Neues Support-Ticket: {body.subject} ({user['email']})",
+        _CI_EMAIL("Neues Support-Ticket", f"<p><b>{user['name']}</b> ({user['email']}):</p><p style='border-left:2px solid #52525b;padding-left:12px;'>{body.body}</p>", cta_label="Im CRM öffnen", cta_url=f"{FRONTEND_URL}/admin"),
+    ))
+    return {"id": str(tid), "status": "open"}
+
+
+@router.get("/api/portal/tickets/{ticket_id}/messages")
+async def ticket_messages(ticket_id: str, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1", uuid.UUID(ticket_id))
+        if not t or (user["role"] != "admin" and t["email"].lower() != user["email"].lower()):
+            raise HTTPException(status_code=404, detail="Ticket nicht gefunden.")
+        rows = await con.fetch("select * from nexify_ticket_messages where ticket_id = $1 order by created_at asc", uuid.UUID(ticket_id))
+    return [{"id": str(r["id"]), "sender": r["sender"], "body": r["body"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+@router.post("/api/portal/tickets/{ticket_id}/messages")
+async def ticket_reply(ticket_id: str, body: MessageIn, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1 and lower(email) = $2", uuid.UUID(ticket_id), user["email"].lower())
+        if not t:
+            raise HTTPException(status_code=404, detail="Ticket nicht gefunden.")
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'customer',$3)", uuid.uuid4(), uuid.UUID(ticket_id), body.body)
+        await con.execute("update nexify_tickets set status='open' where id=$1", uuid.UUID(ticket_id))
+    asyncio.create_task(_EXTRAS["ai_ticket_reply"](ticket_id))
+    return {"status": "ok"}
+
+
+class ProspectIn(BaseModel):
+    name: str
+    email: EmailStr
+    company: str | None = None
+    phone: str | None = None
+    language: str = "de"
+    note: str | None = None
+
+
+async def prospect_core(name: str, email: str, company: str | None, phone: str | None, language: str = "de", note: str | None = None) -> dict:
+    email = email.lower().strip()
+    pool = await _DB()
+    async with pool.acquire() as con:
+        await con.execute(
+            "insert into nexify_leads (id,name,email,company,phone,language,message,source) values ($1,$2,$3,$4,$5,$6,$7,'manual')",
+            uuid.uuid4(), name, email, company, phone, language, note or "Manuell angelegt",
+        )
+        existing = await con.fetchrow("select id from nexify_users where email = $1", email)
+    nl = language == "nl"
+    if existing:
+        return {"status": "lead_created", "note": "Konto existiert bereits – keine Einladung gesendet."}
+    token = create_invite_token(email, "")
+    title = "Welkom bij NeXify AI – uw persoonlijke toegang" if nl else "Willkommen bei NeXify AI – Ihr persönlicher Zugang"
+    welcome = (
+        f"Beste {name},<br/><br/>hartelijk dank voor uw interesse in <b>NeXify AI by NeXify – chat it. Automate it.</b> Wij hebben u persoonlijk als contact in ons systeem opgenomen, zodat u direct toegang krijgt tot uw eigen klantportaal.<br/><br/>Kies eenvoudig een wachtwoord en profiteer van alle voordelen: offertes inzien en beheren, vragen stellen, support-tickets openen en uw gegevens op elk moment aanpassen.<br/><br/>Met vriendelijke groet<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it."
+        if nl else
+        f"Guten Tag {name},<br/><br/>vielen Dank für Ihr Interesse an <b>NeXify AI by NeXify – chat it. Automate it.</b> Wir haben Sie persönlich als Kontakt in unserem System aufgenommen, damit Sie direkten Zugang zu Ihrem eigenen Kundenportal erhalten.<br/><br/>Vergeben Sie einfach ein Passwort und profitieren Sie von allen Vorteilen: Angebote einsehen und verwalten, Rückfragen stellen, Support-Tickets eröffnen und Ihre Daten jederzeit selbst pflegen.<br/><br/>Mit besten Grüßen<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it."
+    )
+    email_id = await _SEND_EMAIL(email, title, _CI_EMAIL(title, welcome, cta_label="Wachtwoord aanmaken" if nl else "Passwort jetzt anlegen", cta_url=f"{FRONTEND_URL}/registrieren?token={token}", language=language))
+    return {"status": "invited", "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/prospects")
+async def create_prospect(body: ProspectIn, admin: dict = Depends(get_admin)):
+    return await prospect_core(body.name, body.email, body.company, body.phone, body.language, body.note)
+
+
+class ManualOfferItem(BaseModel):
+    name: str
+    description: str = ""
+    days_min: float = 1
+    days_max: float = 1
+
+
+class ManualOfferIn(BaseModel):
+    name: str
+    email: EmailStr
+    company: str | None = None
+    language: str = "de"
+    title: str
+    intro: str = ""
+    items: list[ManualOfferItem]
+    assumptions: list[str] = []
+    next_steps: list[str] = []
+
+
+async def offer_core(name: str, email: str, company: str | None, language: str, title: str, intro: str,
+                     items: list[dict], assumptions: list[str], next_steps: list[str]) -> dict:
+    import base64
+    offer = {"title": title, "intro": intro, "items": items, "assumptions": assumptions, "next_steps": next_steps}
+    total_min = sum(float(i.get("days_min", 1)) for i in items)
+    total_max = sum(float(i.get("days_max", i.get("days_min", 1))) for i in items)
+    price_total = round((total_min + total_max) / 2) * 999
+    offer_id = uuid.uuid4()
+    nl = language == "nl"
+    subject = f"Uw offerte van NeXify AI – {title}" if nl else f"Ihr Angebot von NeXify AI – {title}"
+    html = _EXTRAS["offer_email_html"](offer, name, language, price_total)
+    try:
+        pdf = _EXTRAS["offer_pdf"](offer, name, company, language, price_total)
+        attachments = [{"filename": "NeXify-AI-Offerte.pdf" if nl else "NeXify-AI-Angebot.pdf", "content": base64.b64encode(pdf).decode()}]
+    except Exception as e:
+        logger.error(f"manual offer pdf failed: {e}")
+        attachments = None
+    email_id = await _SEND_EMAIL(email, subject, html, attachments=attachments)
+    pool = await _DB()
+    async with pool.acquire() as con:
+        await con.execute(
+            """insert into nexify_offers (id,session_id,name,email,company,language,offer_json,price_total,email_id,followup_at)
+               values ($1,null,$2,$3,$4,$5,$6,$7,$8, now() + interval '24 hours')""",
+            offer_id, name, email.lower(), company, language, json.dumps(offer), price_total, email_id,
+        )
+    asyncio.create_task(_EXTRAS["send_account_invite"](str(offer_id), name, email.lower(), language))
+    return {"status": "sent" if email_id else "created", "offer_id": str(offer_id), "price_total": price_total, "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/offers/create")
+async def create_manual_offer(body: ManualOfferIn, admin: dict = Depends(get_admin)):
+    return await offer_core(body.name, body.email.lower(), body.company, body.language, body.title, body.intro,
+                            [i.model_dump() for i in body.items], body.assumptions, body.next_steps)
+
+
+@router.get("/api/admin/tickets")
+async def admin_tickets(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            """select t.*, count(m.id) as msg_count from nexify_tickets t
+               left join nexify_ticket_messages m on m.ticket_id = t.id
+               group by t.id order by t.created_at desc limit 200"""
+        )
+    return [{"id": str(r["id"]), "name": r["name"], "email": r["email"], "subject": r["subject"], "status": r["status"], "language": r["language"], "source": r["source"], "msg_count": r["msg_count"], "created_at": r["created_at"].isoformat()} for r in rows]
+
+
+async def ticket_reply_core(ticket_id: str, body_text: str) -> dict:
+    pool = await _DB()
+    async with pool.acquire() as con:
+        t = await con.fetchrow("select * from nexify_tickets where id = $1", uuid.UUID(ticket_id))
+        if not t:
+            return {"error": "Ticket nicht gefunden."}
+        await con.execute("insert into nexify_ticket_messages (id,ticket_id,sender,body) values ($1,$2,'admin',$3)", uuid.uuid4(), uuid.UUID(ticket_id), body_text)
+        await con.execute("update nexify_tickets set status='answered' where id=$1", uuid.UUID(ticket_id))
+    nl = t["language"] == "nl"
+    subject = f"Re: {t['subject']} – NeXify AI"
+    greeting = f"Beste {t['name']}," if nl else f"Guten Tag {t['name']},"
+    sig = ("Met vriendelijke groet<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it." if nl
+           else "Mit besten Grüßen<br/><b>Pascal Courbois</b><br/>NeXify AI by NeXify – chat it. Automate it.")
+    email_id = await _SEND_EMAIL(t["email"], subject, _CI_EMAIL(subject, f"<p>{greeting}</p><p>{body_text.replace(chr(10), '<br/>')}</p><p style='margin-top:18px;'>{sig}</p>", cta_label="Naar het klantportaal" if nl else "Zum Kundenportal", cta_url=f"{FRONTEND_URL}/konto", language=t["language"]))
+    return {"status": "ok", "email_sent": bool(email_id)}
+
+
+@router.post("/api/admin/tickets/{ticket_id}/messages")
+async def admin_ticket_reply(ticket_id: str, body: MessageIn, admin: dict = Depends(get_admin)):
+    result = await ticket_reply_core(ticket_id, body.body)
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result["error"])
+    return result
+
+
+async def seed_admin(db_getter):
+    email = os.environ.get("ADMIN_EMAIL", "").lower().strip()
+    password = os.environ.get("ADMIN_PASSWORD", "")
+    if not email or not password:
+        return
+    pool = await db_getter()
+    if not pool:
+        return
+    async with pool.acquire() as con:
+        row = await con.fetchrow("select * from nexify_users where email = $1", email)
+        if row is None:
+            await con.execute(
+                "insert into nexify_users (id,email,password_hash,name,role,language) values ($1,$2,$3,'Pascal Courbois','admin','de')",
+                uuid.uuid4(), email, hash_password(password),
+            )
+            logger.info("admin seeded")
+        elif not verify_password(password, row["password_hash"]):
+            await con.execute("update nexify_users set password_hash=$1, role='admin' where email=$2", hash_password(password), email)
+            logger.info("admin password updated")

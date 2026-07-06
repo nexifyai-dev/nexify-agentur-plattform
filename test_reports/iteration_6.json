@@ -1,0 +1,36 @@
+{
+  "summary": "E2E verification of Hermes-WebUI bug fixes via SSO from preview backend. All 4 reported bugs (CSRF, Branding, SSO, Theme) fixed and verified. Website regression clean. One minor pre-existing provider-config issue found (certain OpenAI model IDs return 'Model not found' when used in older sessions), not caused by the fixes.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "WebUI Chat — Model selection on legacy sessions",
+        "issue": "When a chat session has model 'GPT 5.4 Mini' (or another OpenAI-variant) selected, the assistant returns an inline error bubble: 'Model not found: HTTP 404: No active credentials for provider: openai'. Fresh chats default to 'ds/deepseek-chat' which answers correctly (~3s, 63.5 t/s). This is a provider-credential/config gap, NOT the CSRF or agent-availability bug from the review.",
+        "affected_selectors": ["#messages", "composer model dropdown"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "MINOR (not blocking review): OpenAI models (GPT 5.x, GPT 4.x variants) in the model dropdown produce 'Model not found / no active credentials for provider: openai' when actually used. Either hide/disable them in the picker or wire real OpenAI credentials in the WebUI/Hermes provider registry. This is pre-existing and independent of the four fixes verified here.",
+    "OPTIONAL: The stylesheet is loaded as '/static/style.css?v=unknown' — the cache-buster placeholder never got substituted. Not a functional issue (CSS works), but if you rely on ?v=<hash> for cache invalidation on style.css similarly to favicons, consider filling in a real version token."
+  ],
+  "critical_code_review_comments": [
+    "SSO endpoint /api/admin/webui-sso mints a 60s-valid HMAC-SHA256 token (portal.py:192-201). The main-agent's warning about '60s window' is accurate — during first login+mint attempts the roundtrip is well under 5s so no timing pressure in practice.",
+    "The chat error message text still contains the string 'hermes model' in a code-block ('run `hermes model` to verify it exists for your provider.'). This is a backend-generated hint from the Hermes upstream and is only visible when the provider fails. If strict rebranding is desired, that error template should be patched too (or hidden behind a 'Provider details' expander which currently is a link — but the summary line still contains 'hermes model').",
+    "Two body-background measurements returned different values across runs (rgb(13,13,26) on the very first measurement immediately after landing, rgb(9,9,11) on subsequent measurements after full stylesheet load). Suggests style.css is applied slightly late relative to a Vue/Angular loader shell. Non-blocking, but a FOUC guard (opacity:0 until stylesheet loaded, or inlining the two core vars into <head>) would be nicer."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (frontend-only run)", "frontend": "100% (5/5 review cases pass)"},
+  "test_credentials": "Admin mail@nexifyai.cloud / ***REDACTED*** used via POST /api/auth/login on the preview backend. Cookie set, /api/admin/webui-sso minted, redirect landed directly in WebUI app-shell without any login screen.",
+  "seed_data_creation": "Two new WebUI chat sessions were created on the external VPS during testing: 'Hallo, kurzer Test: bitte antworte mit einem Satz.' and 'Bitte antworte kurz: Wer bist du?'. No settings changed, no sessions deleted.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Test flow that works reliably: (1) POST https://rebranding-hub-2.preview.emergentagent.com/api/auth/login with JSON {email,password} using page.context.request → 200 + cookie; (2) GET /api/admin/webui-sso on same context → returns {url} with 60s TTL; (3) page.goto(url) → lands on https://webui.nexifyai.cloud/ app-shell directly. IMPORTANT: to send a chat that gets a REAL answer, click '+' next to CHAT to open a NEW session (defaults to model ds/deepseek-chat). Sending into the last-used session may inherit an OpenAI model that returns 'Model not found'. Selectors: composer textarea = #msg, send button = #btnSend, messages container = #messages (children count changes as messages/tool-calls stream). Body theme vars: expected background rgb(9,9,11), font Manrope. Favicons must have ?v=nx2. Title contains 'NeXify AI'.",
+  "rca of the issue": "BUG1 (CSRF): CONFIRMED FIXED. Chat POST to WebUI no longer throws 'Failed to execute has on Headers: Invalid name'; user bubble appears, composer clears, network POSTs succeed. Header name was reverted from 'X-NeXify AI-CSRF-Token' (contains space, invalid HTTP header name per RFC 7230) back to 'X-Hermes-CSRF-Token'. BUG2 (Branding): CONFIRMED FIXED. document.title='NeXify AI – Chat it. Automate it.', 0 visible 'Hermes' occurrences in body.innerText, all 4 favicon link tags include ?v=nx2, /static/favicon.svg?v=nx2 delivers SVG with <rect fill='#09090b'/> + silver gradient (no gold/orange). BUG3 (SSO): CONFIRMED FIXED. Login → mint → goto returns 200 and lands on app-shell (composer #msg + sidebar 'CHAT' visible) with no interstitial login screen. BUG4 (Theme): CONFIRMED FIXED on the stable app-shell state — getComputedStyle(document.body).backgroundColor='rgb(9, 9, 11)' and fontFamily starts with 'Manrope'. Stylesheets loaded from Google Fonts (Outfit+Manrope) and /static/style.css. REGRESSION: Preview homepage returns 200 with title 'NeXify AI — Premium Websites, Apps & AI-Automatisierung in Tagen'; admin /api/auth/login returns 200 with role='admin'. All four fixes reproduced and verified end-to-end from a fresh browser context."
+}

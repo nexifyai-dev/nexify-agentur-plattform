@@ -1,19 +1,18 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useLang } from "@/lib/i18n";
 
 export default function NotFound() {
+  const { lang } = useLang();
   return (
-    <main className="grid min-h-[70vh] place-items-center px-5 text-center">
-      <div>
-        <p className="font-mono text-[80px] font-bold tracking-[-.08em] text-[var(--text-4)]">404</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-.04em] text-[var(--text-1)]">Seite nicht gefunden.</h1>
-        <p className="mx-auto mt-4 max-w-md text-[15px] text-[var(--text-2)] font-light leading-relaxed">
-          Der Link ist möglicherweise veraltet oder die URL enthält einen Tippfehler.
-        </p>
-        <Button asChild className="mt-8" variant="outline">
-          <Link href="/de"><ArrowLeft className="size-4" /> Zur Startseite</Link>
-        </Button>
+    <main className="flex min-h-[70vh] items-center pt-24" data-testid="not-found-page">
+      <div className="site-container text-center">
+        <div className="text-silver font-[family-name:var(--font-heading)] text-8xl font-semibold">404</div>
+        <p className="mt-4 text-lg text-zinc-400">{lang === "nl" ? "Deze pagina bestaat niet (meer)." : "Diese Seite existiert nicht (mehr)."}</p>
+        <Link href="/" className="btn-primary mt-8 inline-flex" data-testid="not-found-home-link">
+          {lang === "nl" ? "Naar de startpagina" : "Zur Startseite"}
+        </Link>
       </div>
     </main>
   );

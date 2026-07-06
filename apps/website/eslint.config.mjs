@@ -6,4 +6,11 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores([".next/**", "out/**", "next-env.d.ts"]),
+  {
+    rules: {
+      // SSR-Hydration-Muster (localStorage/API-Sync in Effects) sind hier bewusst eingesetzt
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/purity": "warn",
+    },
+  },
 ]);
