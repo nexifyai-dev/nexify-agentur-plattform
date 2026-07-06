@@ -272,3 +272,12 @@ User lieferte neuen `tp-`Key (Region AMS). 9router-Provider `xiaomi-tokenplan` s
 ### Offen / Nächste Schritte
 - Revolut-Payment E2E (P1, echter Zahltest durch User)
 - CRM-Panels nativ im Hermes-Stil (P2, ganz am Ende)
+
+## Session 06.07.2026 (Fork 5, Teil 2) – Memory/Brain-Gesamtlösung & MCP-Produktion
+**Auftrag**: Alle Memory-Systeme (Brain, agentmemory, Qdrant, mem0, RAGFlow) systemweit aktiv, verbunden, von allen Agenten genutzt; alle Host-Verbindungen fehlerfrei; Gegencheck der Hermes-Agent-MCP-Arbeit.
+- Stale Brain-Wissen ersetzt (Ursache für "work.nexifyai.cloud umsetzen"-Fehlverhalten), autoritativer SYSTEM-STATUS in Brain+agentmemory+mem0.
+- MEMORY-PROTOKOLL (vor Arbeit: brain_query; nach Arbeit: brain_store) in allen 30+ Agenten-Instruktionsdateien (Hermes-Profile, Fabrik canonical+runtime, CLAUDE.md, AGENTS.md, goosehints).
+- MCP produktionsfest: 5 Server systemd-gesichert (:9200, :9292, :9393, :9494 + ragflow :9382), in Hermes (global+16 Profile), Fabrik, Claude Code, MimoCode, Goose verankert.
+- Infra-Fixes: agentmemory cgroup-Throttling behoben + Watchdog, TEI 11G→float16/8G-Cap, Host-SSH-Keys für Agenten, RAGFlow-MCP überall eingebunden.
+- E2E bewiesen: Hermes-Agent fragt Brain und erkennt korrekt, dass webui/work FERTIG sind.
+- Offen: Tavily-API-Key für echte Websuche (User), Revolut-E2E (User), CRM-Panels (Projektende).
