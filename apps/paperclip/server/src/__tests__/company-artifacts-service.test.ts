@@ -607,13 +607,13 @@ describeEmbeddedPostgres("companyArtifactsService", () => {
         issue: "PAP-2",
         count: 1,
         mediaKinds: ["document"],
-        href: "/PAP/artifacts?groupBy=task&groupIssueId=77777777-7777-4777-8777-777777777777",
+        href: "/PAP/artifacts?groupBy=task&groupIssueId=rebranding-hub-2",
       },
       {
         issue: "PAP-1",
         count: 3,
         mediaKinds: ["video", "text"],
-        href: "/PAP/artifacts?groupBy=task&groupIssueId=66666666-6666-4666-8666-666666666666",
+        href: "/PAP/artifacts?groupBy=task&groupIssueId=rebranding-hub-2",
       },
     ]);
     expect(grouped.groups?.find((group) => group.issue.id === issueId)?.previewArtifacts.map((artifact) => artifact.title))
@@ -634,7 +634,7 @@ describeEmbeddedPostgres("companyArtifactsService", () => {
         issue: "PAP-1",
         count: 2,
         href:
-          "/PAP/artifacts?groupBy=task&groupIssueId=66666666-6666-4666-8666-666666666666&kind=video&projectId=55555555-5555-4555-8555-555555555555",
+          "/PAP/artifacts?groupBy=task&groupIssueId=rebranding-hub-2&kind=video&projectId=rebranding-hub-2",
       },
     ]);
 
