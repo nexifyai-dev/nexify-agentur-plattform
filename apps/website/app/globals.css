@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ─────────────────────────────────────────────────────────────
+   NeXify Premium — Design System
+   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Inter Tight
+   ───────────────────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════
+   §1  TOKENS
+   ══════════════════════════════════════════════════════════════ */
 :root {
   --bg: #09090b;
   --bg-2: #0e0e11;
@@ -30,6 +39,9 @@ body {
     radial-gradient(ellipse 40% 35% at 88% 60%, rgba(200, 200, 215, 0.03), transparent),
     var(--bg);
   font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }

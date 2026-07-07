@@ -25,11 +25,11 @@ test('package exposes required quality scripts', () => {
 test('legacy and contract URLs redirect to canonical pages', () => {
   const config = read('next.config.ts');
   const redirects = [
-    ['/arbeitsweise', '/prozess'],
-    ['/ueber-pascal', '/ueber-mich'],
-    ['/projekte', '/referenzen'],
-    ['/leistungen/unternehmenswebsites', '/leistungen/websites'],
-    ['/leistungen/ai-gestuetzte-agenten', '/leistungen/ai-agenten'],
+    ['/arbeitsweise', '/de/prozess'],
+    ['/ueber-pascal', '/de/ueber-mich'],
+    ['/projekte', '/de/referenzen'],
+    ['/preise', '/de/preise'],
+    ['/kontakt', '/de/kontakt'],
   ];
   for (const [source, destination] of redirects) {
     assert.match(config, new RegExp(`source: "${source.replaceAll('/', '\\/')}"`));

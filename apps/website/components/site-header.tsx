@@ -131,7 +131,7 @@ export function SiteHeader() {
             </Link>
           </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }
