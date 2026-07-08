@@ -1,8 +1,12 @@
 # Translation Layer Tests
+> **Factory:** Paperclip API at http://localhost:3100 (P0 Skill Source)
+
 
 Tests for `open-sse/translator/`. Goals: (1) data-driven coverage of every provider/model, (2) expose bugs caused by using OpenAI as the intermediate format.
 
 ## 1. Translation layer structure (`open-sse/translator/`)
+> **Factory:** Paperclip API at http://localhost:3100 (P0 Skill Source)
+
 
 Pipeline uses **OpenAI as the intermediate format**:
 - Request: `source → openai → target` (`translateRequest`)
