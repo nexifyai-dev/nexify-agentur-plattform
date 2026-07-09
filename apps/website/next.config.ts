@@ -59,10 +59,15 @@ const nextConfig: NextConfig = {
     { source: "/avv", destination: "/de/avv", permanent: true },
     { source: "/widerruf", destination: "/de/widerruf", permanent: true },
   ],
-  rewrites: async () =>
-    process.env.BACKEND_ORIGIN
-      ? [{ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` }]
-      : [],
+  rewrites: async () => {
+    const rewrites = [
+      { source: "/docs/vollbetrieb", destination: "/docs/vollbetrieb.md" },
+    ];
+    if (process.env.BACKEND_ORIGIN) {
+      rewrites.push({ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` });
+    }
+    return rewrites;
+  },
 };
 
 export default nextConfig;
