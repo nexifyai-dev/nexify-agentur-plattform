@@ -18,7 +18,6 @@ export function apiErr(detail: unknown): string {
   return String(detail);
 }
 
-export const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
 export const API_FALLBACK = "https://admin.nexifyai.cloud";  // fallback when same-origin rewrite is not deployed
 
 export async function api(path: string, options: RequestInit = {}) {
