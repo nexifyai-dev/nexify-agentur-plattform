@@ -28,6 +28,26 @@ const nextConfig: NextConfig = {
         { key: "X-DNS-Prefetch-Control", value: "on" },
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         { key: "X-XSS-Protection", value: "1; mode=block" },
+        {
+          // Pragmatic CSP: keeps Next.js' inline bootstrap and the inline JSON-LD
+          // working (no nonce infra yet, so 'unsafe-inline' is required), while
+          // locking down the high-value directives. Tighten script-src to a nonce
+          // once a CSP nonce is wired through middleware.
+          key: "Content-Security-Policy",
+          value: [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-inline'",
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' data: https:",
+            "font-src 'self' data:",
+            "connect-src 'self' https:",
+            "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "object-src 'none'",
+            "upgrade-insecure-requests",
+          ].join("; "),
+        },
       ],
     },
     {
