@@ -4,7 +4,7 @@ import test from 'node:test';
 test('SiteFooter Component - has correct company information', () => {
   const company = {
     legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
-    email: "support@nexify-automate.com",
+    email: "mail@nexifyai.cloud",
     phone: "+31 6 133 188 56",
   };
   assert.ok(company.legalName.includes("NeXify"));
