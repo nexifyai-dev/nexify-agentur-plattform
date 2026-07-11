@@ -8,14 +8,26 @@ Klartext-Zugangsdaten auf `main` committet und über die GitHub-Remote
 `.env`, `*.pem`, `*.key`, `credentials.json` korrekt aus — die Datei war aber eine
 `.md`-Datei mit eingebetteten Klartext-Werten und wurde von keinem der Muster erfasst.
 
-Betroffene Werte (Stand vor dem Scrub in diesem Commit):
+Betroffene Werte (Stand vor dem Scrub — mittlerweile in 3 Dateien gefunden und gescrubbt,
+siehe „Sofortmaßnahmen" unten):
 1. Admin-Login-Passwort (`mail@nexifyai.cloud`, Live-Admin unter `www.nexifyai.cloud/admin`)
-2. Test-Kunden-Passwort (`support@nexify-automate.com`)
+   — in `memory/test_credentials.md` UND (erneut, unabhängig) in 8 Dateien
+   `test_reports/iteration_2.json` bis `iteration_9.json`.
+2. Test-Kunden-Passwort (`support@nexify-automate.com`) — `memory/test_credentials.md`.
 3. Service-Admin-API-Token (`X-Admin-Token` / Backend-Env `ADMIN_API_TOKEN`, identisch mit
    `NEXIFY_CRM_API_TOKEN` in der VPS-Datei `/root/.hermes/.env`) — dieser Token hat laut
    `memory/VPS_INFRA.md` Server-zu-Server-Admin-Rechte und wird vom Hermes-Skill `nexify-crm`
    genutzt. Höchste Priorität, da er nicht nur einen Nutzer-Account, sondern eine
-   Service-zu-Service-Vertrauensbeziehung betrifft.
+   Service-zu-Service-Vertrauensbeziehung betrifft. In `memory/test_credentials.md` UND
+   denselben 8 `test_reports/iteration_*.json`-Dateien.
+4. 9router-„system"-API-Key (Hermes-Auth) — `memory/VPS_INFRA.md`.
+5. RAGFlow-MCP-API-Key — `memory/VPS_INFRA.md`.
+6. You.com-Such-API-Key — `memory/VPS_INFRA.md`.
+
+Die Wiederholung derselben Werte in `test_reports/*.json` (automatisch generierte
+Test-Läufe, die offenbar `memory/test_credentials.md` mitgeloggt haben) zeigt, dass das
+Leck sich bereits selbst repliziert hat — ein weiterer Beleg, warum Secret-Scanning als
+CI-Gate nötig ist, nicht nur ein einmaliges manuelles Aufräumen.
 
 Zusätzlich: Im Zuge dieser Session hat der Betreiber das VPS-Root-Passwort im Klartext in
 den Chat-Verlauf dieser Session eingefügt (in der Annahme, es werde für einen SSH-Login

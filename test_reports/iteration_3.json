@@ -30,7 +30,7 @@
     "/app/backend/tests/test_booking_agent.py (created)"
   ],
   "success_rate": {"backend": "100% (8/8, agent-chat once via skip-on-ingress-502 retry)", "frontend": "100% (all 13 review-request flows)"},
-  "test_credentials": "Admin: mail@nexifyai.cloud / 1def!xO2022!! ; Customer: support@nexify-automate.com / TestKunde2026!",
+  "test_credentials": "Admin: mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] ; Customer: support@nexify-automate.com / TestKunde2026!",
   "seed_data_creation": "Created via UI/API: 1 booked slot (Fr 10.07.2026 14:30, TEST_Automation Booking, test+booking*@nexify-automate.com), 1 booked slot (2027-02-15 09:00 via pytest, test+dbl1*@nexify-automate.com), 1 prospect (prospect-test-*@example.com), 1 offer (TEST_Automation Angebot, €999, offer-test-*@example.com), 1 lead phone update, 1 contact-form lead+ticket (test+contact*@nexify-automate.com). All prefixed TEST_/test+ for easy cleanup.",
   "retest_needed": false,
   "main_agent_can_self_test": true,

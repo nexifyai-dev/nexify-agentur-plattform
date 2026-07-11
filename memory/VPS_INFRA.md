@@ -47,7 +47,7 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 ## Hermes Agent
 - API (OpenAI-kompatibel): `127.0.0.1:8642` (health `/health`, v0.17.0). Gateway/Cron: `hermes-gateway.service` (jetzt autoritativ + reboot-sicher).
 - Binaries: `/usr/local/lib/hermes-agent/venv`. State: `/root/.hermes`. Profil: `agentur-admin`.
-- API-Key (= 9router-Key „system"): `sk-97034a83a8033b14-ijhhux-4a3f10ba`
+- API-Key (= 9router-Key „system"): **[ROTIEREN — siehe docs/architecture/SECURITY-INCIDENT-2026-07-11.md, aus Git entfernt]**
 
 ## 9router (:20128, ai-router.nexifyai.cloud)
 - v0.5.18. 7 aktive Provider: DeepSeek, Xiaomi MiMo (sk- + token-plan tp-), NScale, Codex(OAuth nexify.login@gmail.com), Vercel AI Gateway, You.com.
@@ -119,7 +119,7 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 1. **Brain-Wissen refresht**: Stale Gap-Analyse (2026-06-20, "WebUI 21+ Gaps", ID 40f1d415…) GELÖSCHT – sie verleitete Agenten (MimoCode) dazu, work.nexifyai.cloud "umzusetzen". Autoritativer SYSTEM-STATUS (auch /workspace/00_status/) in Brain (category status) + agentmemory (key system-status-2026-07-06) + mem0 (user_id nexifyai-system) geseedet. E2E: hermes chat fragt Brain und antwortet korrekt "nichts umzusetzen".
 2. **MEMORY-PROTOKOLL (Pflicht)** in ALLE SOULs/AGENTS: 17 Hermes-SOULs, Paperclip-SOUL, 6 canonical + 6 runtime Fabrik-AGENTS.md (instances/default/companies/…/agents/*/instructions/).
 3. **Unified-MCP gefixt**: agentmemory_search nutzte falsche Route (immer "offline") → /agentmemory/smart_search; neues Tool agentmemory_save. Backup: mcp-sse-unified.py.bak-20260706.
-4. **RAGFlow-MCP (:9382, api_key nexify-mcp-key-2026)** in Hermes eingebunden: global + alle 16 Profile (127.0.0.1) + Paperclip (172.25.0.1).
+4. **RAGFlow-MCP (:9382, api_key [ROTIEREN — aus Git entfernt])** in Hermes eingebunden: global + alle 16 Profile (127.0.0.1) + Paperclip (172.25.0.1).
 5. **Host-SSH für Agenten**: Key /root/.hermes/ssh/id_ed25519 (= /home/hermeswebui/.hermes/ssh/… bzw. /paperclip/.hermes/ssh/…), in authorized_keys, beide Container getestet. In SOULs + Brain dokumentiert.
 6. **agentmemory-Hänger-Root-Cause**: cgroup MemoryHigh=2G → Endlos-Throttling (D-State). Fix: Dropin memory-fix.conf (MemoryHigh=infinity, MemoryMax=3G) + agentmemory-watchdog.timer (5 min, prüft :40000/health + TCP :3113).
 7. **RAM-Krise gelöst**: ragflow TEI (bge-m3) fraß 11G float32 unbounded → auf --dtype float16 + mem_limit 8g umgestellt (compose, Backup .bak-teimem). TEI Ready, embed 200. Host: 2G→8G+ available.
@@ -129,5 +129,5 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 
 ## Session-Fixes 06.07.2026 – Teil 5 (Fabrik-Heilung + You.com-Websuche)
 1. **Fabrik-Fehleranalyse**: 3 Agenten (Architekt/Analyst/QA) standen auf `error`. Ursachen (bereits zuvor behoben): fehlender `nexifyai`-Wrapper (bis 05.07. 21:06) + Approval-Prompt-Blockade (vor yolo-Fix). Heilung per Wakeup: QA-Run succeeded (exit 0), alle Agenten wieder `idle`/gesund. Brain-Zugriff der Fabrik: nexify-unified MCP + Memory-Protokoll in runtime AGENTS.md (bereits Teil 4).
-2. **web_search → You.com**: unified MCP (:9200) nutzt jetzt `https://ydc-index.io/v1/search` (offizieller Endpoint), Key `ydc-sk-a0f0…be7f53` (User, frisch), Parsing `results.web[].description`. WICHTIG: `User-Agent`-Header setzen (curl/8.5.0), sonst 403 bei Python-urllib. Alter Tavily-Key war redacted/kaputt. Gleicher You.com-Key in 9router `youcom`-Provider aktualisiert (Backoff resettet, Router restartet). E2E: Hermes-Agent liefert via web_search korrekte GitHub-URLs.
+2. **web_search → You.com**: unified MCP (:9200) nutzt jetzt `https://ydc-index.io/v1/search` (offizieller Endpoint), Key **[ROTIEREN — aus Git entfernt]**, Parsing `results.web[].description`. WICHTIG: `User-Agent`-Header setzen (curl/8.5.0), sonst 403 bei Python-urllib. Alter Tavily-Key war redacted/kaputt. Gleicher You.com-Key in 9router `youcom`-Provider aktualisiert (Backoff resettet, Router restartet). E2E: Hermes-Agent liefert via web_search korrekte GitHub-URLs.
 3. **Paperclip-Referenzen**: Docs https://docs.paperclip.ing, Repo github.com/paperclipai/paperclip. Run-Logs: `paperclip-data/_data/instances/default/data/run-logs/<runId>/…ndjson`.
