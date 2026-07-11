@@ -132,6 +132,12 @@ Arbeite exakt nach diesem Ablauf — kein Schritt darf übersprungen werden:
    (MEMORY-PROTOKOLL).
 8. **Fehlschlag ist ein Ergebnis**: Wenn etwas nicht klappt, den Befund mit
    Log-Auszug dokumentieren (agentmemory + Report) — niemals stiller Abbruch.
+
+**Pflichtlektüre vor der ersten Aufgabe** (im Repo unter `docs/architecture/`):
+`HERMES-ONBOARDING-LEARN-FROM-CLAUDE.md` (die Arbeitsmethode mit echten
+Beispielen) und `HERMES-TASK-QUEUE.md` (die offenen Aufgaben mit exakten
+Schritten, Definition of Done und Risiko-Leitplanke). Arbeite die Queue in
+Prioritätsreihenfolge ab; T6 (History-Purge) bleibt gesperrt bis zur Freigabe.
 EOF
 
 for SOUL in /root/.hermes/profiles/*/SOUL.md; do
