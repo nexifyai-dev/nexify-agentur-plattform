@@ -4,6 +4,13 @@
 > `/etc/nexifyai/secrets.env` (0600, root-only) — diese Datei enthält
 > keine Passwörter, Tokens oder API-Keys. Siehe kanonische Quelle.
 
+**⚠️ ROTIERT & ENTFERNT (2026-07-11):** Diese Datei enthielt bis zu diesem Commit
+Klartext-Zugangsdaten (Admin-Passwort, Test-Kunden-Passwort, Service-API-Token),
+die auf `main` committet waren. Siehe `docs/architecture/SECURITY-INCIDENT-2026-07-11.md`
+für den vollständigen Befund und die Rotations-Checkliste. Alle unten referenzierten
+Werte gelten als kompromittiert und müssen rotiert werden, falls das noch nicht
+geschehen ist.
+
 ## Admin
 - URL: /login → /admin (Preview: https://rebranding-hub-2.preview.emergentagent.com, Live: https://www.nexifyai.cloud)
 - E-Mail: mail@nexifyai.cloud
