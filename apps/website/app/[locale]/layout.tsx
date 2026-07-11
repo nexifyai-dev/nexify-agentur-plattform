@@ -1,35 +1,17 @@
-import type { Metadata, Viewport } from "next";
-import { Inter_Tight, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CustomCursor } from "@/components/custom-cursor";
 import { ScrollProgress } from "@/components/scroll-progress";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { StickyCta } from "@/components/sticky-cta";
 import { company } from "@/lib/site-data";
 import { getTranslations, isValidLocale, type Locale, locales } from "@/lib/i18n";
-import "../globals.css";
 
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-body",
-  weight: ["300", "400", "500", "600"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-  weight: ["400", "500"],
-});
+// NOTE: This is a NESTED layout under the root app/layout.tsx, which already
+// provides <html>/<body>, fonts, globals.css, providers, header and footer.
+// It must NOT render a second <html>/<body>/<SiteHeader>/<SiteFooter> — doing so
+// produced two stacked headers and nested invalid HTML in production, which broke
+// stylesheet application. It only adds per-locale SEO metadata, JSON-LD and the
+// decorative client extras.
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -53,12 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     publisher: company.legalName,
     alternates: {
       canonical: `/${locale}`,
-      languages: {
-        de: "/de",
-        en: "/en",
-        nl: "/nl",
-        "x-default": "/de",
-      },
+      languages: { de: "/de", en: "/en", nl: "/nl", "x-default": "/de" },
     },
     openGraph: {
       type: "website",
@@ -71,8 +48,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     robots: { index: true, follow: true },
   };
 }
-
-export const viewport: Viewport = { themeColor: "#0A0A0A", colorScheme: "dark" };
 
 export default async function LocaleLayout({
   children,
@@ -98,20 +73,12 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} className={`${interTight.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable}`}>
-      <body>
-        <CustomCursor />
-        <ScrollProgress />
-        <StickyCta />
-        <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
-        {/* SiteHeader/SiteFooter still resolve language from client-side lang-context (useLang()),
-            not from the URL locale segment — see master audit plan for the architecture
-            reconciliation needed to make them locale-aware server-side. */}
-        <SiteHeader />
-        <main id="main-content" role="main">{children}</main>
-        <SiteFooter />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      </body>
-    </html>
+    <>
+      <CustomCursor />
+      <ScrollProgress />
+      <StickyCta />
+      {children}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+    </>
   );
 }
