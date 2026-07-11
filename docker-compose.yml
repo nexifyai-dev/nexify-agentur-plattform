@@ -9,6 +9,11 @@ services:
       dockerfile: deploy/docker/Dockerfile.website
     container_name: nexify-website
     restart: unless-stopped
+    # Central secret store on the VPS (BACKEND_ORIGIN, NEXT_PUBLIC_* etc.).
+    # required:false → no-op locally / when the file is absent.
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0
