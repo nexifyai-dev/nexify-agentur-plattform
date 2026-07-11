@@ -1,4 +1,8 @@
-# Test-Zugänge NeXify AI
+# Test-Zugänge NeXify AI — Übersicht (keine Credentials)
+
+> **CREDENTIALS-SICHERHEIT:** Alle Secrets liegen ausschließlich in
+> `/etc/nexifyai/secrets.env` (0600, root-only) — diese Datei enthält
+> keine Passwörter, Tokens oder API-Keys. Siehe kanonische Quelle.
 
 **⚠️ ROTIERT & ENTFERNT (2026-07-11):** Diese Datei enthielt bis zu diesem Commit
 Klartext-Zugangsdaten (Admin-Passwort, Test-Kunden-Passwort, Service-API-Token),
@@ -10,17 +14,17 @@ geschehen ist.
 ## Admin
 - URL: /login → /admin (Preview: https://rebranding-hub-2.preview.emergentagent.com, Live: https://www.nexifyai.cloud)
 - E-Mail: mail@nexifyai.cloud
-- Passwort: **[ROTIEREN — siehe Security-Incident-Doku, nicht mehr in Git]**
+- **Passwort:** → `/etc/nexifyai/secrets.env`
 
 ## Test-Kunde (vom Testing-Agent angelegt)
 - E-Mail: support@nexify-automate.com
-- Passwort: **[ROTIEREN — siehe Security-Incident-Doku, nicht mehr in Git]**
+- **Passwort:** → `/etc/nexifyai/secrets.env`
 
 ## Infrastruktur
-- Vercel-Projekt: "website" (Token in Secret-Store, NICHT in Git — z. B. Vercel Env Vars / VPS `.env`)
-- Cloudflare: Global Key im Secret-Store; Bearer-Token hat nur Zone-Read
-- Supabase, Resend, Revolut, MiMo: Keys im Secret-Store (z. B. `.env`, nie in Git)
+- Vercel-Projekt: "website" (Token in `/etc/nexifyai/secrets.env`)
+- Cloudflare: Credentials in `/etc/nexifyai/secrets.env`
+- Supabase, Resend, Revolut, MiMo: Keys in `/etc/nexifyai/secrets.env`
 
 ## Service-Token (Server-zu-Server Admin-API)
-- Header: `X-Admin-Token: <ROTIERT — siehe Security-Incident-Doku>`
-- Quelle: Secret-Store `ADMIN_API_TOKEN` (identisch als `NEXIFY_CRM_API_TOKEN` in VPS `/root/.hermes/.env` für den Hermes-Skill nexify-crm)
+- **Header:** `X-Admin-Token` → `/etc/nexifyai/secrets.env`
+- **Quelle:** Einzige kanonische Quelle: `/etc/nexifyai/secrets.env`
