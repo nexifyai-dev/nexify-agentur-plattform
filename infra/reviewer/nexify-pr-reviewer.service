@@ -1,0 +1,17 @@
+[Unit]
+Description=NeXifyAI autonomer PR-Reviewer (Review-Gate im Loop mit den Agenten)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# REVIEWER_GITHUB_TOKEN + NEXIFY_REVIEWER_LOGIN kommen aus dem zentralen Secret-Store.
+EnvironmentFile=/etc/nexifyai/secrets.env
+WorkingDirectory=/opt/nexifyai-cloud
+ExecStart=/usr/bin/python3 /opt/nexifyai-cloud/infra/reviewer/nexify_pr_reviewer.py
+# Härtung
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/log
+ProtectHome=true
+PrivateTmp=true
