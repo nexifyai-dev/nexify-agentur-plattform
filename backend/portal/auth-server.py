@@ -40,9 +40,28 @@ _CSRF_TOKENS: dict[str, float] = {}  # csrf_token → expiry timestamp
 # ── PBKDF2 Password Verification (for local admin login) ──────────────
 _PASSWORD_HASH_B64 = os.environ.get("NEXIFY_AUTH_PASSWORD_HASH", "")
 _PASSWORD_SALT_B64 = os.environ.get("NEXIFY_AUTH_SALT", "")
-_LOGIN_ATTEMPTS = {}  # ip → [(timestamp, ...)]
+_LOGIN_ATTEMPTS: dict[str, list[float]] = {}  # ip → [attempt timestamps]
 _LOGIN_RATE_LIMIT = 5  # max attempts per minute
 _LOGIN_RATE_WINDOW = 60  # seconds
+_MAX_LOGIN_BODY = 64 * 1024  # reject oversized login POST bodies
+
+
+def _rate_limited(ip: str) -> bool:
+    """Record this attempt for `ip` and report whether it exceeds the window limit.
+
+    Sliding 60s window, 5 attempts. Every POST counts (not just failures) so a
+    brute-force loop is throttled regardless of outcome.
+    """
+    now = time.time()
+    attempts = [t for t in _LOGIN_ATTEMPTS.get(ip, []) if now - t < _LOGIN_RATE_WINDOW]
+    attempts.append(now)
+    _LOGIN_ATTEMPTS[ip] = attempts
+    # Bound memory: drop IPs whose attempts have all aged out.
+    if len(_LOGIN_ATTEMPTS) > 10000:
+        for k in [k for k, v in _LOGIN_ATTEMPTS.items()
+                  if all(now - t >= _LOGIN_RATE_WINDOW for t in v)]:
+            _LOGIN_ATTEMPTS.pop(k, None)
+    return len(attempts) > _LOGIN_RATE_LIMIT
 
 USERS = {
     "mail@nexifyai.cloud": {"email": "mail@nexifyai.cloud", "role": "admin", "name": "Pascal"},
@@ -312,6 +331,14 @@ class AuthHandler(BaseHTTPRequestHandler):
             or "admin.nexifyai.cloud"
         )
 
+    def _client_ip(self):
+        # Behind Cloudflare Tunnel / Traefik, the peer is the proxy — use the
+        # forwarded client IP so rate-limiting keys on the real caller.
+        xff = self.headers.get("X-Forwarded-For", "")
+        if xff:
+            return xff.split(",")[0].strip()
+        return self.client_address[0] if self.client_address else "unknown"
+
     def send_json(self, data, status=200):
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
@@ -468,8 +495,17 @@ class AuthHandler(BaseHTTPRequestHandler):
 
     def _login_post(self):
         """Handle login form submission. Validates credentials and sets JWT cookie."""
-        content_length = int(self.headers.get("Content-Length", 0))
-        body = self.rfile.read(content_length).decode()
+        # Brute-force throttle: 5 attempts / 60s per client IP (every POST counts).
+        if _rate_limited(self._client_ip()):
+            return self._login_page("Zu viele Versuche — bitte eine Minute warten")
+
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        if content_length <= 0 or content_length > _MAX_LOGIN_BODY:
+            return self._login_page("Ungültige Anfrage")
+        body = self.rfile.read(content_length).decode("utf-8", "replace")
         params = parse_qs(body)
         username = params.get("username", [""])[0].strip().lower()
         password = params.get("password", [""])[0]
