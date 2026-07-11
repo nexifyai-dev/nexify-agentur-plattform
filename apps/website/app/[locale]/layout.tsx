@@ -104,9 +104,12 @@ export default async function LocaleLayout({
         <ScrollProgress />
         <StickyCta />
         <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
-        <SiteHeader currentLocale={locale as Locale} />
+        {/* SiteHeader/SiteFooter still resolve language from client-side lang-context (useLang()),
+            not from the URL locale segment — see master audit plan for the architecture
+            reconciliation needed to make them locale-aware server-side. */}
+        <SiteHeader />
         <main id="main-content" role="main">{children}</main>
-        <SiteFooter currentLocale={locale as Locale} />
+        <SiteFooter />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       </body>
     </html>

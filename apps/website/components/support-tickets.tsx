@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronDown, LifeBuoy, Send } from "lucide-react";
 import { api } from "@/lib/auth";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Ticket = { id: string; subject: string; status: string; source: string; created_at: string };
