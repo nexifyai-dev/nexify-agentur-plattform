@@ -31,7 +31,7 @@ export const legalPages: Record<string, LegalPage> = {
       },
       {
         heading: "Kontakt",
-        paragraphs: [`E-Mail: ${company.email}`, `Telefon: ${company.phone}`, `Web: nexify-automate.com`],
+        paragraphs: [`E-Mail: ${company.email}`, `Telefon: ${company.phone}`, `Web: nexifyai.cloud`],
       },
       {
         heading: "Register- und Steuerangaben",

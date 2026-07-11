@@ -9,7 +9,7 @@ export const legalPagesEn: Record<string, LegalPage> = {
     updated: "4 July 2026",
     sections: [
       { heading: "Company Details", paragraphs: [`${company.legalName}`, `${company.legalForm}, Owner: ${company.owner}`, `${company.address}, ${company.postalCity}, ${company.country}`] },
-      { heading: "Contact", paragraphs: [`Email: ${company.email}`, `Phone: ${company.phone}`, `Web: nexify-automate.com`] },
+      { heading: "Contact", paragraphs: [`Email: ${company.email}`, `Phone: ${company.phone}`, `Web: nexifyai.cloud`] },
       { heading: "Registration & Tax", paragraphs: [`Chamber of Commerce (KvK): ${company.kvk}`, `VAT ID: ${company.vatId}`, "Scope: IT consulting, AI-powered automation and software development."] },
       { heading: "Representation", paragraphs: [`${company.owner}, Owner / Director. Responsible for editorial content: ${company.owner}.`] },
       { heading: "B2B Focus", paragraphs: ["This offering is exclusively aimed at businesses, legal entities and comparable organisations acting in their professional capacity."] },
