@@ -58,6 +58,11 @@ const nextConfig: NextConfig = {
     },
   ],
   redirects: async () => [
+    // Auth/utility pages live OUTSIDE the locale tree. An earlier middleware
+    // version redirected /login → /de/login (404) and Vercel's edge cached
+    // those 404s — send locale-prefixed auth URLs back to the real pages so
+    // stale links and caches recover. Non-permanent on purpose (cheap to undo).
+    { source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false },
     // Legacy redirects (old URLs → /de/ prefixed)
     { source: "/arbeitsweise", destination: "/de/prozess", permanent: true },
     { source: "/ueber-pascal", destination: "/de/ueber-mich", permanent: true },
