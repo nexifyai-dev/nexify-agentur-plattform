@@ -22,6 +22,6 @@ test('Sitemap - supports 3 locales', () => {
 });
 
 test('Sitemap - has correct base URL', () => {
-  const baseUrl = 'https://nexify-automate.com';
+  const baseUrl = 'https://nexifyai.cloud';
   assert.ok(baseUrl.includes('nexify'));
 });
