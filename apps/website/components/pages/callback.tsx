@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CalendarCheck2, CheckCircle2, PhoneCall } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { api } from "@/lib/auth";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 type Slot = { id: string; start_at: string; duration_min: number };
 

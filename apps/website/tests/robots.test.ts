@@ -12,6 +12,6 @@ test('robots - disallows api paths', () => {
 });
 
 test('robots - has sitemap reference', () => {
-  const sitemap = 'https://nexify-automate.com/sitemap.xml';
+  const sitemap = 'https://nexifyai.cloud/sitemap.xml';
   assert.ok(sitemap.includes('sitemap.xml'));
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 export default function NotFound() {
   const { lang } = useLang();

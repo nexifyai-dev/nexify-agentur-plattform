@@ -26,7 +26,7 @@
     "/app/backend/tests/test_iter5_bughunt.py (new)"
   ],
   "success_rate": {"backend": "100% (10/10)", "frontend": "100% (all review-request flows verified)"},
-  "test_credentials": "Admin mail@nexifyai.cloud / ***REDACTED*** used for /api/auth/login + /admin cockpit access. Kept /admin session read-only.",
+  "test_credentials": "Admin mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] used for /api/auth/login + /admin cockpit access. Kept /admin session read-only.",
   "seed_data_creation": "1 contact lead created via POST /api/contact (name TEST_Iter5, email test@example.com) as required by the /api/contact review case. No offer submissions or bookings written.",
   "retest_needed": false,
   "main_agent_can_self_test": true,

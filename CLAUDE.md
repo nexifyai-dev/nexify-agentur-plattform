@@ -2,10 +2,19 @@
 
 ## Struktur
 ```
-apps/website/    ← Next.js Website
+apps/website/    ← Next.js Website (Vercel + optional VPS-Container)
+apps/hermes/     ← vendored Hermes-Agent/WebUI (Upstream-Kopie; NeXify-Patches leben auf dem VPS)
+apps/paperclip/  ← vendored Paperclip-Automatisierungsplattform (Upstream-Kopie)
+backend/         ← Python/FastAPI-Backend (Leads, Angebote, Buchungen, Zahlungen, LLM-Calls)
 deploy/          ← Dockerfile, Compose, Traefik-Routes, Scripts
-docs/            ← Design-System, Konzepte, Architektur
+docs/            ← Design-System, Konzepte, Architektur, Governance
+infra/           ← Deploy-/Health-Check-Skripte (Alternativpfad zu deploy/)
+memory/          ← interne Betriebsnotizen (VPS_INFRA.md, PRD.md) — enthielt Secrets, nie hier committen!
+nexify/          ← Governance-/Security-/Norm-Register
+fabrik/          ← Fabrik-/Agenten-Definitionen
 ```
+⚠️ Dieses Repo ist ein **Multi-Service-Monorepo**, nicht nur die Website. `memory/` und `nexify/`
+gehören zur Angriffsfläche (reguläres Git-Tracking) — Secrets dort niemals im Klartext ablegen.
 
 ## Betreiber
 - **Website**: nexifyai.cloud (Next.js Standalone)
