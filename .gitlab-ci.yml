@@ -32,3 +32,9 @@ deploy:
   script:
     - echo "Deploy from GitLab CI — auto-sync"
   only: [main]
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+secret_detection:
+  stage: validate
+  only: [main, merge_requests]
