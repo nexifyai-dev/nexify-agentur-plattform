@@ -1,0 +1,34 @@
+stages:
+  - validate
+  - test
+  - deploy
+
+validate:portal:
+  stage: validate
+  image: python:3.11-alpine
+  script:
+    - python3 -c "import ast; ast.parse(open('backend/portal/server.py').read())"
+  only: [main, merge_requests]
+
+validate:traefik:
+  stage: validate
+  image: python:3.11-alpine
+  script:
+    - pip install pyyaml -q
+    - python3 -c "import yaml; yaml.safe_load(open('infra/traefik/dynamic.yml'))"
+  only: [main, merge_requests]
+
+e2e-test:
+  stage: test
+  image: curlimages/curl:latest
+  script:
+    - curl -f http://host.docker.internal:8880/health
+    - curl -f http://host.docker.internal:8881/health
+  only: [main]
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploy from GitLab CI — auto-sync"
+  only: [main]
