@@ -1,5 +1,9 @@
 services:
   website:
+    # CI (deploy-vps.yml) builds and pushes this exact tag; `docker compose pull`
+    # on the VPS pulls it. `build:` stays as a local-dev / fallback path so
+    # `docker compose up --build` still works without the registry.
+    image: ghcr.io/nexifyai-dev/nexify-website:latest
     build:
       context: .
       dockerfile: deploy/docker/Dockerfile.website
