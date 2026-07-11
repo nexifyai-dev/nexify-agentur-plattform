@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { company } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 const T = {
   de: {

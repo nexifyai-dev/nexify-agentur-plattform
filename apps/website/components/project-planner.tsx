@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2, Sparkles, Wand2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { useContent } from "@/lib/content";
 
 type Plan = {
