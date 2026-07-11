@@ -1,4 +1,5 @@
 """NeXifyAI Portal Server — serves static files + landing page + API proxy + SSE."""
+import html
 import json, logging, os, subprocess, time, threading, queue, urllib.request
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from socketserver import ThreadingMixIn
