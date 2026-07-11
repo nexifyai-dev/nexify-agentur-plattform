@@ -119,6 +119,52 @@ def classify(pr: dict) -> tuple[str, list[str]]:
     return "approve", ["Alle Gates grün, geringes Risiko"]
 
 
+# Lokale Verifikation ist wichtig, weil GitHub-Actions in diesem privaten Repo
+# ggf. nicht laufen (0 Runs) — dann gäbe es kein echtes Test-/Typecheck-Gate.
+# Der Reviewer führt es dann selbst aus, statt blind zu approven.
+LOCAL_VERIFY = os.environ.get("NEXIFY_REVIEWER_LOCAL_VERIFY", "1") == "1"
+WEB_PREFIX = "apps/website/"
+
+
+def touches_website(pr: dict) -> bool:
+    return any(f["path"].startswith(WEB_PREFIX) for f in pr.get("files", []))
+
+
+def local_verify(pr: dict) -> tuple[bool, str]:
+    """PR-Head in einem Wegwerf-Worktree auschecken, `yarn typecheck` + `yarn test`
+    laufen lassen. Rückgabe (ok, kurzes Log). Fehlt Toolchain/Worktree → (False, …),
+    damit im Zweifel NICHT auto-gemergt wird (fällt auf human/request_changes zurück)."""
+    import shutil
+    import tempfile
+    repo_root = os.environ.get("NEXIFY_REPO_DIR", "/opt/nexifyai-cloud")
+    if not shutil.which("yarn") or not os.path.isdir(os.path.join(repo_root, ".git")):
+        return False, "yarn oder Repo-Checkout nicht verfügbar (Toolchain fehlt)"
+    head = pr["headRefOid"]
+    wt = tempfile.mkdtemp(prefix="nexify-verify-")
+    def run(cmd, cwd, timeout=600):
+        return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+    try:
+        subprocess.run(["git", "-C", repo_root, "fetch", "origin", head], capture_output=True, text=True, timeout=120)
+        wr = run(["git", "-C", repo_root, "worktree", "add", "--detach", wt, head])
+        if wr.returncode != 0:
+            return False, f"worktree add fehlgeschlagen: {wr.stderr[-300:]}"
+        web = os.path.join(wt, "apps", "website")
+        for step in (["yarn", "install", "--frozen-lockfile"],
+                     ["yarn", "typecheck"],
+                     ["yarn", "test"]):
+            r = run(step, web)
+            if r.returncode != 0:
+                tail = (r.stdout + r.stderr)[-800:]
+                return False, f"`{' '.join(step)}` fehlgeschlagen:\n{tail}"
+        return True, "typecheck + test lokal grün"
+    except subprocess.TimeoutExpired:
+        return False, "Verifikation-Timeout"
+    finally:
+        subprocess.run(["git", "-C", repo_root, "worktree", "remove", "--force", wt],
+                       capture_output=True, text=True)
+        shutil.rmtree(wt, ignore_errors=True)
+
+
 def act(pr: dict, decision: str, reasons: list[str], token: str) -> None:
     n = pr["number"]
     head = pr["headRefOid"]
@@ -167,6 +213,15 @@ def main() -> int:
         decision, reasons = classify(pr)
         if decision == "wait":
             continue  # nächster Lauf
+        # Vor dem Auto-Merge einer Website-Änderung lokal verifizieren (typecheck+test),
+        # damit das Gate auch ohne laufende GitHub-Actions echt ist.
+        if decision == "approve" and LOCAL_VERIFY and touches_website(pr):
+            ok, log = local_verify(pr)
+            if ok:
+                reasons.append(log)
+            else:
+                decision = "request_changes"
+                reasons = [f"Lokale Verifikation nicht bestanden: {log}"]
         act(pr, decision, reasons, token)
         processed += 1
     print(f"Reviewer-Lauf fertig: {processed} PR(s) bearbeitet")

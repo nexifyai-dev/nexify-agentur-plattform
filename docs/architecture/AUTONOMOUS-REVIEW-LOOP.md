@@ -19,6 +19,23 @@ Unit-Tests laufen **parallel** (Matrix), mit yarn-Cache und
 Reviewer als Gate nutzt. Damit fallen Fehler VOR dem Review auf, nicht erst danach
 (weniger Round-Trips = schneller).
 
+## ⚠️ Voraussetzung: GitHub Actions muss laufen
+
+Stand 11.07.2026 hat dieses **private** Repo **0 Actions-Runs** (weder
+`Secret Scan` noch `Deploy to VPS` haben je ausgeführt) — Actions-Ausführung
+ist offenbar deaktiviert oder die Minuten sind aufgebraucht. Solange das so ist,
+feuern die Action-basierten Teile (`web-ci.yml`, `autonomous-review.yml`,
+gitleaks) **nicht**. Zu tun (Repo-Owner): Settings → Actions aktivieren bzw.
+Actions-Minuten/Billing prüfen.
+
+**Robust ohne Actions:** Der **VPS-Timer-Reviewer** hängt nicht von Actions ab.
+Damit sein Gate trotzdem echt ist, verifiziert er Website-PRs **selbst** — er
+checkt den PR-Head in einen Wegwerf-Worktree und fährt `yarn typecheck` +
+`yarn test` (109 Tests), bevor er approved (`NEXIFY_REVIEWER_LOCAL_VERIFY=1`,
+Default). Fehlt die Toolchain oder schlägt ein Schritt fehl, wird **nicht**
+auto-gemergt (sicherer Fallback). In der Action ist diese Doppel-Verifikation
+aus (`=0`), weil `web-ci.yml` sie dort übernimmt.
+
 ## Prinzip: Gewaltenteilung
 
 ```

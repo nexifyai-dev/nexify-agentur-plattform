@@ -36,6 +36,10 @@ jobs:
           REVIEWER_GITHUB_TOKEN: ${{ secrets.REVIEWER_GITHUB_TOKEN }}
           NEXIFY_REVIEWER_LOGIN: ${{ secrets.NEXIFY_REVIEWER_LOGIN }}
           NEXIFY_REPO: ${{ github.repository }}
+          # In der Action verifiziert web-ci.yml (typecheck+test) — der Reviewer
+          # liest das als Check-Gate. Die lokale Doppel-Verifikation ist nur für
+          # den VPS-Timer gedacht (wo Actions ggf. nicht laufen).
+          NEXIFY_REVIEWER_LOCAL_VERIFY: "0"
         run: |
           if [ -z "${REVIEWER_GITHUB_TOKEN}" ]; then
             echo "REVIEWER_GITHUB_TOKEN nicht gesetzt — Reviewer übersprungen (Gewaltenteilung erfordert eigenen Bot-PAT als Repo-Secret)."
