@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cookie, Settings2 } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 const KEY = "nexify-consent";
 

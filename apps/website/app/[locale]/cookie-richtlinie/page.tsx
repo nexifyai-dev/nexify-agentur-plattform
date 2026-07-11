@@ -16,5 +16,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function LegalPageDynamic({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const pages = allLegal[locale] ?? allLegal.de;
-  return <LegalPage page={pages[slug]} />;
+  const lang = locale === "nl" || locale === "en" ? locale : "de";
+  return <LegalPage page={pages[slug]} lang={lang} />;
 }

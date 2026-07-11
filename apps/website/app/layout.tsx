@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
 import { CookieConsent } from "@/components/cookie-consent";
 import { PwaRegister } from "@/components/pwa-register";
-import { LanguageProvider } from "@/lib/i18n";
+import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import "./globals.css";

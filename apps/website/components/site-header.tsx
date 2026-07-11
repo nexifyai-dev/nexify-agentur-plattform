@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, UserRound } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth";
 
 const NAV = {
@@ -131,7 +131,7 @@ export function SiteHeader() {
             </Link>
           </nav>
         </div>
-      </div>
+      )}
     </header>
   );
 }
