@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FileText, CreditCard, MessageSquare, LifeBuoy, UserCog, Sparkles } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 const STEPS = {
   de: [

@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
 import { CookieConsent } from "@/components/cookie-consent";
 import { PwaRegister } from "@/components/pwa-register";
-import { LanguageProvider } from "@/lib/i18n";
+import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import "./globals.css";
@@ -68,6 +68,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   };
   return (
     <html lang="de" data-scroll-behavior="smooth" className={`${outfit.variable} ${manrope.variable}`}>
+      <head>
+        {/* Fail-safe: scroll-reveal starts at opacity:0 and is un-hidden by JS.
+            Without JS (or if it fails to run) the whole page below the fold would
+            stay invisible — force it visible so content always renders. */}
+        <noscript>
+          <style>{`.reveal{opacity:1 !important;transform:none !important;}`}</style>
+        </noscript>
+      </head>
       <body>
         <LanguageProvider>
           <AuthProvider>

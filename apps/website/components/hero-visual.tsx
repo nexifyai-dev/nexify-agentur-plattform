@@ -1,7 +1,7 @@
 "use client";
 
 import { Sparkles, Bot, FileText, Zap } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 export function HeroVisual() {
   const { lang } = useLang();

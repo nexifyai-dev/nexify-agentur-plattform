@@ -28,6 +28,26 @@ const nextConfig: NextConfig = {
         { key: "X-DNS-Prefetch-Control", value: "on" },
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         { key: "X-XSS-Protection", value: "1; mode=block" },
+        {
+          // Pragmatic CSP: keeps Next.js' inline bootstrap and the inline JSON-LD
+          // working (no nonce infra yet, so 'unsafe-inline' is required), while
+          // locking down the high-value directives. Tighten script-src to a nonce
+          // once a CSP nonce is wired through middleware.
+          key: "Content-Security-Policy",
+          value: [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-inline'",
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' data: https:",
+            "font-src 'self' data:",
+            "connect-src 'self' https:",
+            "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "object-src 'none'",
+            "upgrade-insecure-requests",
+          ].join("; "),
+        },
       ],
     },
     {
@@ -38,6 +58,11 @@ const nextConfig: NextConfig = {
     },
   ],
   redirects: async () => [
+    // Auth/utility pages live OUTSIDE the locale tree. An earlier middleware
+    // version redirected /login → /de/login (404) and Vercel's edge cached
+    // those 404s — send locale-prefixed auth URLs back to the real pages so
+    // stale links and caches recover. Non-permanent on purpose (cheap to undo).
+    { source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false },
     // Legacy redirects (old URLs → /de/ prefixed)
     { source: "/arbeitsweise", destination: "/de/prozess", permanent: true },
     { source: "/ueber-pascal", destination: "/de/ueber-mich", permanent: true },
@@ -59,10 +84,15 @@ const nextConfig: NextConfig = {
     { source: "/avv", destination: "/de/avv", permanent: true },
     { source: "/widerruf", destination: "/de/widerruf", permanent: true },
   ],
-  rewrites: async () =>
-    process.env.BACKEND_ORIGIN
-      ? [{ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` }]
-      : [],
+  rewrites: async () => {
+    const rewrites = [
+      { source: "/docs/vollbetrieb", destination: "/docs/vollbetrieb.md" },
+    ];
+    if (process.env.BACKEND_ORIGIN) {
+      rewrites.push({ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` });
+    }
+    return rewrites;
+  },
 };
 
 export default nextConfig;

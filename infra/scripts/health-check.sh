@@ -67,9 +67,15 @@ check "Paperclip"   "https://app.nexifyai.cloud/api/health"
 
 echo ""
 echo "--- Traefik ---"
-check "Traefik"     "http://127.0.0.1:8080/health" 2>/dev/null || \
-  docker ps --filter name=traefik --format '{{.Names}} {{.Status}}' | grep -q "Up" && \
+# Traefik hat kein /health-Endpoint auf :8080 in dieser Umgebung — direkt am
+# Container-Status prüfen. (Vorher: `check ... || docker ps ...` war toter Code,
+# weil check() immer mit exit 0 endet und den ||-Zweig nie erreicht.)
+if docker ps --filter name=traefik --format '{{.Status}}' | grep -q "Up"; then
   echo -e "${GREEN}✓${NC} Traefik container running"
+else
+  echo -e "${RED}✗${NC} Traefik container not running"
+  FAILURES=$((FAILURES + 1))
+fi
 
 echo ""
 if [ "$FAILURES" -eq 0 ]; then

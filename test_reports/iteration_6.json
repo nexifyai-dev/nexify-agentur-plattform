@@ -27,7 +27,7 @@
   ],
   "updated_files": [],
   "success_rate": {"backend": "n/a (frontend-only run)", "frontend": "100% (5/5 review cases pass)"},
-  "test_credentials": "Admin mail@nexifyai.cloud / 1def!xO2022!! used via POST /api/auth/login on the preview backend. Cookie set, /api/admin/webui-sso minted, redirect landed directly in WebUI app-shell without any login screen.",
+  "test_credentials": "Admin mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] used via POST /api/auth/login on the preview backend. Cookie set, /api/admin/webui-sso minted, redirect landed directly in WebUI app-shell without any login screen.",
   "seed_data_creation": "Two new WebUI chat sessions were created on the external VPS during testing: 'Hallo, kurzer Test: bitte antworte mit einem Satz.' and 'Bitte antworte kurz: Wer bist du?'. No settings changed, no sessions deleted.",
   "retest_needed": false,
   "main_agent_can_self_test": true,
