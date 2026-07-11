@@ -13,7 +13,7 @@
   ],
   "updated_files": ["/app/backend/tests/test_deploy_verification.py"],
   "success_rate": {"backend": "100%", "frontend": "skipped"},
-  "test_credentials": "Admin mail@nexifyai.cloud / 1def!xO2022!! used for login E2E via live domain; login+admin/stats returned 200.",
+  "test_credentials": "Admin mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] used for login E2E via live domain; login+admin/stats returned 200.",
   "seed_data_creation": "None - only read-only checks and one login (no data written).",
   "retest_needed": false,
   "main_agent_can_self_test": true,

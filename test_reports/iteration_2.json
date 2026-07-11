@@ -33,7 +33,7 @@
     "/app/backend/tests/test_portal_admin.py (created)"
   ],
   "success_rate": {"backend": "100% (19/19)", "frontend": "100% (all critical flows)"},
-  "test_credentials": "Admin mail@nexifyai.cloud / 1def!xO2022!! ; Customer support@nexify-automate.com / TestKunde2026! ; Registration used random test+{rand}@nexify-automate.com (safe test domain).",
+  "test_credentials": "Admin mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] ; Customer support@nexify-automate.com / TestKunde2026! ; Registration used random test+{rand}@nexify-automate.com (safe test domain).",
   "seed_data_creation": "Created via tests: several nexify_users rows (TEST_AutoUser / TEST_Reg_UI with test+*@nexify-automate.com), 1–2 admin-reply messages on customer offer, 2 portal request-new leads (TEST_Automation), 1 Revolut order (pending, NOT paid). Payment order created but not consummated – Revolut checkout URL was only validated for format. Safe to purge with `delete from nexify_users where email like 'test+%@nexify-automate.com'` and `delete from nexify_leads where source='portal_request' and name like 'TEST_%'`.",
   "retest_needed": false,
   "main_agent_can_self_test": true,
