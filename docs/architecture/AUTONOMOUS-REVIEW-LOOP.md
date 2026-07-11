@@ -5,6 +5,20 @@ Ziel: Die Agenten (Hermes u. a.) produzieren rund um die Uhr Änderungen; ein
 die Gates besteht. Kein Mensch muss dazwischenstehen — außer bei Risiko-Pfaden,
 die bewusst zur Freigabe eskaliert werden.
 
+## Geschwindigkeit: event-getrieben statt Polling
+
+Der Reviewer läuft **primär als GitHub Action** (`.github/workflows/autonomous-review.yml`),
+getriggert von PR-Ereignissen und abgeschlossenen Checks — **Reaktion in Sekunden**,
+kein VPS-Rollout nötig, kein Poll-Intervall. Dieselbe Logik
+(`infra/reviewer/nexify_pr_reviewer.py`) läuft zusätzlich als systemd-Timer
+(alle 5 min) als **Fallback/Catch-up**, falls die Action mal nicht feuert.
+
+Ergänzend sorgt **`web-ci.yml`** für schnelles, gecachtes Feedback: typecheck und
+Unit-Tests laufen **parallel** (Matrix), mit yarn-Cache und
+`cancel-in-progress` — jeder PR hat in ~1–2 min ein echtes Grün/Rot, das der
+Reviewer als Gate nutzt. Damit fallen Fehler VOR dem Review auf, nicht erst danach
+(weniger Round-Trips = schneller).
+
 ## Prinzip: Gewaltenteilung
 
 ```
