@@ -1,0 +1,44 @@
+name: Autonomous Review
+
+# Event-getriebener Reviewer: reagiert in Sekunden auf PR-Ereignisse und auf
+# abgeschlossene Checks — statt alle 5 min zu pollen. Fährt dieselbe Logik wie
+# infra/reviewer/nexify_pr_reviewer.py (Gates: Checks grün, Beleg im Body,
+# Risiko-Pfade, kein Self-Merge) und merged nur low-risk-PRs autonom.
+#
+# GEWALTENTEILUNG: nutzt REVIEWER_GITHUB_TOKEN (eigener Bot-Account) als
+# Repo-Secret — NICHT den Standard-GITHUB_TOKEN und nicht den Agenten-Account.
+# Ohne dieses Secret beendet sich der Lauf sauber ohne Aktion.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows: ["Web CI", "Secret Scan"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: autonomous-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run reviewer
+        env:
+          REVIEWER_GITHUB_TOKEN: ${{ secrets.REVIEWER_GITHUB_TOKEN }}
+          NEXIFY_REVIEWER_LOGIN: ${{ secrets.NEXIFY_REVIEWER_LOGIN }}
+          NEXIFY_REPO: ${{ github.repository }}
+        run: |
+          if [ -z "${REVIEWER_GITHUB_TOKEN}" ]; then
+            echo "REVIEWER_GITHUB_TOKEN nicht gesetzt — Reviewer übersprungen (Gewaltenteilung erfordert eigenen Bot-PAT als Repo-Secret)."
+            exit 0
+          fi
+          GH_TOKEN="${REVIEWER_GITHUB_TOKEN}" python3 infra/reviewer/nexify_pr_reviewer.py

@@ -4,14 +4,19 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
 
-test('npm lockfile uses only public npm registry tarballs', () => {
-  const lock = JSON.parse(read('package-lock.json'));
+test('yarn lockfile uses only trusted public registry tarballs', () => {
+  // This is a yarn project (yarn.lock, no package-lock.json). Assert every
+  // resolved tarball comes from a trusted public registry — supply-chain guard.
+  const lock = read('yarn.lock');
+  const allowed = new Set(['registry.yarnpkg.com', 'registry.npmjs.org']);
   const hosts = new Set();
-  for (const meta of Object.values(lock.packages ?? {})) {
-    if (typeof meta?.resolved !== 'string') continue;
-    hosts.add(new URL(meta.resolved).host);
+  for (const m of lock.matchAll(/resolved\s+"(https:\/\/[^"#]+)/g)) {
+    hosts.add(new URL(m[1]).host);
   }
-  assert.deepEqual([...hosts], ['registry.npmjs.org']);
+  assert.ok(hosts.size > 0, 'expected resolved entries in yarn.lock');
+  for (const host of hosts) {
+    assert.ok(allowed.has(host), `untrusted registry host in yarn.lock: ${host}`);
+  }
 });
 
 test('package exposes required quality scripts', () => {

@@ -1,0 +1,42 @@
+name: Web CI
+
+# Schnelles Qualitäts-Gate für die Website: typecheck + Unit-Tests laufen
+# parallel und gecacht, damit jeder PR in ~1-2 min echtes Feedback bekommt
+# (statt erst im Review aufzufallen). Superseded commits werden abgebrochen.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/website/**"
+      - ".github/workflows/web-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: apps/website
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [typecheck, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+          cache-dependency-path: apps/website/yarn.lock
+      - run: yarn install --frozen-lockfile
+      - name: ${{ matrix.task }}
+        run: yarn ${{ matrix.task }}
