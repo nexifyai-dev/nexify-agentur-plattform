@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
 import { api, useAuth } from "@/lib/auth";
 import { API_BASE } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
 import { SupportTickets } from "@/components/support-tickets";

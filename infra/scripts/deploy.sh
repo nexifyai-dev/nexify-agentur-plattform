@@ -39,10 +39,10 @@ docker compose down --timeout 30 2>/dev/null || true
 echo "[4/6] Starting new containers..."
 docker compose up -d --remove-orphans
 
-# 5. Traefik-Dynamic-Config linken
+# 5. Traefik-Dynamic-Config linken (Datei existiert im Repo: deploy/website-routes.yml)
 echo "[5/6] Linking Traefik dynamic config..."
-cp deploy/traefik/dynamic-monorepo.yml "$TRAEFIK_DYNAMIC/nexifyai-monorepo.yml"
-echo "  → $TRAEFIK_DYNAMIC/nexifyai-monorepo.yml (auto-reload by Traefik watch)"
+install -D deploy/website-routes.yml "$TRAEFIK_DYNAMIC/nexifyai-website.yml"
+echo "  → $TRAEFIK_DYNAMIC/nexifyai-website.yml (auto-reload by Traefik watch)"
 
 # 6. Health check
 echo "[6/6] Running health checks..."

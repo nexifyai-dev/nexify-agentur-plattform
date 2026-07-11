@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { LogoMark } from "@/components/logo";
 import { api, useAuth } from "@/lib/auth";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 function RegisterForm() {
   const router = useRouter();

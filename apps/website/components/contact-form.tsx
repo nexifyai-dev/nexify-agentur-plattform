@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Mail, Phone, Timer } from "lucide-react";
 import { API_BASE, company } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { useContent } from "@/lib/content";
 
 export function ContactForm() {
