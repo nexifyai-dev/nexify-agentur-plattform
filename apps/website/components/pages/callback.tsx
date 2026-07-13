@@ -32,6 +32,28 @@ const T = {
     minutes: "Min.",
     contactAlt: "Lieber schriftlich? Zum Kontaktformular",
   },
+  en: {
+    eyebrow: "Personal Callback",
+    title: "Book Your Fixed Callback Appointment",
+    intro: "Choose an available time slot – Pascal Courbois will call you personally and punctually. Binding, free and without detours.",
+    pick: "1. Choose a time slot",
+    details: "2. Your contact details",
+    none: "All time slots are currently taken. Please check back soon or send us a message via the contact form.",
+    name: "Your name *",
+    email: "Email *",
+    phone: "Phone number for callback *",
+    company: "Company",
+    topic: "What is it about? (optional)",
+    privacy: "I have read and understood the privacy policy. *",
+    submit: "Book callback appointment",
+    submitting: "Booking …",
+    successTitle: "Appointment confirmed!",
+    successText: "Your callback appointment has been booked. A confirmation is on its way to your email address.",
+    successWhen: "Your appointment:",
+    back: "Back to homepage",
+    minutes: "min.",
+    contactAlt: "Prefer writing? To the contact form",
+  },
   nl: {
     eyebrow: "Persoonlijk teruggebeld",
     title: "Boek uw vaste terugbelafspraak",
@@ -59,7 +81,7 @@ const T = {
 export function CallbackPage() {
   const { lang } = useLang();
   const t = T[lang];
-  const locale = lang === "nl" ? "nl-NL" : "de-DE";
+  const locale = lang === "en" ? "en-GB" : lang === "nl" ? "nl-NL" : "de-DE";
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Slot | null>(null);

@@ -17,6 +17,13 @@ const T = {
     note: "Unser AI-Support antwortet in der Regel innerhalb von 30 Minuten – zusätzlich per E-Mail.",
     you: "Sie", ai: "NeXify AI Support", admin: "Pascal (NeXify)",
   },
+  en: {
+    title: "Support Tickets", newTicket: "New Ticket", subject: "Subject", message: "Your message …", create: "Create Ticket",
+    empty: "No tickets yet. We are always here for you if you have any questions.",
+    open: "Open", answered: "Answered", reply: "Write reply …",
+    note: "Our AI support typically responds within 30 minutes – also via email.",
+    you: "You", ai: "NeXify AI Support", admin: "Pascal (NeXify)",
+  },
   nl: {
     title: "Support-tickets", newTicket: "Nieuw ticket", subject: "Onderwerp", message: "Uw bericht …", create: "Ticket openen",
     empty: "Geen tickets aanwezig. Bij vragen staan wij altijd voor u klaar.",
