@@ -13,49 +13,47 @@
 
 | Service | Port | Status | Health |
 |---------|------|--------|--------|
-| Brain API | https://brain.nexifyai.cloud | 🟢 UP | HTTP 200 |
-| agentmemory | localhost:3111 | 🟢 UP | SQLite-FTS5 |
-| Qdrant | localhost:6333 | 🟢 UP | 4 collections |
-| Gateway | localhost:8645 | 🟢 UP | /health 200 |
-| WebUI | localhost:8787 | 🟢 UP | HTTP 302 |
-| MITM Proxy | VPS :8443 | 🟢 UP | systemd active |
+| Paperclip (Factory) | localhost:3100 | 🟢 UP | HTTP 200 |
+| Hermes Agent (Runtime+Gateway) | localhost:8787 | 🟢 UP | /health 200 |
+| 9Router (LLM-Router) | localhost:20128 | 🟢 UP | 61 Modelle |
+| agentmemory (iii) | localhost:3111 | 🟢 UP | REST-API |
+| agentmemory (Viewer) | localhost:3113 | 🟢 UP | HTTP 200 |
+| LightRAG | localhost:9621 | 🟢 UP | HTTP 307 |
+| Spaether | localhost:8900 | 🟢 UP | HTTP 404 |
+| Traefik | *:80/443 | 🟢 UP | systemd active |
 
-### MCP Servers
+### Deprecated Services
+| Service | Status | Deprecated |
+|---------|--------|------------|
+| Brain API (:9090) | 🔴 DOWN | Q2 2026 |
+| Qdrant (:6333) | 🔴 DOWN | Q2 2026 |
+| Gateway (:8645) | 🔴 DOWN | Merged into Hermes :8787 |
 
-| Server | Script | Tools | Status |
-|--------|--------|------:|--------|
-| brain | /workspace/mcp-brain-server.py | 1 | ✅ enabled |
-| qdrant | /workspace/mcp-qdrant-server.py | 3 | ✅ enabled (@app.call_tool() gefixt) |
-| agentmemory | /workspace/mcp-agentmemory-server.py | 4 | ✅ enabled (port 40000, SQLite-FTS5) |
-| tavily-search | /workspace/mcp-tavily-search-server.py | 1 | ✅ enabled |
-| you-search | — | — | ❌ disabled (API 403, kein Skript) |
+> **Updated 2026-07-13**
 
-### Active Profiles (16)
+### MCP Servers (Stand 2026-07-13)
 
-| Profile | Config | Role |
-|---------|--------|------|
-| default | 780B | Main |
-| automation-agent | 13.8K | Cron/Automation |
-| agentur-admin | 14.0K | Customer Operations |
-| nexify-ceo | 799B | CEO/R&D |
-| ceo | 785B | CEO |
-| cto | 1.1K | CTO |
-| cso | 780B | CSO |
-| vps-admin | 780B | VPS Admin |
-| **network-engineer** (global) | 22K | Network + Infra | ✅ Skills + Config |
-| expert-dev (AKTIV) | 21.2K | Development | ✅ 12 Fixes today |
-| expert-data | 22K | Data Science | |
-| expert-design | 24K | Design | |
-| expert-ops | 12K | Operations | |
-| workflow-agent | 21K | Workflows | |
-| mcp-agent | 29K | MCP | |
-| monitoring-agent | 12K | Monitoring | |
-| nexify-ceo | 8K | CEO/R&D | lean |
-| cto | 6K | CTO | skeleton |
-| cso | 6K | CSO | skeleton |
-| vps-admin | 18K | VPS Admin | has state.db |
+| Server | Status | Note |
+|--------|--------|------|
+| agentmemory :3111 | ✅ REST-API | MCP via Cloudflare Tunnel agentmemory.nexifyai.cloud |
+| brain :9090 | ❌ DEPRECATED | Q2 2026 |
+| qdrant :6333 | ❌ DEPRECATED | Q2 2026 |
+| you-search | ❌ disabled | API 403 |
 
-### Cron Jobs (3 active)
+> **Updated 2026-07-13:** Brain/Qdrant deprecated. agentmemory jetzt via REST-API direkt.
+
+### Active Profiles (4 — Stand 2026-07-13)
+
+| Profile | Model | Role |
+|---------|-------|------|
+| architect | ds/deepseek-v4-pro-max | Architecture, Planning |
+| developer | ds/deepseek-v4-pro | Development, Building |
+| reviewer | ds/deepseek-v4-flash | Code-Review, QA |
+| devops | ds/deepseek-v4-flash | DevOps, Automation |
+
+> **Updated 2026-07-13:** Von 16 Profilen auf 4 DeepSeek-first konsolidiert.
+
+### Cron Jobs (22 active — Stand 2026-07-13)
 
 | ID | Name | Schedule | Status |
 |----|------|----------|--------|

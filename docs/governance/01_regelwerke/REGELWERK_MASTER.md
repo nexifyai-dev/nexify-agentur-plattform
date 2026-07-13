@@ -125,11 +125,13 @@ Es gilt für alle Menschen und KI-Agenten gleichermaßen.
 **Ort:** `/workspace/nexify/10_evidence/`
 **Format:** Datum, Aktion, Beteiligte Systeme, Ergebnis, Qualitätskriterien.
 
-### 3.5 🟢 P2 — Brain + agentmemory aktualisieren [Rang: STANDARD]
+### 3.5 🟢 P2 — agentmemory aktualisieren [Rang: STANDARD]
 **Gebot:** Nach jeder Aktion:
-1. Relevante Entscheidungen in agentmemory speichern
-2. Wissensaktualisierungen in Brain API schreiben
+1. Relevante Entscheidungen in agentmemory speichern (REST-API :3111)
+2. Hermes MEMORY.md als lokalen Cache aktualisieren
 3. Kanban/Task-Registry-Status aktualisieren
+
+> **Updated 2026-07-13:** Brain API deprecated. agentmemory ist zentrale Memory-Infrastruktur.
 
 ### 3.6 🟢 P2 — Handoff dokumentieren [Rang: STANDARD]
 **Gebot:** Jeder Agenten-Übergabepunkt (Handoff) muss dokumentiert sein:
