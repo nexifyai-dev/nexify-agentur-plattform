@@ -1,6 +1,7 @@
 import type { Dict, Service } from "./de";
 
 export const nl: Dict = {
+  // @NEXIFYAI-MARKER: prelogin-content-trust-20260713
   common: {
     cta: "Project starten",
     ctaSecondary: "Diensten bekijken",
@@ -12,18 +13,18 @@ export const nl: Dict = {
     allServices: "Alle diensten",
   },
   home: {
-    badge: "AI-ondersteunde ontwikkeling · Deutsch & Nederlands · B2B",
+    badge: "AI-ondersteunde ontwikkeling · Deutsch & Nederlands · Voor bedrijven",
     titleA: "Digitale excellentie.",
     titleB: "In dagen in plaats van maanden.",
     subtitle:
-      "NeXify AI ontwikkelt premium websites, webshops, web-apps en AI-automatiseringen – persoonlijk verantwoord door één vakman, versneld door de modernste AI-tools, transparant tegen een vast dagtarief van € 999 netto.",
+      "NeXify AI ontwikkelt premium websites, webshops, web-apps en AI-automatiseringen – persoonlijk verantwoord door één vakman, versneld door passende AI-tools, transparant tegen een vast dagtarief van € 999 netto.",
     ctaPrimary: "Gratis adviesgesprek",
     ctaSecondary: "Diensten ontdekken",
     stats: [
-      { value: "€ 999", label: "netto per werkdag – geen verborgen kosten" },
-      { value: "1–3", label: "dagen tot een complete website" },
-      { value: "100 %", label: "persoonlijke verantwoordelijkheid, geen overdrachtsketens" },
-      { value: "24/7", label: "NeXify AI adviseur voor uw vraag" },
+      { value: "€ 999", label: "netto per werkdag – transparant berekend" },
+      { value: "1–3", label: "richtwaarde voor duidelijk afgebakende websites" },
+      { value: "1", label: "verantwoordelijke contactpersoon van concept tot overdracht" },
+      { value: "Chat", label: "AI-adviseur voor een eerste inschatting" },
     ],
     pillarsEyebrow: "Waarom NeXify AI",
     pillarsTitle: "Eén vakman. Moderne AI. Meetbare resultaten.",
@@ -36,7 +37,7 @@ export const nl: Dict = {
       {
         icon: "Bot",
         title: "AI-ondersteund, niet AI-uitbesteed",
-        text: "De modernste AI-tools verkorten onderzoek, uitvoering en controle drastisch. De vakinhoudelijke beslissingen neemt nog altijd een ervaren ontwikkelaar – met volledige verantwoordelijkheid.",
+        text: "Moderne AI-tools versnellen onderzoek, uitvoering en controle. De vakinhoudelijke beslissingen neemt nog altijd een ervaren ontwikkelaar – met volledige verantwoordelijkheid.",
       },
       {
         icon: "ChartNoAxesCombined",
@@ -46,14 +47,14 @@ export const nl: Dict = {
     ],
     servicesEyebrow: "Diensten",
     servicesTitle: "Van de eerste klik tot een geschaald platform",
-    servicesText: "Acht helder gedefinieerde bouwstenen – elk met een vaste doorlooptijd, duidelijke resultaten en een transparante prijs.",
+    servicesText: "Acht helder gedefinieerde bouwstenen – elk met een doorlooptijd, duidelijke resultaten en een transparant dagtarief.",
     processEyebrow: "Werkwijze",
     processTitle: "Vijf stappen. Nul verrassingen.",
     quotesEyebrow: "Stemmen & resultaten",
     quotesTitle: "Wat samenwerken met NeXify AI betekent",
     ctaBandTitle: "Klaar voor uw project?",
     ctaBandText:
-      "Beschrijf uw plan – u ontvangt binnen één werkdag een eerlijke inschatting met urenraming en prijsindicatie. Of vraag het direct aan NeXify AI, onze AI-adviseur in de chat.",
+      "Beschrijf uw plan – doorgaans ontvangt u binnen één werkdag een eerlijke inschatting met omvang en prijsindicatie. Of vraag het direct aan NeXify AI, onze AI-adviseur in de chat.",
     ctaBandBtn: "Aanvraag versturen",
     ctaBandBtn2: "Chat met NeXify AI",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-agenten", "Automatisering", "E-commerce", "Web-apps", "Mobile apps", "SEO", "Cloud-infrastructuur", "API-integratie"],
@@ -230,7 +231,7 @@ export const nl: Dict = {
     eyebrow: "Werkwijze",
     title: "Vijf stappen van idee naar livegang",
     intro:
-      "Een gestandaardiseerd, honderdvoudig verfijnd proces zorgt ervoor dat projecten in dagen in plaats van maanden klaar zijn – zonder kwaliteitsverlies, zonder verrassingen, met volledige transparantie in elke stap.",
+      "Een gestandaardiseerd proces zorgt ervoor dat passende projecten in dagen in plaats van maanden worden uitgevoerd – met duidelijke kwaliteitscontroles, zonder verrassingen en met volledige transparantie in elke stap.",
     steps: [
       { n: "01", icon: "ChartNoAxesCombined", title: "Doel en bedrijfswaarde", text: "We bepalen welk resultaat telt, wie het gebruikt en wat bewust géén deel uitmaakt van de eerste scope. Focus verslaat de feature-lijst." },
       { n: "02", icon: "MessageSquareMore", title: "Concept en prijsindicatie", text: "De inspanning wordt in werkdagen uitgedrukt. U ziet vooraf scope, prijsindicatie, aannames en mogelijke uitbreidingen – schriftelijk en betrouwbaar." },
@@ -250,7 +251,7 @@ export const nl: Dict = {
     eyebrow: "Platform & technologie",
     title: "De techstack achter de snelheid",
     intro:
-      "Snelheid zonder kwaliteitsverlies ontstaat door een bewust samengestelde, honderdvoudig beproefde technologiestack – gecombineerd met AI-ondersteunde ontwikkel- en controletools van de nieuwste generatie.",
+      "Snelheid zonder kwaliteitsverlies ontstaat door een bewust samengestelde en beproefde technologiestack – gecombineerd met passende AI-ondersteunde ontwikkel- en controletools.",
     blocks: [
       {
         icon: "Layers",
@@ -400,7 +401,7 @@ export const nl: Dict = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Veelgestelde vragen, eerlijke antwoorden",
-    intro: "Alles over werkwijze, prijzen, AI-inzet en samenwerking – compact beantwoord. Mist u een vraag? de NeXify AI chat of het contactformulier helpen direct.",
+    intro: "Alles over werkwijze, prijzen, AI-inzet en samenwerking – compact beantwoord. Mist u een vraag? De NeXify AI-chat of het contactformulier helpen direct.",
   },
   faqs: [
     {

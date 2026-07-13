@@ -6,6 +6,7 @@ import { useLang } from "@/lib/lang-context";
 export function HeroVisual() {
   const { lang } = useLang();
   const nl = lang === "nl";
+  // @NEXIFYAI-MARKER: prelogin-visual-copy-trust-20260713
   return (
     <div className="relative mx-auto hidden aspect-square w-full max-w-[540px] select-none lg:block" aria-hidden="true" data-testid="hero-visual">
       <svg viewBox="0 0 540 540" className="h-full w-full">
@@ -60,7 +61,7 @@ export function HeroVisual() {
         <Bot size={17} className="text-zinc-300" />
         <div>
           <div className="text-[12px] font-bold text-white">{nl ? "AI-adviseur actief" : "AI-Berater aktiv"}</div>
-          <div className="text-[10px] text-zinc-500">{nl ? "24/7 · DE & NL" : "24/7 · DE & NL"}</div>
+          <div className="text-[10px] text-zinc-500">DE & NL · im Chat</div>
         </div>
         <span className="ml-1 inline-block size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
       </div>
@@ -68,15 +69,15 @@ export function HeroVisual() {
       <div className="float-chip absolute -right-2 top-[38%] flex items-center gap-2.5 rounded-2xl border border-white/15 bg-black/60 px-4 py-3 backdrop-blur-xl" style={{ animationDelay: "1.5s" }}>
         <FileText size={17} className="text-zinc-300" />
         <div>
-          <div className="text-[12px] font-bold text-white">{nl ? "Offerte in 60 sec." : "Angebot in 60 Sek."}</div>
-          <div className="text-[10px] text-zinc-500">{nl ? "direct per e-mail" : "direkt per E-Mail"}</div>
+          <div className="text-[12px] font-bold text-white">{nl ? "Eerste inschatting" : "Erste Einordnung"}</div>
+          <div className="text-[10px] text-zinc-500">{nl ? "na uw aanvraag" : "nach Ihrer Anfrage"}</div>
         </div>
       </div>
 
       <div className="float-chip absolute bottom-[10%] left-[12%] flex items-center gap-2.5 rounded-2xl border border-white/15 bg-black/60 px-4 py-3 backdrop-blur-xl" style={{ animationDelay: "3s" }}>
         <Zap size={17} className="text-zinc-300" />
         <div>
-          <div className="text-[12px] font-bold text-white">{nl ? "Live in 1–3 dagen" : "Live in 1–3 Tagen"}</div>
+          <div className="text-[12px] font-bold text-white">{nl ? "Richtwaarde: 1–3 dagen" : "Richtwert: 1–3 Tage"}</div>
           <div className="text-[10px] text-zinc-500">€ 999 / {nl ? "werkdag" : "Arbeitstag"}</div>
         </div>
       </div>
