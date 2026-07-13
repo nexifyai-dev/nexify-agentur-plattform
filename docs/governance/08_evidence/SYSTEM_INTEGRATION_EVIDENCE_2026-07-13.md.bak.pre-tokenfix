@@ -1,0 +1,143 @@
+# NeXifyAI System-Integration Evidence — 2026-07-13
+
+**Status:** ✅ AKTIV & VERIFIZIERT  
+**Datum:** 2026-07-13  
+**Uhrzeit:** 03:15 CEST  
+**Autor:** Hermes Agent (developer Profil)  
+**Task-ID:** AUTO-MODE SESSION  
+**Löst ab:** HERMES_BRAIN_AGENTMEMORY_9ROUTER_INTEGRATION_EVIDENCE_2026-06-21.md
+
+---
+
+## 1. SYSTEM-ARCHITEKTUR (IST-Stand)
+
+| Komponente | Port | Typ | Status | Details |
+|---|---|---|---|---|
+| Paperclip (Factory) | 3100 | Control Plane | ✅ 200 | React-SPA, Skill-Verwaltung via UI |
+| Hermes Agent (Headroom) | 8787 | Runtime + Gateway | ✅ 200 | WebUI, WhatsApp Bridge, Gateway |
+| 9Router | 20128 | LLM-Router | ✅ | 61 Modelle, 8 Provider, host-networking |
+| agentmemory | 3111 (API) / 3113 (Viewer) | Memory | ✅ 200 | iii-Engine REST, Node-Viewer |
+| LightRAG | 9621 | RAG | ✅ 307 | Vektor-Suche |
+| Spaether | 8900 | Monitoring | ✅ 404 | Erreichbar, kein Root-Endpoint |
+| n8n | 5678 | Automation | ✅ 200 | v2.29.10, Owner: mail@nexifyai.cloud |
+| Traefik | 80/443 | Reverse Proxy | ✅ active | TLS-Terminierung |
+| Portainer | 9000/9443 | Container-Mgmt | ✅ | Docker-Verwaltung |
+
+---
+
+## 2. 9ROUTER — MODELL-SYNCHRONISATION
+
+### Stand 13.07.2026: 61 Modelle, 8 Provider
+
+| Provider | Modelle | Key Models |
+|---|---|---|
+| ds (DeepSeek) | 6 | flash, chat, pro, pro-none, pro-max, reasoner |
+| gh (GitHub) | 23 | GPT-4o, GPT-5-mini, Claude-Haiku, MAI-Code |
+| cx (CX) | 14 | GPT-5.4, GPT-5.5, GPT-5.6 (luna/sol/terra) |
+| xmtp | 9 | Mimo-v2/v2.5 (omni, pro, tts) |
+| cc (Claude-Chat) | 5 | Fable-5, Haiku-4.5, Opus-4.7/4.8, Sonnet-5 |
+| anthropic | 3 | Claude-3.5-Sonnet, Opus-4, Sonnet-4 |
+| combo | 1 | nexifyai-combo-llm |
+| unknown | 1 | — |
+
+### Routing
+- **base_url:** `http://127.0.0.1:20128/v1` (host-networking, kein Cloudflare)
+- **DeepSeek-First:** Default `ds/deepseek-v4-pro-max`
+- **Fallback-Kette:** pro-max → pro → pro-none → flash
+- **AGENTS.md aktualisiert:** "46/67 tot" → "61 Modelle aktiv"
+
+---
+
+## 3. AGENTMEMORY INTEGRATION
+
+### Architektur
+- **iii-Engine:** Port 3111 (REST-API, Node.js, Bearer Auth)
+- **Viewer:** Port 3113 (Node, Dashboard)
+- **Secret:** `nexify_memory_1783618814_bbb47f0526df3ea62fddc57bdb1a0611`
+- **MCP-URL:** `https://agentmemory.nexifyai.cloud` (Cloudflare Tunnel)
+- **Memories:** 14 (nach iii-Restart 00:55 UTC, 2651 verloren)
+- **Actions:** 10 (alle done per 03:15)
+
+### Endpunkte
+```
+GET  :3113/memories          → 200 (Viewer)
+GET  :3111/agentmemory/actions → 200 (REST)
+POST :3111/agentmemory/actions → 201
+PATCH :3111/agentmemory/actions/:id → 404 (nicht implementiert)
+POST :3111/agentmemory/memories → 405 (nicht implementiert)
+```
+
+### LLM Provider
+- `OPENAI_MODEL=ds/deepseek-v4-flash` (via 9Router)
+- `OPENAI_BASE_URL=http://localhost:20128/v1`
+- `OPENAI_API_KEY=system-key`
+
+---
+
+## 4. SYSTEMD SERVICES
+
+| Service | Status |
+|---|---|
+| hermes-gateway.service | active |
+| hermes-webui.service | active |
+| agentmemory.service | active |
+| traefik.service | active |
+| nginx.service | inactive (ersetzt durch Traefik) |
+
+---
+
+## 5. DOCKER CONTAINER
+
+| Container | Status |
+|---|---|
+| 9router | Up (host-networking) |
+| headroom | Up (healthy) |
+| lightrag | Up (:9621) |
+| n8n | Up (:5678, v2.29.10) |
+| nexify-grafana | Up |
+| nexify-prometheus | Up |
+| nexify-recherche | Up (:8000) |
+| nexify-spaether | Up |
+| portainer | Up (:9000) |
+| zitadel | Up (:8081) |
+| gitlab | Up (healthy) |
+| gitlab-runner | Up |
+| firecrawl-* | Up (API, Redis, RabbitMQ, Postgres, Playwright, FoundationDB) |
+
+---
+
+## 6. HARDWARE
+
+- **Disk:** 287G frei / 387G (27% voll)
+- **RAM:** 15Gi used / 31Gi total
+- **Uptime:** 5d 21h
+- **Load:** 1.75 (normal)
+
+---
+
+## 7. AGENTS.md ÄNDERUNGEN (13.07.)
+
+1. "46/67 9Router-Modelle tot" → "61 Modelle aktiv"
+2. Architektur-Tabelle: "LLM-Router (701/77)" → "LLM-Router (61 Modelle)"
+3. base_url: "https://ai-router.nexifyai.cloud/v1" → "http://127.0.0.1:20128/v1"
+
+---
+
+## 8. N8N — OWNER-SETUP (NEU)
+
+- **Status:** ✅ Owner erstellt (mail@nexifyai.cloud / Pascal Courbois)
+- **API-Key:** Erstellt (Scope: workflow:read) → `/root/.config/n8n-mcp/env`
+- **ToDo:** Weitere Scopes via WebUI (:5678) — workflow:execute, execution:read, credential:read
+
+---
+
+## 9. NÄCHSTE SCHRITTE
+
+1. **n8n MCP aktivieren:** API-Key-Scopes via WebUI erweitern
+2. **agentmemory API fixen:** POST/PATCH-Endpunkte implementieren
+3. **GDOK Governance Bulk-Load:** 7 kritische Docs aus §2 laden
+4. **Monitoring:** Grafana Dashboards für alle 7 Komponenten
+
+---
+
+*Evidence generiert von Hermes Agent (developer Profil) am 2026-07-13 03:15 CEST*

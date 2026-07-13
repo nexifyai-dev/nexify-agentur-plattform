@@ -1,11 +1,15 @@
 # NeXifyAI DOS AI Governance
 
 ## Brain-first
-- Ohne Brain keine Arbeit
-- Ein zentrales Brain (Qdrant + Brain API)
-- Semantisches Gedächtnis: Fakten, Architektur, Regeln
-- Episodisches Gedächtnis: Ereignisse, Incidents, Entscheidungen
-- Prozedurales Gedächtnis: Workflows, Recovery, Vorgehensweisen
+- Ohne agentmemory keine Arbeit
+- agentmemory = zentrales Langzeitgedächtnis (REST-API :3111, Viewer :3113)
+- Hermes MEMORY.md = lokaler Cache, agentmemory = Source of Truth
+- Brain API (:9090) + Qdrant (:6333) = DEPRECATED (Q2 2026)
+- Semantisches Gedächtnis: Fakten, Architektur, Regeln → agentmemory
+- Episodisches Gedächtnis: Ereignisse, Incidents, Entscheidungen → agentmemory
+- Prozedurales Gedächtnis: Workflows, Recovery → Skills + agentmemory
+
+> **Updated 2026-07-13:** Brain/Qdrant deprecated. agentmemory ist jetzt zentrale Memory-Infrastruktur.
 
 ## Lernpflicht
 - Lessons Learned sind Pflicht
