@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type Lang = "de" | "nl";
+export type Lang = "de" | "en" | "nl";
 
 const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: "de", setLang: () => {} });
 
@@ -11,7 +11,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("nexify-lang");
-    if (stored === "nl" || stored === "de") {
+    if (stored === "nl" || stored === "de" || stored === "en") {
       setLangState(stored);
       document.documentElement.lang = stored;
     }

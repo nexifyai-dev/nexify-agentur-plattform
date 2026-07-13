@@ -29,6 +29,17 @@ const T = {
     name: "Name", company: "Firma", phone: "Telefon", note: "Optionale Nachricht an uns …",
     total: "Richtpreis (netto)", you: "Sie", nexify: "NeXify AI",
   },
+  en: {
+    title: "Your Customer Portal", hello: "Welcome back", offers: "Your Offers", profile: "Your Data", request: "Request New Offer",
+    noOffers: "No offers yet. Request a new offer below or chat with the NeXify AI advisor.",
+    accept: "Accept Offer", decline: "Decline", accepted: "Accepted", declined: "Declined", sent: "Open", followed_up: "Open",
+    pay: "Pay first daily rate now (€ 999)", paid: "Deposit paid ✔", payPending: "Payment being verified …",
+    questions: "Questions & Messages", writeQuestion: "Your question …", send: "Send",
+    requestPlaceholder: "Describe your new project – we will get back to you with an offer.",
+    requestBtn: "Send Request", save: "Save", saved: "Saved ✔", logout: "Logout",
+    name: "Name", company: "Company", phone: "Phone", note: "Optional message to us …",
+    total: "Guide price (net)", you: "You", nexify: "NeXify AI",
+  },
   nl: {
     title: "Uw klantportaal", hello: "Welkom terug", offers: "Uw offertes", profile: "Uw gegevens", request: "Nieuwe offerte aanvragen",
     noOffers: "Nog geen offertes aanwezig. Vraag hieronder een nieuwe offerte aan of chat met de NeXify AI adviseur.",
