@@ -18,6 +18,7 @@ export type Service = {
 export type Dict = typeof de;
 
 export const de = {
+  // @NEXIFYAI-MARKER: prelogin-content-trust-20260713
   common: {
     cta: "Projekt starten",
     ctaSecondary: "Leistungen ansehen",
@@ -29,18 +30,18 @@ export const de = {
     allServices: "Alle Leistungen",
   },
   home: {
-    badge: "AI-gestützte Entwicklung · Deutsch & Nederlands · B2B",
+    badge: "AI-gestützte Entwicklung · Deutsch & Nederlands · Für Unternehmen",
     titleA: "Digitale Exzellenz.",
     titleB: "In Tagen statt Monaten.",
     subtitle:
-      "NeXify AI entwickelt Premium-Websites, Onlineshops, Web-Apps und AI-Automatisierungen – persönlich verantwortet von einem Fachmann, beschleunigt durch modernste AI-Werkzeuge, transparent zum festen Tagessatz von 999 € netto.",
+      "NeXify AI entwickelt Premium-Websites, Onlineshops, Web-Apps und AI-Automatisierungen – persönlich verantwortet von einem Fachmann, beschleunigt durch passende AI-Werkzeuge, transparent zum festen Tagessatz von 999 € netto.",
     ctaPrimary: "Kostenlose Erstberatung",
     ctaSecondary: "Leistungen entdecken",
     stats: [
-      { value: "999 €", label: "netto pro Arbeitstag – keine versteckten Kosten" },
-      { value: "1–3", label: "Tage bis zur fertigen Website" },
-      { value: "100 %", label: "persönliche Verantwortung, keine Übergabeketten" },
-      { value: "24/7", label: "NeXify AI Berater für Ihr Anliegen" },
+      { value: "999 €", label: "netto pro Arbeitstag – transparent kalkuliert" },
+      { value: "1–3", label: "Richtwert für klar abgegrenzte Websites" },
+      { value: "1", label: "verantwortlicher Ansprechpartner von Konzept bis Übergabe" },
+      { value: "Chat", label: "AI-Berater für eine erste Einordnung" },
     ],
     pillarsEyebrow: "Warum NeXify AI",
     pillarsTitle: "Ein Fachmann. Moderne AI. Messbare Ergebnisse.",
@@ -53,7 +54,7 @@ export const de = {
       {
         icon: "Bot",
         title: "AI-gestützt, nicht AI-abgegeben",
-        text: "Modernste AI-Werkzeuge verkürzen Recherche, Umsetzung und Prüfung dramatisch. Die fachlichen Entscheidungen trifft weiterhin ein erfahrener Entwickler – mit voller Verantwortung.",
+        text: "Moderne AI-Werkzeuge beschleunigen Recherche, Umsetzung und Prüfung. Die fachlichen Entscheidungen trifft weiterhin ein erfahrener Entwickler – mit voller Verantwortung.",
       },
       {
         icon: "ChartNoAxesCombined",
@@ -63,14 +64,14 @@ export const de = {
     ],
     servicesEyebrow: "Leistungen",
     servicesTitle: "Vom ersten Klick bis zur skalierten Plattform",
-    servicesText: "Acht klar definierte Leistungsbausteine – jeder mit fester Zeitspanne, klaren Ergebnissen und transparentem Preis.",
+    servicesText: "Acht klar definierte Leistungsbausteine – jeweils mit Zeitspanne, klaren Ergebnissen und transparentem Tagessatz.",
     processEyebrow: "Arbeitsweise",
     processTitle: "Fünf Schritte. Null Überraschungen.",
     quotesEyebrow: "Stimmen & Ergebnisse",
     quotesTitle: "Was Zusammenarbeit mit NeXify AI bedeutet",
     ctaBandTitle: "Bereit für Ihr Projekt?",
     ctaBandText:
-      "Beschreiben Sie Ihr Vorhaben – Sie erhalten innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Festpreisrahmen. Oder fragen Sie NeXify AI, unseren AI-Berater, direkt im Chat.",
+      "Beschreiben Sie Ihr Vorhaben – in der Regel erhalten Sie innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Preisrahmen. Oder fragen Sie NeXify AI, unseren AI-Berater, direkt im Chat.",
     ctaBandBtn: "Jetzt Anfrage senden",
     ctaBandBtn2: "Mit NeXify AI chatten",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-Agenten", "Automatisierung", "E-Commerce", "Web-Apps", "Mobile Apps", "SEO", "Cloud-Infrastruktur", "API-Integration"],
@@ -247,7 +248,7 @@ export const de = {
     eyebrow: "Arbeitsweise",
     title: "Fünf Schritte von der Idee zum Betrieb",
     intro:
-      "Ein standardisierter, hundertfach verfeinerter Ablauf sorgt dafür, dass Projekte in Tagen statt Monaten fertig werden – ohne Qualitätsverlust, ohne Überraschungen, mit voller Nachvollziehbarkeit in jedem Schritt.",
+      "Ein standardisierter Ablauf sorgt dafür, dass passende Projekte in Tagen statt Monaten umgesetzt werden – mit klaren Qualitätsprüfungen, ohne Überraschungen und mit voller Nachvollziehbarkeit in jedem Schritt.",
     steps: [
       { n: "01", icon: "ChartNoAxesCombined", title: "Ziel und Geschäftsnutzen", text: "Wir klären, welches Ergebnis zählt, wer es nutzt und was bewusst nicht Teil des ersten Umfangs ist. Fokus schlägt Feature-Liste." },
       { n: "02", icon: "MessageSquareMore", title: "Konzept und Festpreisrahmen", text: "Der Aufwand wird in Arbeitstagen ausgewiesen. Sie sehen vorab Scope, Preisrahmen, Annahmen und mögliche Erweiterungen – schriftlich und verbindlich." },
@@ -267,7 +268,7 @@ export const de = {
     eyebrow: "Plattform & Technologie",
     title: "Der Technik-Stack hinter der Geschwindigkeit",
     intro:
-      "Geschwindigkeit ohne Qualitätsverlust entsteht durch einen bewusst kuratierten, hundertfach erprobten Technologie-Stack – kombiniert mit AI-gestützten Entwicklungs- und Prüfwerkzeugen der neuesten Generation.",
+      "Geschwindigkeit ohne Qualitätsverlust entsteht durch einen bewusst kuratierten und erprobten Technologie-Stack – kombiniert mit passenden AI-gestützten Entwicklungs- und Prüfwerkzeugen.",
     blocks: [
       {
         icon: "Layers",
@@ -417,7 +418,7 @@ export const de = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Häufige Fragen, ehrliche Antworten",
-    intro: "Alles Wichtige zu Arbeitsweise, Preisen, AI-Einsatz und Zusammenarbeit – kompakt beantwortet. Ihre Frage fehlt? der NeXify AI Chat oder das Kontaktformular helfen sofort.",
+    intro: "Alles Wichtige zu Arbeitsweise, Preisen, AI-Einsatz und Zusammenarbeit – kompakt beantwortet. Ihre Frage fehlt? Der NeXify AI Chat oder das Kontaktformular helfen sofort.",
   },
   faqs: [
     {
