@@ -1,0 +1,16 @@
+{
+  "name": "nexify-agentur-plattform",
+  "version": "1.0.0",
+  "description": "NeXify Agentur Plattform — Monorepo",
+  "private": true,
+  "engines": {
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "install-all": "pnpm install -r",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "dev": "pnpm -r dev"
+  }
+}
