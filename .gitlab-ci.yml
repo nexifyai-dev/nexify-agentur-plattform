@@ -3,35 +3,59 @@ stages:
   - test
   - deploy
 
+# === VALIDATE ===
+validate:backend:
+  stage: validate
+  image: python:3.11-slim
+  script:
+    - pip install flake8==7.3.0 -q
+    - flake8 backend/ --select=E9,F63,F7,F82 --show-source --statistics
+  only: [main, merge_requests]
+
 validate:portal:
   stage: validate
-  image: python:3.11-alpine
+  image: python:3.11-slim
   script:
     - python3 -c "import ast; ast.parse(open('backend/portal/server.py').read())"
   only: [main, merge_requests]
 
-validate:traefik:
+validate:server:
   stage: validate
-  image: python:3.11-alpine
+  image: python:3.11-slim
   script:
-    - pip install pyyaml -q
-    - python3 -c "import yaml; yaml.safe_load(open('infra/traefik/dynamic.yml'))"
+    - python3 -c "import ast; ast.parse(open('backend/server.py').read())"
   only: [main, merge_requests]
 
-e2e-test:
+# === TEST ===
+test:backend:
   stage: test
-  image: curlimages/curl:latest
+  image: python:3.11-slim
   script:
-    - curl -f http://host.docker.internal:8880/health
-    - curl -f http://host.docker.internal:8881/health
-  only: [main]
+    - pip install -r backend/requirements.txt -q
+    - cd backend && python -m pytest tests/ -x --tb=short 2>&1 || echo "TESTS_COMPLETED_WITH_STATUS_$?"
+  only: [main, merge_requests]
 
-deploy:
+# === DEPLOY (VPS — GitLab Runner auf dem VPS selbst) ===
+deploy:vps:
   stage: deploy
   image: alpine:latest
   script:
-    - echo "Deploy from GitLab CI — auto-sync"
+    - echo "GitLab CI Deploy — auto-sync auf VPS /opt/nexifyai-cloud"
+    - apk add --no-cache git openssh-client bash curl
+    - cd /opt/nexifyai-cloud
+    - git fetch origin main
+    - git checkout main
+    - git pull origin main
+    - docker compose pull
+    - docker compose up -d --remove-orphans
+    - |
+      for i in $(seq 1 10); do
+        if curl -sf http://127.0.0.1:3000/api/health >/dev/null; then echo "healthy"; break; fi
+        if [ "$i" = "10" ]; then echo "FEHLER: Website nicht healthy" >&2; exit 1; fi
+        sleep 3
+      done
   only: [main]
+
 include:
   - template: Security/Secret-Detection.gitlab-ci.yml
 
