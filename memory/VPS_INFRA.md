@@ -3,6 +3,11 @@
 ## Zugang
 - VPS: Hostinger KVM8, `srv1243952.hstgr.cloud`, IPv4 `72.62.152.47`, Ubuntu 26.04
 - SSH: `ssh -i /root/.ssh/nexify_vps root@72.62.152.47` (Key via Hostinger-API hinterlegt, ID 528586)
+- **NEU (2026-07-24):** SSH-Key-Wechsel. Alter Key ID 528586 + 8 weitere nicht mehr authorisiert.
+  **Aktueller Key:** `id_ed25519_vps_current` (ED25519, root@s0x22.app)
+  **Fingerprint:** `SHA256:4qslF5I62zagyAgda0bK2+Cf8AxdcCBODFflGTVYSd4`
+  **Public Key:** `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIED/J85hZZkxaaHwT5+ghvNJS2xuXcWD4wUilvFlYAUE root@s0x22.app`
+  **STATUS: Muss via Hostinger Dashboard → VPS → SSH Keys hochgeladen werden. Noch nicht authorisiert.**
 - Hostinger API-Token: in Chat (VnMnz…) – VM-ID 1243952. Docker-Manager-API: `/api/vps/v1/virtual-machines/1243952/docker`
 - Cloudflare: Zone `nexifyai.cloud` = `2b96bbce5033dd364440906cea99b086`. Voll-Zugriff nur mit GLOBAL_KEY+EMAIL (aus backend/.env); der API_TOKEN ist nur zonen-lesend.
 

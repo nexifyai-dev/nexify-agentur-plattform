@@ -1,6 +1,6 @@
 # Abweichungsanalyse: Systemmaster V5/199 vs Ist-Zustand
 
-**Stand:** 2026-07-24T12:28+0200 (DE/Berlin)
+**Stand:** 2026-07-24T13:20+0200 (DE/Berlin)
 **Referenz:** `nexify/00_master/SYSTEMMASTER_TOTAL_CONCEPT_v5_199.md` (2026-06-11T20:45+0200)
 **Delta:** 43 Tage seit letzter autoritativer Iteration
 
@@ -69,6 +69,9 @@
 | MCP-02 | playwright npx-MCP → playwright-browser Cloud-Tools migriert |
 | MCP-03 | stripe MCP als HTTP-Cloud hinzugefügt (Key pending) |
 | COM-01 | Hermes-SSO Profile: alle 16 via Session-Skript validiert |
+| GAP-01 | `scripts/`-Verzeichnis erstellt (sync-workspace-to-vps.sh, health-check.sh) |
+| GAP-02 | `docs/governance/04_workflows/` erstellt (WORKFLOW_OVERVIEW.md) — war in GOVERNANCE.md als fehlend referenziert |
+| GAP-03 | VPS_INFRA.md mit neuem SSH-Key-Fingerprint aktualisiert |
 
 ---
 
@@ -76,12 +79,15 @@
 
 | ID | Abweichung | Soll | Ist | Impact |
 |----|-----------|------|-----|--------|
-| **C-07** | VPS SSH-Zugang | Funktionsfähig (Key auth) | BLOCKED — alle 9 lokalen SSH-Keys abgelehnt | 🔴 VPS-Vollprüfung unmöglich, alle C/H-Abweichungen blockiert |
+| **C-07** | VPS SSH-Zugang | Funktionsfähig (Key auth) | BLOCKED — neuer Key bereit aber nicht auf VPS authorisiert | 🔴 VPS-Vollprüfung unmöglich, alle C/H-Abweichungen blockiert |
 
-### SSH-Diagnose (2026-07-24)
-- Host 72.62.152.47 antwortet auf TCP/22
-- ED25519 Host-Key geändert (vorher ECDSA) → VPS wurde neu aufgesetzt oder OS upgraded
-- Authentifizierung: publickey,password
-- Alle 9 lokalen Keys abgelehnt (nexify_vps, id_ed25519_hostinger_vps, id_ed25519_vps, id_rsa_nexify, id_ed25519, circleci_nexify, nexify_deploy, mydispatch_ed25519, id_ed25519_github)
-- Nächste Schritte: Hostinger API-Token oder manueller Key-Upload via Hostinger-Dashboard nötig
-- VPS_INFRA.md ist 18 Tage veraltet (Stand 06.07.2026)
+### C-07 Detail: SSH-Blockade (Stand 2026-07-24T13:20+0200)
+
+*   Host 72.62.152.47 antwortet auf TCP/22 (ED25519 Host-Key)
+*   Alle 9 alten lokalen Keys abgelehnt → VPS möglicherweise neu aufgesetzt oder OS upgraded
+*   **Neuer Key bereit:** `C:\Users\pcour\.ssh\id_ed25519_vps_current` (root@s0x22.app)
+*   **Public Key:** `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIED/J85hZZkxaaHwT5+ghvNJS2xuXcWD4wUilvFlYAUE root@s0x22.app`
+*   **Fingerprint:** `SHA256:4qslF5I62zagyAgda0bK2+Cf8AxdcCBODFflGTVYSd4`
+*   **ERFORDERLICH:** Public Key via Hostinger Dashboard (VPS → SSH Keys) hochladen ODER Hostinger API-Token bereitstellen
+*   **Alternativ:** Falls OS neu installiert → kompletter VPS-Rebuild nötig, alle Dienste neu deployen
+*   **VPS_INFRA.md** 18 Tage veraltet — nach SSH-Erfolg sofort aktualisieren

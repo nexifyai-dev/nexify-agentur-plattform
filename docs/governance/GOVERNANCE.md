@@ -12,7 +12,7 @@
 | `01_regelwerke/` | Kern-Regeln, Verbote, Pflichtregeln, Normenregister | 14 |
 | `02_sops/` | Standard Operating Procedures inkl. Register | 16 |
 | `03_checklisten/` | Pre-Task, Post-Go-Live, Compliance, Quality-Checklisten | 11 |
-| `04_workflows/` | Dispatcher, Automation, Health-Workflows | (referenziert) |
+| `04_workflows/` | Dispatcher, Automation, Health-Workflows | 1 |
 | `05_masterplan/` | Masterplan, Pascal-Arbeitsweise, Bolt-Integration | 6 |
 | `06_sicherheit_policies/` | Security, Tenant-Isolation, Change-Management, DR | 20 |
 | `07_audits_reports/` | System-Audits, Deviation-Reports, Voll-Scans | 12 |
@@ -24,7 +24,7 @@
 | `13_betriebshandbuch/` | Betriebsanleitung V3, Normalbetrieb, SOP V5 | 6 |
 | `14_production/` | Production-Skripte, Docker-Compose, Cron-Register | 5 |
 
-**Gesamt: 139 Governance-Dokumente**
+**Gesamt: 140 Governance-Dokumente**
 
 ---
 
