@@ -97,6 +97,33 @@ jobs:
             echo "✅ Deployment complete at $(date)"
         continue-on-error: true
       
+      - name: §11 Governance Check
+        run: |
+          echo "📋 Charta §11 Governance-Post-Check..."
+          
+          # Prüfe Charta-Evidence existiert
+          if ls docs/governance/08_evidence/CHARTA_CYCLE*.md 2>/dev/null; then
+            echo "✅ Charta-Evidence-Dokumente vorhanden"
+          else
+            echo "⚠️ Keine Charta-Evidence — Zyklus 1 starten"
+          fi
+          
+          # Prüfe GOVERNANCE.md Port-Matrix
+          if grep -q "System-Port-Matrix" docs/governance/GOVERNANCE.md 2>/dev/null; then
+            echo "✅ Port-Matrix in GOVERNANCE.md"
+          else
+            echo "⚠️ Port-Matrix fehlt"
+          fi
+          
+          # Prüfe Cost-Brake
+          if grep -q "Task-Abbruch" docs/governance/12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md 2>/dev/null; then
+            echo "✅ Cost-Brake aktiv"
+          else
+            echo "⚠️ Cost-Brake fehlt"
+          fi
+          
+          echo "✅ §11 Governance-Check abgeschlossen"
+          
       - name: Deployment Status
         run: |
           echo "Deployment job completed"
