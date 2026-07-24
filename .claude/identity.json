@@ -2,11 +2,7 @@
   "version": "2.0",
   "technicalLevel": "technical",
   "preferredStyle": {
-<<<<<<< HEAD
-    "verbosity": "detailed",
-=======
     "verbosity": "minimal",
->>>>>>> origin/main
     "codeComments": true,
     "explanations": true
   },
@@ -14,9 +10,5 @@
     "python"
   ],
   "suggestedBy": "ecc-tools-repo-analysis",
-<<<<<<< HEAD
-  "createdAt": "2026-07-24T10:35:35.154Z"
-=======
   "createdAt": "2026-07-24T12:58:50.914Z"
->>>>>>> origin/main
 }

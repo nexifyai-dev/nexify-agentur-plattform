@@ -1,9 +1,5 @@
 # Instincts generated from https://github.com/nexifyai-dev/nexify-agentur-plattform
-<<<<<<< HEAD
-# Generated: 2026-07-24T10:35:35.154Z
-=======
 # Generated: 2026-07-24T12:58:50.914Z
->>>>>>> origin/main
 # Version: 2.0
 # NOTE: This file supplements (does not replace) any existing curated instincts.
 # High-confidence manually curated instincts should be preserved alongside these.
@@ -21,19 +17,11 @@ source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use conventional commit format with prefixes: chore, feat, fix
-
-## Evidence
-
-- 5 commits analyzed
-=======
 Use conventional commit format with prefixes: feat, fix, chore, docs, refactor
 
 ## Evidence
 
 - 31 commits analyzed
->>>>>>> origin/main
 - Detected conventional commit pattern
 - Examples: chore: remove files with invalid colon chars for Windows, fix: update deploy workflow for Cloudflare Tunnel, add .env.example
 
@@ -50,21 +38,12 @@ source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Write moderate-length commit messages (~64 characters)
-
-## Evidence
-
-- Average commit message length: 64 chars
-- Based on 5 commits
-=======
 Write moderate-length commit messages (~75 characters)
 
 ## Evidence
 
 - Average commit message length: 75 chars
 - Based on 31 commits
->>>>>>> origin/main
 
 ---
 id: nexify-agentur-plattform-naming-files
@@ -147,10 +126,6 @@ Name test files using the pattern: *.test.ts
 - Consistent across test files
 
 ---
-<<<<<<< HEAD
-id: nexify-agentur-plattform-workflow-project-snapshot-or-cleanup
-trigger: "when doing project snapshot or cleanup"
-=======
 id: nexify-agentur-plattform-workflow-feature-development
 trigger: "when implementing a new feature"
 confidence: 0.9
@@ -177,23 +152,12 @@ Follow the feature-development workflow:
 ---
 id: nexify-agentur-plattform-workflow-ecc-bundle-integration
 trigger: "when doing ecc bundle integration"
->>>>>>> origin/main
 confidence: 0.6
 domain: workflow
 source: repo-analysis
 source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 ---
 
-<<<<<<< HEAD
-# Nexify Agentur Plattform Workflow Project Snapshot Or Cleanup
-
-## Action
-
-Follow the project-snapshot-or-cleanup workflow:
-1. Identify files that need to be removed or cleaned (e.g., invalid path chars).
-2. Remove or update those files across the codebase.
-3. Commit all changes in a single large commit with a chore/cleanup message.
-=======
 # Nexify Agentur Plattform Workflow Ecc Bundle Integration
 
 ## Action
@@ -209,20 +173,11 @@ Follow the ecc-bundle-integration workflow:
 8. Add or update .codex/agents/[agent].toml
 9. Add or update .agents/skills/[skill-name]/SKILL.md
 10. Add or update .agents/skills/[skill-name]/agents/openai.yaml
->>>>>>> origin/main
 
 ## Evidence
 
 - Workflow detected from commit patterns
 - Frequency: ~2x per month
-<<<<<<< HEAD
-- Files: .gitignore, .gitlab-ci.yml, .github/workflows/*
-
----
-id: nexify-agentur-plattform-instinct-file-naming
-trigger: "When creating a new file"
-confidence: 0.85
-=======
 - Files: .claude/ecc-tools.json, .claude/identity.json, .claude/skills/*/SKILL.md
 
 ---
@@ -280,7 +235,6 @@ Follow the monorepo-workspace-config workflow:
 id: nexify-agentur-plattform-instinct-file-naming
 trigger: "When creating or renaming a file in the codebase."
 confidence: 0.9
->>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -290,19 +244,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Name the file using snake_case convention
-
-## Evidence
-
-- Pattern in codeStyle.namingConventions.files
-- Consistent with Python community standards
-
----
-id: nexify-agentur-plattform-instinct-function-naming
-trigger: "When defining a new function"
-confidence: 0.8
-=======
 Use snake_case for file names.
 
 ## Evidence
@@ -313,7 +254,6 @@ Use snake_case for file names.
 id: nexify-agentur-plattform-instinct-function-naming
 trigger: "When defining a new function."
 confidence: 0.9
->>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -323,18 +263,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use camelCase for function names
-
-## Evidence
-
-- Pattern in codeStyle.namingConventions.functions
-
----
-id: nexify-agentur-plattform-instinct-class-naming
-trigger: "When defining a new class"
-confidence: 0.8
-=======
 Use camelCase for function names.
 
 ## Evidence
@@ -345,7 +273,6 @@ Use camelCase for function names.
 id: nexify-agentur-plattform-instinct-class-naming
 trigger: "When defining a new class."
 confidence: 0.9
->>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -355,18 +282,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use PascalCase for class names
-
-## Evidence
-
-- Pattern in codeStyle.namingConventions.classes
-
----
-id: nexify-agentur-plattform-instinct-constant-naming
-trigger: "When defining a constant"
-confidence: 0.8
-=======
 Use PascalCase for class names.
 
 ## Evidence
@@ -377,7 +292,6 @@ Use PascalCase for class names.
 id: nexify-agentur-plattform-instinct-constant-naming
 trigger: "When defining a constant."
 confidence: 0.9
->>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -387,17 +301,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use SCREAMING_SNAKE_CASE for constant names
-
-## Evidence
-
-- Pattern in codeStyle.namingConventions.constants
-
----
-id: nexify-agentur-plattform-instinct-import-style
-trigger: "When importing modules"
-=======
 Use SCREAMING_SNAKE_CASE for constant names.
 
 ## Evidence
@@ -407,7 +310,6 @@ Use SCREAMING_SNAKE_CASE for constant names.
 ---
 id: nexify-agentur-plattform-instinct-import-style
 trigger: "When importing modules in Python code."
->>>>>>> origin/main
 confidence: 0.8
 domain: code-style
 source: repo-analysis
@@ -418,17 +320,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use relative import paths
-
-## Evidence
-
-- Pattern in codeStyle.importStyle
-
----
-id: nexify-agentur-plattform-instinct-export-style
-trigger: "When exporting modules or functions"
-=======
 Use relative imports.
 
 ## Evidence
@@ -438,7 +329,6 @@ Use relative imports.
 ---
 id: nexify-agentur-plattform-instinct-export-style
 trigger: "When exporting code elements."
->>>>>>> origin/main
 confidence: 0.8
 domain: code-style
 source: repo-analysis
@@ -449,18 +339,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use named exports
-
-## Evidence
-
-- Pattern in codeStyle.exportStyle
-
----
-id: nexify-agentur-plattform-instinct-test-file-pattern
-trigger: "When creating a new test file"
-confidence: 0.85
-=======
 Use named exports.
 
 ## Evidence
@@ -471,27 +349,11 @@ Use named exports.
 id: nexify-agentur-plattform-instinct-test-file-naming
 trigger: "When creating a test file."
 confidence: 0.8
->>>>>>> origin/main
 domain: testing
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
 ---
 
-<<<<<<< HEAD
-# Nexify Agentur Plattform Instinct Test File Pattern
-
-## Action
-
-Name the test file with a .test.ts suffix
-
-## Evidence
-
-- Pattern in testing.filePattern
-
----
-id: nexify-agentur-plattform-instinct-test-type
-trigger: "When writing tests"
-=======
 # Nexify Agentur Plattform Instinct Test File Naming
 
 ## Action
@@ -505,7 +367,6 @@ Name the file with the pattern *.test.ts.
 ---
 id: nexify-agentur-plattform-instinct-test-type
 trigger: "When writing tests."
->>>>>>> origin/main
 confidence: 0.7
 domain: testing
 source: repo-analysis
@@ -516,36 +377,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Write unit tests as the primary test type
-
-## Evidence
-
-- Pattern in testing.testTypes
-
----
-id: nexify-agentur-plattform-instinct-test-location
-trigger: "When placing test files"
-confidence: 0.7
-domain: testing
-source: repo-analysis
-source_repo: nexifyai-dev/nexify-agentur-plattform
----
-
-# Nexify Agentur Plattform Instinct Test Location
-
-## Action
-
-Place test files in mixed locations (not strictly separated from source)
-
-## Evidence
-
-- Pattern in architecture.folderStructure.testLocation
-
----
-id: nexify-agentur-plattform-instinct-commit-format
-trigger: "When writing a commit message"
-=======
 Write unit tests.
 
 ## Evidence
@@ -555,7 +386,6 @@ Write unit tests.
 ---
 id: nexify-agentur-plattform-instinct-commit-format
 trigger: "When making a git commit."
->>>>>>> origin/main
 confidence: 0.9
 domain: git
 source: repo-analysis
@@ -566,18 +396,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Use conventional commit prefixes: chore, feat, or fix, followed by a colon and a concise message
-
-## Evidence
-
-- Seen in commit: 'chore: remove files with invalid colon chars for Windows'
-- Pattern in commits.prefixes
-
----
-id: nexify-agentur-plattform-instinct-commit-length
-trigger: "When composing a commit message"
-=======
 Use conventional commit prefixes: feat, fix, chore, docs, refactor.
 
 ## Evidence
@@ -588,7 +406,6 @@ Use conventional commit prefixes: feat, fix, chore, docs, refactor.
 ---
 id: nexify-agentur-plattform-instinct-commit-length
 trigger: "When writing a commit message."
->>>>>>> origin/main
 confidence: 0.7
 domain: git
 source: repo-analysis
@@ -599,17 +416,6 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-<<<<<<< HEAD
-Keep the commit message around 64 characters on average
-
-## Evidence
-
-- Pattern in commits.averageLength
-
----
-id: nexify-agentur-plattform-instinct-snapshot-cleanup
-trigger: "When initializing a new repo state or cleaning up files for compatibility (e.g., Windows path issues)"
-=======
 Keep the commit message around 75 characters.
 
 ## Evidence
@@ -619,25 +425,12 @@ Keep the commit message around 75 characters.
 ---
 id: nexify-agentur-plattform-instinct-ecc-bundle-integration
 trigger: "When someone wants to add a new ECC bundle (agent/skill) to the platform."
->>>>>>> origin/main
 confidence: 0.95
 domain: workflow
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
 ---
 
-<<<<<<< HEAD
-# Nexify Agentur Plattform Instinct Snapshot Cleanup
-
-## Action
-
-Identify problematic files, remove or update them, and commit all changes in a single large commit with a chore/cleanup message
-
-## Evidence
-
-- Seen in commit: 'chore: remove files with invalid colon chars for Windows'
-- Workflow: project-snapshot-or-cleanup
-=======
 # Nexify Agentur Plattform Instinct Ecc Bundle Integration
 
 ## Action
@@ -688,5 +481,4 @@ Edit or create pnpm-workspace.yaml and package.json to include new packages/apps
 
 - Workflow: monorepo-workspace-config
 - Pattern in files: pnpm-workspace.yaml, package.json
->>>>>>> origin/main
 

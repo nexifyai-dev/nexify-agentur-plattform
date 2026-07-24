@@ -48,22 +48,6 @@ jobs:
             cd ${{ env.REPO_PATH }}
             echo "📥 Git fetch + rebase..."
             git fetch origin main
-<<<<<<< HEAD
-            git checkout main
-            git pull origin main
-            docker compose pull
-            docker compose up -d --remove-orphans
-            # Hartes Gate: nur die Website-Health entscheidet über Erfolg dieses Deploys.
-            # (Nicht das Vollsystem — Hermes/Paperclip laufen unabhängig und dürfen einen
-            # Website-Deploy nicht blockieren.)
-            echo "Warte auf Website-Health..."
-            for i in $(seq 1 10); do
-              if curl -sf http://127.0.0.1:3000/api/health >/dev/null; then echo "healthy"; break; fi
-              if [ "$i" = "10" ]; then echo "FEHLER: Website nicht healthy — Deploy abgebrochen." >&2; exit 1; fi
-              sleep 3
-            done
-            bash infra/scripts/health-check.sh || true
-=======
             git reset --hard origin/main
             git pull origin main --ff-only || git rebase origin/main
             
@@ -89,7 +73,10 @@ jobs:
             echo "🏥 Waiting for services..."
             sleep 10
             
-            if curl -sf http://127.0.0.1:3000 > /dev/null 2>&1; then
+            # Hartes Gate: nur die Website-Health entscheidet über Erfolg dieses Deploys.
+            # (Nicht das Vollsystem — Hermes/Paperclip laufen unabhängig und dürfen einen
+            # Website-Deploy nicht blockieren.)
+            if curl -sf http://127.0.0.1:3000/api/health > /dev/null 2>&1; then
               echo "✅ Vitrine (port 3000) — OK"
             else
               echo "⚠️  Vitrine (port 3000) — NOT RESPONDING"
@@ -100,6 +87,8 @@ jobs:
             else
               echo "⚠️  LightRAG (port 9621) — NOT RESPONDING"
             fi
+            
+            bash infra/scripts/health-check.sh || true
             
             # 5. Logs
             echo "📋 Recent container logs:"
@@ -112,4 +101,3 @@ jobs:
         run: |
           echo "Deployment job completed"
           echo "Check VPS: ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}"
->>>>>>> origin/main
