@@ -10,6 +10,8 @@
 name: Test Suite (Lint, Unit, Security)
 
 on:
+  schedule:
+    - cron: '0 6 * * 1'  # §11 Mo 06:00 Charta-Monitoring
   push:
     branches: [ main, develop, 'feature/**' ]
   pull_request:
