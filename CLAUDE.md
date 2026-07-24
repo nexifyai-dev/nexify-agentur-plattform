@@ -26,8 +26,8 @@ gehören zur Angriffsfläche (reguläres Git-Tracking) — Secrets dort niemals 
 bash deploy/deploy.sh
 ```
 Zieht main, baut website, startet neu, kopiert Traefik-Routen.
-Kein eigener Traefik — nutzt bestehenden (traefik-vsrs, host-Netz).
+Kein eigener Traefik — nutzt bestehenden (Traefik 3.7.8, host-Netz).
 
 ## VPS-Infra
 - `/opt/nexifyai-cloud/` — Repo
-- `/docker/traefik-vsrs/dynamic/` — Traefik Dynamic Config
+- `/etc/traefik/dynamic/` — Traefik Dynamic Config
