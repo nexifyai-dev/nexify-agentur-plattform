@@ -4,10 +4,11 @@
 
 set -euo pipefail
 
-VPS_HOST="srv1243952.hstgr.cloud"
-VPS_USER="root"
-VPS_WORKSPACE="/workspace/nexify"
-REPO_NEXIFY="nexify"
+VPS_HOST="${VPS_HOST:-72.62.152.47}"
+VPS_USER="${VPS_USER:-root}"
+VPS_WORKSPACE="${VPS_WORKSPACE:-/workspace/nexify}"
+REPO_NEXIFY="${REPO_NEXIFY:-$(cd "$(dirname "$0")/.." && pwd)/nexify}"
+SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519_vps_current}"
 
 # Directories that live on VPS and sync VPS → Repo (manual pull)
 VPS_SOURCE_DIRS=(
