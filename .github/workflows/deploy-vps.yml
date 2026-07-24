@@ -78,7 +78,4 @@ jobs:
               if [ "$i" = "10" ]; then echo "FEHLER: Website nicht healthy — Deploy abgebrochen." >&2; exit 1; fi
               sleep 3
             done
-            # Website-Route in den bestehenden Traefik kopieren (Datei existiert im Repo).
-            install -D deploy/website-routes.yml /docker/traefik-vsrs/dynamic/nexifyai-website.yml
-            # Vollsystem-Health nur informativ (blockiert den Website-Deploy nicht).
             bash infra/scripts/health-check.sh || true
