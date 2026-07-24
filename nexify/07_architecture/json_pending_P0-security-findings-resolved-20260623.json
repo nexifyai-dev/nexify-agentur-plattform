@@ -1,9 +1,0 @@
-{
-  "action": "store",
-  "title": "P0-Findings RESOLVED — Security Agent 2026-06-23",
-  "content": "All 3 P0-Findings fixed and verified:\n\nP0-SEC-001 (.env secrets not gitignored): FIXED\n- Created /workspace/.gitignore with comprehensive secret patterns\n- Covers .env, .env.*, config/, secrets, keys\n- No .env files were git-tracked\n\nP0-DOC-001 (Dockerfiles as root): FIXED\n- bookando-api/Dockerfile: Added non-root USER appuser (groupadd appgroup + useradd appuser)\n- Other 3 Dockerfiles already used non-root users\n\nP0-DEP-001 (32 dependency vulnerabilities): FIXED\n- python-multipart: 0.0.12 → 0.0.31 (7 CVEs)\n- pyjwt: 2.10.0 → 2.13.0 (12 CVEs)\n- cryptography: 44.0.0 → 48.0.1 (7 CVEs)\n- pillow: 11.3.0 → 12.2.0 (6 CVEs)\n- pip-audit verification: 0 vulnerabilities remaining\n\nEvidence: /workspace/nexify/10_evidence/security/P0-*-fix.json",
-  "category": "security",
-  "tags": ["P0", "security", "resolved", "bookando-api", "dockerfile", "dependencies"],
-  "status": "PENDING_BRAIN_SYNC",
-  "reason": "Brain token not accessible in container — sync manually or via next host session"
-}
