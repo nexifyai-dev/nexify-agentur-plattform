@@ -1,10 +1,32 @@
 # NeXify AI — Governance & Betriebsabläufe
 
 > **Single Source of Truth für alle Regelwerke, SOPs, Policies, Workflows und Produktionsabläufe.**
-> Alle Dateien unter `docs/governance/` sind verbindlich für jeden Agenten und每eveloper.
+> Alle Dateien unter `docs/governance/` sind verbindlich für jeden Agenten und Entwickler.
 
 ---
 
+## 0. Charta §0–§13 — Geltungsbereich
+
+Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebsmodell):
+
+| Charta | Governance-Ordner | Zweck |
+|--------|------------------|-------|
+| §0 Geltungsbereich | gesamtes System | VPS-Gesamtsystem / Kundenprojekt / NeXifyAI-Projekt |
+| §1 Auftrag & Datenbasis | `01_regelwerke/` | Server-, Festplatten-, Netzwerk-, Prozess-, Logdaten |
+| §2 Vollprüfung SOLL/IST | `02_sops/`, `07_audits_reports/` | Lückenlose Prüfung, Abweichungsanalyse, Fix |
+| §3 Integrationsprinzip | `04_workflows/` | API, MCP, Webhooks vollständig integriert |
+| §4 Propagationspflicht | alle Ordner | Standards fließen bei jeder Änderung neu ein |
+| §5 Fach-/Governance-Ebene | `01_regelwerke/`, `02_sops/` | Fachexperten-Agenten verwalten Regelwerke |
+| §6 Agenten-Architektur | `11_fuehrung/` | Spezialagenten pro Bereich |
+| §7 Wissens-/Gedächtnisschicht | `08_evidence/`, `12_register/` | AgentMemory + LightRAG zentral |
+| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen |
+| §9 Betriebsrahmen | `13_betriebshandbuch/` | Live-Terminal, Deutsch, Best-Practice |
+| §10 Modellstrategie | `09_konzepte/` | Upstage + DeepSeek, gestaffelte Migration |
+| §11 Monitoring | `07_audits_reports/`, `14_production/` | Durchgehende Überwachung aller Komponenten |
+| §12 Circuit Breaker | `12_register/` | Budget-/Iterationsgrenzen, Notabschaltung |
+| §13 Arbeitsweise | `10_quality_gates/` | Verifikation vor Übernahme, Ehrlichkeit |
+
+---
 ## 1. Verzeichnisstruktur
 
 | Verzeichnis | Inhalt | Anzahl |
@@ -66,7 +88,30 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 
 ---
 
-## 3. Produktionsablauf (Production Pipeline)
+## 3. System-Port-Matrix (SOLL)
+
+| Komponente | Port(s) | Typ | Status SOLL |
+|---|---|---|---|
+| Paperclip (Factory) | 3100 | Control Plane | ✅ 200 |
+| Hermes Agent (Headroom) | 8787 | Runtime + Gateway | ✅ 200 |
+| Hermes Agent (Gateway) | 8642 | CLI/Telegram/Cron | ✅ |
+| Hermes Dashboard | 9119 | Monitoring | ✅ |
+| 9Router | 20128 | LLM-Router | ✅ |
+| agentmemory API | 3111 | Memory REST | ✅ |
+| agentmemory Viewer | 3113 | Node-Viewer | ✅ |
+| LightRAG | 9621 | Vektor-Suche | ✅ |
+| Spaether | 8900 | Monitoring | ✅ |
+| n8n | 5678 | Automation | ✅ |
+| Traefik | 80/443 | Reverse Proxy | ✅ |
+| Portainer | 9000/9443 | Container-Mgmt | ✅ |
+| GitLab | 8081/8929/22 | DevOps | ✅ |
+| Nexify Proxy | 32768 | Proxy | ✅ |
+| Redis | 6379 | Cache | ✅ |
+
+Siehe: `08_evidence/SYSTEM_INTEGRATION_EVIDENCE_2026-07-13.md`
+
+---
+## 4. Produktionsablauf (Production Pipeline)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
