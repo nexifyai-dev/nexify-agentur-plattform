@@ -1,0 +1,30 @@
+{
+  "version": "3.0",
+  "sops": [
+    {
+      "id": "SOP-001",
+      "name": "Auftrag Vorbereitung/Ausführung/Prüfung/Endkontrolle",
+      "path": "04_sops/SOP_AUFTRAG_VORBEREITUNG_AUSFUEHRUNG_PRUEFUNG_ENDKONTROLLE_V3.md"
+    },
+    {
+      "id": "SOP-002",
+      "name": "Kundensuche Lead-to-CRM Outreach Gate",
+      "path": "04_sops/SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.md"
+    },
+    {
+      "id": "SOP-003",
+      "name": "KI-Berater Angebotsgenerator Resend",
+      "path": "04_sops/SOP_KI_BERATER_ANGEBOTSGENERATOR_RESEND_V3.md"
+    },
+    {
+      "id": "SOP-004",
+      "name": "Brain-first agentmemory Wissenssicherung",
+      "path": "04_sops/SOP_BRAIN_FIRST_AGENTMEMORY_WISSENSSICHERUNG_V3.md"
+    },
+    {
+      "id": "SOP-005",
+      "name": "Automation Cron Scheduler Worker",
+      "path": "04_sops/SOP_AUTOMATION_CRON_SCHEDULER_WORKER_V3.md"
+    }
+  ]
+}

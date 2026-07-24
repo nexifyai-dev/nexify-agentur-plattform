@@ -1,0 +1,95 @@
+{
+  "generated": "2026-06-22",
+  "vps": "72.62.152.47",
+  "host_memory_gib": 31.34,
+  "total_containers": 42,
+  "all_running": true,
+  "categories": {
+    "core": [
+      "nexify-webui",
+      "nexify-api",
+      "nexify-proxy",
+      "hermes-webui-nexify-hermes-webui-1",
+      "9router-6kxn-niner-router-1",
+      "nexify-redis",
+      "nexify-qdrant",
+      "nexify-mongodb"
+    ],
+    "monitoring": [
+      "nexify-prometheus",
+      "nexify-grafana",
+      "nexify-alertmanager",
+      "nexify-node-exporter",
+      "nexify-cadvisor",
+      "nexify-blackbox-exporter"
+    ],
+    "knowledge": [
+      "ragflow-xszg-ragflow-1",
+      "ragflow-xszg-mysql-1",
+      "ragflow-xszg-minio-1",
+      "ragflow-xszg-redis-1",
+      "ragflow-xszg-infinity-1"
+    ],
+    "infrastructure_supabase": [
+      "supabase_kong_root",
+      "supabase_db_root",
+      "supabase_studio_root",
+      "supabase_auth_root",
+      "supabase_rest_root",
+      "supabase_realtime_root",
+      "supabase_storage_root",
+      "supabase_inbucket_root",
+      "supabase_edge_runtime_root",
+      "supabase_pg_meta_root",
+      "supabase_analytics_root",
+      "supabase_vector_root"
+    ],
+    "infrastructure_other": [
+      "traefik-vsrs-traefik-1",
+      "postgresql-tu3y-postgresql-1",
+      "nexify-preview"
+    ],
+    "customer_bookando": [
+      "bookando-core",
+      "bookando-postgres",
+      "bookando-cache",
+      "bookando-qdrant-ai"
+    ],
+    "customer_vsk": [
+      "vsk-web",
+      "vsk-email-worker",
+      "vsk-mongodb"
+    ],
+    "utility": [
+      "paperclip-krv8-paperclip-1"
+    ]
+  },
+  "healthy_containers": [
+    "supabase_studio_root",
+    "supabase_pg_meta_root",
+    "supabase_storage_root",
+    "supabase_realtime_root",
+    "supabase_inbucket_root",
+    "supabase_auth_root",
+    "supabase_kong_root",
+    "supabase_vector_root",
+    "supabase_analytics_root",
+    "supabase_db_root",
+    "nexify-cadvisor",
+    "nexify-webui",
+    "hermes-webui-nexify-hermes-webui-1",
+    "ragflow-xszg-mysql-1",
+    "bookando-postgres",
+    "bookando-cache",
+    "vsk-web",
+    "vsk-email-worker",
+    "vsk-mongodb"
+  ],
+  "resource_hotspots": [
+    {"container": "nexify-cadvisor", "cpu": "7.32%", "mem": "1.405 GiB", "note": "expected for container metrics"},
+    {"container": "supabase_analytics_root", "cpu": "6.55%", "mem": "541 MiB", "note": "log processing"},
+    {"container": "ragflow-xszg-ragflow-1", "cpu": "0.61%", "mem": "2.705 GiB", "note": "RAG/AI workload"},
+    {"container": "hermes-webui-nexify-hermes-webui-1", "cpu": "1.25%", "mem": "1.513 GiB", "note": "WebUI AI backend"}
+  ],
+  "external_services": ["GitHub", "Vercel", "Cloudflare Tunnel"]
+}

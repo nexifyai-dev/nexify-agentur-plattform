@@ -1,0 +1,191 @@
+{
+  "meta": {
+    "document": "Promptmaster Governance",
+    "version": "1.0.0",
+    "date": "2026-06-11",
+    "author": "Subagent 20260611_5",
+    "status": "draft",
+    "rule_rank": 5
+  },
+  "overview": {
+    "title": "Promptmaster Governance V1",
+    "purpose": "Governance für Prompt-Änderungen im NeXify-System. Nur Promptmaster ändert produktive Prompts.",
+    "scope": "Alle Prompts im NeXify-System (04_prompts/, CLAUDE.md, System-Prompts, Prompt-Templates)"
+  },
+  "roles": [
+    {
+      "role": "promptmaster",
+      "permissions": ["prompt_schreiben", "prompt_aendern", "prompt_loeschen", "prompt_deployen", "prompt_review", "prompt_testen", "claude_md_aendern"],
+      "responsibilities": [
+        "Prompt-Pflege und Qualitätssicherung",
+        "Versionierung und Änderungsprotokoll",
+        "Change-Control-Prozess-Durchführung",
+        "Review von Änderungsvorschlägen",
+        "Prompt-Tests vor Produktivsetzung"
+      ]
+    },
+    {
+      "role": "other_agents",
+      "permissions": ["fehler_erkennen", "verbesserung_vorschlagen", "evidence_liefern", "test_prompts_in_isolated_env"],
+      "forbidden": [
+        "eigenmaechtige_prompt_aenderungen",
+        "claude_md_ohne_review_aendern",
+        "prompt_dateien_direkt_editieren",
+        "prompt_templates_ueberschreiben",
+        "system_prompts_in_memory_ueberschreiben"
+      ],
+      "responsibilities": [
+        "Fehler in Prompts erkennen und melden",
+        "Konkrete Änderungsvorschläge mit Evidence einreichen",
+        "Verbesserungen vorschlagen statt selbst ändern"
+      ]
+    }
+  ],
+  "forbidden_actions": [
+    {
+      "action": "eigenmaechtige_prompt_aenderungen",
+      "reason": "Ohne Change-Control-Prozess besteht Risiko von Systemausfällen",
+      "consequence": "Sofortige Meldung an Oracle, Audit, mögliche Sperrung"
+    },
+    {
+      "action": "claude_md_ohne_review_ueberladen",
+      "reason": "CLAUDE.md ist zentrales Steuerungsdokument; jede Änderung braucht Review",
+      "consequence": "Änderung wird rückgängig gemacht, Review-Prozess eingeleitet"
+    },
+    {
+      "action": "prompt_dateien_direkt_editieren",
+      "reason": "Auch vermeintlich triviale Änderungen können Seiteneffekte haben",
+      "consequence": "Änderung rückgängig, Change-Control-Prozess obligatorisch"
+    },
+    {
+      "action": "prompt_templates_ueberschreiben",
+      "reason": "Templates haben oft Abhängigkeiten zu anderen Systemen",
+      "consequence": "Template aus Backup wiederhergestellt, Dependency-Check"
+    },
+    {
+      "action": "system_prompts_in_memory_ueberschreiben",
+      "reason": "System-Prompts sind geschützt und steuern fundamentales Systemverhalten",
+      "consequence": "Memory aus Backup restored, Oracle-Benachrichtigung"
+    }
+  ],
+  "change_control_process": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Erkennen",
+        "actor": "Jeder Agent",
+        "description": "Fehler, Unklarheiten, Ineffektivität oder Inkonsistenz in Prompts erkennen",
+        "output": "Problemidentifikation"
+      },
+      {
+        "step": 2,
+        "name": "Vorschlag einreichen",
+        "actor": "Jeder Agent",
+        "description": "Formalen Änderungsvorschlag mit IST/SOLL-Vergleich, Begründung und Evidence einreichen",
+        "output": "PROMPT-CHANGE-VORSCHLAG"
+      },
+      {
+        "step": 3,
+        "name": "Review",
+        "actor": "Promptmaster",
+        "description": "Prüfung auf Korrektheit, Klarheit, Konsistenz, Sicherheit, Rückwärtskompatibilität",
+        "output": "APPROVED / REVISE / REJECTED"
+      },
+      {
+        "step": 4,
+        "name": "Test",
+        "actor": "Promptmaster",
+        "description": "Isolationstest, Regressionstest, Sicherheitstest, Performance-Test",
+        "output": "Test-Ergebnis"
+      },
+      {
+        "step": 5,
+        "name": "Deploy",
+        "actor": "Promptmaster",
+        "description": "Versionierung, Backup, Deploy, Evidence, Benachrichtigung, 24h Monitoring",
+        "output": "PROMPT_CHANGE_CONTROL_EVIDENCE.md"
+      }
+    ]
+  },
+  "urgency_levels": [
+    {
+      "level": "P1",
+      "name": "Kritisch",
+      "label": "🔴",
+      "description": "Sicherheitslücke, Systemausfall",
+      "sla": "1 Stunde"
+    },
+    {
+      "level": "P2",
+      "name": "Hoch",
+      "label": "🟡",
+      "description": "Fehlerhafte Ausgaben, Datenverlust-Risiko",
+      "sla": "4 Stunden"
+    },
+    {
+      "level": "P3",
+      "name": "Normal",
+      "label": "🔵",
+      "description": "Verbesserung, Klarstellung",
+      "sla": "48 Stunden"
+    },
+    {
+      "level": "P4",
+      "name": "Niedrig",
+      "label": "🟢",
+      "description": "Kosmetik, optionale Optimierung",
+      "sla": "2 Wochen"
+    }
+  ],
+  "claude_md_governance": {
+    "allowed_content": [
+      "Globale Systemregeln",
+      "Immer-gültige Workflow-Anweisungen",
+      "Sicherheitsrichtlinien",
+      "Verhaltenscodizes",
+      "Qualitätsstandards"
+    ],
+    "forbidden_content": [
+      "Task-spezifische Anweisungen",
+      "Temporäre Workarounds",
+      "Benutzerspezifische Konfigurationen",
+      "Debugging-Anweisungen",
+      "Experimentelle Konfigurationen"
+    ],
+    "change_rules": [
+      "Nicht überladen",
+      "Keine Task-spezifischen Anweisungen",
+      "Review vor Commit",
+      "Evidence-Pflicht für jede Änderung",
+      "Jede Änderung muss systemweite Gültigkeit begründen"
+    ]
+  },
+  "escalation": {
+    "promptmaster_unreachable": "Oracle übernimmt temporär",
+    "change_rejected": "Autor kann Beschwerde bei Oracle einlegen",
+    "critical_prompt_error_p1": "Promptmaster wird sofort benachrichtigt",
+    "disagreement": "Oracle entscheidet als letzte Instanz"
+  },
+  "metrics": {
+    "change_request_cycle_time": "< 48h (P3)",
+    "approval_rate": "> 70%",
+    "rollback_rate": "< 5%",
+    "prompt_test_coverage": "100%",
+    "claude_md_change_frequency": "< 5 pro Monat"
+  },
+  "related_rules": [
+    "GLOBAL_POLICY_V1.md",
+    "EVIDENCE_TEMPLATE_V1.md",
+    "FEEDBACK_LOOP_MASTER_V1.md",
+    "AUDIT_MASTER_V1.md",
+    "REGELWERKS_INDEX_V1.md"
+  ],
+  "changelog": [
+    {
+      "date": "2026-06-11",
+      "version": "1.0.0",
+      "change": "Initiale Promptmaster Governance",
+      "author": "Subagent 20260611_5"
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "evidence_id": "ev-trun-fa53acb15057",
+  "timestamp": "2026-06-20T14:58:25.527116+00:00",
+  "date": "2026-06-20",
+  "type": "workflow_task_execution",
+  "status": "completed",
+  "run_id": "trun-fa53acb15057",
+  "task_id": "deep-research",
+  "source": "trigger-exec",
+  "details": {
+    "task_id": "deep-research",
+    "run_id": "trun-fa53acb15057",
+    "result": {
+      "success": true,
+      "query": "NeXify: brain",
+      "results": {
+        "collection": "nexifyai_brain",
+        "count": 10,
+        "query": "NeXify: brain",
+        "results": [
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Stage 2: Brain context verification before action: Check if relevant Brain context is loaded before action. If loaded, proceed. If not consulted, query Brain then proceed. If incomplete, reload missing context then proceed. Verify architecture decisions, relevant patterns/precedents, and documented system dependencies.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "4069b5f3f4f6487c",
+            "metadata": {
+              "binding_level": "mandatory",
+              "date": "2026-06-11",
+              "oracle_entry_id": "stage-2-brain-check",
+              "phase": "oracle_canonicalization",
+              "priority": 5,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/GLOBAL_POLICY_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle stage brain context verification before action check if relevant brain context is loaded before action if loaded proceed if not consulted query brain then proceed if incomplete reload missing context then proceed verify architecture decisions relevant patterns precedents and documented system dependencies brain oracle_entry_id stage brain check binding_level mandatory priority scope systemwide source workspace nexify 03_regelwerke global_policy_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": "brain",
+            "collection": "nexifyai_brain",
+            "content": "[ORACLE] Erlaubte Verbesserung: Brain/Agentmemory-Pfad: Agents may prepare memory paths for Brain and agentmemory when minimum goal is met.",
+            "created_at": "2026-06-11T12:28:12Z",
+            "id": "889a9b37504d40f0",
+            "metadata": {
+              "binding_level": "recommended",
+              "date": "2026-06-11",
+              "oracle_entry_id": "positive-surprise-allowed-brain-memory",
+              "phase": "oracle_canonicalization",
+              "priority": 3,
+              "scope": "systemwide",
+              "source": "/workspace/nexify/03_regelwerke/POSITIVE_SURPRISE_DELIVERY_RULE_V1.md"
+            },
+            "score": 7,
+            "tokens": "oracle erlaubte verbesserung brain agentmemory pfad agents may prepare memory paths for brain and agentmemory when minimum goal is met brain oracle_entry_id positive surprise allowed brain memory binding_level recommended priority scope systemwide source workspace nexify 03_regelwerke positive_surprise_delivery_rule_v1 md phase oracle_canonicalization date 2026 06 11",
+            "updated_at": "2026-06-11T12:28:12Z"
+          },
+          {
+            "category": null,
+            "collection": "nexifyai_brain",
+            "content": "# Autopilot Iteration 21 \u2014 2026-06-11\n\n**Run-ID:** iteration-21-brain-autopilot-20260611T1322Z\n**UTC:** 2026-06-11T13:22:00Z\n**Berlin:** 2026-06-11T15:22:00+0200\n**Executor:** claude_code\n**Scope:** nexify_internal\n**Workspace:** /workspace/nexify\n\n## Systemstatus\n\n- Brain: 200, 483 memories, 2 collections, uptime 4857s, schema_version 1.0\n- Brain Write: \u2705 functional (token length 43)\n- Brain API correct paths: /health, /categories, /stats (NOT /api/brain/ prefix)\n- 9Router: running v0.4.71, HTTP 401 (auth protected)\n- Traefik: auf Port 80 (Brain nicht mehr direkt auf 80)\n- Docker Runtime: 11 containers, all Up 14-23h\n- Host: uptime 1d 4h, load 0.90\n\n## Key Findings\n\n1. **Brain API-Pfad-Korrektur best\u00e4tigt**:  Prefix funktioniert NICHT.  und  direkt sind korrekt. Fruhere GOOSE.md-Korrektur (2026-06-08) war falsch \u2014 tatsachliche Brain-API-Urls sind direkt, nicht unter /api/brain/.\n\n2. **Stage-1-Testtasks (15 Stuck)**: Alle Status 'unknown', nie ausgefuhrt. Erstellt 2026-06-07 von nexify-agent-architect-expert. TT-S1-001 bis TT-S1-015 vorhanden als JSON-Dateien.\n\n3. **Keine Experten-Definitionen**: /root/.nexify/agent-system/experts/Expert-*.md existiert nicht. Stage-1-Experten nie erstellt/aktiviert.\n\n4. **Brain Pending Queue**: Leer. Alle Payloads processed/migrated. Keine neuen pending entries.\n\n5. **You.com**: Weiterhin blockiert (Key-Rotation steht aus). Keine YOU im env.\n\n6. **PII-Patch**: bookando-backend hat PII-exc_info in server.py, aber kein Workspace-Write ohne Freigabe.\n\n7. **Shared State veraltet**: Letzte Aktualisierung 2026-06-07. Counters/run_log referenzieren veraltete Daten (brain_delta: 22, brain_actual: 67 \u2014 jetzt 483).\n\n## Gates Blocking Progress\n\n1. ~~You.com Key Rotation~~ (muss Nutzer machen)\n2. ~~Stage-1-Tests manuell ausfuhren~~ (15 Tasks, nie gestartet)\n3. ~~Shared State aktualisieren~~ (veraltet seit 2026-06-07)\n4. ~~Stage-1-Experten erstellen~~ (nie angelegt)\n5. Brain API Path Korrektur in GOOSE.md (falscher Prefix dokumentiert)\n\n## Empfohlene nchste Aktion\n\nShared State aktualisieren + Stage-1-Testtasks ausfuhren + Stage-1-Experten erstellen.",
+            "created_at": "2026-06-11T13:23:42Z",
+            "id": "ddc50f417dbf4235",
+            "metadata": {
+              "categories": [
+                "autopilot-iteration",
+                "system-scan"
+              ],
+              "iteration": 21,
+              "run_id": "iteration-21-brain-autopilot-20260611T1322Z",
+              "scope": "nexify_internal",
+              "tags": [
+                "autopilot",
+                "iteration-21",
+                "brain-api-path",
+                "stage-1-tasks"
+              ]
+            },
+            "score": 6,
+            "tokens": "autopilot iteration 21 2026 06 11 run id iteration 21 brain autopilot 20260611t1322z utc 2026 06 11t13 22 00z berlin 2026 06 11t15 22 00 0200 executor claude_code scope nexify_internal workspace workspace nexify systemstatus brain 200 483 memories collections uptime 4857s schema_version brain write functional token length 43 brain api correct paths health categories stats not api brain prefix 9router running v0 71 http 401 auth protected traefik auf port 80 brain nicht mehr direkt auf 80 docker runtime 11 containers all up 14 23h host uptime 1d 4h load 90 key findings brain api pfad korrektur best\u00e4tigt prefix funktioniert nicht und direkt sind korrekt fruhere goose md korrektur 2026 06 08 war falsch tatsachliche brain api urls sind direkt nicht unter api brain stage testtasks 15 stuck alle status unknown nie ausgefuhrt erstellt 2026 06 07 von nexify agent architect expert tt s1 001 bis tt s1 015 vorhanden als json dateien keine experten definitionen root nexify agent system experts expert md existiert nicht stage experten nie erstellt aktiviert brain pending queue leer alle payloads processed migrated keine neuen pending entries you com weiterhin blockiert key rotation steht aus keine you im env pii patch bookando backend hat pii exc_info in server py aber kein workspace write ohne freigabe shared state veraltet letzte aktualisierung 2026 06 07 counters run_log referenzieren veraltete daten brain_delta 22 brain_actual 67 jetzt 483 gates blocking progress you com key rotation muss nutzer machen stage tests manuell ausfuhren 15 tasks nie gestartet shared state aktualisieren veraltet seit 2026 06 07 stage experten erstellen nie angelegt brain api path korrektur in goose md falscher prefix dokumentiert empfohlene nchste aktion shared state aktualisieren stage testtasks ausfuhren stage experten erstellen iteration 21 scope nexify_internal run_id iteration 21 brain autopilot 20260611t1322z categories autopilot iteration system scan tags autopilot iteration 21 brain api path stage tasks",
+            "updated_at": "2026-06-11T13:23:42Z"
+          },
+          {
+            "category": "rule",
+            "collection": "nexifyai_brain",
+            "content": "# Brain-First-Policy V1\n\n**Status:** AKTIV\n**Version:** 1.0\n**Datum:** 2026-06-11\n**Owner:** NeXify Chief Orchestrator (Claude Code)\n**Scope:** nexify_internal\n\n## Regel\n\n```text\nBRAIN_FIRST = TRUE\nNO_SYSTEMMASTER_WORK_WITH_UNTESTED_BRAIN = TRUE\nNO_DONE_WITHOUT_BRAIN_STATUS = TRUE\n```\n\nVor jeder nicht-trivialen Architektur-, Code-, Konfigurations-, Runtime-, Deployment- oder \nDokumentations\u00e4nderung mit Projektauswirkung:\n\n1. Brain query (nexifyai_brain oder nexifyai_memories)\n2. Pr\u00fcfen, ob relevantes Wissen existiert\n3. Nach der \u00c4nderung: Brain store (wenn neues, dauerhaftes Wissen entstanden)\n\n## Ausnahmen\n\n- Reine Lesetransaktionen an bekannten Dateien\n- Explizite Brain-Umgehungsanweisung durch berechtigten Agenten\n- Brain nicht erreichbar: Pending-Queue verwenden, Fehler melden\n\n## Brain-Komponenten (Stand 2026-06-11)\n\n| Komponente | URL | Status |\n|---|---|---|\n| Brain API (Python) | http://127.0.0.1:9090 | \u2705 AKTIV (Systemd) |\n| Brain API (Cloudflare) | https://brain.nexifyai.cloud | \u26a0\ufe0f Leitet zu 9Router-Dashboard (Konfigurationskonflikt) |\n| Brain SQLite DB | /var/lib/nexify/brain.db | \u2705 68 Eintr\u00e4ge |\n| Qdrant | http://127.0.0.1:6333 | \u2705 4 Collections, 3925+ Points |\n| agentmemory III Engine | http://127.0.0.1:3111 | \u2705 Verbunden |\n| Cloudflare Tunnel | brain.nexifyai.cloud \u2192 Traefik:80 | \u2705 Aktiv, aber falsches Ziel |\n\n## Brain-Fallback-Kette\n\n1. http://127.0.0.1:9090 (prim\u00e4r)\n2. http://127.0.0.1:6333 (Qdrant direkt)\n3. /workspace/nexify/11_brain_sync/ (Pending-Files)\n\n## Konfigurationskonflikt: brain.nexifyai.cloud\n\nDie Cloudflare-URL brain.nexifyai.cloud leitet aktuell zu Traefik auf Port 80,\nder wiederum zum 9Router-Dashboard routet. Die Brain-API l\u00e4uft auf Port 9090.\nEine Tunnel-Anpassung (brain.nexifyai.cloud \u2192 http://127.0.0.1:9090) erfordert\nProduktiv-Change-Genehmigung.\n\n**Status:** \u23f3 WAITING_FOR_APPROVAL",
+            "created_at": "2026-06-11T13:32:36Z",
+            "id": "1b9e4ecab40e4aa5",
+            "metadata": {
+              "category": "rule",
+              "filesize": 1875,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/03_regelwerke/BRAIN_FIRST_POLICY_V1.md"
+            },
+            "score": 6,
+            "tokens": "brain first policy v1 status aktiv version datum 2026 06 11 owner nexify chief orchestrator claude code scope nexify_internal regel text brain_first true no_systemmaster_work_with_untested_brain true no_done_without_brain_status true vor jeder nicht trivialen architektur code konfigurations runtime deployment oder dokumentations\u00e4nderung mit projektauswirkung brain query nexifyai_brain oder nexifyai_memories pr\u00fcfen ob relevantes wissen existiert nach der \u00e4nderung brain store wenn neues dauerhaftes wissen entstanden ausnahmen reine lesetransaktionen an bekannten dateien explizite brain umgehungsanweisung durch berechtigten agenten brain nicht erreichbar pending queue verwenden fehler melden brain komponenten stand 2026 06 11 komponente url status brain api python http 127 9090 aktiv systemd brain api cloudflare https brain nexifyai cloud leitet zu 9router dashboard konfigurationskonflikt brain sqlite db var lib nexify brain db 68 eintr\u00e4ge qdrant http 127 6333 collections 3925 points agentmemory iii engine http 127 3111 verbunden cloudflare tunnel brain nexifyai cloud traefik 80 aktiv aber falsches ziel brain fallback kette http 127 9090 prim\u00e4r http 127 6333 qdrant direkt workspace nexify 11_brain_sync pending files konfigurationskonflikt brain nexifyai cloud die cloudflare url brain nexifyai cloud leitet aktuell zu traefik auf port 80 der wiederum zum 9router dashboard routet die brain api l\u00e4uft auf port 9090 eine tunnel anpassung brain nexifyai cloud http 127 9090 erfordert produktiv change genehmigung status waiting_for_approval rule path workspace nexify 03_regelwerke brain_first_policy_v1 md category rule filetype md filesize 1875 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:36Z"
+          },
+          {
+            "category": "rule",
+            "collection": "nexifyai_brain",
+            "content": "{\n  \"policy\": \"brain_first_policy\",\n  \"version\": \"1.0\",\n  \"date\": \"2026-06-11\",\n  \"active\": true,\n  \"scope\": \"nexify_internal\",\n  \"rules\": [\n    {\n      \"id\": \"BRAIN_FIRST-001\",\n      \"statement\": \"Before non-trivial work, query Brain first\",\n      \"binding_level\": \"mandatory\"\n    },\n    {\n      \"id\": \"BRAIN_FIRST-002\",\n      \"statement\": \"Store durable knowledge after changes\",\n      \"binding_level\": \"mandatory\"\n    },\n    {\n      \"id\": \"BRAIN_FIRST-003\",\n      \"statement\": \"No systemmaster work with untested Brain\",\n      \"binding_level\": \"mandatory\"\n    },\n    {\n      \"id\": \"BRAIN_FIRST-004\",\n      \"statement\": \"Report Brain status in every task completion\",\n      \"binding_level\": \"mandatory\"\n    }\n  ],\n  \"components\": {\n    \"brain_api_local\": \"http://127.0.0.1:9090\",\n    \"brain_api_cloudflare\": \"https://brain.nexifyai.cloud\",\n    \"qdrant\": \"http://127.0.0.1:6333\",\n    \"agentmemory\": \"http://127.0.0.1:3111\",\n    \"brain_db\": \"/var/lib/nexify/brain.db\",\n    \"brain_entries\": 68,\n    \"qdrant_collections\": {\n      \"nexifyai_brain\": 3923,\n      \"nexifyai_memories\": 2,\n      \"nexifyai_projects\": 0,\n      \"nexifyai_rules\": 0\n    }\n  },\n  \"fallback_chain\": [\n    \"http://127.0.0.1:9090\",\n    \"http://127.0.0.1:6333\",\n    \"/workspace/nexify/11_brain_sync/\"\n  ],\n  \"conflicts\": [\n    {\n      \"component\": \"brain.nexifyai.cloud\",\n      \"issue\": \"Leads to 9Router dashboard instead of Brain API\",\n      \"status\": \"WAITING_FOR_APPROVAL\"\n    }\n  ]\n}",
+            "created_at": "2026-06-11T13:32:36Z",
+            "id": "5fee1f7816bc4a8d",
+            "metadata": {
+              "category": "rule",
+              "filesize": 1456,
+              "filetype": "json",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/03_regelwerke/brain-first-policy-v1.json"
+            },
+            "score": 6,
+            "tokens": "policy brain_first_policy version date 2026 06 11 active true scope nexify_internal rules id brain_first 001 statement before non trivial work query brain first binding_level mandatory id brain_first 002 statement store durable knowledge after changes binding_level mandatory id brain_first 003 statement no systemmaster work with untested brain binding_level mandatory id brain_first 004 statement report brain status in every task completion binding_level mandatory components brain_api_local http 127 9090 brain_api_cloudflare https brain nexifyai cloud qdrant http 127 6333 agentmemory http 127 3111 brain_db var lib nexify brain db brain_entries 68 qdrant_collections nexifyai_brain 3923 nexifyai_memories nexifyai_projects nexifyai_rules fallback_chain http 127 9090 http 127 6333 workspace nexify 11_brain_sync conflicts component brain nexifyai cloud issue leads to 9router dashboard instead of brain api status waiting_for_approval rule path workspace nexify 03_regelwerke brain first policy v1 json category rule filetype json filesize 1456 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:36Z"
+          },
+          {
+            "category": "rule",
+            "collection": "nexifyai_brain",
+            "content": "---\nid: BRAIN_GEBOT_V1\ntitle: Brain-Gebot\nversion: 1.0.0\nstatus: active\ncreated: 2026-06-10\nauthor: NeXify Governance\naudit_pflicht: ja\ntags: [brain, gebot, regelwerk, kontext]\n---\n\n# BRAIN_GEBOT_V1 \u2014 Brain-Gebot\n\n## 1. Definition\n\n**Brain** bedeutet den gesamten Wissens- und Speicheraufbau von NeXify AI.\nBrain umfasst:\n\n| Komponente | Zweck |\n|-----------|-------|\n| **agentmemory** | Zentrale Memory-Schicht (lokal: Docker via iii-engine) |\n| **Qdrant (alt)** | Vektor-DB (wird abgel\u00f6st) |\n| **Workspace-Dateien** | `/workspace/nexify/` \u2014 Regelwerke, Architektur, Evidence |\n| **Pending-Import** | `/workspace/nexify/12_agentmemory/` \u2014 f\u00fcr sp\u00e4tere Syncs |\n\n## 2. Gebot\n\nVor jeder Aktion MUSS der Agent pr\u00fcfen, ob Brain-Kontext verf\u00fcgbar ist:\n\n```text\n1. agentmemory verf\u00fcgbar? \u2192 Memories laden\n2. agentmemory nicht verf\u00fcgbar? \u2192 Pending-Dateien pr\u00fcfen\n3. Workspace-Dateien vorhanden? \u2192 Kontext laden\n4. Kein Kontext verf\u00fcgbar? \u2192 Aufgabe pausieren, nicht raten\n```\n\n## 3. Verbot\n\nNicht arbeiten ohne Brain-/Memory-/Evidence-/Kanban-Entscheidung.\nNicht raten wenn Kontext fehlt.\nNicht isoliert handeln ohne Systembild.\n\n---\n\n*Version 1.0.0 | 2026-06-10 | Audit-Pflichtig*",
+            "created_at": "2026-06-11T13:32:37Z",
+            "id": "0d46e373e3794941",
+            "metadata": {
+              "category": "rule",
+              "filesize": 1196,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/03_regelwerke/BRAIN_GEBOT_V1.md"
+            },
+            "score": 6,
+            "tokens": "id brain_gebot_v1 title brain gebot version status active created 2026 06 10 author nexify governance audit_pflicht ja tags brain gebot regelwerk kontext brain_gebot_v1 brain gebot definition brain bedeutet den gesamten wissens und speicheraufbau von nexify ai brain umfasst komponente zweck agentmemory zentrale memory schicht lokal docker via iii engine qdrant alt vektor db wird abgel\u00f6st workspace dateien workspace nexify regelwerke architektur evidence pending import workspace nexify 12_agentmemory f\u00fcr sp\u00e4tere syncs gebot vor jeder aktion muss der agent pr\u00fcfen ob brain kontext verf\u00fcgbar ist text agentmemory verf\u00fcgbar memories laden agentmemory nicht verf\u00fcgbar pending dateien pr\u00fcfen workspace dateien vorhanden kontext laden kein kontext verf\u00fcgbar aufgabe pausieren nicht raten verbot nicht arbeiten ohne brain memory evidence kanban entscheidung nicht raten wenn kontext fehlt nicht isoliert handeln ohne systembild version 2026 06 10 audit pflichtig rule path workspace nexify 03_regelwerke brain_gebot_v1 md category rule filetype md filesize 1196 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:37Z"
+          },
+          {
+            "category": "rule",
+            "collection": "nexifyai_brain",
+            "content": "---\nid: BRAIN_BEGRIFF_DEFINITION_V1\ntitle: Brain-Begriffsdefinition\nversion: 1.0.0\nstatus: active\ncreated: 2026-06-10\nauthor: NeXify Governance\naudit_pflicht: ja\ntags: [brain, definition, begriff, kontext]\n---\n\n# BRAIN_BEGRIFF_DEFINITION_V1 \u2014 Was \u201eBrain\u201c bedeutet\n\n## 1. Begriffskl\u00e4rung\n\n**Brain** ist im NeXify-Kontext der gesamte Wissens-, Speicher- und\nEntscheidungsaufbau des Systems. Brain ist nicht nur eine Technologie,\nsondern ein Architekturprinzip:\n\n> **Brain = agentmemory + Workspace-Dateien + Pending + Evidence + Kanban**\n\n## 2. Technische Schichten\n\n| Schicht | System | Status | Zugriff |\n|---------|--------|--------|---------|\n| Prim\u00e4r | agentmemory (iii-engine) | \u2705 Lokal l\u00e4uft | Docker :3111 (Auth required) |\n| Fallback | Pending-Dateien (JSON) | \u2705 Bereit | `/workspace/nexify/12_agentmemory/` |\n| Statisch | Workspace-Dateien (Markdown) | \u2705 Vollst\u00e4ndig | `/workspace/nexify/` |\n| Evidence | Alle Aktionen dokumentiert | \u2705 Aktiv | `/workspace/nexify/10_evidence/` |\n| Alt | Qdrant (wird abgel\u00f6st) | \ud83d\udd34 Abk\u00fcndigung | Kein Zugriff mehr |\n\n## 3. Nutzungspflicht\n\nJeder Agent MUSS vor einer Aktion pr\u00fcfen:\n\n```text\n1. Ist agentmemory lesbar?\n   \u2192 Ja: Memories laden, relevante Kontexte abrufen\n   \u2192 Nein: Pending-Import pr\u00fcfen, Workspace-Dateien laden\n2. Ist Evidence vorhanden?\n   \u2192 Ja: Vorherige Entscheidungen pr\u00fcfen\n3. Ist Kanban aktuell?\n   \u2192 Ja: Task-Status \u00fcbernehmen\n   \u2192 Nein: Task-Registry aktualisieren\n4. Erst dann: Handeln\n```\n\n## 4. Bei Nichterreichbarkeit\n\nWenn Brain nicht erreichbar ist:\n\n```text\nQuelle: <name>\nStatus: NOT_AVAILABLE\nGrund: <ursache>\nRisiko: HOCH/MITTEL/NIEDRIG\nErsatzquelle: <pfad>\nFolgeauftrag: <task>\n```\n\nNicht raten wenn Brain nicht erreichbar ist.  \nNicht isoliert handeln ohne Systembild.  \nPausieren und dokumentieren.\n\n---\n\n*Version 1.0.0 | 2026-06-10 | Audit-Pflichtig*",
+            "created_at": "2026-06-11T13:32:37Z",
+            "id": "75aa3bd533b84822",
+            "metadata": {
+              "category": "rule",
+              "filesize": 1867,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/03_regelwerke/BRAIN_BEGRIFF_DEFINITION_V1.md"
+            },
+            "score": 6,
+            "tokens": "id brain_begriff_definition_v1 title brain begriffsdefinition version status active created 2026 06 10 author nexify governance audit_pflicht ja tags brain definition begriff kontext brain_begriff_definition_v1 was brain bedeutet begriffskl\u00e4rung brain ist im nexify kontext der gesamte wissens speicher und entscheidungsaufbau des systems brain ist nicht nur eine technologie sondern ein architekturprinzip brain agentmemory workspace dateien pending evidence kanban technische schichten schicht system status zugriff prim\u00e4r agentmemory iii engine lokal l\u00e4uft docker 3111 auth required fallback pending dateien json bereit workspace nexify 12_agentmemory statisch workspace dateien markdown vollst\u00e4ndig workspace nexify evidence alle aktionen dokumentiert aktiv workspace nexify 10_evidence alt qdrant wird abgel\u00f6st abk\u00fcndigung kein zugriff mehr nutzungspflicht jeder agent muss vor einer aktion pr\u00fcfen text ist agentmemory lesbar ja memories laden relevante kontexte abrufen nein pending import pr\u00fcfen workspace dateien laden ist evidence vorhanden ja vorherige entscheidungen pr\u00fcfen ist kanban aktuell ja task status \u00fcbernehmen nein task registry aktualisieren erst dann handeln bei nichterreichbarkeit wenn brain nicht erreichbar ist text quelle name status not_available grund ursache risiko hoch mittel niedrig ersatzquelle pfad folgeauftrag task nicht raten wenn brain nicht erreichbar ist nicht isoliert handeln ohne systembild pausieren und dokumentieren version 2026 06 10 audit pflichtig rule path workspace nexify 03_regelwerke brain_begriff_definition_v1 md category rule filetype md filesize 1867 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:37Z"
+          },
+          {
+            "category": "evidence",
+            "collection": "nexifyai_brain",
+            "content": "# Brain-First-Policy Verankerung \u2014 Evidence\n\n**Datum (Berlin):** 2026-06-11 14:00 +0200\n\n## Erstellte Dateien\n\n1. /workspace/nexify/03_regelwerke/BRAIN_FIRST_POLICY_V1.md\n2. /workspace/nexify/03_regelwerke/brain-first-policy-v1.json\n\n## Inhalt der Policy\n\n- BRAIN_FIRST = TRUE vor jeder relevanten Arbeit\n- Drei Kernregeln (Query, Store, Report)\n- Brain-Komponenteninventar mit Status\n- Fallback-Kette definiert\n- Konfigurationskonflikt brain.nexifyai.cloud dokumentiert\n\n## Brain-Check vor dieser Arbeit\n\n\u2705 Brain query ausgef\u00fchrt (Ergebnis: BRAIN_QUERY_FAILED \u2192 deshalb Integrationstest priorisiert)\n\u2705 Brain store gepr\u00fcft (funktioniert)\n\u2705 Brain-Fallback etabliert\n\n## Integration in bestehende Regelwerke\n\nDie Policy erg\u00e4nzt das BRAIN_GEBOT_V1.md und die Brain-Definition.\nRegelwerks-Index muss aktualisiert werden.",
+            "created_at": "2026-06-11T13:32:39Z",
+            "id": "44e4bc5b3e3347e1",
+            "metadata": {
+              "category": "evidence",
+              "filesize": 830,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/10_evidence/brain/BRAIN_FIRST_POLICY_VERANKERUNG_EVIDENCE_2026-06-11.md"
+            },
+            "score": 6,
+            "tokens": "brain first policy verankerung evidence datum berlin 2026 06 11 14 00 0200 erstellte dateien workspace nexify 03_regelwerke brain_first_policy_v1 md workspace nexify 03_regelwerke brain first policy v1 json inhalt der policy brain_first true vor jeder relevanten arbeit drei kernregeln query store report brain komponenteninventar mit status fallback kette definiert konfigurationskonflikt brain nexifyai cloud dokumentiert brain check vor dieser arbeit brain query ausgef\u00fchrt ergebnis brain_query_failed deshalb integrationstest priorisiert brain store gepr\u00fcft funktioniert brain fallback etabliert integration in bestehende regelwerke die policy erg\u00e4nzt das brain_gebot_v1 md und die brain definition regelwerks index muss aktualisiert werden evidence path workspace nexify 10_evidence brain brain_first_policy_verankerung_evidence_2026 06 11 md category evidence filetype md filesize 830 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:39Z"
+          },
+          {
+            "category": "evidence",
+            "collection": "nexifyai_brain",
+            "content": "# Brain Pending/Fallback \u2014 Evidence\n\n**Datum (Berlin):** 2026-06-11 14:00 +0200\n\n## Pending-Queue-Stand\n\n| Queue | Pfad | Status |\n|---|---|---|\n| Brain Pending Operating Data | /workspace/nexify/11_brain_sync/brain-pending-operating-data.json | \u2705 VORHANDEN |\n| agentmemory Pending Current Session | /workspace/nexify/12_agentmemory/agentmemory-pending-current-session.json | \u2705 VORHANDEN |\n| agentmemory Pending Operating Data | /workspace/nexify/12_agentmemory/agentmemory-pending-operating-data.json | \u2705 VORHANDEN |\n| agentmemory Pending Regelwerke | /workspace/nexify/12_agentmemory/agentmemory-pending-regelwerke.json | \u2705 VORHANDEN |\n\n## Brain-Fallback-Kette\n1. Brain API (http://127.0.0.1:9090) \u2014 prim\u00e4r\n2. Qdrant direkt (http://127.0.0.1:6333) \u2014 Fallback bei Brain-API-Ausfall\n3. Lokale Pending-Dateien \u2014 wenn kein Store m\u00f6glich\n\n## Status\n\u2705 Pending-Infrastruktur vollst\u00e4ndig und betriebsbereit.",
+            "created_at": "2026-06-11T13:32:39Z",
+            "id": "dbedab80574f4e52",
+            "metadata": {
+              "category": "evidence",
+              "filesize": 923,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/10_evidence/brain/BRAIN_PENDING_FALLBACK_EVIDENCE_2026-06-11.md"
+            },
+            "score": 6,
+            "tokens": "brain pending fallback evidence datum berlin 2026 06 11 14 00 0200 pending queue stand queue pfad status brain pending operating data workspace nexify 11_brain_sync brain pending operating data json vorhanden agentmemory pending current session workspace nexify 12_agentmemory agentmemory pending current session json vorhanden agentmemory pending operating data workspace nexify 12_agentmemory agentmemory pending operating data json vorhanden agentmemory pending regelwerke workspace nexify 12_agentmemory agentmemory pending regelwerke json vorhanden brain fallback kette brain api http 127 9090 prim\u00e4r qdrant direkt http 127 6333 fallback bei brain api ausfall lokale pending dateien wenn kein store m\u00f6glich status pending infrastruktur vollst\u00e4ndig und betriebsbereit evidence path workspace nexify 10_evidence brain brain_pending_fallback_evidence_2026 06 11 md category evidence filetype md filesize 923 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:39Z"
+          },
+          {
+            "category": "evidence",
+            "collection": "nexifyai_brain",
+            "content": "# Brain Query/Store/Retrieve/Delete Test \u2014 Evidence\n\n**Datum (Berlin):** 2026-06-11 14:00 +0200\n**Agent:** Claude Code\n\n## Testprotokoll\n\n### A. Query Test\n- Endpoint: POST /query auf http://127.0.0.1:9090\n- Query: \"NeXify Workspace Agentur Operator Systemmaster\"\n- Collection: nexifyai_brain\n- Ergebnis: 3 Treffer, darunter Operational Blockers Report, NeXify Identity, Fertigstellungsdefinition\n- Status: \u2705 PASS\n\n### B. Store Test\n- Endpoint: POST /store auf http://127.0.0.1:9090\n- Collection: nexifyai_memories\n- Content: BRAIN_TEST_ENTRY_20260611_115739 (tempor\u00e4rer Test-Eintrag)\n- Auth: X-Brain-Token gesetzt\n- Ergebnis: created, ID 96f95b597fbc4ddb\n- Status: \u2705 PASS\n\n### C. Retrieve Test\n- Query nach Test-Eintrag in nexifyai_memories\n- Ergebnis: 1 Treffer, vollst\u00e4ndige Metadaten\n- Status: \u2705 PASS\n\n### D. Delete / Cleanup\n- DELETE /delete/96f95b597fbc4ddb\n- Ergebnis: deleted\n- Status: \u2705 PASS\n\n## Fazit\nAlle vier Kernfunktionen (Query, Store, Retrieve, Delete) funktionieren einwandfrei.\nBrain API ist produktiv nutzbar.",
+            "created_at": "2026-06-11T13:32:39Z",
+            "id": "9cef316ce10e4cdc",
+            "metadata": {
+              "category": "evidence",
+              "filesize": 1041,
+              "filetype": "md",
+              "imported_at": "2026-06-11T13:32:36Z",
+              "path": "/workspace/nexify/10_evidence/brain/BRAIN_QUERY_STORE_RETRIEVE_TEST_EVIDENCE_2026-06-11.md"
+            },
+            "score": 6,
+            "tokens": "brain query store retrieve delete test evidence datum berlin 2026 06 11 14 00 0200 agent claude code testprotokoll query test endpoint post query auf http 127 9090 query nexify workspace agentur operator systemmaster collection nexifyai_brain ergebnis treffer darunter operational blockers report nexify identity fertigstellungsdefinition status pass store test endpoint post store auf http 127 9090 collection nexifyai_memories content brain_test_entry_20260611_115739 tempor\u00e4rer test eintrag auth brain token gesetzt ergebnis created id 96f95b597fbc4ddb status pass retrieve test query nach test eintrag in nexifyai_memories ergebnis treffer vollst\u00e4ndige metadaten status pass delete cleanup delete delete 96f95b597fbc4ddb ergebnis deleted status pass fazit alle vier kernfunktionen query store retrieve delete funktionieren einwandfrei brain api ist produktiv nutzbar evidence path workspace nexify 10_evidence brain brain_query_store_retrieve_test_evidence_2026 06 11 md category evidence filetype md filesize 1041 imported_at 2026 06 11t13 32 36z",
+            "updated_at": "2026-06-11T13:32:39Z"
+          }
+        ]
+      },
+      "source": "brain_api",
+      "retries": 0
+    },
+    "error": null,
+    "triggered_at": "2026-06-20T14:58:25.527029+00:00"
+  },
+  "policy": {
+    "gate_used": true,
+    "gate_type": "PolicyGate V1",
+    "evidence_standard": "EVIDENCE_TEMPLATE_V1"
+  }
+}
