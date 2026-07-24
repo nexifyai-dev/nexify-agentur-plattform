@@ -44,7 +44,7 @@ jobs:
         run: npm install --prefer-offline --no-audit
       
       - name: Lint JavaScript (ESLint)
-        run: npm run lint 2>&1 || true
+        run: cd apps/website && npx eslint . 2>&1 || true
         continue-on-error: true
       
       - name: Check YAML syntax
@@ -75,8 +75,8 @@ jobs:
         run: npm ci --prefer-offline 2>&1 || npm install --prefer-offline || true
         continue-on-error: true
       
-      - name: Test JS (Jest/Vitest)
-        run: npm run test 2>&1 || true
+      - name: Test JS (Website tests)
+        run: cd apps/website && node --test tests/*.test.mjs 2>&1 || true
         continue-on-error: true
       
       - name: Backend tests (Python)
