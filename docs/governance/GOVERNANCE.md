@@ -148,9 +148,46 @@ Siehe: `08_evidence/SYSTEM_INTEGRATION_EVIDENCE_2026-07-13.md`
 
 ---
 
-## 4. Betriebsablauf (Daily/Weekly/Monthly)
+## 5. Modellstrategie (§10)
 
-### 4.1 Täglich
+| Modell | Status | Strategie |
+|--------|--------|-----------|
+| DeepSeek V4 (flash/chat/pro/pro-max/pro-none/reasoner) | ✅ Bestehen + Vollintegriert | Primär-Router über 9Router :20128 |
+| Upstage (alle Modelle) | ⏳ Migration geplant | Gestaffelter Ersatz, Validierung pro Modell |
+| GitHub Models (GPT-4o, GPT-5-mini, Claude-Haiku, MAI-Code) | ⏳ Zu ersetzen | Ersatz durch Upstage, Rückfallebene DeepSeek |
+| CX Models (GPT-5.x) | ⏳ Zu ersetzen | Ersatz durch Upstage |
+| Claude-Chat (Sonnet/Opus/Haiku) | ⏳ Zu ersetzen | Ersatz durch Upstage |
+
+**Cost-Brake:** Budget >150% → Task-Abbruch. >200% → P0-Escalation.
+Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md)
+
+---
+
+## 6. Monitoring & Audit-Zyklus (§11)
+
+### Kontinuierlich (pro Agent-Turn)
+| Prüfung | Trigger | Werkzeug |
+|---------|---------|----------|
+| Pre-Task 6 Gates | Jeder Task | `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` |
+| Secret-Scan | Vor jedem Commit | `.pre-commit-config.yaml` |
+| Charta-Deviation-Scan | Jeder Zyklus (dieses Dokument) | Vollprüfung §2 |
+
+### Wöchentlich (Montag)
+- Voll-Scan in `07_audits_reports/`
+- Memory-Audit (Agentmemory + Qdrant)
+- Backup-Verifikation
+
+### Monatlich
+- Deviation-Audit (expert-dev)
+- Design-Quality-Gate (expert-design)
+- Security-Audit (CISO-Profil)
+- FinOps-Review (CFO-Profil)
+
+---
+
+## 7. Betriebsablauf (Daily/Weekly/Monthly)
+
+### 7.1 Täglich
 
 | Zeit | Aktion | Skript/Tool |
 |------|--------|-------------|
@@ -159,15 +196,15 @@ Siehe: `08_evidence/SYSTEM_INTEGRATION_EVIDENCE_2026-07-13.md`
 | 06:30 | Cron-Job-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md` |
 | 18:00 | Daily-Report | `07_audits_reports/` |
 
-### 4.2 Wöchentlich
+### 7.2 Wöchentlich
 
 | Tag | Aktion |
 |-----|--------|
-| Mo | Voll-Scan (`NEXIFY_FULL_SCAN_REPORT.md`) |
+| Mo | Voll-Scan + Charta-Deviation-Scan |
 | Mi | Memory-Audit (Agentmemory + Qdrant) |
 | Fr | Backup-Verifikation |
 
-### 4.3 Monatlich
+### 7.3 Monatlich
 
 | Aktion | Verantwortlich |
 |--------|---------------|
@@ -178,7 +215,7 @@ Siehe: `08_evidence/SYSTEM_INTEGRATION_EVIDENCE_2026-07-13.md`
 
 ---
 
-## 5. Incident-Response
+## 8. Incident-Response
 
 Siehe: `06_sicherheit_policies/INCIDENT_RESPONSE_POLICY_V1.md`
 
@@ -189,9 +226,19 @@ Siehe: `06_sicherheit_policies/INCIDENT_RESPONSE_POLICY_V1.md`
 | **P2** (Minor) | < 1 Std | DevOps |
 | **P3** (Cosmetic) | Next Sprint | Standard |
 
+### §12 Circuit Breaker
+| Level | Maßnahme |
+|-------|----------|
+| <50% Budget | Normalbetrieb |
+| 50-80% | Cost-Warning (Event-Bus) |
+| 80-100% | Fallback günstigeres Modell |
+| 100-150% | Task P2, Prüfung optional |
+| >150% | **Task-Abbruch** |
+| >200% | **P0-Escalation** |
+
 ---
 
-## 6. Quality-Gate-Hierarchie
+## 9. Quality-Gate-Hierarchie
 
 ```
 Pre-Task Gate (6 Checks)
@@ -213,7 +260,7 @@ Siehe: `10_quality_gates/BOUNDARY_ENFORCEMENT_GATES_V1.md`
 
 ---
 
-## 7. Agenten-Orchestrierung
+## 10. Agenten-Orchestrierung
 
 Siehe: `11_fuehrung/DOS_AGENT_GOVERNANCE.md`
 
