@@ -1,5 +1,9 @@
 # Instincts generated from https://github.com/nexifyai-dev/nexify-agentur-plattform
+<<<<<<< HEAD
 # Generated: 2026-07-24T10:35:35.154Z
+=======
+# Generated: 2026-07-24T12:58:50.914Z
+>>>>>>> origin/main
 # Version: 2.0
 # NOTE: This file supplements (does not replace) any existing curated instincts.
 # High-confidence manually curated instincts should be preserved alongside these.
@@ -17,11 +21,19 @@ source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use conventional commit format with prefixes: chore, feat, fix
 
 ## Evidence
 
 - 5 commits analyzed
+=======
+Use conventional commit format with prefixes: feat, fix, chore, docs, refactor
+
+## Evidence
+
+- 31 commits analyzed
+>>>>>>> origin/main
 - Detected conventional commit pattern
 - Examples: chore: remove files with invalid colon chars for Windows, fix: update deploy workflow for Cloudflare Tunnel, add .env.example
 
@@ -38,12 +50,21 @@ source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Write moderate-length commit messages (~64 characters)
 
 ## Evidence
 
 - Average commit message length: 64 chars
 - Based on 5 commits
+=======
+Write moderate-length commit messages (~75 characters)
+
+## Evidence
+
+- Average commit message length: 75 chars
+- Based on 31 commits
+>>>>>>> origin/main
 
 ---
 id: nexify-agentur-plattform-naming-files
@@ -126,14 +147,44 @@ Name test files using the pattern: *.test.ts
 - Consistent across test files
 
 ---
+<<<<<<< HEAD
 id: nexify-agentur-plattform-workflow-project-snapshot-or-cleanup
 trigger: "when doing project snapshot or cleanup"
+=======
+id: nexify-agentur-plattform-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
+---
+
+# Nexify Agentur Plattform Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~19x per month
+- Files: **/api/**
+
+---
+id: nexify-agentur-plattform-workflow-ecc-bundle-integration
+trigger: "when doing ecc bundle integration"
+>>>>>>> origin/main
 confidence: 0.6
 domain: workflow
 source: repo-analysis
 source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
 ---
 
+<<<<<<< HEAD
 # Nexify Agentur Plattform Workflow Project Snapshot Or Cleanup
 
 ## Action
@@ -142,17 +193,94 @@ Follow the project-snapshot-or-cleanup workflow:
 1. Identify files that need to be removed or cleaned (e.g., invalid path chars).
 2. Remove or update those files across the codebase.
 3. Commit all changes in a single large commit with a chore/cleanup message.
+=======
+# Nexify Agentur Plattform Workflow Ecc Bundle Integration
+
+## Action
+
+Follow the ecc-bundle-integration workflow:
+1. Add or update .claude/ecc-tools.json
+2. Add or update .claude/identity.json
+3. Add or update .claude/skills/[skill-name]/SKILL.md
+4. Add or update .claude/homunculus/instincts/inherited/[skill-name]-instincts.yaml
+5. Add or update .claude/commands/project-snapshot-or-cleanup.md
+6. Add or update .codex/config.toml
+7. Add or update .codex/AGENTS.md
+8. Add or update .codex/agents/[agent].toml
+9. Add or update .agents/skills/[skill-name]/SKILL.md
+10. Add or update .agents/skills/[skill-name]/agents/openai.yaml
+>>>>>>> origin/main
 
 ## Evidence
 
 - Workflow detected from commit patterns
 - Frequency: ~2x per month
+<<<<<<< HEAD
 - Files: .gitignore, .gitlab-ci.yml, .github/workflows/*
 
 ---
 id: nexify-agentur-plattform-instinct-file-naming
 trigger: "When creating a new file"
 confidence: 0.85
+=======
+- Files: .claude/ecc-tools.json, .claude/identity.json, .claude/skills/*/SKILL.md
+
+---
+id: nexify-agentur-plattform-workflow-ci-cd-workflow-update
+trigger: "when doing ci cd workflow update"
+confidence: 0.65
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
+---
+
+# Nexify Agentur Plattform Workflow Ci Cd Workflow Update
+
+## Action
+
+Follow the ci-cd-workflow-update workflow:
+1. Edit .github/workflows/*.yml to add/fix jobs (ci.yml, deploy-vps.yml, mirror-to-gitlab.yml, secret-scan.yml, etc.)
+2. Edit .gitlab-ci.yml for GitLab pipeline changes
+3. Edit .gitignore if needed for workflow artifacts
+4. Add or update related documentation (e.g., docs/architecture/DEVIATION-REPORT-*.md, docs/operations/REPO-SYNC-STRATEGY.md)
+5. Add or update scripts for deployment/sync (e.g., scripts/sync-workspace-to-vps.sh)
+6. Commit and push changes to trigger new workflow runs
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~3x per month
+- Files: .github/workflows/*.yml, .gitlab-ci.yml, .gitignore
+
+---
+id: nexify-agentur-plattform-workflow-monorepo-workspace-config
+trigger: "when doing monorepo workspace config"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/nexifyai-dev/nexify-agentur-plattform
+---
+
+# Nexify Agentur Plattform Workflow Monorepo Workspace Config
+
+## Action
+
+Follow the monorepo-workspace-config workflow:
+1. Edit or create pnpm-workspace.yaml to include new packages/apps
+2. Edit or create root package.json with workspace metadata and scripts
+3. Commit and push to validate via CI
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: pnpm-workspace.yaml, package.json
+
+---
+id: nexify-agentur-plattform-instinct-file-naming
+trigger: "When creating or renaming a file in the codebase."
+confidence: 0.9
+>>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -162,6 +290,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Name the file using snake_case convention
 
 ## Evidence
@@ -173,6 +302,18 @@ Name the file using snake_case convention
 id: nexify-agentur-plattform-instinct-function-naming
 trigger: "When defining a new function"
 confidence: 0.8
+=======
+Use snake_case for file names.
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files: snake_case
+
+---
+id: nexify-agentur-plattform-instinct-function-naming
+trigger: "When defining a new function."
+confidence: 0.9
+>>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -182,6 +323,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use camelCase for function names
 
 ## Evidence
@@ -192,6 +334,18 @@ Use camelCase for function names
 id: nexify-agentur-plattform-instinct-class-naming
 trigger: "When defining a new class"
 confidence: 0.8
+=======
+Use camelCase for function names.
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions: camelCase
+
+---
+id: nexify-agentur-plattform-instinct-class-naming
+trigger: "When defining a new class."
+confidence: 0.9
+>>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -201,6 +355,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use PascalCase for class names
 
 ## Evidence
@@ -211,6 +366,18 @@ Use PascalCase for class names
 id: nexify-agentur-plattform-instinct-constant-naming
 trigger: "When defining a constant"
 confidence: 0.8
+=======
+Use PascalCase for class names.
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes: PascalCase
+
+---
+id: nexify-agentur-plattform-instinct-constant-naming
+trigger: "When defining a constant."
+confidence: 0.9
+>>>>>>> origin/main
 domain: code-style
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
@@ -220,6 +387,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use SCREAMING_SNAKE_CASE for constant names
 
 ## Evidence
@@ -229,6 +397,17 @@ Use SCREAMING_SNAKE_CASE for constant names
 ---
 id: nexify-agentur-plattform-instinct-import-style
 trigger: "When importing modules"
+=======
+Use SCREAMING_SNAKE_CASE for constant names.
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: nexify-agentur-plattform-instinct-import-style
+trigger: "When importing modules in Python code."
+>>>>>>> origin/main
 confidence: 0.8
 domain: code-style
 source: repo-analysis
@@ -239,6 +418,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use relative import paths
 
 ## Evidence
@@ -248,6 +428,17 @@ Use relative import paths
 ---
 id: nexify-agentur-plattform-instinct-export-style
 trigger: "When exporting modules or functions"
+=======
+Use relative imports.
+
+## Evidence
+
+- Pattern in codeStyle.importStyle: relative
+
+---
+id: nexify-agentur-plattform-instinct-export-style
+trigger: "When exporting code elements."
+>>>>>>> origin/main
 confidence: 0.8
 domain: code-style
 source: repo-analysis
@@ -258,6 +449,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use named exports
 
 ## Evidence
@@ -268,11 +460,24 @@ Use named exports
 id: nexify-agentur-plattform-instinct-test-file-pattern
 trigger: "When creating a new test file"
 confidence: 0.85
+=======
+Use named exports.
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle: named
+
+---
+id: nexify-agentur-plattform-instinct-test-file-naming
+trigger: "When creating a test file."
+confidence: 0.8
+>>>>>>> origin/main
 domain: testing
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
 ---
 
+<<<<<<< HEAD
 # Nexify Agentur Plattform Instinct Test File Pattern
 
 ## Action
@@ -286,6 +491,21 @@ Name the test file with a .test.ts suffix
 ---
 id: nexify-agentur-plattform-instinct-test-type
 trigger: "When writing tests"
+=======
+# Nexify Agentur Plattform Instinct Test File Naming
+
+## Action
+
+Name the file with the pattern *.test.ts.
+
+## Evidence
+
+- Pattern in testing.filePattern: *.test.ts
+
+---
+id: nexify-agentur-plattform-instinct-test-type
+trigger: "When writing tests."
+>>>>>>> origin/main
 confidence: 0.7
 domain: testing
 source: repo-analysis
@@ -296,6 +516,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Write unit tests as the primary test type
 
 ## Evidence
@@ -324,6 +545,17 @@ Place test files in mixed locations (not strictly separated from source)
 ---
 id: nexify-agentur-plattform-instinct-commit-format
 trigger: "When writing a commit message"
+=======
+Write unit tests.
+
+## Evidence
+
+- Pattern in testing.testTypes: unit
+
+---
+id: nexify-agentur-plattform-instinct-commit-format
+trigger: "When making a git commit."
+>>>>>>> origin/main
 confidence: 0.9
 domain: git
 source: repo-analysis
@@ -334,6 +566,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Use conventional commit prefixes: chore, feat, or fix, followed by a colon and a concise message
 
 ## Evidence
@@ -344,6 +577,18 @@ Use conventional commit prefixes: chore, feat, or fix, followed by a colon and a
 ---
 id: nexify-agentur-plattform-instinct-commit-length
 trigger: "When composing a commit message"
+=======
+Use conventional commit prefixes: feat, fix, chore, docs, refactor.
+
+## Evidence
+
+- Pattern in commits.prefixes
+- Seen in commit: 'fix: update deploy workflow for Cloudflare Tunnel, add .env.example'
+
+---
+id: nexify-agentur-plattform-instinct-commit-length
+trigger: "When writing a commit message."
+>>>>>>> origin/main
 confidence: 0.7
 domain: git
 source: repo-analysis
@@ -354,6 +599,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
+<<<<<<< HEAD
 Keep the commit message around 64 characters on average
 
 ## Evidence
@@ -363,12 +609,24 @@ Keep the commit message around 64 characters on average
 ---
 id: nexify-agentur-plattform-instinct-snapshot-cleanup
 trigger: "When initializing a new repo state or cleaning up files for compatibility (e.g., Windows path issues)"
+=======
+Keep the commit message around 75 characters.
+
+## Evidence
+
+- Pattern in commits.averageLength: 75
+
+---
+id: nexify-agentur-plattform-instinct-ecc-bundle-integration
+trigger: "When someone wants to add a new ECC bundle (agent/skill) to the platform."
+>>>>>>> origin/main
 confidence: 0.95
 domain: workflow
 source: repo-analysis
 source_repo: nexifyai-dev/nexify-agentur-plattform
 ---
 
+<<<<<<< HEAD
 # Nexify Agentur Plattform Instinct Snapshot Cleanup
 
 ## Action
@@ -379,4 +637,56 @@ Identify problematic files, remove or update them, and commit all changes in a s
 
 - Seen in commit: 'chore: remove files with invalid colon chars for Windows'
 - Workflow: project-snapshot-or-cleanup
+=======
+# Nexify Agentur Plattform Instinct Ecc Bundle Integration
+
+## Action
+
+Add or update all relevant ECC bundle files across .claude, .codex, and .agents directories as per the workflow steps.
+
+## Evidence
+
+- Workflow: ecc-bundle-integration
+- Pattern in files: .claude/ecc-tools.json, .claude/skills/*/SKILL.md, etc.
+
+---
+id: nexify-agentur-plattform-instinct-ci-cd-workflow-update
+trigger: "When someone wants to fix, expand, or add CI/CD automation for backend/frontend or infrastructure."
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: nexifyai-dev/nexify-agentur-plattform
+---
+
+# Nexify Agentur Plattform Instinct Ci Cd Workflow Update
+
+## Action
+
+Edit or add CI/CD workflow files, update related documentation and scripts, and commit changes to trigger workflow runs.
+
+## Evidence
+
+- Workflow: ci-cd-workflow-update
+- Pattern in files: .github/workflows/*.yml, .gitlab-ci.yml, docs/architecture/DEVIATION-REPORT-*.md
+
+---
+id: nexify-agentur-plattform-instinct-monorepo-workspace-config
+trigger: "When someone wants to add new apps/packages to the monorepo or fix workspace-related CI errors."
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: nexifyai-dev/nexify-agentur-plattform
+---
+
+# Nexify Agentur Plattform Instinct Monorepo Workspace Config
+
+## Action
+
+Edit or create pnpm-workspace.yaml and package.json to include new packages/apps and validate via CI.
+
+## Evidence
+
+- Workflow: monorepo-workspace-config
+- Pattern in files: pnpm-workspace.yaml, package.json
+>>>>>>> origin/main
 

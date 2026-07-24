@@ -1,8 +1,19 @@
+# FILE: .gitlab-ci.yml
+# NIR: 24.07.2026 13:20
+# NAME: NeXifyAI Agent (GitLab CI/CD)
+# TEAM: NeXifyAI DevOps
+# WHAT: GitLab Pipeline — Test, Build, Deploy lokal auf VPS
+# WHY: Lokale Orchestration + Redundanz zu GitHub Actions
+# DEPENDS: GitLab Runner (Docker), Docker registry access
+# DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
+
 stages:
-  - validate
+  - lint
   - test
+  - build
   - deploy
 
+<<<<<<< HEAD
 # === VALIDATE ===
 validate:backend:
   stage: validate
@@ -36,10 +47,82 @@ test:backend:
   only: [main, merge_requests]
 
 # === DEPLOY (VPS — GitLab Runner auf dem VPS selbst) ===
+=======
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+# === LINT ===
+lint:
+  stage: lint
+  image: node:20-alpine
+  script:
+    - npm install --prefer-offline
+    - npm run lint 2>&1 || true
+  allow_failure: true
+  only:
+    - branches
+
+# === TEST ===
+test:
+  stage: test
+  image: node:20-alpine
+  script:
+    - npm install --prefer-offline
+    - npm run test 2>&1 || true
+  allow_failure: true
+  only:
+    - branches
+  artifacts:
+    reports:
+      junit: test-results.xml
+    paths:
+      - coverage/
+    expire_in: 30 days
+
+# === BUILD ===
+build:vitrine:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f deploy/docker/Dockerfile.vitrine -t $DOCKER_IMAGE:vitrine-$CI_COMMIT_SHA -t $DOCKER_IMAGE:vitrine-latest ./apps/vitrine
+    - docker push $DOCKER_IMAGE:vitrine-$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE:vitrine-latest
+  only:
+    - main
+    - develop
+
+build:backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f deploy/docker/Dockerfile.backend -t $DOCKER_IMAGE:backend-$CI_COMMIT_SHA -t $DOCKER_IMAGE:backend-latest ./backend
+    - docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE:backend-latest
+  only:
+    - main
+    - develop
+
+# === DEPLOY ===
+>>>>>>> origin/main
 deploy:vps:
   stage: deploy
   image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client git
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -p 22 $VPS_HOST >> ~/.ssh/known_hosts 2>/dev/null
   script:
+<<<<<<< HEAD
     - echo "GitLab CI Deploy — auto-sync auf VPS /opt/nexifyai-cloud"
     - apk add --no-cache git openssh-client bash curl
     - cd /opt/nexifyai-cloud
@@ -62,3 +145,14 @@ include:
 secret_detection:
   stage: validate
   only: [main, merge_requests]
+=======
+    - echo "🚀 Deploying to VPS..."
+    - ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "cd /opt/nexifyai/repos/nexify-agentur-plattform && git fetch origin main && git reset --hard origin/main && docker-compose up --build -d"
+    - echo "✅ Deployment complete"
+  environment:
+    name: production
+    url: https://nexifyai.cloud
+  only:
+    - main
+  when: manual
+>>>>>>> origin/main

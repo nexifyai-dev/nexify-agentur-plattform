@@ -4,7 +4,7 @@ import { RevealGroup } from "@/components/reveal";
 const trustItems = [
   { icon: Shield, label: "Kein Risiko", detail: "Kostenlose Erstberatung" },
   { icon: Zap, label: "Schnell", detail: "Website in 1–3 Tagen" },
-  { icon: Clock, label: "Transparent", detail: "Festpreis pro Arbeitstag" },
+  { icon: Clock, label: "Transparent", detail: "Fester Tagessatz" },
   { icon: FileCheck, label: "Geprüft", detail: "Tests vor Übergabe" },
   { icon: Headphones, label: "Direkt", detail: "Persönlicher Ansprechpartner" },
   { icon: Check, label: "B2B", detail: "Ausschließlich für Unternehmen" },

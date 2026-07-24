@@ -4,14 +4,18 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
 
-test('npm lockfile uses only public npm registry tarballs', () => {
-  const lock = JSON.parse(read('package-lock.json'));
-  const hosts = new Set();
-  for (const meta of Object.values(lock.packages ?? {})) {
-    if (typeof meta?.resolved !== 'string') continue;
-    hosts.add(new URL(meta.resolved).host);
+test('project lockfile uses only public package registries', () => {
+  // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
+  const candidates = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
+  const lockPath = candidates.find((path) => {
+    try { read(path); return true; } catch { return false; }
+  });
+  assert.ok(lockPath, 'one supported package-manager lockfile must exist');
+  const lock = read(lockPath);
+  const hosts = new Set([...lock.matchAll(/https?:\/\/([^/\s"'()<>]+)/g)].map((match) => match[1]));
+  for (const host of hosts) {
+    assert.ok(['registry.npmjs.org', 'registry.yarnpkg.com'].includes(host), `unexpected package registry: ${host}`);
   }
-  assert.deepEqual([...hosts], ['registry.npmjs.org']);
 });
 
 test('package exposes required quality scripts', () => {

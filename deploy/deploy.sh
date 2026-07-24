@@ -1,6 +1,9 @@
 #!/bin/sh
+# NIR: 24.07.2026 — VPS-Pfade aktualisiert
+# HACK: Port :3000 belegt durch old hermes-webui (PID 3441715). 
+# Vor Deploy: old webui stoppen oder Website-Port auf 3001 ändern.
 set -e
-TRAEFIK_DIR=/docker/traefik-vsrs/dynamic
+TRAEFIK_DIR=/etc/traefik/dynamic
 cd /opt/nexifyai-cloud
 git stash || true
 git pull origin main
