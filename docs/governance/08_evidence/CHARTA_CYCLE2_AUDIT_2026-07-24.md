@@ -72,3 +72,24 @@
 ---
 
 *Generiert von Copilot CLI (Systemmaster-Agent) am 2026-07-24*
+
+---
+
+# Nachtrag Zyklus 3 (Vollprüfung Referenzen)
+
+## Fix 6 (D07): Cost-Brake in FINANCE_REGISTER
+
+- **Ort:** `12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md` §6 (neu)
+- **Inhalt:**
+  - Cost-Brake Thresholds: 6 Stufen <50% bis >200%
+  - Iterationsgrenzen: 50 Dateien/20 Deviations/24 Zyklen/4h Commit
+  - Charta-Governance-Hinweis: nicht durch Agenten änderbar
+- **Ergebnis:** D07 geschlossen — Cost-Brake jetzt in GOVERNANCE.md §8 + FINANCE_REGISTER §6 referenziert
+
+## Zyklus 3 Fazit
+
+- Alle Referenzen zwischen GOVERNANCE.md und FINANCE_REGISTER konsistent
+- Keine neuen P1/P2-Deviationen im Repo-Kontext
+- Zyklus 4: VPS-Status-Prüfung (wenn Verbindung möglich) / tiefergehende Legacy-Konsolidierung
+
+---
