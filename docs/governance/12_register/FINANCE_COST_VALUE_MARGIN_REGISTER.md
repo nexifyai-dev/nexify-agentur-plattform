@@ -133,4 +133,37 @@ des NeXify AI Systems für Transparenz und Steuerung.
 
 ---
 
+---
+
+## 6. Circuit Breaker (§12 Charta)
+
+### 6.1 Cost-Brake Thresholds (LLM-Kosten)
+
+| Level | Budget-Auslastung | Maßnahme |
+|-------|------------------|----------|
+| Grün | <50% | Normalbetrieb |
+| Gelb | 50-80% | Cost-Warning an Event-Bus |
+| Orange | 80-100% | Fallback auf günstigeres Modell (DeepSeek) |
+| Rot | 100-150% | Task auf P2 herabstufen, Prüfung optional |
+| **Kritisch** | **>150%** | **Task-Abbruch** |
+| **P0** | **>200%** | **P0-Escalation an CEO** |
+
+### 6.2 Iterationsgrenzen (pro Zyklus)
+
+| Limit | Wert | Maßnahme bei Überschreitung |
+|-------|------|----------------------------|
+| Datei-Änderungen | 50 | Automatischer Commit-Zwang |
+| Deviatonen/Zyklus | 20 | Pausieren, Report-Generierung |
+| Zyklen/Tag | 24 | 12h Cooldown (siehe §12) |
+| Stunden ohne Commit | 4 | Zwangs-Commit mit Status-Report |
+
+### 6.3 Charta-Governance
+
+- Diese Schwellen sind **nicht durch den Agenten änderbar** (§12 Abs. 2)
+- Umsetzung auf Gateway-/Infrastrukturebene erforderlich
+- Siehe: `GOVERNANCE.md §8` (Incident-Response / §12 Circuit Breaker)
+
+---
+
 *Erstellt: 2026-06-23 | Systemmaster Agent | NeXify AI OS*
+*Aktualisiert: 2026-07-24 | §12 Cost-Brake integriert (Zyklus 2/3)*
