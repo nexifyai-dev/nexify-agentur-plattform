@@ -65,3 +65,23 @@
 | R-03 | GitLab CI repariert: flake8, pytest, deploy-vps |
 | R-04 | GitHub CI erstellt: ci.yml (lint + test + TS check) |
 | R-05 | Colon-Files aus Worktree entfernt (Tree-Clean-Commit) |
+| MCP-01 | github Docker-MCP → github-mcp-server Cloud-Tools migriert |
+| MCP-02 | playwright npx-MCP → playwright-browser Cloud-Tools migriert |
+| MCP-03 | stripe MCP als HTTP-Cloud hinzugefügt (Key pending) |
+| COM-01 | Hermes-SSO Profile: alle 16 via Session-Skript validiert |
+
+---
+
+## NEUE ABWEICHUNG (2026-07-24T14:00+0200)
+
+| ID | Abweichung | Soll | Ist | Impact |
+|----|-----------|------|-----|--------|
+| **C-07** | VPS SSH-Zugang | Funktionsfähig (Key auth) | BLOCKED — alle 9 lokalen SSH-Keys abgelehnt | 🔴 VPS-Vollprüfung unmöglich, alle C/H-Abweichungen blockiert |
+
+### SSH-Diagnose (2026-07-24)
+- Host 72.62.152.47 antwortet auf TCP/22
+- ED25519 Host-Key geändert (vorher ECDSA) → VPS wurde neu aufgesetzt oder OS upgraded
+- Authentifizierung: publickey,password
+- Alle 9 lokalen Keys abgelehnt (nexify_vps, id_ed25519_hostinger_vps, id_ed25519_vps, id_rsa_nexify, id_ed25519, circleci_nexify, nexify_deploy, mydispatch_ed25519, id_ed25519_github)
+- Nächste Schritte: Hostinger API-Token oder manueller Key-Upload via Hostinger-Dashboard nötig
+- VPS_INFRA.md ist 18 Tage veraltet (Stand 06.07.2026)
