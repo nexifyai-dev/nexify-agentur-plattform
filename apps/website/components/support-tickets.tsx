@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronDown, LifeBuoy, Send } from "lucide-react";
 import { api } from "@/lib/auth";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Ticket = { id: string; subject: string; status: string; source: string; created_at: string };
@@ -16,6 +16,13 @@ const T = {
     open: "Offen", answered: "Beantwortet", reply: "Antwort schreiben …",
     note: "Unser AI-Support antwortet in der Regel innerhalb von 30 Minuten – zusätzlich per E-Mail.",
     you: "Sie", ai: "NeXify AI Support", admin: "Pascal (NeXify)",
+  },
+  en: {
+    title: "Support Tickets", newTicket: "New Ticket", subject: "Subject", message: "Your message …", create: "Create Ticket",
+    empty: "No tickets yet. We are always here for you if you have any questions.",
+    open: "Open", answered: "Answered", reply: "Write reply …",
+    note: "Our AI support typically responds within 30 minutes – also via email.",
+    you: "You", ai: "NeXify AI Support", admin: "Pascal (NeXify)",
   },
   nl: {
     title: "Support-tickets", newTicket: "Nieuw ticket", subject: "Onderwerp", message: "Uw bericht …", create: "Ticket openen",

@@ -21,20 +21,22 @@ Analysiere die erhaltene Aufgabe nicht nur oberflächlich. **Hinterfrage die imp
 ### 1.2 Recherche-Zwang (PROACTIVE-007 — 12 Quellen Pre-Flight)
 Durchsuche das gesamte verfügbare Systemwissen vor jeder Aktion:
 
-| Quelle | Pfad/Endpoint | Zweck |
-|--------|--------------|-------|
-| [Q01] MASTERPLAN.md | docs/MASTERPLAN.md | Systemzustand verstehen |
-| [Q02] BRAIN API | http://127.0.0.1:9090 | Governance-Wissen abrufen |
-| [Q03] AGENTMEMORY | http://127.0.0.1:3111 | Session-Historie prüfen |
-| [Q04] QDRANT | http://127.0.0.1:6333 (4 Cols) | Semantische Muster |
-| [Q05] SKILLS-REPO | src/automation/skills-repository/ | 434 Agent-Vorlagen |
-| [Q06] LEGACY (403 Regeln) | /workspace/nexify/31_oracle/ | Historische Governance |
-| [Q07] FABRIK | /workspace/nexifyai/fabrik/ | Factory-Kontext, Entscheidungen |
-| [Q08] MASTER-SCHEMA | src/automation/prompts/masterSchema.ts | Prompt-Standard V1.5.0 |
-| [Q09] KANBAN/TASKS | /workspace/nexify/08_kanban_tasks/ | Aktuelle Task-Registry |
-| [Q10] PROFIL-SCOPE | config.yaml + SOUL.md | LLM-Policy, Rechte |
-| [Q11] QUELLENREGISTER | nexifyai/fabrik/wissen/QUELLENREGISTER.md | Alle Wissensquellen |
-| [Q12] SHARED STATE | /workspace/nexify/04_register/SHARED_AGENT_STATE.json | Globaler Agenten-Zustand |
+| Quelle | Pfad/Endpoint | Zweck | Status |
+|--------|--------------|-------|--------|
+| [Q01] AGENTS.md | /opt/nexifyai/workspace/AGENTS.md | Systemzustand verstehen | ✅ AKTIV |
+| [Q02] AGENTMEMORY | http://127.0.0.1:3111 | Langzeitgedächtnis, Actions | ✅ AKTIV |
+| [Q03] HERMES MEMORY | memory tool | Durable Facts, Preferences | ✅ AKTIV |
+| [Q04] GDOK GOVERNANCE | /opt/nexifyai/repos/.../governance/ | Regelwerke, SOPs, Evidence | ✅ AKTIV |
+| [Q05] FACTORY | http://localhost:3100 | Skill-Verwaltung (Paperclip) | ✅ AKTIV |
+| [Q06] HERMES TAPS | davila7/claude-code-templates | Skill-Quellen via GitHub | ✅ AKTIV |
+| [Q07] 9ROUTER | http://127.0.0.1:20128/v1 | LLM-Routing (61 Modelle) | ✅ AKTIV |
+| [Q08] CONFIG.YAML | ~/.hermes/config.yaml + profiles | LLM-Policy, Rechte | ✅ AKTIV |
+| [Q09] CRON JOBS | hermes cronjob list | Automatisierte Tasks | ✅ AKTIV |
+| [Q10] DOCKER PS | docker ps | Container-Health | ✅ AKTIV |
+| [Q11] SYSTEMD | systemctl status | Service-Health | ✅ AKTIV |
+| [Q12] LIGHTRAG | http://127.0.0.1:9621 | Semantische Vektor-Suche | ✅ AKTIV |
+
+> **Updated 2026-07-13:** 4 tote Quellen ersetzt (Brain:9090, Qdrant:6333, Legacy-Workspaces, Kanban). Neue Quellen: Docker, Systemd, Cron, LightRAG, Factory.
 
 ### 1.3 Ergebnis-Skeptizismus (NEU — PROACTIVE-011)
 Hinterfrage JEDE Teillösung und jedes Zwischenergebnis proaktiv:

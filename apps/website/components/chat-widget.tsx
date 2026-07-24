@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, X, Send, FileText, CheckCircle2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -29,6 +29,26 @@ const T = {
     offerGenerated: "Ihr Angebot wurde erstellt. Der E-Mail-Versand wird kurzfristig nachgeholt – wir melden uns persönlich.",
     error: "Verbindung unterbrochen – bitte erneut versuchen.",
     cancel: "Zurück zum Chat",
+  },
+  en: {
+    title: "NeXify AI – Your AI Advisor",
+    status: "Online · responds instantly",
+    greeting:
+      "Hello! I am NeXify AI – your personal AI advisor. So that I can advise you truly individually and create a tailor-made offer for you, tell me briefly: What does your company do – and what are you thinking about? A website, a shop, an app or automation?",
+    placeholder: "Your message …",
+    offerBtn: "Receive offer via email",
+    offerTitle: "Request Your Individual Offer",
+    offerText: "Based on our needs analysis, NeXify AI creates an offer exclusively tailored to you – including PDF – and sends it to you immediately via email.",
+    name: "Your name *",
+    email: "Your email *",
+    companyField: "Company (optional)",
+    phoneField: "Phone (optional, for personal inquiries)",
+    sendOffer: "Send individual offer now",
+    sending: "Your offer is being individually created …",
+    offerSent: "Your individual offer is on its way! Check your inbox – Pascal Courbois will also contact you personally. Prefer to speak directly? Book a fixed phone appointment at /rueckruf.",
+    offerGenerated: "Your offer has been created. The email dispatch will follow shortly – we will contact you personally.",
+    error: "Connection interrupted – please try again.",
+    cancel: "Back to Chat",
   },
   nl: {
     title: "NeXify AI – Uw AI-adviseur",

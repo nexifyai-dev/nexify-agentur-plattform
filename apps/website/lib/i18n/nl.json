@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "title": "NeXify AI — Websites & Software van de vakman · €999/dag",
+    "description": "Persoonlijke B2B-webontwikkeling: websites, shops, apps en automatisering tegen een transparant dagtarief."
+  },
+  "nav": {
+    "leistungen": "Diensten",
+    "preise": "Prijzen",
+    "arbeitsweise": "Werkwijze",
+    "ueber": "Over ons",
+    "kontakt": "Contact"
+  },
+  "header": {
+    "chip": "Persoonlijk beheerd",
+    "cta": "Project aanvragen"
+  },
+  "hero": {
+    "badge": "Ervaring ontmoet AI-ondersteunde snelheid",
+    "headline": "Websites en software van de vakman.",
+    "highlight": "In dagen, niet maanden.",
+    "description": "Pascal Courbois combineert persoonlijke ervaring, duidelijke verantwoordelijkheid en moderne AI-ondersteunde ontwikkeling. Zo ontstaan hoogwaardige websites, shops, webapps, mobiele apps en automatiseringen tegen een transparante prijs.",
+    "cta": "Project bespreken",
+    "ctaSecondary": "Bekijk prijzen",
+    "trust1": "Persoonlijk beheerd",
+    "trust2": "€999 netto / werkdag",
+    "trust3": "Exclusief B2B"
+  },
+  "proof": {
+    "price": "netto per werkdag",
+    "landing": "voor een landingspagina",
+    "website": "voor een website",
+    "shop": "voor een shop of app-MVP"
+  },
+  "services": {
+    "kicker": "Diensten",
+    "title": "Alles wat een digitaal product echt nodig heeft.",
+    "subtitle": "Strategie, ontwerp, ontwikkeling, integraties, tests en oplevering uit één verantwoordelijke hand. Geen anonieme productieketen.",
+    "details": "Bekijk details"
+  },
+  "why": {
+    "kicker": "Waarom deze prijs mogelijk is",
+    "title": "Ervaring bespaart omwegen. AI bespaart doorlooptijd.",
+    "subtitle": "De prijs is niet lager door minder verantwoordelijkheid, maar door minder wrijving: geen opgeblazen teams, geen overdrachtsloops, geen maandenlange productie."
+  },
+  "process": {
+    "kicker": "Werkwijze",
+    "title": "Een duidelijk pad van doel naar getoetst resultaat.",
+    "subtitle": "De omvang wordt vooraf in werkdagen gepland. Elke fase produceert zichtbare besluiten, resultaten en controles."
+  },
+  "calculator": {
+    "kicker": "Projectcalculator",
+    "title": "Transparantie in plaats van pakketnevel.",
+    "description": "Kies de geplande werkdagen. De werkelijke omvang wordt vóór projectstart vastgesteld op basis van functies, inhoud, integraties en acceptatiecriteria.",
+    "days": "werkdagen",
+    "day": "werkdag",
+    "netto": "Netto",
+    "vat": "21% btw",
+    "gross": "Bruto incl. 21% btw",
+    "note": "Bij grensoverschrijdende B2B-diensten binnen de EU kan de verleggingsregeling gelden bij een geldig btw-identificatienummer."
+  },
+  "cta": {
+    "kicker": "Start met een duidelijke kostenraming",
+    "title": "Beschrijf het doel. U ontvangt scope, werkdagen en een prijsbereik.",
+    "description": "Geen vrijblijvende verkooppresentatie, maar een eerste vakmatige beoordeling: wat is nodig, wat kan wachten en hoe is het kosteneffectief te realiseren?",
+    "button": "Project aanvragen",
+    "response": "Reactie op gekwalificeerde aanvragen doorgaans binnen één werkdag",
+    "confidential": "Vertrouwelijke B2B-communicatie"
+  },
+  "faq": {
+    "kicker": "Veelgestelde vragen",
+    "title": "Duidelijke antwoorden vóór de projectstart.",
+    "subtitle": "De belangrijkste punten over prijs, omvang en samenwerking.",
+    "allQuestions": "Bekijk alle vragen"
+  },
+  "testimonials": {
+    "q1": "In drie dagen een complete website — en het resultaat ziet eruit als van een groot bureau. Pascal begreep meteen wat we nodig hadden.",
+    "a1": "Directeur",
+    "i1": "IT-consultancy",
+    "q2": "Eindelijk een ontwikkelaar die eerlijk zegt wat zinvol is en wat niet. Geen technologiegezwets, maar duidelijke aanbevelingen.",
+    "a2": "Eigenaresse",
+    "i2": "Handel",
+    "q3": "De prijs was transparant, de communicatie direct, het resultaat op tijd. Zo zou samenwerking altijd moeten verlopen.",
+    "a3": "CTO",
+    "i3": "Technologie"
+  },
+  "footer": {
+    "description": "AI-ondersteunde websites, shops, apps en automatiseringen — persoonlijk bedacht, ontwikkeld en getest.",
+    "b2b": "Exclusief B2B",
+    "navigation": "Navigatie",
+    "services": "Diensten",
+    "contact": "Contact",
+    "ready": "Klaar om uw project te starten?",
+    "readySub": "Gratis intakegesprek · Reactie binnen 24u",
+    "cta": "Project aanvragen"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Pagina niet gevonden.",
+    "description": "De link is mogelijk verouderd of de URL bevat een typfout.",
+    "back": "Terug naar homepage"
+  },
+  "loading": "Laden …",
+  "backToTop": "Boven"
+}
