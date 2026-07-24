@@ -1,0 +1,64 @@
+# FILE: .github/workflows/gitlab-sync.yml
+# NIR: 24.07.2026 13:15
+# NAME: NeXifyAI Agent (GitHub ↔ GitLab Sync)
+# TEAM: NeXifyAI DevOps
+# WHAT: Mirror repository zu GitLab lokal + trigger CI/CD Pipeline
+# WHY: Dual-CI (GitHub Actions + GitLab Pipeline); lokale GitLab Orchestration
+# DEPENDS: GitLab token, SSH key für Push zu GitLab
+# DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
+
+name: Sync to GitLab + Trigger Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+concurrency:
+  group: gitlab-sync
+  cancel-in-progress: false
+
+env:
+  GITLAB_HOST: srv1243952.hstgr.cloud
+  GITLAB_PORT: 8922
+  GITLAB_GROUP: nexifyai
+  GITLAB_PROJECT: nexify-agentur-plattform
+
+jobs:
+  sync-to-gitlab:
+    runs-on: ubuntu-latest
+    name: Mirror → GitLab + Trigger
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config --global user.email "ci@nexifyai.cloud"
+          git config --global user.name "NeXifyAI CI"
+      
+      - name: Add GitLab remote
+        run: |
+          git remote add gitlab http://${{ env.GITLAB_HOST }}:${{ env.GITLAB_PORT }}/${{ env.GITLAB_GROUP }}/${{ env.GITLAB_PROJECT }}.git || true
+      
+      - name: Push to GitLab
+        run: |
+          git push gitlab ${{ github.ref }} --force 2>&1 || echo "⚠️  GitLab push failed (expected if project not mirrored yet)"
+        continue-on-error: true
+      
+      - name: Trigger GitLab Pipeline (if available)
+        run: |
+          GITLAB_URL="http://${{ env.GITLAB_HOST }}:${{ env.GITLAB_PORT }}"
+          PROJECT_ID=$(curl -s "$GITLAB_URL/api/v4/projects?search=${{ env.GITLAB_PROJECT }}" \
+            -H "PRIVATE-TOKEN: ${{ secrets.GITLAB_TOKEN }}" | jq '.[0].id' 2>/dev/null || echo "")
+          
+          if [ -n "$PROJECT_ID" ] && [ "$PROJECT_ID" != "null" ]; then
+            echo "Triggering pipeline for project $PROJECT_ID..."
+            curl -X POST "$GITLAB_URL/api/v4/projects/$PROJECT_ID/pipeline" \
+              -H "PRIVATE-TOKEN: ${{ secrets.GITLAB_TOKEN }}" \
+              -d "ref=${{ github.ref_name }}" 2>&1 || true
+          else
+            echo "⚠️  GitLab project not found or GITLAB_TOKEN not set"
+          fi
+        continue-on-error: true

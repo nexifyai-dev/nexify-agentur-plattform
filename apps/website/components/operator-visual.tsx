@@ -1,6 +1,7 @@
 import { Check, Files, LayoutDashboard, Settings2, Zap } from "lucide-react";
 
 export function OperatorVisual() {
+  // @NEXIFYAI-MARKER: prelogin-visual-copy-trust-20260713
   return (
     <div className="operator-wrap" aria-label="Visualisierung eines NeXify AI Operator-Dashboards">
       <div className="operator-device">
@@ -26,9 +27,9 @@ export function OperatorVisual() {
             {/* ── Metrics Row ── */}
             <div className="operator-metrics">
               <article className="operator-value">
-                <small>Automatisierter Geschäftswert</small>
-                <strong>€ 184.260 <em>/ Monat</em></strong>
-                <span>↗ 18,4 % seit letztem Zyklus</span>
+                <small>Workflow-Status</small>
+                <strong>Geprüft <em>/ bereit</em></strong>
+                <span>Klare Übergabepunkte dokumentiert</span>
                 <svg viewBox="0 0 320 48" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
@@ -43,7 +44,7 @@ export function OperatorVisual() {
               <article className="operator-mini">
                 <small>Autonomiegrad</small>
                 <span>mit Policy-Gates</span>
-                <div className="operator-gauge"><b>82%</b></div>
+                <div className="operator-gauge"><b>klar</b></div>
               </article>
             </div>
 
@@ -71,9 +72,9 @@ export function OperatorVisual() {
 
             {/* ── Task List ── */}
             <div className="operator-tasks">
-              <div><i /><b>Lead-Qualifizierung D/A/CH</b><span>fertig</span></div>
-              <div><i /><b>Portal-Release prüfen</b><span>läuft</span></div>
-              <div><i /><b>Angebot vorbereiten</b><span>bereit</span></div>
+              <div><i /><b>Anfrage einordnen</b><span>fertig</span></div>
+              <div><i /><b>Qualitätsprüfung</b><span>läuft</span></div>
+              <div><i /><b>Nächsten Schritt vorbereiten</b><span>bereit</span></div>
             </div>
           </div>
         </div>
