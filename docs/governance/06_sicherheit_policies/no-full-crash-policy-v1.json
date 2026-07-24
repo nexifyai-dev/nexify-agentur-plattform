@@ -1,0 +1,66 @@
+{
+  "policy": {
+    "name": "NO FULL CRASH POLICY V1",
+    "version": "1.0.0",
+    "status": "BINDING",
+    "rank": 3,
+    "created": "2026-06-11",
+    "last_reviewed": "2026-06-11",
+    "enforcement": "CI_GATE_AUTOMATED",
+    "scope": "ALL_NEXIFY_SYSTEMS"
+  },
+  "protected_systems": {
+    "CRITICAL": [
+      "9Router",
+      "Brain/Qdrant",
+      "agentmemory",
+      "Oracle",
+      "Cloudflare/Tunnel/DNS",
+      "Supabase",
+      "Redis/Postgres",
+      "Secret-Management"
+    ],
+    "HIGH": [
+      "Hermes WebUI/Workstation",
+      "Auto-Chat/User-Chat-Driver",
+      "Vercel",
+      "Goose ACC",
+      "Claude Code Systemmaster",
+      "SimpleX Gateway",
+      "MCP Server"
+    ]
+  },
+  "requirements": {
+    "backup": { "required": true, "description": "Vollständiges Backup des betroffenen Systems" },
+    "config_export": { "required": true, "description": "Aktuelle Konfiguration exportieren und sichern" },
+    "rollback_plan": { "required": true, "description": "Dokumentierter Plan zur Wiederherstellung" },
+    "health_baseline": { "required": true, "description": "Aktuelle Gesundheitsmetriken erfassen" },
+    "change_plan": { "required": true, "description": "Detaillierter Änderungsplan mit Schritten" },
+    "risk_level_assignment": { "required": true, "description": "Risikoeinstufung (LOW/MEDIUM/HIGH/CRITICAL)" },
+    "approval_gate": { "required": true, "description": "Festgelegtes Genehmigungsverfahren" },
+    "evidence_template": { "required": true, "description": "Evidence-Dokument vorbereitet" },
+    "post_change_health_check": { "required": true, "description": "Health-Check nach Änderung" }
+  },
+  "risk_levels": {
+    "LOW": { "description": "Kein Ausfallrisiko, nur Dokumentation", "gate": "none", "examples": ["Evidence schreiben", "README aktualisieren"] },
+    "MEDIUM": { "description": "Geringes Ausfallrisiko, degradierter Betrieb möglich", "gate": "code_review", "examples": ["Config-Änderungen mit Rollback", "Plugin-Test"] },
+    "HIGH": { "description": "Ausfallrisiko für Teilsysteme", "gate": "approval_and_review", "examples": ["9Router-Provider ändern", "DNS-Änderung"] },
+    "CRITICAL": { "description": "Vollausfallrisiko für Gesamtsystem", "gate": "multi_stage_gate_plus_staging", "examples": ["9Router-Neustart", "Secret-Rotation", "DB-Migration"] }
+  },
+  "forbidden_actions": [
+    "9Router hart neu starten ohne Rollback",
+    "Config überschreiben ohne Backup",
+    "Provider löschen ohne Prüfung",
+    "nexifyai-combo-llm entfernen oder überschreiben",
+    "Secret-Werte in Klartext in Git/Evidence/Brain/Logs schreiben",
+    "Riskante Live-Änderungen ohne Staging/Shadow-Test",
+    "Vollabsturz riskieren ohne dokumentierten Notfallplan",
+    "Produktive Prompts ohne Promptmaster-Review ändern",
+    "DNS/Tunnel-Änderungen ohne Rollback-Plan",
+    "Datenbank-Migration ohne Backup"
+  ],
+  "violation_tracking": {
+    "required_fields": ["violation_id", "date", "system", "category", "perpetrator", "impact", "immediate_action", "prevention", "evidence_path"],
+    "id_format": "V-{YYYYMMDD}-{NR}"
+  }
+}

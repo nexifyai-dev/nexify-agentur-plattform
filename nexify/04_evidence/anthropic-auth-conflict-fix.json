@@ -1,0 +1,30 @@
+{
+  "id": "claude-startup-auth-fix-2026-06-12",
+  "title": "ANTHROPIC_AUTH_TOKEN Bereinigung",
+  "scope": "global + project + shell + profile + bashrc",
+  "fixes": [
+    {
+      "file": "/root/.claude/settings.json",
+      "change": "removed ANTHROPIC_AUTH_TOKEN line"
+    },
+    {
+      "file": "/workspace/nexify/.claude/settings.json",
+      "change": "removed ANTHROPIC_AUTH_TOKEN line"
+    },
+    {
+      "file": "/root/.profile",
+      "change": "removed export ANTHROPIC_AUTH_TOKEN"
+    },
+    {
+      "file": "/root/.bashrc",
+      "change": "replaced ANTHROPIC_AUTH_TOKEN with ANTHROPIC_API_KEY"
+    },
+    {
+      "file": "/root/.nexify/claude-env.sh",
+      "change": "replaced ANTHROPIC_AUTH_TOKEN fallback with ANTHROPIC_API_KEY fallback"
+    }
+  ],
+  "before": "Both ANTHROPIC_AUTH_TOKEN and ANTHROPIC_API_KEY set",
+  "after": "Only ANTHROPIC_API_KEY set",
+  "verification": "9Router returns HTTP 200 with ANTHROPIC_API_KEY"
+}

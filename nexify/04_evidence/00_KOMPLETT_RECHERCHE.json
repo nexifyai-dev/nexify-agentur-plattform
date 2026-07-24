@@ -1,0 +1,237 @@
+{
+  "id": "bolt-integration-komplett-recherche",
+  "date": "2026-06-23",
+  "agent": "research-agent-hermes",
+  "status": "COMPLETE",
+  "research_sources": {
+    "internet": [
+      {
+        "source": "Anthropic Prompt Caching",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+        "status": "available",
+        "findings": [
+          "Automatic caching with cache_control: ephemeral",
+          "Default TTL: 5 minutes (free refreshes)",
+          "Optional 1h cache (2× base input cost)",
+          "Pricing: Cache Writes 1.25× base, Cache Hits 0.1× base",
+          "Minimum cacheable length: 1024 tokens",
+          "Supported: Tools, System, Messages (not Thinking-Blocks)",
+          "Cache storage: Workspace isolation (Feb 2026+)"
+        ]
+      },
+      {
+        "source": "Anthropic Token Counting",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/token-counting",
+        "status": "available",
+        "findings": [
+          "Endpoint: client.messages.count_tokens()",
+          "Supports: Messages, Tools, Images, PDFs, Extended Thinking",
+          "Billing: Only actual content tokens (system-adds not billed)"
+        ]
+      },
+      {
+        "source": "Nous Research Headroom",
+        "url": "https://github.com/nousresearch/headroom",
+        "status": "not_found_404",
+        "findings": [
+          "Private repository, no public documentation",
+          "Proprietary tool by Nous Research"
+        ]
+      }
+    ],
+    "local": {
+      "evidence_files": [
+        "/workspace/nexify/10_evidence/bolt/rtk/rtk-documentation.md",
+        "/workspace/nexify/10_evidence/bolt/rtk/rtk-status.json",
+        "/workspace/nexify/10_evidence/bolt/rtk/rtk-configuration.json",
+        "/workspace/nexify/10_evidence/bolt/rtk/rtk-test-results.json",
+        "/workspace/nexify/10_evidence/bolt/rtk/rtk-full-integration.json",
+        "/workspace/nexify/10_evidence/bolt/headroom_context_compress_evidence_2026-06-23.md",
+        "/workspace/nexify/10_evidence/bolt/task3_headroom_systemd_service.md",
+        "/workspace/nexify/10_evidence/bolt/caveman-ponytail/caveman-ponytail-sicherstellung.md",
+        "/workspace/nexify/10_evidence/bolt/caveman-ponytail/caveman-ponytail-status.json",
+        "/workspace/nexify/10_evidence/bolt/F01_F02_F05_BOLT_INTEGRATION_2026-06-22.md",
+        "/workspace/nexify/10_evidence/bolt/F03_F04_F06_BOLT_KONFIGURATION_2026-06-22.md"
+      ],
+      "source_directories": [
+        "/workspace/nexify/07_tools_cli/rtk/source/rtk/",
+        "/workspace/nexify/07_tools_cli/caveman/source/caveman/",
+        "/workspace/nexify/07_tools_cli/9router/source/9router/"
+      ],
+      "masterplan": "/workspace/nexify/04_register/BOLT_INTEGRATION_MASTERPLAN.md"
+    }
+  },
+  "bolt_features": {
+    "rtk": {
+      "name": "Response Token Kürzung (Token Saver)",
+      "type": "Hermes Skill + 9Router Filter",
+      "status": "ACTIVE",
+      "savings": "60-90% Input-Tokens",
+      "config": {
+        "enabled": true,
+        "threshold": 0.5,
+        "target_ratio": 0.2,
+        "protect_last_n": 20,
+        "protect_first_n": 3
+      },
+      "filters": [
+        "git-diff (54%)",
+        "git-status",
+        "build-output",
+        "grep",
+        "find",
+        "dedup-log (57%)",
+        "ls",
+        "tree (18%)",
+        "smart-truncate",
+        "read-numbered",
+        "search-list"
+      ],
+      "hermes_skill_path": "~/.hermes/skills/hermes/token-saver/",
+      "critical_findings": []
+    },
+    "headroom": {
+      "name": "Context-Compress",
+      "type": "9Router Proxy (Python/Rust)",
+      "status": "DEPLOYED_BUT_NOT_ACTIVE",
+      "savings": "40-60% Context-Tokens",
+      "config": {
+        "headroomEnabled": false,
+        "headroomUrl": "http://localhost:8787",
+        "headroomCompressUserMessages": false
+      },
+      "service": {
+        "name": "headroom-proxy.service",
+        "version": "0.27.0",
+        "port": 8790,
+        "status": "active (running)"
+      },
+      "critical_findings": [
+        {
+          "issue": "PORT_MISMATCH",
+          "severity": "HIGH",
+          "description": "9Router configured port 8787, Headroom runs on 8790",
+          "fix": "Update headroomUrl to http://localhost:8790"
+        },
+        {
+          "issue": "NOT_ENABLED",
+          "severity": "HIGH",
+          "description": "headroomEnabled is false (default)",
+          "fix": "Set headroomEnabled=true in 9Router DB"
+        }
+      ]
+    },
+    "caveman": {
+      "name": "Output-Compress",
+      "type": "9Router + Caveman Skill",
+      "status": "IMPLEMENTED_BUT_NOT_ACTIVE",
+      "savings": "~65% Output-Tokens (full mode)",
+      "config": {
+        "cavemanEnabled": false,
+        "cavemanLevel": "full"
+      },
+      "modes": {
+        "off": {"intensity": "0%", "description": "No compression"},
+        "lite": {"intensity": "~30%", "description": "Drop filler/hedging, keep grammar"},
+        "full": {"intensity": "~65%", "description": "Terse caveman, fragments OK"},
+        "ultra": {"intensity": "~85%", "description": "Maximum compression, telegraphic"},
+        "wenyan-lite": {"intensity": "~40%", "description": "Semi-classical Chinese"},
+        "wenyan": {"intensity": "~80%", "description": "Classical Chinese"},
+        "wenyan-ultra": {"intensity": "~90%", "description": "Extreme classical compression"}
+      },
+      "compatibility": {
+        "sse_streaming": {"full": "INCOMPATIBLE", "lite": "RISK", "off": "SAFE"},
+        "non_stream": {"full": "COMPATIBLE", "lite": "COMPATIBLE"}
+      },
+      "multi_provider_support": ["openai", "claude", "gemini", "vertex", "antigravity", "kiro", "codex", "cursor", "ollama"],
+      "critical_findings": [
+        {
+          "issue": "SSE_INCOMPATIBILITY",
+          "severity": "HIGH",
+          "description": "Caveman full damages SSE frames in Claude Code",
+          "fix": "Set cavemanLevel=off for SSE streams"
+        },
+        {
+          "issue": "NOT_ENABLED",
+          "severity": "MEDIUM",
+          "description": "cavemanEnabled is false (default)",
+          "fix": "Enable via Dashboard or API"
+        }
+      ]
+    },
+    "ponytail": {
+      "name": "Lazy Senior Dev",
+      "type": "Philosophy Pattern (no code)",
+      "status": "DEFINED",
+      "savings": "Code-Reduktion 30-50%",
+      "principles": {
+        "yagni": "You Ain't Gonna Need It",
+        "reuse_stdlib": "Use existing solutions instead of building new",
+        "deletion_over_addition": "Delete more than you add"
+      },
+      "metric": {
+        "name": "PDR (Ponytail Deletions Ratio)",
+        "formula": "deleted_lines / added_lines",
+        "target": ">= 1.0",
+        "alert_threshold": "< 0.8 (session), < 0.5 (task)"
+      },
+      "critical_findings": [
+        {
+          "issue": "NO_MONITORING",
+          "severity": "LOW",
+          "description": "PDR monitoring not yet implemented",
+          "fix": "Implement in F23 monitoring dashboard"
+        }
+      ]
+    }
+  },
+  "test_results": [
+    {"test": "caveman_output_compressor", "input_tokens": 44, "output_tokens": 41, "reduction_pct": 7, "status": "OK"},
+    {"test": "caveman_microservices", "input_tokens": 64, "output_tokens": 58, "reduction_pct": 9, "status": "OK"},
+    {"test": "input_filter_git", "input_tokens": 102, "output_tokens": 47, "reduction_pct": 54, "status": "OK"},
+    {"test": "input_filter_logs", "input_tokens": 75, "output_tokens": 32, "reduction_pct": 57, "status": "OK"},
+    {"test": "input_filter_tree", "input_tokens": 34, "output_tokens": 28, "reduction_pct": 18, "status": "OK"}
+  ],
+  "integration_patterns": {
+    "task_intake": {"rtk": "ON", "headroom": "ON", "caveman": "terse-style", "ponytail": "yagni-check"},
+    "brain_query": {"rtk": "ON", "headroom": "ON", "caveman": "terse-style", "ponytail": "n/a"},
+    "code_development": {"rtk": "ON", "headroom": "ON", "caveman": "terse-style", "ponytail": "yagni+reuse+pdr"},
+    "filesystem_ops": {"rtk": "ON", "headroom": "ON-many-files", "caveman": "n/a", "ponytail": "n/a"},
+    "git_operations": {"rtk": "ON-always", "headroom": "n/a", "caveman": "n/a", "ponytail": "n/a"},
+    "audit_evidence": {"rtk": "OFF", "headroom": "OFF", "caveman": "OFF", "ponytail": "n/a"},
+    "monitoring_logs": {"rtk": "ON", "headroom": "ON-long-logs", "caveman": "moderate", "ponytail": "n/a"},
+    "customer_projects": {"rtk": "ON", "headroom": "ON-internal", "caveman": "OFF", "ponytail": "yagni"}
+  },
+  "recommendations": [
+    {
+      "priority": "P0",
+      "action": "Fix Headroom port mismatch (8787 → 8790)",
+      "impact": "Headroom non-functional without this fix"
+    },
+    {
+      "priority": "P0",
+      "action": "Enable headroomEnabled=true in 9Router DB",
+      "impact": "Activate context compression"
+    },
+    {
+      "priority": "P1",
+      "action": "Enable cavemanEnabled=true with appropriate level",
+      "impact": "Activate output compression"
+    },
+    {
+      "priority": "P1",
+      "action": "Set cavemanLevel=off for SSE streams",
+      "impact": "Prevent SSE frame damage"
+    },
+    {
+      "priority": "P2",
+      "action": "Implement PDR monitoring in F23",
+      "impact": "Track Ponytail compliance"
+    },
+    {
+      "priority": "P2",
+      "action": "Switch RTK to aggressive config",
+      "impact": "Additional 10-15% token savings"
+    }
+  ]
+}

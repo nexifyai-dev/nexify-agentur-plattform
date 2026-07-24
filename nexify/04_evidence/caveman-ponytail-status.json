@@ -1,0 +1,95 @@
+{
+  "id": "caveman-ponytail-sicherstellung",
+  "date": "2026-06-23",
+  "agent": "9router-admin",
+  "caveman": {
+    "status": "IMPLEMENTED",
+    "integration_level": "FULL",
+    "db_settings": {
+      "cavemanEnabled": {
+        "default": false,
+        "current": "false (not overridden in DB)",
+        "type": "boolean"
+      },
+      "cavemanLevel": {
+        "default": "full",
+        "current": "full (default)",
+        "type": "string",
+        "valid_values": ["off", "lite", "full", "ultra", "wenyan-lite", "wenyan", "wenyan-ultra"]
+      }
+    },
+    "source_files": {
+      "settings_repo": "/workspace/nexify/07_tools_cli/9router/source/9router/src/lib/db/repos/settingsRepo.js",
+      "chat_handler": "/workspace/nexify/07_tools_cli/9router/source/9router/src/sse/handlers/chat.js",
+      "chat_core": "/workspace/nexify/07_tools_cli/9router/source/9router/open-sse/handlers/chatCore.js",
+      "caveman_injector": "/workspace/nexify/07_tools_cli/9router/source/9router/open-sse/rtk/caveman.js",
+      "caveman_prompts": "/workspace/nexify/07_tools_cli/9router/source/9router/open-sse/rtk/cavemanPrompts.js",
+      "dashboard_ui": "/workspace/nexify/07_tools_cli/9router/source/9router/src/app/(dashboard)/dashboard/endpoint/EndpointPageClient.js",
+      "caveman_source": "/workspace/nexify/07_tools_cli/caveman/source/caveman/"
+    },
+    "compression_rates": {
+      "lite": "~30%",
+      "full": "~65%",
+      "ultra": "~85%",
+      "wenyan-lite": "~40%",
+      "wenyan": "~80-90%",
+      "wenyan-ultra": "~90%"
+    },
+    "compatibility": {
+      "sse_streaming": {
+        "full": "INCOMPATIBLE (damages SSE frames)",
+        "lite": "RISK",
+        "off": "SAFE"
+      },
+      "non_stream": {
+        "full": "COMPATIBLE",
+        "lite": "COMPATIBLE"
+      },
+      "recommendation": {
+        "claude_code": "OFF",
+        "other_paths": "lite",
+        "tool_outputs": "ON (RTK)"
+      }
+    },
+    "multi_provider_support": ["openai", "claude", "gemini", "vertex", "antigravity", "kiro", "codex", "cursor", "ollama"]
+  },
+  "ponytail": {
+    "status": "DEFINED",
+    "type": "PHILOSOPHY_PATTERN",
+    "is_coded_feature": false,
+    "principles": {
+      "yagni": "You Ain't Gonna Need It — no code for hypothetical requirements",
+      "reuse_stdlib": "Use existing solutions instead of building new ones",
+      "deletion_over_addition": "Delete more than you add"
+    },
+    "metric": {
+      "name": "PDR (Ponytail Deletions Ratio)",
+      "formula": "deleted_lines / added_lines",
+      "target": ">= 1.0",
+      "alert_threshold": "< 0.8 (session), < 0.5 (task)"
+    },
+    "measurement": "git diff --stat",
+    "documentation": "/workspace/nexify/10_evidence/bolt/F03_F04_F06_BOLT_KONFIGURATION_2026-06-22.md",
+    "monitoring_integration": "PLANNED (F23)"
+  },
+  "evidence_files": {
+    "main_documentation": "/workspace/nexify/10_evidence/bolt/caveman-ponytail/caveman-ponytail-sicherstellung.md",
+    "rtk_configuration": "/workspace/nexify/10_evidence/bolt/rtk/rtk-configuration.json",
+    "rtk_status": "/workspace/nexify/10_evidence/bolt/rtk/rtk-status.json",
+    "rtk_test_results": "/workspace/nexify/10_evidence/bolt/rtk/rtk-test-results.json",
+    "caveman_compatibility": "/workspace/nexify/07_tools_cli/9router/06_evidence/rtk-caveman-claude-code-compatibility.json",
+    "bolt_konfiguration_f04": "/workspace/nexify/10_evidence/bolt/F03_F04_F06_BOLT_KONFIGURATION_2026-06-22.md"
+  },
+  "recommendations": {
+    "caveman": {
+      "action": "Enable cavemanEnabled in 9Router DB",
+      "level": "full for non-SSE, lite or off for SSE streams",
+      "note": "Must be explicitly activated via Dashboard or API"
+    },
+    "ponytail": {
+      "action": "Integrate PDR metric into F23 monitoring dashboard",
+      "automation": "Git hook for per-commit PDR calculation",
+      "note": "Philosophy pattern, no code integration needed"
+    }
+  }
+}

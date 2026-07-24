@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "document": "Customer Data Classification Policy — Machine-readable",
+    "version": "1.0.0",
+    "date": "2026-06-11",
+    "source": "CUSTOMER_DATA_CLASSIFICATION_POLICY.md",
+    "language": "de",
+    "status": "BINDING",
+    "scope": "CUSTOMER_PROJECT + NEXIFY_INTERNAL"
+  },
+  "classification_levels": [
+    { "level": "PUBLIC", "label": "Öffentlich", "description": "Kein Schaden bei Offenlegung", "brain_storage": "✅ Brain (Metadata)" },
+    { "level": "INTERNAL", "label": "Intern", "description": "NeXify-intern, nicht kundenbezogen", "brain_storage": "✅ Brain (Scope: NEXIFY_INTERNAL)" },
+    { "level": "CONFIDENTIAL", "label": "Vertraulich", "description": "Kundenprojektdaten, Geschäftslogik", "brain_storage": "⚠️ Brain (Scope: CUSTOMER_PROJECT, nur Metadata)" },
+    { "level": "RESTRICTED", "label": "Streng vertraulich", "description": "PII, Secrets, Zahlungsdaten", "brain_storage": "❌ NIEMALS Brain, NIEMALS Logs" }
+  ],
+  "customer_projects": [
+    {
+      "id": "CP-001",
+      "name": "Studienkolleg Aachen",
+      "data_types": [
+        { "type": "Projektname / Status", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Repo-URLs", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Deployment-Domain", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Studieninhalte", "classification": "CONFIDENTIAL", "storage": "NUR Kunden-Repo", "brain": "metadata_only" },
+        { "type": "Studentendaten", "classification": "RESTRICTED", "storage": "NUR Kunden-Repo", "brain": false },
+        { "type": "API-Keys / Secrets", "classification": "RESTRICTED", "storage": "NUR Kunden-.env", "brain": false }
+      ]
+    },
+    {
+      "id": "CP-002",
+      "name": "Affilientportal / Bookando",
+      "data_types": [
+        { "type": "Projektname / Status", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Repo-URLs", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Deployment-Domain", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
+        { "type": "Affiliate-Daten", "classification": "CONFIDENTIAL", "storage": "NUR Kunden-Repo", "brain": "metadata_only" },
+        { "type": "Nutzerdaten", "classification": "RESTRICTED", "storage": "NUR Kunden-Repo", "brain": false },
+        { "type": "Zahlungsdaten", "classification": "RESTRICTED", "storage": "NUR Stripe", "brain": false },
+        { "type": "API-Keys / Secrets", "classification": "RESTRICTED", "storage": "NUR Kunden-.env", "brain": false }
+      ]
+    }
+  ],
+  "nexify_internal_data": [
+    { "type": "Systemkonfiguration", "classification": "INTERNAL", "brain": true },
+    { "type": "Agent-Prompts", "classification": "INTERNAL", "brain": true },
+    { "type": "Betriebsdaten (Register)", "classification": "INTERNAL", "brain": true },
+    { "type": "Brain Write Token", "classification": "RESTRICTED", "brain": false },
+    { "type": "9Router API Keys", "classification": "RESTRICTED", "brain": false },
+    { "type": "Cloudflare Tokens", "classification": "RESTRICTED", "brain": false },
+    { "type": "Vercel Tokens", "classification": "RESTRICTED", "brain": false },
+    { "type": "Supabase Credentials", "classification": "RESTRICTED", "brain": false },
+    { "type": "Resend API Keys", "classification": "RESTRICTED", "brain": false }
+  ],
+  "logging_rules": [
+    { "level": "PUBLIC/INTERNAL", "logging_allowed": true },
+    { "level": "CONFIDENTIAL (ohne PII)", "logging_allowed": "⚠️ Nur in strukturierten Logs, rotiert" },
+    { "level": "RESTRICTED", "logging_allowed": false },
+    { "level": "Secrets/Keys", "logging_allowed": false },
+    { "level": "PII", "logging_allowed": false }
+  ],
+  "incident_rules": [
+    "Datenleck → P0 Incident",
+    "Vertrauliche Daten in Logs → Sofort löschen, PII-Patch anwenden",
+    "Secret in Brain → Sofort rotieren, Brain-Eintrag maskieren"
+  ]
+}

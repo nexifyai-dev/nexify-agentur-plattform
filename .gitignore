@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.vercel
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
+__pycache__/
+.env*
+backend/references/

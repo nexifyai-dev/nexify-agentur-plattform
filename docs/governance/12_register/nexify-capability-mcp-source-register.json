@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "title": "NEXIFY CAPABILITY MCP SOURCE REGISTER V1",
+    "date": "2026-06-11",
+    "status": "DRAFT",
+    "owner": "NeXify Architecture Team",
+    "classification": "Internal",
+    "version": "V1-DRAFT",
+    "description": "Zentrales Register aller MCP-Quellen und Capabilities für NeXify"
+  },
+
+  "mcp_sources": [
+    {
+      "mcp_id": "MCP-001",
+      "name": "agentmemory",
+      "source_type": "local Python MCP",
+      "source_url": "memory://agentmemory/",
+      "protocol": "memory-store",
+      "transport": "local IPC",
+      "capabilities": "Memory/State-Management – persistenter Agent-Speicher, Embedding-Suche, kontextuelles Recall",
+      "auth_required": true,
+      "risk_level": "HIGH",
+      "status": "DRAFT",
+      "evidence_ref": "/evidence/mcp-001-arch.md"
+    },
+    {
+      "mcp_id": "MCP-002",
+      "name": "9router",
+      "source_type": "remote/API MCP",
+      "source_url": "https://api.9router.ai/v1",
+      "protocol": "REST/HTTP",
+      "transport": "HTTPS",
+      "capabilities": "AI Router/Model-Dispatch – LLM-Routing, Fallback-Chains, Modell-Auswahl",
+      "auth_required": true,
+      "risk_level": "CRITICAL",
+      "status": "DRAFT",
+      "evidence_ref": "/evidence/mcp-002-router-spec.md"
+    },
+    {
+      "mcp_id": "MCP-003",
+      "name": "filesystem",
+      "source_type": "built-in",
+      "source_url": "file:///",
+      "protocol": "file-protocol",
+      "transport": "stdio",
+      "capabilities": "File-Operationen – read/write/move/copy/list, File-Watcher",
+      "auth_required": false,
+      "risk_level": "LOW",
+      "status": "REGISTERED",
+      "evidence_ref": "/evidence/mcp-003-fs.md"
+    },
+    {
+      "mcp_id": "MCP-004",
+      "name": "github",
+      "source_type": "built-in",
+      "source_url": "https://api.github.com",
+      "protocol": "REST/HTTP",
+      "transport": "HTTPS",
+      "capabilities": "Repository-Management – Issues, PRs, Commits, Code-Review, Actions",
+      "auth_required": true,
+      "risk_level": "MEDIUM",
+      "status": "REGISTERED",
+      "evidence_ref": "/evidence/mcp-004-github.md"
+    },
+    {
+      "mcp_id": "MCP-005",
+      "name": "brave-search",
+      "source_type": "built-in",
+      "source_url": "https://api.search.brave.com",
+      "protocol": "REST/HTTP",
+      "transport": "HTTPS",
+      "capabilities": "Web Search – Internetsuche, News, Zusammenfassungen",
+      "auth_required": true,
+      "risk_level": "MEDIUM",
+      "status": "REGISTERED",
+      "evidence_ref": "/evidence/mcp-005-brave.md"
+    },
+    {
+      "mcp_id": "MCP-006",
+      "name": "NeXify Capability MCP",
+      "source_type": "custom",
+      "source_url": "mcp://nexify/capability/",
+      "protocol": "capability-registry",
+      "transport": "stdio/gRPC",
+      "capabilities": "Tool/Workflow-Registry – Capability-Erkennung, Permission-Prüfung, Workflow-Dispatch",
+      "auth_required": true,
+      "risk_level": "HIGH",
+      "status": "DRAFT",
+      "evidence_ref": "/evidence/mcp-006-capability.md"
+    },
+    {
+      "mcp_id": "MCP-007",
+      "name": "Oracle MCP",
+      "source_type": "planned",
+      "source_url": "mcp://nexify/oracle/",
+      "protocol": "question-dispatch",
+      "transport": "gRPC",
+      "capabilities": "Question/Knowledge/Dispatch – Intent-Klassifikation, Wissensabfrage, Agent-Dispatch",
+      "auth_required": true,
+      "risk_level": "HIGH",
+      "status": "PLANNED",
+      "evidence_ref": "/evidence/mcp-007-oracle.md"
+    },
+    {
+      "mcp_id": "MCP-008",
+      "name": "Secret Management MCP",
+      "source_type": "planned",
+      "source_url": "mcp://nexify/secret/",
+      "protocol": "secret-store",
+      "transport": "gRPC/HSM",
+      "capabilities": "Secret Rotation/Access – Credential-Lifecycle, Vault-Integration, Audit-Logging",
+      "auth_required": true,
+      "risk_level": "CRITICAL",
+      "status": "PLANNED",
+      "evidence_ref": "/evidence/mcp-008-secret.md"
+    }
+  ],
+
+  "capability_categories": [
+    {
+      "category_id": "CAT-01",
+      "name": "Dateisystem-Operationen",
+      "description": "Lesen und Schreiben von Dateien und Verzeichnissen",
+      "risk_level": "MEDIUM",
+      "approval_required": false
+    },
+    {
+      "category_id": "CAT-02",
+      "name": "Netzwerk/API",
+      "description": "Externe API-Aufrufe und Netzwerkkommunikation",
+      "risk_level": "HIGH",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-03",
+      "name": "Secret/Key-Management",
+      "description": "Verwaltung und Zugriff auf Credentials, Schlüssel und Secrets",
+      "risk_level": "CRITICAL",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-04",
+      "name": "Modell-Inferenz",
+      "description": "LLM-Aufrufe über 9Router – Prompt-Execution und Response-Generierung",
+      "risk_level": "MEDIUM",
+      "approval_required": false
+    },
+    {
+      "category_id": "CAT-05",
+      "name": "Code-Ausführung",
+      "description": "Shell-Befehle, Script-Execution und Code-Evaluation",
+      "risk_level": "HIGH",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-06",
+      "name": "Datenbank",
+      "description": "Datenbank-Operationen: Read, Write, Migrationen",
+      "risk_level": "HIGH",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-07",
+      "name": "Kommunikation",
+      "description": "Versand von Nachrichten via E-Mail, Simplex, Messenger",
+      "risk_level": "MEDIUM",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-08",
+      "name": "Deployment",
+      "description": "DNS-Änderungen, Cloud-Infrastruktur, Deployment-Pipelines",
+      "risk_level": "CRITICAL",
+      "approval_required": true
+    },
+    {
+      "category_id": "CAT-09",
+      "name": "Memory/State",
+      "description": "Agent-Speicher und Zustandsverwaltung (Brain/Context)",
+      "risk_level": "MEDIUM",
+      "approval_required": false
+    },
+    {
+      "category_id": "CAT-10",
+      "name": "Recherche",
+      "description": "Websuche und Research via Brave Search u.ä.",
+      "risk_level": "MEDIUM",
+      "approval_required": false
+    }
+  ],
+
+  "permission_categories": [
+    {
+      "perm_id": "PERM-READ",
+      "name": "Lesender Zugriff",
+      "description": "Zugriff auf Ressourcen im Read-Only-Modus",
+      "gate_type": "kein Gate",
+      "audit_required": false,
+      "break_glass": false
+    },
+    {
+      "perm_id": "PERM-WRITE",
+      "name": "Schreibender Zugriff",
+      "description": "Erstellen und Ändern von Ressourcen",
+      "gate_type": "Code Review",
+      "audit_required": false,
+      "break_glass": false
+    },
+    {
+      "perm_id": "PERM-EXECUTE",
+      "name": "Ausführung",
+      "description": "Ausführen von Operationen, Scripts oder Workflows",
+      "gate_type": "Approval Gate",
+      "audit_required": false,
+      "break_glass": false
+    },
+    {
+      "perm_id": "PERM-CONFIGURE",
+      "name": "Konfigurationsänderung",
+      "description": "Änderung von System- und Agent-Konfigurationen",
+      "gate_type": "Multi-Stage Gate",
+      "audit_required": true,
+      "break_glass": false
+    },
+    {
+      "perm_id": "PERM-DELETE",
+      "name": "Löschung",
+      "description": "Entfernen von Ressourcen, Dateien oder Konfigurationen",
+      "gate_type": "Multi-Stage Gate + Backup",
+      "audit_required": true,
+      "break_glass": false
+    },
+    {
+      "perm_id": "PERM-SECRET",
+      "name": "Secret-Zugriff",
+      "description": "Zugriff auf Secrets, Keys und Credentials",
+      "gate_type": "Break Glass + Audit",
+      "audit_required": true,
+      "break_glass": true
+    }
+  ],
+
+  "change_log": [
+    {
+      "version": "V1-DRAFT",
+      "date": "2026-06-11",
+      "author": "NeXify Architecture Team",
+      "change": "Initiales Register – alle 8 MCPs, 10 Capability-Kategorien, 6 Permission-Levels"
+    }
+  ]
+}

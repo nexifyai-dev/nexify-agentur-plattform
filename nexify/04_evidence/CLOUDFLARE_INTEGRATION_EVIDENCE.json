@@ -1,0 +1,182 @@
+{
+  "evidence_type": "cloudflare_integration_complete",
+  "timestamp": "2026-06-23T12:00:00Z",
+  "agent": "Infrastructure Agent",
+  "status": "COMPLETED",
+
+  "cloudflare_token": {
+    "status": "active",
+    "valid": true
+  },
+
+  "free_tier_services": {
+    "total_count": 15,
+    "estimated_monthly_value_usd": 275,
+    "services": [
+      {
+        "name": "Workers",
+        "free_limit": "100K requests/day, 10ms CPU",
+        "status": "implemented",
+        "worker_path": "workers/api-router/",
+        "nexify_use": "API-Gateway, Brain/Qdrant Proxy"
+      },
+      {
+        "name": "Pages",
+        "free_limit": "Unlimited static",
+        "status": "implemented",
+        "worker_path": "pages/",
+        "nexify_use": "Landingpage"
+      },
+      {
+        "name": "R2",
+        "free_limit": "10GB, 1M Class A, 10M Class B, 0 Egress",
+        "status": "implemented",
+        "worker_path": "workers/r2-backup/",
+        "nexify_use": "Backups, Media Storage"
+      },
+      {
+        "name": "KV",
+        "free_limit": "1GB, 100K reads/day, 1K writes/day",
+        "status": "implemented",
+        "worker_path": "workers/kv-cache/",
+        "nexify_use": "Config Cache, Feature Flags"
+      },
+      {
+        "name": "D1",
+        "free_limit": "5GB, 5M reads/month, 100K writes/month",
+        "status": "implemented",
+        "worker_path": "d1/schema.sql",
+        "nexify_use": "SQL Database, Users, Tasks"
+      },
+      {
+        "name": "Queues",
+        "free_limit": "10K messages/day",
+        "status": "implemented",
+        "worker_path": "workers/queues/",
+        "nexify_use": "Async Processing, Webhooks"
+      },
+      {
+        "name": "Workers AI",
+        "free_limit": "10K inferences/day",
+        "status": "implemented",
+        "worker_path": "workers/ai-worker/",
+        "nexify_use": "LLM, Classification, Embeddings"
+      },
+      {
+        "name": "Vectorize",
+        "free_limit": "30M queried + 5M stored dimensions/month",
+        "status": "implemented",
+        "worker_path": "workers/vectorize/",
+        "nexify_use": "Vektor-DB, Semantic Search, Brain-Sync",
+        "note": "NEW - Free on Workers Free Plan since GA"
+      },
+      {
+        "name": "AI Search",
+        "free_limit": "100 instances, 100K files, 20K queries/month",
+        "status": "implemented",
+        "worker_path": "workers/ai-search/",
+        "nexify_use": "Knowledge-Retrieval, RAG, Semantic Search",
+        "note": "NEW - Free in open beta"
+      },
+      {
+        "name": "Durable Objects",
+        "free_limit": "400K GB-seconds, 1M requests/month",
+        "status": "implemented",
+        "worker_path": "workers/durable-objects/",
+        "nexify_use": "Agent Sessions, Collaboration Rooms",
+        "note": "NEW - Free since April 2025"
+      },
+      {
+        "name": "Web Analytics",
+        "free_limit": "Unlimited, DSGVO-konform",
+        "status": "identified",
+        "nexify_use": "Website Analytics, Core Web Vitals"
+      },
+      {
+        "name": "Analytics Engine",
+        "free_limit": "Unlimited cardinality",
+        "status": "identified",
+        "nexify_use": "Time-Series Metriken"
+      },
+      {
+        "name": "Zaraz",
+        "free_limit": "Unlimited",
+        "status": "identified",
+        "nexify_use": "3rd-Party Script Management"
+      },
+      {
+        "name": "Security (WAF/DDoS/Bot)",
+        "free_limit": "Free Plan",
+        "status": "active",
+        "nexify_use": "Sicherheit, DDoS Protection"
+      },
+      {
+        "name": "DNS + SSL/TLS",
+        "free_limit": "Unlimited",
+        "status": "active",
+        "nexify_use": "Domain Management, Verschlüsselung"
+      }
+    ]
+  },
+
+  "new_implementations": {
+    "vectorize": {
+      "files": [
+        "workers/vectorize/worker.js",
+        "workers/vectorize/wrangler.toml"
+      ],
+      "features": [
+        "Embedding-Generierung via Workers AI (BGE Model)",
+        "Vektor-Speicherung in Vectorize",
+        "Semantic Search (Text → Embedding → Vectorize → Results)",
+        "Brain-Sync (automatische Synchronisation)",
+        "Scheduled Sync via Cron Trigger",
+        "Batch-Insert/Delete Operations"
+      ],
+      "integration_points": [
+        "Brain (127.0.0.1:9090) via Cloudflare Tunnel",
+        "Qdrant (Fallback/Mirror)",
+        "Workers AI (Embeddings)"
+      ]
+    },
+    "ai_search": {
+      "files": [
+        "workers/ai-search/worker.js",
+        "workers/ai-search/wrangler.toml"
+      ],
+      "features": [
+        "Semantic Search mit Query-Rewriting",
+        "RAG-Pipeline (Retrieval Augmented Generation)",
+        "Chunk-basierte Dokument-Indexierung",
+        "Brain-Integration",
+        "AI-generierte Antworten"
+      ]
+    },
+    "durable_objects": {
+      "files": [
+        "workers/durable-objects/worker.js",
+        "workers/durable-objects/wrangler.toml"
+      ],
+      "features": [
+        "Agent Sessions mit persistierter Memory",
+        "Collaboration Rooms mit WebSocket",
+        "Real-Time Document Editing",
+        "Context-Management"
+      ]
+    }
+  },
+
+  "evidence_files": [
+    "/workspace/nexify/10_evidence/cloudflare/CLOUDFLARE_VECTORIZE_ANALYSIS.md",
+    "/workspace/nexify/10_evidence/cloudflare/CLOUDFLARE_KOSTENFREIE_LOESUNGEN_MASTER.md",
+    "/workspace/nexify/10_evidence/cloudflare/CLOUDFLARE_INTEGRATION_EVIDENCE.json",
+    "/workspace/nexify/10_evidence/cloudflare/workers/vectorize/worker.js",
+    "/workspace/nexify/10_evidence/cloudflare/workers/vectorize/wrangler.toml",
+    "/workspace/nexify/10_evidence/cloudflare/workers/ai-search/worker.js",
+    "/workspace/nexify/10_evidence/cloudflare/workers/ai-search/wrangler.toml",
+    "/workspace/nexify/10_evidence/cloudflare/workers/durable-objects/worker.js",
+    "/workspace/nexify/10_evidence/cloudflare/workers/durable-objects/wrangler.toml"
+  ],
+
+  "summary": "Cloudflare Vectorize (30M queried + 5M stored dimensions/month KOSTENFREI), AI Search (100 instances, 100K files, 20K queries/month KOSTENFREI) und Durable Objects (400K GB-seconds, 1M req/month KOSTENFREI seit April 2025) wurden identifiziert und mit vollständigem Worker-Code implementiert. Insgesamt 15 kostenfreie Cloudflare-Services mit ~$275/Monat geschätztem Wert."
+}

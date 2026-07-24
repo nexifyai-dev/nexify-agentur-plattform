@@ -1,0 +1,24 @@
+{
+  "finding_id": "P0-DEP-001",
+  "title": "bookando-api 32 Dependency Vulnerabilities",
+  "status": "FIXED",
+  "fix_date": "2026-06-23T00:00:00Z",
+  "agent": "Security Agent (Hermes)",
+  "description": "pip-audit found 32 known vulnerabilities in 4 packages",
+  "vulnerabilities_found": {
+    "total": 32,
+    "packages_affected": 4
+  },
+  "upgrades_applied": [
+    {"package": "python-multipart", "old": "0.0.12", "new": "0.0.31", "cves_fixed": 7},
+    {"package": "pyjwt", "old": "2.10.0", "new": "2.13.0", "cves_fixed": 12},
+    {"package": "cryptography", "old": "44.0.0", "new": "48.0.1", "cves_fixed": 7},
+    {"package": "pillow", "old": "11.3.0", "new": "12.2.0", "cves_fixed": 6}
+  ],
+  "files_modified": [
+    "/workspace/customers/fixdigital/bookando/bookando-api/requirements.txt",
+    "/workspace/customers/fixdigital/bookando/bookando-api/api/requirements.txt"
+  ],
+  "verification": "pip-audit: 'No known vulnerabilities found'",
+  "evidence_path": "/workspace/nexify/10_evidence/security/P0-DEP-001-fix.json"
+}
