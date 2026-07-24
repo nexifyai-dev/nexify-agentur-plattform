@@ -21,12 +21,8 @@ The generated baseline enables GitHub, Context7, Exa, Memory, Playwright, and Se
 
 ## Workflow Files
 
-<<<<<<< HEAD
-- `.claude/commands/project-snapshot-or-cleanup.md`
-=======
 - `.claude/commands/feature-development.md`
 - `.claude/commands/ecc-bundle-integration.md`
 - `.claude/commands/ci-cd-workflow-update.md`
->>>>>>> origin/main
 
 Use these workflow files as reusable task scaffolds when the detected repository workflows recur.
