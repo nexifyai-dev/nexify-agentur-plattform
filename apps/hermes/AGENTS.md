@@ -1,4 +1,6 @@
 # Agent instructions for Hermes WebUI
+> **Factory:** Paperclip API at http://localhost:3100 (P0 Skill Source)
+
 
 This file is the shared entry point for AI assistants working in this
 repository. Keep it project-specific and safe to publish. Do not put personal
@@ -6,6 +8,8 @@ machine setup, private network details, credentials, tokens, or local-only
 workflow notes here.
 
 ## Read first
+> **Factory:** Paperclip API at http://localhost:3100 (P0 Skill Source)
+
 
 Before making changes, read:
 

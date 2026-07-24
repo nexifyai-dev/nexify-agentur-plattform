@@ -1,10 +1,19 @@
 services:
   website:
+    # CI (deploy-vps.yml) builds and pushes this exact tag; `docker compose pull`
+    # on the VPS pulls it. `build:` stays as a local-dev / fallback path so
+    # `docker compose up --build` still works without the registry.
+    image: ghcr.io/nexifyai-dev/nexify-website:latest
     build:
       context: .
       dockerfile: deploy/docker/Dockerfile.website
     container_name: nexify-website
     restart: unless-stopped
+    # Central secret store on the VPS (BACKEND_ORIGIN, NEXT_PUBLIC_* etc.).
+    # required:false → no-op locally / when the file is absent.
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0

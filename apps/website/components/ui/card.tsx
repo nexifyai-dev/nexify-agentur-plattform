@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("rounded-[18px] border border-white/[.085] bg-white/[.025]", className)} {...props} />;
+  return <div className={cn("rounded-[var(--r-lg)] border border-[var(--border)] bg-[var(--bg-surface)] transition-all duration-200 hover:border-[var(--border-hover)]", className)} {...props} />;
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -14,5 +14,5 @@ export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDi
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn("text-xl font-semibold tracking-[-.035em]", className)} {...props} />;
+  return <h3 className={cn("text-lg font-semibold tracking-[-.02em]", className)} {...props} />;
 }
