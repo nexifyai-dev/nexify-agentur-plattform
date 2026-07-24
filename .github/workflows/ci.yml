@@ -69,3 +69,26 @@ jobs:
       - name: Lint
         run: npx next lint
         continue-on-error: true
+
+      - name: Build Next.js
+        run: pnpm build
+        continue-on-error: true  # Build can fail due to missing env vars; validate project structure
+
+  # === SECURITY: Secret scanning ===
+  secret-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+       with:
+         fetch-depth: 0
+
+      - name: TruffleHog secret scan
+       uses: trufflesecurity/trufflehog@main
+       with:
+         path: ./
+         base: ${{ github.event.repository.default_branch }}
+         head: HEAD
+         extra_args: --debug --only-verified
