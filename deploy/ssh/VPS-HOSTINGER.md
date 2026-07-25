@@ -34,19 +34,11 @@
 - TCP `:22` — open
 - Banner — `SSH-2.0-OpenSSH_10.2p1 Ubuntu-2ubuntu3.5`
 - Host key (ED25519) — `AAAAC3NzaC1lZDI1NTE5AAAAID75SWQrbHF24KPgphTDczVnUJU4fvlDAqF6rkONl+gv`
-- Auth without agent private key — `Permission denied (publickey,password)`
+- **Pubkey installed on VPS** — `cursor-cloud-agent-nexify-vps` confirmed in `/root/.ssh/authorized_keys` (Hostinger console, 2026-07-25)
+- Agent private key — **still missing** in this cloud-agent environment (auth will fail until secret is injected)
 
 ## Unlock path
 
-1. Hostinger console (as `root`) — paste (repo script is not in `/root` by default):
-
-```bash
-install -d -m 700 /root/.ssh
-PUB='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwSGLR7qw3CM21KlW0ZtFOt6l2LgAAefnrYLN3y+2+K cursor-cloud-agent-nexify-vps'
-grep -qxF "$PUB" /root/.ssh/authorized_keys 2>/dev/null || echo "$PUB" >> /root/.ssh/authorized_keys
-chmod 600 /root/.ssh/authorized_keys
-grep cursor-cloud-agent-nexify-vps /root/.ssh/authorized_keys
-```
-
-2. Inject private key secret into Cursor/GitHub (`VPS_SSH_KEY`)
+1. ~~Hostinger console — install pubkey~~ ✅ done (2026-07-25)
+2. Inject private key secret into Cursor/GitHub (`VPS_SSH_KEY`) — **pending**
 3. Connect: `ssh -i ~/.ssh/cursor-cloud-agent-nexify-vps root@72.62.152.47`
