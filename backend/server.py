@@ -15,21 +15,20 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr
-from openai import AsyncOpenAI
-
 import portal
 import booking
 import agent as agent_mod
 import email_agent
 from memory import mem_add, mem_search
+from ninerouter import CostBrakeError, router as nine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
 
+# Legacy env names retained for ops compatibility; routing is owned by ninerouter.py
 EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY")
 MIMO_API_KEY = os.environ.get("MIMO_API_KEY")
 MIMO_BASE_URL = os.environ.get("MIMO_BASE_URL_OPENAI")
-MIMO_MODEL = os.environ.get("MIMO_MODEL", "mimo-v2.5-pro")
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
 INTERNAL_NOTIFY_EMAIL = os.environ.get("INTERNAL_NOTIFY_EMAIL")
@@ -52,16 +51,15 @@ app.include_router(agent_mod.router)
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
 
-NINEROUTER_BASE_URL = os.environ.get("NINEROUTER_BASE_URL")
-NINEROUTER_API_KEY = os.environ.get("NINEROUTER_API_KEY")
-PRIMARY_MODEL = os.environ.get("PRIMARY_MODEL", "nexifyai-combo-llm")
-
-# Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: gleicher 9router mit backup-Modell.
-# Best-practice: alle LLM-Calls über den 9router — Combo hat interne Multi-Provider-Redundanz.
-LLM = AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
-MIMO_MODEL = PRIMARY_MODEL
-LLM_FALLBACK = LLM  # gleicher client → gleicher provider → nutzt Combo-Fallback intern
-FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", PRIMARY_MODEL)
+# 9router Vollintegration — siehe backend/ninerouter.py + docs/architecture/9ROUTER_VOLLINTEGRATION.md
+NINEROUTER_BASE_URL = nine.config.base_url
+NINEROUTER_API_KEY = nine.config.api_key
+PRIMARY_MODEL = nine.config.primary_model
+CUSTOMER_MODEL = nine.config.customer_model
+FALLBACK_MODEL = nine.config.fallback_model
+LLM = nine.client
+LLM_FALLBACK = nine.client
+MIMO_MODEL = PRIMARY_MODEL  # agent.py historically expects this name
 
 SCHEMA = """
 create table if not exists nexify_leads (
@@ -285,14 +283,7 @@ def get_history(session_id: str, language: str) -> list[dict]:
 
 
 def _extract_llm_content(resp) -> str:
-    msg = resp.choices[0].message
-    content = (msg.content or "").strip()
-    if not content:
-        rc = getattr(msg, "reasoning_content", None) or (getattr(msg, "model_extra", None) or {}).get("reasoning_content")
-        content = (rc or "").strip()
-    if "<think>" in content:
-        content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
-    return content
+    return nine.extract_content(resp)
 
 
 def _parse_json_lenient(raw: str) -> dict | None:
@@ -342,29 +333,32 @@ def _parse_json_lenient(raw: str) -> dict | None:
     return None
 
 
-async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
-    last_err: Exception | None = None
-    for attempt in range(3):
-        try:
-            resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
-            content = _extract_llm_content(resp)
-            if content:
-                return content
-            last_err = RuntimeError("empty LLM response")
-        except Exception as e:
-            last_err = e
-        logger.warning(f"llm_complete attempt {attempt + 1}/3 failed ({last_err}); retrying via {FALLBACK_MODEL}")
-    raise last_err
+async def llm_complete(
+    messages: list[dict],
+    max_tokens: int = 4000,
+    *,
+    purpose: str = "customer",
+    model: str | None = None,
+) -> str:
+    """Complete via 9router. Default purpose=customer → CUSTOMER_MODEL (no combo leak)."""
+    try:
+        return await nine.complete(
+            messages,
+            purpose=purpose,  # type: ignore[arg-type]
+            model=model,
+            max_tokens=max_tokens,
+        )
+    except CostBrakeError as e:
+        logger.error("llm_complete cost-brake: %s", e)
+        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
 
 
 async def open_chat_stream(messages: list[dict], max_tokens: int):
     try:
-        return await LLM.chat.completions.create(model=PRIMARY_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
-    except Exception as e:
-        if not LLM_FALLBACK:
-            raise
-        logger.warning(f"primary chat stream failed ({e}); routing via fallback ({FALLBACK_MODEL})")
-        return await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+        return await nine.stream(messages, purpose="customer", max_tokens=max_tokens)
+    except CostBrakeError as e:
+        logger.error("open_chat_stream cost-brake: %s", e)
+        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
 
 
 def offer_email_html(offer: dict, name: str, language: str, price_total: int) -> str:
@@ -678,6 +672,27 @@ async def ai_ticket_reply(ticket_id: str, delay_seconds: int | None = None):
 async def health():
     pool = await db()
     return {"status": "ok", "db": "supabase" if pool else "unavailable", "time": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/api/health/llm")
+async def health_llm():
+    """9router / LLM subsystem health (no secrets)."""
+    info = await nine.health()
+    ok = bool(info.get("configured") and info.get("reachable"))
+    return {
+        "status": "ok" if ok else "degraded",
+        "ninerouter": {
+            "configured": info.get("configured"),
+            "reachable": info.get("reachable"),
+            "http_status": info.get("http_status"),
+            "base_url": info.get("base_url"),
+            "primary_model": info.get("primary_model"),
+            "customer_model": info.get("customer_model"),
+            "fallback_model": info.get("fallback_model"),
+            "budget_pct": info.get("budget_pct"),
+        },
+        "time": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 @app.exception_handler(ValueError)
