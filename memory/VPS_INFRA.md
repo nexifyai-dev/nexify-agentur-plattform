@@ -1,9 +1,15 @@
-# NeXify VPS – Infrastruktur & Ops (Stand 24.07.2026 — C-07 CRITICAL BLOCKADE)
+# NeXify VPS – Infrastruktur & Ops (Stand 25.07.2026 — C-07 CRITICAL BLOCKADE)
 
 ## Zugang
 - VPS: Hostinger KVM8, `srv1243952.hstgr.cloud`, IPv4 `72.62.152.47`, Ubuntu 26.04
 - SSH: `ssh -i /root/.ssh/nexify_vps root@72.62.152.47` ⚠️ **BLOCKIERT (C-07)** — Host Key geändert (ED25519, war ECDSA). Alle 9 lokalen SSH-Keys abgelehnt.
 - **CRITICAL:** Beide GitHub Actions (deploy-vps.yml) und GitLab CI (deploy:vps) **können nicht deployen** bis SSH funktioniert.
+- Host key (aktuell, ED25519): `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID75SWQrbHF24KPgphTDczVnUJU4fvlDAqF6rkONl+gv`
+- **Cursor Cloud Agent pubkey** (repo: `deploy/ssh/cursor-cloud-agent-nexify-vps.pub`):
+  - Comment: `cursor-cloud-agent-nexify-vps`
+  - Fingerprint: `SHA256:neGig+3ebWoBuJx4un1BlXPTz2WZHE89/pg6dni+hn8`
+  - Install on VPS (Hostinger console): `bash scripts/install-cursor-cloud-agent-ssh-key.sh`
+  - Private key: Cursor/GitHub secret only (`VPS_SSH_KEY` / `CURSOR_CLOUD_AGENT_VPS_SSH_KEY`) — never in git
 - Hostinger API-Token: in Chat (VnMnz…) – VM-ID 1243952. Docker-Manager-API: `/api/vps/v1/virtual-machines/1243952/docker`
 - Cloudflare: Zone `nexifyai.cloud` = `2b96bbce5033dd364440906cea99b086`. Voll-Zugriff nur mit GLOBAL_KEY+EMAIL (aus backend/.env); der API_TOKEN ist nur zonen-lesend.
 
