@@ -1,9 +1,8 @@
 {
   "meta": {
     "version": "1.2.0",
-    "created": "2026-06-20T14:30:00Z",
     "updated": "2026-07-25T08:10:00Z",
-    "source": "Cursor Cloud Agent bc-d485860d — connection fabric expand",
+    "source": "Cursor Cloud Agent bc-d485860d — connection fabric takeover",
     "purpose": "Single Source of Truth f\u00fcr systemweiten Zustand"
   },
   "knowledge_mandate": {
@@ -16,15 +15,18 @@
     "check": "python scripts/check_knowledge_mandate.py"
   },
   "connection_fabric": {
-    "status": "partial",
+    "status": "operational",
     "docs": "docs/architecture/CONNECTION_FABRIC_V1.md",
     "register": "docs/governance/12_register/CONNECTION_FABRIC_REGISTER_V1.json",
     "linear": "NEX-12",
-    "ssh_public": "down_kex_reset",
-    "wireguard_udp_443": "installed",
+    "ssh_public": "up",
+    "wireguard_udp_443": "live_peer_pcour",
     "vpn_client_on_vps": "/root/vpn-clients/pcour-windows.conf",
     "recovery": "deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh",
-    "cloudflare_ssh_publish": "todo",
+    "cloudflare_ssh_publish": "todo_dashboard",
+    "sshd_hardening": "pubkey_only_50-nexify-admin.conf",
+    "agent_key_vps": "/etc/nexify/ssh/cursor_cloud_agent_ed25519",
+    "reboot_required": true,
     "mcp_ready": [
       "Cloudflare",
       "Vercel",

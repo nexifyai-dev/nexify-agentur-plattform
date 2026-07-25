@@ -13,26 +13,27 @@
 
 # Connection Fabric V1 — NeXify
 
-## Status 2026-07-25
+## Status 2026-07-25 (übernommen)
 
 | Kanal | Status | Hinweis |
 |-------|--------|---------|
-| SSH `root@72.62.152.47:22` | 🔴 **DOWN** | TCP open, KEX reset — Recovery: `deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh` |
-| SSH `:2222` | 🟡 unstable | Config vorhanden; Socket-Override hat Handshake zerstört |
-| WireGuard UDP/443 | 🟢 installed | `wg0` `10.66.66.0/24` — Client `/root/vpn-clients/pcour-windows.conf` |
-| Cloudflare HTTP Tunnel | 🟢 | Token-Service `cloudflared.service` — webui/ai-router/agentmemory/… |
-| Cloudflare SSH publish | ⬜ TODO | Dashboard: Published App `ssh.nexifyai.cloud` → `ssh://localhost:22` |
-| Cursor MCP (Cloud) | 🟢 partial | siehe Register unten |
+| SSH `root@72.62.152.47:22` | 🟢 OK | Recovery done; pubkey-only hardening |
+| SSH `:2222` | 🟢 OK | aktiv |
+| WireGuard UDP/443 | 🟢 **live** | Peer pcour handshake + Transfer OK → `10.66.66.1` |
+| Cloudflare HTTP Tunnel | 🟢 | token `cloudflared.service` |
+| Cloudflare SSH publish | ⬜ Dashboard | `deploy/ssh/CLOUDFLARE_SSH_PUBLISH.md` |
+| Cursor Agent Key | 🟢 | `/etc/nexify/ssh/cursor_cloud_agent_ed25519` auf VPS |
+| Reboot pending | ⚠️ | `/var/run/reboot-required` — **nicht auto-reboot** (Freigabe) |
 
-Linear P0: [NEX-12](https://linear.app/nexifyai/issue/NEX-12/p0-vps-ssh-kex-reset-wireguard-up-restore-sshsocket)
+Linear: [NEX-12](https://linear.app/nexifyai/issue/NEX-12/p0-vps-ssh-kex-reset-wireguard-up-restore-sshsocket)
 
 ## Pfad-Priorität (Agent / Admin)
 
 ```
-1. WireGuard → ssh root@10.66.66.1          # nach Client-Import
-2. Direct SSH :22 (wenn Carrier erlaubt)
-3. Cloudflare Tunnel SSH hostname          # nach Publish (Hotspot/443-only)
-4. Hostinger Browser Console               # Break-glass
+1. WireGuard → ssh nexify-vps (10.66.66.1)     # Windows daily
+2. Direct SSH :22 from allowed networks         # Cloud Agent OK
+3. Cloudflare Tunnel SSH hostname               # after Dashboard publish
+4. Hostinger Browser Console                    # Break-glass
 ```
 
 ## Live HTTPS (Cloudflare Tunnel) — Probe 2026-07-25

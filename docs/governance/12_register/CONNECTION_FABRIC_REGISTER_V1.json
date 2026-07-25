@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "1.0.0",
-    "updated": "2026-07-25T08:10:00Z",
+    "version": "1.1.0",
+    "updated": "2026-07-25T08:40:00Z",
     "docs": "docs/architecture/CONNECTION_FABRIC_V1.md",
     "linear": "NEX-12",
     "session": "bc-d485860d-ad48-4c90-9109-ca221d3b9368"
@@ -10,10 +10,12 @@
     "host": "srv1243952",
     "ipv4": "72.62.152.47",
     "ssh": {
-      "port_22": "down_kex_reset",
-      "port_2222": "unstable",
+      "port_22": "up",
+      "port_2222": "up",
+      "hardening": "PasswordAuthentication no (50-nexify-admin.conf)",
       "recovery_script": "deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh",
-      "pc_pubkey_comment": "nexify-pc@20260725@nexify-vps"
+      "pc_pubkey_comment": "nexify-pc@20260725@nexify-vps",
+      "agent_key": "/etc/nexify/ssh/cursor_cloud_agent_ed25519"
     },
     "wireguard": {
       "interface": "wg0",
@@ -22,6 +24,7 @@
       "server_ip": "10.66.66.1",
       "client_pcour_ip": "10.66.66.2",
       "client_conf_on_vps": "/root/vpn-clients/pcour-windows.conf",
+      "peer_status": "handshake_live",
       "apparmor": "wg-quick complain required on Ubuntu 26"
     },
     "cloudflared": {
@@ -29,8 +32,10 @@
       "mode": "token",
       "token_file": "/etc/cloudflared/token",
       "local_config_yml_active": false,
-      "ssh_publish": "todo_dashboard"
-    }
+      "ssh_publish": "todo_dashboard",
+      "ssh_publish_doc": "deploy/ssh/CLOUDFLARE_SSH_PUBLISH.md"
+    },
+    "reboot_required": true
   },
   "mcp_cursor_cloud": {
     "ready": [
@@ -71,10 +76,9 @@
     "sentry_org": "nexify-ai-by-nexify-chat-it-au"
   },
   "next_actions": [
-    "Run deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh in Hostinger console",
-    "Open Hostinger firewall UDP/443",
-    "Import WireGuard client; ssh root@10.66.66.1",
+    "Windows: ssh config → Host nexify-vps (10.66.66.1); WireGuard autostart",
     "Publish ssh.nexifyai.cloud via Cloudflare Tunnel dashboard",
+    "Schedule VPS reboot (kernel pending) with explicit Freigabe",
     "Re-auth Github/Gitlab/Slack MCP"
   ]
 }
