@@ -19,16 +19,24 @@
 
 ## Install on VPS (while C-07 blocks remote SSH)
 
-Run via Hostinger VPS console / recovery shell:
+The repo script is **not** on the VPS unless you cloned the repo. Prefer this Hostinger console paste (as `root`):
 
 ```bash
-bash scripts/install-cursor-cloud-agent-ssh-key.sh
-# or manually:
 install -d -m 700 /root/.ssh
-grep -qxF "$(cat deploy/ssh/cursor-cloud-agent-nexify-vps.pub)" /root/.ssh/authorized_keys \
-  || cat deploy/ssh/cursor-cloud-agent-nexify-vps.pub >> /root/.ssh/authorized_keys
+PUB='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwSGLR7qw3CM21KlW0ZtFOt6l2LgAAefnrYLN3y+2+K cursor-cloud-agent-nexify-vps'
+grep -qxF "$PUB" /root/.ssh/authorized_keys 2>/dev/null || echo "$PUB" >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
+grep cursor-cloud-agent-nexify-vps /root/.ssh/authorized_keys
 ```
+
+If the repo is already checked out on the VPS:
+
+```bash
+cd /path/to/nexify-agentur-plattform
+bash scripts/install-cursor-cloud-agent-ssh-key.sh
+```
+
+No reboot required for `authorized_keys` (kernel “Neustart erforderlich” is unrelated).
 
 ## Agent-side private key
 
