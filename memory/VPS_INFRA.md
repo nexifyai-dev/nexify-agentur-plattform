@@ -6,14 +6,14 @@
 - Resources: 8 vCPU · 32 GB RAM · 400 GB disk · 32 TB bandwidth
 - Backup: weekly · Plan expiry: 2026-07-27 · Auto-renewal: enabled
 - SSH user: `root` · Port 22 open (OpenSSH_10.2p1) · Auth: `publickey,password`
-- SSH: `ssh -i ~/.ssh/cursor-cloud-agent-nexify-vps root@72.62.152.47` ⚠️ **BLOCKIERT (C-07)** — Host Key ist ED25519; agent/local keys not yet authorized (Permission denied).
-- **CRITICAL:** Beide GitHub Actions (deploy-vps.yml) und GitLab CI (deploy:vps) **können nicht deployen** bis SSH funktioniert.
+- SSH: `ssh -i ~/.ssh/cursor-cloud-agent-nexify-vps root@72.62.152.47` ⚠️ **halb offen** — pubkey ✅ in VPS `authorized_keys` (2026-07-25); private key secret still missing in cloud agent.
+- **CRITICAL:** Deploy pipelines remain blocked until the matching private key is available to CI/agents.
 - Host key (aktuell, ED25519): `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID75SWQrbHF24KPgphTDczVnUJU4fvlDAqF6rkONl+gv`
 - **Cursor Cloud Agent pubkey** (repo: `deploy/ssh/cursor-cloud-agent-nexify-vps.pub`):
   - Comment: `cursor-cloud-agent-nexify-vps`
   - Fingerprint: `SHA256:neGig+3ebWoBuJx4un1BlXPTz2WZHE89/pg6dni+hn8`
-  - Install on VPS (Hostinger console): `bash scripts/install-cursor-cloud-agent-ssh-key.sh`
-  - Private key: Cursor/GitHub secret only (`VPS_SSH_KEY` / `CURSOR_CLOUD_AGENT_VPS_SSH_KEY`) — never in git
+  - VPS install: ✅ confirmed via Hostinger console (`grep cursor-cloud-agent-nexify-vps`)
+  - Private key: Cursor/GitHub secret only (`VPS_SSH_KEY` / `CURSOR_CLOUD_AGENT_VPS_SSH_KEY`) — never in git — **pending**
 - Hostinger API-Token: in Chat (VnMnz…) – VM-ID 1243952. Docker-Manager-API: `/api/vps/v1/virtual-machines/1243952/docker`
 - Cloudflare: Zone `nexifyai.cloud` = `2b96bbce5033dd364440906cea99b086`. Voll-Zugriff nur mit GLOBAL_KEY+EMAIL (aus backend/.env); der API_TOKEN ist nur zonen-lesend.
 
