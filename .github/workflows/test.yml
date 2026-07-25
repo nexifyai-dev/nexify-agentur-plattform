@@ -147,7 +147,7 @@ jobs:
       - name: Build apps (vitrine)
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/vitrine
+          context: ./apps/website
           file: ./deploy/docker/Dockerfile.vitrine
           push: false
           cache-from: type=gha

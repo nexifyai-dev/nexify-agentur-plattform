@@ -39,7 +39,7 @@ jobs:
       matrix:
         include:
           - name: vitrine
-            context: ./apps/vitrine
+            context: ./apps/website
             dockerfile: ./deploy/docker/Dockerfile.vitrine
             tag: vitrine
           - name: konsole
