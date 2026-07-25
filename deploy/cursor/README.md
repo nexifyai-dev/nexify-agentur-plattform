@@ -1,42 +1,39 @@
 # FILE: /deploy/cursor/README.md
 # NIR: 25.07.2026 09:02
-# UPDATED: 25.07.2026 09:02
+# UPDATED: 25.07.2026 09:17
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
-# WHAT: Cursor User-Commands Sync (Windows PC ↔ Repo)
-# WHY: Single Source of Truth im Repo; PC-Pfad C:\Users\pcour\.cursor\commands\
-# BEST-PRACTICE: Repo `.cursor/commands/*.md` pflegen, dann sync-commands-windows.ps1
-# PITFALL: V-CMD-01: Secrets in Commands; V-CMD-02: empty-window ohne Open Folder
-# DEPENDS: Cursor Desktop, PowerShell, git clone des Repos
+# WHAT: Cursor User-Commands — stets als ein Selbstausführungs-Befehl
+# WHY: PC-Pfad C:\Users\pcour\.cursor\commands\ aus Repo-SoT befüllen
+# BEST-PRACTICE: irm … | iex (Windows) bzw. curl … | bash
+# PITFALL: V-CMD-01 Secrets; V-CMD-02 empty-window ohne Open Folder
+# DEPENDS: Cursor Desktop; GitHub raw und/oder VPN/SSH zum VPS
 # DOCS-REF: .cursor/commands/nexifyai-commands.md
 # SESSION: cursor/nexifyai-commands-9368
 
 # Cursor Commands — NeXifyAI
 
-## Pfade
+## Ein Befehl (Selbstausführung)
 
-| Ort | Pfad |
-|-----|------|
-| Repo (SoT) | `.cursor/commands/*.md` |
-| Windows User | `C:\Users\pcour\.cursor\commands\` |
-| Meta-Command | `/nexifyai-commands` → erstellen, pflegen, verwalten |
-
-## Sync (Windows)
-
-Im Repo-Root:
+### Windows PowerShell
 
 ```powershell
-.\deploy\cursor\sync-commands-windows.ps1
+irm "https://raw.githubusercontent.com/nexifyai-dev/nexify-agentur-plattform/cursor/nexifyai-commands-9368/deploy/cursor/install-commands.ps1" | iex
 ```
 
-Oder:
+VPN-Fallback:
 
 ```powershell
-Copy-Item -Force .\.cursor\commands\*.md "$env:USERPROFILE\.cursor\commands\"
+$d="$env:USERPROFILE\.cursor\commands"; New-Item -ItemType Directory -Force $d|Out-Null; scp "root@10.66.66.1:/root/nexify-cursor-commands/*.md" $d; Get-ChildItem $d\*.md | % { "/$($_.BaseName)" }
 ```
 
-Dann in Cursor Chat `/` tippen. **Zuerst Open Folder** auf dem Repo.
+### Shell
 
-## Pflege
+```bash
+curl -fsSL "https://raw.githubusercontent.com/nexifyai-dev/nexify-agentur-plattform/cursor/nexifyai-commands-9368/deploy/cursor/install-commands.sh" | bash
+```
 
-`/nexifyai-commands` im Chat ausführen (list / add / update / audit / sync-to-pc).
+Ziel: `%USERPROFILE%\.cursor\commands` bzw. `~/.cursor/commands`  
+Meta: `/nexifyai-commands`
+
+Nach Merge nach `main` Branch in der URL auf `main` umstellen.
