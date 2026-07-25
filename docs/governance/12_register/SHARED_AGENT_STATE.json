@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "created": "2026-06-20T14:30:00Z",
-    "updated": "2026-07-25T02:30:00Z",
-    "source": "Hermes Agent (ceo) via SSH root@srv1243952 \u2014 Langlauf Run 5 final",
+    "updated": "2026-07-25T08:10:00Z",
+    "source": "Cursor Cloud Agent bc-d485860d — connection fabric expand",
     "purpose": "Single Source of Truth f\u00fcr systemweiten Zustand"
   },
   "knowledge_mandate": {
@@ -14,6 +14,28 @@
     "openreview_forum": "z5uVAKwmjf",
     "package": "backend/flowsearch",
     "check": "python scripts/check_knowledge_mandate.py"
+  },
+  "connection_fabric": {
+    "status": "partial",
+    "docs": "docs/architecture/CONNECTION_FABRIC_V1.md",
+    "register": "docs/governance/12_register/CONNECTION_FABRIC_REGISTER_V1.json",
+    "linear": "NEX-12",
+    "ssh_public": "down_kex_reset",
+    "wireguard_udp_443": "installed",
+    "vpn_client_on_vps": "/root/vpn-clients/pcour-windows.conf",
+    "recovery": "deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh",
+    "cloudflare_ssh_publish": "todo",
+    "mcp_ready": [
+      "Cloudflare",
+      "Vercel",
+      "Linear",
+      "Supabase",
+      "Neon",
+      "Resend",
+      "Sentry",
+      "Clerk"
+    ],
+    "mcp_broken": ["Github", "Gitlab", "Greptile", "Slack"]
   },
   "system": {
     "host": "srv1243952",

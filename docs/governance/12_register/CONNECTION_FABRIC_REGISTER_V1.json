@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "updated": "2026-07-25T08:10:00Z",
+    "docs": "docs/architecture/CONNECTION_FABRIC_V1.md",
+    "linear": "NEX-12",
+    "session": "bc-d485860d-ad48-4c90-9109-ca221d3b9368"
+  },
+  "vps": {
+    "host": "srv1243952",
+    "ipv4": "72.62.152.47",
+    "ssh": {
+      "port_22": "down_kex_reset",
+      "port_2222": "unstable",
+      "recovery_script": "deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh",
+      "pc_pubkey_comment": "nexify-pc@20260725@nexify-vps"
+    },
+    "wireguard": {
+      "interface": "wg0",
+      "listen": "udp/443",
+      "network": "10.66.66.0/24",
+      "server_ip": "10.66.66.1",
+      "client_pcour_ip": "10.66.66.2",
+      "client_conf_on_vps": "/root/vpn-clients/pcour-windows.conf",
+      "apparmor": "wg-quick complain required on Ubuntu 26"
+    },
+    "cloudflared": {
+      "unit": "cloudflared.service",
+      "mode": "token",
+      "token_file": "/etc/cloudflared/token",
+      "local_config_yml_active": false,
+      "ssh_publish": "todo_dashboard"
+    }
+  },
+  "mcp_cursor_cloud": {
+    "ready": [
+      "Cloudflare-bindings",
+      "Cloudflare-docs",
+      "Cloudflare-builds",
+      "Cloudflare-observability",
+      "Vercel",
+      "Linear",
+      "Supabase",
+      "Neon",
+      "Resend",
+      "Sentry",
+      "Clerk",
+      "cursor-cloud"
+    ],
+    "error": ["Github", "Greptile", "Slack"],
+    "needsAuth": ["Gitlab"]
+  },
+  "cloud_inventory_snapshot": {
+    "vercel_team": "Agentur",
+    "vercel_projects": [
+      "website",
+      "nexifyai-nextjs-template",
+      "vercel-relay-01",
+      "lv-ai",
+      "bookando-de",
+      "bookando-api"
+    ],
+    "cloudflare_workers": ["nexifyai-login-redirect", "cloudflare-relay"],
+    "supabase_projects": [
+      "opencarbox-gmbh-2026",
+      "bookando-api",
+      "NeXify AI Agentur-Webseite und ADMIN-Portal"
+    ],
+    "neon_projects": ["lv-ai", "NeXifyAI-by-NeXify-automate-it"],
+    "resend_domains": ["nexifyai.cloud"],
+    "sentry_org": "nexify-ai-by-nexify-chat-it-au"
+  },
+  "next_actions": [
+    "Run deploy/ssh/VPS_SSH_SOCKET_RECOVERY.sh in Hostinger console",
+    "Open Hostinger firewall UDP/443",
+    "Import WireGuard client; ssh root@10.66.66.1",
+    "Publish ssh.nexifyai.cloud via Cloudflare Tunnel dashboard",
+    "Re-auth Github/Gitlab/Slack MCP"
+  ]
+}
