@@ -1,8 +1,12 @@
 # NeXify VPS – Infrastruktur & Ops (Stand 25.07.2026 — C-07 CRITICAL BLOCKADE)
 
 ## Zugang
-- VPS: Hostinger KVM8, `srv1243952.hstgr.cloud`, IPv4 `72.62.152.47`, Ubuntu 26.04
-- SSH: `ssh -i /root/.ssh/nexify_vps root@72.62.152.47` ⚠️ **BLOCKIERT (C-07)** — Host Key geändert (ED25519, war ECDSA). Alle 9 lokalen SSH-Keys abgelehnt.
+- VPS: Hostinger **KVM 8**, location **Germany – Frankfurt**
+- Hostname: `srv1243952.hstgr.cloud` · IPv4: `72.62.152.47` · OS: Ubuntu 26.04
+- Resources: 8 vCPU · 32 GB RAM · 400 GB disk · 32 TB bandwidth
+- Backup: weekly · Plan expiry: 2026-07-27 · Auto-renewal: enabled
+- SSH user: `root` · Port 22 open (OpenSSH_10.2p1) · Auth: `publickey,password`
+- SSH: `ssh -i ~/.ssh/cursor-cloud-agent-nexify-vps root@72.62.152.47` ⚠️ **BLOCKIERT (C-07)** — Host Key ist ED25519; agent/local keys not yet authorized (Permission denied).
 - **CRITICAL:** Beide GitHub Actions (deploy-vps.yml) und GitLab CI (deploy:vps) **können nicht deployen** bis SSH funktioniert.
 - Host key (aktuell, ED25519): `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID75SWQrbHF24KPgphTDczVnUJU4fvlDAqF6rkONl+gv`
 - **Cursor Cloud Agent pubkey** (repo: `deploy/ssh/cursor-cloud-agent-nexify-vps.pub`):
