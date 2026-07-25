@@ -50,6 +50,7 @@ owner: NeXify CEO (nexify-ceo)
 | F14 | Promptmaster — ist das eine separate Rolle oder identisch mit Systemmaster? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Rollenklärung |
 | F15 | Meta-Audit — wer auditiert den Auditor? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Prozess definieren |
 | F16 | Budget-Freigabe bei Kostenüberschreitung — wer entscheidet? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Policy erstellen |
+| F32 | Charta §8 „volle Autonomie… wartet auf niemanden“ vs. `GOVERNANCE.md` §2.2 „Kein interaktiver Eingriff in Produktionsprozesse ohne Freigabe“ (+ Verbot V08)? | 🔴 HIGH | OFFEN | NeXify CEO + CTO | 2026-07-28 | **Eskalation — Agent darf nicht selbst auflösen.** Kontext: `CHARTA.md` §16 |
 
 ---
 
@@ -98,7 +99,7 @@ owner: NeXify CEO (nexify-ceo)
 
 ## 8. Priorisierung
 
-### 8.1 SOFORT (bis 2026-06-25)
+### 8.1 SOFORT (bis 2026-06-25 / Autonomie-Blocker)
 
 ```
 F01 — RTK-Status klären
@@ -110,6 +111,7 @@ F13 — Eskalationsweg 9Router
 F17 — Secret-Rotation
 F18 — CVE-Scanner
 F21 — Monitoring-Deployment
+F32 — Charta §8 Autonomie vs. GOVERNANCE Produktions-Freigabe (CEO/CTO) — nicht selbst auflösen
 ```
 
 ### 8.2 BIS 2026-06-29
@@ -164,13 +166,14 @@ F24 — Log-Retention
 
 | Metriken | Wert |
 |----------|------|
-| Offene Fragen gesamt | 19 |
-| Kritikalität HIGH | 10 |
+| Offene Fragen gesamt | 20 |
+| Kritikalität HIGH | 11 |
 | Kritikalität MEDIUM | 10 |
 | Kritikalität LOW | 0 |
 | Deadline 2026-06-25 | 9 |
 | Deadline 2026-06-29 | 10 |
 | Deadline 2026-07-06 | 0 |
+| Deadline 2026-07-28 (F32) | 1 |
 | ✅ Geklärt (F03, F04, F06, F19, F25, F26, F27, F28, F29, F30, F31) | 12 |
 
 ---
@@ -182,6 +185,7 @@ F24 — Log-Retention
 | Bolt-Fragen (F01-F06) | 9Router-Admin | NeXify CEO |
 | Architektur-Fragen (F07-F11) | Systemmaster | NeXify CEO |
 | Governance-Fragen (F12-F16) | NeXify CEO | — |
+| Normkonflikt Autonomie (F32) | NeXify CEO + CTO | — (Agent entscheidet nicht) |
 | Security-Fragen (F17-F20) | Systemmaster | NeXify CEO |
 | Monitoring-Fragen (F21-F24) | Systemmaster | NeXify CEO |
 | Kunden-Fragen (F25-F27) | NeXify CEO | — |
@@ -190,4 +194,4 @@ F24 — Log-Retention
 
 ---
 
-*Generiert: 2026-06-22 | Nächster Review: 2026-06-25 (HIGH-Fragen)*
+*Generiert: 2026-06-22 | Aktualisiert: 2026-07-25 (F32 eskaliert) | Nächster Review: CEO/CTO zu F32 + offene HIGH-Fragen*
