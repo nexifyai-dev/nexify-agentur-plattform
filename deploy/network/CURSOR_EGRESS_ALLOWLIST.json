@@ -1,0 +1,61 @@
+{
+  "name": "cursor-egress-allowlist",
+  "version": "1.0.0",
+  "updated": "2026-07-25",
+  "source": [
+    "Cursor Settings → Network → Required domains (operator paste 2026-07-25)",
+    "https://cursor.com/docs/enterprise/network-configuration"
+  ],
+  "recommendation": "Prefer wildcard patterns for firewalls that support them; use granular list when wildcards are forbidden.",
+  "wildcard_patterns": [
+    "*.cursor.sh",
+    "*.cursor-cdn.com",
+    "*.cursorapi.com",
+    "*.cursorvm.com",
+    "*.*.cursorvm.com"
+  ],
+  "settings_network_required": [
+    "api2.cursor.sh",
+    "api3.cursor.sh",
+    "api4.cursor.sh",
+    "*.api5.cursor.sh",
+    "*.authentication.cursor.sh",
+    "authenticator.cursor.sh",
+    "marketplace.cursorapi.com",
+    "cursor-cdn.com",
+    "downloads.cursor.com"
+  ],
+  "enterprise_granular_extras": [
+    "api5.cursor.sh",
+    "repo42.cursor.sh",
+    "us-asia.gcpp.cursor.sh",
+    "us-eu.gcpp.cursor.sh",
+    "us-only.gcpp.cursor.sh",
+    "adminportal42.cursor.sh",
+    "anysphere-binaries.s3.us-east-1.amazonaws.com",
+    "agent.api5.cursor.sh",
+    "agentn.api5.cursor.sh",
+    "agent.us.api5.cursor.sh",
+    "agentn.us.api5.cursor.sh",
+    "agent.global.api5.cursor.sh",
+    "agentn.global.api5.cursor.sh",
+    "authenticate.cursor.sh",
+    "prod.authentication.cursor.sh",
+    "authentication.cursor.sh",
+    "metrics.cursor.sh"
+  ],
+  "ssl_inspection_exclude": [
+    ".cursor.sh",
+    "cursor-cdn.com",
+    "marketplace.cursorapi.com",
+    "authenticate.cursor.sh",
+    "authenticator.cursor.sh",
+    "*.cursorvm.com",
+    "*.*.cursorvm.com"
+  ],
+  "notes": [
+    "Cloud Agents run on Cursor infra; this list is for desktop/CLI/VPS hosts that must reach Cursor backends.",
+    "NeXify VPS Cloud Agent / Hermes workers that call Cursor APIs need these egress rules on the host firewall.",
+    "Do not confuse with Cloud Agent inbound allowlist of NeXify services (ai-router, github, etc.)."
+  ]
+}

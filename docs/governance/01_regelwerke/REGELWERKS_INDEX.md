@@ -17,6 +17,7 @@
 
 | Regelwerk | Kanonischer Pfad | Legacy-Pfad | Status |
 |---|---|---|---|
+| Cursor Egress Allowlist | `deploy/network/CURSOR_EGRESS_ALLOWLIST.md` (+ `.json`) | — | ✅ 2026-07-25 |
 | OIDC Auth Target State | — | /workspace/nexify/07_security_auth/OIDC_AUTH_TARGET_STATE.md | ✅ Plan |
 | Break-Glass-Policy | — | /workspace/nexify/07_security_auth/BREAK_GLASS_LOGIN_POLICY.md | ✅ Plan |
 | Secret-Zugriffspolitik | — | /workspace/nexify/07_security_secrets/SECRET_ACCESS_POLICY.md | ✅ Existiert |
