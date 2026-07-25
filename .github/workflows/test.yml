@@ -84,7 +84,7 @@ jobs:
           cache: 'pip'
       
       - name: Install JS dependencies
-        run: pnpm --dir apps/website install --frozen-lockfile 2>&1 || true
+        run: pnpm --dir apps/website install --frozen-lockfile
         continue-on-error: true
       
       - name: Test JS (Website tests)
