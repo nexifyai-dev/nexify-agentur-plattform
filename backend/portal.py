@@ -57,8 +57,8 @@ def create_invite_token(email: str, offer_id: str) -> str:
 def set_auth_cookies(response: Response, user_id: str, email: str, role: str):
     access = make_token({"type": "access", "sub": user_id, "email": email, "role": role}, hours=12)
     refresh = make_token({"type": "refresh", "sub": user_id}, hours=24 * 7)
-    response.set_cookie("access_token", access, httponly=True, secure=True, samesite="lax", max_age=43200, path="/")
-    response.set_cookie("refresh_token", refresh, httponly=True, secure=True, samesite="lax", max_age=604800, path="/")
+    response.set_cookie("access_token", access, httponly=True, secure=True, samesite="lax", max_age=43200, path="/", domain=".nexifyai.cloud")
+    response.set_cookie("refresh_token", refresh, httponly=True, secure=True, samesite="lax", max_age=604800, path="/", domain=".nexifyai.cloud")
 
 
 def user_dict(row) -> dict:

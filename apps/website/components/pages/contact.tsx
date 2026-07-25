@@ -5,7 +5,7 @@ import { PhoneCall } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { ContactForm, ContactSidebar } from "@/components/contact-form";
 import { useContent } from "@/lib/content";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 export function ContactPage() {
   const t = useContent();

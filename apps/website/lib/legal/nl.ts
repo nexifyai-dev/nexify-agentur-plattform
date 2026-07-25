@@ -10,7 +10,12 @@ const C = {
   vat: "NL865786276B01",
 };
 
-export const legalNl: Record<string, LegalPageData> = {
+export const legalPagesNl: Record<string, LegalPageData> = {
+  // NOTE: two parallel legal-page systems exist in this app (locale-prefixed
+  // app/[locale]/* expecting `legalPagesNl`, and the legacy flat app/* tree
+  // via components/legal-page.tsx expecting `legalNl`). Kept both exports in
+  // sync here rather than picking a side — see master audit plan for the
+  // route-tree consolidation decision.
   impressum: {
     slug: "impressum",
     title: "Colofon",
@@ -469,3 +474,7 @@ export const legalNl: Record<string, LegalPageData> = {
     ],
   },
 };
+
+// Legacy alias for the flat (non-locale-prefixed) app/* route tree via
+// components/legal-page.tsx. See NOTE above.
+export const legalNl = legalPagesNl;

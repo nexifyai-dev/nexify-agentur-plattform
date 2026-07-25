@@ -1,10 +1,32 @@
 # NeXify AI — Governance & Betriebsabläufe
 
 > **Single Source of Truth für alle Regelwerke, SOPs, Policies, Workflows und Produktionsabläufe.**
-> Alle Dateien unter `docs/governance/` sind verbindlich für jeden Agenten und每eveloper.
+> Alle Dateien unter `docs/governance/` sind verbindlich für jeden Agenten und Entwickler.
 
 ---
 
+## 0. Charta §0–§13 — Geltungsbereich
+
+Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebsmodell):
+
+| Charta | Governance-Ordner | Zweck |
+|--------|------------------|-------|
+| §0 Geltungsbereich | gesamtes System | VPS-Gesamtsystem / Kundenprojekt / NeXifyAI-Projekt |
+| §1 Auftrag & Datenbasis | `01_regelwerke/` | Server-, Festplatten-, Netzwerk-, Prozess-, Logdaten |
+| §2 Vollprüfung SOLL/IST | `02_sops/`, `07_audits_reports/` | Lückenlose Prüfung, Abweichungsanalyse, Fix |
+| §3 Integrationsprinzip | `04_workflows/` | API, MCP, Webhooks vollständig integriert |
+| §4 Propagationspflicht | alle Ordner | Standards fließen bei jeder Änderung neu ein |
+| §5 Fach-/Governance-Ebene | `01_regelwerke/`, `02_sops/` | Fachexperten-Agenten verwalten Regelwerke |
+| §6 Agenten-Architektur | `11_fuehrung/` | Spezialagenten pro Bereich |
+| §7 Wissens-/Gedächtnisschicht | `08_evidence/`, `12_register/` | AgentMemory + LightRAG zentral |
+| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen |
+| §9 Betriebsrahmen | `13_betriebshandbuch/` | Live-Terminal, Deutsch, Best-Practice |
+| §10 Modellstrategie | `09_konzepte/` | Upstage + DeepSeek, gestaffelte Migration |
+| §11 Monitoring | `07_audits_reports/`, `14_production/` | Durchgehende Überwachung aller Komponenten |
+| §12 Circuit Breaker | `12_register/` | Budget-/Iterationsgrenzen, Notabschaltung |
+| §13 Arbeitsweise | `10_quality_gates/` | Verifikation vor Übernahme, Ehrlichkeit |
+
+---
 ## 1. Verzeichnisstruktur
 
 | Verzeichnis | Inhalt | Anzahl |
@@ -30,18 +52,19 @@
 
 ## 2. Verbindliche Regeln (Kurzform)
 
-### 2.1 Prä-Task-Compliance (6 Gates)
+### 2.1 Prä-Task-Compliance (6 + 1 Gates)
 
-Vor JEDER Aufgabe müssen alle 6 Gates grün sein:
+Vor JEDER Aufgabe müssen die 6 Basis-Gates grün sein; bei agentischen Workflows zusätzlich Gate 7:
 
 1. **BRAIN_FIRST** — Brain-Query vor jeder Änderung
-2. **DOCS_FIRST** — Offizielle Docs vor Tool-Config
+2. **DOCS_FIRST** — Offizielle Docs vor Tool-Config (inkl. DOC-018–020 / Knowledge Register)
 3. **SHARED_STATE** — Shared Agent State konsultiert
 4. **PRE_TASK_CHECKLIST** — Skript ausgeführt
 5. **SECRET_SCAN** — Keine Secrets in Config/Code
 6. **TENANT_ISOLATION** — Kundenprojekte isoliert
+7. **FLOWSEARCH_KNOWLEDGE** — **Nutzungspflicht** bei Workflow-/Agent-Design: Knowledge Register + Operator-Register + FlowSearch-Abgleich (oder Waiver)
 
-Siehe: `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh`
+Siehe: `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` · `02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md` · `12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md`
 
 ### 2.2 Verbindliche Verbote
 
@@ -66,7 +89,30 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 
 ---
 
-## 3. Produktionsablauf (Production Pipeline)
+## 3. System-Port-Matrix (SOLL)
+
+| Komponente | Port(s) | Typ | Status SOLL |
+|---|---|---|---|
+| Paperclip (Factory) | 3100 | Control Plane | ✅ 200 |
+| Hermes Agent (Headroom) | 8787 | Runtime + Gateway | ✅ 200 |
+| Hermes Agent (Gateway) | 8642 | CLI/Telegram/Cron | ✅ |
+| Hermes Dashboard | 9119 | Monitoring | ✅ |
+| 9Router | 20128 | LLM-Router | ✅ |
+| agentmemory API | 3111 | Memory REST | ✅ |
+| agentmemory Viewer | 3113 | Node-Viewer | ✅ |
+| LightRAG | 9621 | Vektor-Suche | ✅ |
+| Spaether | 8900 | Monitoring | ✅ |
+| n8n | 5678 | Automation | ✅ |
+| Traefik | 80/443 | Reverse Proxy | ✅ |
+| Portainer | 9000/9443 | Container-Mgmt | ✅ |
+| GitLab | 8081/8929/22 | DevOps | ✅ |
+| Nexify Proxy | 32768 | Proxy | ✅ |
+| Redis | 6379 | Cache | ✅ |
+
+Siehe: `08_evidence/SYSTEM_INTEGRATION_EVIDENCE_2026-07-13.md`
+
+---
+## 4. Produktionsablauf (Production Pipeline)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -103,9 +149,46 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 
 ---
 
-## 4. Betriebsablauf (Daily/Weekly/Monthly)
+## 5. Modellstrategie (§10)
 
-### 4.1 Täglich
+| Modell | Status | Strategie |
+|--------|--------|-----------|
+| DeepSeek V4 (flash/chat/pro/pro-max/pro-none/reasoner) | ✅ Bestehen + Vollintegriert | Primär-Router über 9Router :20128 |
+| Upstage (alle Modelle) | ⏳ Migration geplant | Gestaffelter Ersatz, Validierung pro Modell |
+| GitHub Models (GPT-4o, GPT-5-mini, Claude-Haiku, MAI-Code) | ⏳ Zu ersetzen | Ersatz durch Upstage, Rückfallebene DeepSeek |
+| CX Models (GPT-5.x) | ⏳ Zu ersetzen | Ersatz durch Upstage |
+| Claude-Chat (Sonnet/Opus/Haiku) | ⏳ Zu ersetzen | Ersatz durch Upstage |
+
+**Cost-Brake:** Budget >150% → Task-Abbruch. >200% → P0-Escalation.
+Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md)
+
+---
+
+## 6. Monitoring & Audit-Zyklus (§11)
+
+### Kontinuierlich (pro Agent-Turn)
+| Prüfung | Trigger | Werkzeug |
+|---------|---------|----------|
+| Pre-Task 6 Gates | Jeder Task | `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` |
+| Secret-Scan | Vor jedem Commit | `.pre-commit-config.yaml` |
+| Charta-Deviation-Scan | Jeder Zyklus (dieses Dokument) | Vollprüfung §2 |
+
+### Wöchentlich (Montag)
+- Voll-Scan in `07_audits_reports/`
+- Memory-Audit (Agentmemory + Qdrant)
+- Backup-Verifikation
+
+### Monatlich
+- Deviation-Audit (expert-dev)
+- Design-Quality-Gate (expert-design)
+- Security-Audit (CISO-Profil)
+- FinOps-Review (CFO-Profil)
+
+---
+
+## 7. Betriebsablauf (Daily/Weekly/Monthly)
+
+### 7.1 Täglich
 
 | Zeit | Aktion | Skript/Tool |
 |------|--------|-------------|
@@ -114,15 +197,15 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 | 06:30 | Cron-Job-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md` |
 | 18:00 | Daily-Report | `07_audits_reports/` |
 
-### 4.2 Wöchentlich
+### 7.2 Wöchentlich
 
 | Tag | Aktion |
 |-----|--------|
-| Mo | Voll-Scan (`NEXIFY_FULL_SCAN_REPORT.md`) |
+| Mo | Voll-Scan + Charta-Deviation-Scan |
 | Mi | Memory-Audit (Agentmemory + Qdrant) |
 | Fr | Backup-Verifikation |
 
-### 4.3 Monatlich
+### 7.3 Monatlich
 
 | Aktion | Verantwortlich |
 |--------|---------------|
@@ -133,7 +216,7 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 
 ---
 
-## 5. Incident-Response
+## 8. Incident-Response
 
 Siehe: `06_sicherheit_policies/INCIDENT_RESPONSE_POLICY_V1.md`
 
@@ -144,9 +227,19 @@ Siehe: `06_sicherheit_policies/INCIDENT_RESPONSE_POLICY_V1.md`
 | **P2** (Minor) | < 1 Std | DevOps |
 | **P3** (Cosmetic) | Next Sprint | Standard |
 
+### §12 Circuit Breaker
+| Level | Maßnahme |
+|-------|----------|
+| <50% Budget | Normalbetrieb |
+| 50-80% | Cost-Warning (Event-Bus) |
+| 80-100% | Fallback günstigeres Modell |
+| 100-150% | Task P2, Prüfung optional |
+| >150% | **Task-Abbruch** |
+| >200% | **P0-Escalation** |
+
 ---
 
-## 6. Quality-Gate-Hierarchie
+## 9. Quality-Gate-Hierarchie
 
 ```
 Pre-Task Gate (6 Checks)
@@ -168,7 +261,7 @@ Siehe: `10_quality_gates/BOUNDARY_ENFORCEMENT_GATES_V1.md`
 
 ---
 
-## 7. Agenten-Orchestrierung
+## 10. Agenten-Orchestrierung
 
 Siehe: `11_fuehrung/DOS_AGENT_GOVERNANCE.md`
 

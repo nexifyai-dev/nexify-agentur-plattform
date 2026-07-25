@@ -1,13 +1,28 @@
 #!/bin/sh
+# NIR: 24.07.2026 — VPS-Pfade aktualisiert
+# HACK: Port :3000 belegt durch old hermes-webui (PID 3441715). 
+# Vor Deploy: old webui stoppen oder Website-Port auf 3001 ändern.
 set -e
-TRAEFIK_DIR=/docker/traefik-vsrs/dynamic
+TRAEFIK_DIR=/etc/traefik/dynamic
 cd /opt/nexifyai-cloud
 git stash || true
 git pull origin main
 docker compose build website
-docker compose down website
 docker compose up -d website
-sleep 10
-curl -sf http://127.0.0.1:3000/api/health && echo "healthy"
-cp deploy/website-routes.yml "$TRAEFIK_DIR/nexifyai-website.yml"
+# Health-Gate: curl muss eigenständig scheitern können, damit `set -e` greift.
+# (Vorher: `curl ... && echo "healthy"` — bei Fehlschlag lief das Skript wegen der
+# &&-Kette weiter und aktualisierte Traefik trotz kaputter Website.)
+echo "Warte auf Website-Health..."
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -sf http://127.0.0.1:3000/api/health >/dev/null; then
+    echo "healthy"
+    break
+  fi
+  if [ "$i" = "10" ]; then
+    echo "FEHLER: Website wurde nicht healthy — Deploy abgebrochen, Traefik-Route NICHT aktualisiert." >&2
+    exit 1
+  fi
+  sleep 3
+done
+install -D deploy/website-routes.yml "$TRAEFIK_DIR/nexifyai-website.yml"
 echo "done"

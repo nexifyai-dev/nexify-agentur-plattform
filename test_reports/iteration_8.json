@@ -25,7 +25,7 @@
     "backend": "100% (TEST 2: 5/5, TEST 3: 2/2, TEST 5: 5/5 endpoints)",
     "frontend": "100% (TEST 1, TEST 4, TEST 6)"
   },
-  "test_credentials": "WebUI: password-only 1def!xO2022!! at https://webui.nexifyai.cloud; Admin: mail@nexifyai.cloud / 1def!xO2022!! at https://www.nexifyai.cloud",
+  "test_credentials": "WebUI: password-only [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] at https://webui.nexifyai.cloud; Admin: mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] at https://www.nexifyai.cloud",
   "retest_needed": false,
   "should_main_agent_self_test": false,
   "context_for_next_testing_agent": "CRM SSO chain: webui /crm (needs hermes_session cookie) -> www.nexifyai.cloud/api/auth/sso-consume?t=... (portal.py, CRM_SSO_SECRET, nonce replay protection) -> 302 /admin with JWT cookies. 9router = custom provider in /root/.hermes/config.yaml (base_url localhost:20128/v1). mimo/* models return 402 (MiMo account balance), xmtp/* 401 (upstream key) - these are 9router upstream issues, not integration bugs."
