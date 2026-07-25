@@ -30,3 +30,8 @@ Register aller offiziellen Dokumentationsquellen für NeXify-AI-relevante Tools,
 | DOC-015 | Next.js | `https://nextjs.org/docs` | Hersteller-Docs | 14+ | — |
 | DOC-016 | React | `https://react.dev/` | Hersteller-Docs | 19+ | — |
 | DOC-017 | Python | `https://docs.python.org/3/` | Hersteller-Docs | 3.12 | — |
+| DOC-018 | **AFlow** (ICLR 2025 Oral) | `https://openreview.net/forum?id=z5uVAKwmjf` · Spiegel: `https://arxiv.org/abs/2410.10762` · `https://github.com/FoundationAgents/AFlow` | Research+Code | ICLR 2025 | 2026-07-25 |
+| DOC-019 | ADAS / Meta Agent Search | `https://arxiv.org/abs/2408.08435` | Research | 2024 | 2026-07-25 |
+| DOC-020 | NeXify FlowSearch (intern) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` · `backend/flowsearch/` · `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | Intern kanonisch | v1 | 2026-07-25 |
+
+> **Nutzungspflicht:** DOC-018–020 + Knowledge Register — siehe `02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md`.
