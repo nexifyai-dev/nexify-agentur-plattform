@@ -9,6 +9,8 @@
 - [ ] Offizielle Docs geladen (laut Source Register)
 - [ ] Version identifiziert
 - [ ] GitHub/Changelog auf aktuelle Änderungen geprüft
+- [ ] Bei agentischen Workflows: Knowledge Register A-FLOW + DOC-018–020 geladen
+- [ ] Bei agentischen Workflows: FlowSearch-Nutzungspflicht erfüllt (`SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1`)
 
 ## Analyse
 

@@ -13,6 +13,10 @@
 
 # ALLE scannen · vergleichen · kombinieren · entwickeln
 
+> **VERPFLICHTEND / NUTZUNGSPFLICHT:**  
+> `docs/governance/02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md` · Gate **FLOWSEARCH_KNOWLEDGE** ·  
+> Register: `12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md` · Check: `python scripts/check_knowledge_mandate.py`
+
 ## 1. Gescannte Quellen
 
 | ID | Werk | Typ | Zugang hier |
