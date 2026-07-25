@@ -38,6 +38,15 @@
 
 ## Unlock path
 
-1. Hostinger console → install pubkey: `bash scripts/install-cursor-cloud-agent-ssh-key.sh`
+1. Hostinger console (as `root`) — paste (repo script is not in `/root` by default):
+
+```bash
+install -d -m 700 /root/.ssh
+PUB='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwSGLR7qw3CM21KlW0ZtFOt6l2LgAAefnrYLN3y+2+K cursor-cloud-agent-nexify-vps'
+grep -qxF "$PUB" /root/.ssh/authorized_keys 2>/dev/null || echo "$PUB" >> /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+grep cursor-cloud-agent-nexify-vps /root/.ssh/authorized_keys
+```
+
 2. Inject private key secret into Cursor/GitHub (`VPS_SSH_KEY`)
 3. Connect: `ssh -i ~/.ssh/cursor-cloud-agent-nexify-vps root@72.62.152.47`
