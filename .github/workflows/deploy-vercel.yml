@@ -56,20 +56,25 @@ jobs:
           set -euo pipefail
           FILE="app/globals.css"
           LINES=$(wc -l < "$FILE")
-          echo "globals.css has $LINES lines"
-          # Threshold: the full [locale] page design system (restored in commit 772e3944)
-          # adds ~1 600 lines on top of the ~275-line shared stylesheet. 1 500 is a safe
-          # lower-bound that catches any accidental truncation back to the flat file.
-          MIN_CSS_LINES=1500
+          MARKERS=$(grep -c "\[locale\] PAGE DESIGN SYSTEM" "$FILE" || true)
+          echo "globals.css has $LINES lines, [locale] markers=$MARKERS"
+          # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1060.
+          # Lower bound catches truncation to the flat sheet only; duplicate marker
+          # check flags re-introduction of the [locale] Suppress-Bug.
+          MIN_CSS_LINES=900
           if [ "$LINES" -lt "$MIN_CSS_LINES" ]; then
             echo "::error::globals.css has only $LINES lines (< $MIN_CSS_LINES). Aborting deploy — design system may be stripped."
             exit 1
           fi
-          if ! grep -q "\[locale\] PAGE DESIGN SYSTEM" "$FILE"; then
+          if [ "$MARKERS" -lt 1 ]; then
             echo "::error::globals.css is missing the '[locale] PAGE DESIGN SYSTEM' marker. Aborting deploy."
             exit 1
           fi
-          echo "✅ Design system integrity OK ($LINES lines)"
+          if [ "$MARKERS" -gt 1 ]; then
+            echo "::error::globals.css has $MARKERS duplicate '[locale] PAGE DESIGN SYSTEM' blocks. Aborting deploy — Suppress-Bug."
+            exit 1
+          fi
+          echo "✅ Design system integrity OK ($LINES lines, 1 [locale] block)"
 
       - name: Deploy to Vercel (production)
         id: deploy
