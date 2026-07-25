@@ -9,6 +9,7 @@ import hashlib
 import time
 import asyncio
 import logging
+from collections import OrderedDict
 from datetime import datetime, timezone, timedelta
 
 import asyncpg
@@ -90,8 +91,8 @@ def pick_model(task_type: str = "default") -> str:
     return TASK_MODEL_MAP.get(task_type, PRIMARY_MODEL)
 
 
-# --- Token-Optimierung: In-Memory Response-Cache (LRU + TTL) ---
-_LLM_CACHE: dict[str, tuple[str, float]] = {}
+# --- Token-Optimierung: In-Memory Response-Cache (echtes LRU + TTL via OrderedDict) ---
+_LLM_CACHE: OrderedDict[str, tuple[str, float]] = OrderedDict()
 LLM_CACHE_TTL = int(os.environ.get("LLM_CACHE_TTL", "3600"))        # Sekunden; 1h Standard
 LLM_CACHE_MAXSIZE = int(os.environ.get("LLM_CACHE_MAXSIZE", "500"))
 LLM_CACHE_ENABLED = os.environ.get("LLM_CACHE_ENABLED", "1") == "1"
@@ -110,6 +111,7 @@ def _get_cached(key: str) -> str | None:
         return None
     entry = _LLM_CACHE.get(key)
     if entry and entry[1] > time.monotonic():
+        _LLM_CACHE.move_to_end(key)  # Als zuletzt genutzt markieren (LRU-Update)
         logger.debug(f"LLM cache hit: {key[:12]}")
         return entry[0]
     _LLM_CACHE.pop(key, None)
@@ -120,15 +122,16 @@ def _set_cached(key: str, value: str, ttl: int = 0) -> None:
     if not LLM_CACHE_ENABLED:
         return
     effective_ttl = ttl or LLM_CACHE_TTL
-    if len(_LLM_CACHE) >= LLM_CACHE_MAXSIZE:
-        cut = max(1, int(LLM_CACHE_MAXSIZE * 0.2))
-        for k in list(_LLM_CACHE.keys())[:cut]:
-            _LLM_CACHE.pop(k, None)
+    if key in _LLM_CACHE:
+        _LLM_CACHE.move_to_end(key)  # Position bei Update aktualisieren
+    elif len(_LLM_CACHE) >= LLM_CACHE_MAXSIZE:
+        _LLM_CACHE.popitem(last=False)  # Ältesten (am wenigsten genutzten) Eintrag entfernen
     _LLM_CACHE[key] = (value, time.monotonic() + effective_ttl)
 
 
 def compress_history(history: list[dict]) -> list[dict]:
-    """Begrenzt den Kontext auf System-Prompt + max. HISTORY_MAX_TURNS Nachrichten.
+    """Begrenzt den Kontext auf System-Prompt(s) + max. HISTORY_MAX_TURNS Nachrichten.
+    Alle System-Nachrichten werden immer beibehalten (in der Praxis exakt eine pro Session).
     Reduziert Input-Token-Kosten bei langen Gesprächen erheblich."""
     system = [m for m in history if m["role"] == "system"]
     turns = [m for m in history if m["role"] != "system"]
