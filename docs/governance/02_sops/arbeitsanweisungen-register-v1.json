@@ -16,7 +16,22 @@
     {
       "id": "WI-002",
       "path": "01_docs_first/OFFICIAL_DOCS_SOURCE_REGISTER_V1.md",
-      "purpose": "Quellenregister offizieller Dokumentationen"
+      "purpose": "Quellenregister offizieller Dokumentationen",
+      "note": "includes DOC-018 AFlow / DOC-020 FlowSearch"
+    },
+    {
+      "id": "AA-FLOW-001",
+      "title": "FlowSearch Knowledge Nutzungspflicht",
+      "path": "docs/governance/02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md",
+      "purpose": "Verpflichtende Nutzung FlowSearch/AFlow-Wissen",
+      "mandatory": true
+    },
+    {
+      "id": "AA-FLOW-002",
+      "title": "Knowledge Source Register",
+      "path": "docs/governance/12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md",
+      "purpose": "Bereichs- und Research-Quellen mit Nutzungspflicht",
+      "mandatory": true
     },
     {
       "id": "WI-003",
