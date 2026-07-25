@@ -57,8 +57,12 @@ jobs:
           FILE="app/globals.css"
           LINES=$(wc -l < "$FILE")
           echo "globals.css has $LINES lines"
-          if [ "$LINES" -lt 1500 ]; then
-            echo "::error::globals.css has only $LINES lines (< 1500). Aborting deploy — design system may be stripped."
+          # Threshold: the full [locale] page design system (restored in commit 772e3944)
+          # adds ~1 600 lines on top of the ~275-line shared stylesheet. 1 500 is a safe
+          # lower-bound that catches any accidental truncation back to the flat file.
+          MIN_CSS_LINES=1500
+          if [ "$LINES" -lt "$MIN_CSS_LINES" ]; then
+            echo "::error::globals.css has only $LINES lines (< $MIN_CSS_LINES). Aborting deploy — design system may be stripped."
             exit 1
           fi
           if ! grep -q "\[locale\] PAGE DESIGN SYSTEM" "$FILE"; then
@@ -75,13 +79,25 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          DEPLOY_URL=$(pnpm dlx vercel --token "$VERCEL_TOKEN" \
+          set -euo pipefail
+          # Use --json for reliable machine-readable output; parse URL with jq.
+          pnpm dlx vercel --token "$VERCEL_TOKEN" \
             --prod \
             --yes \
+            --json \
             --cwd . \
-            2>&1 | tee /tmp/vercel-output.txt | tail -1)
+            > /tmp/vercel-output.json 2>/tmp/vercel-stderr.txt || {
+            echo "::error::Vercel deploy failed:"
+            cat /tmp/vercel-stderr.txt
+            exit 1
+          }
+          DEPLOY_URL=$(jq -r '.url // .deploymentUrl // empty' /tmp/vercel-output.json || true)
+          # Fallback: Vercel may print the URL as plain text to stderr when --json is used
+          if [ -z "$DEPLOY_URL" ]; then
+            DEPLOY_URL=$(grep -Eo 'https://[^ ]+\.vercel\.app' /tmp/vercel-stderr.txt | tail -1 || true)
+          fi
           echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
-          echo "✅ Deployed to: $DEPLOY_URL"
+          echo "✅ Deployed to: ${DEPLOY_URL:-<see Vercel dashboard>}"
 
       - name: Post-deploy health check
         shell: bash
