@@ -2,12 +2,12 @@
   "mcpServers": {
     "hostinger-billing": {
       "command": "npx",
-      "args": ["--yes", "--package=hostinger-api-mcp@latest", "hostinger-billing-mcp"],
+      "args": ["--yes", "--package=hostinger-api-mcp@1.22.0", "hostinger-billing-mcp"],
       "env": { "HOSTINGER_API_TOKEN": "${HOSTINGER_API_TOKEN}" }
     },
     "hostinger-vps": {
       "command": "npx",
-      "args": ["--yes", "--package=hostinger-api-mcp@latest", "hostinger-vps-mcp"],
+      "args": ["--yes", "--package=hostinger-api-mcp@1.22.0", "hostinger-vps-mcp"],
       "env": { "HOSTINGER_API_TOKEN": "${HOSTINGER_API_TOKEN}" }
     }
   }

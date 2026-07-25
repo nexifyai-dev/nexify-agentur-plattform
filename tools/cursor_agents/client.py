@@ -173,7 +173,7 @@ class CursorAgentsClient:
                 key, _, value = line.partition(":")
                 value = value.lstrip(" ")
                 if key == "data":
-                    event["data"] = (event.get("data", "") + value) if "data" in event else value
+                    event["data"] = (event.get("data", "") + "\n" + value) if "data" in event else value
                 elif key in ("event", "id"):
                     event[key] = value
 
