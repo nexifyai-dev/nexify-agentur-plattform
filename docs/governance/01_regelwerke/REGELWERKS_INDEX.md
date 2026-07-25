@@ -37,6 +37,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
+| Research: AFlow (ICLR 2025 Oral) | `docs/research/AFLOW_OPENREVIEW_z5uVAKwmjf.md` | ✅ 2026-07-25 |
 | Source/Repo/Plugin/CLI Register | `docs/governance/12_register/NEXIFY_CAPABILITY_MCP_SOURCE_REGISTER.md` | ✅ Vorhanden |
 | Dependency/Flow Map | — | ⏳ Wird erstellt |
 | Real Progress Gate | `docs/governance/10_quality_gates/REAL_PROGRESS_GATE_V1.md` | ✅ Neu (MA-015) |
