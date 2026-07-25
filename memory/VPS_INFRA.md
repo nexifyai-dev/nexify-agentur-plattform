@@ -65,10 +65,15 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 5. `cloudflared-paperclip.service`: YAML-Indentation kaputt (Z.6-10) → nur ai-team-Ingress, repariert (ai-team 530→403 app-level).
 - Backups: `/root/config-backups/<ts>-gateways` und `-cloudflared`.
 
-## Website-LLM (mein /app-Backend) – 9router-Integration
-- Primär: MiMo direkt (`MIMO_BASE_URL_OPENAI`, Modell `mimo-v2.5-pro`).
-- Auto-Fallback: `NINEROUTER_BASE_URL=https://ai-router.nexifyai.cloud/v1`, Key = system-key, Modell `ds/deepseek-chat`.
-- Code: `server.py` `llm_complete()` + `open_chat_stream()` fangen Fehler/leere Antwort ab → 9router. Verifiziert (401→Fallback liefert sauberes Deutsch).
+## Website-LLM (Backend) – 9router Vollintegration (25.07.2026)
+- **Code-SSOT:** `backend/ninerouter.py` · Doku: `docs/architecture/9ROUTER_VOLLINTEGRATION.md`
+- Base: `NINEROUTER_BASE_URL=https://ai-router.nexifyai.cloud/v1` (intern `http://127.0.0.1:20128/v1`)
+- **Customer** (Chat/Offer/Planner): `CUSTOMER_MODEL=ds/deepseek-chat`
+- **Agent/intern:** `PRIMARY_MODEL=nexifyai-combo-llm`
+- **Fallback:** `FALLBACK_MODEL=ds/deepseek-chat` (echter Modellwechsel bei Fehler/leerem Content)
+- Key: nur Env `NINEROUTER_API_KEY` (Aliases: `NINEROUTER_KEY`, `OPENAI_API_KEY`) — **nicht in Git**
+- Health: Backend `GET /api/health/llm` · Router `/api/health`
+- Historie: früher MiMo-direkt → dann Combo-only → jetzt Customer/Agent-Split (siehe Vollintegration §6)
 
 ## Offen (P1/P2)
 - **SSO – UMGESETZT & E2E-verifiziert (05.07.)**: Website-Admin → Einmal-HMAC-Token (60s, Nonce gegen Replay) → Hermes-WebUI `/api/auth/sso` → `create_session()` + Cookie → eingeloggt.
@@ -78,11 +83,6 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 - **Design-Transfer – Login UMGESETZT (05.07.)**: `_LOGIN_PAGE_HTML` in `routes.py` auf NeXify-CI rethemt (#09090b, Silber-Logo/Button, Outfit+Manrope via Google Fonts). Verifiziert. Marker `--silver:#d4d4d8`.
   - OFFEN: Voller App-Shell-Retheme (`nexify-overlay/static/style.css`, 374 KB) – große Einzelaufgabe; Shell trägt bereits „NeXify AI"-Branding.
 - MiMo-sk-Konto: umgangen – Website primär über 9router-Combo, MiMo (token-plan) nur Fallback.
-
-## Website-LLM (mein /app-Backend) – 9router als Primär (05.07. aktualisiert)
-- Primär: 9router Combo. `PRIMARY_MODEL=nexifyai-combo-llm`, `NINEROUTER_BASE_URL=https://ai-router.nexifyai.cloud/v1`, Key=system-key.
-- Fallback: MiMo direkt (`FALLBACK_MODEL=mimo-v2.5-pro`). Angebots-Preise serverseitig aus Tagen×999 (modellunabhängig korrekt).
-- Code: `server.py` `llm_complete()`+`open_chat_stream()`. Verifiziert (Planner/Chat über Combo OK).
 
 ## Session-Fixes 06.07.2026 (Fork: Doku-Review + Provider-Hardening)
 1. **Hermes LLM-Provider systemweit fixiert**: Hermes v0.17 unterstützt Provider-Typ `custom` in der WebUI nicht mehr. Lösung: `provider: openai-api` + ENV `OPENAI_API_KEY`/`OPENAI_BASE_URL` (→ 9router `localhost:20128/v1`).

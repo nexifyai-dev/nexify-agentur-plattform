@@ -1,8 +1,11 @@
 # NeXify AI — 9router AI-Architektur
 
+> **Gesamtabstimmung / Vollintegration:** [`9ROUTER_VOLLINTEGRATION.md`](./9ROUTER_VOLLINTEGRATION.md)  
+> **Code-SSOT:** `backend/ninerouter.py`
+
 ## Überblick
 9router (v0.5.18) ist der zentrale AI-Modell-Router auf dem VPS unter `ai-router.nexifyai.cloud`.
-Er aggregiert 7 Provider mit 21 Modellen hinter einer OpenAI-kompatiblen API.
+Er aggregiert mehrere Provider hinter einer OpenAI-kompatiblen API (live: 60+ Modell-IDs inkl. Aliase).
 
 ## Zugang
 | Zugang | URL | Port |
@@ -38,12 +41,14 @@ api_key: <system-key>
 default_model: nexifyai-combo-llm
 ```
 
-## Backend-Integration (`server.py`)
+## Backend-Integration (`backend/ninerouter.py` → `server.py`)
 ```python
 NINEROUTER_BASE_URL = https://ai-router.nexifyai.cloud/v1
-PRIMARY_MODEL = nexifyai-combo-llm
-FALLBACK_MODEL = ds/deepseek-chat
-# 3 Retries + reasoning_content Salvage + <think>-Stripping
+PRIMARY_MODEL   = nexifyai-combo-llm   # agents / Hermes
+CUSTOMER_MODEL  = ds/deepseek-chat     # website chat / offers / planner
+FALLBACK_MODEL  = ds/deepseek-chat
+# Retries with real model switch + reasoning_content salvage + <think> strip
+# Cost-Brake via NINEROUTER_BUDGET_PCT; health via GET /api/health/llm
 ```
 
 ## Webhook Gateway
