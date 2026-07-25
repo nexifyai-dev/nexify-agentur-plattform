@@ -58,31 +58,15 @@ const nextConfig: NextConfig = {
     },
   ],
   redirects: async () => [
-    // Auth/utility pages live OUTSIDE the locale tree. An earlier middleware
-    // version redirected /login → /de/login (404) and Vercel's edge cached
-    // those 404s — send locale-prefixed auth URLs back to the real pages so
-    // stale links and caches recover. Non-permanent on purpose (cheap to undo).
+    // PR47 / Emergent SoT: marketing pages are UNPREFIXED (`/preise`, …).
+    // Prior permanent redirects to `/de/*` forced the alternate `[locale]` tree
+    // and suppressed the Emergent HomePage (Digitale Exzellenz / HeroVisual).
+    // Locale-prefixed URLs are stripped in middleware → unprefixed destinations.
     { source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false },
-    // Legacy redirects (old URLs → /de/ prefixed)
-    { source: "/arbeitsweise", destination: "/de/prozess", permanent: true },
-    { source: "/ueber-pascal", destination: "/de/ueber-mich", permanent: true },
-    { source: "/projekte", destination: "/de/referenzen", permanent: true },
-    { source: "/leistungen/:slug", destination: "/de/leistungen/:slug", permanent: true },
-    { source: "/preise", destination: "/de/preise", permanent: true },
-    { source: "/kontakt", destination: "/de/kontakt", permanent: true },
-    { source: "/prozess", destination: "/de/prozess", permanent: true },
-    { source: "/ueber-mich", destination: "/de/ueber-mich", permanent: true },
-    { source: "/faq", destination: "/de/faq", permanent: true },
-    { source: "/referenzen", destination: "/de/referenzen", permanent: true },
-    { source: "/plattform", destination: "/de/plattform", permanent: true },
-    { source: "/wissen", destination: "/de/wissen", permanent: true },
-    { source: "/impressum", destination: "/de/impressum", permanent: true },
-    { source: "/datenschutz", destination: "/de/datenschutz", permanent: true },
-    { source: "/agb", destination: "/de/agb", permanent: true },
-    { source: "/ki-hinweise", destination: "/de/ki-hinweise", permanent: true },
-    { source: "/cookie-richtlinie", destination: "/de/cookie-richtlinie", permanent: true },
-    { source: "/avv", destination: "/de/avv", permanent: true },
-    { source: "/widerruf", destination: "/de/widerruf", permanent: true },
+    // Legacy aliases → Emergent unprefixed paths (not /de/*)
+    { source: "/arbeitsweise", destination: "/prozess", permanent: true },
+    { source: "/ueber-pascal", destination: "/ueber-mich", permanent: true },
+    { source: "/projekte", destination: "/referenzen", permanent: true },
   ],
   rewrites: async () => {
     const rewrites = [
