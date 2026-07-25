@@ -5,8 +5,11 @@ import os
 import re
 import json
 import uuid
+import hashlib
+import time
 import asyncio
 import logging
+from collections import OrderedDict
 from datetime import datetime, timezone, timedelta
 
 import asyncpg
@@ -59,9 +62,82 @@ PRIMARY_MODEL = os.environ.get("PRIMARY_MODEL", "nexifyai-combo-llm")
 # Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: gleicher 9router mit backup-Modell.
 # Best-practice: alle LLM-Calls über den 9router — Combo hat interne Multi-Provider-Redundanz.
 LLM = AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
-MIMO_MODEL = PRIMARY_MODEL
 LLM_FALLBACK = LLM  # gleicher client → gleicher provider → nutzt Combo-Fallback intern
-FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", PRIMARY_MODEL)
+FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "ds/deepseek-chat")
+
+# --- §10: Systemweite Standardmodelle (3 Modelle, feinabgestimmt je Aufgabe) ---
+# 1. Upstage Solar Pro 3 — Premium DE/NL-Qualität, Primär-Provider laut §10
+UPSTAGE_MODEL = os.environ.get("UPSTAGE_MODEL", "upstage/solar-pro3")
+# 2. DeepSeek Chat (V3.2) — strukturiertes JSON, Angebote, Pläne (§10-Ausnahme: vollintegriert)
+DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "ds/deepseek-chat")
+# 3. Upstage Solar Mini — günstigstes Modell, Token-effizient für einfache Texte & Support
+UPSTAGE_MINI = os.environ.get("UPSTAGE_MINI", "upstage/solar-mini")
+# Reasoning-Modell für komplexe interne Aufgaben (kein Kunden-Output direkt)
+DEEPSEEK_REASONER = os.environ.get("DEEPSEEK_REASONER", "ds/deepseek-v4-pro-none")
+
+# Task-basiertes Routing: ordnet jeden Aufgabentyp dem optimalen Modell zu (cost-first)
+TASK_MODEL_MAP: dict[str, str] = {
+    "chat":      PRIMARY_MODEL,    # Combo (DeepSeek primär → interne Fallback-Kette)
+    "offer":     DEEPSEEK_MODEL,   # JSON-Angebot → DeepSeek Chat (sauber, kein reasoning_content-Leak)
+    "plan":      DEEPSEEK_MODEL,   # JSON-Projektplan → DeepSeek Chat
+    "support":   UPSTAGE_MINI,     # Support-Antworten → solar-mini (günstigstes Standardmodell)
+    "followup":  UPSTAGE_MINI,     # Follow-up-E-Mails → solar-mini
+    "default":   PRIMARY_MODEL,
+}
+
+
+def pick_model(task_type: str = "default") -> str:
+    """Liefert das optimale Modell für den Aufgabentyp — cost-first, quality-aware."""
+    return TASK_MODEL_MAP.get(task_type, PRIMARY_MODEL)
+
+
+# --- Token-Optimierung: In-Memory Response-Cache (echtes LRU + TTL via OrderedDict) ---
+_LLM_CACHE: OrderedDict[str, tuple[str, float]] = OrderedDict()
+LLM_CACHE_TTL = int(os.environ.get("LLM_CACHE_TTL", "3600"))        # Sekunden; 1h Standard
+LLM_CACHE_MAXSIZE = int(os.environ.get("LLM_CACHE_MAXSIZE", "500"))
+LLM_CACHE_ENABLED = os.environ.get("LLM_CACHE_ENABLED", "1") == "1"
+
+# Token-Optimierung: Kontextfenster begrenzen (reduziert Input-Token-Kosten erheblich)
+HISTORY_MAX_TURNS = int(os.environ.get("HISTORY_MAX_TURNS", "12"))  # 12 Nachrichten = 6 Exchanges
+
+
+def _cache_key(model: str, messages: list[dict], max_tokens: int) -> str:
+    payload = json.dumps({"m": model, "msg": messages, "t": max_tokens}, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def _get_cached(key: str) -> str | None:
+    if not LLM_CACHE_ENABLED:
+        return None
+    entry = _LLM_CACHE.get(key)
+    if entry and entry[1] > time.monotonic():
+        _LLM_CACHE.move_to_end(key)  # Als zuletzt genutzt markieren (LRU-Update)
+        logger.debug(f"LLM cache hit: {key[:12]}")
+        return entry[0]
+    _LLM_CACHE.pop(key, None)
+    return None
+
+
+def _set_cached(key: str, value: str, ttl: int = 0) -> None:
+    if not LLM_CACHE_ENABLED:
+        return
+    effective_ttl = ttl or LLM_CACHE_TTL
+    if key in _LLM_CACHE:
+        _LLM_CACHE.move_to_end(key)  # Position bei Update aktualisieren
+    elif len(_LLM_CACHE) >= LLM_CACHE_MAXSIZE:
+        _LLM_CACHE.popitem(last=False)  # Ältesten (am wenigsten genutzten) Eintrag entfernen
+    _LLM_CACHE[key] = (value, time.monotonic() + effective_ttl)
+
+
+def compress_history(history: list[dict]) -> list[dict]:
+    """Begrenzt den Kontext auf System-Prompt(s) + max. HISTORY_MAX_TURNS Nachrichten.
+    Alle System-Nachrichten werden immer beibehalten (in der Praxis exakt eine pro Session).
+    Reduziert Input-Token-Kosten bei langen Gesprächen erheblich."""
+    system = [m for m in history if m["role"] == "system"]
+    turns = [m for m in history if m["role"] != "system"]
+    if len(turns) <= HISTORY_MAX_TURNS:
+        return history
+    return system + turns[-HISTORY_MAX_TURNS:]
 
 SCHEMA = """
 create table if not exists nexify_leads (
@@ -342,28 +418,35 @@ def _parse_json_lenient(raw: str) -> dict | None:
     return None
 
 
-async def llm_complete(messages: list[dict], max_tokens: int = 4000) -> str:
+async def llm_complete(messages: list[dict], max_tokens: int = 4000, task_type: str = "default", cache_ttl: int = 0) -> str:
+    model = pick_model(task_type)
+    ck = _cache_key(model, messages, max_tokens)
+    cached = _get_cached(ck)
+    if cached is not None:
+        return cached
     last_err: Exception | None = None
     for attempt in range(3):
         try:
-            resp = await LLM.chat.completions.create(model=MIMO_MODEL, messages=messages, max_tokens=max_tokens)
+            resp = await LLM.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens)
             content = _extract_llm_content(resp)
             if content:
+                _set_cached(ck, content, cache_ttl)
                 return content
             last_err = RuntimeError("empty LLM response")
         except Exception as e:
             last_err = e
-        logger.warning(f"llm_complete attempt {attempt + 1}/3 failed ({last_err}); retrying via {FALLBACK_MODEL}")
+        logger.warning(f"llm_complete attempt {attempt + 1}/3 ({task_type}/{model}) failed ({last_err}); retrying via {FALLBACK_MODEL}")
     raise last_err
 
 
-async def open_chat_stream(messages: list[dict], max_tokens: int):
+async def open_chat_stream(messages: list[dict], max_tokens: int, task_type: str = "chat"):
+    model = pick_model(task_type)
     try:
-        return await LLM.chat.completions.create(model=PRIMARY_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+        return await LLM.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens, stream=True)
     except Exception as e:
         if not LLM_FALLBACK:
             raise
-        logger.warning(f"primary chat stream failed ({e}); routing via fallback ({FALLBACK_MODEL})")
+        logger.warning(f"chat stream ({task_type}/{model}) failed ({e}); routing via fallback ({FALLBACK_MODEL})")
         return await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
 
 
@@ -654,7 +737,7 @@ async def ai_ticket_reply(ticket_id: str, delay_seconds: int | None = None):
         reply = await llm_complete([
             {"role": "system", "content": SUPPORT_PROMPT},
             {"role": "user", "content": f"Betreff: {ticket['subject']}\nName: {ticket['name']}\n\nVerlauf:\n{thread}{mem_block}"},
-        ], max_tokens=2500)
+        ], max_tokens=2500, task_type="support")
         asyncio.create_task(mem_add(ticket["email"], [
             {"role": "user", "content": f"Support-Anfrage ({ticket['subject']}): {msgs[-1]['body'][:1500]}"},
             {"role": "assistant", "content": reply[:1500]},
@@ -803,7 +886,7 @@ async def planner_plan(body: PlannerIn):
         raw = await llm_complete([
             {"role": "system", "content": PLANNER_PROMPT.format(language=body.language)},
             {"role": "user", "content": brief},
-        ], max_tokens=3000)
+        ], max_tokens=3000, task_type="plan", cache_ttl=300)
     except Exception as e:
         logger.error(f"planner llm failed: {e}")
         raise HTTPException(status_code=502, detail="plan generation failed")
@@ -856,7 +939,7 @@ async def chat(body: ChatMessageIn):
         hold = len(OFFER_READY_MARKER) + 8
         pending = ""
         try:
-            stream = await open_chat_stream(history, 3000)
+            stream = await open_chat_stream(compress_history(history), 3000, task_type="chat")
             async for chunk in stream:
                 delta = chunk.choices[0].delta if chunk.choices else None
                 content = getattr(delta, "content", None) if delta else None
@@ -935,7 +1018,7 @@ async def request_offer(body: OfferRequestIn):
     offer = None
     for attempt in range(2):
         try:
-            raw = await llm_complete(history + [{"role": "user", "content": prompt}], max_tokens=9000)
+            raw = await llm_complete(compress_history(history) + [{"role": "user", "content": prompt}], max_tokens=9000, task_type="offer")
         except Exception as e:
             logger.error(f"offer llm failed: {e}")
             raise HTTPException(status_code=502, detail="offer generation failed")
@@ -1078,7 +1161,7 @@ async def startup():
     })
     await portal.seed_admin(db)
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
-    agent_mod.init(db, LLM, MIMO_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
