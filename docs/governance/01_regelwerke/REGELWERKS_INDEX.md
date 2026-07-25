@@ -29,6 +29,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | 9Router Betrieb | `docs/governance/02_sops/SOP_9ROUTER_OFFICIAL_DOCS_CONFIGURATION_V1.md` | ✅ Skills geladen |
+| 9Router Vollintegration | `docs/architecture/9ROUTER_VOLLINTEGRATION.md` + `backend/ninerouter.py` | ✅ 2026-07-25 |
 | Proxy/MITM Policy | — | ✅ OFF |
 | VPS Service Naming | — | ⏳ Noch zu erstellen |
 
