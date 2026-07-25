@@ -429,3 +429,58 @@
 | Abhängigkeiten | BCM-Runbook → P1-015, TOM-Matrix → P2-005, AVV-Matrix → P2-004 |
 
 **Legende:** ✅ ERSTELLT = im Rahmen dieses Tasks erstellt | 🔴 OFFEN = noch nicht umgesetzt | ⏳ IN ARBEIT = aktuell in Bearbeitung
+
+### P0-022 – Loop-Engineering Guards (deepcode-director) ✅ ERLEDIGT
+| Feld | Wert |
+|---|---|
+| **Typ** | Infrastruktur |
+| **Komponente** | deepcode-director |
+| **Status** | ✅ Erstellt |
+| **Priorität** | P0 |
+| **Beschreibung** | M1-M4 Loop-Safety-Guards: max-iterations (10000/Epoch), iteration-counter, circuit-breaker (3 failures→15min TTL), loop-time-tracking → agentmemory |
+| **Referenz** | `/opt/nexifyai/scripts/deepcode-director.py` v2.0 |
+| **Erstellt** | 2026-07-08 |
+
+### P0-023 – Code-Quality: Bare Excepts & Skill-YAML
+| Feld | Wert |
+|---|---|
+| **Typ** | Code-Qualität |
+| **Komponente** | deepcode-director, Skills |
+| **Status** | ✅ Erledigt |
+| **Priorität** | P0 |
+| **Beschreibung** | 5 bare `except:` → spezifische Exceptions in director.py; 2 Skill-YAML-Frontmatter ergänzt → 25/25 konform |
+| **Referenz** | `/opt/nexifyai/scripts/deepcode-director.py` |
+| **Erstellt** | 2026-07-08 |
+
+### P0-024 – AGENTS.md Factory-Referenz (22 Repos)
+| Feld | Wert |
+|---|---|
+| **Typ** | Dokumentation |
+| **Komponente** | Alle 22 Repos |
+| **Status** | ✅ Erledigt |
+| **Priorität** | P0 |
+| **Beschreibung** | Paperclip Factory API (localhost:3100) als P0-Skill-Quelle in allen AGENTS.md verankert |
+| **Referenz** | `/opt/nexifyai/repos/*/AGENTS.md` |
+| **Erstellt** | 2026-07-08 |
+
+### P0-025 – GDOK v1.5 → v1.6 Aktualisierung
+| Feld | Wert |
+|---|---|
+| **Typ** | Governance (GDOK-ISO) |
+| **Komponente** | agentmemory GDOK-NXAI-MASTER |
+| **Status** | ✅ Erledigt |
+| **Priorität** | P0 |
+| **Beschreibung** | GDOK v1.6: Loop-Engineering, Code-Quality, Compliance (21/21 P0), Sicherheits-Update, Architektur-Update (html-anything). Gespeichert als mem_mrci9gl2_73c947532088 |
+| **Referenz** | `agentmemory: mem_mrci9gl2_73c947532088` |
+| **Erstellt** | 2026-07-08 |
+
+### P0-026 – Wöchentlicher System-Health-Audit (Automatisierung)
+| Feld | Wert |
+|---|---|
+| **Typ** | Monitoring |
+| **Komponente** | Alle 7 Kernkomponenten |
+| **Status** | 🔄 Laufend (wird via frontier auto-generiert) |
+| **Priorität** | P0 |
+| **Beschreibung** | Automatisierter Health-Check aller 7 Komponenten: Hermes, Paperclip, 9Router, agentmemory, LightRAG, Spaether, Traefik. Via systemd-timer + frontier auto-generation. Erster Audit: 2026-07-08 20:07 UTC — alle gesund |
+| **Referenz** | `act_mrcibm3j_74e639e8215f` (frontier), `nexifyai-healthcheck.timer` |
+| **Erstellt** | 2026-07-08 |

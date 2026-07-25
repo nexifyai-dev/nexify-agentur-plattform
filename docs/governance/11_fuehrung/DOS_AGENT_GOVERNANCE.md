@@ -1,11 +1,12 @@
 # NeXifyAI DOS Agent Governance
 
 ## Primärintelligenz
-- Goose ist Primärintelligenz. Alle AI-Arbeiten laufen über Goose.
-- Cline ist Dead Legacy. Nur readonly für Wissensextraktion.
-- Anton ist Legacy/entfernt. Nur historisch relevant.
-- Hermes ist Legacy/entfernt. Nur historisch relevant.
+- **Hermes Agent** ist Primärintelligenz (WebUI:8787, Gateway, WhatsApp Bridge). Alle Agenten-Arbeiten laufen über Hermes.
+- Paperclip ist Factory Control Plane (:3100, Skill-Verwaltung).
+- Goose, Cline, Anton sind Legacy/entfernt. Nur historisch relevant.
 - Oracle/Autopilot-Reste sind Legacy. Keine neue Nutzung.
+
+> **Updated 2026-07-13:** Hermes von "Legacy" auf "Primär" korrigiert — IST-Zustand seit Q2 2026.
 
 ## Agenten-Rollen (Subagenten-Pflicht)
 Bei systemweiten Aufgaben müssen Subagenten in diesen Rollen eingesetzt werden:

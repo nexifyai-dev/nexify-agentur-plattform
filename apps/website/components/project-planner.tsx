@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2, Sparkles, Wand2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 import { useContent } from "@/lib/content";
 
 type Plan = {
@@ -18,6 +18,7 @@ type PlanResult = { session_id: string; plan: Plan; days_min: number; days_max: 
 
 const FEATURES = {
   de: ["Kontakt & Lead-Formulare", "Online-Terminbuchung", "Mehrsprachigkeit (DE/NL/EN)", "Blog / News", "Shop & Online-Zahlungen", "Kundenkonto / Login", "ERP- / Buchhaltungs-Anbindung", "KI-Chatbot / KI-Berater", "Newsletter & E-Mail-Automation", "SEO & Analytics"],
+  en: ["Contact & Lead Forms", "Online Appointment Booking", "Multilingual (EN/DE/NL)", "Blog / News", "Shop & Online Payments", "Customer Account / Login", "ERP / Accounting Integration", "AI Chatbot / AI Advisor", "Newsletter & Email Automation", "SEO & Analytics"],
   nl: ["Contact- & leadformulieren", "Online afspraken boeken", "Meertaligheid (NL/DE/EN)", "Blog / nieuws", "Shop & online betalingen", "Klantaccount / login", "ERP- / boekhoudkoppeling", "AI-chatbot / AI-adviseur", "Nieuwsbrief & e-mailautomatisering", "SEO & analytics"],
 };
 
@@ -43,6 +44,28 @@ const T = {
     error: "Das hat leider nicht geklappt – bitte versuchen Sie es erneut oder schreiben Sie an mail@nexifyai.cloud.",
     restart: "Neues Projekt planen",
     legal: "Unverbindliche Indikation, ausschließlich B2B. Preise zzgl. USt.",
+  },
+  en: {
+    eyebrow: "AI Project Planner",
+    title: "Plan Your Project – AI Delivers Concept, Draft and Offer",
+    intro: "Choose your project type, briefly describe your plans – NeXify AI creates an individual project plan in seconds with modules, initial structure and transparent price range. On request directly as a binding offer via email.",
+    step1: "1. Project Type", step2: "2. Your Project", step3: "3. Your AI Project Plan",
+    industry: "Your industry (e.g. dental practice, mechanical engineering) *",
+    goal: "What should the project achieve? (e.g. more inquiries, online sales) *",
+    features: "Desired features (optional)",
+    details: "Further details, specifics, examples … (optional)",
+    generate: "Create AI Project Plan",
+    generating: "NeXify AI is planning your project …",
+    modules: "Modules & Effort", structure: "Initial Structure Draft", phases: "Project Phases", reco: "Recommendation",
+    total: "Guide price total (net)",
+    offerTitle: "Request Binding Offer",
+    offerText: "We will send you this plan as an individual offer incl. PDF via email – reviewed by Pascal Courbois.",
+    name: "Your name *", email: "Your email *", companyF: "Company (optional)", phoneF: "Phone (optional)",
+    send: "Receive offer via email", sending: "Your offer is being created …",
+    sent: "Your offer is on its way! Check your inbox – Pascal Courbois will also contact you personally.",
+    error: "Unfortunately that didn't work – please try again or write to mail@nexifyai.cloud.",
+    restart: "Plan New Project",
+    legal: "Non-binding indication, exclusively B2B. Prices excl. VAT.",
   },
   nl: {
     eyebrow: "AI-projectplanner",

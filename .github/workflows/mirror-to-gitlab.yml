@@ -1,0 +1,22 @@
+name: Mirror to VPS GitLab
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push mirror to VPS GitLab
+        run: |
+          git remote add gitlab "${{ secrets.VPS_GITLAB_URL }}"
+          git push --mirror gitlab
+        env:
+          VPS_GITLAB_URL: ${{ secrets.VPS_GITLAB_URL }}

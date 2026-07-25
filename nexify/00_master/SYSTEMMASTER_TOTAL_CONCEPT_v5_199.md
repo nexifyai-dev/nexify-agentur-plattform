@@ -12,6 +12,7 @@
 NeXify AI — Agentic AI OS. 3 Agenten (Claude Code, Goose CLI, Goose ACC).
 VDS srv1243952 | 8 Cores | 31GB RAM | 387GB Disk (14% used — 52G/387G).
 Ubuntu 7.0.0-22 | Docker: **22 Container** | Uptime 1d 9h | Load: 3.06
+**9Router: v0.5.18** (updated 2026-07-06; was v0.4.71)
 
 ---
 
@@ -36,9 +37,9 @@ Ubuntu 7.0.0-22 | Docker: **22 Container** | Uptime 1d 9h | Load: 3.06
 |--------|--------|--------|
 | Brain API (9090) | ✅ OK | 767 total (722 brain + 45 memories), 24290s |
 | Qdrant (6333) | ✅ OK | v1.18.2, 4 Collections |
-| 9Router (32794) | ✅ OK | v0.4.71, 3h uptime |
+| 9Router (32794) | ✅ OK | v0.5.18 (updated 2026-07-06), 7 providers active, 21 models |
 | Redis (6379) | ✅ OK | 29h |
-| Traefik (:80/:443) | ✅ OK | 29h |
+| Traefik (:80/:443) | ⚠️ DEPRECATED | Replaced by Cloudflare Tunnel (2026-07-06). Direct routing via Tunnel. See VPS_INFRA.md Z.9-22. |
 | Nexify Proxy (32768) | ✅ OK | 28h |
 | Nexify API | ✅ Running (degraded) | Image `nexify-api:final`, vor Sekunden gestartet |
 | Supabase Stack (12) | ✅ OK | 5h |

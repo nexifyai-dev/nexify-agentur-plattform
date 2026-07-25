@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "title": "NeXify AI — Websites & Software vom Fachmann · 999 €/Tag",
+    "description": "Persönliche B2B-Webentwicklung: Websites, Shops, Apps und Automatisierung zum transparenten Tagessatz."
+  },
+  "nav": {
+    "leistungen": "Leistungen",
+    "preise": "Preise",
+    "arbeitsweise": "Arbeitsweise",
+    "ueber": "Über mich",
+    "kontakt": "Kontakt"
+  },
+  "header": {
+    "chip": "Persönlich geführt",
+    "cta": "Projekt anfragen"
+  },
+  "hero": {
+    "badge": "Erfahrung trifft AI-gestützte Geschwindigkeit",
+    "headline": "Websites und Software vom Fachmann.",
+    "highlight": "In Tagen statt Monaten.",
+    "description": "Pascal Courbois verbindet persönliche Erfahrung, klare Verantwortung und hochmoderne AI-gestützte Entwicklung. So entstehen hochwertige Websites, Shops, Web-Apps, mobile Apps und Automatisierungen zu einem transparenten Preis.",
+    "cta": "Projekt besprechen",
+    "ctaSecondary": "Preise ansehen",
+    "trust1": "Persönlich geführt",
+    "trust2": "999 € netto / Arbeitstag",
+    "trust3": "Ausschließlich B2B"
+  },
+  "proof": {
+    "price": "netto pro Arbeitstag",
+    "landing": "für eine Landingpage",
+    "website": "für eine Website",
+    "shop": "für Shop oder App-MVP"
+  },
+  "services": {
+    "kicker": "Leistungen",
+    "title": "Alles, was ein digitales Produkt wirklich braucht.",
+    "subtitle": "Strategie, Design, Entwicklung, Integrationen, Tests und Übergabe aus einer verantwortlichen Hand. Keine anonyme Produktionskette.",
+    "details": "Details ansehen"
+  },
+  "why": {
+    "kicker": "Warum dieser Preis möglich ist",
+    "title": "Erfahrung spart Umwege. AI spart Durchlaufzeit.",
+    "subtitle": "Der Preis sinkt nicht durch weniger Verantwortung, sondern durch weniger Reibung: keine aufgeblähten Teams, keine Übergabeschleifen, keine monatelange Produktion."
+  },
+  "process": {
+    "kicker": "Arbeitsweise",
+    "title": "Ein klarer Weg vom Ziel zum geprüften Ergebnis.",
+    "subtitle": "Der Umfang wird vorab in Arbeitstagen geplant. Jede Phase erzeugt sichtbare Entscheidungen, Ergebnisse und Prüfungen."
+  },
+  "calculator": {
+    "kicker": "Projekt-Rechner",
+    "title": "Transparenz statt Paketnebel.",
+    "description": "Wählen Sie die geplanten Arbeitstage. Der tatsächliche Umfang wird vor Projektstart anhand von Funktionen, Inhalten, Integrationen und Abnahme definiert.",
+    "days": "Arbeitstage",
+    "day": "Arbeitstag",
+    "netto": "Netto",
+    "vat": "21 % BTW",
+    "gross": "Brutto bei 21 % BTW",
+    "note": "Bei grenzüberschreitenden B2B-Leistungen innerhalb der EU kann bei gültiger Umsatzsteuer-ID Reverse Charge gelten."
+  },
+  "cta": {
+    "kicker": "Start mit klarer Aufwandsspanne",
+    "title": "Beschreiben Sie das Ziel. Sie erhalten Scope, Arbeitstage und Preisrahmen.",
+    "description": "Keine unverbindliche Verkaufspräsentation, sondern eine erste fachliche Einordnung: Was ist nötig, was kann warten und wie lässt es sich wirtschaftlich umsetzen?",
+    "button": "Projekt anfragen",
+    "response": "Antwort auf qualifizierte Anfragen in der Regel innerhalb eines Arbeitstags",
+    "confidential": "Vertrauliche B2B-Kommunikation"
+  },
+  "faq": {
+    "kicker": "Häufige Fragen",
+    "title": "Klare Antworten vor dem Projektstart.",
+    "subtitle": "Die wichtigsten Punkte zu Preis, Umfang und Zusammenarbeit.",
+    "allQuestions": "Alle Fragen ansehen"
+  },
+  "testimonials": {
+    "q1": "In drei Tagen eine vollständige Website – und das Ergebnis sieht aus wie von einer großen Agentur. Pascal hat sofort verstanden, was wir brauchen.",
+    "a1": "Geschäftsführer",
+    "i1": "IT-Beratung",
+    "q2": "Endlich ein Entwickler, der ehrlich sagt, was sinnvoll ist und was nicht. Kein Technologie-Bla, sondern klare Empfehlungen.",
+    "a2": "Inhaberin",
+    "i2": "Handel",
+    "q3": "Der Preis war transparent, die Kommunikation direkt, das Ergebnis termingerecht. So sollte Zusammenarbeit immer laufen.",
+    "a3": "CTO",
+    "i3": "Technologie"
+  },
+  "footer": {
+    "description": "AI-gestützte Websites, Shops, Apps und Automatisierungen – persönlich konzipiert, entwickelt und geprüft.",
+    "b2b": "Ausschließlich B2B",
+    "navigation": "Navigation",
+    "services": "Leistungen",
+    "contact": "Kontakt",
+    "ready": "Bereit, Ihr Projekt zu starten?",
+    "readySub": "Kostenlose Erstberatung · Antwort in 24h",
+    "cta": "Projekt anfragen"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Seite nicht gefunden.",
+    "description": "Der Link ist möglicherweise veraltet oder die URL enthält einen Tippfehler.",
+    "back": "Zur Startseite"
+  },
+  "loading": "Wird geladen …",
+  "backToTop": "Oben"
+}

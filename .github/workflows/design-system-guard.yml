@@ -1,0 +1,48 @@
+name: Design System Guard
+
+# Prevents the [locale] page design system in apps/website/app/globals.css
+# from being silently stripped by a future merge (as happened before the
+# fix in commits 51f1a1e8 / 1add04a9). Fails CI if the file is truncated
+# or missing the design-system marker.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/website/app/globals.css"
+  pull_request:
+    paths:
+      - "apps/website/app/globals.css"
+  workflow_dispatch:
+
+jobs:
+  guard-globals-css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify globals.css contains the full [locale] design system
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="apps/website/app/globals.css"
+
+          if [ ! -f "$FILE" ]; then
+            echo "::error::$FILE is missing"
+            exit 1
+          fi
+
+          LINES=$(wc -l < "$FILE")
+          echo "globals.css has $LINES lines"
+
+          if [ "$LINES" -lt 1500 ]; then
+            echo "::error::$FILE has only $LINES lines (< 1500). The [locale] page design system may have been stripped again."
+            exit 1
+          fi
+
+          if ! grep -q "\[locale\] PAGE DESIGN SYSTEM" "$FILE"; then
+            echo "::error::$FILE is missing the '[locale] PAGE DESIGN SYSTEM' marker. It must not be truncated to the flat stylesheet."
+            exit 1
+          fi
+
+          echo "OK: globals.css contains the full design system ($LINES lines)."
