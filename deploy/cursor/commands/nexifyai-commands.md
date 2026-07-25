@@ -73,19 +73,26 @@ Bei `/nexifyai-commands audit` oder `list`:
 4. MCP-Plugins brauchen Open Folder; sonst `workspaceId-empty-window`.
 5. Kurzbericht: OK / Drift / Action.
 
-## Sync auf Windows-PC
+## Agent-Regel: stets EIN Selbstausführungs-Befehl
+
+Wenn der User Sync/Install braucht: **immer genau einen** copy-paste-fähigen Befehl liefern (PowerShell auf Windows, bash sonst) — keine mehrstufige Anleitung als Ersatz.
+
+### Windows PowerShell (GitHub raw — empfohlen)
 
 ```powershell
-# Im geklonten Repo (oder nach git pull):
-.\deploy\cursor\sync-commands-windows.ps1
-# Default-Ziel: $env:USERPROFILE\.cursor\commands
+irm "https://raw.githubusercontent.com/nexifyai-dev/nexify-agentur-plattform/cursor/nexifyai-commands-9368/deploy/cursor/install-commands.ps1" | iex
 ```
 
-Manuell:
+### Windows PowerShell (VPN → VPS)
 
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.cursor\commands" | Out-Null
-Copy-Item -Force .\.cursor\commands\*.md "$env:USERPROFILE\.cursor\commands\"
+$d="$env:USERPROFILE\.cursor\commands"; New-Item -ItemType Directory -Force $d|Out-Null; scp "root@10.66.66.1:/root/nexify-cursor-commands/*.md" $d; Get-ChildItem $d\*.md | % { "/$($_.BaseName)" }
+```
+
+### Shell (Linux/macOS/Git-Bash)
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/nexifyai-dev/nexify-agentur-plattform/cursor/nexifyai-commands-9368/deploy/cursor/install-commands.sh" | bash
 ```
 
 Danach in Cursor `/` tippen → Commands erscheinen. Bei leerem Fenster zuerst **Open Folder**.
