@@ -50,6 +50,7 @@ owner: NeXify CEO (nexify-ceo)
 | F14 | Promptmaster — ist das eine separate Rolle oder identisch mit Systemmaster? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Rollenklärung |
 | F15 | Meta-Audit — wer auditiert den Auditor? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Prozess definieren |
 | F16 | Budget-Freigabe bei Kostenüberschreitung — wer entscheidet? | 🟡 MEDIUM | OFFEN | NeXify CEO | 2026-06-29 | Policy erstellen |
+| F32 | Charta §8 „volle Autonomie… wartet auf niemanden“ vs. `GOVERNANCE.md` §2.2 „Kein interaktiver Eingriff in Produktionsprozesse ohne Freigabe“ (+ Verbot V08)? | 🔴 HIGH | OFFEN | NeXify CEO + CTO | 2026-07-28 | **Eskalation — Agent darf nicht selbst auflösen.** Kontext: `CHARTA.md` §16, Evidence `08_evidence/CHARTA_RECONCILE_PRIMARY_SOURCE_2026-07-25.md` |
 
 ---
 
@@ -101,6 +102,7 @@ owner: NeXify CEO (nexify-ceo)
 ### 8.1 SOFORT (bis 2026-06-25)
 
 ```
+F32 — §8 Autonomie vs. Production-Freigabe-Verbot (Eskalation CEO/CTO)  ← NEU 2026-07-25
 F01 — RTK-Status klären
 F02 — Headroom-Endpoint klären
 F07 — Paperclip-Status klären

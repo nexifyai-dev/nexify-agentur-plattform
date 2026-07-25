@@ -5,9 +5,9 @@
 
 ---
 
-## 0. Charta §0–§13 — Geltungsbereich
+## 0. Charta §0–§16 — Geltungsbereich
 
-Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebsmodell):
+Dieses Governance-System ist die **Primärquelle**. Der vereinfachte Betriebsauszug liegt in [`CHARTA.md`](./CHARTA.md) (bestätigt §0–§13; ergänzt §14–§16). Bei Konflikt gilt dieser Ordnerbaum, nicht der Auszug.
 
 | Charta | Governance-Ordner | Zweck |
 |--------|------------------|-------|
@@ -19,12 +19,15 @@ Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebs
 | §5 Fach-/Governance-Ebene | `01_regelwerke/`, `02_sops/` | Fachexperten-Agenten verwalten Regelwerke |
 | §6 Agenten-Architektur | `11_fuehrung/` | Spezialagenten pro Bereich |
 | §7 Wissens-/Gedächtnisschicht | `08_evidence/`, `12_register/` | AgentMemory + LightRAG zentral |
-| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen |
+| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen — ⚠️ siehe §16 / F32 |
 | §9 Betriebsrahmen | `13_betriebshandbuch/` | Live-Terminal, Deutsch, Best-Practice |
 | §10 Modellstrategie | `09_konzepte/` | Upstage + DeepSeek, gestaffelte Migration |
 | §11 Monitoring | `07_audits_reports/`, `14_production/` | Durchgehende Überwachung aller Komponenten |
 | §12 Circuit Breaker | `12_register/` | Budget-/Iterationsgrenzen, Notabschaltung |
 | §13 Arbeitsweise | `10_quality_gates/` | Verifikation vor Übernahme, Ehrlichkeit |
+| §14 Pre-Task-Gates | `03_checklisten/`, `02_sops/SOP_PRE_TASK_COMPLIANCE_V1.md` | BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION |
+| §15 Design-System | `/design_guidelines.json` | Dark/Luxury, Outfit+Manrope, Background `#0A0A0A` |
+| §16 Primärquellen-Rang + offene Konflikte | `CHARTA.md` §16, `12_register/OFFENE_FRAGEN_REGISTER.md` | Auszug ≠ Ersatz; F32 Eskalation Autonomie vs. Production-Freigabe |
 
 ---
 ## 1. Verzeichnisstruktur
@@ -73,7 +76,8 @@ Siehe: `01_regelwerke/VERBOTE_UND_PFLICHTREGELN_V2.md`
 - **Kein Secret im Code** — API-Keys nur in env (mode 600)
 - **Kein blinder Write** — Lesen vor Schreiben
 - **Kein Fake-Done** — Evidence verpflichtend
-- **Kein interaktiver Eingriff** in Produktionsprozesse ohne Freigabe
+- **Kein interaktiver Eingriff** in Produktionsprozesse ohne Freigabe  
+  ⚠️ **NORMKONFLIKT F32 (ungeklärt):** Diese Zeile (+ Verbot **V08**) widerspricht Charta §8 („volle Autonomie… wartet auf niemanden“). **Nicht selbst auflösen — Eskalation CEO/CTO.** Siehe `CHARTA.md` §16 und `12_register/OFFENE_FRAGEN_REGISTER.md` F32.
 
 ### 2.3 Post-Go-Live-Checkliste
 
@@ -277,4 +281,4 @@ Siehe: `11_fuehrung/DOS_AGENT_GOVERNANCE.md`
 
 ---
 
-*Alle Dokumente unter `docs/governance/` sind versioniert und verbindlich. Bei Widerspruch gilt: Live-System schlägt alter Doku. Aktuellste Version im Git-Repo schlägt Kopie.*
+*Alle Dokumente unter `docs/governance/` sind versioniert und verbindlich. Bei Widerspruch gilt: Live-System schlägt alter Doku. Aktuellste Version im Git-Repo schlägt Kopie. `CHARTA.md` ist bestätigter Auszug — Primärquelle bleibt dieser Ordnerbaum (§16).*
