@@ -37,6 +37,9 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
+| FlowSearch Synthesis (AFlow/ADAS) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` | ✅ 2026-07-25 |
+| Operator Register v1 | `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | ✅ 2026-07-25 |
+| FlowSearch Package | `backend/flowsearch/` | ✅ Offline MCTS |
 | Source/Repo/Plugin/CLI Register | `docs/governance/12_register/NEXIFY_CAPABILITY_MCP_SOURCE_REGISTER.md` | ✅ Vorhanden |
 | Dependency/Flow Map | — | ⏳ Wird erstellt |
 | Real Progress Gate | `docs/governance/10_quality_gates/REAL_PROGRESS_GATE_V1.md` | ✅ Neu (MA-015) |
