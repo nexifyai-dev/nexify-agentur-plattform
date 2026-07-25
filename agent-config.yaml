@@ -56,14 +56,42 @@ hooks:
 # --- §10: Modellstrategie ---
 models:
   primary_provider: upstage
+  # Die 3 systemweiten Standardmodelle (feinabgestimmt je Aufgabentyp):
+  system_defaults:
+    - id: upstage/solar-pro3
+      alias: upstage
+      role: "Premium DE/NL-Qualität, Primär-Provider laut §10"
+      tasks: [chat_premium, general]
+    - id: ds/deepseek-chat
+      alias: deepseek
+      role: "Strukturiertes JSON, Angebote, Pläne — §10-Ausnahme: vollintegriert"
+      tasks: [offer, plan, reasoning]
+    - id: upstage/solar-mini
+      alias: solar-mini
+      role: "Günstigstes Standardmodell — Support, Follow-up, einfache Texte"
+      tasks: [support, followup, simple_chat]
+  # Optional: DeepSeek Reasoning für interne komplexe Aufgaben
+  extended:
+    - id: ds/deepseek-v4-pro-none
+      alias: deepseek-reasoner
+      role: "Reasoning ohne thinking-Leak — interne Analyse, kein direkter Kunden-Output"
+    - id: ds/deepseek-v4-flash
+      alias: deepseek-flash
+      role: "Schnell + Reasoning — alternative zu deepseek-chat"
+  token_optimization:
+    strategy: task_routing         # Jeder Task-Typ → günstigstes geeignetes Modell
+    response_cache: in_memory      # LRU-Cache mit TTL (500 Einträge, 1h Standard)
+    history_window: sliding        # Nur die letzten HISTORY_MAX_TURNS Nachrichten übertragen
+    history_max_turns: 12          # 12 Msg = 6 Exchanges → reduziert Input-Tokens drastisch
+    cache_ttl_seconds: 3600        # 1h Standard-TTL für wiederholte Anfragen
   retained:
     - name: deepseek
-      reason: "Ausnahme laut §10 — bleibt vollintegriert"
-  rollout: staged                       # kein Komplett-Swap ohne Rueckfallebene
-  # ist: LightRAG bereits Upstage (solar-pro3); breite Migration je Dienst noch offen
+      reason: "Ausnahme laut §10 — bleibt vollintegriert als systemweites Standardmodell"
+  rollout: staged                       # kein Komplett-Swap ohne Rückfallebene
+  # ist: LightRAG bereits Upstage (solar-pro3); Backend-Migration via task-routing abgeschlossen
   cursor_models:
     billing: token_based
-    auto_hard_stop_on_budget_exhaustion: false   # per Fetch bestaetigt
+    auto_hard_stop_on_budget_exhaustion: false   # per Fetch bestätigt
     note: "Cursor stoppt selbst NICHT automatisch — deshalb greift §12 auch hier"
 
 # --- §8: Autonomie- & Rueckfragegrenzen ---
