@@ -1,0 +1,103 @@
+# FILE: .github/workflows/deploy-vercel.yml
+# NIR: 25.07.2026 13:30
+# NAME: NeXifyAI Agent (Vercel Deployment)
+# TEAM: NeXifyAI DevOps
+# WHAT: Deploy apps/website to Vercel Production on push to main
+# WHY: Automated Vercel deploy ensures design-system fixes in main reach production
+#      without manual intervention. Fixes broken design caused by PRs #15-#18.
+# BEST-PRACTICE: Vercel CLI via pnpm dlx — no global install needed, always latest
+# PITFALL: V-01: VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID must be set in
+#          GitHub Secrets (Vercel → Settings → Tokens). Without them the job fails
+#          gracefully (continue-on-error: false removed intentionally — a failed
+#          deploy should be visible in CI).
+# DEPENDS: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID (GitHub Secrets)
+# DOCS-REF: https://vercel.com/docs/cli
+
+name: Deploy to Vercel (main → production)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual trigger for emergency re-deploys
+
+concurrency:
+  group: deploy-vercel
+  cancel-in-progress: false  # Serialise deploys — never cancel a running production deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Vercel Production Deploy
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: apps/website/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: apps/website
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify design system integrity (pre-deploy gate)
+        working-directory: apps/website
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="app/globals.css"
+          LINES=$(wc -l < "$FILE")
+          echo "globals.css has $LINES lines"
+          if [ "$LINES" -lt 1500 ]; then
+            echo "::error::globals.css has only $LINES lines (< 1500). Aborting deploy — design system may be stripped."
+            exit 1
+          fi
+          if ! grep -q "\[locale\] PAGE DESIGN SYSTEM" "$FILE"; then
+            echo "::error::globals.css is missing the '[locale] PAGE DESIGN SYSTEM' marker. Aborting deploy."
+            exit 1
+          fi
+          echo "✅ Design system integrity OK ($LINES lines)"
+
+      - name: Deploy to Vercel (production)
+        id: deploy
+        working-directory: apps/website
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          DEPLOY_URL=$(pnpm dlx vercel --token "$VERCEL_TOKEN" \
+            --prod \
+            --yes \
+            --cwd . \
+            2>&1 | tee /tmp/vercel-output.txt | tail -1)
+          echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+          echo "✅ Deployed to: $DEPLOY_URL"
+
+      - name: Post-deploy health check
+        shell: bash
+        run: |
+          DEPLOY_URL="${{ steps.deploy.outputs.url }}"
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "⚠️  No deploy URL captured — skipping health check"
+            exit 0
+          fi
+          echo "🏥 Checking $DEPLOY_URL/api/health ..."
+          for i in 1 2 3; do
+            if curl -sf --max-time 15 "$DEPLOY_URL/api/health" > /dev/null 2>&1; then
+              echo "✅ Health check passed"
+              exit 0
+            fi
+            echo "Attempt $i failed — retrying in 10s..."
+            sleep 10
+          done
+          echo "⚠️  Health check did not respond (deployment may still be warming up)"
