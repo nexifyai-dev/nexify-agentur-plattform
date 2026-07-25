@@ -19,6 +19,7 @@
 | MCP-006 | NeXify Capability MCP | custom | `mcp://nexify/capability/` | capability-registry | stdio/gRPC | Tool/Workflow-Registry – Capability-Erkennung, Permission-Prüfung, Workflow-Dispatch | yes | HIGH | DRAFT | `/evidence/mcp-006-capability.md` |
 | MCP-007 | Oracle MCP | planned | `mcp://nexify/oracle/` | question-dispatch | gRPC | Question/Knowledge/Dispatch – Intent-Klassifikation, Wissensabfrage, Agent-Dispatch | yes | HIGH | PLANNED | `/evidence/mcp-007-oracle.md` |
 | MCP-008 | Secret Management MCP | planned | `mcp://nexify/secret/` | secret-store | gRPC/HSM | Secret Rotation/Access – Credential-Lifecycle, Vault-Integration, Audit-Logging | yes | CRITICAL | PLANNED | `/evidence/mcp-008-secret.md` |
+| MCP-009 | gitlab-oss | local/self-hosted MCP | `https://gitlab.nexifyai.cloud/api/v4` | REST via `@zereight/mcp-gitlab` | stdio (npx) | Self-hosted GitLab OSS – MRs, Issues, Pipelines, Repos (nicht gitlab.com) | yes | HIGH | REGISTERED | `/deploy/mcp/gitlab-oss/README.md` |
 
 ### Legende
 
