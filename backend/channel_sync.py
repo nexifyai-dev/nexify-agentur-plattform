@@ -304,8 +304,8 @@ async def whatsapp_webhook(request: Request):
 
     if WHATSAPP_ACCESS_TOKEN:
         raw_body = await request.body()
-        _verify_meta_signature(request, raw_body)  # non-fatal on failure
-
+        if not _verify_meta_signature(request, raw_body):
+            raise HTTPException(status_code=403, detail="bad signature")
     asyncio.create_task(_handle_meta_whatsapp(body))
     return {"ok": True}
 
