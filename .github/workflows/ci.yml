@@ -63,12 +63,9 @@ jobs:
 
       - name: TypeScript check
         run: npx tsc --noEmit
-        continue-on-error: true  # TS errors werden als Warning gemeldet
 
       - name: Lint
         run: npx next lint
-        continue-on-error: true
-
       - name: Build Next.js
         run: pnpm build
         continue-on-error: true  # Build can fail due to missing env vars; validate project structure
