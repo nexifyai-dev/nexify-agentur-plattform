@@ -2,8 +2,9 @@
 
 > Stand: 2026-07-25 (aktualisiert)
 > Canonical: Ja — dieser Index ist die führende Referenz.
-> Governance-Pfade: `docs/governance/` ist die kanonische Quelle. Legacy-Pfade unter `nexify/` werden beibehalten, Verweise zeigen auf kanonische Pfade.
-> Charta-Auszug: `docs/governance/CHARTA.md` (§0–§16) — bestätigt Struktur, ersetzt Ordnerbaum nicht. Offener Normkonflikt: F32.
+> Governance-Pfade: `docs/governance/` ist die **Primärquelle**. Legacy-Pfade unter `nexify/` bleiben, Verweise zeigen auf kanonische Pfade.
+> Charta-Auszug: `docs/governance/CHARTA.md` (§0–§16) — bestätigt Struktur, ersetzt Ordnerbaum nicht. Offener Normkonflikt: **F32**.
+> Design-System: `/design_guidelines.json` — Dark/Luxury, Outfit+Manrope, bg `#0A0A0A` (verbindlich).
 
 ## Charta / Primärquelle
 
