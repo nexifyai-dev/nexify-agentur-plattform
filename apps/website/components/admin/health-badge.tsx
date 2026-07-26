@@ -24,9 +24,16 @@ export function HealthBadge() {
   }, []);
 
   useEffect(() => {
-    load();
-    const iv = setInterval(load, 60000);
-    return () => clearInterval(iv);
+    const timeoutId = window.setTimeout(() => {
+      void load();
+    }, 0);
+    const iv = window.setInterval(() => {
+      void load();
+    }, 60000);
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.clearInterval(iv);
+    };
   }, [load]);
 
   if (!h) {

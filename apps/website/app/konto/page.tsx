@@ -242,8 +242,11 @@ export default function PortalPage() {
   useEffect(() => {
     if (user === false) router.push("/login");
     if (user) {
-      setProfile({ name: user.name ?? "", company: user.company ?? "", phone: user.phone ?? "" });
+      const timeoutId = window.setTimeout(() => {
+        setProfile({ name: user.name ?? "", company: user.company ?? "", phone: user.phone ?? "" });
+      }, 0);
       loadOffers();
+      return () => window.clearTimeout(timeoutId);
     }
   }, [user, router, loadOffers]);
 

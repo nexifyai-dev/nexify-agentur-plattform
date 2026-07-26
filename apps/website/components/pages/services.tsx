@@ -19,7 +19,7 @@ export function ServicesPage() {
         </Reveal>
 
         <div className="mt-16 space-y-8">
-          {t.services.map((s, i) => {
+          {t.services.map((s) => {
             const Icon = ICONS[s.icon];
             return (
               <Reveal key={s.slug} delay={60}>
