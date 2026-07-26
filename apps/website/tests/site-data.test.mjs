@@ -1,9 +1,19 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import * as ts from 'typescript';
 
-const source = readFileSync(new URL('../lib/site-data.ts', import.meta.url), 'utf8');
+const read = (path) => {
+  try {
+    return readFileSync(path, 'utf8');
+  } catch (error) {
+    const displayPath = path instanceof URL ? fileURLToPath(path) : path;
+    throw new Error(`${displayPath} not found or unreadable`, { cause: error });
+  }
+};
+
+const source = read(new URL('../lib/site-data.ts', import.meta.url));
 const sourceFile = ts.createSourceFile('site-data.ts', source, ts.ScriptTarget.ES2023, true, ts.ScriptKind.TS);
 
 /** Unwraps TypeScript type assertions so tests can inspect the underlying literal AST nodes. */
