@@ -1,6 +1,6 @@
 # NeXify AI — Automationen und Cronregister V1
 
-**Stand:** 2026-06-12 | **Status:** VERBINDLICH | **Version:** 1.0.0
+**Stand:** 2026-07-26 | **Status:** VERBINDLICH | **Version:** 1.1.0
 **Owner:** Betrieb / NeXify AI
 **Klassifikation:** nexify_internal
 
@@ -8,44 +8,50 @@
 
 ## 1. Zweck
 
-Zentrales Register aller aktiven und geplanten Automationen und Cron-Jobs.
+Diese Datei ist die menschlich lesbare Übersicht über den aktuellen Automationsbestand.
 
-## 2. Automations-Register
+**Kanonische Detailquelle:** `docs/governance/12_register/automation-control-register-v1.json`  
+**Soll-Betriebsmodell:** `docs/governance/12_register/AUTOMATION_OPERATING_MODEL_V1.md`
 
-| ID | Automation | Trigger | Aktion | Status | Gate |
-|----|-----------|---------|--------|--------|------|
-| A-001 | Brain Sync | Cron stündlich | Brain-Queue verarbeiten | 🟡 CRON_READY | F |
-| A-002 | Brain Healthcheck | Cron 5min | Brain Health prüfen + Alert | 🟢 AKTIV | — |
-| A-003 | Live-State-Snapshot | Cron 30min | Host-Snapshot erstellen | 🟡 CRON_READY | F |
-| A-004 | Handoff-Aufräumung | Cron stündlich | Alte Handoffs archivieren | 🟡 CRON_READY | F |
-| A-005 | Secret-Ablauf-Prüfung | Cron täglich | Secret-TTL prüfen | 🟡 CRON_READY | F |
-| A-006 | Evidence-Prüfung | Cron 4h | Evidence-Vollständigkeit | 🟡 CRON_READY | F |
-| A-007 | Feedback-Loop | Cron täglich | Feedback-Metriken sammeln | 🟡 CRON_READY | F |
-| A-008 | Chat Continuation | Event | Chat nach Unterbrechung fortsetzen | 🟢 AKTIV | — |
-| A-009 | Lead-Qualifizierung | Event | Neue Leads automatisch qualifizieren | 🟡 GEKANNT | F |
-| A-010 | Angebots-Follow-up | Event | Angebotserinnerungen automatisch | 🟡 GEKANNT | F |
-| A-011 | Brain → agentmemory | Cron 4h | Knowledge aus Brain syncen | 🟡 GEKANNT | F |
-| A-012 | Monitoring Report | Cron 24h | Täglicher Betriebsreport | 🟡 GEKANNT | F |
-| A-BACKUP-001 | Backup-Automatisierung | Cron 02:00 | Workspace+Brain+Qdrant+Config Backup | 🟢 AKTIV | — |
-| A-MON-001 | Health Monitor | Cron */5 | Service Health + Metrics | 🟢 AKTIV | — |
-| A-SEC-001 | Security Scan | Cron 03:00 | Secret-Leak+Port+Docker+F2B | 🟢 AKTIV | — |
-| A-DEP-001 | Deployment Automation | Event | Pre/Post-Deploy Checks | 🟢 AKTIV | — |
-| A-MASTER-001 | Master Controller | Manuell | Zentraler Automation-Controller | 🟢 AKTIV | — |
+---
 
-## 3. Cron-Architektur
+## 2. Konsolidierte Baseline
 
-- Cron-Skripte in: `/workspace/nexify/11_brain_sync/`
-- Systemd-Timer: 13 aktive Timer
-- Aktivierung: Erst nach F-Freigabe
+| Bereich | Aktive / bekannte Automationen |
+|---|---|
+| GitHub Actions | `test`, `build`, `deploy-vps`, `deploy-vercel`, `gitlab-sync`, `mirror-to-gitlab`, `secret-scan`, `design-system-guard` |
+| GitLab CI | Redundanzpfad für lint/test/build/deploy |
+| Lokale Hooks | `pre-commit`-Pipeline + dokumentierte `pre-push` Boundary-Gates |
+| Runtime | `resend-inbound` Webhook, E-Mail-Worker-Polling, `schedule_task`, VPS-Healthcheck |
+| Governance | Cron-/Runbook-/Evidence-Planung und Audit-Zyklen |
 
-## 4. Automations-Engine-Pipeline
+---
 
+## 3. Trigger-Klassen
+
+| Klasse | Beispiele | Mindestanforderungen |
+|---|---|---|
+| Git | push, pull_request | Secret-/Boundary-Gates, CI-Checks |
+| Manuell | workflow_dispatch, Recovery | dokumentierte Freigabe, Evidence |
+| Zeit | schedule / Cron | Owner, SLA, Healthcheck, Rollback |
+| Event | Webhook, Mail, Statuswechsel | Validierung, Deduplizierung, Audit-Log |
+| Lokal | pre-commit, pre-push | harte Hook-Gates vor Remote-Write |
+
+---
+
+## 4. Gate-Grundsätze
+
+- Keine Automation ohne Registereintrag
+- Keine Cron-Aktivierung ohne Owner, Healthcheck, Evidence und Abort Condition
+- Kein externer Write ohne Gate, Rollback und Auditierbarkeit
+- Kein produktiver Blind-Retry
+
+---
+
+## 5. Betriebsformel
+
+```text
+Trigger -> Validator -> Gate -> Executor -> Healthcheck -> Evidence -> Recovery/Abort
 ```
-Trigger → Validator → Context Loader → Policy Gate → 
-Executor → Evidence Writer → Brain/agentmemory Sync → 
-Review Hook → Retry/Recovery → Abort Condition
-```
 
-## 5. Gate
-
-Keine Cron-Aktivierung ohne F-Freigabe. Keine Automation ohne Evidence-Pfad.
+Die vollständigen Regeln, Flows und Rollen stehen im Operating Model.
