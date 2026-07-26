@@ -153,3 +153,12 @@ jobs:
           push: false
           cache-from: type=gha
         continue-on-error: true
+
+      - name: Build backend image (if Dockerfile exists)
+        run: |
+          if [ -f ./deploy/docker/Dockerfile.backend ]; then
+            docker build -f ./deploy/docker/Dockerfile.backend ./backend
+          else
+            echo "Skipping backend image build: deploy/docker/Dockerfile.backend not present."
+          fi
+        continue-on-error: true
