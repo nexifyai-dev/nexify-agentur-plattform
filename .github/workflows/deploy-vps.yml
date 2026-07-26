@@ -87,7 +87,13 @@ jobs:
             else
               echo "⚠️  LightRAG (port 9621) — NOT RESPONDING"
             fi
-            
+
+            if curl -sf http://127.0.0.1:8484/health > /dev/null 2>&1; then
+              echo "✅ Hermes WebUI (port 8484) — OK"
+            else
+              echo "⚠️  Hermes WebUI (port 8484) — NOT RESPONDING"
+            fi
+             
             bash infra/scripts/health-check.sh || true
             
             # 5. Logs

@@ -403,3 +403,58 @@ async def task_worker():
         except Exception as e:
             logger.warning(f"agent task worker error: {e}")
         await asyncio.sleep(60)
+
+
+async def seed_recurring_tasks():
+    """Seed weekly autonomous self-optimization and system health tasks if not already scheduled.
+    Called once from server startup. Idempotent — only inserts if no matching pending/future task exists.
+    """
+    pool = await _DB()
+    if not pool:
+        return
+    now = datetime.now(TZ)
+
+    tasks = [
+        {
+            "title": "Wöchentliche Selbstoptimierung & System-Review",
+            "days": 7,
+            "instruction": (
+                "WÖCHENTLICHE SELBSTOPTIMIERUNG – Autonomer Review.\n"
+                "1. Rufe get_stats auf und analysiere aktuelle Zahlen (Leads, Angebote, Tickets, Pipeline).\n"
+                "2. Rufe list_tasks auf und prüfe: gibt es steckengebliebene Tasks (>7 Tage pending)? Wenn ja, storniere sie via cancel_task und plane neue mit klarer Instruktion.\n"
+                "3. Rufe list_tickets(status='open') auf. Tickets die >5 Tage alt und unanswered sind: prüfe ob AI-Antwort sinnvoll wäre, antworte professionell via reply_ticket.\n"
+                "4. Rufe list_offers(status='sent') auf. Angebote >48h ohne Reaktion: plane follow-up via schedule_task für den nächsten Arbeitstag.\n"
+                "5. Plane die nächste Selbstoptimierung in 7 Tagen via schedule_task mit identischer Instruktion.\n"
+                "Berichte kompakt was du erledigt hast (kein Markdown, keine Sternchen)."
+            ),
+        },
+        {
+            "title": "Monatlicher Pipeline-Bericht",
+            "days": 30,
+            "instruction": (
+                "MONATLICHER PIPELINE-BERICHT.\n"
+                "1. Rufe get_stats auf für aktuelle Kennzahlen.\n"
+                "2. Rufe list_offers(status='accepted') auf und berechne den gewonnenen Umsatz.\n"
+                "3. Rufe list_leads auf und analysiere Conversion-Rate (won vs. total).\n"
+                "4. Verfasse einen kompakten Bericht (keine Markdown-Formatierung) und sende ihn via send_email an den Admin (mail@nexifyai.cloud).\n"
+                "   Betreff: 'NeXify AI – Monatsbericht Pipeline & KPI'\n"
+                "5. Plane den nächsten Monatsbericht in 30 Tagen via schedule_task mit identischer Instruktion."
+            ),
+        },
+    ]
+
+    for t in tasks:
+        run_at = now + __import__("datetime").timedelta(days=t["days"])
+        title_prefix = t["title"][:60]
+        async with pool.acquire() as con:
+            existing = await con.fetchval(
+                "SELECT 1 FROM nexify_agent_tasks WHERE title LIKE $1 AND status='pending' AND run_at > now() LIMIT 1",
+                f"{title_prefix}%"
+            )
+            if not existing:
+                tid = uuid.uuid4()
+                await con.execute(
+                    "INSERT INTO nexify_agent_tasks (id,title,instruction,run_at) VALUES ($1,$2,$3,$4)",
+                    tid, t["title"], t["instruction"], run_at,
+                )
+                logger.info(f"Seeded recurring task: {t['title']} @ {run_at.isoformat()}")
