@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, X, Send, FileText, CheckCircle2 } from "lucide-react";
 import { API_BASE } from "@/lib/company";
@@ -87,23 +87,23 @@ export function ChatWidget() {
   const [form, setForm] = useState({ name: "", email: "", company: "", phone: "" });
   const scrollRef = useRef<HTMLDivElement>(null);
   const openedOnce = useRef(false);
+  const openChat = useCallback(() => {
+    openedOnce.current = true;
+    setOpen(true);
+    setMessages((current) => (
+      current.length === 0 ? [{ role: "assistant", content: t.greeting }] : current
+    ));
+  }, [t.greeting]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!openedOnce.current && !window.localStorage.getItem("nova-greeted")) {
         window.localStorage.setItem("nova-greeted", "1");
-        setOpen(true);
+        openChat();
       }
     }, 6000);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{ role: "assistant", content: t.greeting }]);
-    }
-    if (open) openedOnce.current = true;
-  }, [open, messages.length, t.greeting]);
+  }, [openChat]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -199,7 +199,7 @@ export function ChatWidget() {
   return (
     <>
       {!open && (
-        <button className="chat-launcher" onClick={() => setOpen(true)} aria-label="Chat öffnen" data-testid="chat-launcher">
+        <button className="chat-launcher" onClick={openChat} aria-label="Chat öffnen" data-testid="chat-launcher">
           <Sparkles size={24} className="text-zinc-200" />
         </button>
       )}

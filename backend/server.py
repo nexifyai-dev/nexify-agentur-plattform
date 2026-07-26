@@ -16,23 +16,23 @@ import asyncpg
 import resend
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, EmailStr
-from openai import AsyncOpenAI
-
 import portal
 import booking
 import agent as agent_mod
 import email_agent
+import channel_sync
 from memory import mem_add, mem_search
+from ninerouter import CostBrakeError, router as nine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
 
+# Legacy env names retained for ops compatibility; routing is owned by ninerouter.py
 EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY")
 MIMO_API_KEY = os.environ.get("MIMO_API_KEY")
 MIMO_BASE_URL = os.environ.get("MIMO_BASE_URL_OPENAI")
-MIMO_MODEL = os.environ.get("MIMO_MODEL", "mimo-v2.5-pro")
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
 INTERNAL_NOTIFY_EMAIL = os.environ.get("INTERNAL_NOTIFY_EMAIL")
@@ -48,48 +48,91 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+RATE_LIMIT_WINDOW_SECONDS = 60
+RATE_LIMIT_RULES: list[tuple[str, int]] = [
+    ("/api/chat", 20),
+    ("/api/planner/plan", 10),
+    ("/api/offers/request", 5),
+    ("/api/contact", 5),
+    ("/api/webhooks/", 100),
+]
+RATE_LIMIT_BUCKETS: dict[tuple[str, str], list[float]] = {}
+RATE_LIMIT_REQUESTS = 0
+
+
+def _get_client_ip(request: Request) -> str:
+    forwarded_for = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+    if forwarded_for:
+        return forwarded_for
+    if request.client and request.client.host:
+        return request.client.host
+    return "unknown"
+
+
+def _get_rate_limit_rule(path: str) -> tuple[str, int] | None:
+    if path.startswith("/api/admin/") or path.startswith("/api/health"):
+        return None
+    for prefix, limit in RATE_LIMIT_RULES:
+        if prefix.endswith("/"):
+            if path.startswith(prefix):
+                return prefix, limit
+        elif path == prefix:
+            return prefix, limit
+    return None
+
+
+def _cleanup_rate_limit_buckets(now: float) -> None:
+    cutoff = now - RATE_LIMIT_WINDOW_SECONDS
+    for key, timestamps in list(RATE_LIMIT_BUCKETS.items()):
+        fresh = [ts for ts in timestamps if ts > cutoff]
+        if fresh:
+            RATE_LIMIT_BUCKETS[key] = fresh
+        else:
+            RATE_LIMIT_BUCKETS.pop(key, None)
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    rule = _get_rate_limit_rule(request.url.path)
+    if not rule:
+        return await call_next(request)
+
+    global RATE_LIMIT_REQUESTS
+    now = time.monotonic()
+    RATE_LIMIT_REQUESTS += 1
+    if RATE_LIMIT_REQUESTS % 100 == 0:
+        _cleanup_rate_limit_buckets(now)
+
+    endpoint_prefix, limit = rule
+    key = (_get_client_ip(request), endpoint_prefix)
+    cutoff = now - RATE_LIMIT_WINDOW_SECONDS
+    timestamps = [ts for ts in RATE_LIMIT_BUCKETS.get(key, []) if ts > cutoff]
+    if len(timestamps) >= limit:
+        RATE_LIMIT_BUCKETS[key] = timestamps
+        return JSONResponse(status_code=429, content={"detail": "Zu viele Anfragen – bitte warte einen Moment."})
+
+    timestamps.append(now)
+    RATE_LIMIT_BUCKETS[key] = timestamps
+    return await call_next(request)
+
 app.include_router(portal.router)
 app.include_router(booking.router)
 app.include_router(agent_mod.router)
+app.include_router(channel_sync.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
 
-NINEROUTER_BASE_URL = os.environ.get("NINEROUTER_BASE_URL")
-NINEROUTER_API_KEY = os.environ.get("NINEROUTER_API_KEY")
-PRIMARY_MODEL = os.environ.get("PRIMARY_MODEL", "nexifyai-combo-llm")
-
-# Primär: 9router (Combo mit Multi-Provider-Fallback). Fallback: gleicher 9router mit backup-Modell.
-# Best-practice: alle LLM-Calls über den 9router — Combo hat interne Multi-Provider-Redundanz.
-LLM = AsyncOpenAI(base_url=NINEROUTER_BASE_URL, api_key=NINEROUTER_API_KEY)
-LLM_FALLBACK = LLM  # gleicher client → gleicher provider → nutzt Combo-Fallback intern
-FALLBACK_MODEL = os.environ.get("FALLBACK_MODEL", "ds/deepseek-chat")
-
-# --- §10: Systemweite Standardmodelle (3 Modelle, feinabgestimmt je Aufgabe) ---
-# 1. Upstage Solar Pro 3 — Premium DE/NL-Qualität, Primär-Provider laut §10
-UPSTAGE_MODEL = os.environ.get("UPSTAGE_MODEL", "upstage/solar-pro3")
-# 2. DeepSeek Chat (V3.2) — strukturiertes JSON, Angebote, Pläne (§10-Ausnahme: vollintegriert)
-DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "ds/deepseek-chat")
-# 3. Upstage Solar Mini — günstigstes Modell, Token-effizient für einfache Texte & Support
-UPSTAGE_MINI = os.environ.get("UPSTAGE_MINI", "upstage/solar-mini")
-# Reasoning-Modell für komplexe interne Aufgaben (kein Kunden-Output direkt)
-DEEPSEEK_REASONER = os.environ.get("DEEPSEEK_REASONER", "ds/deepseek-v4-pro-none")
-
-# Task-basiertes Routing: ordnet jeden Aufgabentyp dem optimalen Modell zu (cost-first)
-TASK_MODEL_MAP: dict[str, str] = {
-    "chat":      PRIMARY_MODEL,    # Combo (DeepSeek primär → interne Fallback-Kette)
-    "offer":     DEEPSEEK_MODEL,   # JSON-Angebot → DeepSeek Chat (sauber, kein reasoning_content-Leak)
-    "plan":      DEEPSEEK_MODEL,   # JSON-Projektplan → DeepSeek Chat
-    "support":   UPSTAGE_MINI,     # Support-Antworten → solar-mini (günstigstes Standardmodell)
-    "followup":  UPSTAGE_MINI,     # Follow-up-E-Mails → solar-mini
-    "default":   PRIMARY_MODEL,
-}
-
-
-def pick_model(task_type: str = "default") -> str:
-    """Liefert das optimale Modell für den Aufgabentyp — cost-first, quality-aware."""
-    return TASK_MODEL_MAP.get(task_type, PRIMARY_MODEL)
-
+# 9router Vollintegration — siehe backend/ninerouter.py + docs/architecture/9ROUTER_VOLLINTEGRATION.md
+NINEROUTER_BASE_URL = nine.config.base_url
+NINEROUTER_API_KEY = nine.config.api_key
+PRIMARY_MODEL = nine.config.primary_model
+CUSTOMER_MODEL = nine.config.customer_model
+FALLBACK_MODEL = nine.config.fallback_model
+LLM = nine.client
+LLM_FALLBACK = nine.client
+MIMO_MODEL = PRIMARY_MODEL  # agent.py historically expects this name
 
 # --- Token-Optimierung: In-Memory Response-Cache (echtes LRU + TTL via OrderedDict) ---
 _LLM_CACHE: OrderedDict[str, tuple[str, float]] = OrderedDict()
@@ -194,6 +237,24 @@ create table if not exists nexify_agent_tasks (
   id uuid primary key, title text, instruction text, run_at timestamptz, status text default 'pending',
   result text, created_at timestamptz default now()
 );
+create table if not exists nexify_channel_events (
+  id uuid primary key,
+  channel text not null,
+  direction text not null,
+  summary text,
+  contact_email text,
+  contact_phone text,
+  contact_name text,
+  contact_ref text,
+  ref_id text,
+  ref_type text,
+  metadata jsonb default '{}',
+  ts timestamptz default now()
+);
+create index if not exists idx_channel_events_email on nexify_channel_events (lower(contact_email));
+create index if not exists idx_channel_events_phone on nexify_channel_events (lower(contact_phone));
+create index if not exists idx_channel_events_ref   on nexify_channel_events (lower(contact_ref));
+create index if not exists idx_channel_events_ts    on nexify_channel_events (ts desc);
 """
 
 LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
@@ -361,14 +422,7 @@ def get_history(session_id: str, language: str) -> list[dict]:
 
 
 def _extract_llm_content(resp) -> str:
-    msg = resp.choices[0].message
-    content = (msg.content or "").strip()
-    if not content:
-        rc = getattr(msg, "reasoning_content", None) or (getattr(msg, "model_extra", None) or {}).get("reasoning_content")
-        content = (rc or "").strip()
-    if "<think>" in content:
-        content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
-    return content
+    return nine.extract_content(resp)
 
 
 def _parse_json_lenient(raw: str) -> dict | None:
@@ -418,36 +472,40 @@ def _parse_json_lenient(raw: str) -> dict | None:
     return None
 
 
-async def llm_complete(messages: list[dict], max_tokens: int = 4000, task_type: str = "default", cache_ttl: int = 0) -> str:
-    model = pick_model(task_type)
-    ck = _cache_key(model, messages, max_tokens)
+async def llm_complete(
+    messages: list[dict],
+    max_tokens: int = 4000,
+    task_type: str = "default",
+    cache_ttl: int = 0,
+    *,
+    purpose: str = "customer",
+    model: str | None = None,
+) -> str:
+    """Complete via 9router. Routes all tasks through 9router with caching."""
+    ck = _cache_key(model or purpose, messages, max_tokens)
     cached = _get_cached(ck)
     if cached is not None:
         return cached
-    last_err: Exception | None = None
-    for attempt in range(3):
-        try:
-            resp = await LLM.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens)
-            content = _extract_llm_content(resp)
-            if content:
-                _set_cached(ck, content, cache_ttl)
-                return content
-            last_err = RuntimeError("empty LLM response")
-        except Exception as e:
-            last_err = e
-        logger.warning(f"llm_complete attempt {attempt + 1}/3 ({task_type}/{model}) failed ({last_err}); retrying via {FALLBACK_MODEL}")
-    raise last_err
+    try:
+        result = await nine.complete(
+            messages,
+            purpose=purpose,  # type: ignore[arg-type]
+            model=model,
+            max_tokens=max_tokens,
+        )
+        _set_cached(ck, result, cache_ttl)
+        return result
+    except CostBrakeError as e:
+        logger.error("llm_complete cost-brake: %s", e)
+        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
 
 
 async def open_chat_stream(messages: list[dict], max_tokens: int, task_type: str = "chat"):
-    model = pick_model(task_type)
     try:
-        return await LLM.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens, stream=True)
-    except Exception as e:
-        if not LLM_FALLBACK:
-            raise
-        logger.warning(f"chat stream ({task_type}/{model}) failed ({e}); routing via fallback ({FALLBACK_MODEL})")
-        return await LLM_FALLBACK.chat.completions.create(model=FALLBACK_MODEL, messages=messages, max_tokens=max_tokens, stream=True)
+        return await nine.stream(messages, purpose="customer", max_tokens=max_tokens)
+    except CostBrakeError as e:
+        logger.error("open_chat_stream cost-brake: %s", e)
+        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
 
 
 def offer_email_html(offer: dict, name: str, language: str, price_total: int) -> str:
@@ -763,9 +821,194 @@ async def health():
     return {"status": "ok", "db": "supabase" if pool else "unavailable", "time": datetime.now(timezone.utc).isoformat()}
 
 
+@app.get("/api/health/llm")
+async def health_llm():
+    """9router / LLM subsystem health (no secrets)."""
+    info = await nine.health()
+    ok = bool(info.get("configured") and info.get("reachable"))
+    return {
+        "status": "ok" if ok else "degraded",
+        "ninerouter": {
+            "configured": info.get("configured"),
+            "reachable": info.get("reachable"),
+            "http_status": info.get("http_status"),
+            "base_url": info.get("base_url"),
+            "primary_model": info.get("primary_model"),
+            "customer_model": info.get("customer_model"),
+            "fallback_model": info.get("fallback_model"),
+            "budget_pct": info.get("budget_pct"),
+        },
+        "time": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def _db_pool_snapshot(pool: asyncpg.Pool | None) -> dict:
+    if not pool:
+        return {"available": False}
+    snapshot = {"available": True}
+    for field, method_name in (
+        ("size", "get_size"),
+        ("idle", "get_idle_size"),
+        ("min_size", "get_min_size"),
+        ("max_size", "get_max_size"),
+    ):
+        method = getattr(pool, method_name, None)
+        if callable(method):
+            try:
+                snapshot[field] = method()
+            except Exception:
+                snapshot[field] = None
+    return snapshot
+
+
+async def _safe_fetchval(con, query: str, label: str, errors: list[str], *args) -> int:
+    try:
+        value = await con.fetchval(query, *args)
+        return int(value or 0)
+    except Exception as e:
+        errors.append(label)
+        logger.warning(f"{label} query failed: {e}")
+        return 0
+
+
+async def _safe_channel_counts(con, errors: list[str]) -> dict[str, int]:
+    try:
+        rows = await con.fetch(
+            "select channel, count(*)::int as total from nexify_channel_events group by channel order by channel"
+        )
+        return {str(row["channel"]): int(row["total"] or 0) for row in rows}
+    except Exception as e:
+        errors.append("channels")
+        logger.warning(f"channel health query failed: {e}")
+        return {}
+
+
+async def _collect_system_status() -> dict:
+    ts = datetime.now(timezone.utc).isoformat()
+    pool = await db()
+    counts = {
+        "nexify_leads": 0,
+        "nexify_offers": 0,
+        "nexify_tickets": 0,
+        "nexify_agent_tasks_pending": 0,
+        "nexify_channel_events": 0,
+    }
+    channels: dict[str, int] = {}
+    errors: list[str] = []
+
+    if pool:
+        try:
+            async with pool.acquire() as con:
+                counts["nexify_leads"] = await _safe_fetchval(con, "select count(*) from nexify_leads", "nexify_leads", errors)
+                counts["nexify_offers"] = await _safe_fetchval(con, "select count(*) from nexify_offers", "nexify_offers", errors)
+                counts["nexify_tickets"] = await _safe_fetchval(con, "select count(*) from nexify_tickets", "nexify_tickets", errors)
+                counts["nexify_agent_tasks_pending"] = await _safe_fetchval(
+                    con,
+                    "select count(*) from nexify_agent_tasks where status = $1",
+                    "nexify_agent_tasks_pending",
+                    errors,
+                    "pending",
+                )
+                counts["nexify_channel_events"] = await _safe_fetchval(
+                    con, "select count(*) from nexify_channel_events", "nexify_channel_events", errors
+                )
+                channels = await _safe_channel_counts(con, errors)
+        except Exception as e:
+            errors.append("db_acquire")
+            logger.warning(f"health status DB acquire failed: {e}")
+    else:
+        errors.append("db_unavailable")
+
+    degraded = bool(errors) or not pool
+    return {
+        "status": "degraded" if degraded else "ok",
+        "db": {
+            "pool": _db_pool_snapshot(pool),
+            **counts,
+            "errors": errors,
+        },
+        "email_agent": email_agent.get_status(),
+        "channels": channels,
+        "pending_agent_tasks": counts["nexify_agent_tasks_pending"],
+        "ts": ts,
+    }
+
+
+@app.get("/api/health/full")
+async def health_full():
+    return await _collect_system_status()
+
+
+@app.get("/api/metrics")
+async def metrics():
+    pool = await db()
+    if not pool:
+        return PlainTextResponse("# DB unavailable\n", media_type="text/plain; version=0.0.4; charset=utf-8")
+
+    errors: list[str] = []
+    metrics_values = {
+        "nexify_leads_total": 0,
+        "nexify_offers_total": 0,
+        "nexify_tickets_total": 0,
+        "nexify_tickets_open": 0,
+        "nexify_channel_events_total": 0,
+        "nexify_agent_tasks_pending": 0,
+    }
+
+    try:
+        async with pool.acquire() as con:
+            metrics_values["nexify_leads_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_leads", "metrics_nexify_leads_total", errors
+            )
+            metrics_values["nexify_offers_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_offers", "metrics_nexify_offers_total", errors
+            )
+            metrics_values["nexify_tickets_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_tickets", "metrics_nexify_tickets_total", errors
+            )
+            metrics_values["nexify_tickets_open"] = await _safe_fetchval(
+                con, "select count(*) from nexify_tickets where status = $1", "metrics_nexify_tickets_open", errors, "open"
+            )
+            metrics_values["nexify_channel_events_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_channel_events", "metrics_nexify_channel_events_total", errors
+            )
+            metrics_values["nexify_agent_tasks_pending"] = await _safe_fetchval(
+                con,
+                "select count(*) from nexify_agent_tasks where status = $1",
+                "metrics_nexify_agent_tasks_pending",
+                errors,
+                "pending",
+            )
+    except Exception as e:
+        logger.warning(f"metrics DB acquire failed: {e}")
+
+    body = "\n".join(
+        [
+            "# HELP nexify_leads_total Total leads",
+            "# TYPE nexify_leads_total gauge",
+            f"nexify_leads_total {metrics_values['nexify_leads_total']}",
+            "# HELP nexify_offers_total Total offers",
+            "# TYPE nexify_offers_total gauge",
+            f"nexify_offers_total {metrics_values['nexify_offers_total']}",
+            "# HELP nexify_tickets_total Total tickets",
+            "# TYPE nexify_tickets_total gauge",
+            f"nexify_tickets_total {metrics_values['nexify_tickets_total']}",
+            "# HELP nexify_tickets_open Open tickets",
+            "# TYPE nexify_tickets_open gauge",
+            f"nexify_tickets_open {metrics_values['nexify_tickets_open']}",
+            "# HELP nexify_channel_events_total Cross-channel events total",
+            "# TYPE nexify_channel_events_total gauge",
+            f"nexify_channel_events_total {metrics_values['nexify_channel_events_total']}",
+            "# HELP nexify_agent_tasks_pending Pending agent tasks",
+            "# TYPE nexify_agent_tasks_pending gauge",
+            f"nexify_agent_tasks_pending {metrics_values['nexify_agent_tasks_pending']}",
+        ]
+    ) + "\n"
+    return PlainTextResponse(body, media_type="text/plain; version=0.0.4; charset=utf-8")
+
+
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError):
-    from fastapi.responses import JSONResponse
     if "UUID" in str(exc):
         return JSONResponse(status_code=400, content={"detail": "Ungültige ID"})
     return JSONResponse(status_code=500, content={"detail": "Interner Fehler"})
@@ -843,6 +1086,16 @@ async def process_inbound_email(data: dict):
         asyncio.create_task(send_email(
             INTERNAL_NOTIFY_EMAIL, f"Eingehende E-Mail: {subject} ({from_addr})",
             ci_email("Eingehende E-Mail", f"<p><b>{name}</b> ({from_addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{text[:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>", cta_label="Im CRM öffnen", cta_url=f"{os.environ.get('FRONTEND_URL','')}/admin")))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="email",
+        direction="inbound",
+        summary=f"E-Mail: {subject} — {name} ({from_addr}): {text[:200]}",
+        contact_email=from_addr,
+        contact_name=name,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+        metadata={"subject": subject, "email_id": email_id},
+    ))
     logger.info(f"inbound email processed: ticket {ticket_id} from {from_addr}")
 
 
@@ -1008,6 +1261,16 @@ async def contact(body: ContactIn):
     if INTERNAL_NOTIFY_EMAIL:
         notify = f"<p>Neue Anfrage über die Website:</p><p><b>{body.name}</b> ({body.email})<br/>Firma: {body.company or '-'}<br/>Telefon: {body.phone or '-'}<br/>Sprache: {body.language}</p><p>{body.message}</p>"
         asyncio.create_task(send_email(INTERNAL_NOTIFY_EMAIL, f"Neue Website-Anfrage von {body.name}", notify))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Kontaktanfrage: {body.name} — {(body.message or '')[:200]}",
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+    ))
     return {"status": "ok", "lead_id": str(lead_id)}
 
 
@@ -1074,6 +1337,17 @@ async def request_offer(body: OfferRequestIn):
     convo = [m for m in history if m["role"] in ("user", "assistant")][-12:]
     if convo:
         asyncio.create_task(mem_add(body.email, convo, {"source": "offer_chat", "offer_title": offer.get("title", "")}))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Chat-Angebot: {offer.get('title', '')} — {body.name} — €{price_total:,.0f}".replace(",", "."),
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(offer_id),
+        ref_type="offer",
+        metadata={"offer_title": offer.get("title", ""), "price_total": price_total, "session_id": body.session_id},
+    ))
     return {
         "status": "sent" if email_id else "generated",
         "offer_id": str(offer_id),
@@ -1163,8 +1437,15 @@ async def startup():
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    channel_sync.init(
+        db_getter=db,
+        send_email_fn=send_email,
+        internal_notify_email=INTERNAL_NOTIFY_EMAIL or "",
+        frontend_url=os.environ.get("FRONTEND_URL", ""),
+    )
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
+    asyncio.create_task(agent_mod.seed_recurring_tasks())
     asyncio.create_task(email_agent.email_worker())
 
 

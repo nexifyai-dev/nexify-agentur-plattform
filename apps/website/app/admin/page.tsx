@@ -11,12 +11,13 @@ import { CreateOfferForm, ProspectForm } from "@/components/admin/forms";
 import { LeadsPanel, type Lead } from "@/components/admin/leads-panel";
 import { SlotsPanel } from "@/components/admin/slots-panel";
 import { AgentChat } from "@/components/admin/agent-chat";
+import { ChannelEventsPanel } from "@/components/admin/channel-events-panel";
 import { EmailAgentPanel } from "@/components/admin/email-agent-panel";
 import { CeoRecommendationsPanel } from "@/components/admin/ceo-recommendations-panel";
 import { HealthBadge } from "@/components/admin/health-badge";
 
 type Stats = { leads: number; offers: number; accepted: number; declined: number; chat_sessions: number; customers: number; pipeline_value: number; won_value: number };
-type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "createOffer" | "prospect" | "email" | "emailAgent" | "ceo";
+type Tab = "leads" | "offers" | "slots" | "tickets" | "chats" | "agent" | "channelEvents" | "createOffer" | "prospect" | "email" | "emailAgent" | "ceo";
 
 const TABS: [Tab, string][] = [
   ["agent", "AI-Agent"],
@@ -25,6 +26,7 @@ const TABS: [Tab, string][] = [
   ["slots", "Termine"],
   ["tickets", "Tickets"],
   ["chats", "KI-Chats"],
+  ["channelEvents", "Channel Events"],
   ["emailAgent", "E-Mail-Agent"],
   ["ceo", "CEO-Empfehlungen"],
   ["createOffer", "+ Angebot"],
@@ -167,6 +169,7 @@ export default function AdminPage() {
 
           {tab === "chats" && sessions.map((s) => <SessionRow key={s.id} s={s} />)}
 
+          {tab === "channelEvents" && <ChannelEventsPanel />}
           {tab === "emailAgent" && <EmailAgentPanel />}
           {tab === "ceo" && <CeoRecommendationsPanel />}
 

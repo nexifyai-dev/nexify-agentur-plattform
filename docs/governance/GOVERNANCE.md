@@ -5,9 +5,9 @@
 
 ---
 
-## 0. Charta §0–§13 — Geltungsbereich
+## 0. Charta §0–§16 — Geltungsbereich
 
-Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebsmodell):
+**Primärquelle:** dieser Ordnerbaum (`docs/governance/`). Der vereinfachte Betriebsauszug liegt in [`CHARTA.md`](./CHARTA.md) (bestätigt §0–§13; ergänzt §14–§16). Bei Konflikt gilt dieser Ordnerbaum, nicht der Chat-Auszug.
 
 | Charta | Governance-Ordner | Zweck |
 |--------|------------------|-------|
@@ -19,12 +19,15 @@ Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebs
 | §5 Fach-/Governance-Ebene | `01_regelwerke/`, `02_sops/` | Fachexperten-Agenten verwalten Regelwerke |
 | §6 Agenten-Architektur | `11_fuehrung/` | Spezialagenten pro Bereich |
 | §7 Wissens-/Gedächtnisschicht | `08_evidence/`, `12_register/` | AgentMemory + LightRAG zentral |
-| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen |
+| §8 Autonomie & Rückfragegrenzen | `11_fuehrung/` | Volle Autonomie, protokollierte Änderungen — ⚠️ siehe §16 / **F32** |
 | §9 Betriebsrahmen | `13_betriebshandbuch/` | Live-Terminal, Deutsch, Best-Practice |
 | §10 Modellstrategie | `09_konzepte/` | Upstage + DeepSeek, gestaffelte Migration |
 | §11 Monitoring | `07_audits_reports/`, `14_production/` | Durchgehende Überwachung aller Komponenten |
 | §12 Circuit Breaker | `12_register/` | Budget-/Iterationsgrenzen, Notabschaltung |
 | §13 Arbeitsweise | `10_quality_gates/` | Verifikation vor Übernahme, Ehrlichkeit |
+| §14 Pre-Task-Gates | `03_checklisten/`, `02_sops/SOP_PRE_TASK_COMPLIANCE_V1.md` | BRAIN_FIRST … TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE) |
+| §15 Design-System | `/design_guidelines.json` | Dark/Luxury, Outfit+Manrope, Background `#0A0A0A` |
+| §16 Primärquellen-Rang + offene Konflikte | `CHARTA.md` §16, `12_register/OFFENE_FRAGEN_REGISTER.md` | Auszug ≠ Ersatz; **F32** Eskalation |
 
 ---
 ## 1. Verzeichnisstruktur
@@ -42,7 +45,7 @@ Dieses Governance-System folgt der **Charta §0–§13** (verbindliches Betriebs
 | `09_konzepte/` | Pflichtenheft, Brand-Konzept, OS-Gesamtkonzept | 5 |
 | `10_quality_gates/` | Production-Gates, HITL-Gate, CI-CD-Compliance | 11 |
 | `11_fuehrung/` | Governance-Rules, Agent-Governance, Promptmaster | 7 |
-| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register | 14 |
+| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register, Automation-Model | 16 |
 | `13_betriebshandbuch/` | Betriebsanleitung V3, Normalbetrieb, SOP V5 | 6 |
 | `14_production/` | Production-Skripte, Docker-Compose, Cron-Register | 5 |
 
@@ -74,7 +77,8 @@ Siehe: `01_regelwerke/VERBOTE_UND_PFLICHTREGELN_V2.md`
 - **Kein Secret im Code** — API-Keys nur in env (mode 600)
 - **Kein blinder Write** — Lesen vor Schreiben
 - **Kein Fake-Done** — Evidence verpflichtend
-- **Kein interaktiver Eingriff** in Produktionsprozesse ohne Freigabe
+- **Kein interaktiver Eingriff** in Produktionsprozesse ohne Freigabe  
+  ⚠️ **NORMKONFLIKT F32 (ungeklärt):** widerspricht Charta §8 („volle Autonomie… wartet auf niemanden“) und eng verwandt mit Verbot **V08**. **Nicht selbst auflösen — Eskalation CEO/CTO.** Siehe `CHARTA.md` §16 und `OFFENE_FRAGEN_REGISTER.md` F32.
 
 ### 2.3 Post-Go-Live-Checkliste
 
@@ -172,6 +176,7 @@ Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE
 | Pre-Task 6 Gates | Jeder Task | `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` |
 | Secret-Scan | Vor jedem Commit | `.pre-commit-config.yaml` |
 | Charta-Deviation-Scan | Jeder Zyklus (dieses Dokument) | Vollprüfung §2 |
+| Automations-Register-Review | bei Workflow-/Cron-/Hook-Änderung | `12_register/automation-control-register-v1.json` |
 
 ### Wöchentlich (Montag)
 - Voll-Scan in `07_audits_reports/`
@@ -194,7 +199,7 @@ Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE
 |------|--------|-------------|
 | 06:00 | System-Health-Check | `infra/scripts/health-check.sh` |
 | 06:15 | Brain-Sync prüfen | `12_register/SHARED_AGENT_STATE.json` |
-| 06:30 | Cron-Job-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md` |
+| 06:30 | Cron-Job- und Trigger-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md`, `12_register/automation-control-register-v1.json` |
 | 18:00 | Daily-Report | `07_audits_reports/` |
 
 ### 7.2 Wöchentlich
@@ -278,4 +283,4 @@ Siehe: `11_fuehrung/DOS_AGENT_GOVERNANCE.md`
 
 ---
 
-*Alle Dokumente unter `docs/governance/` sind versioniert und verbindlich. Bei Widerspruch gilt: Live-System schlägt alter Doku. Aktuellste Version im Git-Repo schlägt Kopie.*
+*Alle Dokumente unter `docs/governance/` sind versioniert und verbindlich. Bei Widerspruch gilt: Live-System schlägt alter Doku. Aktuellste Version im Git-Repo schlägt Kopie. `CHARTA.md` ist bestätigter Auszug — Primärquelle bleibt dieser Ordnerbaum (§16). Design-System: `design_guidelines.json` (`#0A0A0A`, Outfit/Manrope). Offener Normkonflikt: F32.*

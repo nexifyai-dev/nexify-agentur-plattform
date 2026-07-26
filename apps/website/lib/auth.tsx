@@ -67,7 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refresh();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate auth state on provider mount
+    void refresh();
   }, [refresh]);
 
   return <AuthContext.Provider value={{ user, setUser, refresh }}>{children}</AuthContext.Provider>;
