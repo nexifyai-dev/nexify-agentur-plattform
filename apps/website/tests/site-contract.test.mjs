@@ -3,8 +3,6 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
-const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
   const candidates = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
@@ -30,14 +28,13 @@ test('package exposes required quality scripts', () => {
 test('legacy aliases and locale-only routes redirect to canonical pages', () => {
   const config = read('next.config.ts');
   const redirects = [
-    ['/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', '/:page'],
-    ['/arbeitsweise', '/prozess'],
-    ['/ueber-pascal', '/ueber-mich'],
-    ['/projekte', '/referenzen'],
+    '{ source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false }',
+    '{ source: "/arbeitsweise", destination: "/prozess", permanent: true }',
+    '{ source: "/ueber-pascal", destination: "/ueber-mich", permanent: true }',
+    '{ source: "/projekte", destination: "/referenzen", permanent: true }',
   ];
-  for (const [source, destination] of redirects) {
-    assert.match(config, new RegExp(`source: "${escapeRegExp(source)}"`));
-    assert.match(config, new RegExp(`destination: "${escapeRegExp(destination)}"`));
+  for (const redirect of redirects) {
+    assert.ok(config.includes(redirect));
   }
 });
 
