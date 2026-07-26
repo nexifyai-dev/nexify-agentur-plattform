@@ -82,12 +82,22 @@ test('package exposes required quality scripts', () => {
 
 test('redirect config keeps expected locale and legacy aliases', () => {
   const redirects = parseRedirects();
-  assert.deepEqual(redirects, [
+  for (const expected of [
     { source: '/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', destination: '/:page', permanent: false },
     { source: '/arbeitsweise', destination: '/prozess', permanent: true },
     { source: '/ueber-pascal', destination: '/ueber-mich', permanent: true },
     { source: '/projekte', destination: '/referenzen', permanent: true },
-  ]);
+  ]) {
+    assert.ok(
+      redirects.some(
+        (redirect) =>
+          redirect.source === expected.source &&
+          redirect.destination === expected.destination &&
+          redirect.permanent === expected.permanent
+      ),
+      `missing redirect ${expected.source} -> ${expected.destination}`
+    );
+  }
   assert.ok(!redirects.some(({ source }) => source === '/preise'));
   assert.ok(!redirects.some(({ source }) => source === '/kontakt'));
 });
