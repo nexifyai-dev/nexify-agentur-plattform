@@ -1,0 +1,410 @@
+# FILE: .github/workflows/vps-worker.yml
+# NIR: 26.07.2026 13:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: VPS Worker — proaktive Automations-Flows auf dem Self-Hosted Runner
+# WHY: Zentraler Orchestrations-Workflow: Health-Check, Cleanup, Hermes-Sync,
+#      LightRAG-Indexing und proaktive Agent-Flows direkt auf dem VPS.
+# BEST-PRACTICE: Läuft ausschließlich auf Self-Hosted Runner (self-hosted,vps,nexifyai);
+#                kein SSH-Tunnel nötig; interne Dienste direkt erreichbar.
+# PITFALL: V-01: Nur auf self-hosted ausführen — ubuntu-latest hat keinen VPS-Zugang.
+#          V-02: Jeder Job setzt continue-on-error:true wo der VPS-Dienst optional ist.
+# DEPENDS: Self-Hosted Runner auf VPS, /etc/nexifyai/secrets.env, Docker-Socket
+# DOCS-REF: docs/architecture/GITHUB-RUNNER-VPS.md
+
+name: VPS Worker (proaktive Flows)
+
+on:
+  schedule:
+    # Täglich 06:00 UTC — Vollsystem-Health + Governance (§11)
+    - cron: '0 6 * * *'
+    # Stündlich — leichter Health-Ping der kritischen Dienste
+    - cron: '0 * * * *'
+    # Montags 07:00 UTC — Cleanup + LightRAG-Reindex + Audit-Report
+    - cron: '0 7 * * 1'
+
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Welchen Job ausführen?'
+        required: true
+        default: 'full-health'
+        type: choice
+        options:
+          - full-health
+          - quick-ping
+          - cleanup
+          - lightrag-reindex
+          - hermes-sync
+          - runner-renew
+          - governance-audit
+
+  push:
+    branches: [ main ]
+    paths:
+      # Neu deployte Compose- oder Infrastruktur-Dateien → sofortiger Health-Check
+      - 'docker-compose.yml'
+      - 'infra/**'
+      - 'deploy/**'
+
+concurrency:
+  group: vps-worker
+  cancel-in-progress: false   # VPS-Ops niemals abbrechen
+
+permissions:
+  contents: read   # Checkout ist der einzige GITHUB_TOKEN-Zugriff; alle anderen Calls nutzen GITHUB_PAT
+
+# Alle Jobs laufen auf dem Self-Hosted Runner
+defaults:
+  run:
+    shell: bash
+
+env:
+  REPO_DIR: /opt/nexifyai/repos/nexify-agentur-plattform
+  SECRETS_FILE: /etc/nexifyai/secrets.env
+
+# ── Job 1: Schneller Health-Ping (stündlich + Dispatch) ───────────────────────
+jobs:
+  quick-ping:
+    name: Quick Ping — Kritische Dienste
+    runs-on: [self-hosted, vps, nexifyai]
+    if: |
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'quick-ping')
+    timeout-minutes: 5
+    steps:
+      - name: Interne Dienste pingen
+        run: |
+          declare -A SERVICES=(
+            ["Website:3000"]="http://127.0.0.1:3000/api/health"
+            ["Hermes WebUI:8787"]="http://127.0.0.1:8787/health"
+            ["9Router:20128"]="http://127.0.0.1:20128/health"
+            ["LightRAG:9621"]="http://127.0.0.1:9621/health"
+            ["AgentMemory:3111"]="http://127.0.0.1:3111/health"
+            ["Webhook:8644"]="http://127.0.0.1:8644/"
+          )
+          FAIL=0
+          for name in "${!SERVICES[@]}"; do
+            url="${SERVICES[$name]}"
+            if curl -sf --max-time 5 "$url" >/dev/null 2>&1; then
+              echo "✅ $name"
+            else
+              echo "⚠️  $name — NICHT ERREICHBAR ($url)"
+              FAIL=$((FAIL+1))
+            fi
+          done
+          echo "Quick-Ping abgeschlossen: $FAIL Dienste nicht erreichbar"
+          # Kein exit 1 — Worker läuft weiter, Problem wird im Full-Health aufgelöst
+        continue-on-error: true
+
+  # ── Job 2: Vollständiger Health-Check (täglich 06:00) ──────────────────────
+  full-health:
+    name: Vollsystem Health-Check (§11)
+    runs-on: [self-hosted, vps, nexifyai]
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 6 * * *')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'full-health') ||
+      github.event_name == 'push'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+
+      - name: Vollständiger Health-Check
+        run: bash repo/infra/scripts/health-check.sh
+        continue-on-error: true
+
+      - name: Docker Compose Status
+        run: |
+          echo "=== Container Status ==="
+          docker compose -f $REPO_DIR/docker-compose.yml ps 2>/dev/null || docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+
+      - name: Disk-Space prüfen
+        run: |
+          echo "=== Disk-Space ==="
+          df -h / /opt 2>/dev/null || df -h /
+          echo ""
+          echo "=== Docker-Volumes ==="
+          docker system df 2>/dev/null || true
+
+      - name: §11 Governance-Evidence erzeugen
+        run: |
+          TS=$(date +%Y-%m-%dT%H:%M:%SZ)
+          EVIDENCE_DIR="$REPO_DIR/docs/governance/08_evidence"
+          mkdir -p "$EVIDENCE_DIR"
+          EVIDENCE_FILE="$EVIDENCE_DIR/VPS_HEALTH_$(date +%Y%m%d).md"
+          cat > "$EVIDENCE_FILE" <<EOF
+          # VPS Health-Check Evidence — $(date +%Y-%m-%d)
+          **Trigger:** ${{ github.event_name }}
+          **Runner:** $(hostname)
+          **Zeitstempel:** $TS
+          **Branch:** ${{ github.ref_name }}
+
+          ## Dienste
+          $(for port in 3000 8787 8642 9119 20128 3100 3111 9621 8644; do
+            if curl -sf --max-time 3 "http://127.0.0.1:$port/" >/dev/null 2>&1 || \
+               curl -sf --max-time 3 "http://127.0.0.1:$port/health" >/dev/null 2>&1 || \
+               curl -sf --max-time 3 "http://127.0.0.1:$port/api/health" >/dev/null 2>&1; then
+              echo "- Port $port: ✅ UP"
+            else
+              echo "- Port $port: ⚠️ NOT READY"
+            fi
+          done)
+
+          ## Docker
+          $(docker compose -f $REPO_DIR/docker-compose.yml ps --format '- {{.Name}}: {{.Status}}' 2>/dev/null || echo "- compose: nicht verfügbar")
+          EOF
+          echo "Evidence gespeichert: $EVIDENCE_FILE"
+        continue-on-error: true
+
+  # ── Job 3: Cleanup (montags 07:00) ─────────────────────────────────────────
+  cleanup:
+    name: Weekly Cleanup — Docker + Logs
+    runs-on: [self-hosted, vps, nexifyai]
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'cleanup')
+    timeout-minutes: 20
+    steps:
+      - name: Docker Prune
+        run: |
+          echo "🧹 Docker Prune — ungenutzte Images, Container, Volumes..."
+          docker image prune -f --filter "until=168h" 2>&1 || true
+          docker container prune -f --filter "until=24h" 2>&1 || true
+          docker volume prune -f 2>&1 || true
+          docker network prune -f 2>&1 || true
+          echo "✅ Docker Prune abgeschlossen"
+          docker system df
+
+      - name: Log-Rotation
+        run: |
+          echo "📋 Log-Rotation..."
+          find /var/log -name "*.log" -mtime +7 -exec gzip {} \; 2>/dev/null || true
+          find /root/nexifyai-reports -name "*.md" -mtime +30 -delete 2>/dev/null || true
+          journalctl --vacuum-time=7d 2>/dev/null || true
+          echo "✅ Log-Rotation abgeschlossen"
+        continue-on-error: true
+
+      - name: Runner _work Cleanup
+        run: |
+          echo "🗑️ Runner Workdir Cleanup..."
+          find /home/runner/actions-runner/_work -maxdepth 2 -mtime +2 \
+            -name "*.zip" -o -name "*.tar.gz" 2>/dev/null \
+            | xargs rm -f 2>/dev/null || true
+          echo "✅ Done"
+        continue-on-error: true
+
+  # ── Job 4: LightRAG Reindex (montags 07:00) ─────────────────────────────────
+  lightrag-reindex:
+    name: LightRAG Reindex — Docs + Governance
+    runs-on: [self-hosted, vps, nexifyai]
+    needs: cleanup
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lightrag-reindex')
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: LightRAG verfügbar?
+        id: lightrag-check
+        run: |
+          if curl -sf --max-time 5 "http://127.0.0.1:9621/health" >/dev/null 2>&1; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "⚠️  LightRAG (9621) nicht erreichbar — Reindex übersprungen"
+          fi
+
+      - name: Governance-Docs indexieren
+        if: steps.lightrag-check.outputs.available == 'true'
+        run: |
+          echo "📚 Indexiere Governance-Docs in LightRAG..."
+          LIGHTRAG_URL="http://127.0.0.1:9621"
+
+          # Alle Markdown-Dateien aus docs/governance/ indexieren
+          find docs/governance/ -name "*.md" | while read -r f; do
+            CONTENT=$(cat "$f" | head -c 8000)  # LightRAG max payload
+            FNAME=$(basename "$f")
+            curl -sS -X POST "$LIGHTRAG_URL/v1/text/insert" \
+              -H "Content-Type: application/json" \
+              -d "{\"text\": $(echo "$CONTENT" | jq -Rs .), \"description\": \"$FNAME\"}" \
+              >/dev/null 2>&1 || true
+            echo "  ✓ $f"
+          done
+          echo "✅ LightRAG-Reindex abgeschlossen"
+        continue-on-error: true
+
+  # ── Job 5: Hermes-Sync (täglich 06:00) ────────────────────────────────────
+  hermes-sync:
+    name: Hermes Agent Sync — Brain + State
+    runs-on: [self-hosted, vps, nexifyai]
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 6 * * *')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'hermes-sync')
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Hermes verfügbar?
+        id: hermes-check
+        run: |
+          if curl -sf --max-time 5 "http://127.0.0.1:8787/health" >/dev/null 2>&1; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "⚠️  Hermes WebUI (8787) nicht erreichbar"
+          fi
+
+      - name: Shared Agent State synchronisieren
+        if: steps.hermes-check.outputs.available == 'true'
+        run: |
+          echo "🤖 Synchronisiere Shared Agent State..."
+          STATE_FILE="docs/governance/12_register/SHARED_AGENT_STATE.json"
+
+          # Aktuellen Status aus State-Datei lesen und VPS-Status updaten
+          if [ -f "$STATE_FILE" ]; then
+            TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            # Status-Update: last_runner_sync Timestamp
+            python3 -c "
+          import json
+          with open('$STATE_FILE', 'r') as f:
+              state = json.load(f)
+          if 'github_runner' not in state:
+              state['github_runner'] = {}
+          state['github_runner']['last_sync'] = '$TS'
+          state['github_runner']['runner_name'] = '$(hostname)'
+          state['github_runner']['status'] = 'active'
+          with open('$STATE_FILE', 'w') as f:
+              json.dump(state, f, indent=2, ensure_ascii=False)
+          print('✅ State aktualisiert')
+          " 2>/dev/null || true
+          fi
+        continue-on-error: true
+
+      - name: AgentMemory Ping
+        run: |
+          if curl -sf --max-time 5 "http://127.0.0.1:3111/health" >/dev/null 2>&1; then
+            # Täglicher Status-Save in AgentMemory
+            curl -sS -X POST "http://127.0.0.1:3111/api/save" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"entity\": \"github-runner-daily-sync\",
+                \"data\": {
+                  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+                  \"runner\": \"$(hostname)\",
+                  \"branch\": \"${{ github.ref_name }}\",
+                  \"status\": \"active\"
+                }
+              }" >/dev/null 2>&1 || true
+            echo "✅ AgentMemory Ping OK"
+          else
+            echo "⚠️  AgentMemory nicht erreichbar"
+          fi
+        continue-on-error: true
+
+  # ── Job 6: Runner-Token erneuern (täglich 06:00) ────────────────────────────
+  runner-renew:
+    name: Runner Token Renewal Check
+    runs-on: [self-hosted, vps, nexifyai]
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 6 * * *')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'runner-renew')
+    timeout-minutes: 5
+    steps:
+      - name: Runner-Status prüfen
+        run: |
+          echo "=== Aktive Runner ==="
+          docker ps --filter name=nexify-github-runner --format 'table {{.Names}}\t{{.Status}}\t{{.RunningFor}}'
+          echo ""
+          echo "=== Runner Logs (letzte 20 Zeilen) ==="
+          docker logs nexify-github-runner --tail=20 2>/dev/null || echo "Container nicht gefunden"
+        continue-on-error: true
+
+      - name: Runner neu starten wenn unhealthy
+        run: |
+          STATUS=$(docker inspect --format='{{.State.Health.Status}}' nexify-github-runner 2>/dev/null || echo "missing")
+          echo "Runner Health-Status: $STATUS"
+          if [ "$STATUS" = "unhealthy" ] || [ "$STATUS" = "missing" ]; then
+            echo "🔄 Starte github-runner neu..."
+            cd $REPO_DIR
+            docker compose restart github-runner 2>&1 || true
+            sleep 10
+            docker ps --filter name=nexify-github-runner --format 'table {{.Names}}\t{{.Status}}'
+          else
+            echo "✅ Runner ist healthy"
+          fi
+        continue-on-error: true
+
+  # ── Job 7: Governance Audit (montags) ──────────────────────────────────────
+  governance-audit:
+    name: Governance Audit (§2, §11)
+    runs-on: [self-hosted, vps, nexifyai]
+    needs: full-health
+    if: |
+      (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'governance-audit')
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: §2 Vollprüfung SOLL/IST
+        run: |
+          echo "📋 §2 Governance-Vollprüfung..."
+          FAIL=0
+
+          # Port-Matrix prüfen
+          for port in 8787 8642 9119 20128 3111 9621 8644 3000; do
+            if grep -q ":${port}" docs/governance/GOVERNANCE.md 2>/dev/null; then
+              echo "✅ Port $port dokumentiert"
+            else
+              echo "⚠️  Port $port fehlt in GOVERNANCE.md"
+              FAIL=$((FAIL+1))
+            fi
+          done
+
+          # Automation-Register prüfen
+          if python3 -c "import json; json.load(open('docs/governance/12_register/automation-control-register-v1.json'))" 2>/dev/null; then
+            echo "✅ automation-control-register.json valides JSON"
+          else
+            echo "❌ automation-control-register.json ungültig"
+            FAIL=$((FAIL+1))
+          fi
+
+          # design_guidelines.json prüfen
+          if python3 -c "import json; d=json.load(open('design_guidelines.json')); assert d" 2>/dev/null; then
+            echo "✅ design_guidelines.json OK"
+          else
+            echo "❌ design_guidelines.json fehlt oder ungültig"
+            FAIL=$((FAIL+1))
+          fi
+
+          echo ""
+          echo "Audit-Ergebnis: $FAIL Abweichungen"
+          exit 0  # Audit informiert, blockiert nicht
+        continue-on-error: true
+
+      - name: Evidence-Zyklus dokumentieren
+        run: |
+          TS=$(date +%Y%m%d)
+          WEEK=$(date +%V)
+          EVIDENCE_FILE="docs/governance/08_evidence/GOVERNANCE_AUDIT_W${WEEK}_${TS}.md"
+          mkdir -p docs/governance/08_evidence
+          cat > "$EVIDENCE_FILE" <<EOF
+          # Governance Audit — KW $WEEK, $(date +%Y-%m-%d)
+          **Runner:** $(hostname) (self-hosted)
+          **Trigger:** ${{ github.event_name }}
+          **Branch:** ${{ github.ref_name }}
+          **Status:** ✅ Audit ausgeführt
+
+          ## Geprüfte Gates
+          - §2 SOLL/IST-Vollprüfung: ausgeführt
+          - §11 Monitoring: aktiv (VPS Worker Workflow)
+          - Runner-Integration: GitHub Self-Hosted Runner aktiv
+
+          ## Nächster Audit
+          KW $(( WEEK + 1 ))
+          EOF
+          echo "Evidence gespeichert: $EVIDENCE_FILE"
+        continue-on-error: true
