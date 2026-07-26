@@ -77,4 +77,3 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: true
-        continue-on-error: true

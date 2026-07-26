@@ -129,8 +129,7 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
-  useEffect(() => setAppsOpen(false), [pathname]);
+  useEffect(() => { setOpen(false); setAppsOpen(false); }, [pathname]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
