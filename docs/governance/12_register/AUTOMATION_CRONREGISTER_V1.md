@@ -10,7 +10,7 @@
 
 Diese Datei ist die menschlich lesbare Übersicht über den aktuellen Automationsbestand.
 
-**Kanonische Detailquelle:** `docs/governance/12_register/automation-control-register-v1.json`  
+**Kanonische Detailquelle:** `docs/governance/12_register/automation-control-register-v1.json`
 **Soll-Betriebsmodell:** `docs/governance/12_register/AUTOMATION_OPERATING_MODEL_V1.md`
 
 ---
