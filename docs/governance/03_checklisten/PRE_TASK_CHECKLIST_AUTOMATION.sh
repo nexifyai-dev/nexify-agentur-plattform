@@ -89,6 +89,21 @@ gate_check "06" "Tenant-Trennung (Customer-Isolation)" \
     "test -d /workspace/customers/ && ls /workspace/customers/ 2>/dev/null | grep -q ." \
     "Customer-Isolation fehlt — R09 verletzt"
 
+# ─── GATE 07: FlowSearch / Knowledge Nutzungspflicht (Vollintegration) ───
+# Prüft: Knowledge Register + Operator Register + flowsearch package vorhanden
+REPO_ROOT="/workspace"
+if [ ! -d "$REPO_ROOT/docs/governance" ] && [ -d "$(pwd)/docs/governance" ]; then
+  REPO_ROOT="$(pwd)"
+fi
+gate_check "07" "FLOWSEARCH_KNOWLEDGE (Nutzungspflicht)" \
+    "test -r \"$REPO_ROOT/docs/governance/12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md\" \
+      && test -r \"$REPO_ROOT/docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json\" \
+      && test -r \"$REPO_ROOT/docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md\" \
+      && test -d \"$REPO_ROOT/backend/flowsearch\" \
+      && test -r \"$REPO_ROOT/docs/governance/02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md\" \
+      && python3 \"$REPO_ROOT/scripts/check_knowledge_mandate.py\" >/dev/null 2>&1" \
+    "FlowSearch/Knowledge nicht vollintegriert — SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1"
+
 echo ""
 echo "╔══════════════════════════════════════════════════╗"
 echo "║  Ergebnis: $GATES_PASSED passed, $GATES_FAILED failed, $GATES_SKIPPED skipped  ║"
