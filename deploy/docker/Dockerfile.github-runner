@@ -36,8 +36,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     python3 \
     python3-pip \
-    nodejs \
-    npm \
+  && rm -rf /var/lib/apt/lists/*
+
+# ── Node.js 22 (via NodeSource — gepinnte LTS-Version, kompatibel mit corepack) ──
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 # ── Docker CLI (kein Daemon — Socket wird eingebunden) ──────────────────────
@@ -60,8 +63,8 @@ RUN curl -fsSL \
   && rm runner.tar.gz \
   && ./bin/installdependencies.sh
 
-# ── pnpm (für Website-Jobs) ──────────────────────────────────────────────────
-RUN npm install -g pnpm@9
+# ── pnpm (gepinnte Version, kompatibel mit Repo-Lockfile) ───────────────────
+RUN npm install -g pnpm@9.15.4
 
 # ── gh CLI (für proaktive Workflow-Dispatch und PR-Kommentare) ───────────────
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
