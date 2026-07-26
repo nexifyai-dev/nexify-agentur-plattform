@@ -1,0 +1,47 @@
+# FILE: deploy/harness/traefik-routes.yml
+# NIR: 26.07.2026 16:00
+# UPDATED: 26.07.2026 16:00
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Traefik Dynamic Configuration — Harness Open Source Web UI Route
+# WHY: Exponiert harness.nexifyai.cloud über Traefik mit TLS (Let's Encrypt)
+#      und leitet auf den lokalen Harness-Container (Port 3100) weiter.
+# BEST-PRACTICE: File-Provider-Route statt Labels, da harness `network_mode: bridge` nutzt.
+# PITFALL: V-01: Harness braucht korrekte GITNESS_URL_BASE — muss mit dem externen Hostnamen übereinstimmen.
+# PITFALL: V-02: SSH (Port 3022) läuft direkt am Host — kein Traefik-Routing nötig.
+# DEPENDS: Traefik mit File-Provider, Let's Encrypt certResolver; Harness Container auf :3100
+# DOCS-REF: docs/architecture/HARNESS-INTEGRATION.md
+
+http:
+  routers:
+    harness:
+      rule: "Host(`harness.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      priority: 20
+      middlewares:
+        - harness-secHeaders
+      service: harness-web
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    harness-web:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3100"
+        passHostHeader: true
+        healthCheck:
+          path: /api/v1/system/health
+          interval: 30s
+          timeout: 10s
+
+  middlewares:
+    harness-secHeaders:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        contentTypeNosniff: true
+        frameDeny: false          # Harness braucht iframes intern (Gitspaces)
+        customFrameOptionsValue: "SAMEORIGIN"
+        referrerPolicy: "strict-origin-when-cross-origin"
