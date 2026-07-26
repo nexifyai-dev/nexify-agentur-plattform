@@ -7,6 +7,7 @@ import { api } from "@/lib/auth";
 type Slot = { id: string; start_at: string; duration_min: number; status: string; name: string | null; email: string | null; phone: string | null; company: string | null; topic: string | null; language: string | null };
 
 const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" });
+// One 24-hour window in milliseconds for recent-booking filtering.
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export function SlotsPanel() {
