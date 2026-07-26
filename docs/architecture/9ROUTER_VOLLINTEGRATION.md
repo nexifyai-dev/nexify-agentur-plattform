@@ -49,13 +49,14 @@
 
 | Use-case | Modell | Begründung |
 |----------|--------|------------|
-| Website Chat / Offer / Planner | `ds/deepseek-chat` | saubere DE/NL-Antworten, flash-backend |
-| Agent / intern / Hermes | `nexifyai-combo-llm` | Multi-Provider-Redundanz |
-| Fallback | `ds/deepseek-chat` | stabil, günstig |
-| Meiden (Customer) | `ds/deepseek-v4-pro*`, `vercel/glm-5.2` | reasoning_content / Leak |
-| MiMo | nur Token-Plan (`tp-`), Region AMS | sk-Konto 402 |
+| Website Chat / Offer / Planner | `ds/deepseek-v4-flash` | saubere Antworten; `deepseek-chat` upstream retired |
+| Agent / intern / Hermes | `nexifyai-combo-llm` / `nexifyai` | Multi-Provider-Redundanz |
+| Fallback | `ds/deepseek-v4-flash` | stabil |
+| Meiden (Customer) | `ds/deepseek-v4-pro*`, `glm-5.2` | reasoning_content / Leak |
+| Meiden (alle) | `ds/deepseek-chat`, `ds/deepseek-reasoner` | Upstream 400 — nur v4-flash/pro |
 
-**Combo-Kette (live, dokumentiert):** DeepSeek → MiMo tp → Vercel glm (interne 9router-Config; Änderungen nur mit Backup + Freigabe).
+**Combo-Kette (live SQLite `~/.9router/db/data.sqlite`, 2026-07-25):**  
+`ds/deepseek-v4-flash` → `openrouter/deepseek/deepseek-v3.2` → `ds/deepseek-v4-pro`
 
 ### Finetuning-Hebel (ohne Production-Write aus dem Agent)
 

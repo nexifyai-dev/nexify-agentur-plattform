@@ -14,14 +14,13 @@ Er aggregiert mehrere Provider hinter einer OpenAI-kompatiblen API (live: 60+ Mo
 | VPS-intern | `http://127.0.0.1:20128/v1` | 20128 |
 | Compose | `/docker/9router-6kxn/` | – |
 
-## Eigenmodell-Combo `nexifyai-combo-llm`
-Die Combo-Kette routet automatisch durch (primär → fallback):
-1. `ds/deepseek-v4-pro` (DeepSeek, primär)
-2. `ds/ds-max` (DeepSeek)
-3. `xmtp/mimo-v2.5-pro` (Xiaomi MiMo Token-Plan, AMS-Region)
-4. `vercel/glm-5.2` (Vercel AI Gateway)
+## Eigenmodell-Combo `nexifyai` / `nexifyai-combo-llm`
+Live-Kette (SQLite `~/.9router/db/data.sqlite`, 2026-07-25):
+1. `ds/deepseek-v4-flash` (sauberer Content)
+2. `openrouter/deepseek/deepseek-v3.2`
+3. `ds/deepseek-v4-pro` (kann `reasoning_content` liefern → Backend-Salvage)
 
-Bei leerem `content` (deepseek-v4-pro-Eigenheit → `reasoning_content`) salvaged das Backend.
+**Retired upstream:** `ds/deepseek-chat` / `ds/deepseek-reasoner` → HTTP 400 (nur v4-flash/pro).
 
 ## Beteiligte Provider
 - **DeepSeek** – primärer Chat/Reasoning
