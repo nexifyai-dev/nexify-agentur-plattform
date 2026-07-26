@@ -23,6 +23,9 @@ cd nexify-agentur-plattform
 # Backend + Services
 docker-compose up -d
 
+# Hinweis: Das Backend benötigt private/externe Abhängigkeiten und ist lokal ohne
+# zusätzliche Konfiguration (siehe backend/.env.example) ggf. nicht vollständig lauffähig.
+
 # Website App (Next.js)
 pnpm --dir apps/website install
 pnpm --dir apps/website dev

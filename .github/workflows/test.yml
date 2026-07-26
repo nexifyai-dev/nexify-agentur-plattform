@@ -169,4 +169,4 @@ jobs:
       - name: Skip backend image build when Dockerfile is missing
         if: ${{ env.BACKEND_DOCKERFILE_PRESENT != 'true' }}
         run: |
-          echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
+          echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist (expected when backend image build is not configured in this repo)."
