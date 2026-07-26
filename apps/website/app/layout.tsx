@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Manrope } from "next/font/google";
+import "@fontsource-variable/manrope";
+import "@fontsource-variable/outfit";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
@@ -9,9 +10,6 @@ import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import "./globals.css";
-
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", weight: ["300", "400", "500", "600", "700"] });
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", weight: ["400", "500", "600", "700", "800"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? company.website),
@@ -67,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     priceRange: "€€",
   };
   return (
-    <html lang="de" data-scroll-behavior="smooth" className={`${outfit.variable} ${manrope.variable}`}>
+    <html lang="de" data-scroll-behavior="smooth">
       <head>
         {/* Fail-safe: scroll-reveal starts at opacity:0 and is un-hidden by JS.
             Without JS (or if it fails to run) the whole page below the fold would
