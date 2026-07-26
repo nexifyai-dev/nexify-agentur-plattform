@@ -138,6 +138,8 @@ jobs:
   docker-build-test:
     runs-on: ubuntu-latest
     name: Docker Build (Verify Dockerfiles)
+    env:
+      BACKEND_DOCKERFILE_PRESENT: ${{ hashFiles('deploy/docker/Dockerfile.backend') != '' }}
     steps:
       - uses: actions/checkout@v4
       
@@ -155,7 +157,7 @@ jobs:
         continue-on-error: true
 
       - name: Build backend image when Dockerfile exists
-        if: ${{ hashFiles('deploy/docker/Dockerfile.backend') != '' }}
+        if: ${{ env.BACKEND_DOCKERFILE_PRESENT == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -165,6 +167,6 @@ jobs:
         continue-on-error: true
 
       - name: Skip backend image build when Dockerfile is missing
-        if: ${{ hashFiles('deploy/docker/Dockerfile.backend') == '' }}
+        if: ${{ env.BACKEND_DOCKERFILE_PRESENT != 'true' }}
         run: |
           echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
