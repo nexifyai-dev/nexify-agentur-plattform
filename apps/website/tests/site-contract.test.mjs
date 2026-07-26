@@ -1,20 +1,61 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import * as ts from 'typescript';
 
 const read = (path) => readFileSync(path, 'utf8');
 
 const parseRedirects = () => {
   const source = read('next.config.ts');
-  const redirectsBlock = source.match(/redirects:\s*async\s*\(\)\s*=>\s*\[(.*?)\],\s*rewrites:/s)?.[1];
-  assert.ok(redirectsBlock, 'next.config.ts must define a redirects array');
-  return [...redirectsBlock.matchAll(/\{\s*source:\s*"([^"]+)",\s*destination:\s*"([^"]+)",\s*permanent:\s*(true|false)\s*\}/g)].map(
-    ([, source, destination, permanent]) => ({
-      source,
-      destination,
-      permanent: permanent === 'true',
-    }),
+  const sourceFile = ts.createSourceFile('next.config.ts', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const unwrapExpression = (node) => {
+    if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) {
+      return unwrapExpression(node.expression);
+    }
+    return node;
+  };
+  const getObjectProperty = (objectNode, propertyName) => {
+    const property = objectNode.properties.find(
+      (node) => ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && node.name.text === propertyName
+    );
+    assert.ok(property, `Missing next.config.ts property: ${propertyName}`);
+    return unwrapExpression(property.initializer);
+  };
+
+  const configStatement = sourceFile.statements.find(
+    (statement) =>
+      ts.isVariableStatement(statement) &&
+      statement.declarationList.declarations.some(
+        (declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === 'nextConfig' && declaration.initializer
+      )
   );
+  assert.ok(configStatement && ts.isVariableStatement(configStatement), 'next.config.ts must define nextConfig');
+  const configDeclaration = configStatement.declarationList.declarations.find(
+    (declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === 'nextConfig'
+  );
+  assert.ok(configDeclaration?.initializer, 'nextConfig must have an initializer');
+  const configObject = unwrapExpression(configDeclaration.initializer);
+  assert.ok(ts.isObjectLiteralExpression(configObject), 'nextConfig must be an object literal');
+
+  const redirects = getObjectProperty(configObject, 'redirects');
+  assert.ok(ts.isArrowFunction(redirects), 'redirects must be an arrow function');
+  const redirectsBody = unwrapExpression(redirects.body);
+  assert.ok(ts.isArrayLiteralExpression(redirectsBody), 'redirects must return an array literal');
+
+  return redirectsBody.elements.map((entry) => {
+    assert.ok(ts.isObjectLiteralExpression(entry), 'redirect entries must be object literals');
+    const sourceNode = getObjectProperty(entry, 'source');
+    const destinationNode = getObjectProperty(entry, 'destination');
+    const permanentNode = getObjectProperty(entry, 'permanent');
+    assert.ok(ts.isStringLiteralLike(sourceNode), 'redirect source must be a string literal');
+    assert.ok(ts.isStringLiteralLike(destinationNode), 'redirect destination must be a string literal');
+    assert.ok(permanentNode.kind === ts.SyntaxKind.TrueKeyword || permanentNode.kind === ts.SyntaxKind.FalseKeyword, 'redirect permanent must be boolean');
+    return {
+      source: sourceNode.text,
+      destination: destinationNode.text,
+      permanent: permanentNode.kind === ts.SyntaxKind.TrueKeyword,
+    };
+  });
 };
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713

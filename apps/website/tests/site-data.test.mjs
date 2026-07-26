@@ -6,6 +6,7 @@ import * as ts from 'typescript';
 const source = readFileSync(new URL('../lib/site-data.ts', import.meta.url), 'utf8');
 const sourceFile = ts.createSourceFile('site-data.ts', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
 
+/** Unwraps TypeScript type assertions so tests can inspect the underlying literal AST nodes. */
 const unwrapExpression = (node) => {
   if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) {
     return unwrapExpression(node.expression);
