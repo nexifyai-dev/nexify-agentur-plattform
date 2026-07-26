@@ -35,8 +35,8 @@ test('legacy aliases and locale-only routes redirect to canonical pages', () => 
     ['/projekte', '/referenzen'],
   ];
   for (const [source, destination] of redirects) {
-    assert.match(config, new RegExp(`source: "${source.replaceAll('/', '\\/')}"`));
-    assert.match(config, new RegExp(`destination: "${destination.replaceAll('/', '\\/')}"`));
+    assert.ok(config.includes(`source: "${source}"`));
+    assert.ok(config.includes(`destination: "${destination}"`));
   }
 });
 
