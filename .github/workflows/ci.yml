@@ -60,15 +60,13 @@ jobs:
 
       - name: TypeScript check
         run: pnpm --dir apps/website typecheck
-        continue-on-error: true  # TS errors werden als Warning gemeldet
 
       - name: Lint
         run: pnpm --dir apps/website lint
-        continue-on-error: true
 
       - name: Build Next.js
         run: pnpm --dir apps/website build
-        continue-on-error: true  # Build can fail due to missing env vars; validate project structure
+        continue-on-error: true  # Build remains soft-fail while next/font still depends on external fetches in CI
 
   # === SECURITY: Secret scanning ===
   secret-scan:
