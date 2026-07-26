@@ -1179,7 +1179,7 @@ async def startup():
     })
     await portal.seed_admin(db)
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
-    agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    agent_mod.init(db, nine.client, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
