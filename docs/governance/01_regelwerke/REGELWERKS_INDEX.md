@@ -48,6 +48,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
+| Research: AFlow (ICLR 2025 Oral) | `docs/research/AFLOW_OPENREVIEW_z5uVAKwmjf.md` | ✅ 2026-07-25 |
 | FlowSearch Synthesis (AFlow/ADAS) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` | ✅ 2026-07-25 |
 | Operator Register v1 | `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | ✅ 2026-07-25 |
 | FlowSearch Package | `backend/flowsearch/` | ✅ Offline MCTS |
