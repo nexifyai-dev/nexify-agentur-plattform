@@ -23,10 +23,8 @@ export function SlotsPanel() {
     } catch {}
   }, []);
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void load();
-    }, 0);
-    return () => window.clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- trigger initial slots fetch when panel mounts
+    void load();
   }, [load]);
 
   const add = async () => {

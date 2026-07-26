@@ -20,11 +20,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           ? fromCookie
           : null;
     if (initial) {
-      const timeoutId = window.setTimeout(() => {
-        setLangState(initial);
-        document.documentElement.lang = initial;
-      }, 0);
-      return () => window.clearTimeout(timeoutId);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize persisted locale on initial mount
+      setLangState(initial);
+      document.documentElement.lang = initial;
     }
   }, []);
 

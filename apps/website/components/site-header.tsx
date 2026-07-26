@@ -56,8 +56,8 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => setOpen(false), 0);
-    return () => window.clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- close mobile menu on route change
+    setOpen(false);
   }, [pathname]);
 
   return (
