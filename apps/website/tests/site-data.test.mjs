@@ -21,8 +21,9 @@ test('site-data - each service has required fields', () => {
 });
 
 test('site-data - FAQs exist', () => {
-  const faqEntries = source.match(/\{\s*q:\s*"[\s\S]*?",\s*a:\s*"[\s\S]*?"\s*\}/g) ?? [];
-  assert.ok(faqEntries.length >= 8);
+  const section = source.match(/export const faqs = \[([\s\S]*?)\];/);
+  assert.ok(section);
+  assert.ok((section[1].match(/\bq:\s*"/g) ?? []).length >= 8);
 });
 
 test('site-data - processSteps has 5 steps', () => {
