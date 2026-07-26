@@ -100,7 +100,7 @@ build:backend:
         docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
         docker push $DOCKER_IMAGE:backend-latest
       else
-        echo "Skipping backend image build: deploy/docker/Dockerfile.backend not present in repository."
+        echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
       fi
   only:
     - main
