@@ -30,20 +30,30 @@ function normalizeEvent(row: unknown, index: number): ChannelEvent {
   const event = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
   const createdAt = typeof event.created_at === "string"
     ? event.created_at
-    : typeof event.timestamp === "string"
-      ? event.timestamp
-      : new Date(0).toISOString();
+    : typeof event.ts === "string"
+      ? event.ts
+      : typeof event.timestamp === "string"
+        ? event.timestamp
+        : new Date(0).toISOString();
   const channel = typeof event.channel === "string" ? event.channel : "unknown";
   const direction = typeof event.direction === "string" ? event.direction : "inbound";
   const contact = typeof event.contact === "string"
     ? event.contact
     : typeof event.contact_label === "string"
       ? event.contact_label
-      : typeof event.name === "string"
-        ? event.name
-        : typeof event.email === "string"
-          ? event.email
-          : "—";
+      : typeof event.contact_name === "string"
+        ? event.contact_name
+        : typeof event.contact_email === "string"
+          ? event.contact_email
+          : typeof event.contact_phone === "string"
+            ? event.contact_phone
+            : typeof event.contact_ref === "string"
+              ? event.contact_ref
+              : typeof event.name === "string"
+                ? event.name
+                : typeof event.email === "string"
+                  ? event.email
+                  : "—";
   const summary = typeof event.summary === "string"
     ? event.summary
     : typeof event.message === "string"
