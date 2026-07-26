@@ -79,9 +79,29 @@ build:website:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
     - docker build -f deploy/docker/Dockerfile.website -t $DOCKER_IMAGE:website-$CI_COMMIT_SHA -t $DOCKER_IMAGE:website-latest .
     - docker push $DOCKER_IMAGE:website-$CI_COMMIT_SHA
     - docker push $DOCKER_IMAGE:website-latest
+  only:
+    - main
+    - develop
+
+build:backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - |
+      if [ -f deploy/docker/Dockerfile.backend ]; then
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        docker build -f deploy/docker/Dockerfile.backend -t $DOCKER_IMAGE:backend-$CI_COMMIT_SHA -t $DOCKER_IMAGE:backend-latest ./backend
+        docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
+        docker push $DOCKER_IMAGE:backend-latest
+      else
+        echo "Skipping backend image build: deploy/docker/Dockerfile.backend not present in repository."
+      fi
   only:
     - main
     - develop

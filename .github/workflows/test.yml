@@ -147,6 +147,7 @@ jobs:
       - name: Build website image
         uses: docker/build-push-action@v5
         with:
+          # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
           context: .
           file: ./deploy/docker/Dockerfile.website
           push: false

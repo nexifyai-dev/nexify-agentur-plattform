@@ -24,7 +24,7 @@ cd nexify-agentur-plattform
 docker-compose up -d
 
 # Website App (Next.js)
-pnpm --dir apps/website install --frozen-lockfile
+pnpm --dir apps/website install
 pnpm --dir apps/website dev
 
 # Zugriff
