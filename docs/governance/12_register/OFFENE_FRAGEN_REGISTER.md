@@ -102,6 +102,7 @@ owner: NeXify CEO (nexify-ceo)
 ### 8.1 SOFORT (bis 2026-06-25 / Autonomie-Blocker)
 
 ```
+F32 — §8 Autonomie vs. Production-Freigabe-Verbot (Eskalation CEO/CTO)  ← NEU 2026-07-25
 F01 — RTK-Status klären
 F02 — Headroom-Endpoint klären
 F07 — Paperclip-Status klären
