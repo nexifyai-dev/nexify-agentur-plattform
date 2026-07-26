@@ -4,6 +4,7 @@ import test from 'node:test';
 import * as ts from 'typescript';
 
 const read = (path) => readFileSync(path, 'utf8');
+const isBooleanLiteral = (node) => node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword;
 
 const parseRedirects = () => {
   const source = read('next.config.ts');
@@ -49,7 +50,7 @@ const parseRedirects = () => {
     const permanentNode = getObjectProperty(entry, 'permanent');
     assert.ok(ts.isStringLiteralLike(sourceNode), 'redirect source must be a string literal');
     assert.ok(ts.isStringLiteralLike(destinationNode), 'redirect destination must be a string literal');
-    assert.ok(permanentNode.kind === ts.SyntaxKind.TrueKeyword || permanentNode.kind === ts.SyntaxKind.FalseKeyword, 'redirect permanent must be boolean');
+    assert.ok(isBooleanLiteral(permanentNode), 'redirect permanent must be boolean');
     return {
       source: sourceNode.text,
       destination: destinationNode.text,
