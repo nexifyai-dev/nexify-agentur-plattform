@@ -46,6 +46,10 @@ jobs:
             context: .
             dockerfile: ./deploy/docker/Dockerfile.website
             tag: website
+          - name: hermes
+            context: ./apps/hermes
+            dockerfile: ./apps/hermes/Dockerfile
+            tag: hermes
           - name: backend
             context: ./backend
             dockerfile: ./deploy/docker/Dockerfile.backend

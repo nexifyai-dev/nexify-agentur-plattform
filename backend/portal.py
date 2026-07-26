@@ -302,6 +302,44 @@ async def email_agent_poll(_: dict = Depends(get_admin)):
     return await email_agent.trigger_poll()
 
 
+@router.get("/api/admin/channels/events")
+async def admin_channel_events(limit: int = 50, identifier: str | None = None, _: dict = Depends(get_admin)):
+    """Return cross-channel events, optionally filtered by contact identifier."""
+    import channel_sync
+    if identifier:
+        return await channel_sync.get_contact_context(identifier, limit=limit)
+    pool = await _DB()
+    if not pool:
+        return {"events": [], "total": 0}
+    limit = min(max(limit, 1), 200)
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            """SELECT id, channel, direction, summary,
+                      contact_email, contact_phone, contact_name, contact_ref,
+                      ref_id, ref_type, ts
+               FROM nexify_channel_events
+               ORDER BY ts DESC LIMIT $1""",
+            limit,
+        )
+    events = [
+        {
+            "id": str(r["id"]),
+            "channel": r["channel"],
+            "direction": r["direction"],
+            "summary": r["summary"],
+            "contact_email": r["contact_email"],
+            "contact_phone": r["contact_phone"],
+            "contact_name": r["contact_name"],
+            "contact_ref": r["contact_ref"],
+            "ref_id": r["ref_id"],
+            "ref_type": r["ref_type"],
+            "ts": r["ts"].isoformat() if r["ts"] else None,
+        }
+        for r in rows
+    ]
+    return {"total": len(events), "events": events}
+
+
 # ---------------------- Fabrik CEO-Queue ----------------------
 # Autonome Empfehlungs-Pipeline: E-Mail-Agent inseriert bei jeder inquiry einen
 # Queue-Eintrag; ein VPS-Cron (Hermes-CLI mit nexify-crm-Skill) pollt, holt Kontext

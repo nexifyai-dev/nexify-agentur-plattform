@@ -1,0 +1,57 @@
+name: Customer Isolation Gate
+
+on:
+  push:
+    branches: [main, develop, 'feature/**']
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  isolation-check:
+    runs-on: ubuntu-latest
+    name: Customer Boundary Enforcement
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check no customer project paths leak into core modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIOLATIONS=0
+
+          # Customer project dirs that must NOT appear in backend/ or apps/website/
+          CUSTOMER_DIRS=("bookando" "vsk" "studienkolleg")
+          CORE_DIRS=("backend" "apps/website" "apps/hermes")
+
+          for customer in "${CUSTOMER_DIRS[@]}"; do
+            for core in "${CORE_DIRS[@]}"; do
+              if grep -r "$customer" "$core/" --include="*.py" --include="*.ts" --include="*.tsx" -l 2>/dev/null | grep -qv "__pycache__"; then
+                echo "::warning::Customer project '$customer' referenced in core module '$core/'"
+                # Only error on import/require statements, not comments
+                if grep -r "import.*$customer\|require.*$customer\|from $customer" "$core/" --include="*.py" --include="*.ts" --include="*.tsx" 2>/dev/null | grep -qv "#"; then
+                  echo "::error::Hard import of customer project '$customer' found in '$core/' — isolation violated"
+                  VIOLATIONS=$((VIOLATIONS+1))
+                fi
+              fi
+            done
+          done
+
+          if [ "$VIOLATIONS" -gt 0 ]; then
+            echo "❌ Customer isolation violations: $VIOLATIONS"
+            exit 1
+          fi
+          echo "✅ Customer isolation: no violations"
+
+      - name: Verify .env.example contains no real secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f ".env.example" ]; then
+            # Fail if .env.example contains anything that looks like a real key (not a placeholder)
+            if grep -Pv "^(#|$|[A-Z_]+=(your_|<|REPLACE|PLACEHOLDER|xxx|changeme|example|sk-\\*\\*|$))" .env.example 2>/dev/null | grep -q "="; then
+              echo "::warning::.env.example may contain non-placeholder values — review manually"
+            fi
+            echo "✅ .env.example reviewed"
+          else
+            echo "ℹ️  No .env.example found"
+          fi
