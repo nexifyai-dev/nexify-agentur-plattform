@@ -242,11 +242,9 @@ export default function PortalPage() {
   useEffect(() => {
     if (user === false) router.push("/login");
     if (user) {
-      const timeoutId = window.setTimeout(() => {
-        setProfile({ name: user.name ?? "", company: user.company ?? "", phone: user.phone ?? "" });
-      }, 0);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate profile form from authenticated user data
+      setProfile({ name: user.name ?? "", company: user.company ?? "", phone: user.phone ?? "" });
       loadOffers();
-      return () => window.clearTimeout(timeoutId);
     }
   }, [user, router, loadOffers]);
 

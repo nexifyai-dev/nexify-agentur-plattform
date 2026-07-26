@@ -24,16 +24,12 @@ export function HealthBadge() {
   }, []);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void load();
-    }, 0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- trigger initial health fetch when badge mounts
+    void load();
     const iv = window.setInterval(() => {
       void load();
     }, 60000);
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.clearInterval(iv);
-    };
+    return () => window.clearInterval(iv);
   }, [load]);
 
   if (!h) {
