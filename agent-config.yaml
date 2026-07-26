@@ -1,0 +1,128 @@
+# NeXifyAI — Agent-Betriebskonfiguration
+# Übersetzt Charta §0–§14 in reale Agent-Config. Bei Widerspruch gilt die
+# Charta (CHARTA.md), nicht diese Datei.
+#
+# §13/§14-ABGLEICH: Die mit "ist_" markierten Felder / Kommentare geben den
+# real verifizierten IST-Zustand wieder (Live-Checks am 2026-07-25), der von den
+# ursprünglichen SOLL-Angaben abweicht. YAML syntaktisch validiert.
+
+version: 1
+charter_ref: "CHARTA.md#§0-§14"
+scope: "<Geltungsbereich>"   # §0 — VPS-Gesamtsystem | Kundenprojekt | NeXifyAI-Projekt <Kennung>
+
+# --- §7: Wissens-/Gedächtnisschicht — zwei getrennte Dienste ---
+memory:
+  providers:
+    agentmemory:
+      type: iii-engine
+      source_repo: "https://github.com/rohitg00/agentmemory"
+      verified_version: "0.9.28"          # ist: bestätigt (npx-Cache 0.9.28)
+      dashboard: "https://agentmemory.nexifyai.cloud"   # ist: HTTP 200
+      # ist: MCP läuft als stdio via `npx -y @agentmemory/mcp` mit
+      #      AGENTMEMORY_URL=http://127.0.0.1:3111 (REST-Basis; / => 404,
+      #      /agentmemory/health => 401 auth-gated). Kein plain /api/mcp-Pfad.
+      rest_base: "http://127.0.0.1:3111"
+      mcp_transport: stdio
+      namespace_isolation: true           # pro Kundenprojekt getrennt
+      shared_sync_worker: iii-pubsub      # ist: in iii-config konfiguriert; Cross-Instanz-Sync NICHT verifiziert
+    lightrag:
+      type: lightrag
+      dashboard: "https://rag.nexifyai.cloud/webui"     # ist: HTTP 200 (via localhost:9621->9622 Bridge)
+      role: "eigenstaendiger Wissensspeicher, getrennt von agentmemory"
+
+# --- §3: MCP-/Tool-Anbindungen ---
+mcp_servers:
+  agentmemory:
+    command: npx
+    args: ["-y", "@agentmemory/mcp"]
+    # ist: eingebunden in 7 Agenten (cursor, codex, claude-code, copilot-cli,
+    #      gemini-cli, opencode, openclaw) via `agentmemory connect --all`
+  context7:
+    url: "https://mcp.context7.com/mcp"
+    role: "aktuelle Bibliotheks-/API-Dokumentation zur Verifikation nach §13"
+    # ist: als Geschwister-Eintrag in dieselben 7 Agenten eingetragen (keyless)
+
+skills:
+  install_command: "npx skills add rohitg00/agentmemory -y -a '*'"   # ist: ausgeführt (alle Agenten)
+  invocable: [remember, recall, recap, handoff, forget, commit-context, commit-history, session-history]
+  reference: [agentmemory-mcp-tools, agentmemory-rest-api, agentmemory-config,
+              agentmemory-agents, agentmemory-hooks, agentmemory-architecture,
+              write-agentmemory-skill]
+
+hooks:
+  agentmemory_lifecycle: [session-start, session-end]   # ist: über Plugin/Skills bereitgestellt; Wirkung pro Agent erst nach Neustart
+  cross_agent_handoff_skill: handoff
+
+# --- §10: Modellstrategie ---
+models:
+  primary_provider: upstage
+  # Die 3 systemweiten Standardmodelle (feinabgestimmt je Aufgabentyp):
+  system_defaults:
+    - id: upstage/solar-pro3
+      alias: upstage
+      role: "Premium DE/NL-Qualität, Primär-Provider laut §10"
+      tasks: [chat_premium, general]
+    - id: ds/deepseek-chat
+      alias: deepseek
+      role: "Strukturiertes JSON, Angebote, Pläne — §10-Ausnahme: vollintegriert"
+      tasks: [offer, plan, reasoning]
+    - id: upstage/solar-mini
+      alias: solar-mini
+      role: "Günstigstes Standardmodell — Support, Follow-up, einfache Texte"
+      tasks: [support, followup, simple_chat]
+  # Optional: DeepSeek Reasoning für interne komplexe Aufgaben
+  extended:
+    - id: ds/deepseek-v4-pro-none
+      alias: deepseek-reasoner
+      role: "Reasoning ohne thinking-Leak — interne Analyse, kein direkter Kunden-Output"
+    - id: ds/deepseek-v4-flash
+      alias: deepseek-flash
+      role: "Schnell + Reasoning — alternative zu deepseek-chat"
+  token_optimization:
+    strategy: task_routing         # Jeder Task-Typ → günstigstes geeignetes Modell
+    response_cache: in_memory      # LRU-Cache mit TTL (500 Einträge, 1h Standard)
+    history_window: sliding        # Nur die letzten HISTORY_MAX_TURNS Nachrichten übertragen
+    history_max_turns: 12          # 12 Msg = 6 Exchanges → reduziert Input-Tokens drastisch
+    cache_ttl_seconds: 3600        # 1h Standard-TTL für wiederholte Anfragen
+  retained:
+    - name: deepseek
+      reason: "Ausnahme laut §10 — bleibt vollintegriert als systemweites Standardmodell"
+  rollout: staged                       # kein Komplett-Swap ohne Rückfallebene
+  # ist: LightRAG bereits Upstage (solar-pro3); Backend-Migration via task-routing abgeschlossen
+  cursor_models:
+    billing: token_based
+    auto_hard_stop_on_budget_exhaustion: false   # per Fetch bestätigt
+    note: "Cursor stoppt selbst NICHT automatisch — deshalb greift §12 auch hier"
+
+# --- §8: Autonomie- & Rueckfragegrenzen ---
+autonomy:
+  default: full
+  escalation_required:      # Protokoll statt Blockieren
+    - hermes_agent_webui_changes
+    - kundenlogik_aenderungen
+    - regelwerk_aenderungen
+  escalation_mode: log_only
+
+# --- §12: Circuit Breaker ---
+circuit_breaker:
+  enforcer_endpoint: "http://127.0.0.1:8912"
+  status: "deployed_running"            # ist: systemd circuit-breaker.service aktiv, User=circuitbreaker (least-priv), /status=200, 10/10 Unit-Tests
+  enforced_outside_prompt: false        # ist: KEIN Aufrufer nutzt /check → noch NICHT im Request-Pfad (offene Verdrahtung)
+  known_gaps:
+    - "globales statt geltungsbereich-getrenntes Budget (siehe §12-Statusvermerk)"
+    - "kein Agent/Gateway ruft /check auf → Durchsetzung noch nicht wirksam"
+  check_before_action: true             # SOLL-Design; ist: noch nicht verdrahtet
+  targets: ["call_llm", "run_shell", "deploy_change"]
+
+# --- §14: Testpflicht ---
+testing_standard:
+  rule: "kein Bestandteil gilt ohne bestandenes Pruefmuster als fertig"
+  applies_to: [code, services, config]
+
+# --- §9: Betriebsrahmen ---
+operations:
+  language: de
+  full_context_retention: true
+  documentation: inline_code
+  visible_terminal: true
+  goal: "dauerhafter 24/7-Betrieb: aufbauen, pflegen, sichern, stabilisieren, optimieren"
