@@ -69,7 +69,7 @@ jobs:
     name: Quick Ping — Kritische Dienste
     runs-on: [self-hosted, vps, nexifyai]
     if: |
-      github.event_name == 'schedule' ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 * * * *') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'quick-ping')
     timeout-minutes: 5
     steps:
@@ -190,7 +190,7 @@ jobs:
         run: |
           echo "🗑️ Runner Workdir Cleanup..."
           find /home/runner/actions-runner/_work -maxdepth 2 -mtime +2 \
-            -name "*.zip" -o -name "*.tar.gz" 2>/dev/null \
+            \( -name "*.zip" -o -name "*.tar.gz" \) 2>/dev/null \
             | xargs rm -f 2>/dev/null || true
           echo "✅ Done"
         continue-on-error: true
@@ -201,8 +201,9 @@ jobs:
     runs-on: [self-hosted, vps, nexifyai]
     needs: cleanup
     if: |
-      (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1')) ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lightrag-reindex')
+      (needs.cleanup.result == 'success' || needs.cleanup.result == 'skipped') &&
+      ((github.event_name == 'schedule' && github.event.schedule == '0 7 * * 1') ||
+       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lightrag-reindex'))
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -261,7 +262,7 @@ jobs:
         if: steps.hermes-check.outputs.available == 'true'
         run: |
           echo "🤖 Synchronisiere Shared Agent State..."
-          STATE_FILE="docs/governance/12_register/SHARED_AGENT_STATE.json"
+          STATE_FILE="$REPO_DIR/docs/governance/12_register/SHARED_AGENT_STATE.json"
 
           # Aktuellen Status aus State-Datei lesen und VPS-Status updaten
           if [ -f "$STATE_FILE" ]; then
@@ -324,16 +325,17 @@ jobs:
 
       - name: Runner neu starten wenn unhealthy
         run: |
-          STATUS=$(docker inspect --format='{{.State.Health.Status}}' nexify-github-runner 2>/dev/null || echo "missing")
-          echo "Runner Health-Status: $STATUS"
-          if [ "$STATUS" = "unhealthy" ] || [ "$STATUS" = "missing" ]; then
+          RUNNING=$(docker inspect --format='{{.State.Running}}' nexify-github-runner 2>/dev/null || echo "false")
+          STATUS=$(docker inspect --format='{{.State.Health.Status}}' nexify-github-runner 2>/dev/null || echo "")
+          echo "Runner Running: $RUNNING | Health: ${STATUS:-n/a (kein Healthcheck)}"
+          if [ "$RUNNING" != "true" ] || [ "$STATUS" = "unhealthy" ]; then
             echo "🔄 Starte github-runner neu..."
             cd $REPO_DIR
             docker compose restart github-runner 2>&1 || true
             sleep 10
             docker ps --filter name=nexify-github-runner --format 'table {{.Names}}\t{{.Status}}'
           else
-            echo "✅ Runner ist healthy"
+            echo "✅ Runner läuft"
           fi
         continue-on-error: true
 
@@ -343,8 +345,9 @@ jobs:
     runs-on: [self-hosted, vps, nexifyai]
     needs: full-health
     if: |
-      (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1')) ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'governance-audit')
+      (needs.full-health.result == 'success' || needs.full-health.result == 'skipped') &&
+      ((github.event_name == 'schedule' && github.event.schedule == '0 7 * * 1') ||
+       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'governance-audit'))
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -389,8 +392,9 @@ jobs:
         run: |
           TS=$(date +%Y%m%d)
           WEEK=$(date +%V)
-          EVIDENCE_FILE="docs/governance/08_evidence/GOVERNANCE_AUDIT_W${WEEK}_${TS}.md"
-          mkdir -p docs/governance/08_evidence
+          EVIDENCE_DIR="$REPO_DIR/docs/governance/08_evidence"
+          EVIDENCE_FILE="$EVIDENCE_DIR/GOVERNANCE_AUDIT_W${WEEK}_${TS}.md"
+          mkdir -p "$EVIDENCE_DIR"
           cat > "$EVIDENCE_FILE" <<EOF
           # Governance Audit — KW $WEEK, $(date +%Y-%m-%d)
           **Runner:** $(hostname) (self-hosted)

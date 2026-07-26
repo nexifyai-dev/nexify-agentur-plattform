@@ -80,7 +80,13 @@ export function ChannelEventsPanel() {
 
   const fetchEvents = useCallback((): Promise<ChannelEvent[]> => {
     return api("/api/admin/channels/events?limit=50").then((data) => {
-      const rows = Array.isArray(data) ? data : Array.isArray((data as { items?: unknown[] })?.items) ? (data as { items: unknown[] }).items : [];
+      const rows = Array.isArray(data)
+        ? data
+        : Array.isArray((data as { events?: unknown[] })?.events)
+          ? (data as { events: unknown[] }).events
+          : Array.isArray((data as { items?: unknown[] })?.items)
+            ? (data as { items: unknown[] }).items
+            : [];
       return rows.map(normalizeEvent);
     });
   }, []);
@@ -135,7 +141,7 @@ export function ChannelEventsPanel() {
           </label>
           <button
             type="button"
-            onClick={() => load()}
+            onClick={load}
             disabled={refreshing}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-[12px] font-semibold text-zinc-300 hover:border-white/30 hover:text-white disabled:opacity-50"
           >

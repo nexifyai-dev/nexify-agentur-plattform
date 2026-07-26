@@ -68,14 +68,20 @@ jobs:
           sleep 15
 
           # Website: hartes Gate (Deployment-Erfolg hängt davon ab)
+          WEBSITE_OK=0
           for i in 1 2 3 4 5; do
             if curl -sf --max-time 5 "http://127.0.0.1:3000/api/health" >/dev/null 2>&1; then
               echo "✅ Website (3000) — OK"
+              WEBSITE_OK=1
               break
             fi
             echo "⏳ Website noch nicht ready ($i/5)..."
             sleep 5
           done
+          if [ "$WEBSITE_OK" != 1 ]; then
+            echo "❌ Website (3000) — Health-Check nach 5 Retries fehlgeschlagen — Deployment abgebrochen"
+            exit 1
+          fi
 
           # Weitere Dienste: weiche Gates (warnen, nicht blockieren)
           for svc_port in "LightRAG:9621:/health" "Hermes WebUI:8787:/health" "AgentMemory:3111:/health"; do
