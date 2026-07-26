@@ -1,9 +1,32 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import test from 'node:test';
+import vm from 'node:vm';
+import ts from 'typescript';
 
 const read = (path) => readFileSync(path, 'utf8');
-const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const require = createRequire(import.meta.url);
+
+const loadNextConfig = () => {
+  const source = read('next.config.ts');
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+    },
+    fileName: 'next.config.ts',
+  });
+  const module = { exports: {} };
+  const context = vm.createContext({
+    exports: module.exports,
+    module,
+    process,
+    require,
+  });
+  new vm.Script(outputText, { filename: 'next.config.ts' }).runInContext(context);
+  return module.exports.default ?? module.exports;
+};
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
   const candidates = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
@@ -26,20 +49,19 @@ test('package exposes required quality scripts', () => {
   }
 });
 
-test('legacy aliases and locale login/account routes redirect to canonical pages', () => {
-  const config = read('next.config.ts');
-  const redirects = [
-    ['/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', '/:page', 'false'],
-    ['/arbeitsweise', '/prozess', 'true'],
-    ['/ueber-pascal', '/ueber-mich', 'true'],
-    ['/projekte', '/referenzen', 'true'],
-  ];
-  for (const [source, destination, permanent] of redirects) {
-    const pattern = new RegExp(
-      `\\{\\s*source:\\s*"${escapeRegExp(source)}",\\s*destination:\\s*"${escapeRegExp(destination)}",\\s*permanent:\\s*${permanent}\\s*\\}`,
-    );
-    assert.match(config, pattern);
-  }
+test('redirect config keeps expected locale and legacy aliases', async () => {
+  const config = loadNextConfig();
+  const redirects = (await config.redirects()).map(({ source, destination, permanent }) => ({
+    source,
+    destination,
+    permanent,
+  }));
+  assert.equal(JSON.stringify(redirects), JSON.stringify([
+    { source: '/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', destination: '/:page', permanent: false },
+    { source: '/arbeitsweise', destination: '/prozess', permanent: true },
+    { source: '/ueber-pascal', destination: '/ueber-mich', permanent: true },
+    { source: '/projekte', destination: '/referenzen', permanent: true },
+  ]));
 });
 
 test('service price model keeps required day-rate and offer ranges', () => {
