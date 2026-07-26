@@ -38,6 +38,10 @@ VPS Workspace /workspace/nexify/
 
 **Workflow:** `.github/workflows/mirror-to-gitlab.yml`
 
+### Cursor MCP (GitLab OSS)
+
+Self-hosted GitLab wird über MCP `gitlab-oss` angebunden (`@zereight/mcp-gitlab` → `https://gitlab.nexifyai.cloud/api/v4`). Setup: `deploy/mcp/gitlab-oss/README.md`.
+
 ## 2. VPS Workspace ↔ Repo Sync
 
 **Problem:** `/workspace/nexify/` auf dem VPS enthält Dateien, die nicht im Repo sind
