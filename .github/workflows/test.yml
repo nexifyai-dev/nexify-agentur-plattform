@@ -154,11 +154,18 @@ jobs:
           cache-from: type=gha
         continue-on-error: true
 
-      - name: Build backend image (if Dockerfile exists)
+      - name: Build backend image when Dockerfile exists
+        if: ${{ hashFiles('deploy/docker/Dockerfile.backend') != '' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./deploy/docker/Dockerfile.backend
+          push: false
+          cache-from: type=gha
+        continue-on-error: true
+
+      - name: Skip backend image build when Dockerfile is missing
+        if: ${{ hashFiles('deploy/docker/Dockerfile.backend') == '' }}
         run: |
-          if [ -f ./deploy/docker/Dockerfile.backend ]; then
-            docker build -f ./deploy/docker/Dockerfile.backend ./backend
-          else
-            echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
-          fi
+          echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
         continue-on-error: true
