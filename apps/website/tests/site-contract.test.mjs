@@ -28,6 +28,9 @@ test('package exposes required quality scripts', () => {
 });
 
 test('routing contract keeps unprefixed canonical pages and legacy aliases', () => {
+  // PR47 / Emergent SoT: canonical routes are UNPREFIXED (no /de/* prefix).
+  // Middleware strips locale prefixes; next.config.ts redirects legacy aliases
+  // to the unprefixed canonical paths.
   const config = read('next.config.ts');
   const redirects = [
     ['/arbeitsweise', '/prozess'],
