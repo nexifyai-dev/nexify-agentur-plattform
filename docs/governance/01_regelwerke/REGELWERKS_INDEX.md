@@ -1,8 +1,19 @@
 # Regelwerks-Index — NeXify AI Systemmaster
 
-> Stand: 2026-07-24 (aktualisiert)
+> Stand: 2026-07-25 (aktualisiert)
 > Canonical: Ja — dieser Index ist die führende Referenz.
-> Governance-Pfade: `docs/governance/` ist die kanonische Quelle. Legacy-Pfade unter `nexify/` werden beibehalten, Verweise zeigen auf kanonische Pfade.
+> Governance-Pfade: `docs/governance/` ist die **Primärquelle**. Legacy-Pfade unter `nexify/` bleiben, Verweise zeigen auf kanonische Pfade.
+> Charta-Auszug: `docs/governance/CHARTA.md` (§0–§16) — bestätigt Struktur, ersetzt Ordnerbaum nicht. Offener Normkonflikt: **F32**.
+> Design-System: `/design_guidelines.json` — Dark/Luxury, Outfit+Manrope, bg `#0A0A0A` (verbindlich).
+
+## Charta / Primärquelle
+
+| Regelwerk | Kanonischer Pfad | Status |
+|---|---|---|
+| Governance Index (SSOT) | `docs/governance/GOVERNANCE.md` | ✅ Primärquelle |
+| Charta Auszug §0–§16 | `docs/governance/CHARTA.md` | ✅ Auszug (2026-07-25) |
+| Offene Fragen (inkl. F32) | `docs/governance/12_register/OFFENE_FRAGEN_REGISTER.md` | ✅ F32 OFFEN |
+| Design-System | `/design_guidelines.json` | ✅ bg `#0A0A0A` |
 
 ## Claude-Code-CLI-first (P0)
 
@@ -17,6 +28,7 @@
 
 | Regelwerk | Kanonischer Pfad | Legacy-Pfad | Status |
 |---|---|---|---|
+| Cursor Egress Allowlist | `deploy/network/CURSOR_EGRESS_ALLOWLIST.md` (+ `.json`) | — | ✅ 2026-07-25 |
 | OIDC Auth Target State | — | /workspace/nexify/07_security_auth/OIDC_AUTH_TARGET_STATE.md | ✅ Plan |
 | Break-Glass-Policy | — | /workspace/nexify/07_security_auth/BREAK_GLASS_LOGIN_POLICY.md | ✅ Plan |
 | Secret-Zugriffspolitik | — | /workspace/nexify/07_security_secrets/SECRET_ACCESS_POLICY.md | ✅ Existiert |
@@ -29,6 +41,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | 9Router Betrieb | `docs/governance/02_sops/SOP_9ROUTER_OFFICIAL_DOCS_CONFIGURATION_V1.md` | ✅ Skills geladen |
+| 9Router Vollintegration | `docs/architecture/9ROUTER_VOLLINTEGRATION.md` + `backend/ninerouter.py` | ✅ 2026-07-25 |
 | Proxy/MITM Policy | — | ✅ OFF |
 | VPS Service Naming | — | ⏳ Noch zu erstellen |
 
@@ -37,6 +50,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
+| Research: AFlow (ICLR 2025 Oral) | `docs/research/AFLOW_OPENREVIEW_z5uVAKwmjf.md` | ✅ 2026-07-25 |
 | FlowSearch Synthesis (AFlow/ADAS) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` | ✅ 2026-07-25 |
 | Operator Register v1 | `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | ✅ 2026-07-25 |
 | FlowSearch Package | `backend/flowsearch/` | ✅ Offline MCTS |

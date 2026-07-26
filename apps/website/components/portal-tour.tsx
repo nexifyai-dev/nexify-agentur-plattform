@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FileText, CreditCard, MessageSquare, LifeBuoy, UserCog, Sparkles } from "lucide-react";
 import { useLang } from "@/lib/lang-context";
 
@@ -33,12 +33,11 @@ const STEPS = {
 
 export function PortalTour() {
   const { lang } = useLang();
-  const [step, setStep] = useState(-1);
+  const [step, setStep] = useState(() => {
+    if (typeof window === "undefined") return -1;
+    return window.localStorage.getItem("nexify-tour-done") ? -1 : 0;
+  });
   const steps = STEPS[lang];
-
-  useEffect(() => {
-    if (!window.localStorage.getItem("nexify-tour-done")) setStep(0);
-  }, []);
 
   if (step < 0) return null;
   const s = steps[step];

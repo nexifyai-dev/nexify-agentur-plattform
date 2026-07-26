@@ -38,14 +38,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: vitrine
-            context: ./apps/website
-            dockerfile: ./deploy/docker/Dockerfile.vitrine
-            tag: vitrine
-          - name: konsole
-            context: ./apps/konsole
-            dockerfile: ./deploy/docker/Dockerfile.konsole
-            tag: konsole
+          - name: website
+            context: .
+            dockerfile: ./deploy/docker/Dockerfile.website
+            tag: website
           - name: backend
             context: ./backend
             dockerfile: ./deploy/docker/Dockerfile.backend
@@ -77,4 +73,3 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: true
-        continue-on-error: true
