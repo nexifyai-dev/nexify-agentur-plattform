@@ -55,18 +55,19 @@ Dieses Governance-System ist die **Primärquelle**. Der vereinfachte Betriebsaus
 
 ## 2. Verbindliche Regeln (Kurzform)
 
-### 2.1 Prä-Task-Compliance (6 Gates)
+### 2.1 Prä-Task-Compliance (6 + 1 Gates)
 
-Vor JEDER Aufgabe müssen alle 6 Gates grün sein:
+Vor JEDER Aufgabe müssen die 6 Basis-Gates grün sein; bei agentischen Workflows zusätzlich Gate 7:
 
 1. **BRAIN_FIRST** — Brain-Query vor jeder Änderung
-2. **DOCS_FIRST** — Offizielle Docs vor Tool-Config
+2. **DOCS_FIRST** — Offizielle Docs vor Tool-Config (inkl. DOC-018–020 / Knowledge Register)
 3. **SHARED_STATE** — Shared Agent State konsultiert
 4. **PRE_TASK_CHECKLIST** — Skript ausgeführt
 5. **SECRET_SCAN** — Keine Secrets in Config/Code
 6. **TENANT_ISOLATION** — Kundenprojekte isoliert
+7. **FLOWSEARCH_KNOWLEDGE** — **Nutzungspflicht** bei Workflow-/Agent-Design: Knowledge Register + Operator-Register + FlowSearch-Abgleich (oder Waiver)
 
-Siehe: `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh`
+Siehe: `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` · `02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md` · `12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md`
 
 ### 2.2 Verbindliche Verbote
 
