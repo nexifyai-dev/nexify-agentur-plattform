@@ -13,9 +13,21 @@ export function SlotsPanel() {
   const [when, setWhen] = useState("");
   const [duration, setDuration] = useState(30);
   const [state, setState] = useState("");
+  const [lastLoadedAtMs, setLastLoadedAtMs] = useState(0);
 
-  const load = useCallback(() => api("/api/admin/slots").then(setSlots).catch(() => {}), []);
-  useEffect(() => { load(); }, [load]);
+  const load = useCallback(async () => {
+    try {
+      const data = await api("/api/admin/slots");
+      setSlots(data);
+      setLastLoadedAtMs(Date.now());
+    } catch {}
+  }, []);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      void load();
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [load]);
 
   const add = async () => {
     if (!when) return;
@@ -36,8 +48,9 @@ export function SlotsPanel() {
     load();
   };
 
-  const booked = slots.filter((s) => s.status === "booked" && new Date(s.start_at) > new Date(Date.now() - 864e5));
-  const free = slots.filter((s) => s.status === "free" && new Date(s.start_at) > new Date());
+  const nowMs = lastLoadedAtMs;
+  const booked = slots.filter((s) => s.status === "booked" && new Date(s.start_at).getTime() > nowMs - 864e5);
+  const free = slots.filter((s) => s.status === "free" && new Date(s.start_at).getTime() > nowMs);
 
   return (
     <div className="space-y-8" data-testid="admin-slots-panel">

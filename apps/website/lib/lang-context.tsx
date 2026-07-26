@@ -20,8 +20,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           ? fromCookie
           : null;
     if (initial) {
-      setLangState(initial);
-      document.documentElement.lang = initial;
+      const timeoutId = window.setTimeout(() => {
+        setLangState(initial);
+        document.documentElement.lang = initial;
+      }, 0);
+      return () => window.clearTimeout(timeoutId);
     }
   }, []);
 

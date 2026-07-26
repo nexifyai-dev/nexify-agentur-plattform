@@ -55,7 +55,10 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setOpen(false), 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [pathname]);
 
   return (
     <header

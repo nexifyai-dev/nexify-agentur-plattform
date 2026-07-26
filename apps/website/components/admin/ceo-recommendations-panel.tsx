@@ -48,9 +48,16 @@ export function CeoRecommendationsPanel() {
   }, []);
 
   useEffect(() => {
-    load();
-    const iv = setInterval(load, 45000);
-    return () => clearInterval(iv);
+    const timeoutId = window.setTimeout(() => {
+      void load();
+    }, 0);
+    const iv = window.setInterval(() => {
+      void load();
+    }, 45000);
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.clearInterval(iv);
+    };
   }, [load]);
 
   const stats = {

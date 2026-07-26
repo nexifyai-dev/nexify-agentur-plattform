@@ -67,7 +67,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refresh();
+    const timeoutId = window.setTimeout(() => {
+      void refresh();
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, [refresh]);
 
   return <AuthContext.Provider value={{ user, setUser, refresh }}>{children}</AuthContext.Provider>;
