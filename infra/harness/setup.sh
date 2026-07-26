@@ -122,7 +122,7 @@ run docker compose up -d harness
 log "Warte auf Harness Web UI (max. 120s) ..."
 if ! $DRY_RUN; then
   for i in $(seq 1 24); do
-    if curl -sf http://127.0.0.1:3100/api/v1/system/health >/dev/null 2>&1; then
+    if curl -sf http://127.0.0.1:3101/api/v1/system/health >/dev/null 2>&1; then
       log "Harness Web UI erreichbar ✓"
       break
     fi
@@ -134,7 +134,7 @@ fi
 # ── 6. Status-Ausgabe ─────────────────────────────────────────────────────────
 log ""
 log "=== Harness Setup abgeschlossen ==="
-log "  Web UI (lokal):   http://127.0.0.1:3100"
+log "  Web UI (lokal):   http://127.0.0.1:3101"
 log "  Web UI (extern):  https://harness.nexifyai.cloud"
 log "  SSH Git:          ssh://git@<VPS-IP>:3022/<user>/<repo>.git"
 log "  Admin-Email:      $(grep 'HARNESS_ADMIN_EMAIL' $SECRETS_FILE 2>/dev/null | cut -d= -f2 || echo 'siehe secrets.env')"

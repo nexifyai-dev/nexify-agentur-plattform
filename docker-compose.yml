@@ -3,7 +3,7 @@ services:
   # ── Harness Open Source — Git-Hosting, CI/CD, Code Review ─────────────────
   # Vollintegrierte DevOps-Plattform: Git-Repos, Pipelines, Artifact-Registry.
   # NIR: 26.07.2026 | Docs: docs/architecture/HARNESS-INTEGRATION.md
-  # Port 3100 → Harness Web UI | Port 3022 → Git-over-SSH
+  # Port 3101 → Harness Web UI | Port 3022 → Git-over-SSH
   harness-db:
     image: postgres:16-alpine
     container_name: nexify-harness-db
@@ -42,8 +42,8 @@ services:
       - GITNESS_DATABASE_DRIVER=postgres
       - GITNESS_DATABASE_DATASOURCE=host=harness-db port=5432 dbname=${HARNESS_DB_NAME:-harnessdb} user=${HARNESS_DB_USER:-harness} ****** sslmode=disable
       # Server URLs — extern via Traefik/Cloudflare Tunnel
-      - GITNESS_URL_BASE=${HARNESS_URL_BASE:-http://localhost:3100}
-      - GITNESS_URL_GIT=${HARNESS_URL_GIT:-http://localhost:3100}
+      - GITNESS_URL_BASE=${HARNESS_URL_BASE:-http://localhost:3101}
+      - GITNESS_URL_GIT=${HARNESS_URL_GIT:-http://localhost:3101}
       # SSH-Server
       - GITNESS_SSH_SERVER_PORT=3022
       # Admin-Account (nur beim ersten Start)
@@ -55,7 +55,7 @@ services:
       - harness-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "127.0.0.1:3100:3000"   # Web UI (intern: 3000, extern via Traefik: 3100)
+      - "127.0.0.1:3101:3000"   # Web UI (intern: 3000, extern via Traefik: 3101)
       - "3022:3022"              # Git-over-SSH
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/v1/system/health"]
