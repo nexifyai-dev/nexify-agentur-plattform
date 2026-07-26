@@ -46,6 +46,10 @@ jobs:
             context: .
             dockerfile: ./deploy/docker/Dockerfile.website
             tag: website
+          - name: backend
+            context: ./backend
+            dockerfile: ./deploy/docker/Dockerfile.backend
+            tag: backend
     steps:
       - uses: actions/checkout@v4
       
