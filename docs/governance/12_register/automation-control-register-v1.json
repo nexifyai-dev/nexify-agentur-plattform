@@ -507,7 +507,8 @@
       "healthcheck": "Pipeline-Status im Harness Web UI; /api/v1/system/health.",
       "evidence": "Harness-Pipeline-Run-Logs; docs/architecture/HARNESS-INTEGRATION.md.",
       "rollback": "Pipeline-Run stoppen im Harness UI; GitHub Actions bleibt primärer CI-Pfad.",
-      "abort": "Abort wenn Harness Container offline oder DB nicht erreichbar."
+      "abort": "Abort wenn Harness Container offline oder DB nicht erreichbar.",
+      "docs": "docs/architecture/HARNESS-INTEGRATION.md"
     }
   ]
 }
