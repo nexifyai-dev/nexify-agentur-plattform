@@ -1,12 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import test from 'node:test';
 import vm from 'node:vm';
 import ts from 'typescript';
 
 const read = (path) => readFileSync(path, 'utf8');
-const require = createRequire(import.meta.url);
 
 const loadNextConfig = () => {
   const source = read('next.config.ts');
@@ -18,13 +16,11 @@ const loadNextConfig = () => {
     fileName: 'next.config.ts',
   });
   const module = { exports: {} };
-  const context = vm.createContext({
+  vm.runInNewContext(outputText, {
     exports: module.exports,
     module,
-    process,
-    require,
-  });
-  new vm.Script(outputText, { filename: 'next.config.ts' }).runInContext(context);
+    process: { env: {} },
+  }, { filename: 'next.config.ts' });
   return module.exports.default ?? module.exports;
 };
 test('project lockfile uses only public package registries', () => {
@@ -51,17 +47,15 @@ test('package exposes required quality scripts', () => {
 
 test('redirect config keeps expected locale and legacy aliases', async () => {
   const config = loadNextConfig();
-  const redirects = (await config.redirects()).map(({ source, destination, permanent }) => ({
-    source,
-    destination,
-    permanent,
-  }));
-  assert.equal(JSON.stringify(redirects), JSON.stringify([
+  const redirects = JSON.parse(JSON.stringify(await config.redirects()));
+  assert.deepEqual(redirects, [
     { source: '/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', destination: '/:page', permanent: false },
     { source: '/arbeitsweise', destination: '/prozess', permanent: true },
     { source: '/ueber-pascal', destination: '/ueber-mich', permanent: true },
     { source: '/projekte', destination: '/referenzen', permanent: true },
-  ]));
+  ]);
+  assert.ok(!redirects.some(({ source }) => source === '/preise'));
+  assert.ok(!redirects.some(({ source }) => source === '/kontakt'));
 });
 
 test('service price model keeps required day-rate and offer ranges', () => {
