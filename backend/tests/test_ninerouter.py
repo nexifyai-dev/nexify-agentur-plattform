@@ -15,8 +15,8 @@ def _clear_budget(monkeypatch):
     monkeypatch.setenv("NINEROUTER_BASE_URL", "https://ai-router.nexifyai.cloud/v1")
     monkeypatch.setenv("NINEROUTER_API_KEY", "test-key-not-real")
     monkeypatch.setenv("PRIMARY_MODEL", "nexifyai-combo-llm")
-    monkeypatch.setenv("CUSTOMER_MODEL", "ds/deepseek-chat")
-    monkeypatch.setenv("FALLBACK_MODEL", "ds/deepseek-chat")
+    monkeypatch.setenv("CUSTOMER_MODEL", "ds/deepseek-v4-flash")
+    monkeypatch.setenv("FALLBACK_MODEL", "ds/deepseek-v4-flash")
 
 
 def test_load_config_aliases(monkeypatch):
@@ -30,9 +30,9 @@ def test_load_config_aliases(monkeypatch):
 
 def test_customer_purpose_blocks_combo():
     r = nr.NineRouter(nr.load_config())
-    assert r.resolve_model("customer") == "ds/deepseek-chat"
+    assert r.resolve_model("customer") == "ds/deepseek-v4-flash"
     # Even if explicitly requesting combo for customer, policy rewrites
-    assert r.resolve_model("customer", "nexifyai-combo-llm") == "ds/deepseek-chat"
+    assert r.resolve_model("customer", "nexifyai-combo-llm") == "ds/deepseek-v4-flash"
 
 
 def test_agent_purpose_keeps_combo():
@@ -84,4 +84,4 @@ async def test_complete_falls_back_on_empty(monkeypatch):
     # Force primary to combo then fallback
     out = await r.complete([{"role": "user", "content": "hi"}], purpose="agent", retries=2)
     assert out == "ok-fallback"
-    assert "ds/deepseek-chat" in calls
+    assert "ds/deepseek-v4-flash" in calls

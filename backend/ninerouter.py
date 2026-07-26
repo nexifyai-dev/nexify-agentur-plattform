@@ -1,6 +1,6 @@
 # FILE: /backend/ninerouter.py
 # NIR: 25.07.2026 01:55
-# UPDATED: 25.07.2026 01:55
+# UPDATED: 25.07.2026 08:50
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Zentraler 9router-Client (Config, Allowlist, Fallback, Cost-Brake, Health).
@@ -30,9 +30,9 @@ Purpose = Literal["customer", "agent", "internal"]
 # Customer-facing models: clean content, no reasoning leak.
 CUSTOMER_SAFE_MODELS = frozenset(
     {
-        "ds/deepseek-chat",
         "ds/deepseek-v4-flash",
-        "nexifyai",  # curated alias if present
+        "openrouter/deepseek/deepseek-v3.2",
+        "nexifyai",  # combo alias — prefer flash-first live chain
     }
 )
 
@@ -42,8 +42,11 @@ CUSTOMER_UNSAFE_MODELS = frozenset(
         "nexifyai-combo-llm",
         "ds/deepseek-v4-pro",
         "ds/deepseek-v4-pro-max",
+        "ds/deepseek-v4-pro-none",
         "ds/deepseek-reasoner",
+        "ds/deepseek-chat",  # upstream retired → 400; use v4-flash
         "vercel/glm-5.2",
+        "glm-cn/glm-5.2",
     }
 )
 
@@ -76,8 +79,8 @@ def load_config() -> NineRouterConfig:
     base_url = _env("NINEROUTER_BASE_URL", "OPENAI_BASE_URL", default="https://ai-router.nexifyai.cloud/v1")
     api_key = _env("NINEROUTER_API_KEY", "NINEROUTER_KEY", "OPENAI_API_KEY")
     primary = _env("PRIMARY_MODEL", default="nexifyai-combo-llm")
-    customer = _env("CUSTOMER_MODEL", default="ds/deepseek-chat")
-    fallback = _env("FALLBACK_MODEL", default="ds/deepseek-chat")
+    customer = _env("CUSTOMER_MODEL", default="ds/deepseek-v4-flash")
+    fallback = _env("FALLBACK_MODEL", default="ds/deepseek-v4-flash")
     # Prefer dedicated health endpoint; derive from base_url when unset.
     health = _env("NINEROUTER_HEALTH_URL")
     if not health:
@@ -135,11 +138,13 @@ class NineRouter:
             logger.warning(
                 "customer purpose refused unsafe model %s → %s",
                 model,
-                self.config.customer_model if self.config.customer_model not in CUSTOMER_UNSAFE_MODELS else "ds/deepseek-chat",
+                self.config.customer_model
+                if self.config.customer_model not in CUSTOMER_UNSAFE_MODELS
+                else "ds/deepseek-v4-flash",
             )
             safe = self.config.customer_model
             if safe in CUSTOMER_UNSAFE_MODELS:
-                safe = "ds/deepseek-chat"
+                safe = "ds/deepseek-v4-flash"
             model = safe
         return model
 

@@ -29,6 +29,10 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 - **Mirror:** GitLab (`localhost:8922/nexifyai-dev/nexify-agentur-plattform`)
 - **Sync:** Automatisch via `.github/workflows/gitlab-sync.yml`
 - **Branch Pattern:** `main` (stable) | `develop` (staging) | `feature/*` (development)
+- **Governance Primärquelle:** `docs/governance/` (nicht Chat-Charta). Auszug: `docs/governance/CHARTA.md`
+- **Pre-Task Gates:** BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE bei Workflows)
+- **Design verbindlich:** `design_guidelines.json` — Dark/Luxury, Outfit/Manrope, `#0A0A0A`
+- **F32 (ungeklärt):** §8 Autonomie vs. Production-Freigabe-Verbot — eskalieren, nicht selbst entscheiden
 
 ### 3. Dokumentations-Konvention
 

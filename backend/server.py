@@ -60,33 +60,9 @@ NINEROUTER_API_KEY = nine.config.api_key
 PRIMARY_MODEL = nine.config.primary_model
 CUSTOMER_MODEL = nine.config.customer_model
 FALLBACK_MODEL = nine.config.fallback_model
+LLM = nine.client
+LLM_FALLBACK = nine.client
 MIMO_MODEL = PRIMARY_MODEL  # agent.py historically expects this name
-
-# --- §10: Systemweite Standardmodelle (3 Modelle, feinabgestimmt je Aufgabe) ---
-# 1. Upstage Solar Pro 3 — Premium DE/NL-Qualität, Primär-Provider laut §10
-UPSTAGE_MODEL = os.environ.get("UPSTAGE_MODEL", "upstage/solar-pro3")
-# 2. DeepSeek Chat (V3.2) — strukturiertes JSON, Angebote, Pläne (§10-Ausnahme: vollintegriert)
-DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "ds/deepseek-chat")
-# 3. Upstage Solar Mini — günstigstes Modell, Token-effizient für einfache Texte & Support
-UPSTAGE_MINI = os.environ.get("UPSTAGE_MINI", "upstage/solar-mini")
-# Reasoning-Modell für komplexe interne Aufgaben (kein Kunden-Output direkt)
-DEEPSEEK_REASONER = os.environ.get("DEEPSEEK_REASONER", "ds/deepseek-v4-pro-none")
-
-# Task-basiertes Routing: ordnet jeden Aufgabentyp dem optimalen Modell zu (cost-first)
-TASK_MODEL_MAP: dict[str, str] = {
-    "chat":      PRIMARY_MODEL,    # Combo (DeepSeek primär → interne Fallback-Kette)
-    "offer":     DEEPSEEK_MODEL,   # JSON-Angebot → DeepSeek Chat (sauber, kein reasoning_content-Leak)
-    "plan":      DEEPSEEK_MODEL,   # JSON-Projektplan → DeepSeek Chat
-    "support":   UPSTAGE_MINI,     # Support-Antworten → solar-mini (günstigstes Standardmodell)
-    "followup":  UPSTAGE_MINI,     # Follow-up-E-Mails → solar-mini
-    "default":   PRIMARY_MODEL,
-}
-
-
-def pick_model(task_type: str = "default") -> str:
-    """Liefert das optimale Modell für den Aufgabentyp — cost-first, quality-aware."""
-    return TASK_MODEL_MAP.get(task_type, PRIMARY_MODEL)
-
 
 # --- Token-Optimierung: In-Memory Response-Cache (echtes LRU + TTL via OrderedDict) ---
 _LLM_CACHE: OrderedDict[str, tuple[str, float]] = OrderedDict()
@@ -414,34 +390,31 @@ async def llm_complete(
     task_type: str = "default",
     cache_ttl: int = 0,
     *,
-    purpose: str | None = None,
+    purpose: str = "customer",
     model: str | None = None,
 ) -> str:
-    """Complete via 9router with task model mapping + optional cache."""
-    chosen_model = model or pick_model(task_type)
-    chosen_purpose = purpose or ("customer" if task_type in {"chat", "offer", "plan", "support", "followup"} else "agent")
-    ck = _cache_key(chosen_model, messages, max_tokens)
+    """Complete via 9router. Routes all tasks through 9router with caching."""
+    ck = _cache_key(model or purpose, messages, max_tokens)
     cached = _get_cached(ck)
     if cached is not None:
         return cached
     try:
-        content = await nine.complete(
+        result = await nine.complete(
             messages,
-            purpose=chosen_purpose,  # type: ignore[arg-type]
-            model=chosen_model,
+            purpose=purpose,  # type: ignore[arg-type]
+            model=model,
             max_tokens=max_tokens,
         )
-        _set_cached(ck, content, cache_ttl)
-        return content
+        _set_cached(ck, result, cache_ttl)
+        return result
     except CostBrakeError as e:
         logger.error("llm_complete cost-brake: %s", e)
         raise HTTPException(status_code=503, detail="LLM budget brake active") from e
 
 
 async def open_chat_stream(messages: list[dict], max_tokens: int, task_type: str = "chat"):
-    purpose = "customer" if task_type in {"chat", "offer", "plan", "support", "followup"} else "agent"
     try:
-        return await nine.stream(messages, purpose=purpose, max_tokens=max_tokens)
+        return await nine.stream(messages, purpose="customer", max_tokens=max_tokens)
     except CostBrakeError as e:
         logger.error("open_chat_stream cost-brake: %s", e)
         raise HTTPException(status_code=503, detail="LLM budget brake active") from e
@@ -1179,7 +1152,7 @@ async def startup():
     })
     await portal.seed_admin(db)
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
-    agent_mod.init(db, nine.client, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
