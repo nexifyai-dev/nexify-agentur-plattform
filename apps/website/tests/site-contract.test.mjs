@@ -35,8 +35,10 @@ test('routing contract keeps unprefixed canonical pages and legacy aliases', () 
     ['/projekte', '/referenzen'],
   ];
   for (const [source, destination] of redirects) {
-    assert.match(config, new RegExp(`source:\\s*"${escapeRegex(source)}"`));
-    assert.match(config, new RegExp(`destination:\\s*"${escapeRegex(destination)}"`));
+    assert.match(
+      config,
+      new RegExp(`\\{\\s*source:\\s*"${escapeRegex(source)}",\\s*destination:\\s*"${escapeRegex(destination)}",\\s*permanent:\\s*true\\s*\\}`),
+    );
   }
 });
 
@@ -55,6 +57,15 @@ test('service price model keeps required day-rate and offer ranges', () => {
   for (const slug of ['landingpages', 'websites', 'onlineshops', 'enterprise-commerce', 'web-apps', 'mobile-apps', 'automatisierung', 'ai-agenten']) {
     assert.match(data, new RegExp(`slug: "${slug}"`));
   }
+});
+
+test('layout self-hosts the brand fonts without remote Google fetches', () => {
+  const layout = read('app/layout.tsx');
+  const css = read('app/globals.css');
+  assert.match(layout, /import "@fontsource-variable\/manrope";/);
+  assert.match(layout, /import "@fontsource-variable\/outfit";/);
+  assert.match(css, /--font-heading:\s*"Outfit Variable",\s*sans-serif;/);
+  assert.match(css, /--font-body:\s*"Manrope Variable",\s*sans-serif;/);
 });
 
 test('design keeps reference overflow guards', () => {
