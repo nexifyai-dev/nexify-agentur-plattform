@@ -28,6 +28,7 @@
 
 | Regelwerk | Kanonischer Pfad | Legacy-Pfad | Status |
 |---|---|---|---|
+| Cursor Egress Allowlist | `deploy/network/CURSOR_EGRESS_ALLOWLIST.md` (+ `.json`) | — | ✅ 2026-07-25 |
 | OIDC Auth Target State | — | /workspace/nexify/07_security_auth/OIDC_AUTH_TARGET_STATE.md | ✅ Plan |
 | Break-Glass-Policy | — | /workspace/nexify/07_security_auth/BREAK_GLASS_LOGIN_POLICY.md | ✅ Plan |
 | Secret-Zugriffspolitik | — | /workspace/nexify/07_security_secrets/SECRET_ACCESS_POLICY.md | ✅ Existiert |
@@ -48,6 +49,7 @@
 | Regelwerk | Kanonischer Pfad | Status |
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
+| Research: AFlow (ICLR 2025 Oral) | `docs/research/AFLOW_OPENREVIEW_z5uVAKwmjf.md` | ✅ 2026-07-25 |
 | FlowSearch Synthesis (AFlow/ADAS) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` | ✅ 2026-07-25 |
 | Operator Register v1 | `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | ✅ 2026-07-25 |
 | FlowSearch Package | `backend/flowsearch/` | ✅ Offline MCTS |
