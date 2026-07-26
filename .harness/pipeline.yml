@@ -1,0 +1,77 @@
+# FILE: .harness/pipeline.yml
+# NIR: 26.07.2026 16:00
+# UPDATED: 26.07.2026 16:00
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Harness Open Source — Standard-Pipeline-Template für NeXify-Repos
+# WHY: Wiederverwendbares CI-Template mit Lint, Test und Build-Stage.
+#      Kann von jedem Repo-Pipeline via "uses" referenziert werden.
+# BEST-PRACTICE: Stages klar trennen; jede Stage in eigenem Container.
+# PITFALL: V-01: Bei Harness OSS ist "template" noch nicht identisch mit Harness SaaS.
+#          Dieses Template ist eine vollständige Pipeline-Definition.
+# DEPENDS: Harness Open Source >= latest; Docker-Runner mit Node.js-Image
+# DOCS-REF: docs/architecture/HARNESS-INTEGRATION.md
+
+version: 1
+kind: pipeline
+spec:
+  # Trigger: Push auf beliebigen Branch und Pull Requests
+  triggers:
+    - type: branch
+      spec:
+        branches:
+          - main
+          - develop
+          - "feature/*"
+          - "bugfix/*"
+          - "release/*"
+    - type: pullreq
+      spec:
+        events:
+          - opened
+          - synchronized
+
+  # Stages
+  stages:
+    # ── Stage 1: Lint & Typecheck ────────────────────────────────────────────
+    - name: lint
+      type: ci
+      spec:
+        image: node:22-alpine
+        envs:
+          CI: "true"
+        commands:
+          - corepack enable
+          - corepack prepare pnpm@9.15.4 --activate
+          - cd apps/website
+          - pnpm install --frozen-lockfile
+          - pnpm lint
+          - pnpm typecheck
+
+    # ── Stage 2: Tests ───────────────────────────────────────────────────────
+    - name: test
+      type: ci
+      spec:
+        image: node:22-alpine
+        envs:
+          CI: "true"
+        commands:
+          - corepack enable
+          - corepack prepare pnpm@9.15.4 --activate
+          - cd apps/website
+          - pnpm install --frozen-lockfile
+          - pnpm test
+
+    # ── Stage 3: Docker Build (nur main-Branch) ──────────────────────────────
+    - name: docker-build
+      type: ci
+      when:
+        branch: main
+      spec:
+        image: docker:24-dind
+        privileged: true
+        envs:
+          DOCKER_BUILDKIT: "1"
+        commands:
+          - docker build -f deploy/docker/Dockerfile.website -t nexify-website:${DRONE_COMMIT_SHA:-latest} .
+          - echo "Docker-Build erfolgreich: nexify-website:${DRONE_COMMIT_SHA:-latest}"
