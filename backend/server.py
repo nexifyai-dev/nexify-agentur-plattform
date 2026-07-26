@@ -238,7 +238,7 @@ create table if not exists nexify_agent_tasks (
   result text, created_at timestamptz default now()
 );
 create table if not exists nexify_channel_events (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key,
   channel text not null,
   direction text not null,
   summary text,
