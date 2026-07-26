@@ -36,8 +36,9 @@ jobs:
           echo "globals.css has $LINES lines"
 
           # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1060.
-          # Lower bound catches truncation to the flat sheet only; duplicate marker
-          # check flags re-introduction of the [locale] Suppress-Bug.
+          # Use 900 as the lower bound (≈160-line safety margin) so normal edits
+          # still pass, but truncation back to the flat sheet is caught.
+          # Duplicate marker check flags re-introduction of the [locale] Suppress-Bug.
           MIN_CSS_LINES=900
           if [ "$LINES" -lt "$MIN_CSS_LINES" ]; then
             echo "::error::$FILE has only $LINES lines (< $MIN_CSS_LINES). The [locale] page design system may have been stripped again."
