@@ -24,6 +24,7 @@ export const company = {
   address: "Graaf van Loonstraat 1E",
   postalCity: "5921 JA Venlo",
   country: "Niederlande",
+  countryNl: "Nederland",
   email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   phoneHref: "+31613318856",
