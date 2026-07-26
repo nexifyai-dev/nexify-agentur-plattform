@@ -159,6 +159,6 @@ jobs:
           if [ -f ./deploy/docker/Dockerfile.backend ]; then
             docker build -f ./deploy/docker/Dockerfile.backend ./backend
           else
-            echo "Skipping backend image build: deploy/docker/Dockerfile.backend not present."
+            echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
           fi
         continue-on-error: true
