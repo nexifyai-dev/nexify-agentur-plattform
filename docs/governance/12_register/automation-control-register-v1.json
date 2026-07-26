@@ -419,6 +419,60 @@
       "evidence": "Planned: docs/governance/08_evidence/backup-restore-verification/",
       "rollback": "Suspend automatic verification and use supervised manual DR test.",
       "abort": "Abort on failed restore validation or missing backup artifacts."
+    },
+    {
+      "id": "AUTO-RUNNER-001",
+      "name": "GitHub Self-Hosted Runner (VPS)",
+      "owner": "DevOps / NeXify AI",
+      "layer": "L2",
+      "status": "active",
+      "trigger": {
+        "type": "event",
+        "event": "github-job-dispatch (HTTPS polling)"
+      },
+      "gate": "Runner-Token via GITHUB_PAT live abgeholt; /etc/nexifyai/secrets.env chmod 600; Docker-Socket-Mount.",
+      "executor": "Docker-Container nexify-github-runner (Dockerfile.github-runner); entrypoint.sh registriert und startet Runner.",
+      "healthcheck": "docker ps nexify-github-runner Status=Up; GitHub API /repos/.../actions/runners Total > 0.",
+      "evidence": "docs/governance/08_evidence/VPS_HEALTH_*.md; GitHub Actions Runner-Liste in Repo-Settings.",
+      "rollback": "SSH-Fallback in deploy-vps.yml aktivieren; docker compose restart github-runner.",
+      "abort": "Abort wenn GITHUB_PAT fehlt oder abgelaufen; docker compose stop github-runner.",
+      "docs": "docs/architecture/GITHUB-RUNNER-VPS.md"
+    },
+    {
+      "id": "AUTO-RUNNER-002",
+      "name": "VPS Worker Workflow — Proaktive Flows",
+      "owner": "DevOps / NeXify AI",
+      "layer": "L3",
+      "status": "active",
+      "trigger": {
+        "type": "schedule",
+        "event": "stündlich (quick-ping), täglich 06:00 UTC, montags 07:00 UTC"
+      },
+      "gate": "Läuft nur auf self-hosted Runner (labels: vps, nexifyai); Jobs unabhängig (continue-on-error).",
+      "executor": ".github/workflows/vps-worker.yml auf Self-Hosted Runner; direkte Docker- und curl-Aufrufe.",
+      "healthcheck": "Job-Status in GitHub Actions; VPS_HEALTH_*.md Evidence; §11 Monitoring.",
+      "evidence": "docs/governance/08_evidence/VPS_HEALTH_*.md; docs/governance/08_evidence/GOVERNANCE_AUDIT_W*.md",
+      "rollback": "workflow_dispatch job=quick-ping; Runner-Neustart.",
+      "abort": "Abort wenn Runner offline; Jobs haben Timeout 5–30 min.",
+      "docs": "docs/architecture/GITHUB-RUNNER-VPS.md"
+    },
+    {
+      "id": "AUTO-RUNNER-003",
+      "name": "Deploy VPS (Self-Hosted Runner primär)",
+      "owner": "DevOps / NeXify AI",
+      "layer": "L2",
+      "status": "active",
+      "trigger": {
+        "type": "git",
+        "event": "push auf main; workflow_dispatch"
+      },
+      "gate": "Self-Hosted Runner auf VPS; docker compose direkt; Health-Gate Website:3000 hartes Gate.",
+      "executor": ".github/workflows/deploy-vps.yml Job deploy-self-hosted; git reset --hard + docker compose pull + up.",
+      "healthcheck": "curl -sf http://127.0.0.1:3000/api/health; docker compose ps nach Deploy.",
+      "evidence": "GitHub Actions Run-Log; §11 Governance-Post-Check in Workflow.",
+      "rollback": "git reset --hard <prev-sha>; docker compose up -d; SSH-Fallback-Job aktivieren.",
+      "abort": "Abort wenn Website-Health nach 5 Retry fehlschlägt.",
+      "docs": "docs/architecture/GITHUB-RUNNER-VPS.md"
     }
   ]
 }
