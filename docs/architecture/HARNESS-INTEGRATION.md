@@ -8,7 +8,7 @@
 #      unabhängig von GitHub/GitLab, vollständig selbst-gehostet.
 # BEST-PRACTICE: GitHub bleibt Source-of-Truth; Harness OSS als redundanter
 #                CI/CD-Pfad und selbst-gehostetes Git-Mirror.
-# PITFALL: V-01: Harness OSS nutzt intern Port 3000 — auf dem VPS auf 3100 gemappt
+# PITFALL: V-01: Harness OSS nutzt intern Port 3000 — auf dem VPS auf 3101 gemappt
 #          (Website belegt 3000).
 # PITFALL: V-02: PostgreSQL-Daten müssen vor dem ersten Start konfiguriert sein.
 #          Passwort-Änderung nach erstem Start erfordert DB-Dump.
@@ -51,14 +51,14 @@ Cloudflare Tunnel (cloudflared)
     │
     ▼
 Traefik Reverse Proxy
-    │  Host: harness.nexifyai.cloud → localhost:3100
+    │  Host: harness.nexifyai.cloud → localhost:3101
     │
     ▼
 ┌──────────────────────────────────────────────────────────┐
 │  VPS (srv1243952.hstgr.cloud)                             │
 │                                                           │
 │  ┌─────────────────────────────────────────────────────┐ │
-│  │  Docker: nexify-harness (Port 3100:3000)             │ │
+│  │  Docker: nexify-harness (Port 3101:3000)             │ │
 │  │  Image: harness/harness:latest                       │ │
 │  │                                                       │ │
 │  │  ┌─────────────────────┐  ┌─────────────────────┐   │ │
@@ -101,7 +101,7 @@ Traefik Reverse Proxy
 
 | Port | Dienst | Bindung | Zugang |
 |------|--------|---------|--------|
-| 3100 | Harness Web UI | 127.0.0.1:3100 | via Traefik → Cloudflare |
+| 3101 | Harness Web UI | 127.0.0.1:3101 | via Traefik → Cloudflare |
 | 3022 | Git-over-SSH | 0.0.0.0:3022 | direkt (VPS-IP) |
 | 5433 | Harness PostgreSQL | 127.0.0.1:5433 | nur intern |
 
@@ -245,7 +245,7 @@ Der VPS-Worker-Workflow (`.github/workflows/vps-worker.yml`) kann optional um ei
 
     # Beispiel-Ergänzung in vps-worker.yml (ping-Schritt):
     - name: ping harness
-      run: curl -sf http://127.0.0.1:3100/api/v1/system/health | jq .status
+      run: curl -sf http://127.0.0.1:3101/api/v1/system/health | jq .status
 
 ---
 
@@ -255,7 +255,7 @@ Der VPS-Worker-Workflow (`.github/workflows/vps-worker.yml`) kann optional um ei
 
 ```bash
 # Harness API-Health:
-curl -sf http://127.0.0.1:3100/api/v1/system/health | jq .
+curl -sf http://127.0.0.1:3101/api/v1/system/health | jq .
 
 # Container-Status:
 docker compose ps harness harness-db
@@ -277,7 +277,7 @@ docker compose pull harness
 docker compose up -d harness
 
 # Nach Update prüfen:
-curl -sf http://127.0.0.1:3100/api/v1/system/health | jq .version
+curl -sf http://127.0.0.1:3101/api/v1/system/health | jq .version
 ```
 
 ### 7.3 Backup
@@ -326,7 +326,7 @@ docker compose up -d harness-db harness
 
 - **Automation-Register:** `docs/governance/12_register/automation-control-register-v1.json` — Einträge `AUTO-HARNESS-001..002`
 - **Evidence:** Nach jeder Harness-Pipeline: `docs/governance/08_evidence/HARNESS_CI_*.md`
-- **§11 Monitoring:** VPS-Worker `quick-ping` prüft `http://127.0.0.1:3100/api/v1/system/health`
+- **§11 Monitoring:** VPS-Worker `quick-ping` prüft `http://127.0.0.1:3101/api/v1/system/health`
 
 ---
 
@@ -334,7 +334,7 @@ docker compose up -d harness-db harness
 
 | Szenario | Erkennung | Aktion |
 |----------|-----------|--------|
-| Harness offline | `curl 127.0.0.1:3100` fails | `docker compose restart harness` |
+| Harness offline | `curl 127.0.0.1:3101` fails | `docker compose restart harness` |
 | DB nicht erreichbar | Harness Startfehler | `docker compose restart harness-db` |
 | Disk voll (Git-Repos) | Container-Exit | Git-LFS-Repos prüfen, `docker system prune` |
 | Port 3022 belegt | SSH-Fehler | `ss -tlnp | grep 3022` |
