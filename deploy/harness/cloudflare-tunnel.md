@@ -4,7 +4,7 @@
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Cloudflare Tunnel Konfigurationspatch für Harness Open Source
-# WHY: Ergänzt cloudflared Tunnel-Config um harness.nexifyai.cloud → localhost:3100
+# WHY: Ergänzt cloudflared Tunnel-Config um harness.nexifyai.cloud → localhost:3101
 # BEST-PRACTICE: Tunnel-Route nach Traefik leiten (Traefik macht TLS), nicht direkt zum Container.
 # PITFALL: V-01: Harness SSH (Port 3022) kann nicht über Cloudflare Tunnel geroutet werden
 #          → SSH direkt am Host gebunden (kein Tunnel nötig bei öffentlicher IP).
@@ -15,15 +15,21 @@
 
 ## Ausgangslage
 
-Der bestehende `cloudflared`-Tunnel verbindet folgende Domains:
+Der bestehende `cloudflared`-Tunnel verbindet folgende Domains (korrigiert
+gegen `memory/VPS_INFRA.md:54-55` — die ursprüngliche Version dieser Tabelle
+nannte fälschlich `nexifyai.cloud` als Hermes-Ziel, das ist laut
+`deploy/website-routes.yml` bzw. `memory/VPS_INFRA.md:21` die Website
+[Vercel, nicht auf dem VPS]; außerdem widersprach der 9Router-Port dem in
+`memory/VPS_INFRA.md:55` dokumentierten Wert — bitte vor Anwendung dieses
+Patches gegen den tatsächlichen Tunnel-Ingress verifizieren):
 
 | Domain | Ziel | Port |
 |--------|------|------|
-| nexifyai.cloud | Hermes WebUI | 8787 |
-| ai-router.nexifyai.cloud | 9Router | 32794 |
+| webui.nexifyai.cloud / work.nexifyai.cloud | Hermes WebUI | 8787 |
+| ai-router.nexifyai.cloud | 9Router | 20128 (laut memory/VPS_INFRA.md:55 — abweichend von einer früheren Version dieser Tabelle, die 32794 nannte; bitte verifizieren) |
 | agentmemory.nexifyai.cloud | AgentMemory | 3111 |
 | brain.nexifyai.cloud | Brain | 9090 |
-| work.nexifyai.cloud | Hermes alt | 32769 |
+| hermes-dash.nexifyai.cloud | **fehlt bisher** | siehe deploy/hermes-webui-cloudflare-ingress.md |
 
 ## Patch: harness.nexifyai.cloud hinzufügen
 
@@ -35,7 +41,7 @@ ingress:
 
   # Harness Open Source — Git-Hosting & CI/CD
   - hostname: harness.nexifyai.cloud
-    service: http://localhost:3100
+    service: http://localhost:3101
     originRequest:
       noTLSVerify: false
       connectTimeout: 30s
@@ -52,7 +58,7 @@ ingress:
 1. Zero Trust → Networks → Tunnels → Tunnel auswählen
 2. **Public Hostname** → **Add a public hostname**
 3. Subdomain: `harness`, Domain: `nexifyai.cloud`
-4. Service Type: `HTTP`, URL: `localhost:3100`
+4. Service Type: `HTTP`, URL: `localhost:3101`
 5. **Additional application settings** → HTTP Settings:
    - HTTP Host Header: `harness.nexifyai.cloud`
 
