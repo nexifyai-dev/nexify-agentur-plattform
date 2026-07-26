@@ -242,6 +242,7 @@ export default function PortalPage() {
   useEffect(() => {
     if (user === false) router.push("/login");
     if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate profile form from authenticated user data
       setProfile({ name: user.name ?? "", company: user.company ?? "", phone: user.phone ?? "" });
       loadOffers();
     }

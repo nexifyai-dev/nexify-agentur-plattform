@@ -4,7 +4,7 @@
 # TEAM: NeXifyAI DevOps
 # WHAT: Automated testing — lint, unit tests, integration tests, security scans
 # WHY: Quality gates vor Build+Deploy; früh Fehler erkennen
-# DEPENDS: Node.js 20+, Python 3.11+, Docker, npm/pip
+# DEPENDS: Node.js 20+, Python 3.11+, Docker, pnpm/pip
 # DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
 
 name: Test Suite (Lint, Unit, Security)
@@ -103,6 +103,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history für secret detection
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: 'apps/website/pnpm-lock.yaml'
+
+      - name: Install JS dependencies
+        run: pnpm --dir apps/website install --frozen-lockfile
       
       - name: TruffleHog Secret Scan
         uses: trufflesecurity/trufflehog@main
@@ -141,20 +156,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build apps (vitrine)
+      - name: Build app (website)
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/vitrine
-          file: ./deploy/docker/Dockerfile.vitrine
-          push: false
-          cache-from: type=gha
-        continue-on-error: true
-      
-      - name: Build backend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./deploy/docker/Dockerfile.backend
+          context: .
+          file: ./deploy/docker/Dockerfile.website
           push: false
           cache-from: type=gha
         continue-on-error: true
