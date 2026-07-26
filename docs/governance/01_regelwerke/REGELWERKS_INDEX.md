@@ -38,6 +38,12 @@
 |---|---|---|
 | System Blueprint | `docs/governance/09_konzepte/NEXIFY_AI_OS_GESAMTKONZEPT_KONSOLIDIERT_V1.md` | ✅ Vorhanden |
 | Research: AFlow (ICLR 2025 Oral) | `docs/research/AFLOW_OPENREVIEW_z5uVAKwmjf.md` | ✅ 2026-07-25 |
+| FlowSearch Synthesis (AFlow/ADAS) | `docs/research/AFLOW_ADAS_NEXIFY_SYNTHESIS.md` | ✅ 2026-07-25 |
+| Operator Register v1 | `docs/research/operators/NEXIFY_OPERATOR_REGISTER_V1.json` | ✅ 2026-07-25 |
+| FlowSearch Package | `backend/flowsearch/` | ✅ Offline MCTS |
+| Knowledge Source Register | `docs/governance/12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md` | ✅ VERBINDLICH |
+| FlowSearch Nutzungspflicht SOP | `docs/governance/02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md` | ✅ VERBINDLICH |
+| FLOWSEARCH_KNOWLEDGE_FIRST Regel | `docs/governance/01_regelwerke/FLOWSEARCH_KNOWLEDGE_FIRST_REGEL_V1.md` | ✅ Aktiv |
 | Source/Repo/Plugin/CLI Register | `docs/governance/12_register/NEXIFY_CAPABILITY_MCP_SOURCE_REGISTER.md` | ✅ Vorhanden |
 | Dependency/Flow Map | — | ⏳ Wird erstellt |
 | Real Progress Gate | `docs/governance/10_quality_gates/REAL_PROGRESS_GATE_V1.md` | ✅ Neu (MA-015) |
