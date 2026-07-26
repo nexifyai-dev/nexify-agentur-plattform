@@ -7,7 +7,7 @@ const read = (path) => readFileSync(path, 'utf8');
 
 const parseRedirects = () => {
   const source = read('next.config.ts');
-  const sourceFile = ts.createSourceFile('next.config.ts', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const sourceFile = ts.createSourceFile('next.config.ts', source, ts.ScriptTarget.ES2023, true, ts.ScriptKind.TS);
   const unwrapExpression = (node) => {
     if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) {
       return unwrapExpression(node.expression);
