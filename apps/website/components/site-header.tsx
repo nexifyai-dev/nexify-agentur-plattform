@@ -129,8 +129,11 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => { setOpen(false); setAppsOpen(false); }, [pathname]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- close menus on route change
+    setOpen(false);
+    setAppsOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -143,12 +146,6 @@ export function SiteHeader() {
   }, []);
 
   const appsMenu = APPS_MENU[lang];
-=======
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- close mobile menu on route change
-    setOpen(false);
-  }, [pathname]);
->>>>>>> origin/main
 
   return (
     <header
