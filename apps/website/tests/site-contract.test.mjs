@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(path, 'utf8');
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
@@ -35,8 +36,8 @@ test('legacy aliases and locale-only routes redirect to canonical pages', () => 
     ['/projekte', '/referenzen'],
   ];
   for (const [source, destination] of redirects) {
-    assert.ok(config.includes(`source: "${source}"`));
-    assert.ok(config.includes(`destination: "${destination}"`));
+    assert.match(config, new RegExp(`source: "${escapeRegExp(source)}"`));
+    assert.match(config, new RegExp(`destination: "${escapeRegExp(destination)}"`));
   }
 });
 
