@@ -1,6 +1,6 @@
 # Pre-Task Audit Report
 **Datum:** 2026-07-25 01:47:49 UTC
-**Exit:** $? (wird am Ende gesetzt)
+**Exit:** 4
 
 ## Gate-Ergebnisse
 
