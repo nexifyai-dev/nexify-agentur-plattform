@@ -155,12 +155,18 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy → VPS (SSH-Fallback)
     needs: []   # kein needs — läuft parallel; result wird nach Completion geprüft
-    if: |
-      false
-      # SSH-Fallback ist deaktiviert solange Self-Hosted Runner aktiv ist.
-      # Aktivieren: 'false' durch folgende Bedingung ersetzen:
-      # (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      #  github.event_name == 'workflow_dispatch'
+    # SSH-Fallback ist deaktiviert solange Self-Hosted Runner aktiv ist.
+    # Aktivieren: 'false' durch folgende Bedingung ersetzen:
+    # (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+    #  github.event_name == 'workflow_dispatch'
+    #
+    # PITFALL V-03 (behoben): `if:` als `|`-Block-Scalar mit Kommentarzeilen
+    # DARIN macht den gesamten String Teil des Ausdrucks — GitHub Actions
+    # kennt kein `#`-Kommentar innerhalb einer Expression. Das machte die
+    # gesamte Workflow-Datei ungültig → JEDER Run (inkl. deploy-self-hosted!)
+    # schlug seit Einführung sofort mit 0 Jobs fehl. Kommentare gehören als
+    # normale YAML-Zeilen VOR den Key, `if:` bleibt ein einzeiliger Wert.
+    if: false
     steps:
       - uses: actions/checkout@v4
 
