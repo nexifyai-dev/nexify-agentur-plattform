@@ -168,4 +168,3 @@ jobs:
         if: ${{ hashFiles('deploy/docker/Dockerfile.backend') == '' }}
         run: |
           echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
-        continue-on-error: true
