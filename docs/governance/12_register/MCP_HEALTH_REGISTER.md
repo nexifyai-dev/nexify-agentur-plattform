@@ -19,6 +19,7 @@
 |-----|--------|--------|
 | agentmemory (settings.json) | ✅ eingerichtet | Läuft über settings.json MCP-Server |
 | hostinger-mcp (settings.json) | ✅ eingerichtet | Hosting-API |
+| gitlab-oss (`@zereight/mcp-gitlab`) | ✅ eingerichtet (2026-07-25) | Self-hosted `gitlab.nexifyai.cloud`; PAT in `/etc/nexifyai/gitlab-mcp.env`; siehe `deploy/mcp/gitlab-oss/` |
 
 ## P1 — Benötigt Authentifizierung (OAuth)
 
