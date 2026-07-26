@@ -26,14 +26,13 @@ test('package exposes required quality scripts', () => {
   }
 });
 
-test('legacy and contract URLs redirect to canonical pages', () => {
+test('legacy aliases and locale-only routes redirect to canonical pages', () => {
   const config = read('next.config.ts');
   const redirects = [
-    ['/arbeitsweise', '/de/prozess'],
-    ['/ueber-pascal', '/de/ueber-mich'],
-    ['/projekte', '/de/referenzen'],
-    ['/preise', '/de/preise'],
-    ['/kontakt', '/de/kontakt'],
+    ['/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', '/:page'],
+    ['/arbeitsweise', '/prozess'],
+    ['/ueber-pascal', '/ueber-mich'],
+    ['/projekte', '/referenzen'],
   ];
   for (const [source, destination] of redirects) {
     assert.match(config, new RegExp(`source: "${source.replaceAll('/', '\\/')}"`));
