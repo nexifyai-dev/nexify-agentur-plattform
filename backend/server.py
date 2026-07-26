@@ -16,12 +16,13 @@ import asyncpg
 import resend
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, EmailStr
 import portal
 import booking
 import agent as agent_mod
 import email_agent
+import channel_sync
 from memory import mem_add, mem_search
 from ninerouter import CostBrakeError, router as nine
 
@@ -47,9 +48,78 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+RATE_LIMIT_WINDOW_SECONDS = 60
+RATE_LIMIT_RULES: list[tuple[str, int]] = [
+    ("/api/chat", 20),
+    ("/api/planner/plan", 10),
+    ("/api/offers/request", 5),
+    ("/api/contact", 5),
+    ("/api/webhooks/", 100),
+]
+RATE_LIMIT_BUCKETS: dict[tuple[str, str], list[float]] = {}
+RATE_LIMIT_REQUESTS = 0
+
+
+def _get_client_ip(request: Request) -> str:
+    forwarded_for = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+    if forwarded_for:
+        return forwarded_for
+    if request.client and request.client.host:
+        return request.client.host
+    return "unknown"
+
+
+def _get_rate_limit_rule(path: str) -> tuple[str, int] | None:
+    if path.startswith("/api/admin/") or path.startswith("/api/health"):
+        return None
+    for prefix, limit in RATE_LIMIT_RULES:
+        if prefix.endswith("/"):
+            if path.startswith(prefix):
+                return prefix, limit
+        elif path == prefix:
+            return prefix, limit
+    return None
+
+
+def _cleanup_rate_limit_buckets(now: float) -> None:
+    cutoff = now - RATE_LIMIT_WINDOW_SECONDS
+    for key, timestamps in list(RATE_LIMIT_BUCKETS.items()):
+        fresh = [ts for ts in timestamps if ts > cutoff]
+        if fresh:
+            RATE_LIMIT_BUCKETS[key] = fresh
+        else:
+            RATE_LIMIT_BUCKETS.pop(key, None)
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    rule = _get_rate_limit_rule(request.url.path)
+    if not rule:
+        return await call_next(request)
+
+    global RATE_LIMIT_REQUESTS
+    now = time.monotonic()
+    RATE_LIMIT_REQUESTS += 1
+    if RATE_LIMIT_REQUESTS % 100 == 0:
+        _cleanup_rate_limit_buckets(now)
+
+    endpoint_prefix, limit = rule
+    key = (_get_client_ip(request), endpoint_prefix)
+    cutoff = now - RATE_LIMIT_WINDOW_SECONDS
+    timestamps = [ts for ts in RATE_LIMIT_BUCKETS.get(key, []) if ts > cutoff]
+    if len(timestamps) >= limit:
+        RATE_LIMIT_BUCKETS[key] = timestamps
+        return JSONResponse(status_code=429, content={"detail": "Zu viele Anfragen – bitte warte einen Moment."})
+
+    timestamps.append(now)
+    RATE_LIMIT_BUCKETS[key] = timestamps
+    return await call_next(request)
+
 app.include_router(portal.router)
 app.include_router(booking.router)
 app.include_router(agent_mod.router)
+app.include_router(channel_sync.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
@@ -167,6 +237,24 @@ create table if not exists nexify_agent_tasks (
   id uuid primary key, title text, instruction text, run_at timestamptz, status text default 'pending',
   result text, created_at timestamptz default now()
 );
+create table if not exists nexify_channel_events (
+  id uuid primary key,
+  channel text not null,
+  direction text not null,
+  summary text,
+  contact_email text,
+  contact_phone text,
+  contact_name text,
+  contact_ref text,
+  ref_id text,
+  ref_type text,
+  metadata jsonb default '{}',
+  ts timestamptz default now()
+);
+create index if not exists idx_channel_events_email on nexify_channel_events (lower(contact_email));
+create index if not exists idx_channel_events_phone on nexify_channel_events (lower(contact_phone));
+create index if not exists idx_channel_events_ref   on nexify_channel_events (lower(contact_ref));
+create index if not exists idx_channel_events_ts    on nexify_channel_events (ts desc);
 """
 
 LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
@@ -754,9 +842,173 @@ async def health_llm():
     }
 
 
+def _db_pool_snapshot(pool: asyncpg.Pool | None) -> dict:
+    if not pool:
+        return {"available": False}
+    snapshot = {"available": True}
+    for field, method_name in (
+        ("size", "get_size"),
+        ("idle", "get_idle_size"),
+        ("min_size", "get_min_size"),
+        ("max_size", "get_max_size"),
+    ):
+        method = getattr(pool, method_name, None)
+        if callable(method):
+            try:
+                snapshot[field] = method()
+            except Exception:
+                snapshot[field] = None
+    return snapshot
+
+
+async def _safe_fetchval(con, query: str, label: str, errors: list[str], *args) -> int:
+    try:
+        value = await con.fetchval(query, *args)
+        return int(value or 0)
+    except Exception as e:
+        errors.append(label)
+        logger.warning(f"{label} query failed: {e}")
+        return 0
+
+
+async def _safe_channel_counts(con, errors: list[str]) -> dict[str, int]:
+    try:
+        rows = await con.fetch(
+            "select channel, count(*)::int as total from nexify_channel_events group by channel order by channel"
+        )
+        return {str(row["channel"]): int(row["total"] or 0) for row in rows}
+    except Exception as e:
+        errors.append("channels")
+        logger.warning(f"channel health query failed: {e}")
+        return {}
+
+
+async def _collect_system_status() -> dict:
+    ts = datetime.now(timezone.utc).isoformat()
+    pool = await db()
+    counts = {
+        "nexify_leads": 0,
+        "nexify_offers": 0,
+        "nexify_tickets": 0,
+        "nexify_agent_tasks_pending": 0,
+        "nexify_channel_events": 0,
+    }
+    channels: dict[str, int] = {}
+    errors: list[str] = []
+
+    if pool:
+        try:
+            async with pool.acquire() as con:
+                counts["nexify_leads"] = await _safe_fetchval(con, "select count(*) from nexify_leads", "nexify_leads", errors)
+                counts["nexify_offers"] = await _safe_fetchval(con, "select count(*) from nexify_offers", "nexify_offers", errors)
+                counts["nexify_tickets"] = await _safe_fetchval(con, "select count(*) from nexify_tickets", "nexify_tickets", errors)
+                counts["nexify_agent_tasks_pending"] = await _safe_fetchval(
+                    con,
+                    "select count(*) from nexify_agent_tasks where status = $1",
+                    "nexify_agent_tasks_pending",
+                    errors,
+                    "pending",
+                )
+                counts["nexify_channel_events"] = await _safe_fetchval(
+                    con, "select count(*) from nexify_channel_events", "nexify_channel_events", errors
+                )
+                channels = await _safe_channel_counts(con, errors)
+        except Exception as e:
+            errors.append("db_acquire")
+            logger.warning(f"health status DB acquire failed: {e}")
+    else:
+        errors.append("db_unavailable")
+
+    degraded = bool(errors) or not pool
+    return {
+        "status": "degraded" if degraded else "ok",
+        "db": {
+            "pool": _db_pool_snapshot(pool),
+            **counts,
+            "errors": errors,
+        },
+        "email_agent": email_agent.get_status(),
+        "channels": channels,
+        "pending_agent_tasks": counts["nexify_agent_tasks_pending"],
+        "ts": ts,
+    }
+
+
+@app.get("/api/health/full")
+async def health_full():
+    return await _collect_system_status()
+
+
+@app.get("/api/metrics")
+async def metrics():
+    pool = await db()
+    if not pool:
+        return PlainTextResponse("# DB unavailable\n", media_type="text/plain; version=0.0.4; charset=utf-8")
+
+    errors: list[str] = []
+    metrics_values = {
+        "nexify_leads_total": 0,
+        "nexify_offers_total": 0,
+        "nexify_tickets_total": 0,
+        "nexify_tickets_open": 0,
+        "nexify_channel_events_total": 0,
+        "nexify_agent_tasks_pending": 0,
+    }
+
+    try:
+        async with pool.acquire() as con:
+            metrics_values["nexify_leads_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_leads", "metrics_nexify_leads_total", errors
+            )
+            metrics_values["nexify_offers_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_offers", "metrics_nexify_offers_total", errors
+            )
+            metrics_values["nexify_tickets_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_tickets", "metrics_nexify_tickets_total", errors
+            )
+            metrics_values["nexify_tickets_open"] = await _safe_fetchval(
+                con, "select count(*) from nexify_tickets where status = $1", "metrics_nexify_tickets_open", errors, "open"
+            )
+            metrics_values["nexify_channel_events_total"] = await _safe_fetchval(
+                con, "select count(*) from nexify_channel_events", "metrics_nexify_channel_events_total", errors
+            )
+            metrics_values["nexify_agent_tasks_pending"] = await _safe_fetchval(
+                con,
+                "select count(*) from nexify_agent_tasks where status = $1",
+                "metrics_nexify_agent_tasks_pending",
+                errors,
+                "pending",
+            )
+    except Exception as e:
+        logger.warning(f"metrics DB acquire failed: {e}")
+
+    body = "\n".join(
+        [
+            "# HELP nexify_leads_total Total leads",
+            "# TYPE nexify_leads_total gauge",
+            f"nexify_leads_total {metrics_values['nexify_leads_total']}",
+            "# HELP nexify_offers_total Total offers",
+            "# TYPE nexify_offers_total gauge",
+            f"nexify_offers_total {metrics_values['nexify_offers_total']}",
+            "# HELP nexify_tickets_total Total tickets",
+            "# TYPE nexify_tickets_total gauge",
+            f"nexify_tickets_total {metrics_values['nexify_tickets_total']}",
+            "# HELP nexify_tickets_open Open tickets",
+            "# TYPE nexify_tickets_open gauge",
+            f"nexify_tickets_open {metrics_values['nexify_tickets_open']}",
+            "# HELP nexify_channel_events_total Cross-channel events total",
+            "# TYPE nexify_channel_events_total gauge",
+            f"nexify_channel_events_total {metrics_values['nexify_channel_events_total']}",
+            "# HELP nexify_agent_tasks_pending Pending agent tasks",
+            "# TYPE nexify_agent_tasks_pending gauge",
+            f"nexify_agent_tasks_pending {metrics_values['nexify_agent_tasks_pending']}",
+        ]
+    ) + "\n"
+    return PlainTextResponse(body, media_type="text/plain; version=0.0.4; charset=utf-8")
+
+
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError):
-    from fastapi.responses import JSONResponse
     if "UUID" in str(exc):
         return JSONResponse(status_code=400, content={"detail": "Ungültige ID"})
     return JSONResponse(status_code=500, content={"detail": "Interner Fehler"})
@@ -834,6 +1086,16 @@ async def process_inbound_email(data: dict):
         asyncio.create_task(send_email(
             INTERNAL_NOTIFY_EMAIL, f"Eingehende E-Mail: {subject} ({from_addr})",
             ci_email("Eingehende E-Mail", f"<p><b>{name}</b> ({from_addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{text[:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>", cta_label="Im CRM öffnen", cta_url=f"{os.environ.get('FRONTEND_URL','')}/admin")))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="email",
+        direction="inbound",
+        summary=f"E-Mail: {subject} — {name} ({from_addr}): {text[:200]}",
+        contact_email=from_addr,
+        contact_name=name,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+        metadata={"subject": subject, "email_id": email_id},
+    ))
     logger.info(f"inbound email processed: ticket {ticket_id} from {from_addr}")
 
 
@@ -999,6 +1261,16 @@ async def contact(body: ContactIn):
     if INTERNAL_NOTIFY_EMAIL:
         notify = f"<p>Neue Anfrage über die Website:</p><p><b>{body.name}</b> ({body.email})<br/>Firma: {body.company or '-'}<br/>Telefon: {body.phone or '-'}<br/>Sprache: {body.language}</p><p>{body.message}</p>"
         asyncio.create_task(send_email(INTERNAL_NOTIFY_EMAIL, f"Neue Website-Anfrage von {body.name}", notify))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Kontaktanfrage: {body.name} — {(body.message or '')[:200]}",
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+    ))
     return {"status": "ok", "lead_id": str(lead_id)}
 
 
@@ -1065,6 +1337,17 @@ async def request_offer(body: OfferRequestIn):
     convo = [m for m in history if m["role"] in ("user", "assistant")][-12:]
     if convo:
         asyncio.create_task(mem_add(body.email, convo, {"source": "offer_chat", "offer_title": offer.get("title", "")}))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Chat-Angebot: {offer.get('title', '')} — {body.name} — €{price_total:,.0f}".replace(",", "."),
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(offer_id),
+        ref_type="offer",
+        metadata={"offer_title": offer.get("title", ""), "price_total": price_total, "session_id": body.session_id},
+    ))
     return {
         "status": "sent" if email_id else "generated",
         "offer_id": str(offer_id),
@@ -1154,8 +1437,15 @@ async def startup():
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    channel_sync.init(
+        db_getter=db,
+        send_email_fn=send_email,
+        internal_notify_email=INTERNAL_NOTIFY_EMAIL or "",
+        frontend_url=os.environ.get("FRONTEND_URL", ""),
+    )
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
+    asyncio.create_task(agent_mod.seed_recurring_tasks())
     asyncio.create_task(email_agent.email_worker())
 
 

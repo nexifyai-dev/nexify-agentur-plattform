@@ -167,7 +167,16 @@ jobs:
           push: false
           cache-from: type=gha
         continue-on-error: true
-
+      
+      - name: Build hermes
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/hermes
+          file: ./apps/hermes/Dockerfile
+          push: false
+          cache-from: type=gha
+        continue-on-error: true
+      
       - name: Build backend image when Dockerfile exists
         if: ${{ env.BACKEND_DOCKERFILE_PRESENT == 'true' }}
         uses: docker/build-push-action@v5
