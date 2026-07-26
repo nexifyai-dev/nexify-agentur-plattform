@@ -1,10 +1,72 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import { readFileSync } from 'node:fs';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+import * as ts from 'typescript';
 
-const read = (path) => readFileSync(path, 'utf8');
-const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const read = (path) => {
+  try {
+    return readFileSync(path, 'utf8');
+  } catch (error) {
+    const displayPath = path instanceof URL ? fileURLToPath(path) : path;
+    throw new Error(`${displayPath} not found or unreadable`, { cause: error });
+  }
+};
+const isBooleanKeyword = (node) => node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword;
+const nextConfigPath = new URL('../next.config.ts', import.meta.url);
 
+const parseRedirects = () => {
+  const source = read(nextConfigPath);
+  const sourceFile = ts.createSourceFile('next.config.ts', source, ts.ScriptTarget.ES2023, true, ts.ScriptKind.TS);
+  const unwrapExpression = (node) => {
+    if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) {
+      return unwrapExpression(node.expression);
+    }
+    return node;
+  };
+  const getObjectProperty = (objectNode, propertyName, context = 'object') => {
+    const property = objectNode.properties.find(
+      (node) => ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && node.name.text === propertyName
+    );
+    assert.ok(property, `Missing ${context} property: ${propertyName}`);
+    return unwrapExpression(property.initializer);
+  };
+
+  const configStatement = sourceFile.statements.find(
+    (statement) =>
+      ts.isVariableStatement(statement) &&
+      statement.declarationList.declarations.some(
+        (declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === 'nextConfig' && declaration.initializer
+      )
+  );
+  assert.ok(configStatement && ts.isVariableStatement(configStatement), 'next.config.ts must define nextConfig');
+  const configDeclaration = configStatement.declarationList.declarations.find(
+    (declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === 'nextConfig'
+  );
+  assert.ok(configDeclaration?.initializer, 'nextConfig must have an initializer');
+  const configObject = unwrapExpression(configDeclaration.initializer);
+  assert.ok(ts.isObjectLiteralExpression(configObject), 'nextConfig must be an object literal');
+
+  const redirects = getObjectProperty(configObject, 'redirects', 'next.config.ts');
+  assert.ok(ts.isArrowFunction(redirects), 'redirects must be an arrow function');
+  const redirectsBody = unwrapExpression(redirects.body);
+  assert.ok(ts.isArrayLiteralExpression(redirectsBody), 'redirects must return an array literal');
+
+  return redirectsBody.elements.map((entry) => {
+    assert.ok(ts.isObjectLiteralExpression(entry), 'redirect entries must be object literals');
+    const sourceNode = getObjectProperty(entry, 'source', 'redirect entry');
+    const destinationNode = getObjectProperty(entry, 'destination', 'redirect entry');
+    const permanentNode = getObjectProperty(entry, 'permanent', 'redirect entry');
+    assert.ok(ts.isStringLiteralLike(sourceNode), 'redirect source must be a string literal');
+    assert.ok(ts.isStringLiteralLike(destinationNode), 'redirect destination must be a string literal');
+    assert.ok(isBooleanKeyword(permanentNode), 'redirect permanent must be boolean');
+    return {
+      source: sourceNode.text,
+      destination: destinationNode.text,
+      permanent: permanentNode.kind === ts.SyntaxKind.TrueKeyword,
+    };
+  });
+};
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
   const candidates = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
@@ -27,21 +89,27 @@ test('package exposes required quality scripts', () => {
   }
 });
 
-test('routing contract keeps unprefixed canonical pages and legacy aliases', () => {
-  // PR47 / Emergent SoT: canonical routes are UNPREFIXED (no /de/* prefix).
-  // Middleware strips locale prefixes; next.config.ts redirects legacy aliases
-  // to the unprefixed canonical paths.
-  const config = read('next.config.ts');
-  const redirects = [
-    ['/arbeitsweise', '/prozess'],
-    ['/ueber-pascal', '/ueber-mich'],
-    ['/projekte', '/referenzen'],
-  ];
-  for (const [source, destination] of redirects) {
-    assert.match(
-      config,
-      new RegExp(`\\{\\s*source:\\s*"${escapeRegex(source)}",\\s*destination:\\s*"${escapeRegex(destination)}",\\s*permanent:\\s*true\\s*\\}`),
+test('redirect config keeps expected locale and legacy aliases', () => {
+  const redirects = parseRedirects();
+  for (const expected of [
+    { source: '/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', destination: '/:page', permanent: false },
+    { source: '/arbeitsweise', destination: '/prozess', permanent: true },
+    { source: '/ueber-pascal', destination: '/ueber-mich', permanent: true },
+    { source: '/projekte', destination: '/referenzen', permanent: true },
+  ]) {
+    assert.ok(
+      redirects.some(
+        (redirect) =>
+          redirect.source === expected.source &&
+          redirect.destination === expected.destination &&
+          redirect.permanent === expected.permanent
+      ),
+      `missing redirect ${expected.source} -> ${expected.destination}`
     );
+  }
+  // Representative top-level canonicals must stay directly addressable, not aliases.
+  for (const canonicalRoute of ['/preise', '/kontakt']) {
+    assert.ok(!redirects.some(({ source }) => source === canonicalRoute));
   }
 });
 
