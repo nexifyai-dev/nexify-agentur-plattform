@@ -39,6 +39,7 @@ jobs:
       matrix:
         include:
           - name: website
+            # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
             context: .
             dockerfile: ./deploy/docker/Dockerfile.website
             tag: website
