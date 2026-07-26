@@ -50,7 +50,7 @@ jobs:
         run: pnpm --dir apps/website install --frozen-lockfile
       
       - name: Lint JavaScript (ESLint)
-        run: cd apps/website && npx eslint . 2>&1 || true
+        run: pnpm --dir apps/website lint 2>&1 || true
         continue-on-error: true
       
       - name: Check YAML syntax
@@ -88,7 +88,7 @@ jobs:
         continue-on-error: true
       
       - name: Test JS (Website tests)
-        run: cd apps/website && node --test tests/*.test.mjs 2>&1 || true
+        run: pnpm --dir apps/website test 2>&1 || true
         continue-on-error: true
       
       - name: Backend tests (Python)
@@ -116,8 +116,8 @@ jobs:
           extra_args: --only-verified
         continue-on-error: true
       
-      - name: Dependency Check (npm audit)
-        run: npm audit --audit-level=moderate 2>&1 || true
+      - name: Dependency Check (pnpm audit)
+        run: pnpm --dir apps/website audit --audit-level=moderate 2>&1 || true
         continue-on-error: true
       
       - name: YAML Policy Check

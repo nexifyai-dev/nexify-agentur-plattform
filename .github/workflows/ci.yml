@@ -59,14 +59,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: apps/website/pnpm-lock.yaml
 
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
 
       - name: TypeScript check
-        run: npx tsc --noEmit
+        run: pnpm typecheck
         continue-on-error: true  # TS errors werden als Warning gemeldet
 
       - name: Lint
-        run: npx next lint
+        run: pnpm lint
         continue-on-error: true
 
       - name: Build Next.js
