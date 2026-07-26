@@ -1,0 +1,17 @@
+# Windows SSH config snippet — Admin over WireGuard
+# Save as: C:\Users\pcour\.ssh\config
+
+Host nexify-vps
+  HostName 10.66.66.1
+  User root
+  IdentityFile ~/.ssh/nexify_vps_pc_ed25519
+  IdentitiesOnly yes
+  StrictHostKeyChecking accept-new
+
+# Direct (only when carrier allows TCP/22 — often blocked on hotspot)
+Host nexify-vps-direct
+  HostName 72.62.152.47
+  User root
+  Port 22
+  IdentityFile ~/.ssh/nexify_vps_pc_ed25519
+  IdentitiesOnly yes
