@@ -1,13 +1,15 @@
 # SOP — 9Router Official Docs & Configuration V1
 
-**Stand:** 2026-06-12 | **Status:** VERBINDLICH | **Version:** 1.0.0
-**Owner:** Routing / NeXify AI
+**Stand:** 2026-07-25 | **Status:** VERBINDLICH | **Version:** 1.1.0
+**Owner:** Routing / NeXify AI  
+**Vollintegration:** `docs/architecture/9ROUTER_VOLLINTEGRATION.md` · Code: `backend/ninerouter.py`
 
 ---
 
 ## 1. Zweck
 
 9Router wird nicht nur als Modellproxy genutzt, sondern als vollständige NeXify AI Router-Zentrale.
+Monorepo-Pflicht: alle Website/Backend-LLM-Calls laufen über `backend/ninerouter.py` (Customer- vs Agent-Modellpolitik, Fallback, Cost-Brake, Health).
 
 ## 2. Pflichtquellen
 
