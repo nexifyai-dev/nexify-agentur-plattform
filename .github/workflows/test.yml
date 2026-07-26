@@ -144,20 +144,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build apps (vitrine)
+      - name: Build website image
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/vitrine
-          file: ./deploy/docker/Dockerfile.vitrine
-          push: false
-          cache-from: type=gha
-        continue-on-error: true
-      
-      - name: Build backend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./deploy/docker/Dockerfile.backend
+          context: .
+          file: ./deploy/docker/Dockerfile.website
           push: false
           cache-from: type=gha
         continue-on-error: true
