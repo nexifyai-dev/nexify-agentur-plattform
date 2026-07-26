@@ -1,24 +1,58 @@
-# AGENTS.md
+# AGENTS.md — NeXifyAI Orchestrator (Cursor Agent Mode)
+> Gelesen von Cursor direkt (kein Frontmatter nötig). Ergänzt, nicht ersetzt:
+> `.cursor/rules/*.mdc` (Detailregeln), `.cursor/mcp.json` (Tool-Zugriff).
+> Technischer Hinweis, wichtig: `.cursorrules` (Einzeldatei) wird von Cursor
+> im Agent-Modus NICHT geladen — nur in Chat/Tab. Deshalb dieses Format.
 
-## Cursor Cloud specific instructions
+## Rolle
+Lead-Orchestrator für das NeXifyAI-Entwicklerteam, alle Kundenprojekte und
+den VPS selbst — verbunden via Cursor Remote-SSH direkt auf den Server.
 
-### What runs here
-The fully runnable product in this repo is the **website** at `apps/website` (Next.js 16, React 19, Tailwind v4, package manager **pnpm**). Standard scripts live in `apps/website/package.json` (`dev`, `build`, `lint`, `typecheck`, `test`). Run them from `apps/website`.
+## Primäre Quelle (verbindlich, in dieser Reihenfolge)
+1. `docs/governance/` in diesem Repo — **139 Dokumente, real, älter und
+   autoritativer** als alles Folgende. Bei Widerspruch gewinnt diese Quelle.
+2. `CHARTA.md` (Chat-Konsolidierung, §0–§16) — bestätigter, aber
+   vereinfachter Auszug von (1), nicht Ersatz.
+3. `design_guidelines.json` (Repo-Root, Stand 04.07.2026) — verbindliches
+   Design. NICHT die ältere „Graphite Premium"-Referenz aus
+   `nexify/02_regelwerke/GESAMTZIELBILD_V3.md` verwenden.
 
-- Dev server: `pnpm dev` (Turbopack) → http://localhost:3000. Health: `GET /api/health`. `/` redirects (307) to `/de`.
-- Lint/typecheck/test/build all pass: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
+## Auftrag: Hermes-Workstation-Konsolidierung
+Siehe `.cursor/rules/10-hermes-consolidation.mdc` für den vollständigen,
+aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
 
-### Non-obvious gotchas (website)
-- Use **pnpm**, not npm/yarn. There is both a `pnpm-lock.yaml` and a stray `yarn.lock`; pnpm matches the lockfile and `engines`. Next.js prints a "multiple lockfiles / inferred workspace root" warning because of this plus the nested `apps/website/pnpm-workspace.yaml` — it is harmless.
-- `apps/website/pnpm-workspace.yaml` makes `apps/website` its own pnpm workspace root, so install from inside that dir (the update script uses `pnpm --dir apps/website install`).
-- `pnpm test` only runs `tests/*.test.mjs` (the site-contract tests). The many `tests/*.test.tsx` / `*.test.ts` files are **not** wired into a runner. `test:design` (`playwright`) needs browser binaries that are not installed.
-- pnpm reports "Ignored build scripts: sharp, unrs-resolver" on install — fine for dev.
-- With no backend configured, `/api/planner/plan` returns a deterministic local estimate, while `/api/contact` and `/api/offers/request` intentionally return 5xx ("honest failure"). Set `BACKEND_ORIGIN` to proxy `/api/*` to a real backend.
+## Ausdrücklich ausgeschlossen (bereits geprüft, nicht erneut prüfen)
+- **`0xNyk/awesome-hermes-agent`** — NousResearchs eigenes, unabhängiges
+  „Hermes Agent"-Projekt. NICHTS von dort übernehmen. Dritte
+  Namenskollision dieser Art — bei jedem Fund mit „Hermes" im Namen zuerst
+  gegen NousResearch abgrenzen, bevor irgendetwas integriert wird.
+- **n8n** — laut bestehender Entscheidung abgeschafft. Nicht aufnehmen,
+  sofern nicht ausdrücklich widerrufen.
 
-### Backend (`backend/`) — cannot be fully run here
-The FastAPI backend is **not** set up in this environment and cannot be without external access:
-- `requirements.txt` / `requirements-ci.txt` need the private package `emergentintegrations` (not on public PyPI) and a custom `litellm` wheel URL, so a full `pip install` fails.
-- It also needs external services (Supabase Postgres, Resend email, an OpenAI-compatible LLM / 9router) with real keys — see `backend/.env.example`.
-- `backend/tests/*.py` are **integration tests that hit a live/remote HTTP backend** (`REACT_APP_BACKEND_URL`), not local unit tests.
-- The only backend check that passes offline is the CI lint gate (needs just `flake8`), run from `backend/`:
-  `python -m flake8 . --select=E9,F63,F7,F82 --exclude=.venv` and `python -c "import ast; ast.parse(open('server.py').read())"` (same for `portal/server.py`).
+## Arbeitsweise (§13/§14 in CHARTA.md — hier nur der Kurzhinweis)
+- Unbekannte Tools/Repos/Behauptungen: verifizieren, nicht übernehmen,
+  weil der Name passend klingt.
+- Kein Bestandteil gilt ohne gezeigtem Testbeweis als fertig.
+- Reale Widersprüche werden benannt und eskaliert, nicht selbst geraten.
+
+## Produktions-Grenze (zwei unabhängige, konvergente Quellen)
+„Kein interaktiver Eingriff in Produktionsprozesse ohne Freigabe"
+(`docs/governance/GOVERNANCE.md`) **und** das bestehende Hermes-Rebuild-
+Mandat — beide sagen dasselbe: **Cutover/Live-Änderungen an Hermes selbst
+erst nach expliziter Endabnahme.** Entwicklung in Isolation läuft ohne
+Rückfrage.
+
+## Branding
+„NeXify AI by NeXify — chat it. Automate it." — durchgängig.
+
+## Ziel
+Eine einzige WebUI (Basis: Hermes Agent WebUI) vereint alle Workstation-
+Features, 9Router, AgentMemory, LightRAG und die Docker-Container-Liste
+nativ — keine Iframes, keine Tab-Fragmentierung. Website davor.
+
+## Scope-Grenze (HARD, bis Ende 08-2026)
+Arbeits-Scope ist **ausschließlich** dieses Repository
+(`nexifyai-dev/nexify-agentur-plattform`). Andere GitHub-/GitLab-Repos
+werden bis Ende August 2026 **ignoriert** — kein Cross-Repo-Edit, kein
+Fremd-Deploy, keine Fremd-PR-Arbeit. Ausnahme nur bei explizitem neuem
+Mandat.

@@ -1,0 +1,51 @@
+---
+description: Hermes-Workstation-Konsolidierung — vollständiger Auftrag inkl. aller Ergänzungen
+globs:
+alwaysApply: true
+---
+
+# Auftrag: eine einzige WebUI statt fragmentierter Dashboards
+
+## Basis
+**Hermes Agent WebUI** ist die visuelle/technische Basis (bestätigt in
+`GESAMTZIELBILD_V3.md`). „NeXify AI Workstation" ist der Produktname für
+das, was darauf entsteht — kein Konkurrenzsystem.
+
+## Workstation-Features
+Kanban, Auftragsfach, Dispatcher, Automation Controller, User-Chat-Driver,
+Agententeams, Approval Queue, Evidence.
+
+## Native Integration (kein Iframe)
+- **9Router** — nativ.
+- **AgentMemory** — REST verifiziert (`/agentmemory/remember`,
+  `/agentmemory/smart-search`). Alle 11 Ansichten nativ nachbauen — größter
+  Einzelposten, realistisch einplanen.
+- **LightRAG** — eigenständiger Dienst, nativ integrieren.
+
+## Docker-Container (verifizierte Liste, GOVERNANCE.md)
+Paperclip, Hermes (Headroom/Gateway/Dashboard), 9Router, AgentMemory,
+LightRAG, Spaether, Traefik, Portainer, GitLab, Nexify Proxy, Redis.
+**1Backend**: real, aber nicht im Portregister — als Neuintegration
+behandeln. **n8n**: abgeschafft, nicht einbeziehen.
+
+## Zusätzliche Quellen
+MetaGPT, OpenMCP, OpenAPI vollintegriert. `claude-code-templates` (davila7)
+als Skill-Quelle. `opensourceprojects.dev` als Entdeckungskanal, kein
+Integrationsziel selbst.
+
+## Ausdrücklich ausgeschlossen
+`0xNyk/awesome-hermes-agent` — NousResearchs Projekt, nicht unseres.
+
+## Design
+`design_guidelines.json`: Dark/Luxury, Outfit/Manrope, `#0A0A0A`,
+Glass-Cards, Pill-Buttons, Bento-Grid, DE/NL, `data-testid` überall.
+NICHT „Graphite Premium".
+
+## Website
+Öffentliche Agentur-Website davor, gleiche Markenlinie.
+
+## Rollout
+Isoliert/parallel, Cutover erst nach Endabnahme.
+
+## Team
+Ein Spezialagent je integriertem Dienst (Charta §6).

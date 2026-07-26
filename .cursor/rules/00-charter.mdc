@@ -1,0 +1,20 @@
+---
+description: Kern-Governance — immer aktiv, verweist auf die reale Quelle statt sie zu duplizieren
+globs:
+alwaysApply: true
+---
+
+# Governance-Anbindung
+- Vollständige Regeln: `docs/governance/GOVERNANCE.md` + 14 Unterordner (139 Dokumente).
+- Sechs Pre-Task-Gates vor JEDER Aktion: BRAIN_FIRST, DOCS_FIRST,
+  SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION.
+- Chat-Konsolidierung (Ergänzung, nicht Ersatz): `CHARTA.md`.
+
+## Bei Widerspruch
+`docs/governance/` > `CHARTA.md` > diese `.mdc`-Dateien. Ältere Dokumente
+(vor 2026-07-04) im `nexify/`-Ordner können abweichen — im Zweifel das
+jüngere, tatsächlich committete Artefakt nehmen.
+
+## Wenn eine Regel hier fehlt
+Nicht raten. `docs/governance/` durchsuchen. Erst danach nach bestem
+Fachwissen entscheiden UND im Aktions-Log vermerken.
