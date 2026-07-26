@@ -56,7 +56,7 @@ fi
 
 # curl + jq
 for tool in curl jq; do
-  if command -v $tool &>/dev/null; then
+  if command -v "$tool" &>/dev/null; then
     ok "$tool installiert"
   else
     bad "$tool fehlt"

@@ -51,6 +51,9 @@ concurrency:
   group: vps-worker
   cancel-in-progress: false   # VPS-Ops niemals abbrechen
 
+permissions:
+  contents: read   # Checkout ist der einzige GITHUB_TOKEN-Zugriff; alle anderen Calls nutzen GITHUB_PAT
+
 # Alle Jobs laufen auf dem Self-Hosted Runner
 defaults:
   run:
@@ -265,7 +268,7 @@ jobs:
             TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
             # Status-Update: last_runner_sync Timestamp
             python3 -c "
-          import json, sys
+          import json
           with open('$STATE_FILE', 'r') as f:
               state = json.load(f)
           if 'github_runner' not in state:
