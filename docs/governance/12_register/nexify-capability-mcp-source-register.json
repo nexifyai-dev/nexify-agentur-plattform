@@ -113,6 +113,19 @@
       "risk_level": "CRITICAL",
       "status": "PLANNED",
       "evidence_ref": "/evidence/mcp-008-secret.md"
+    },
+    {
+      "mcp_id": "MCP-009",
+      "name": "gitlab-oss",
+      "source_type": "local/self-hosted MCP",
+      "source_url": "https://gitlab.nexifyai.cloud/api/v4",
+      "protocol": "REST/HTTP via @zereight/mcp-gitlab",
+      "transport": "stdio (npx)",
+      "capabilities": "Self-hosted GitLab OSS – MRs, Issues, Pipelines, Repos (nicht gitlab.com)",
+      "auth_required": true,
+      "risk_level": "HIGH",
+      "status": "REGISTERED",
+      "evidence_ref": "/deploy/mcp/gitlab-oss/README.md"
     }
   ],
 
@@ -246,6 +259,12 @@
       "date": "2026-06-11",
       "author": "NeXify Architecture Team",
       "change": "Initiales Register – alle 8 MCPs, 10 Capability-Kategorien, 6 Permission-Levels"
+    },
+    {
+      "version": "V1-DRAFT",
+      "date": "2026-07-25",
+      "author": "NeXifyAI Agent",
+      "change": "MCP-009 gitlab-oss – self-hosted GitLab OSS via @zereight/mcp-gitlab"
     }
   ]
 }
