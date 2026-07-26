@@ -23,6 +23,7 @@ cd nexify-agentur-plattform
 # Backend + Services
 docker-compose up -d
 
+<<<<<<< HEAD
 # Website (Next.js)
 cd apps/website && pnpm install && pnpm dev
 
@@ -34,6 +35,16 @@ cd apps/hermes && pip install pyyaml && python server.py
 # - Backend API: http://localhost:3100/api
 # - Hermes UI:   http://localhost:8484  (default Hermes port)
 # - LightRAG:    http://localhost:9621
+=======
+# Website App (Next.js)
+pnpm --dir apps/website install
+pnpm --dir apps/website dev
+
+# Zugriff
+# - Website: http://localhost:3000
+# - Backend: http://localhost:3100/api
+# - LightRAG: http://localhost:9621
+>>>>>>> origin/main
 ```
 
 ### Auf VPS deployen
@@ -52,11 +63,23 @@ git push origin main  # triggers .gitlab-ci.yml
 
 ```
 nexify-agentur-plattform/
+<<<<<<< HEAD
 ├── apps/                    # Applications
 │   ├── website/            # Marketing & Agency website (Next.js) → :3000
 │   ├── hermes/             # Hermes Agent Web UI (Python) → :8484
 │   └── paperclip/          # Paperclip app (planned)
 ├── backend/                # FastAPI Backend (ops agent, CRM, email, offers)
+=======
+├── apps/                    # Frontend/Produkt-Apps
+│   ├── website/            # Public Website (Next.js) → :3000
+│   ├── hermes/             # Hermes service/app
+│   └── paperclip/          # Paperclip app workspace
+├── backend/                # FastAPI Backend
+│   ├── app/
+│   ├── agents/
+│   ├── routers/
+│   └── schemas/
+>>>>>>> origin/main
 ├── deploy/                 # Infrastructure-as-Code
 │   ├── docker-compose.yml  # Development stack
 │   ├── kubernetes/         # K8s manifests (production)

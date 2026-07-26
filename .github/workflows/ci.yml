@@ -43,9 +43,6 @@ jobs:
   # === FRONTEND: Next.js build validation ===
   website:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/website
     steps:
       - uses: actions/checkout@v4
 
@@ -59,19 +56,17 @@ jobs:
           cache: pnpm
           cache-dependency-path: apps/website/pnpm-lock.yaml
 
-      - run: pnpm install
+      - run: pnpm --dir apps/website install --frozen-lockfile
 
       - name: TypeScript check
-        run: npx tsc --noEmit
-        continue-on-error: true  # TS errors werden als Warning gemeldet
+        run: pnpm --dir apps/website typecheck
 
       - name: Lint
-        run: npx next lint
-        continue-on-error: true
+        run: pnpm --dir apps/website lint
 
       - name: Build Next.js
-        run: pnpm build
-        continue-on-error: true  # Build can fail due to missing env vars; validate project structure
+        run: pnpm --dir apps/website build
+        continue-on-error: true  # Soft-fail until layout.tsx stops fetching Google fonts over CI network and uses vendored/local assets
 
   # === HERMES: Python app lint + test ===
   hermes:
