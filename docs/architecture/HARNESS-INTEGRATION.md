@@ -241,13 +241,11 @@ Siehe `deploy/harness/cloudflare-tunnel.md` für den vollständigen Konfiguratio
 
 ### 6.5 VPS-Worker-Integration
 
-Der VPS-Worker-Workflow (`.github/workflows/vps-worker.yml`) überwacht Harness im `quick-ping`-Job:
+Der VPS-Worker-Workflow (`.github/workflows/vps-worker.yml`) kann optional um einen Harness-Healthcheck im `quick-ping`-Job erweitert werden:
 
-```yaml
-# Ergänzung in vps-worker.yml (ping-Schritt):
-- name: ping harness
-  run: curl -sf http://127.0.0.1:3100/api/v1/system/health | jq .status
-```
+    # Beispiel-Ergänzung in vps-worker.yml (ping-Schritt):
+    - name: ping harness
+      run: curl -sf http://127.0.0.1:3100/api/v1/system/health | jq .status
 
 ---
 
