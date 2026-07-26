@@ -91,6 +91,7 @@ export function ChannelEventsPanel() {
       .catch(() => { setEvents([]); setLoading(false); });
 
     const interval = setInterval(() => {
+      setRefreshing(true);
       fetchEvents()
         .then((rows) => setEvents(rows))
         .catch(() => {})
