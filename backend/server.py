@@ -22,6 +22,7 @@ import portal
 import booking
 import agent as agent_mod
 import email_agent
+import channel_sync
 from memory import mem_add, mem_search
 from ninerouter import CostBrakeError, router as nine
 
@@ -50,6 +51,7 @@ app.add_middleware(
 app.include_router(portal.router)
 app.include_router(booking.router)
 app.include_router(agent_mod.router)
+app.include_router(channel_sync.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
@@ -167,6 +169,24 @@ create table if not exists nexify_agent_tasks (
   id uuid primary key, title text, instruction text, run_at timestamptz, status text default 'pending',
   result text, created_at timestamptz default now()
 );
+create table if not exists nexify_channel_events (
+  id uuid primary key default gen_random_uuid(),
+  channel text not null,
+  direction text not null,
+  summary text,
+  contact_email text,
+  contact_phone text,
+  contact_name text,
+  contact_ref text,
+  ref_id text,
+  ref_type text,
+  metadata jsonb default '{}',
+  ts timestamptz default now()
+);
+create index if not exists idx_channel_events_email on nexify_channel_events (lower(contact_email));
+create index if not exists idx_channel_events_phone on nexify_channel_events (lower(contact_phone));
+create index if not exists idx_channel_events_ref   on nexify_channel_events (lower(contact_ref));
+create index if not exists idx_channel_events_ts    on nexify_channel_events (ts desc);
 """
 
 LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
@@ -834,6 +854,16 @@ async def process_inbound_email(data: dict):
         asyncio.create_task(send_email(
             INTERNAL_NOTIFY_EMAIL, f"Eingehende E-Mail: {subject} ({from_addr})",
             ci_email("Eingehende E-Mail", f"<p><b>{name}</b> ({from_addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{text[:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>", cta_label="Im CRM öffnen", cta_url=f"{os.environ.get('FRONTEND_URL','')}/admin")))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="email",
+        direction="inbound",
+        summary=f"E-Mail: {subject} — {name} ({from_addr}): {text[:200]}",
+        contact_email=from_addr,
+        contact_name=name,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+        metadata={"subject": subject, "email_id": email_id},
+    ))
     logger.info(f"inbound email processed: ticket {ticket_id} from {from_addr}")
 
 
@@ -999,6 +1029,16 @@ async def contact(body: ContactIn):
     if INTERNAL_NOTIFY_EMAIL:
         notify = f"<p>Neue Anfrage über die Website:</p><p><b>{body.name}</b> ({body.email})<br/>Firma: {body.company or '-'}<br/>Telefon: {body.phone or '-'}<br/>Sprache: {body.language}</p><p>{body.message}</p>"
         asyncio.create_task(send_email(INTERNAL_NOTIFY_EMAIL, f"Neue Website-Anfrage von {body.name}", notify))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Kontaktanfrage: {body.name} — {(body.message or '')[:200]}",
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(ticket_id),
+        ref_type="ticket",
+    ))
     return {"status": "ok", "lead_id": str(lead_id)}
 
 
@@ -1065,6 +1105,17 @@ async def request_offer(body: OfferRequestIn):
     convo = [m for m in history if m["role"] in ("user", "assistant")][-12:]
     if convo:
         asyncio.create_task(mem_add(body.email, convo, {"source": "offer_chat", "offer_title": offer.get("title", "")}))
+    asyncio.create_task(channel_sync.sync_event(
+        channel="website",
+        direction="inbound",
+        summary=f"Chat-Angebot: {offer.get('title', '')} — {body.name} — €{price_total:,.0f}".replace(",", "."),
+        contact_email=body.email,
+        contact_name=body.name,
+        contact_phone=body.phone,
+        ref_id=str(offer_id),
+        ref_type="offer",
+        metadata={"offer_title": offer.get("title", ""), "price_total": price_total, "session_id": body.session_id},
+    ))
     return {
         "status": "sent" if email_id else "generated",
         "offer_id": str(offer_id),
@@ -1154,6 +1205,12 @@ async def startup():
     booking.init(db, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     agent_mod.init(db, LLM, PRIMARY_MODEL, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
     email_agent.init(db, llm_complete, ai_ticket_reply, send_email, ci_email, os.environ.get("FRONTEND_URL", ""))
+    channel_sync.init(
+        db_getter=db,
+        send_email_fn=send_email,
+        internal_notify_email=INTERNAL_NOTIFY_EMAIL or "",
+        frontend_url=os.environ.get("FRONTEND_URL", ""),
+    )
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
     asyncio.create_task(email_agent.email_worker())
