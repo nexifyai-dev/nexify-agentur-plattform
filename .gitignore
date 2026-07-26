@@ -19,3 +19,7 @@ __pycache__/
 .env*
 !.env.example
 backend/references/
+
+# Local Cursor MCP configs may contain PATs — keep examples only in git
+.cursor/mcp.json
+**/gitlab-mcp.env

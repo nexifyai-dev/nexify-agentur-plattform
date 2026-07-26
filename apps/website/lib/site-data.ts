@@ -16,8 +16,8 @@ import {
 
 export const company = {
   brand: "NeXify AI",
-  descriptor: "by NeXify — chat it. Automate it.",
-  legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
+  descriptor: "Chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",
   role: "Inhaber / Directeur",
@@ -27,7 +27,8 @@ export const company = {
   email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   phoneHref: "+31613318856",
-  website: "https://nexifyai.cloud",
+  // @NEXIFYAI-MARKER: prelogin-canonical-www-20260713 — apex redirects to www
+  website: "https://www.nexifyai.cloud",
   kvk: "90483944",
   vatId: "NL865786276B01",
   dayRate: 999,

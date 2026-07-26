@@ -12,7 +12,7 @@ test('i18n - default locale is de', () => {
 });
 
 test('i18n - isValidLocale accepts valid locales', () => {
-  const isValid = (l: string) => ['de', 'en', 'nl'].includes(l);
+  const isValid = (l) => ['de', 'en', 'nl'].includes(l);
   assert.ok(isValid('de'));
   assert.ok(isValid('en'));
   assert.ok(isValid('nl'));
