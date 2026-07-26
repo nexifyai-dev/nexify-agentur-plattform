@@ -14,7 +14,14 @@
 # Automatisch
 skill_view(name='nexifyai-agent-foundation')
 read_file(path='/opt/nexifyai/repos/nexify-agentur-plattform/CLAUDE.md')
+# Knowledge / FlowSearch Nutzungspflicht (Gate FLOWSEARCH_KNOWLEDGE)
+python scripts/check_knowledge_mandate.py
 ```
+
+**Nutzungspflicht agentische Workflows:**  
+`docs/governance/02_sops/SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1.md` ·  
+`docs/governance/12_register/KNOWLEDGE_SOURCE_REGISTER_V1.md` ·  
+OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlich**, nicht optional.
 
 ### 2. Repo-Kontext
 

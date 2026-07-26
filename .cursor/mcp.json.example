@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "gitlab-oss": {
+      "command": "npx",
+      "args": ["-y", "@zereight/mcp-gitlab"],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "glpat-REPLACE_ME",
+        "GITLAB_API_URL": "https://gitlab.nexifyai.cloud/api/v4",
+        "GITLAB_READ_ONLY_MODE": "false"
+      }
+    }
+  }
+}

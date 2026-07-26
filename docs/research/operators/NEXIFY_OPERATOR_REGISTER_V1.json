@@ -1,0 +1,98 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-07-25",
+  "sources": [
+    "AFlow operator set (Generate/Review/Revise/Ensemble/Format/Test)",
+    "docs/governance Pre-Task Gates §14",
+    "SOP_AUFTRAG_VORBEREITUNG_AUSFUEHRUNG_PRUEFUNG_ENDKONTROLLE_V4"
+  ],
+  "operators": [
+    {
+      "id": "brain_first",
+      "family": "gate",
+      "required": true,
+      "description": "Query shared context / brain before mutating work",
+      "cost_weight": 0.05,
+      "aflow_analog": null
+    },
+    {
+      "id": "docs_first",
+      "family": "gate",
+      "required": true,
+      "description": "Consult official docs / governance before tool config",
+      "cost_weight": 0.05,
+      "aflow_analog": null
+    },
+    {
+      "id": "generate",
+      "family": "llm",
+      "required": false,
+      "description": "Primary generation step (draft answer / artifact)",
+      "cost_weight": 1.0,
+      "aflow_analog": "Generate"
+    },
+    {
+      "id": "structure",
+      "family": "llm",
+      "required": false,
+      "description": "Force structured output (JSON schema / fields)",
+      "cost_weight": 0.6,
+      "aflow_analog": "Format"
+    },
+    {
+      "id": "critique",
+      "family": "llm",
+      "required": false,
+      "description": "Review draft against acceptance criteria",
+      "cost_weight": 0.7,
+      "aflow_analog": "Review"
+    },
+    {
+      "id": "revise",
+      "family": "llm",
+      "required": false,
+      "description": "Revise draft using critique feedback",
+      "cost_weight": 0.9,
+      "aflow_analog": "Revise"
+    },
+    {
+      "id": "ensemble",
+      "family": "llm",
+      "required": false,
+      "description": "Sample multiple drafts and vote/merge",
+      "cost_weight": 2.2,
+      "aflow_analog": "Ensemble"
+    },
+    {
+      "id": "verify",
+      "family": "check",
+      "required": false,
+      "description": "Deterministic checks (schema, forbidden tokens, length)",
+      "cost_weight": 0.1,
+      "aflow_analog": "Test"
+    },
+    {
+      "id": "evidence",
+      "family": "gate",
+      "required": true,
+      "description": "Write evidence summary fields into artifact metadata",
+      "cost_weight": 0.05,
+      "aflow_analog": null
+    },
+    {
+      "id": "secret_scan",
+      "family": "gate",
+      "required": false,
+      "description": "Reject outputs that look like secrets",
+      "cost_weight": 0.05,
+      "aflow_analog": null
+    }
+  ],
+  "forbidden": [
+    "ssh_exec",
+    "delete_prod",
+    "rotate_secret",
+    "write_vps_sqlite",
+    "disable_cost_brake"
+  ]
+}
