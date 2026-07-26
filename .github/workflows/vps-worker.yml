@@ -189,8 +189,8 @@ jobs:
       - name: Runner _work Cleanup
         run: |
           echo "🗑️ Runner Workdir Cleanup..."
-          find /home/runner/actions-runner/_work -maxdepth 2 -mtime +2 \
-            \( -name "*.zip" -o -name "*.tar.gz" \) 2>/dev/null \
+          find /home/runner/actions-runner/_work -maxdepth 2 \
+            \( -name "*.zip" -o -name "*.tar.gz" \) -a -mtime +2 2>/dev/null \
             | xargs rm -f 2>/dev/null || true
           echo "✅ Done"
         continue-on-error: true
@@ -328,7 +328,8 @@ jobs:
           RUNNING=$(docker inspect --format='{{.State.Running}}' nexify-github-runner 2>/dev/null || echo "false")
           STATUS=$(docker inspect --format='{{.State.Health.Status}}' nexify-github-runner 2>/dev/null || echo "")
           echo "Runner Running: $RUNNING | Health: ${STATUS:-n/a (kein Healthcheck)}"
-          if [ "$RUNNING" != "true" ] || [ "$STATUS" = "unhealthy" ]; then
+          # Neustart nur wenn Container nicht läuft ODER explizit unhealthy (leerer Status = kein Healthcheck → ignorieren)
+          if [ "$RUNNING" != "true" ] || { [ -n "$STATUS" ] && [ "$STATUS" = "unhealthy" ]; }; then
             echo "🔄 Starte github-runner neu..."
             cd $REPO_DIR
             docker compose restart github-runner 2>&1 || true
