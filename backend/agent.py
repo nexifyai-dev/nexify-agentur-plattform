@@ -83,7 +83,7 @@ TOOLS = [
     _tool("cancel_task", "Geplanten Task stornieren.", {"task_id": S}, ["task_id"]),
     _tool("list_chat_sessions", "Website-KI-Chat-Sessions auflisten (neueste zuerst).", {"limit": N}),
     _tool("get_chat_session", "Kompletten Verlauf einer Website-Chat-Session lesen.", {"session_id": S}, ["session_id"]),
-    _tool("get_contact_context", "Vollständigen Kanal-Kontext eines Kontakts abrufen — alle Berührungspunkte über ALLE Kanäle (Website, Telegram, WhatsApp, E-Mail, Hermes) in chronologischer Reihenfolge. identifier = E-Mail-Adresse, Telefonnummer oder Kanal-Ref wie 'telegram:12345'.", {"identifier": S, "limit": N}, ["identifier"]),
+    _tool("get_contact_context", "Vollständigen Kanal-Kontext eines Kontakts abrufen — alle Berührungspunkte über ALLE Kanäle (Website, Telegram, WhatsApp, E-Mail, Hermes) (neueste zuerst). identifier = E-Mail-Adresse, Telefonnummer oder Kanal-Ref wie 'telegram:12345'.", {"identifier": S, "limit": N}, ["identifier"]),
 ]
 
 
