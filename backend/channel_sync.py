@@ -440,7 +440,7 @@ def _make_meta_wa_reply(contact_phone: str | None, phone_number_id: str):
             "type": "text",
             "text": {"body": text[:4096]},
         }
-        headers = {"Authorization": f"******", "Content-Type": "application/json"}
+        headers = {"Authorization": "Bearer " + WHATSAPP_ACCESS_TOKEN, "Content-Type": "application/json"}
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 resp = await client.post(url, json=payload, headers=headers)
