@@ -27,6 +27,8 @@ docker-compose up -d
 pnpm --dir apps/website install && pnpm --dir apps/website dev
 
 # Hermes Web UI (Python)
+# Hinweis: Das Backend benötigt private/externe Abhängigkeiten und ist lokal ohne
+# zusätzliche Konfiguration (siehe backend/.env.example) ggf. nicht vollständig lauffähig.
 cd apps/hermes && pip install pyyaml && python server.py
 
 # Zugriff
@@ -57,10 +59,10 @@ nexify-agentur-plattform/
 │   ├── hermes/             # Hermes Agent Web UI (Python) → :8484
 │   └── paperclip/          # Paperclip app (planned)
 ├── backend/                # FastAPI Backend (ops agent, CRM, email, offers)
-│   ├── app/
-│   ├── agents/
-│   ├── routers/
-│   └── schemas/
+│   ├── server.py
+│   ├── portal/
+│   ├── flowsearch/
+│   └── tests/
 ├── deploy/                 # Infrastructure-as-Code
 │   ├── docker-compose.yml  # Development stack
 │   ├── kubernetes/         # K8s manifests (production)
