@@ -150,15 +150,18 @@ jobs:
   docker-build-test:
     runs-on: ubuntu-latest
     name: Docker Build (Verify Dockerfiles)
+    env:
+      BACKEND_DOCKERFILE_PRESENT: ${{ hashFiles('deploy/docker/Dockerfile.backend') != '' }}
     steps:
       - uses: actions/checkout@v4
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build app (website)
+      - name: Build website image
         uses: docker/build-push-action@v5
         with:
+          # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
           context: .
           file: ./deploy/docker/Dockerfile.website
           push: false
@@ -174,7 +177,8 @@ jobs:
           cache-from: type=gha
         continue-on-error: true
       
-      - name: Build backend
+      - name: Build backend image when Dockerfile exists
+        if: ${{ env.BACKEND_DOCKERFILE_PRESENT == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -182,3 +186,8 @@ jobs:
           push: false
           cache-from: type=gha
         continue-on-error: true
+
+      - name: Skip backend image build when Dockerfile is missing
+        if: ${{ env.BACKEND_DOCKERFILE_PRESENT != 'true' }}
+        run: |
+          echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist (expected when backend image build is not configured in this repo)."
