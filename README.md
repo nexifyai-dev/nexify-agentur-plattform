@@ -23,6 +23,9 @@ cd nexify-agentur-plattform
 # Backend + Services
 docker-compose up -d
 
+# Hinweis: Das Backend benötigt private/externe Abhängigkeiten und ist lokal ohne
+# zusätzliche Konfiguration (siehe backend/.env.example) ggf. nicht vollständig lauffähig.
+
 # Website App (Next.js)
 pnpm --dir apps/website install
 pnpm --dir apps/website dev
@@ -49,15 +52,15 @@ git push origin main  # triggers .gitlab-ci.yml
 
 ```
 nexify-agentur-plattform/
-├── apps/                    # Frontend/Produkt-Apps
-│   ├── website/            # Public Website (Next.js) → :3000
-│   ├── hermes/             # Hermes service/app
-│   └── paperclip/          # Paperclip app workspace
+├── apps/                    # Applications
+│   ├── website/            # Customer website (Next.js) → :3000
+│   ├── hermes/             # Hermes Web UI + API shell (Python)
+│   └── paperclip/          # Placeholder app directory
 ├── backend/                # FastAPI Backend
-│   ├── app/
-│   ├── agents/
-│   ├── routers/
-│   └── schemas/
+│   ├── server.py
+│   ├── portal/
+│   ├── flowsearch/
+│   └── tests/
 ├── deploy/                 # Infrastructure-as-Code
 │   ├── docker-compose.yml  # Development stack
 │   ├── kubernetes/         # K8s manifests (production)

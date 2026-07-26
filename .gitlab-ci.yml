@@ -72,16 +72,17 @@ test:backend:
     - merge_requests
 
 # === BUILD ===
-build:vitrine:
+build:website:
   stage: build
   image: docker:latest
   services:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -f deploy/docker/Dockerfile.vitrine -t $DOCKER_IMAGE:vitrine-$CI_COMMIT_SHA -t $DOCKER_IMAGE:vitrine-latest ./apps/vitrine
-    - docker push $DOCKER_IMAGE:vitrine-$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE:vitrine-latest
+    # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
+    - docker build -f deploy/docker/Dockerfile.website -t $DOCKER_IMAGE:website-$CI_COMMIT_SHA -t $DOCKER_IMAGE:website-latest .
+    - docker push $DOCKER_IMAGE:website-$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE:website-latest
   only:
     - main
     - develop
@@ -92,10 +93,15 @@ build:backend:
   services:
     - docker:dind
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -f deploy/docker/Dockerfile.backend -t $DOCKER_IMAGE:backend-$CI_COMMIT_SHA -t $DOCKER_IMAGE:backend-latest ./backend
-    - docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE:backend-latest
+    - |
+      if [ -f deploy/docker/Dockerfile.backend ]; then
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        docker build -f deploy/docker/Dockerfile.backend -t $DOCKER_IMAGE:backend-$CI_COMMIT_SHA -t $DOCKER_IMAGE:backend-latest ./backend
+        docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
+        docker push $DOCKER_IMAGE:backend-latest
+      else
+        echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
+      fi
   only:
     - main
     - develop

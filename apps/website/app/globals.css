@@ -20,8 +20,8 @@
   --silver-2: #a1a1aa;
   --muted: #8f8f98;
   --white: #fafafa;
-  --font-heading: var(--font-outfit), "Outfit", sans-serif;
-  --font-body: var(--font-manrope), "Manrope", sans-serif;
+  --font-heading: "Outfit Variable", sans-serif;
+  --font-body: "Manrope Variable", sans-serif;
   --grad-silver: linear-gradient(120deg, #fafafa 0%, #c8c8d0 30%, #71717a 50%, #e4e4e7 72%, #fafafa 100%);
   --grad-btn: linear-gradient(120deg, #e4e4e7, #ffffff 45%, #c4c4cc);
 }
@@ -1053,11 +1053,12 @@ body::after {
   }
 }
 
-/* ── Font reconciliation: keep the brand faces (Outfit/Manrope, self-hosted via
-   next/font in app/layout.tsx) instead of the CSP-blocked Google-Fonts @import
-   the restored block originally used. This block is last so it wins the cascade. ── */
+/* ── Font reconciliation: the restored premium block above still defines its own
+   display/body tokens, so we intentionally override them here with the shared
+   self-hosted Fontsource families imported in app/layout.tsx. This block stays
+   last so the brand fonts win the cascade everywhere. ── */
 :root {
-  --font-display: var(--font-outfit), "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: var(--font-manrope), "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
 }
