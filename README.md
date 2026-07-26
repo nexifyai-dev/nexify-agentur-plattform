@@ -251,7 +251,7 @@ jobs:
 ```bash
 # Docker logs
 docker logs nexify-backend
-docker logs nexify-vitrine
+docker logs nexify-website
 docker logs lightrag
 
 # Via docker-compose
