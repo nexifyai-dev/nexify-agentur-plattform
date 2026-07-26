@@ -42,7 +42,6 @@ jobs:
             context: .
             dockerfile: ./deploy/docker/Dockerfile.website
             tag: website
-<<<<<<< HEAD
           - name: hermes
             context: ./apps/hermes
             dockerfile: ./apps/hermes/Dockerfile
@@ -51,8 +50,6 @@ jobs:
             context: ./backend
             dockerfile: ./deploy/docker/Dockerfile.backend
             tag: backend
-=======
->>>>>>> origin/main
     steps:
       - uses: actions/checkout@v4
       
