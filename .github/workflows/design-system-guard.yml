@@ -35,7 +35,7 @@ jobs:
           LINES=$(wc -l < "$FILE")
           echo "globals.css has $LINES lines"
 
-          # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1060.
+          # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1055.
           # Use 900 as the lower bound (≈160-line safety margin) so normal edits
           # still pass, but truncation back to the flat sheet is caught.
           # Duplicate marker check flags re-introduction of the [locale] Suppress-Bug.
