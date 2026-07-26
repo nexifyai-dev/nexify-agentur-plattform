@@ -23,15 +23,12 @@ cd nexify-agentur-plattform
 # Backend + Services
 docker-compose up -d
 
-# Apps (Vitrine, Konsole, Werkstatt, Editor)
-npm install
-npm run dev
+# Website App (Next.js)
+pnpm --dir apps/website install --frozen-lockfile
+pnpm --dir apps/website dev
 
 # Zugriff
-# - Vitrine: http://localhost:3000
-# - Konsole: http://localhost:3100
-# - Werkstatt: http://localhost:8081
-# - Editor: http://localhost:8887
+# - Website: http://localhost:3000
 # - Backend: http://localhost:3100/api
 # - LightRAG: http://localhost:9621
 ```
@@ -52,16 +49,15 @@ git push origin main  # triggers .gitlab-ci.yml
 
 ```
 nexify-agentur-plattform/
-├── apps/                    # Frontend Applications
-│   ├── vitrine/            # Website (Next.js) → :3000
-│   ├── konsole/            # Dashboard (React) → :3100
-│   ├── werkstatt/          # Workshop (Next.js) → :8081
-│   └── editor/             # Code Editor (Vue) → :8887
+├── apps/                    # Applications
+│   ├── website/            # Customer website (Next.js) → :3000
+│   ├── hermes/             # Hermes Web UI + API shell (Python)
+│   └── paperclip/          # Placeholder app directory
 ├── backend/                # FastAPI Backend
-│   ├── app/
-│   ├── agents/
-│   ├── routers/
-│   └── schemas/
+│   ├── server.py
+│   ├── portal/
+│   ├── flowsearch/
+│   └── tests/
 ├── deploy/                 # Infrastructure-as-Code
 │   ├── docker-compose.yml  # Development stack
 │   ├── kubernetes/         # K8s manifests (production)
