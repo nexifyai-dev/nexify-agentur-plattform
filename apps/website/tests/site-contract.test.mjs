@@ -27,13 +27,13 @@ test('package exposes required quality scripts', () => {
 });
 
 test('legacy and contract URLs redirect to canonical pages', () => {
+  // PR47 / Emergent SoT: marketing pages use UNPREFIXED routes (/prozess, …).
+  // Prior /de/* destinations were removed when locale-prefix routing was dropped.
   const config = read('next.config.ts');
   const redirects = [
-    ['/arbeitsweise', '/de/prozess'],
-    ['/ueber-pascal', '/de/ueber-mich'],
-    ['/projekte', '/de/referenzen'],
-    ['/preise', '/de/preise'],
-    ['/kontakt', '/de/kontakt'],
+    ['/arbeitsweise', '/prozess'],
+    ['/ueber-pascal', '/ueber-mich'],
+    ['/projekte', '/referenzen'],
   ];
   for (const [source, destination] of redirects) {
     assert.match(config, new RegExp(`source: "${source.replaceAll('/', '\\/')}"`));
