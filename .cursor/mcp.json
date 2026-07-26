@@ -1,14 +1,13 @@
 {
   "mcpServers": {
-    "hostinger-billing": {
+    "agentmemory": {
       "command": "npx",
-      "args": ["--yes", "--package=hostinger-api-mcp@1.22.0", "hostinger-billing-mcp"],
-      "env": { "HOSTINGER_API_TOKEN": "${HOSTINGER_API_TOKEN}" }
+      "args": ["-y", "@agentmemory/mcp"],
+      "description": "iii-engine-Basis, v0.9.28. 53 Tools verfügbar -- in Cursor-Settings auf 8 invocable Skills kuratieren (remember, recall, recap, handoff, forget, commit-context, commit-history, session-history), Rest deaktivieren."
     },
-    "hostinger-vps": {
-      "command": "npx",
-      "args": ["--yes", "--package=hostinger-api-mcp@1.22.0", "hostinger-vps-mcp"],
-      "env": { "HOSTINGER_API_TOKEN": "${HOSTINGER_API_TOKEN}" }
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor Übernahme."
     }
   }
 }
