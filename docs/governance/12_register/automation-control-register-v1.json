@@ -473,6 +473,41 @@
       "rollback": "git reset --hard <prev-sha>; docker compose up -d; SSH-Fallback-Job aktivieren.",
       "abort": "Abort wenn Website-Health nach 5 Retry fehlschlägt.",
       "docs": "docs/architecture/GITHUB-RUNNER-VPS.md"
+    },
+    {
+      "id": "AUTO-HARNESS-001",
+      "name": "Harness Open Source — Git-Hosting & CI/CD Runtime",
+      "owner": "DevOps / NeXify AI",
+      "layer": "L4",
+      "status": "active",
+      "trigger": {
+        "type": "event",
+        "event": "git-push (via Harness WebUI oder Mirror-Webhook)"
+      },
+      "gate": "Harness OSS läuft als Docker-Container; PostgreSQL-Backend; TLS via Traefik; Cloudflare-Tunnel für externen Zugang.",
+      "executor": "Docker-Container nexify-harness (harness/harness:latest); nexify-harness-db (postgres:16-alpine).",
+      "healthcheck": "curl -sf http://127.0.0.1:3100/api/v1/system/health; docker compose ps harness harness-db.",
+      "evidence": "docs/governance/08_evidence/VPS_HEALTH_*.md; Harness-Pipeline-Logs im Web UI.",
+      "rollback": "docker compose restart harness; DB-Dump aus /var/backup/ einspielen wenn nötig.",
+      "abort": "Abort wenn DB nicht healthy; Container stoppen mit docker compose stop harness.",
+      "docs": "docs/architecture/HARNESS-INTEGRATION.md"
+    },
+    {
+      "id": "AUTO-HARNESS-002",
+      "name": "Harness CI — Redundanter CI-Pfad für Repo",
+      "owner": "DevOps / NeXify AI",
+      "layer": "L2",
+      "status": "active",
+      "trigger": {
+        "type": "git",
+        "event": "push; pull_request (via .harness/ci-default.yml)"
+      },
+      "gate": "Pipeline-YAML in .harness/ definiert; Stages: frontend-lint, frontend-test, design-system-guard, backend-lint, secret-scan, docker-build-check.",
+      "executor": ".harness/ci-default.yml auf Harness OSS Runner; containerisierte Stages.",
+      "healthcheck": "Pipeline-Status im Harness Web UI; /api/v1/system/health.",
+      "evidence": "Harness-Pipeline-Run-Logs; docs/architecture/HARNESS-INTEGRATION.md.",
+      "rollback": "Pipeline-Run stoppen im Harness UI; GitHub Actions bleibt primärer CI-Pfad.",
+      "abort": "Abort wenn Harness Container offline oder DB nicht erreichbar."
     }
   ]
 }
