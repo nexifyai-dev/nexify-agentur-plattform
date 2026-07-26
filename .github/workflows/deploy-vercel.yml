@@ -7,12 +7,15 @@
 # WHY: Automated Vercel deploy ensures design-system fixes in main reach production
 #      without manual intervention. Fixes broken design caused by PRs #15-#18.
 # BEST-PRACTICE: Vercel CLI via pnpm dlx — no global install needed, always latest
-# PITFALL: V-01: VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID must be set in
-#          GitHub Secrets (Vercel → Settings → Tokens). Without them the job skips
-#          gracefully with a warning — CI is not blocked when Vercel is not yet wired.
+# PITFALL: V-01: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) / VERCEL_ORG_ID /
+#          VERCEL_PROJECT_ID must be set in GitHub Secrets (Vercel → Settings → Tokens).
+#          VERCEL_ACCESS_TOKEN is the legacy Vercel CLI secret name; both are supported.
+#          Without them the job skips gracefully with a warning — CI is not blocked
+#          when Vercel is not yet wired.
 # PITFALL: V-02: Use a preflight step to detect missing credentials before expensive
 #          steps (pnpm install, CLI deploy) — avoids wasted runner minutes.
-# DEPENDS: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID (GitHub Secrets or vars)
+# DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name), VERCEL_ORG_ID,
+#          VERCEL_PROJECT_ID — set as GitHub Secrets or repository variables
 # DOCS-REF: https://vercel.com/docs/cli
 
 name: Deploy to Vercel (main → production)
