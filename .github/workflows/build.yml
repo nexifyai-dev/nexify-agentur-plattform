@@ -75,7 +75,7 @@ jobs:
           provenance: true
         continue-on-error: true
 
-  build-backend-optional:
+  build-backend-when-available:
     runs-on: ubuntu-latest
     name: Build backend image (optional)
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
