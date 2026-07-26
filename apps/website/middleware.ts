@@ -4,26 +4,21 @@ const locales = ["de", "en", "nl"] as const;
 type Locale = (typeof locales)[number];
 const defaultLocale: Locale = "de";
 
-// App routes that live OUTSIDE the localized content tree (auth/account/utility
-// pages under app/*, and the /docs/vollbetrieb rewrite). Without this, the locale
-// middleware rewrote e.g. /login → /de/login, which has no page → 404, making the
-// entire login/admin/account flow unreachable.
-const nonLocalizedPrefixes = ["login", "admin", "konto", "registrieren", "rueckruf", "docs"];
-
-function getLocaleFromHeaders(request: NextRequest): Locale {
-  const accept = request.headers.get("accept-language") ?? "";
-  for (const lang of accept.split(",").map((l) => l.split(";")[0].trim().toLowerCase())) {
-    if (lang.startsWith("nl")) return "nl";
-    if (lang.startsWith("en")) return "en";
-    if (lang.startsWith("de")) return "de";
-  }
-  return defaultLocale;
+/**
+ * PR47 / Emergent SoT: public marketing site uses UNPREFIXED routes
+ * (`/`, `/leistungen`, …) with client-side LanguageProvider (nexify-lang).
+ *
+ * Historically, middleware forced `/{locale}/…` which served the alternate
+ * `app/[locale]/*` tree and suppressed the Emergent HomePage design.
+ * See DECISION-2026-07-25-WEBSITE-LAYOUT-SOT-PR47-EMERGENT.
+ */
+function isLocale(value: string | undefined): value is Locale {
+  return !!value && (locales as readonly string[]).includes(value);
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip internal paths
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -33,27 +28,33 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Skip non-localized app routes (auth/account/utility, docs) so they serve
-  // their pages directly instead of being redirected into a missing /{locale}/… path.
-  const firstSegment = pathname.split("/")[1];
-  if (nonLocalizedPrefixes.includes(firstSegment)) {
-    return NextResponse.next();
+  const segments = pathname.split("/").filter(Boolean);
+  const first = segments[0];
+
+  // Strip legacy locale prefixes → Emergent unprefixed routes
+  if (isLocale(first)) {
+    const rest = segments.slice(1).join("/");
+    const url = request.nextUrl.clone();
+    url.pathname = rest ? `/${rest}` : "/";
+    const response = NextResponse.redirect(url, 308);
+    response.cookies.set("NEXT_LOCALE", first, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+    return response;
   }
 
-  // Check if locale is already in URL
-  const hasLocale = locales.some((l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`);
-  if (hasLocale) {
-    return NextResponse.next();
+  // Pass through unprefixed routes; ensure a default locale cookie exists
+  const response = NextResponse.next();
+  if (!request.cookies.get("NEXT_LOCALE")?.value) {
+    response.cookies.set("NEXT_LOCALE", defaultLocale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
   }
-
-  // Determine locale: cookie > header > default
-  const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
-  const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : getLocaleFromHeaders(request);
-
-  // Redirect to locale-prefixed URL
-  const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
-  return NextResponse.redirect(url);
+  return response;
 }
 
 export const config = {

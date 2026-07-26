@@ -122,6 +122,29 @@ jobs:
             echo "⚠️ Cost-Brake fehlt"
           fi
           
+          # Prüfe §2 Charta-Vollprüfung — Port-Matrix vollständig (§2 VPS-Check)
+          for port in 8787 8642 9119 20128 3111 9621 8644; do
+            if grep -q ":${port}" docs/governance/GOVERNANCE.md 2>/dev/null; then
+              echo "✅ Port ${port} in GOVERNANCE.md Port-Matrix dokumentiert"
+            else
+              echo "⚠️ Port ${port} fehlt in GOVERNANCE.md Port-Matrix"
+            fi
+          done
+          
+          # Prüfe Zyklus-8-Evidence (§2 VPS-Audit nach Merge)
+          if ls docs/governance/08_evidence/CHARTA_CYCLE8*.md 2>/dev/null; then
+            echo "✅ Zyklus-8-Evidence vorhanden"
+          else
+            echo "⚠️ Zyklus-8-Evidence fehlt — VPS-Audit nach Merge ausstehend"
+          fi
+          
+          # Prüfe GitHub Actions Schedule (§11)
+          if grep -q "0 6 \* \* 1" .github/workflows/test.yml 2>/dev/null; then
+            echo "✅ GitHub Actions Schedule 0 6 * * 1 aktiv (§11)"
+          else
+            echo "⚠️ GitHub Actions Schedule fehlt"
+          fi
+          
           echo "✅ §11 Governance-Check abgeschlossen"
           
       - name: Deployment Status
