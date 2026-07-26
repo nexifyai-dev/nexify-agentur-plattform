@@ -1,4 +1,33 @@
 services:
+
+  # ── GitHub Actions Self-Hosted Runner ─────────────────────────────────────
+  # Führt CI/CD-Jobs direkt auf dem VPS aus — kein SSH-Tunnel nötig.
+  # Token wird live per GitHub API geholt (GITHUB_PAT) oder direkt übergeben.
+  # NIR: 26.07.2026 | Docs: docs/architecture/GITHUB-RUNNER-VPS.md
+  github-runner:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.github-runner
+    container_name: nexify-github-runner
+    restart: unless-stopped
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
+    environment:
+      - GITHUB_REPO=nexifyai-dev/nexify-agentur-plattform
+      - RUNNER_LABELS=self-hosted,vps,nexifyai,linux,x64
+      - RUNNER_WORKDIR=/home/runner/actions-runner/_work
+      - RUNNER_ALLOW_RUNASROOT=1
+    volumes:
+      # Docker-Socket-Mount: Runner kann docker-Befehle direkt ausführen
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Repo-Verzeichnis für schnelle Checkouts (optional)
+      - /opt/nexifyai/repos:/opt/nexifyai/repos
+      # Secrets-Zugang für Jobs, die VPS-Dienste ansprechen
+      - /etc/nexifyai:/etc/nexifyai:ro
+    # Runner braucht keine eigenen Ports — er verbindet sich nach außen zu GitHub
+    network_mode: host    # host: direkte Erreichbarkeit interner Dienste (LightRAG, AgentMemory…)
+
   website:
     # CI (deploy-vps.yml) builds and pushes this exact tag; `docker compose pull`
     # on the VPS pulls it. `build:` stays as a local-dev / fallback path so
