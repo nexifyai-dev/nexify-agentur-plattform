@@ -65,7 +65,8 @@ register_runner() {
     --labels "$RUNNER_LABELS" \
     --work "$RUNNER_WORKDIR" \
     --unattended \
-    --replace   # überschreibt gleichnamigen Runner ohne Fehler
+    --replace \
+    --ephemeral   # läuft nur einen Job, dann de-registriert; Container wird via restart-policy neu gestartet
 }
 
 # ── Runner de-registrieren (sauberer Shutdown) ────────────────────────────────

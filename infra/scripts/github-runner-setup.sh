@@ -55,12 +55,17 @@ else
 fi
 
 # curl + jq
+APT_UPDATED=0
 for tool in curl jq; do
   if command -v "$tool" &>/dev/null; then
     ok "$tool installiert"
   else
     bad "$tool fehlt"
     if [ $APPLY = 1 ]; then
+      if [ $APT_UPDATED = 0 ]; then
+        apt-get update -y
+        APT_UPDATED=1
+      fi
       apt-get install -y "$tool" && fixed "$tool installiert"
     fi
   fi
