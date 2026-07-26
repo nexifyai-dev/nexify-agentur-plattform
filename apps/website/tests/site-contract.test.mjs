@@ -29,7 +29,6 @@ test('package exposes required quality scripts', () => {
 test('routing contract keeps unprefixed canonical pages and legacy aliases', () => {
   const config = read('next.config.ts');
   const redirects = [
-    ['/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)', '/:page'],
     ['/arbeitsweise', '/prozess'],
     ['/ueber-pascal', '/ueber-mich'],
     ['/projekte', '/referenzen'],
@@ -38,6 +37,14 @@ test('routing contract keeps unprefixed canonical pages and legacy aliases', () 
     assert.ok(config.includes(`source: "${source}"`));
     assert.ok(config.includes(`destination: "${destination}"`));
   }
+});
+
+test('middleware strips locale-prefixed public routes back to the unprefixed tree', () => {
+  const middleware = read('middleware.ts');
+  assert.ok(middleware.includes('if (isLocale(first))'));
+  assert.ok(middleware.includes('url.pathname = rest ? `/${rest}` : "/"'));
+  assert.ok(middleware.includes('const response = NextResponse.redirect(url, 308);'));
+  assert.ok(middleware.includes('response.cookies.set("NEXT_LOCALE", first'));
 });
 
 test('service price model keeps required day-rate and offer ranges', () => {

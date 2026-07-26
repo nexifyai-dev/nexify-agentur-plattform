@@ -20,8 +20,8 @@
   --silver-2: #a1a1aa;
   --muted: #8f8f98;
   --white: #fafafa;
-  --font-heading: "Outfit Variable", "Outfit", sans-serif;
-  --font-body: "Manrope Variable", "Manrope", sans-serif;
+  --font-heading: "Outfit Variable", sans-serif;
+  --font-body: "Manrope Variable", sans-serif;
   --grad-silver: linear-gradient(120deg, #fafafa 0%, #c8c8d0 30%, #71717a 50%, #e4e4e7 72%, #fafafa 100%);
   --grad-btn: linear-gradient(120deg, #e4e4e7, #ffffff 45%, #c4c4cc);
 }
@@ -1057,7 +1057,7 @@ body::after {
    next/font in app/layout.tsx) instead of the CSP-blocked Google-Fonts @import
    the restored block originally used. This block is last so it wins the cascade. ── */
 :root {
-  --font-display: "Outfit Variable", "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: "Manrope Variable", "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
 }
