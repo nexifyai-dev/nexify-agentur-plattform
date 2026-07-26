@@ -45,7 +45,7 @@
 | `09_konzepte/` | Pflichtenheft, Brand-Konzept, OS-Gesamtkonzept | 5 |
 | `10_quality_gates/` | Production-Gates, HITL-Gate, CI-CD-Compliance | 11 |
 | `11_fuehrung/` | Governance-Rules, Agent-Governance, Promptmaster | 7 |
-| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register | 14 |
+| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register, Automation-Modell | 16 |
 | `13_betriebshandbuch/` | Betriebsanleitung V3, Normalbetrieb, SOP V5 | 6 |
 | `14_production/` | Production-Skripte, Docker-Compose, Cron-Register | 5 |
 
@@ -176,6 +176,7 @@ Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE
 | Pre-Task 6 Gates | Jeder Task | `03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh` |
 | Secret-Scan | Vor jedem Commit | `.pre-commit-config.yaml` |
 | Charta-Deviation-Scan | Jeder Zyklus (dieses Dokument) | Vollprüfung §2 |
+| Automations-Register-Review | bei Workflow-/Cron-/Hook-Änderung | `12_register/automation-control-register-v1.json` |
 
 ### Wöchentlich (Montag)
 - Voll-Scan in `07_audits_reports/`
@@ -198,7 +199,7 @@ Siehe: [`12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md`](12_register/FINANCE
 |------|--------|-------------|
 | 06:00 | System-Health-Check | `infra/scripts/health-check.sh` |
 | 06:15 | Brain-Sync prüfen | `12_register/SHARED_AGENT_STATE.json` |
-| 06:30 | Cron-Job-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md` |
+| 06:30 | Cron-Job- und Trigger-Status | `12_register/AUTOMATION_CRONREGISTER_V1.md`, `12_register/automation-control-register-v1.json` |
 | 18:00 | Daily-Report | `07_audits_reports/` |
 
 ### 7.2 Wöchentlich

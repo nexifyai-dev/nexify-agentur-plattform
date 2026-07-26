@@ -27,8 +27,9 @@ test('package exposes required quality scripts', () => {
 });
 
 test('legacy and contract URLs redirect to canonical pages', () => {
-  // PR47 / Emergent SoT: marketing pages use UNPREFIXED routes (/prozess, …).
-  // Prior /de/* destinations were removed when locale-prefix routing was dropped.
+  // PR47 / Emergent SoT: canonical routes are UNPREFIXED (no /de/* prefix).
+  // Middleware strips locale prefixes; next.config.ts redirects legacy aliases
+  // to the unprefixed canonical paths.
   const config = read('next.config.ts');
   const redirects = [
     ['/arbeitsweise', '/prozess'],
