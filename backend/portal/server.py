@@ -11,7 +11,19 @@ from urllib.parse import urlparse
 PORT = int(os.environ.get("PORT", 8880))
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 
-NINEROUTER_KEY = os.environ.get("NINEROUTER_KEY", "")
+# Alias parity with backend/ninerouter.py — never hardcode secrets.
+NINEROUTER_KEY = (
+    os.environ.get("NINEROUTER_API_KEY")
+    or os.environ.get("NINEROUTER_KEY")
+    or os.environ.get("OPENAI_API_KEY")
+    or ""
+)
+_NINEROUTER_BASE = (
+    os.environ.get("NINEROUTER_BASE_URL")
+    or os.environ.get("OPENAI_BASE_URL")
+    or "http://127.0.0.1:20128/v1"
+).rstrip("/")
+NINEROUTER_ROOT = _NINEROUTER_BASE[:-3] if _NINEROUTER_BASE.endswith("/v1") else _NINEROUTER_BASE
 DATABRICKS_PROXY = os.environ.get("DATABRICKS_PROXY", "http://127.0.0.1:9900")
 DATABRICKS_MODELS = [
     {"id": "system.ai.glm-5-2", "object": "model", "owned_by": "databricks"},
@@ -228,7 +240,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
         if path == "/api/proxy/9router/health":
             if not self._check_auth():
                 return self._send_json({"error": "unauthorized"}, 401)
-            return self._proxy_get("http://127.0.0.1:20128/api/health")
+            return self._proxy_get(f"{NINEROUTER_ROOT}/api/health")
         if path == "/api/proxy/lightrag/health":
             if not self._check_auth():
                 return self._send_json({"error": "unauthorized"}, 401)
@@ -329,7 +341,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             "lightrag": ("http://127.0.0.1:9621/health", 200),
             "spaether": ("http://127.0.0.1:8900/health", 200),
             "agentmemory": ("http://127.0.0.1:3113/agentmemory/health", 200),
-            "9router": ("http://127.0.0.1:20128/api/health", 200),
+            "9router": (f"{NINEROUTER_ROOT}/api/health", 200),
             "grafana": ("http://127.0.0.1:3000/api/health", 200),
             "prometheus": ("http://127.0.0.1:9090/-/healthy", 200),
         }
@@ -620,7 +632,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
         if NINEROUTER_KEY:
             try:
                 req = urllib.request.Request(
-                    "http://127.0.0.1:20128/v1/models",
+                    f"{NINEROUTER_ROOT}/v1/models",
                     headers={"Authorization": f"Bearer {NINEROUTER_KEY}"},
                 )
                 with urllib.request.urlopen(req, timeout=5) as resp:
@@ -644,7 +656,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             if model_id.startswith("system.ai.glm") or "databricks" in model_id.lower():
                 backend = DATABRICKS_PROXY
             else:
-                backend = "http://127.0.0.1:20128"
+                backend = NINEROUTER_ROOT
 
             req = urllib.request.Request(
                 f"{backend}/v1/chat/completions",
