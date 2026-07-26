@@ -66,6 +66,7 @@ jobs:
 
       - name: Lint
         run: npx next lint
+
       - name: Build Next.js
         run: pnpm build
         continue-on-error: true  # Build can fail due to missing env vars; validate project structure

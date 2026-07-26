@@ -36,7 +36,7 @@ export function SlotsPanel() {
     load();
   };
 
-  // eslint-disable-next-line react-hooks/purity -- Date.now() used for slot filtering, not in render output
+  // eslint-disable-next-line react-hooks/purity -- Date.now() in filter predicates is safe; slots array is stable within a render cycle
   const now = Date.now();
   const booked = slots.filter((s) => s.status === "booked" && new Date(s.start_at) > new Date(now - 864e5));
   const free = slots.filter((s) => s.status === "free" && new Date(s.start_at) > new Date(now));
