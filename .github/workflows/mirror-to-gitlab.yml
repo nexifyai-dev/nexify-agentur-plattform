@@ -16,7 +16,11 @@ jobs:
 
       - name: Push mirror to VPS GitLab
         run: |
-          git remote add gitlab "${{ secrets.VPS_GITLAB_URL }}"
+          if [ -z "$VPS_GITLAB_URL" ]; then
+            echo "::warning::VPS_GITLAB_URL secret is not set; skipping mirror push"
+            exit 0
+          fi
+          git remote add gitlab "$VPS_GITLAB_URL"
           git push --mirror gitlab
         env:
           VPS_GITLAB_URL: ${{ secrets.VPS_GITLAB_URL }}
