@@ -38,14 +38,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: vitrine
-            context: ./apps/vitrine
-            dockerfile: ./deploy/docker/Dockerfile.vitrine
-            tag: vitrine
-          - name: konsole
-            context: ./apps/konsole
-            dockerfile: ./deploy/docker/Dockerfile.konsole
-            tag: konsole
+          - name: website
+            context: .
+            dockerfile: ./deploy/docker/Dockerfile.website
+            tag: website
+          - name: hermes
+            context: ./apps/hermes
+            dockerfile: ./apps/hermes/Dockerfile
+            tag: hermes
           - name: backend
             context: ./backend
             dockerfile: ./deploy/docker/Dockerfile.backend

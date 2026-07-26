@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Menu, X, UserRound } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, UserRound, ChevronDown } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth";
@@ -41,12 +41,86 @@ const NAV = {
   ],
 };
 
+const APPS_MENU = {
+  de: {
+    label: "Tools",
+    items: [
+      {
+        label: "Hermes Agent",
+        href: process.env.NEXT_PUBLIC_HERMES_URL ?? "/plattform#hermes",
+        description: "Persistenter KI-Agent – selbst gehostet",
+        external: true,
+      },
+      {
+        label: "Kundenkonto",
+        href: "/konto",
+        description: "Projekte, Angebote & Tickets",
+        external: false,
+      },
+      {
+        label: "Admin-Portal",
+        href: "/admin",
+        description: "Interne Verwaltungsoberfläche",
+        external: false,
+      },
+    ],
+  },
+  en: {
+    label: "Tools",
+    items: [
+      {
+        label: "Hermes Agent",
+        href: process.env.NEXT_PUBLIC_HERMES_URL ?? "/plattform#hermes",
+        description: "Persistent AI agent – self-hosted",
+        external: true,
+      },
+      {
+        label: "Client Account",
+        href: "/konto",
+        description: "Projects, offers & tickets",
+        external: false,
+      },
+      {
+        label: "Admin Portal",
+        href: "/admin",
+        description: "Internal management interface",
+        external: false,
+      },
+    ],
+  },
+  nl: {
+    label: "Tools",
+    items: [
+      {
+        label: "Hermes Agent",
+        href: process.env.NEXT_PUBLIC_HERMES_URL ?? "/plattform#hermes",
+        description: "Persistente AI-agent – zelf gehost",
+        external: true,
+      },
+      {
+        label: "Klantaccount",
+        href: "/konto",
+        description: "Projecten, offertes & tickets",
+        external: false,
+      },
+      {
+        label: "Adminportaal",
+        href: "/admin",
+        description: "Interne beheerinterface",
+        external: false,
+      },
+    ],
+  },
+};
+
 export function SiteHeader() {
   const { lang, setLang } = useLang();
   const { user } = useAuth();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [appsOpen, setAppsOpen] = useState(false);
+  const appsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -56,6 +130,19 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => setAppsOpen(false), [pathname]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (appsRef.current && !appsRef.current.contains(e.target as Node)) {
+        setAppsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const appsMenu = APPS_MENU[lang];
 
   return (
     <header
@@ -82,6 +169,47 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+
+          {/* Apps / Tools dropdown */}
+          <div className="relative" ref={appsRef} data-testid="nav-apps-dropdown">
+            <button
+              onClick={() => setAppsOpen((v) => !v)}
+              aria-expanded={appsOpen}
+              aria-haspopup="true"
+              data-testid="nav-apps-toggle"
+              className={`flex items-center gap-1 text-[13px] font-medium transition-colors ${
+                appsOpen ? "text-white" : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              {appsMenu.label}
+              <ChevronDown
+                size={13}
+                className={`transition-transform duration-200 ${appsOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {appsOpen && (
+              <div
+                className="absolute right-0 top-[calc(100%+12px)] w-[260px] rounded-2xl border border-white/10 bg-black/90 py-2 shadow-2xl backdrop-blur-2xl"
+                data-testid="nav-apps-menu"
+              >
+                {appsMenu.items.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                    data-testid={`nav-apps-item-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="flex flex-col gap-0.5 px-4 py-3 transition-colors hover:bg-white/5"
+                    onClick={() => setAppsOpen(false)}
+                  >
+                    <span className="text-[13px] font-medium text-white">{item.label}</span>
+                    <span className="text-[11.5px] text-zinc-500">{item.description}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -136,6 +264,24 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            {/* Apps / Tools section in mobile menu */}
+            <div className="mt-1 border-t border-white/8 pt-2" data-testid="mobile-apps-section">
+              <p className="px-4 pb-1 pt-2 text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+                {appsMenu.label}
+              </p>
+              {appsMenu.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  className="flex flex-col gap-0.5 rounded-xl px-4 py-2.5 text-zinc-400 transition-colors hover:bg-white/5"
+                >
+                  <span className="text-sm font-medium">{item.label}</span>
+                  <span className="text-[11px] text-zinc-600">{item.description}</span>
+                </Link>
+              ))}
+            </div>
             <Link href="/kontakt" className="btn-primary mt-2 justify-center">
               {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
             </Link>
@@ -145,3 +291,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
