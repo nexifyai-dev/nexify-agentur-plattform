@@ -78,29 +78,34 @@ export function ChannelEventsPanel() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const load = useCallback(async (background = false) => {
-    if (background) setRefreshing(true);
-    else setLoading(true);
-
-    try {
-      const data = await api("/api/admin/channels/events?limit=50");
+  const fetchEvents = useCallback((): Promise<ChannelEvent[]> => {
+    return api("/api/admin/channels/events?limit=50").then((data) => {
       const rows = Array.isArray(data) ? data : Array.isArray((data as { items?: unknown[] })?.items) ? (data as { items: unknown[] }).items : [];
-      setEvents(rows.map(normalizeEvent));
-    } catch {
-      if (!background) setEvents([]);
-    } finally {
-      if (background) setRefreshing(false);
-      else setLoading(false);
-    }
+      return rows.map(normalizeEvent);
+    });
   }, []);
 
   useEffect(() => {
-    load();
+    fetchEvents()
+      .then((rows) => { setEvents(rows); setLoading(false); })
+      .catch(() => { setEvents([]); setLoading(false); });
+
     const interval = setInterval(() => {
-      void load(true);
+      fetchEvents()
+        .then((rows) => setEvents(rows))
+        .catch(() => {})
+        .finally(() => setRefreshing(false));
     }, 30000);
     return () => clearInterval(interval);
-  }, [load]);
+  }, [fetchEvents]);
+
+  const load = useCallback(() => {
+    setRefreshing(true);
+    fetchEvents()
+      .then((rows) => setEvents(rows))
+      .catch(() => {})
+      .finally(() => setRefreshing(false));
+  }, [fetchEvents]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -129,7 +134,7 @@ export function ChannelEventsPanel() {
           </label>
           <button
             type="button"
-            onClick={() => void load(true)}
+            onClick={() => load()}
             disabled={refreshing}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-[12px] font-semibold text-zinc-300 hover:border-white/30 hover:text-white disabled:opacity-50"
           >

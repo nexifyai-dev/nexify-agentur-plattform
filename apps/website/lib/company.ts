@@ -1,7 +1,7 @@
 export const company = {
   brand: "NeXify AI",
   descriptor: "Chat it. Automate it.",
-  legalName: "NeXify AI by NeXify – chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",
   role: "Inhaber / Directeur",
@@ -18,6 +18,8 @@ export const company = {
   vatId: "NL865786276B01",
   dayRate: 999,
   vatRate: 0.21,
+  targetMarket: "Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden",
+  businessOnly: true,
 } as const;
 
 export const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
