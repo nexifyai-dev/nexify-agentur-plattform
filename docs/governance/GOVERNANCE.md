@@ -45,7 +45,7 @@
 | `09_konzepte/` | Pflichtenheft, Brand-Konzept, OS-Gesamtkonzept | 5 |
 | `10_quality_gates/` | Production-Gates, HITL-Gate, CI-CD-Compliance | 11 |
 | `11_fuehrung/` | Governance-Rules, Agent-Governance, Promptmaster | 7 |
-| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register, Automation-Modell | 16 |
+| `12_register/` | Shared-Agent-State, MCP-Health, Kanban, Cron-Register, Automation-Model | 16 |
 | `13_betriebshandbuch/` | Betriebsanleitung V3, Normalbetrieb, SOP V5 | 6 |
 | `14_production/` | Production-Skripte, Docker-Compose, Cron-Register | 5 |
 

@@ -7,19 +7,20 @@ import { api } from "@/lib/auth";
 type Slot = { id: string; start_at: string; duration_min: number; status: string; name: string | null; email: string | null; phone: string | null; company: string | null; topic: string | null; language: string | null };
 
 const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" });
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export function SlotsPanel() {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [when, setWhen] = useState("");
   const [duration, setDuration] = useState(30);
   const [state, setState] = useState("");
-  const [lastLoadedAtMs, setLastLoadedAtMs] = useState(0);
+  const [loadTimestampMs, setLoadTimestampMs] = useState(0);
 
   const load = useCallback(async () => {
     try {
       const data = await api("/api/admin/slots");
       setSlots(data);
-      setLastLoadedAtMs(Date.now());
+      setLoadTimestampMs(Date.now());
     } catch {}
   }, []);
   useEffect(() => {
@@ -46,9 +47,9 @@ export function SlotsPanel() {
     load();
   };
 
-  const nowMs = lastLoadedAtMs;
-  const booked = slots.filter((s) => s.status === "booked" && new Date(s.start_at).getTime() > nowMs - 864e5);
-  const free = slots.filter((s) => s.status === "free" && new Date(s.start_at).getTime() > nowMs);
+  const referenceTimeMs = loadTimestampMs;
+  const booked = slots.filter((s) => s.status === "booked" && new Date(s.start_at).getTime() > referenceTimeMs - MS_PER_DAY);
+  const free = slots.filter((s) => s.status === "free" && new Date(s.start_at).getTime() > referenceTimeMs);
 
   return (
     <div className="space-y-8" data-testid="admin-slots-panel">
