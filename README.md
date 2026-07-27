@@ -413,3 +413,6 @@ Proprietary — NeXifyAI 2026
 **Sync Status:** GitHub ↔ GitLab ✓ (nexifyai_group/nexifyai)  
 **SOLL-Ref:** `/opt/nexifyai/docs/architecture/SOLL-GESAMTKONZEPT.md`  
 **Next Review:** 2026-08-01
+
+## Legacy endpoint (deprecated)
+curl http://localhost:9621/health  # OLD LightRAG port
