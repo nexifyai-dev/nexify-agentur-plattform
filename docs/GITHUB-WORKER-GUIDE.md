@@ -28,7 +28,7 @@ Set these in: `github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 
 | Secret | Value | Source |
 |--------|-------|--------|
-| `GITLAB_TOKEN` | GitLab PAT | http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens |
+| `GITLAB_TOKEN` | GitLab PAT | https://gitlab.nexifyai.cloud/-/user_settings/personal_access_tokens (VPS lokal: `127.0.0.1:8922`) |
 | `VPS_SSH_KEY` | SSH Private Key | `/root/.ssh/github_nexify` (created earlier) |
 | `GITHUB_TOKEN` | Auto-provided | GitHub (built-in) |
 | `DOCKER_REGISTRY_PASSWORD` | Docker token | If pushing to registry (optional) |
@@ -154,12 +154,13 @@ gh run view <RUN_ID> -R nexifyai-dev/nexify-agentur-plattform --log
 ### GitLab Pipelines
 
 ```bash
-# After sync, check GitLab
-# https://gitlab.nexifyai.cloud:8922/nexifyai/nexify-agentur-plattform/-/pipelines
+# After sync, check GitLab (public CF)
+# https://gitlab.nexifyai.cloud/nexifyai/nexify-agentur-plattform/-/pipelines
 
-# Query via API
-curl -s http://127.0.0.1:8922/api/v4/projects/ID/pipelines \
-  -H "PRIVATE-TOKEN: GITLAB_TOKEN" | jq '.[0]'
+# Query via API — public:
+curl -sS https://gitlab.nexifyai.cloud/api/v4/projects/ID/pipelines \
+  -H "PRIVATE-TOKEN: $GITLAB_TOKEN" | jq '.[0]'
+# VPS lokal alternativ: http://127.0.0.1:8922/api/v4/...
 ```
 
 ## Troubleshooting

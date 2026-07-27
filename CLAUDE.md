@@ -26,8 +26,8 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 ### 2. Repo-Kontext
 
 - **Primary Repo:** GitHub (`git@github.com:nexifyai-dev/nexify-agentur-plattform.git`)
-- **Mirror:** GitLab (`localhost:8922/nexifyai-dev/nexify-agentur-plattform`)
-- **Sync:** Automatisch via `.github/workflows/gitlab-sync.yml`
+- **Mirror:** GitLab OSS (`https://gitlab.nexifyai.cloud/nexifyai/nexify-agentur-plattform`) — VPS-Bind nur lokal `127.0.0.1:8922`
+- **Sync:** Automatisch via `.github/workflows/gitlab-sync.yml` + `mirror-to-gitlab.yml` (Public CF-Host, nicht Intern-Bind)
 - **Branch Pattern:** `main` (stable) | `develop` (staging) | `feature/*` (development)
 - **Governance Primärquelle:** `docs/governance/` (nicht Chat-Charta). Auszug: `docs/governance/CHARTA.md`
 - **Pre-Task Gates:** BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE bei Workflows)
