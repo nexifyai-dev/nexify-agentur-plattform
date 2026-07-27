@@ -98,8 +98,31 @@ else
   warn "check_knowledge_mandate.py fehlgeschlagen oder nicht ausführbar"
 fi
 
+# --- 8. Copilot CLI (Voll-Autonomie) ---
+say "\n## 8. Copilot CLI (Voll-Autonomie)"
+if command -v copilot >/dev/null 2>&1; then
+  ok "copilot CLI installiert"
+  if [[ -f .github/copilot/settings.json ]]; then
+    if python3 -c "import json;d=json.load(open('.github/copilot/settings.json'));exit(0 if d.get('askUser') is False else 1)" 2>/dev/null; then
+      ok ".github/copilot/settings.json askUser=false"
+    else
+      warn ".github/copilot/settings.json ohne askUser:false"
+    fi
+  else
+    warn ".github/copilot/settings.json fehlt"
+  fi
+  if grep -q 'copilot-nexify' "$HOME/.bashrc" 2>/dev/null || grep -q 'copilot-nexify' "$HOME/.zshrc" 2>/dev/null; then
+    ok "Alias copilot-nexify aktiv"
+  else
+    warn "Alias fehlt — bash scripts/install-copilot-autonomous.sh"
+  fi
+else
+  warn "copilot CLI nicht installiert — deploy/copilot/README.md"
+fi
+
 say "\n## Nächste Schritte"
 say "- Branch: cursor/<task>-7dd5 | Commit: conventional"
 say "- PR → GitHub CI → mirror-to-gitlab → GitLab deploy:vps"
+say "- Copilot CLI: copilot-nexify (scripts/install-copilot-autonomous.sh)"
 say "- Session-Ende: memory_save (AgentMemory) wenn Worker erreichbar"
-say "- Cursor-Command: /pr-flow | /mcp-health | /gitlab-oss-mcp\n"
+say "- Cursor-Command: /pr-flow | /mcp-health | /gitlab-oss-mcp | /copilot-autonomous"

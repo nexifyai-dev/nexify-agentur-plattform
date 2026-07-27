@@ -112,6 +112,17 @@ DeepSeek nur bei expliziter User-Wahl. SoT: `agent-config.yaml` + Workspace-Rule
 - Deviation-Report prüfen
 - PR aktualisieren
 
+## GitHub Copilot CLI (Voll-Autonomie)
+
+Keine Ja-Bestätigungen:
+
+```bash
+bash scripts/install-copilot-autonomous.sh
+copilot-nexify    # = copilot --yolo --no-ask-user
+```
+
+Repo-Settings: `.github/copilot/settings.json` (`askUser: false`). Details: `deploy/copilot/README.md`.
+
 ## Referenzen
 
 - `AGENTS.md` — Orchestrator-Rolle

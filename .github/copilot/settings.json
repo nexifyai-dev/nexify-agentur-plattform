@@ -1,0 +1,13 @@
+{
+  "askUser": false,
+  "allowedUrls": [
+    "github.com",
+    "*.github.com",
+    "gitlab.nexifyai.cloud",
+    "*.nexifyai.cloud",
+    "raw.githubusercontent.com"
+  ],
+  "footer": {
+    "showYolo": true
+  }
+}
