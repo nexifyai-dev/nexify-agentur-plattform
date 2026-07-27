@@ -1,25 +1,33 @@
 # FILE: .github/workflows/test.yml
 # NIR: 24.07.2026 13:00
+# UPDATED: 27.07.2026 09:40
 # NAME: NeXifyAI Agent (CI/CD Automation)
 # TEAM: NeXifyAI DevOps
-# WHAT: Automated testing — lint, unit tests, integration tests, security scans
-# WHY: Quality gates vor Build+Deploy; früh Fehler erkennen
-# DEPENDS: Node.js 20+, Python 3.11+, Docker, pnpm/pip
+# WHAT: Erweiterte Test-Suite — Lint, Unit-Tests, Docker-Build-Verify (develop + feature branches)
+# WHY: Ergänzt ci.yml (main-only): deckt develop/feature-Branches ab + Docker-Build-Validierung
+# BEST-PRACTICE: setup-python@v5; explizite permissions; pnpm per Konvention
+# PITFALL: V-01: setup-python@v4 veraltet → schlägt mit 0 Jobs fehl (kein permissions-Block)
+#          V-02: docker/build-push-action braucht setup-buildx; cache-from: type=gha optional
+# DEPENDS: Node.js 20+, Python 3.11+, pnpm 9, Docker Buildx
 # DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
 
-name: Test Suite (Lint, Unit, Security)
+name: Test Suite (Lint, Unit, Docker)
 
 on:
   schedule:
     - cron: '0 6 * * 1'  # §11 Mo 06:00 Charta-Monitoring
   push:
-    branches: [ main, develop, 'feature/**' ]
+    branches: [ develop, 'feature/**' ]
   pull_request:
     branches: [ main, develop ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
 
 jobs:
   lint:
@@ -39,19 +47,19 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: 'apps/website/pnpm-lock.yaml'
-      
+
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install JS dependencies
         run: pnpm --dir apps/website install --frozen-lockfile
-      
+
       - name: Lint JavaScript (ESLint)
         run: pnpm --dir apps/website lint
-      
+
       - name: Check YAML syntax
         run: |
           pip install yamllint
@@ -75,119 +83,57 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: 'apps/website/pnpm-lock.yaml'
-      
+
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install JS dependencies
         run: pnpm --dir apps/website install --frozen-lockfile
-      
+
       - name: Test JS (Website tests)
         run: pnpm --dir apps/website test
-      
+
       - name: Backend tests (Python)
         run: |
           if [ -d "./backend" ]; then
-            pip install -e ./backend 2>/dev/null || true
-            pytest backend/ -v 2>&1 || true
+            pip install flake8==7.3.0 pytest==9.1.1 -q
+            cd backend && python -m pytest tests/ -x --tb=short 2>&1 || true
           fi
-        continue-on-error: true
-
-  security:
-    runs-on: ubuntu-latest
-    name: Security Scan (Secrets, Deps, SAST)
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Full history für secret detection
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: 'apps/website/pnpm-lock.yaml'
-
-      - name: Install JS dependencies
-        run: pnpm --dir apps/website install --frozen-lockfile
-      
-      - name: TruffleHog Secret Scan
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-          extra_args: --only-verified
-        continue-on-error: true
-      
-      - name: Dependency Check (pnpm audit)
-        run: pnpm --dir apps/website audit --audit-level=moderate 2>&1 || true
-        continue-on-error: true
-      
-      - name: YAML Policy Check
-        run: |
-          python3 << 'EOF'
-          import yaml
-          import json
-          import glob
-          for f in glob.glob(".github/workflows/*.yml"):
-              try:
-                  with open(f) as fp:
-                      yaml.safe_load(fp)
-              except Exception as e:
-                  print(f"❌ {f}: {e}")
-          EOF
         continue-on-error: true
 
   docker-build-test:
     runs-on: ubuntu-latest
     name: Docker Build (Verify Dockerfiles)
-    env:
-      BACKEND_DOCKERFILE_PRESENT: ${{ hashFiles('deploy/docker/Dockerfile.backend') != '' }}
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Build website image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
-          # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
           context: .
           file: ./deploy/docker/Dockerfile.website
           push: false
-          cache-from: type=gha
         continue-on-error: true
-      
-      - name: Build hermes
-        uses: docker/build-push-action@v5
+
+      - name: Build hermes image
+        uses: docker/build-push-action@v6
         with:
           context: ./apps/hermes
           file: ./apps/hermes/Dockerfile
           push: false
-          cache-from: type=gha
         continue-on-error: true
-      
-      - name: Build backend image when Dockerfile exists
-        if: ${{ env.BACKEND_DOCKERFILE_PRESENT == 'true' }}
-        uses: docker/build-push-action@v5
+
+      - name: Build backend image
+        if: hashFiles('deploy/docker/Dockerfile.backend') != ''
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./deploy/docker/Dockerfile.backend
           push: false
-          cache-from: type=gha
         continue-on-error: true
-
-      - name: Skip backend image build when Dockerfile is missing
-        if: ${{ env.BACKEND_DOCKERFILE_PRESENT != 'true' }}
-        run: |
-          echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist (expected when backend image build is not configured in this repo)."

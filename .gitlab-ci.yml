@@ -1,9 +1,12 @@
 # FILE: .gitlab-ci.yml
 # NIR: 24.07.2026 13:20
+# UPDATED: 27.07.2026 09:45
 # NAME: NeXifyAI Agent (GitLab CI/CD)
 # TEAM: NeXifyAI DevOps
 # WHAT: GitLab Pipeline — Test, Build, Deploy lokal auf VPS
 # WHY: Lokale Orchestration + Redundanz zu GitHub Actions
+# BEST-PRACTICE: pnpm statt npm (Projektkonvention: pnpm-only)
+# PITFALL: V-01: npm install ignoriert pnpm-lock.yaml → Lockfile-Abweichung
 # DEPENDS: GitLab Runner (Docker), Docker registry access
 # DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
 
@@ -17,14 +20,17 @@ variables:
   DOCKER_IMAGE: $CI_REGISTRY_IMAGE
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
+  PNPM_VERSION: "9"
 
 # === LINT (Node.js) ===
 lint:
   stage: lint
   image: node:20-alpine
   script:
-    - npm install --prefer-offline
-    - npm run lint 2>&1 || true
+    - corepack enable
+    - corepack prepare pnpm@$PNPM_VERSION --activate
+    - pnpm --dir apps/website install --frozen-lockfile
+    - pnpm --dir apps/website lint 2>&1 || true
   allow_failure: true
   only:
     - branches
@@ -47,8 +53,10 @@ test:
   stage: test
   image: node:20-alpine
   script:
-    - npm install --prefer-offline
-    - npm run test 2>&1 || true
+    - corepack enable
+    - corepack prepare pnpm@$PNPM_VERSION --activate
+    - pnpm --dir apps/website install --frozen-lockfile
+    - pnpm --dir apps/website test 2>&1 || true
   allow_failure: true
   only:
     - branches
