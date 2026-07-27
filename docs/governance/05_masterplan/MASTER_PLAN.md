@@ -18,7 +18,7 @@
 | 9Router (LLM-Router) | localhost:20128 | 🟢 UP | 61 Modelle |
 | agentmemory (iii) | localhost:3111 | 🟢 UP | REST-API |
 | agentmemory (Viewer) | localhost:3113 | 🟢 UP | HTTP 200 |
-| LightRAG | localhost:9621 | 🟢 UP | HTTP 307 |
+| LightRAG | localhost:9622 | 🟢 UP | HTTP 307 |
 | Spaether | localhost:8900 | 🟢 UP | HTTP 404 |
 | Traefik | *:80/443 | 🟢 UP | systemd active |
 
