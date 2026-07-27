@@ -1,6 +1,6 @@
 # FILE: .gitlab-ci.yml
 # NIR: 24.07.2026 13:20
-# UPDATED: 27.07.2026 09:45
+# UPDATED: 27.07.2026 12:35
 # NAME: NeXifyAI Agent (GitLab CI/CD)
 # TEAM: NeXifyAI DevOps
 # WHAT: GitLab Pipeline — Test, Build, Deploy lokal auf VPS
@@ -140,6 +140,6 @@ include:
 
 secret_detection:
   stage: lint
-  only:
-    - main
-    - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

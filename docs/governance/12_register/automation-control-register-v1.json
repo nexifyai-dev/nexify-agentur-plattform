@@ -155,40 +155,22 @@
       "abort": "Abort on missing Vercel secrets, design-system mismatch, or failing deployment command."
     },
     {
-      "id": "AUTO-CICD-005",
-      "name": "GitHub GitLab Sync",
-      "owner": "DevOps",
-      "layer": "L2",
-      "status": "active",
-      "trigger": {
-        "type": "git-manual",
-        "event": "push,workflow_dispatch",
-        "source": ".github/workflows/gitlab-sync.yml"
-      },
-      "gate": "Source-of-truth sync from GitHub to GitLab with optional pipeline trigger.",
-      "executor": ".github/workflows/gitlab-sync.yml",
-      "healthcheck": "Workflow completion + GitLab API response when available.",
-      "evidence": "GitHub Actions logs, GitLab pipeline trail",
-      "rollback": "Re-run from last stable commit or disable sync until GitLab path is repaired.",
-      "abort": "Abort on malformed remote config; tolerate unavailable GitLab but log warning."
-    },
-    {
       "id": "AUTO-CICD-006",
       "name": "GitHub Mirror to GitLab",
       "owner": "DevOps",
       "layer": "L2",
       "status": "active",
       "trigger": {
-        "type": "git",
-        "event": "push",
+        "type": "git-manual",
+        "event": "push,workflow_dispatch",
         "source": ".github/workflows/mirror-to-gitlab.yml"
       },
-      "gate": "Repository mirror of main branch to VPS GitLab remote.",
+      "gate": "Complete repository mirror to VPS GitLab with mandatory HTTPS credentials.",
       "executor": ".github/workflows/mirror-to-gitlab.yml",
       "healthcheck": "Successful mirror push result.",
       "evidence": "GitHub Actions logs, GitLab mirrored refs",
       "rollback": "Remove mirrored ref or re-push corrected refs from GitHub.",
-      "abort": "Abort on auth failure, invalid mirror URL, or repository mismatch."
+      "abort": "Abort on missing credentials, auth failure, invalid mirror URL, or repository mismatch."
     },
     {
       "id": "AUTO-CICD-007",

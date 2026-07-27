@@ -125,20 +125,20 @@ NIE in `.env` committen. Nutze GitLab CI/CD Secrets.
 
 ### GitHub Actions → GitLab Sync
 
-**File:** `.github/workflows/gitlab-sync.yml`
+**File:** `.github/workflows/mirror-to-gitlab.yml`
 
 Automatisch synchronisiert:
 - Commits (main, develop)
 - Tags (releases)
-- Pull Requests → Merge Requests
-- Workflows (GitHub Actions → GitLab CI)
+- Branches und Tags als vollständige Git-Ref-Spiegelung
+- GitLab CI startet auf den gespiegelten Branch-Updates
 
 **Manuell triggern:**
 ```bash
 git push origin main  # Beide Repos updated
 ```
 
-### GitLab CI/CD (Primary)
+### GitLab CI/CD (Redundanz)
 
 **File:** `.gitlab-ci.yml`
 
@@ -308,12 +308,11 @@ git commit -m "feat: description"
 git push origin feature/my-feature
 ```
 
-### 2. Pull Request → Merge Request
+### 2. Pull Request
 
 - GitHub: Create PR
-- GitLab: Auto-creates MR (via gitlab-sync)
-- Reviews in BOTH platforms
-- Merge via GitLab (source of truth)
+- GitHub: Source of Truth für PR und Merge
+- GitLab: vollständiger Repository-Mirror und redundanter CI/CD-Pfad
 
 ### 3. Deploy
 
