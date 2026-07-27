@@ -22,7 +22,7 @@
 
 | Merkmal | GitHub-hosted (`ubuntu-latest`) | Self-Hosted (`vps, nexifyai`) |
 |---------|--------------------------------|-------------------------------|
-| Standort | GitHub-Infrastruktur | Unser VPS (srv1243952.hstgr.cloud) |
+| Standort | GitHub-Infrastruktur | Unser VPS (gitlab.nexifyai.cloud) |
 | Docker-Zugang | Nur innerhalb CI | Echter Docker-Socket — direkte Container-Steuerung |
 | Interne Dienste | Nur via SSH-Tunnel | Direkt: LightRAG:9621, AgentMemory:3111, 9Router:20128 |
 | Deploy-Mechanismus | `appleboy/ssh-action` + SSH-Key | `docker compose up` direkt |
@@ -40,7 +40,7 @@ GitHub.com (Push/PR/Schedule)
      │ HTTPS — Runner-Polling
      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  VPS (srv1243952.hstgr.cloud)                                   │
+│  VPS (gitlab.nexifyai.cloud)                                   │
 │                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │  Docker: nexify-github-runner                             │  │

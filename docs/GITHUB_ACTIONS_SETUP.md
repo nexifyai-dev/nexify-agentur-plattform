@@ -37,7 +37,7 @@
 - [x] GitHub deploy key deployed (`github_deploy_vps`)
 - [x] GitHub Secrets configured:
   - `DEPLOY_KEY_VPS` → private SSH key
-  - `VPS_HOST` → `srv1243952.hstgr.cloud`
+  - `VPS_HOST` → `gitlab.nexifyai.cloud`
   - `VPS_USER` → `root`
   - `VPS_PORT` → `22`
 - [x] `.github/workflows/` created (test.yml, build.yml, deploy-vps.yml, gitlab-sync.yml)
@@ -71,7 +71,7 @@ Set via GitHub UI (Settings → Secrets and variables → Actions):
 ```bash
 # Via CLI:
 gh secret set DEPLOY_KEY_VPS -b "$(cat /root/.ssh/github_deploy_vps)"
-gh secret set VPS_HOST -b "srv1243952.hstgr.cloud"
+gh secret set VPS_HOST -b "gitlab.nexifyai.cloud"
 gh secret set VPS_USER -b "root"
 gh secret set VPS_PORT -b "22"
 ```
@@ -136,7 +136,7 @@ curl -X POST http://localhost:8922/api/v4/projects/import \
 # In GitLab UI: Project → Settings → CI/CD → Variables
 
 SSH_PRIVATE_KEY = [content of /root/.ssh/github_deploy_vps]
-VPS_HOST = srv1243952.hstgr.cloud
+VPS_HOST = gitlab.nexifyai.cloud
 VPS_USER = root
 ```
 
