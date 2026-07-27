@@ -63,19 +63,15 @@ puts t.token
 
 ### 2. Cursor Desktop / Workspace
 
-Beispiel kopieren und Token **lokal** einsetzen (nie committen):
+**Kanonisches Gesamt-Example** (agentmemory + context7 + gitlab-oss):
 
 ```bash
-cp deploy/mcp/gitlab-oss/mcp.json.example .cursor/mcp.json
-# GITLAB_PERSONAL_ACCESS_TOKEN ersetzen
+cp .cursor/mcp.json.example .cursor/mcp.json
+# GITLAB_PERSONAL_ACCESS_TOKEN und AGENTMEMORY_SECRET lokal setzen
 # Cursor neu laden / MCP restart
 ```
 
-Oder User-MCP:
-
-```text
-~/.cursor/mcp.json
-```
+Nur GitLab-Ausschnitt (Legacy): `deploy/mcp/gitlab-oss/mcp.json.example`
 
 Server-Name in Beispielen: **`gitlab-oss`** (bewusst getrennt vom built-in `Gitlab`).
 
