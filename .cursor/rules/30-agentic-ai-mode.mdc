@@ -1,0 +1,47 @@
+---
+description: Agentic AI Mode — Session-Start, Dual-VCS GitHub+GitLab OSS, Deviation Zero
+globs:
+alwaysApply: true
+---
+
+# Agentic AI Mode
+
+## Session-Start (Pflicht)
+
+Vor jeder technischen Arbeit:
+
+```bash
+bash scripts/agentic-bootstrap.sh
+```
+
+Oder Cursor-Command `/agentic-bootstrap`.
+
+## Vorgaben-Reihenfolge
+
+`docs/governance/` > `CHARTA.md` > `.cursor/rules/` > `AGENTS.md`
+
+## Dual-VCS
+
+| System | Rolle | Tool |
+|--------|-------|------|
+| GitHub | Source of Truth, PR, Actions CI | `gh`, GitHub MCP Plugin |
+| GitLab OSS | Mirror, CI, VPS Deploy | MCP `gitlab-oss` (nicht built-in `Gitlab`) |
+
+Sync: `.github/workflows/mirror-to-gitlab.yml` → `docs/operations/REPO-SYNC-STRATEGY.md`
+
+## MCP (lokal)
+
+Kanonisches Example: `.cursor/mcp.json.example` (agentmemory + context7 + gitlab-oss).  
+Lokal: `cp .cursor/mcp.json.example .cursor/mcp.json` — Secrets nur aus Env, nie committen.
+
+## Abweichungen
+
+`python3 scripts/soll-deviation-scan.py` — ERROR sofort fixen; WARN → Action blocked/pending.
+
+## Lieferung
+
+Branch `cursor/<task>-7dd5` → PR → CI → Mirror → GitLab. Command `/pr-flow`.
+
+## Brain
+
+AgentMemory Pflicht wenn :3111 erreichbar: recall vor Planung, save nach Abschluss.

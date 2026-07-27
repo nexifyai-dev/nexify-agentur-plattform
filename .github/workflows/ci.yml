@@ -110,3 +110,19 @@ jobs:
         with:
           path: ./
           extra_args: --debug --only-verified
+
+  # === AGENTIC: SOLL deviation + knowledge mandate ===
+  agentic-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: SOLL deviation scan
+        run: python3 scripts/soll-deviation-scan.py
+
+      - name: Knowledge mandate check
+        run: python3 scripts/check_knowledge_mandate.py
