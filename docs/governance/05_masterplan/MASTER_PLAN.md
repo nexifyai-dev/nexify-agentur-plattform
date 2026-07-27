@@ -119,3 +119,4 @@
 || 2026-06-21 | **Kanban/Tasks AI-OS-Schicht aktiviert:** Bridge-API mit Evidence/Review/Columns erweitert, Dispatcher 5/5 korrekt, 47/47 Tests bestanden. Security-Gate: nexify-ceo key-frei, ceo gesperrt. | nexify-ceo |
 || 2026-06-21 | **Scheduled Tasks P1 Root Cause:** jobs.json owned by root → 500. Fix-Befehl dokumentiert, Host-Fix ausstehend. | nexify-ceo |
 || 2026-06-21 | **Container-Inventur:** Service Registry mit Docker-Manager-Stand aktualisiert (8 Services: core/support/customer/unknown). Paperclip/ai-team als P2-Runtime-Abweichung dokumentiert. | nexify-ceo |
+# test trigger
