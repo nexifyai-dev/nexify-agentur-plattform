@@ -203,9 +203,9 @@ Pipelines können im Harness Web UI bearbeitet und getriggert werden.
 ```
 GitHub (nexifyai-dev/nexify-agentur-plattform)
     │
-    │ push → GitHub Actions (gitlab-sync.yml)
+    │ push → GitHub Actions (mirror-to-gitlab.yml)
     ▼
-GitLab (localhost:8922/nexifyai-dev/...)
+GitLab (gitlab.nexifyai.cloud/<configured-namespace>/...)
     │
     │ (neu) Harness-Mirror-Webhook
     ▼
@@ -221,7 +221,7 @@ Harness OSS (harness.nexifyai.cloud/nexifyai/nexify-agentur-plattform)
 | Pfad | Trigger | Primär |
 |------|---------|--------|
 | GitHub Actions | Push zu GitHub | ✅ Primär |
-| GitLab CI | Push via gitlab-sync | Redundanz |
+| GitLab CI | Push via mirror-to-gitlab | Redundanz |
 | **Harness CI** | Push zu GitHub/Harness | **Redundanz** |
 
 ### 6.3 Traefik-Integration
