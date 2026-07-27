@@ -415,4 +415,4 @@ Proprietary — NeXifyAI 2026
 **Next Review:** 2026-08-01
 
 ## Legacy endpoint (deprecated)
-curl http://localhost:9621/health  # OLD LightRAG port
+curl http://localhost:9622/health  # OLD LightRAG port
