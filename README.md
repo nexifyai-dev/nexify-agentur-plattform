@@ -173,7 +173,7 @@ gitlab-runner run-single ...
 
 **Status prüfen:**
 ```bash
-ssh root@srv1243952.hstgr.cloud "docker ps | grep nexify"
+ssh root@localhost "docker ps | grep nexify"
 ```
 
 ---
@@ -241,7 +241,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh -o StrictHostKeyChecking=no root@srv1243952.hstgr.cloud "cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull && docker-compose up -d"
+          ssh -o StrictHostKeyChecking=no root@localhost "cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull && docker-compose up -d"
 ```
 
 **Setup:**
@@ -264,7 +264,7 @@ docker logs lightrag
 docker-compose logs -f backend
 
 # VPS (SSH)
-ssh root@srv1243952.hstgr.cloud "tail -f /var/log/nexify/*.log"
+ssh root@localhost "tail -f /var/log/nexify/*.log"
 ```
 
 ### Health Checks
@@ -346,7 +346,7 @@ gitlab-runner logs
 ./deploy/deploy-vps.sh staging
 
 # VPS debugging
-ssh root@srv1243952.hstgr.cloud "docker-compose logs backend"
+ssh root@localhost "docker-compose logs backend"
 ```
 
 ### Performance Issues

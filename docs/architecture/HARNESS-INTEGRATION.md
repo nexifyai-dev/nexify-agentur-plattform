@@ -55,7 +55,7 @@ Traefik Reverse Proxy
     │
     ▼
 ┌──────────────────────────────────────────────────────────┐
-│  VPS (srv1243952.hstgr.cloud)                             │
+│  VPS (gitlab.nexifyai.cloud)                             │
 │                                                           │
 │  ┌─────────────────────────────────────────────────────┐ │
 │  │  Docker: nexify-harness (Port 3101:3000)             │ │

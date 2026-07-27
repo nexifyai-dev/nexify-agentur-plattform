@@ -28,7 +28,7 @@ Set these in: `github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 
 | Secret | Value | Source |
 |--------|-------|--------|
-| `GITLAB_TOKEN` | GitLab PAT | http://srv1243952.hstgr.cloud:8922/profile/personal_access_tokens |
+| `GITLAB_TOKEN` | GitLab PAT | http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens |
 | `VPS_SSH_KEY` | SSH Private Key | `/root/.ssh/github_nexify` (created earlier) |
 | `GITHUB_TOKEN` | Auto-provided | GitHub (built-in) |
 | `DOCKER_REGISTRY_PASSWORD` | Docker token | If pushing to registry (optional) |
@@ -44,7 +44,7 @@ cat /root/.ssh/github_nexify | base64 -w 0
 # Value: (paste base64 encoded key)
 
 # 3. Get GitLab Token (from VPS)
-ssh root@srv1243952.hstgr.cloud
+ssh root@gitlab.nexifyai.cloud
 # → GitLab WebUI: Profile → Personal Access Tokens
 # → Create: nexifyai-ci
 # → Scopes: api, read_repo, write_repo
@@ -94,7 +94,7 @@ gh secret list -R nexifyai-dev/nexify-agentur-plattform
 
 **Steps:**
 1. SSH key setup
-2. Connect to VPS: `root@srv1243952.hstgr.cloud`
+2. Connect to VPS: `root@gitlab.nexifyai.cloud`
 3. Pull latest code: `cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull`
 4. docker-compose pull + up
 5. Health checks: curl all endpoints
@@ -155,7 +155,7 @@ gh run view <RUN_ID> -R nexifyai-dev/nexify-agentur-plattform --log
 
 ```bash
 # After sync, check GitLab
-# https://srv1243952.hstgr.cloud:8922/nexifyai/nexify-agentur-plattform/-/pipelines
+# https://gitlab.nexifyai.cloud:8922/nexifyai/nexify-agentur-plattform/-/pipelines
 
 # Query via API
 curl -s http://127.0.0.1:8922/api/v4/projects/ID/pipelines \
@@ -171,7 +171,7 @@ curl -s http://127.0.0.1:8922/api/v4/projects/ID/pipelines \
 # Verify: cat /root/.ssh/github_nexify.pub matches GitHub settings
 
 # Manual test
-ssh -i ~/.ssh/github_nexify root@srv1243952.hstgr.cloud "docker ps"
+ssh -i ~/.ssh/github_nexify root@gitlab.nexifyai.cloud "docker ps"
 ```
 
 ### "GitLab sync failed: 401 Unauthorized"
@@ -179,7 +179,7 @@ ssh -i ~/.ssh/github_nexify root@srv1243952.hstgr.cloud "docker ps"
 ```bash
 # GITLAB_TOKEN invalid/expired
 # Fix:
-# 1. Create new token on VPS: http://srv1243952.hstgr.cloud:8922/profile/personal_access_tokens
+# 1. Create new token on VPS: http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens
 # 2. Update GitHub Secret: gh secret set GITLAB_TOKEN --body "glpat-NEW" ...
 # 3. Re-run workflow
 ```
@@ -191,7 +191,7 @@ ssh -i ~/.ssh/github_nexify root@srv1243952.hstgr.cloud "docker ps"
 # timeout-minutes: 30 (default 360)
 
 # Or run build manually on VPS
-ssh root@srv1243952.hstgr.cloud
+ssh root@gitlab.nexifyai.cloud
 cd /opt/nexifyai/deployment/nexify-agentur-plattform
 docker-compose build
 ```
