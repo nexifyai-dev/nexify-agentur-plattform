@@ -60,19 +60,17 @@ fi
 
 # --- 4. GitLab OSS ---
 say "\n## 4. GitLab OSS (VPS CI/CD)"
-GL_URL="${GITLAB_API_URL:-https://gitlab.nexifyai.cloud/api/v4}"
-if [[ -n "${GITLAB_PERSONAL_ACCESS_TOKEN:-}" ]]; then
-  if curl -sf -H "PRIVATE-TOKEN: $GITLAB_PERSONAL_ACCESS_TOKEN" "$GL_URL/user" >/dev/null; then
-    ok "GitLab OSS API erreichbar (PAT gesetzt)"
-  else
-    warn "GitLab PAT gesetzt, API-Check fehlgeschlagen — URL/Token prüfen"
-  fi
-else
-  warn "GITLAB_PERSONAL_ACCESS_TOKEN nicht gesetzt — deploy/mcp/gitlab-oss/README.md"
-fi
-
 # Built-in Cursor GitLab MCP ≠ OSS
 warn "Built-in Cursor 'Gitlab' MCP = SaaS/OAuth — für VPS 'gitlab-oss' in .cursor/mcp.json nutzen"
+if [[ -x scripts/gitlab-oss-smoke.sh ]]; then
+  bash scripts/gitlab-oss-smoke.sh || warn "gitlab-oss-smoke.sh meldete Fehler"
+else
+  warn "scripts/gitlab-oss-smoke.sh fehlt"
+fi
+if [[ -x scripts/ensure-gitlab-remote.sh ]]; then
+  # Ohne Token nur Public-URL setzen (idempotent)
+  bash scripts/ensure-gitlab-remote.sh || true
+fi
 
 # --- 5. AgentMemory ---
 say "\n## 5. AgentMemory (Pflicht-Brain)"

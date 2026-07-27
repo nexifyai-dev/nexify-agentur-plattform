@@ -132,22 +132,53 @@ def scan() -> list[Finding]:
         findings.append(Finding("warn", "VCS-GITLAB-CI", "GitLab CI ohne deploy:vps"))
 
     # --- Runtime (optional — Cloud-Agent oft ohne VPS) ---
-    for label, url in [
-        ("AgentMemory REST", "http://127.0.0.1:3111/agentmemory/livez"),
-        ("9Router", "http://127.0.0.1:20128/health"),
-        ("GitLab OSS (VPS)", "https://gitlab.nexifyai.cloud/-/health"),
-    ]:
+    # GitLab: /-/health ist auf OSS oft 404 — sign_in / public API sind die richtigen Probes
+    runtime_checks = [
+        ("AgentMemory REST", "http://127.0.0.1:3111/agentmemory/livez", False),
+        ("9Router", "http://127.0.0.1:20128/health", False),
+        ("GitLab OSS UI", "https://gitlab.nexifyai.cloud/users/sign_in", True),
+        ("GitLab OSS API", "https://gitlab.nexifyai.cloud/api/v4/projects?per_page=1", True),
+    ]
+    for label, url, expect_public in runtime_checks:
         if http_ok(url):
             findings.append(Finding("ok", "RUNTIME-UP", f"{label} erreichbar ({url})"))
         else:
+            sev = "warn"
             findings.append(
                 Finding(
-                    "warn",
+                    sev,
                     "RUNTIME-DOWN",
                     f"{label} nicht erreichbar ({url})",
-                    "Auf VPS/Remote-SSH prüfen; Cloud-Agent: blocked/pending Action",
+                    (
+                        "CF-Tunnel / DNS prüfen"
+                        if expect_public
+                        else "Auf VPS/Remote-SSH prüfen; Cloud-Agent: Action blocked"
+                    ),
                 )
             )
+
+    sync = ROOT / ".github/workflows/gitlab-sync.yml"
+    if sync.exists():
+        # Ignore comment lines when detecting dead internal hosts
+        sync_lines = [
+            ln
+            for ln in sync.read_text(encoding="utf-8").splitlines()
+            if not ln.lstrip().startswith("#")
+        ]
+        sync_code = "\n".join(sync_lines)
+        if "hstgr.cloud" in sync_code or re.search(r":8922\b", sync_code):
+            findings.append(
+                Finding(
+                    "error",
+                    "VCS-SYNC-HOST",
+                    "gitlab-sync.yml nutzt internen Host/VPS-Bind (von GitHub Actions unerreichbar)",
+                    "Auf https://gitlab.nexifyai.cloud umstellen",
+                )
+            )
+        elif "gitlab.nexifyai.cloud" in sync_code:
+            findings.append(Finding("ok", "VCS-SYNC-HOST", "gitlab-sync.yml nutzt gitlab.nexifyai.cloud"))
+        else:
+            findings.append(Finding("warn", "VCS-SYNC-HOST", "gitlab-sync.yml ohne erkennbares Public-Host"))
 
     # --- Excluded patterns ---
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8") if (ROOT / "AGENTS.md").exists() else ""

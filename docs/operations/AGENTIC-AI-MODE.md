@@ -19,6 +19,9 @@ Einheitlicher **Agentic AI Mode** für Cursor Cloud-Agent, Desktop und VPS-SSH:
 ```bash
 cd /path/to/nexify-agentur-plattform
 bash scripts/agentic-bootstrap.sh
+# optional explizit:
+bash scripts/gitlab-oss-smoke.sh
+bash scripts/ensure-gitlab-remote.sh   # setzt remote 'gitlab' (Token aus Env)
 ```
 
 Oder in Cursor: Command **`/agentic-bootstrap`** (siehe `.cursor/commands/agentic-bootstrap.md`).

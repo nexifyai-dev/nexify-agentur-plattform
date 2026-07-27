@@ -3,6 +3,7 @@ name: Mirror to VPS GitLab
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   mirror:
@@ -15,12 +16,26 @@ jobs:
           fetch-depth: 0
 
       - name: Push mirror to VPS GitLab
-        run: |
-          if [ -z "$VPS_GITLAB_URL" ]; then
-            echo "::warning::VPS_GITLAB_URL secret is not set; skipping mirror push"
-            exit 0
-          fi
-          git remote add gitlab "$VPS_GITLAB_URL"
-          git push --mirror gitlab
         env:
           VPS_GITLAB_URL: ${{ secrets.VPS_GITLAB_URL }}
+          VPS_GITLAB_TOKEN: ${{ secrets.VPS_GITLAB_TOKEN }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TOKEN="${VPS_GITLAB_TOKEN:-${GITLAB_TOKEN:-}}"
+          if [ -n "${VPS_GITLAB_URL:-}" ]; then
+            URL="$VPS_GITLAB_URL"
+          elif [ -n "$TOKEN" ]; then
+            URL="https://oauth2:${TOKEN}@gitlab.nexifyai.cloud/nexifyai/nexify-agentur-plattform.git"
+          else
+            echo "::warning::VPS_GITLAB_URL / VPS_GITLAB_TOKEN / GITLAB_TOKEN not set; skipping mirror"
+            exit 0
+          fi
+          # If URL has no credentials but TOKEN exists, inject oauth2 token
+          if [[ "$URL" != *":@"* && "$URL" != *"@"* && -n "$TOKEN" ]]; then
+            URL=$(echo "$URL" | sed -E "s#https://#https://oauth2:${TOKEN}@#")
+          fi
+          echo "::add-mask::$TOKEN"
+          git remote remove gitlab 2>/dev/null || true
+          git remote add gitlab "$URL"
+          git push --mirror gitlab
