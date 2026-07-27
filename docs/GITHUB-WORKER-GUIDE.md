@@ -180,7 +180,8 @@ ssh -i ~/.ssh/github_nexify root@gitlab.nexifyai.cloud "docker ps"
 ```bash
 # GITLAB_TOKEN invalid/expired
 # Fix:
-# 1. Create new token on VPS: http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens
+# 1. Create new token: https://gitlab.nexifyai.cloud/-/user_settings/personal_access_tokens
+#    (VPS lokal: http://127.0.0.1:8922/-/user_settings/personal_access_tokens)
 # 2. Update GitHub Secret: gh secret set GITLAB_TOKEN --body "glpat-NEW" ...
 # 3. Re-run workflow
 ```
