@@ -1,0 +1,33 @@
+# Cloudflare Tunnel Ingress Routes (reference / declarative SoT)
+# Actual runtime config: /root/.cloudflared/config.yml (token-based via systemd)
+# This file tracks the intended public routes for audit and PR review.
+# Secrets (tunnel token, credentials-file path) are NOT included.
+
+ingress:
+  - hostname: dashboard.nexifyai.cloud
+    service: http://localhost:9119
+  - hostname: hermes-dash.nexifyai.cloud
+    service: http://localhost:9119
+  - hostname: webui.nexifyai.cloud
+    service: http://localhost:8644
+  - hostname: ai-router.nexifyai.cloud
+    service: http://localhost:20128
+  - hostname: agentmemory.nexifyai.cloud
+    service: http://localhost:3113
+  - hostname: rag.nexifyai.cloud
+    service: http://localhost:9622
+  - hostname: gitlab.nexifyai.cloud
+    service: http://localhost:8922
+  - hostname: grafana.nexifyai.cloud
+    service: http://localhost:3030
+  - hostname: prometheus.nexifyai.cloud
+    service: http://localhost:9090
+  - hostname: wissen.nexifyai.cloud
+    service: http://localhost:9622
+  - hostname: factory.nexifyai.cloud
+    service: http://localhost:3000
+  - hostname: workspace.nexifyai.cloud
+    service: http://localhost:4020
+  - hostname: "*.nexifyai.cloud"
+    service: http://localhost:8644
+  - service: http_status:404
