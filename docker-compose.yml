@@ -1,10 +1,117 @@
 services:
+
+  # ── Harness Open Source — Git-Hosting, CI/CD, Code Review ─────────────────
+  # Vollintegrierte DevOps-Plattform: Git-Repos, Pipelines, Artifact-Registry.
+  # NIR: 26.07.2026 | Docs: docs/architecture/HARNESS-INTEGRATION.md
+  # Port 3101 → Harness Web UI | Port 3022 → Git-over-SSH
+  harness-db:
+    image: postgres:16-alpine
+    container_name: nexify-harness-db
+    restart: unless-stopped
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
+    environment:
+      - POSTGRES_DB=${HARNESS_DB_NAME:-harnessdb}
+      - POSTGRES_USER=${HARNESS_DB_USER:-harness}
+      - POSTGRES_PASSWORD=${HARNESS_DB_PASSWORD:-changeme_harness_db}
+    volumes:
+      - harness-pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${HARNESS_DB_USER:-harness} -d ${HARNESS_DB_NAME:-harnessdb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - harness-net
+
+  harness:
+    image: harness/harness:latest
+    container_name: nexify-harness
+    restart: unless-stopped
+    depends_on:
+      harness-db:
+        condition: service_healthy
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
+    environment:
+      # Database (PostgreSQL)
+      - GITNESS_DATABASE_DRIVER=postgres
+      - GITNESS_DATABASE_DATASOURCE=host=harness-db port=5432 dbname=${HARNESS_DB_NAME:-harnessdb} user=${HARNESS_DB_USER:-harness} ****** sslmode=disable
+      # Server URLs — extern via Traefik/Cloudflare Tunnel
+      - GITNESS_URL_BASE=${HARNESS_URL_BASE:-http://localhost:3101}
+      - GITNESS_URL_GIT=${HARNESS_URL_GIT:-http://localhost:3101}
+      # SSH-Server
+      - GITNESS_SSH_SERVER_PORT=3022
+      # Admin-Account (nur beim ersten Start)
+      - GITNESS_PRINCIPAL_ADMIN_EMAIL=${HARNESS_ADMIN_EMAIL:-admin@nexifyai.cloud}
+      - GITNESS_PRINCIPAL_ADMIN_PASSWORD=${HARNESS_ADMIN_PASSWORD:-changeme_harness_admin}
+      # Data path
+      - GITNESS_ROOT_PATH=/data
+    volumes:
+      - harness-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "127.0.0.1:3101:3000"   # Web UI (intern: 3000, extern via Traefik: 3101)
+      - "3022:3022"              # Git-over-SSH
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/v1/system/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - harness-net
+    labels:
+      # Traefik-Labels für Auto-Discovery (optional — traefik-routes.yml bevorzugt)
+      - "traefik.enable=false"
+
+  # ── GitHub Actions Self-Hosted Runner ─────────────────────────────────────
+  # Führt CI/CD-Jobs direkt auf dem VPS aus — kein SSH-Tunnel nötig.
+  # Token wird live per GitHub API geholt (GITHUB_PAT) oder direkt übergeben.
+  # NIR: 26.07.2026 | Docs: docs/architecture/GITHUB-RUNNER-VPS.md
+  github-runner:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.github-runner
+    container_name: nexify-github-runner
+    restart: unless-stopped
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
+    environment:
+      - GITHUB_REPO=nexifyai-dev/nexify-agentur-plattform
+      - RUNNER_LABELS=self-hosted,vps,nexifyai,linux,x64
+      - RUNNER_WORKDIR=/home/runner/actions-runner/_work
+      - RUNNER_ALLOW_RUNASROOT=1
+    volumes:
+      # Docker-Socket-Mount: Runner kann docker-Befehle direkt ausführen
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Repo-Verzeichnis für schnelle Checkouts (optional)
+      - /opt/nexifyai/repos:/opt/nexifyai/repos
+      # Secrets-Zugang für Jobs, die VPS-Dienste ansprechen
+      - /etc/nexifyai:/etc/nexifyai:ro
+    # Runner braucht keine eigenen Ports — er verbindet sich nach außen zu GitHub
+    network_mode: host    # host: direkte Erreichbarkeit interner Dienste (LightRAG, AgentMemory…)
+
   website:
+    # CI (deploy-vps.yml) builds and pushes this exact tag; `docker compose pull`
+    # on the VPS pulls it. `build:` stays as a local-dev / fallback path so
+    # `docker compose up --build` still works without the registry.
+    image: ghcr.io/nexifyai-dev/nexify-website:latest
     build:
       context: .
       dockerfile: deploy/docker/Dockerfile.website
     container_name: nexify-website
     restart: unless-stopped
+    # Central secret store on the VPS (BACKEND_ORIGIN, NEXT_PUBLIC_* etc.).
+    # required:false → no-op locally / when the file is absent.
+    env_file:
+      - path: /etc/nexifyai/secrets.env
+        required: false
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0
@@ -16,3 +123,14 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+
+volumes:
+  harness-data:
+    name: nexify-harness-data
+  harness-pgdata:
+    name: nexify-harness-pgdata
+
+networks:
+  harness-net:
+    name: nexify-harness-net
+    driver: bridge

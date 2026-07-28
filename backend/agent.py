@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 import portal
 import booking
+import channel_sync
 
 logger = logging.getLogger("nexify.agent")
 router = APIRouter()
@@ -40,7 +41,7 @@ Hintergrund des Inhabers (für Kunden-E-Mails als Vertrauensargument nutzbar): D
 Du hast über deine Tools vollen Zugriff auf das gesamte System: CRM/Leads, Angebote, Support-Tickets, Rückruf-Termine, Website-KI-Chats, E-Mail-Versand (Absender mail@nexifyai.cloud, NeXify-CI-Design automatisch) und einen eigenen Task-Planer für zeitgesteuerte Folgeaufgaben.
 
 ARBEITSWEISE:
-1. DATEN ZUERST: Beschaffe dir vor jeder Aktion die nötigen Fakten über Lese-Tools (search_leads, get_ticket, list_offers …). Rate niemals E-Mail-Adressen, Namen oder Inhalte.
+1. DATEN ZUERST: Beschaffe dir vor jeder Aktion die nötigen Fakten über Lese-Tools (search_leads, get_ticket, list_offers …). Wenn ein Kontakt sich meldet oder du über einen Kontakt berichtest, rufe IMMER ZUERST get_contact_context mit seiner E-Mail-Adresse, Telefonnummer oder Kanal-Ref ab — du bekommst damit sofort die vollständige Kanalhistorie (Website, Telegram, WhatsApp, E-Mail, Hermes) und weißt ohne Rückfragen, wo der letzte Stand ist. Rate niemals E-Mail-Adressen, Namen oder Inhalte.
 2. SICHERHEITS-GATE: Bevor du nach außen wirkst (E-Mail senden, Angebot senden, Interessent einladen, Ticket beantworten, Lead-Daten ändern), fasse den geplanten Schritt inkl. Entwurf kurz zusammen und hole die Freigabe des Admins ein – AUSSER der Admin hat die Ausführung im aktuellen Auftrag bereits eindeutig angeordnet (z. B. "sende…", "kontaktiere X und kläre Y", "erledige das", "mach das"). Dann führe direkt und vollständig aus.
 3. NACHVERFOLGUNG: Setze dir mit schedule_task eigenständig Folgeaufgaben (z. B. "prüfe in 48h, ob kunde@x.de auf Angebot #id geantwortet hat; wenn Status weiterhin 'sent', sende höfliche Nachfass-E-Mail"). Formuliere Instruktionen so präzise und in sich geschlossen, dass du sie später ohne Gesprächskontext ausführen kannst (immer inkl. E-Mail-Adressen, IDs, gewünschtem Verhalten).
 4. FEHLER-GATE: Prüfe Ergebnisse jedes Tool-Aufrufs. Schlägt etwas fehl, versuche einen sinnvollen Alternativweg und berichte transparent, was funktioniert hat und was nicht. Erfinde niemals Erfolge.
@@ -82,6 +83,7 @@ TOOLS = [
     _tool("cancel_task", "Geplanten Task stornieren.", {"task_id": S}, ["task_id"]),
     _tool("list_chat_sessions", "Website-KI-Chat-Sessions auflisten (neueste zuerst).", {"limit": N}),
     _tool("get_chat_session", "Kompletten Verlauf einer Website-Chat-Session lesen.", {"session_id": S}, ["session_id"]),
+    _tool("get_contact_context", "Vollständigen Kanal-Kontext eines Kontakts abrufen — alle Berührungspunkte über ALLE Kanäle (Website, Telegram, WhatsApp, E-Mail, Hermes) (neueste zuerst). identifier = E-Mail-Adresse, Telefonnummer oder Kanal-Ref wie 'telegram:12345'.", {"identifier": S, "limit": N}, ["identifier"]),
 ]
 
 
@@ -238,6 +240,11 @@ async def execute_tool(name: str, args: dict) -> dict:
             async with pool.acquire() as con:
                 rows = await con.fetch("select * from nexify_chat_messages where session_id=$1 order by created_at asc", uuid.UUID(args["session_id"]))
             return {"messages": [{"role": r["role"], "content": r["content"][:600]} for r in rows]}
+
+        if name == "get_contact_context":
+            identifier = args.get("identifier", "").strip()
+            limit = int(args.get("limit") or 30)
+            return await channel_sync.get_contact_context(identifier, limit=limit)
 
         return {"error": f"Unbekanntes Tool: {name}"}
     except Exception as e:
@@ -396,3 +403,58 @@ async def task_worker():
         except Exception as e:
             logger.warning(f"agent task worker error: {e}")
         await asyncio.sleep(60)
+
+
+async def seed_recurring_tasks():
+    """Seed weekly autonomous self-optimization and system health tasks if not already scheduled.
+    Called once from server startup. Idempotent — only inserts if no matching pending/future task exists.
+    """
+    pool = await _DB()
+    if not pool:
+        return
+    now = datetime.now(TZ)
+
+    tasks = [
+        {
+            "title": "Wöchentliche Selbstoptimierung & System-Review",
+            "days": 7,
+            "instruction": (
+                "WÖCHENTLICHE SELBSTOPTIMIERUNG – Autonomer Review.\n"
+                "1. Rufe get_stats auf und analysiere aktuelle Zahlen (Leads, Angebote, Tickets, Pipeline).\n"
+                "2. Rufe list_tasks auf und prüfe: gibt es steckengebliebene Tasks (>7 Tage pending)? Wenn ja, storniere sie via cancel_task und plane neue mit klarer Instruktion.\n"
+                "3. Rufe list_tickets(status='open') auf. Tickets die >5 Tage alt und unanswered sind: prüfe ob AI-Antwort sinnvoll wäre, antworte professionell via reply_ticket.\n"
+                "4. Rufe list_offers(status='sent') auf. Angebote >48h ohne Reaktion: plane follow-up via schedule_task für den nächsten Arbeitstag.\n"
+                "5. Plane die nächste Selbstoptimierung in 7 Tagen via schedule_task mit identischer Instruktion.\n"
+                "Berichte kompakt was du erledigt hast (kein Markdown, keine Sternchen)."
+            ),
+        },
+        {
+            "title": "Monatlicher Pipeline-Bericht",
+            "days": 30,
+            "instruction": (
+                "MONATLICHER PIPELINE-BERICHT.\n"
+                "1. Rufe get_stats auf für aktuelle Kennzahlen.\n"
+                "2. Rufe list_offers(status='accepted') auf und berechne den gewonnenen Umsatz.\n"
+                "3. Rufe list_leads auf und analysiere Conversion-Rate (won vs. total).\n"
+                "4. Verfasse einen kompakten Bericht (keine Markdown-Formatierung) und sende ihn via send_email an den Admin (mail@nexifyai.cloud).\n"
+                "   Betreff: 'NeXify AI – Monatsbericht Pipeline & KPI'\n"
+                "5. Plane den nächsten Monatsbericht in 30 Tagen via schedule_task mit identischer Instruktion."
+            ),
+        },
+    ]
+
+    for t in tasks:
+        run_at = now + __import__("datetime").timedelta(days=t["days"])
+        title_prefix = t["title"][:60]
+        async with pool.acquire() as con:
+            existing = await con.fetchval(
+                "SELECT 1 FROM nexify_agent_tasks WHERE title LIKE $1 AND status='pending' AND run_at > now() LIMIT 1",
+                f"{title_prefix}%"
+            )
+            if not existing:
+                tid = uuid.uuid4()
+                await con.execute(
+                    "INSERT INTO nexify_agent_tasks (id,title,instruction,run_at) VALUES ($1,$2,$3,$4)",
+                    tid, t["title"], t["instruction"], run_at,
+                )
+                logger.info(f"Seeded recurring task: {t['title']} @ {run_at.isoformat()}")

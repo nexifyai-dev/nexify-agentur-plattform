@@ -55,9 +55,21 @@ fi
 
 echo ""
 echo "--- Internal Endpoints ---"
-check_internal "Website"    3000 "/api/health"
-check_internal "Hermes"    8787 "/health"
-check_internal "Paperclip" 3100 "/api/health"
+check_internal "Website"           3000 "/api/health"
+check_internal "Hermes WebUI"      8787 "/health"
+check_internal "Hermes Gateway"    8642 "/health"
+check_internal "Hermes Dashboard"  9119 "/"
+check_internal "9Router"          20128 "/health"
+check_internal "Paperclip"         3100 "/api/health"
+check_internal "agentmemory API"   3111 "/health"
+check_internal "LightRAG"          9621 "/health"
+
+echo ""
+echo "--- Webhook Endpoints (§3, Port 8644) ---"
+check_internal "Webhook aktuelle-logs"   8644 "/aktuelle-logs"
+check_internal "Webhook telegram"        8644 "/telegram"
+check_internal "Webhook github-comment"  8644 "/github-comment"
+check_internal "Webhook nexify-global"   8644 "/"
 
 echo ""
 echo "--- External Endpoints (via Traefik) ---"
@@ -67,9 +79,15 @@ check "Paperclip"   "https://app.nexifyai.cloud/api/health"
 
 echo ""
 echo "--- Traefik ---"
-check "Traefik"     "http://127.0.0.1:8080/health" 2>/dev/null || \
-  docker ps --filter name=traefik --format '{{.Names}} {{.Status}}' | grep -q "Up" && \
+# Traefik hat kein /health-Endpoint auf :8080 in dieser Umgebung — direkt am
+# Container-Status prüfen. (Vorher: `check ... || docker ps ...` war toter Code,
+# weil check() immer mit exit 0 endet und den ||-Zweig nie erreicht.)
+if docker ps --filter name=traefik --format '{{.Status}}' | grep -q "Up"; then
   echo -e "${GREEN}✓${NC} Traefik container running"
+else
+  echo -e "${RED}✗${NC} Traefik container not running"
+  FAILURES=$((FAILURES + 1))
+fi
 
 echo ""
 if [ "$FAILURES" -eq 0 ]; then

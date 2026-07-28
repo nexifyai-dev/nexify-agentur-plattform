@@ -2,7 +2,7 @@ export type LegalSection = { heading: string; paragraphs?: string[]; bullets?: s
 export type LegalPageData = { slug: string; title: string; intro: string; updated: string; sections: LegalSection[] };
 
 const C = {
-  legalName: "NeXify AI by NeXify – chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
   owner: "Pascal Courbois",
   address: "Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande",
   email: "mail@nexifyai.cloud",
@@ -15,7 +15,7 @@ export const legalDe: Record<string, LegalPageData> = {
   impressum: {
     slug: "impressum",
     title: "Impressum",
-    intro: "Anbieterkennzeichnung und Kontaktinformationen von NeXify AI by NeXify – chat it. Automate it.",
+    intro: "Anbieterkennzeichnung und Kontaktinformationen von NeXify AI by NeXify – Chat it. Automate it.",
     updated: "Juni 2026",
     sections: [
       { heading: "Angaben zum Unternehmen", paragraphs: [C.legalName, `Eenmanszaak (Einzelunternehmen nach niederländischem Recht), Inhaber: ${C.owner}`, C.address] },

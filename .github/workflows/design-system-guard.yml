@@ -1,0 +1,59 @@
+name: Design System Guard
+
+# Prevents the [locale] page design system in apps/website/app/globals.css
+# from being silently stripped by a future merge (as happened before the
+# fix in commits 51f1a1e8 / 1add04a9). Fails CI if the file is truncated
+# or missing the design-system marker.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/website/app/globals.css"
+  pull_request:
+    paths:
+      - "apps/website/app/globals.css"
+  workflow_dispatch:
+
+jobs:
+  guard-globals-css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify globals.css contains the full [locale] design system
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="apps/website/app/globals.css"
+
+          if [ ! -f "$FILE" ]; then
+            echo "::error::$FILE is missing"
+            exit 1
+          fi
+
+          LINES=$(wc -l < "$FILE")
+          echo "globals.css has $LINES lines"
+
+          # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1055
+          # (measured current file at 1064 lines on 2026-07-26).
+          # Use 900 as the lower bound (≈160-line safety margin) so normal edits
+          # still pass, but truncation back to the flat sheet is caught.
+          # Duplicate marker check flags re-introduction of the [locale] Suppress-Bug.
+          MIN_CSS_LINES=900
+          if [ "$LINES" -lt "$MIN_CSS_LINES" ]; then
+            echo "::error::$FILE has only $LINES lines (< $MIN_CSS_LINES). The [locale] page design system may have been stripped again."
+            exit 1
+          fi
+
+          MARKERS=$(grep -c "\[locale\] PAGE DESIGN SYSTEM" "$FILE" || true)
+          if [ "$MARKERS" -lt 1 ]; then
+            echo "::error::$FILE is missing the '[locale] PAGE DESIGN SYSTEM' marker. It must not be truncated to the flat stylesheet."
+            exit 1
+          fi
+          if [ "$MARKERS" -gt 1 ]; then
+            echo "::error::$FILE has $MARKERS duplicate '[locale] PAGE DESIGN SYSTEM' blocks. The [locale] Suppress-Bug may have returned."
+            exit 1
+          fi
+
+          echo "OK: globals.css contains the full design system ($LINES lines, 1 marker)."

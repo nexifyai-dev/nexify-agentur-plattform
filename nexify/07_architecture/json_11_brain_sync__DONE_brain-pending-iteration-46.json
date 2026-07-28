@@ -1,9 +1,0 @@
-{
-  "pending_entries": [
-    {
-      "category": "autopilot-iteration",
-      "collection": "nexifyai_brain",
-      "content": "# Autopilot Iteration 46 — 2026-06-11\n\n**UTC**: 2026-06-11T14:54:00Z\n**Berlin**: 2026-06-11T16:54:00+0200\n**Executor**: claude_code\n**Scope**: nexify_internal\n**Workspace**: /workspace/nexify\n\n## Systemstatus\n\n- Brain: 200, 617 memories, 2 collections\n- 9Router: v0.4.71, 11 Container, combo-llm aktiv\n- Meta-Prompt: SHA match\n- systemd Timer: 10 active, alle grün\n- Disk: 81G/387G (21%)\n- RAM: 3.5G/31Gi\n- Load: niedrig\n\n## Aktionen\n\n1. Vollsäule: 15 Quellen gescannt (Konzept, Register, Maps, Brain, Meta-Prompt)\n2. Gap Closure Register validiert: 8 open (GAP-07 CLOSED)\n3. Missing Artifacts Register revidiert: 16 PENDING (9 P0 autonom)\n4. Risiko-Status: 11 offen, unverändert seit Iteration 19\n5. Autopilot-Pivot definiert: Health-Check → Action-Zyklus\n\n## Feststellung\n\n27 Iterationen ohne neuen Gap-Closure. System gesund, aber Stillstand bei Führungsgates.\n8 Policies/Register können autonom erstellt werden.\n\n## Tags\n\nautopilot, iteration-46, total-concept, source-scan, gap-analysis, risk-assessment, action-pivot"
-    }
-  ]
-}

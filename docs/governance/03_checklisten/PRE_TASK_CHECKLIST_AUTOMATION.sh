@@ -1,28 +1,44 @@
 #!/usr/bin/env bash
-# PRE-TASK CHECKLIST AUTOMATION
-# ==============================
-# Automatisierte Pre-Task Compliance-Prüfung (6 Gates)
-# Basiert auf: SOUL.md 3-Phase Model (Pre-Task), DOS GATES, PASCAL-ARBEITSWEISE
-#
-# Usage: bash /workspace/nexify/03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh
-# Exit:   0 = ALLE 6 Gates grün
-#         1 = Gate-Fail(s) — siehe Output
-#
-# Letztes Audit: 2026-06-20
-# Owner: network-engineer
+# FILE: /docs/governance/03_checklisten/PRE_TASK_CHECKLIST_AUTOMATION.sh
+# NIR: 20.06.2026
+# UPDATED: 27.07.2026 12:05
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Dev
+# WHAT: Prüft die sieben verbindlichen Pre-Task-Gates portabel.
+# WHY: Dieselben Gates müssen im VPS-Workspace und in eigenständigen Clones funktionieren.
+# BEST-PRACTICE: Pfade aus dem Skriptstandort ableiten und Runtime-Pfade nur als Overrides nutzen.
+# PITFALL: V-GATE-01: Keine fest verdrahteten /workspace- oder Benutzerpfade.
+# DEPENDS: curl, git, python3, AgentMemory, Governance-Register
+# DOCS-REF: docs/governance/02_sops/SOP_PRE_TASK_COMPLIANCE_V1.md
+# SESSION: copilot-cli-6ad64251
+
+set -u
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="${REPO_ROOT:-$(cd -- "$SCRIPT_DIR/../../.." && pwd)}"
+MASTER_PLAN_PATH="${MASTER_PLAN_PATH:-$REPO_ROOT/docs/governance/05_masterplan/MASTER_PLAN.md}"
+SHARED_STATE_PATH="${SHARED_STATE_PATH:-$REPO_ROOT/docs/governance/12_register/SHARED_AGENT_STATE.json}"
+ISOLATION_POLICY_PATH="${ISOLATION_POLICY_PATH:-$REPO_ROOT/docs/governance/06_sicherheit_policies/CUSTOMER_PROJECT_ISOLATION_POLICY.md}"
+CUSTOMERS_ROOT="${CUSTOMERS_ROOT:-/workspace/customers}"
+
+if [[ -d /workspace/nexify/10_evidence/pre_task ]]; then
+    DEFAULT_REPORT_DIR=/workspace/nexify/10_evidence/pre_task
+else
+    DEFAULT_REPORT_DIR="${TMPDIR:-/tmp}/nexify-pre-task-evidence"
+fi
+REPORT_DIR="${PRE_TASK_REPORT_DIR:-$DEFAULT_REPORT_DIR}"
+REPORT_FILE="$REPORT_DIR/PRE_TASK_AUDIT_$(date +%F).md"
 
 GATES_PASSED=0
 GATES_FAILED=0
 GATES_SKIPPED=0
-REPORT_FILE="/workspace/nexify/10_evidence/pre_task/PRE_TASK_AUDIT_$(date +%Y-%m-%d).md"
-
 echo "╔══════════════════════════════════════════════════╗"
-echo "║     PRE-TASK COMPLIANCE — 6 GATES CHECK         ║"
+echo "║     PRE-TASK COMPLIANCE — 7 GATES CHECK         ║"
 echo "║     $(date '+%Y-%m-%d %H:%M:%S UTC')              ║"
 echo "╚══════════════════════════════════════════════════╝"
 echo ""
 
-mkdir -p "$(dirname "$REPORT_FILE")"
+mkdir -p "$REPORT_DIR"
 echo "# Pre-Task Audit Report" > "$REPORT_FILE"
 echo "**Datum:** $(date '+%Y-%m-%d %H:%M:%S UTC')" >> "$REPORT_FILE"
 echo "**Exit:** \$? (wird am Ende gesetzt)" >> "$REPORT_FILE"
@@ -35,12 +51,12 @@ echo "|------|--------|---------|" >> "$REPORT_FILE"
 gate_check() {
     local gate_num="$1"
     local gate_name="$2"
-    local gate_cmd="$3"
-    local gate_fix="$4"
+    local gate_fix="$3"
+    shift 3
 
     echo -n "  [GATE $gate_num] $gate_name ... "
 
-    if eval "$gate_cmd" 2>/dev/null; then
+    if "$@" 2>/dev/null; then
         echo "✅ PASS"
         GATES_PASSED=$((GATES_PASSED + 1))
         echo "| G$gate_num | ✅ PASS | $gate_name |" >> "$REPORT_FILE"
@@ -52,42 +68,77 @@ gate_check() {
     fi
 }
 
-# ─── GATE 01: Aufgabenverständnis ───
-# Prüft: CLAUDE.md existiert und ist lesbar
+gate_brain_context() {
+    local url
+    local urls="${BRAIN_HEALTH_URLS:-http://127.0.0.1:3113/health https://agentmemory.nexifyai.cloud/health}"
+
+    test -r "$SHARED_STATE_PATH" || return 1
+    for url in $urls; do
+        if curl -fsS --max-time 5 "$url" >/dev/null; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+gate_skills() {
+    local candidate
+
+    if [[ -n "${SKILLS_DIR:-}" ]]; then
+        find "$SKILLS_DIR" -mindepth 1 -maxdepth 2 -name SKILL.md -print -quit | grep -q .
+        return
+    fi
+
+    for candidate in "$HOME/.agents/skills" "$HOME/.hermes/skills" /home/hermeswebui/.hermes/skills; do
+        if [[ -d "$candidate" ]] && find "$candidate" -mindepth 1 -maxdepth 2 -name SKILL.md -print -quit | grep -q .; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+gate_tenant_isolation() {
+    test -r "$ISOLATION_POLICY_PATH" || return 1
+
+    if find "$REPO_ROOT" -mindepth 1 -maxdepth 4 -type d -path '*/customers/*' -print -quit | grep -q .; then
+        return 1
+    fi
+
+    if [[ -d "$CUSTOMERS_ROOT" ]]; then
+        find "$CUSTOMERS_ROOT" -mindepth 1 -maxdepth 1 -type d -print -quit | grep -q .
+        return
+    fi
+
+    return 0
+}
+
 gate_check "01" "Aufgabenverständnis (CLAUDE.md)" \
-    "test -r /workspace/CLAUDE.md || test -r /workspace/nexify/CLAUDE.md || test -r /workspace/nexifyai/CLAUDE.md" \
-    "CLAUDE.md fehlt — Projektkontext nicht dokumentiert"
+    "CLAUDE.md fehlt — Projektkontext nicht dokumentiert" \
+    test -r "$REPO_ROOT/CLAUDE.md"
 
-# ─── GATE 02: Zieldefinition ───
-# Prüft: MASTER_PLAN.md existiert
 gate_check "02" "Zieldefinition (MASTER_PLAN.md)" \
-    "test -r /workspace/MASTER_PLAN.md" \
-    "MASTER_PLAN.md fehlt — strategisches Ziel nicht definiert"
+    "MASTER_PLAN.md fehlt — strategisches Ziel nicht definiert" \
+    test -r "$MASTER_PLAN_PATH"
 
-# ─── GATE 03: Kontext-Prüfung (Brain Query) ───
-# Prüft: Brain API antwortet
 gate_check "03" "Kontext-Prüfung (Brain API erreichbar)" \
-    "curl -sf http://127.0.0.1:9090/health > /dev/null 2>&1 || curl -sf https://brain.nexifyai.cloud/health > /dev/null 2>&1" \
-    "Brain API nicht erreichbar — Kontextabfrage blockiert"
+    "AgentMemory oder Shared Agent State nicht erreichbar" \
+    gate_brain_context
 
-# ─── GATE 04: Umgebungserkennung ───
-# Prüft: Grundlegende System-Commands funktionieren
 gate_check "04" "Umgebungserkennung (System-Befehle)" \
-    "which python3 > /dev/null 2>&1 && which curl > /dev/null 2>&1 && which git > /dev/null 2>&1" \
-    "Fehlende Basis-Commands — environment-reconnaissance unvollständig"
+    "Fehlende Basis-Commands — environment-reconnaissance unvollständig" \
+    bash -c 'command -v python3 >/dev/null && command -v curl >/dev/null && command -v git >/dev/null'
 
-# ─── GATE 05: Skills + Memory ───
-SKILLS_DIR="/home/hermeswebui/.hermes/skills"
-# Prüft: Skill-Index existiert (mindestens ein Skill geladen)
 gate_check "05" "Skills + Memory verfügbar" \
-    "ls \"$SKILLS_DIR\" 2>/dev/null | head -5 | wc -l | grep -q '[1-9]'" \
-    "Skills nicht verfügbar — Skill-First-Regel verletzt"
+    "Kein Skill-Verzeichnis mit SKILL.md gefunden" \
+    gate_skills
 
-# ─── GATE 06: Tenant-Trennung ───
-# Prüft: Customer-Dirs sauber getrennt (existieren und haben Inhalt)
 gate_check "06" "Tenant-Trennung (Customer-Isolation)" \
-    "test -d /workspace/customers/ && ls /workspace/customers/ 2>/dev/null | grep -q ." \
-    "Customer-Isolation fehlt — R09 verletzt"
+    "Isolation-Policy fehlt oder Kundeninhalt liegt im Kern-Repository" \
+    gate_tenant_isolation
+
+gate_check "07" "FLOWSEARCH_KNOWLEDGE (Nutzungspflicht)" \
+    "FlowSearch/Knowledge nicht vollintegriert — SOP_FLOWSEARCH_KNOWLEDGE_NUTZUNGSPFLICHT_V1" \
+    python3 "$REPO_ROOT/scripts/check_knowledge_mandate.py"
 
 echo ""
 echo "╔══════════════════════════════════════════════════╗"

@@ -1,0 +1,67 @@
+# FILE: .github/workflows/mirror-to-gitlab.yml
+# NIR: 24.07.2026 12:33
+# UPDATED: 27.07.2026 12:05
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Spiegelt sämtliche Git-Refs zum self-hosted VPS-GitLab.
+# WHY: GitHub bleibt Source of Truth; GitLab stellt den redundanten CI/CD-Pfad bereit.
+# BEST-PRACTICE: Ein kanonischer Mirror-Workflow mit harten Credential-Gates.
+# PITFALL: V-GL-03: Fehlende Secrets dürfen keinen grünen Schein-Erfolg erzeugen.
+# DEPENDS: VPS_GITLAB_URL, VPS_GITLAB_USERNAME, VPS_GITLAB_TOKEN
+# DOCS-REF: docs/operations/REPO-SYNC-STRATEGY.md
+# SESSION: copilot-cli-6ad64251
+
+name: Mirror to VPS GitLab
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: mirror-to-vps-gitlab
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    steps:
+      - name: Push mirror to VPS GitLab
+        env:
+          GH_REPOSITORY_TOKEN: ${{ github.token }}
+          VPS_GITLAB_TOKEN: ${{ secrets.VPS_GITLAB_TOKEN }}
+          VPS_GITLAB_URL: ${{ secrets.VPS_GITLAB_URL }}
+          VPS_GITLAB_USERNAME: ${{ secrets.VPS_GITLAB_USERNAME }}
+        run: |
+          set -euo pipefail
+
+          for variable in VPS_GITLAB_URL VPS_GITLAB_USERNAME VPS_GITLAB_TOKEN; do
+            if [ -z "${!variable:-}" ]; then
+              echo "::error::$variable secret is required for GitLab mirroring"
+              exit 1
+            fi
+          done
+
+          case "$VPS_GITLAB_URL" in
+            https://*) ;;
+            *)
+              echo "::error::VPS_GITLAB_URL must use HTTPS"
+              exit 1
+              ;;
+          esac
+
+          github_auth="$(printf '%s:%s' x-access-token "$GH_REPOSITORY_TOKEN" | base64 -w 0)"
+          gitlab_auth="$(printf '%s:%s' "$VPS_GITLAB_USERNAME" "$VPS_GITLAB_TOKEN" | base64 -w 0)"
+
+          git -c "http.extraHeader=Authorization: Basic $github_auth" \
+            clone --mirror "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repository.git
+          cd repository.git
+          git remote add gitlab "$VPS_GITLAB_URL"
+          if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" push --mirror gitlab; then
+            echo "::error::GitLab mirror push failed"
+            exit 1
+          fi

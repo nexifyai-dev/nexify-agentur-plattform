@@ -2,13 +2,27 @@ node_modules/
 .next/
 out/
 .env
-.env.*
-!.env.example
+.env.local
+.env.production
+.env.development
+.env.staging
 *.log
 .DS_Store
 .vercel
 *.env
+!.env.example
 credentials.json
 *.pem
 *.key
 .credentials
+__pycache__/
+.env*
+!.env.example
+backend/references/
+
+# Generated agentic governance reports
+test_reports/soll-deviation-scan.json
+
+# Local Cursor MCP configs may contain PATs — keep examples only in git
+.cursor/mcp.json
+**/gitlab-mcp.env

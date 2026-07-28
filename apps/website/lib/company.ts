@@ -1,7 +1,7 @@
 export const company = {
   brand: "NeXify AI",
   descriptor: "Chat it. Automate it.",
-  legalName: "NeXify AI by NeXify – chat it. Automate it.",
+  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",
   role: "Inhaber / Directeur",
@@ -12,11 +12,14 @@ export const company = {
   email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   phoneHref: "+31613318856",
-  website: "https://nexifyai.cloud",
+  // @NEXIFYAI-MARKER: prelogin-canonical-www-20260713 — apex redirects to www
+  website: "https://www.nexifyai.cloud",
   kvk: "90483944",
   vatId: "NL865786276B01",
   dayRate: 999,
   vatRate: 0.21,
+  targetMarket: "Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden",
+  businessOnly: true,
 } as const;
 
 export const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";

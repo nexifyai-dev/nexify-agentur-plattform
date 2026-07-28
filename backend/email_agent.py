@@ -296,6 +296,22 @@ async def _handle(m: dict):
             _deps["ci_email"]("Eingehende E-Mail-Anfrage",
                               f"<p><b>{m['from_name'] or addr}</b> ({addr}):</p><p style='border-left:2px solid #52525b;padding-left:12px;white-space:pre-wrap;'>{m['text'][:1500]}</p><p>Die AI antwortet automatisch zeitversetzt. Im Admin-Bereich können Sie vorher selbst antworten.</p>",
                               cta_label="Im CRM öffnen", cta_url=f"{_deps['frontend_url']}/admin")))
+        # Channel sync — record IMAP-polled inbound email for cross-channel context
+        try:
+            import channel_sync
+            name = m.get("from_name") or addr.split("@")[0]
+            asyncio.create_task(channel_sync.sync_event(
+                channel="email",
+                direction="inbound",
+                summary=f"E-Mail (IMAP): {m['subject']} — {name}: {(m.get('text') or '')[:200]}",
+                contact_email=addr,
+                contact_name=name,
+                ref_id=str(ticket_id),
+                ref_type="ticket",
+                metadata={"subject": m["subject"], "message_id": m.get("message_id")},
+            ))
+        except Exception as e:
+            logger.warning(f"email agent: channel_sync failed: {e}")
         logger.info(f"email agent: inquiry from {addr} → ticket {ticket_id}, AI reply scheduled")
         return
 
