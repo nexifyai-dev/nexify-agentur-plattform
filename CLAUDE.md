@@ -26,8 +26,8 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 ### 2. Repo-Kontext
 
 - **Primary Repo:** GitHub (`git@github.com:nexifyai-dev/nexify-agentur-plattform.git`)
-- **Mirror:** GitLab (`localhost:8922/nexifyai-dev/nexify-agentur-plattform`)
-- **Sync:** Automatisch via `.github/workflows/gitlab-sync.yml`
+- **Mirror:** GitLab (`gitlab.nexifyai.cloud/nexifyai_group/nexifyai`)
+- **Sync:** Automatisch via `.github/workflows/mirror-to-gitlab.yml`
 - **Branch Pattern:** `main` (stable) | `develop` (staging) | `feature/*` (development)
 - **Governance Primärquelle:** `docs/governance/` (nicht Chat-Charta). Auszug: `docs/governance/CHARTA.md`
 - **Pre-Task Gates:** BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE bei Workflows)
@@ -103,7 +103,7 @@ Vor JEDEM Commit:
 1. Feature Branch:          feature/xyz
 2. Push + PR:              git push origin feature/xyz
 3. GitHub Actions (CI):     Tests + Lint + Build
-4. MR auf GitLab:          Auto-created (gitlab-sync.yml)
+4. GitLab Mirror:          Alle Git-Refs via mirror-to-gitlab.yml
 5. Code Review:            Minimum 1 approval
 6. Merge zu develop:       MR → Merge
 7. GitLab CI/CD:           Build + Test + Deploy staging
