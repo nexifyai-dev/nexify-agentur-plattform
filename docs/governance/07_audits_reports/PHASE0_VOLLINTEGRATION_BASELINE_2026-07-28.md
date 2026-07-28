@@ -1,13 +1,13 @@
 # FILE: /docs/governance/07_audits_reports/PHASE0_VOLLINTEGRATION_BASELINE_2026-07-28.md
 # NIR: 28.07.2026 13:10
-# UPDATED: 28.07.2026 13:10
+# UPDATED: 28.07.2026 13:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Phase-0-Baseline für Vollintegration mit SOLL/IST-Matrix, Konfliktliste und priorisierten Umsetzungsblöcken.
 # WHY: Startpunkt für die schrittweise Master-Direktive ohne Annahmen, auf Basis der Primärquellen.
 # BEST-PRACTICE: Erst normativ konsolidieren (SOLL/IST), dann phasenweise umsetzen und je Phase evidenzbasiert validieren.
 # PITFALL: F32/F33-Normkonflikte und n8n-Widerspruch nicht implizit auflösen, sondern explizit steuern.
-# DEPENDS: docs/governance/**, design_guidelines.json, apps/hermes/ROADMAP.md, docs/GESAMT-INTEGRATION-STATUS.md
+# DEPENDS: docs/governance/**, design_guidelines.json, apps/hermes/ROADMAP.md, docs/GESAMT-INTEGRATION-STATUS.md, docs/governance/12_register/SYSTEM_SERVICE_PORT_ENDPOINT_REGISTER_V1.md
 # DOCS-REF: /docs/governance/GOVERNANCE.md
 
 # Phase 0 — Vollintegration Baseline (SOLL/IST)
@@ -58,7 +58,7 @@
 
 ### Block P0-A — Normative Konsolidierung (sofort)
 - F33 dokumentiert schließen: n8n als ausgeschlossene Komponente behandeln, Legacy-Doku markieren.
-- Eine verbindliche Service-/Port-/Endpoint-Matrix als Single Source erstellen.
+- Eine verbindliche Service-/Port-/Endpoint-Matrix als Single Source erstellen (**erfüllt** via `docs/governance/12_register/SYSTEM_SERVICE_PORT_ENDPOINT_REGISTER_V1.md`).
 - F32 als fortlaufender Hard-Gate in allen Folgephasen referenzieren.
 
 ### Block P0-B — Control-Plane-Schnitt (Phase 1 Start)
@@ -99,4 +99,4 @@
 
 ## 6) Nächster operativer Schritt
 
-Umsetzung von **Block P0-A**: normative Konsolidierung (n8n-Legacy-Bereinigung + verbindliche Service-/Port-Matrix), danach **Block P0-B** als erster technischer Integrationsschnitt in `apps/hermes`.
+Weiter mit **Block P0-A Rest**: Legacy-Verweise auf n8n in Governance-/Evidence-Dokumenten systematisch markieren, danach **Block P0-B** als erster technischer Integrationsschnitt in `apps/hermes`.
