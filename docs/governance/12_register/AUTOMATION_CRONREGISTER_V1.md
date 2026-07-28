@@ -19,7 +19,7 @@ Diese Datei ist die menschlich lesbare Übersicht über den aktuellen Automation
 
 | Bereich | Aktive / bekannte Automationen |
 |---|---|
-| GitHub Actions | `test`, `build`, `deploy-vps`, `deploy-vercel`, `gitlab-sync`, `mirror-to-gitlab`, `secret-scan`, `design-system-guard`, **`vps-worker`** |
+| GitHub Actions | `test`, `build`, `deploy-vps`, `deploy-vercel`, `mirror-to-gitlab`, `secret-scan`, `design-system-guard`, **`vps-worker`** |
 | Self-Hosted Runner | **`nexify-github-runner`** (VPS) — Docker-Container, HTTPS-Polling zu GitHub |
 | GitLab CI | Redundanzpfad für lint/test/build/deploy |
 | Lokale Hooks | `pre-commit`-Pipeline + dokumentierte `pre-push` Boundary-Gates |

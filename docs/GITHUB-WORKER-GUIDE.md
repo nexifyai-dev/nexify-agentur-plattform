@@ -14,7 +14,7 @@ GitHub Actions (.github/workflows/*.yml)
   ├─ test.yml ...................... Unit + E2E tests
   ├─ build.yml ..................... Docker image build + push to GHCR
   ├─ deploy-vps.yml ............... Deploy to staging VPS via SSH
-  └─ gitlab-sync.yml .............. Mirror to GitLab + trigger pipeline
+  └─ mirror-to-gitlab.yml ......... Vollständiger Ref-Mirror zu GitLab
        ↓
       GitLab CI/CD (.gitlab-ci.yml) [BACKUP]
        ├─ Build Docker images (if GitHub build failed)
@@ -28,7 +28,9 @@ Set these in: `github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 
 | Secret | Value | Source |
 |--------|-------|--------|
-| `GITLAB_TOKEN` | GitLab PAT | http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens |
+| `VPS_GITLAB_URL` | HTTPS Clone URL | Self-hosted GitLab project |
+| `VPS_GITLAB_USERNAME` | GitLab user | Self-hosted GitLab |
+| `VPS_GITLAB_TOKEN` | GitLab PAT (`write_repository`) | Self-hosted GitLab |
 | `VPS_SSH_KEY` | SSH Private Key | `/root/.ssh/github_nexify` (created earlier) |
 | `GITHUB_TOKEN` | Auto-provided | GitHub (built-in) |
 | `DOCKER_REGISTRY_PASSWORD` | Docker token | If pushing to registry (optional) |
@@ -43,19 +45,21 @@ cat /root/.ssh/github_nexify | base64 -w 0
 # Name: VPS_SSH_KEY
 # Value: (paste base64 encoded key)
 
-# 3. Get GitLab Token (from VPS)
+# 3. Get GitLab project token (from VPS)
 ssh root@gitlab.nexifyai.cloud
-# → GitLab WebUI: Profile → Personal Access Tokens
-# → Create: nexifyai-ci
-# → Scopes: api, read_repo, write_repo
+# → GitLab WebUI: nexifyai_group/nexify → Settings → Access Tokens
+# → Create: github-mirror
+# → Role: Maintainer; scopes: read_repository, write_repository
 # → Copy token
 
-# 4. GitHub UI → New secret
-# Name: GITLAB_TOKEN
-# Value: glpat-XXXXXXXX
+# 4. GitHub UI → Add three repository secrets
+# VPS_GITLAB_URL=https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai.git
+# VPS_GITLAB_USERNAME=<project-token-username>
+# VPS_GITLAB_TOKEN=<project-token>
 
 # 5. Verify
-gh secret list -R nexifyai-dev/nexify-agentur-plattform
+gh secret list -R nexifyai-dev/nexify-agentur-plattform \
+  | grep '^VPS_GITLAB_'
 ```
 
 ## Workflow Details
@@ -108,29 +112,30 @@ git push origin main
 # → Workflow re-runs with old version
 ```
 
-### gitlab-sync.yml (Mirror + Trigger)
+### mirror-to-gitlab.yml
 
 **Trigger:** `push` to `main` or `develop`
 
 **Steps:**
-1. Add GitLab remote
-2. Force-push branches to GitLab
-3. Query GitLab project ID
-4. Trigger GitLab pipeline via API
-5. Report status
+1. Validate all three GitLab secrets
+2. Require HTTPS
+3. Add the GitLab remote without embedding credentials
+4. Push all refs with `git push --mirror`
+5. Fail the workflow on any mirror error
 
 **Expected Duration:** ~2 min
 
 **Failure modes:**
-- GitLab offline → continues (marked as warning)
-- Token invalid → logs 401, skips trigger
-- Project not found → auto-creates if admin permissions
+- GitLab offline → workflow fails
+- Token invalid → workflow fails without printing the token
+- Project not found → workflow fails; projects are never auto-created
 
 ## Manual Workflow Trigger
 
 ```bash
 # Via GitHub CLI
 gh workflow run deploy-vps.yml -R nexifyai-dev/nexify-agentur-plattform
+gh workflow run mirror-to-gitlab.yml -R nexifyai-dev/nexify-agentur-plattform
 
 # Via GitHub WebUI
 # → Actions → Select workflow → Run workflow → Branch: main
@@ -155,11 +160,11 @@ gh run view <RUN_ID> -R nexifyai-dev/nexify-agentur-plattform --log
 
 ```bash
 # After sync, check GitLab
-# https://gitlab.nexifyai.cloud:8922/nexifyai/nexify-agentur-plattform/-/pipelines
+# https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai/-/pipelines
 
 # Query via API
-curl -s http://127.0.0.1:8922/api/v4/projects/ID/pipelines \
-  -H "PRIVATE-TOKEN: GITLAB_TOKEN" | jq '.[0]'
+curl -s https://gitlab.nexifyai.cloud/api/v4/projects/7/pipelines \
+  -H "PRIVATE-TOKEN: $VPS_GITLAB_TOKEN" | jq '.[0]'
 ```
 
 ## Troubleshooting
@@ -174,13 +179,13 @@ curl -s http://127.0.0.1:8922/api/v4/projects/ID/pipelines \
 ssh -i ~/.ssh/github_nexify root@gitlab.nexifyai.cloud "docker ps"
 ```
 
-### "GitLab sync failed: 401 Unauthorized"
+### "GitLab mirror failed: 401 Unauthorized"
 
 ```bash
-# GITLAB_TOKEN invalid/expired
+# VPS_GITLAB_TOKEN invalid/expired
 # Fix:
-# 1. Create new token on VPS: http://gitlab.nexifyai.cloud:8922/profile/personal_access_tokens
-# 2. Update GitHub Secret: gh secret set GITLAB_TOKEN --body "glpat-NEW" ...
+# 1. Create a new project token in nexifyai_group/nexifyai
+# 2. Update GitHub Secret: gh secret set VPS_GITLAB_TOKEN ...
 # 3. Re-run workflow
 ```
 
@@ -222,7 +227,7 @@ docker-compose build
 ├── test.yml ............. Unit + E2E tests
 ├── build.yml ............ Docker image build
 ├── deploy-vps.yml ....... Deploy to VPS
-├── gitlab-sync.yml ...... Mirror to GitLab
+├── mirror-to-gitlab.yml . Mirror to GitLab
 ├── secret-scan.yml ...... Security scan
 └── package.json (root)
 ```
@@ -248,8 +253,8 @@ docker-compose build
      └───────┼────────┘
              │
         ┌────v────────────┐
-        │ gitlab-sync.yml │
-        │ (mirror + run)  │
+        │ mirror-to-      │
+        │ gitlab.yml      │
         └────┬────────────┘
              │
         ┌────v─────────────┐
@@ -261,4 +266,4 @@ docker-compose build
 ---
 
 **Generated:** 2026-07-24 04:58 UTC  
-**Status:** Ready for deployment (pending GITLAB_TOKEN secret)
+**Status:** Mirror credentials configured; workflow repair pending merge
