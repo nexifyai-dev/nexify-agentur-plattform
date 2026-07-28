@@ -1,0 +1,66 @@
+# GitLab CI/CD Pipeline — NeXifyAI Monorepo
+# FILE: .gitlab-ci.yml
+# NIR: 28.07.2026
+
+stages:
+  - validate
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+
+# ── Validate Stage ──
+yaml-lint:
+  stage: validate
+  image: python:3.12-alpine
+  script:
+    - pip install yamllint
+    - yamllint apps/ config/ deploy/
+  allow_failure: true
+
+shellcheck:
+  stage: validate
+  image: koalaman/shellcheck-alpine
+  script:
+    - find . -name "*.sh" -exec shellcheck {} +
+
+# ── Test Stage ──
+python-tests:
+  stage: test
+  image: python:3.12-alpine
+  script:
+    - pip install pytest
+    - find apps/ -name "test_*.py" -exec pytest {} \;
+  allow_failure: true
+
+# ── Build Stage ──
+build-website:
+  stage: build
+  image: node:22-alpine
+  script:
+    - cd apps/website
+    - npm ci
+    - npm run build
+  only:
+    changes:
+      - apps/website/**/*
+
+# ── Deploy Stage ──  
+deploy-website:
+  stage: deploy
+  script:
+    - echo "Deploy trigger"
+    - curl -X POST http://127.0.0.1:3001/deploy
+  only:
+    - main
+  when: manual
+
+# ── Auto Sync ──
+sync-to-github:
+  stage: deploy
+  script:
+    - git push github main
+  only:
+    - main
