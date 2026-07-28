@@ -68,9 +68,12 @@ export function EmailAgentPanel() {
   }, [load]);
 
   useEffect(() => {
-    load();
-    const iv = setInterval(load, 30000);
-    return () => clearInterval(iv);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- trigger initial poll when panel mounts
+    void load();
+    const iv = window.setInterval(() => {
+      void load();
+    }, 30000);
+    return () => window.clearInterval(iv);
   }, [load]);
 
   const cards = status ? [

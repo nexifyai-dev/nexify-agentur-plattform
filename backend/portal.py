@@ -57,8 +57,8 @@ def create_invite_token(email: str, offer_id: str) -> str:
 def set_auth_cookies(response: Response, user_id: str, email: str, role: str):
     access = make_token({"type": "access", "sub": user_id, "email": email, "role": role}, hours=12)
     refresh = make_token({"type": "refresh", "sub": user_id}, hours=24 * 7)
-    response.set_cookie("access_token", access, httponly=True, secure=True, samesite="lax", max_age=43200, path="/")
-    response.set_cookie("refresh_token", refresh, httponly=True, secure=True, samesite="lax", max_age=604800, path="/")
+    response.set_cookie("access_token", access, httponly=True, secure=True, samesite="lax", max_age=43200, path="/", domain=".nexifyai.cloud")
+    response.set_cookie("refresh_token", refresh, httponly=True, secure=True, samesite="lax", max_age=604800, path="/", domain=".nexifyai.cloud")
 
 
 def user_dict(row) -> dict:
@@ -300,6 +300,44 @@ async def email_agent_log(limit: int = 50, _: dict = Depends(get_admin)):
 async def email_agent_poll(_: dict = Depends(get_admin)):
     import email_agent
     return await email_agent.trigger_poll()
+
+
+@router.get("/api/admin/channels/events")
+async def admin_channel_events(limit: int = 50, identifier: str | None = None, _: dict = Depends(get_admin)):
+    """Return cross-channel events, optionally filtered by contact identifier."""
+    import channel_sync
+    if identifier:
+        return await channel_sync.get_contact_context(identifier, limit=limit)
+    pool = await _DB()
+    if not pool:
+        return {"events": [], "total": 0}
+    limit = min(max(limit, 1), 200)
+    async with pool.acquire() as con:
+        rows = await con.fetch(
+            """SELECT id, channel, direction, summary,
+                      contact_email, contact_phone, contact_name, contact_ref,
+                      ref_id, ref_type, ts
+               FROM nexify_channel_events
+               ORDER BY ts DESC LIMIT $1""",
+            limit,
+        )
+    events = [
+        {
+            "id": str(r["id"]),
+            "channel": r["channel"],
+            "direction": r["direction"],
+            "summary": r["summary"],
+            "contact_email": r["contact_email"],
+            "contact_phone": r["contact_phone"],
+            "contact_name": r["contact_name"],
+            "contact_ref": r["contact_ref"],
+            "ref_id": r["ref_id"],
+            "ref_type": r["ref_type"],
+            "ts": r["ts"].isoformat() if r["ts"] else None,
+        }
+        for r in rows
+    ]
+    return {"total": len(events), "events": events}
 
 
 # ---------------------- Fabrik CEO-Queue ----------------------

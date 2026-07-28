@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { company } from "@/lib/company";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 const T = {
   de: {
@@ -33,6 +33,34 @@ const T = {
     ],
     b2b: "Angebote richten sich ausschließlich an Unternehmen (B2B).",
     rights: "Alle Rechte vorbehalten.",
+  },
+  en: {
+    tagline: "Premium websites, shops, apps and AI automation – personally accountable, AI-accelerated, transparent at a daily rate.",
+    nav: "Navigation",
+    services: "Services",
+    legal: "Legal",
+    contact: "Contact",
+    links: [
+      { label: "Services", href: "/leistungen" },
+      { label: "Pricing", href: "/preise" },
+      { label: "Process", href: "/prozess" },
+      { label: "Platform", href: "/plattform" },
+      { label: "References", href: "/referenzen" },
+      { label: "Knowledge", href: "/wissen" },
+      { label: "FAQ", href: "/faq" },
+      { label: "About Me", href: "/ueber-mich" },
+    ],
+    legalLinks: [
+      { label: "Imprint", href: "/impressum" },
+      { label: "Privacy", href: "/datenschutz" },
+      { label: "Terms", href: "/agb" },
+      { label: "DPA", href: "/avv" },
+      { label: "Withdrawal", href: "/widerruf" },
+      { label: "Cookie Policy", href: "/cookie-richtlinie" },
+      { label: "AI Notice", href: "/ki-hinweise" },
+    ],
+    b2b: "Offers are exclusively directed at businesses (B2B).",
+    rights: "All rights reserved.",
   },
   nl: {
     tagline: "Premium websites, shops, apps en AI-automatisering – persoonlijk verantwoord, AI-versneld, transparant tegen dagtarief.",

@@ -1,0 +1,158 @@
+# FILE: .github/workflows/deploy-vercel.yml
+# NIR: 25.07.2026 13:30
+# UPDATED: 26.07.2026 19:55
+# NAME: NeXifyAI Agent (Vercel Deployment)
+# TEAM: NeXifyAI DevOps
+# WHAT: Deploy apps/website to Vercel Production on push to main
+# WHY: Automated Vercel deploy ensures design-system fixes in main reach production
+#      without manual intervention. Fixes broken design caused by PRs #15-#18.
+# BEST-PRACTICE: Vercel CLI via pnpm dlx — no global install needed, always latest
+# PITFALL: V-01: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) / VERCEL_ORG_ID /
+#          VERCEL_PROJECT_ID must be set in GitHub Secrets (Vercel → Settings → Tokens).
+#          VERCEL_ACCESS_TOKEN is the legacy Vercel CLI secret name; both are supported.
+#          Without them the job skips gracefully with a warning — CI is not blocked
+#          when Vercel is not yet wired.
+# PITFALL: V-02: Use a preflight step to detect missing credentials before expensive
+#          steps (pnpm install, CLI deploy) — avoids wasted runner minutes.
+# DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name), VERCEL_ORG_ID,
+#          VERCEL_PROJECT_ID — set as GitHub Secrets or repository variables
+# DOCS-REF: https://vercel.com/docs/cli
+
+name: Deploy to Vercel (main → production)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual trigger for emergency re-deploys
+
+concurrency:
+  group: deploy-vercel
+  cancel-in-progress: false  # Serialise deploys — never cancel a running production deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Vercel Production Deploy
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------
+      # Preflight: detect missing Vercel credentials BEFORE any expensive
+      # work (pnpm install, CLI deploy). Sets skip=true when unconfigured
+      # so subsequent steps can be skipped — CI stays green.
+      # ------------------------------------------------------------------
+      - name: Preflight — check Vercel credentials
+        id: preflight
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
+        run: |
+          MISSING=()
+          [ -z "${VERCEL_TOKEN:-}" ]      && MISSING+=(VERCEL_TOKEN)
+          [ -z "${VERCEL_ORG_ID:-}" ]     && MISSING+=(VERCEL_ORG_ID)
+          [ -z "${VERCEL_PROJECT_ID:-}" ] && MISSING+=(VERCEL_PROJECT_ID)
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::warning::Vercel credentials not configured (missing: ${MISSING[*]}). Skipping deploy — set them in GitHub Secrets or repository variables to enable."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.preflight.outputs.skip != 'true'
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        if: steps.preflight.outputs.skip != 'true'
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: apps/website/pnpm-lock.yaml
+
+      - name: Install dependencies
+        if: steps.preflight.outputs.skip != 'true'
+        working-directory: apps/website
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify design system integrity (pre-deploy gate)
+        if: steps.preflight.outputs.skip != 'true'
+        working-directory: apps/website
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="app/globals.css"
+          LINES=$(wc -l < "$FILE")
+          MARKERS=$(grep -c "\[locale\] PAGE DESIGN SYSTEM" "$FILE" || true)
+          echo "globals.css has $LINES lines, [locale] markers=$MARKERS"
+          # Shared flat sheet ~275 + one [locale] design system ~780 ≈ 1060.
+          # Lower bound catches truncation to the flat sheet only; duplicate marker
+          # check flags re-introduction of the [locale] Suppress-Bug.
+          MIN_CSS_LINES=900
+          if [ "$LINES" -lt "$MIN_CSS_LINES" ]; then
+            echo "::error::globals.css has only $LINES lines (< $MIN_CSS_LINES). Aborting deploy — design system may be stripped."
+            exit 1
+          fi
+          if [ "$MARKERS" -lt 1 ]; then
+            echo "::error::globals.css is missing the '[locale] PAGE DESIGN SYSTEM' marker. Aborting deploy."
+            exit 1
+          fi
+          if [ "$MARKERS" -gt 1 ]; then
+            echo "::error::globals.css has $MARKERS duplicate '[locale] PAGE DESIGN SYSTEM' blocks. Aborting deploy — Suppress-Bug."
+            exit 1
+          fi
+          echo "✅ Design system integrity OK ($LINES lines, 1 [locale] block)"
+
+      - name: Deploy to Vercel (production)
+        if: steps.preflight.outputs.skip != 'true'
+        id: deploy
+        working-directory: apps/website
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
+        run: |
+          set -euo pipefail
+          # Use --json for reliable machine-readable output; parse URL with jq.
+          pnpm dlx vercel --token "$VERCEL_TOKEN" \
+            --prod \
+            --yes \
+            --json \
+            --cwd . \
+            > /tmp/vercel-output.json 2>/tmp/vercel-stderr.txt || {
+            echo "::error::Vercel deploy failed:"
+            cat /tmp/vercel-stderr.txt
+            exit 1
+          }
+          DEPLOY_URL=$(jq -r '.url // .deploymentUrl // empty' /tmp/vercel-output.json || true)
+          # Fallback: Vercel may print the URL as plain text to stderr when --json is used
+          if [ -z "$DEPLOY_URL" ]; then
+            DEPLOY_URL=$(grep -Eo 'https://[^ ]+\.vercel\.app' /tmp/vercel-stderr.txt | tail -1 || true)
+          fi
+          echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+          echo "✅ Deployed to: ${DEPLOY_URL:-<see Vercel dashboard>}"
+
+      - name: Post-deploy health check
+        if: steps.preflight.outputs.skip != 'true'
+        shell: bash
+        run: |
+          DEPLOY_URL="${{ steps.deploy.outputs.url }}"
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "⚠️  No deploy URL captured — skipping health check"
+            exit 0
+          fi
+          echo "🏥 Checking $DEPLOY_URL/api/health ..."
+          for i in 1 2 3; do
+            if curl -sf --max-time 15 "$DEPLOY_URL/api/health" > /dev/null 2>&1; then
+              echo "✅ Health check passed"
+              exit 0
+            fi
+            echo "Attempt $i failed — retrying in 10s..."
+            sleep 10
+          done
+          echo "⚠️  Health check did not respond (deployment may still be warming up)"

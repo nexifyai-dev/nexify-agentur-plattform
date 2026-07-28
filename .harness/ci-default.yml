@@ -1,0 +1,129 @@
+# FILE: .harness/ci-default.yml
+# NIR: 26.07.2026 16:00
+# UPDATED: 26.07.2026 16:00
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Harness Open Source — Vollständige CI-Pipeline für nexify-agentur-plattform
+# WHY: Ergänzt GitHub Actions CI um redundanten Harness-CI-Pfad.
+#      Ermöglicht CI direkt auf dem Harness OSS Server (VPS) ohne GitHub.
+# BEST-PRACTICE: Backend-Lint über Python/flake8; Frontend über pnpm; Secrets nie in YAML.
+# PITFALL: V-01: Backend benötigt privates `emergentintegrations`-Paket —
+#          Python-Stage ist auf statische Analyse beschränkt (ast.parse + flake8).
+# PITFALL: V-02: Design-System-Guard (MIN_CSS_LINES=900) muss auf Harness repliziert werden.
+# DEPENDS: Harness Open Source; pnpm@9; Node.js 22; Python 3; docker
+# DOCS-REF: docs/architecture/HARNESS-INTEGRATION.md
+
+version: 1
+kind: pipeline
+spec:
+  triggers:
+    - type: branch
+      spec:
+        branches:
+          - main
+          - develop
+          - "feature/*"
+          - "bugfix/*"
+
+  stages:
+    # ── Stage 1: Frontend Lint + Typecheck ───────────────────────────────────
+    - name: frontend-lint
+      type: ci
+      spec:
+        image: node:22-alpine
+        envs:
+          CI: "true"
+          NEXT_TELEMETRY_DISABLED: "1"
+        commands:
+          - apk add --no-cache python3 make g++
+          - corepack enable
+          - corepack prepare pnpm@9.15.4 --activate
+          - cd apps/website
+          - pnpm install --frozen-lockfile
+          - pnpm lint
+          - pnpm typecheck
+
+    # ── Stage 2: Frontend Tests ──────────────────────────────────────────────
+    - name: frontend-test
+      type: ci
+      spec:
+        image: node:22-alpine
+        envs:
+          CI: "true"
+          NEXT_TELEMETRY_DISABLED: "1"
+        commands:
+          - corepack enable
+          - corepack prepare pnpm@9.15.4 --activate
+          - cd apps/website
+          - pnpm install --frozen-lockfile
+          - pnpm test
+
+    # ── Stage 3: Design System Guard ─────────────────────────────────────────
+    - name: design-system-guard
+      type: ci
+      spec:
+        image: alpine:3.19
+        commands:
+          - |
+            CSS=apps/website/app/globals.css
+            MIN=900
+            MARKER="[locale] PAGE DESIGN SYSTEM"
+            if [ ! -f "$CSS" ]; then echo "ERROR: $CSS nicht gefunden"; exit 1; fi
+            LINES=$(wc -l < "$CSS")
+            if [ "$LINES" -lt "$MIN" ]; then
+              echo "ERROR: globals.css zu kurz ($LINES Zeilen, min. $MIN erwartet)"
+              exit 1
+            fi
+            COUNT=$(grep -c "$MARKER" "$CSS" || true)
+            if [ "$COUNT" -ne 1 ]; then
+              echo "ERROR: Genau 1 '$MARKER'-Marker erwartet, gefunden: $COUNT"
+              exit 1
+            fi
+            echo "Design System Guard ✓ ($LINES Zeilen, 1 Marker)"
+
+    # ── Stage 4: Backend Static Analysis ─────────────────────────────────────
+    - name: backend-lint
+      type: ci
+      spec:
+        image: python:3.12-slim
+        commands:
+          - pip install flake8 --quiet
+          - cd backend
+          - python -m flake8 . --select=E9,F63,F7,F82 --exclude=.venv,__pycache__
+          - python -c "import ast; ast.parse(open('server.py').read())" && echo "server.py OK"
+          - |
+            if [ -f portal/server.py ]; then
+              python -c "import ast; ast.parse(open('portal/server.py').read())" && echo "portal/server.py OK"
+            fi
+
+    # ── Stage 5: Secret Scan (basic) ─────────────────────────────────────────
+    - name: secret-scan
+      type: ci
+      spec:
+        image: alpine:3.19
+        commands:
+          - |
+            # Grobe Suche nach häufigen Secret-Mustern
+            PATTERNS="password\s*=\s*['\"][^'\"]{8,}"
+            if grep -rIE "$PATTERNS" --include="*.py" --include="*.js" --include="*.ts" \
+               --exclude-dir=".git" --exclude-dir="node_modules" --exclude-dir=".venv" . 2>/dev/null | \
+               grep -v "example\|placeholder\|changeme\|test\|\.env\.example"; then
+              echo "WARN: Potenzielle Secrets gefunden (bitte prüfen)"
+            else
+              echo "Secret-Scan ✓ (keine offensichtlichen Credentials)"
+            fi
+
+    # ── Stage 6: Docker Build Check (main only) ───────────────────────────────
+    - name: docker-build-check
+      type: ci
+      when:
+        branch: main
+      spec:
+        image: docker:24-dind
+        privileged: true
+        envs:
+          DOCKER_BUILDKIT: "1"
+        commands:
+          - docker build --no-cache -f deploy/docker/Dockerfile.website -t nexify-website:harness-check .
+          - echo "Docker-Build-Check erfolgreich ✓"
+          - docker rmi nexify-website:harness-check || true

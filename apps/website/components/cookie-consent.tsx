@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cookie, Settings2 } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/lang-context";
 
 const KEY = "nexify-consent";
 
@@ -24,6 +24,22 @@ const T = {
     catMarketing: "Marketing",
     catMarketingText: "Dienste zur Erfolgsmessung von Kampagnen. Derzeit nicht im Einsatz.",
     always: "Immer aktiv",
+  },
+  en: {
+    title: "Cookies & Privacy",
+    text: "We only use technically necessary storage. Optional categories (analytics, marketing) are disabled by default and are only activated with your consent.",
+    more: "Cookie Policy",
+    acceptAll: "Accept All",
+    necessaryOnly: "Necessary Only",
+    settings: "Settings",
+    save: "Save Selection",
+    catNecessary: "Necessary",
+    catNecessaryText: "Language selection, session, security – required for website operation. Always active.",
+    catAnalytics: "Analytics",
+    catAnalyticsText: "Anonymized usage statistics to improve the website. Currently not in use.",
+    catMarketing: "Marketing",
+    catMarketingText: "Services for measuring campaign success. Currently not in use.",
+    always: "Always active",
   },
   nl: {
     title: "Cookies & privacy",

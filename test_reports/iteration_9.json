@@ -37,7 +37,7 @@
     "backend": "100% (13/13 pytest tests, first run has flaky retry for email_worker 10s startup delay)",
     "frontend": "100% (all TEST 2 + TEST 5 assertions passed on preview)"
   },
-  "test_credentials": "Admin: mail@nexifyai.cloud / 1def!xO2022!! (from /app/memory/test_credentials.md). WebUI: password-only 1def!xO2022!!. Service token X-Admin-Token: 10e5a1213fc000a71df803a6101a1285c7324a8feb33327b (from /app/backend/.env ADMIN_API_TOKEN).",
+  "test_credentials": "Admin: mail@nexifyai.cloud / [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] (from /app/memory/test_credentials.md). WebUI: password-only [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11]. Service token X-Admin-Token: [ROTATED-SEE-SECURITY-INCIDENT-2026-07-11] (from /app/backend/.env ADMIN_API_TOKEN).",
   "seed_data_creation": "No offers/leads/emails created. Consumed 4 SSO one-time tokens during TEST 4 (nonces marked used in nexify_sso_nonces).",
   "retest_needed": false,
   "should_main_agent_self_test": false,
