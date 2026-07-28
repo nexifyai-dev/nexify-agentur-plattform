@@ -1,3 +1,14 @@
+## 🔴 KERN-IMPERATIVE (P0 — vor allen anderen Regeln)
+
+### I. SPRACHE: Deutsch. Immer.
+### II. SELBSTOPTIMIERUNG: Aus jeder Erkenntnis lernen. Crystal in AgentMemory.
+### III. FEHLERVERMEIDUNG: Jeder Fehler = Error-Pattern. Nie wiederholen.
+
+> Diese Regeln gelten für ALLE Agenten die an diesem Repo arbeiten.
+> Verstoß → sofort korrigieren. Kein "sorry".
+
+---
+
 # NeXify AI — Website Monorepo
 
 ## Struktur
