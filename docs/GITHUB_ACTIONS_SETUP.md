@@ -17,7 +17,7 @@
 | **test.yml** | push/PR | 1. Lint+Test | ESLint, YAML check, Jest, Python tests, security scans |
 | **build.yml** | push (main/develop) | 2. Build | Docker multi-app build → GHCR (vitrine, konsole, backend) |
 | **deploy-vps.yml** | push (main) | 3. Deploy | SSH to VPS, git pull, `docker-compose up --build`, health check |
-| **mirror-to-gitlab.yml** | push (main/develop) | 4. Mirror | Vollständiger Ref-Mirror zu GitLab |
+| **mirror-to-gitlab.yml** | push (main/develop) | 4. Mirror | Branch- und Tag-Sync zu GitLab |
 | **secret-scan.yml** | push | Security | TruffleHog secret detection |
 
 ### GitLab CI/CD (`.gitlab-ci.yml`)
@@ -59,7 +59,7 @@ GitHub Push (main)
   ↓ (build success)
 3. deploy-vps.yml (SSH: git pull, docker-compose up)
   ↓ (deploy success)
-4. mirror-to-gitlab.yml (vollständiger Mirror zu GitLab)
+4. mirror-to-gitlab.yml (Branch- und Tag-Sync zu GitLab)
 ```
 
 ---
