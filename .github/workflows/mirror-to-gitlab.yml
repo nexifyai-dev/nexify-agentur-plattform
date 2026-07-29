@@ -61,6 +61,8 @@ jobs:
             clone --bare "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repository.git
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
+          # --force: GitHub is the source of truth; any GitLab-side commits
+          # (e.g. direct pushes) are intentionally overwritten on every mirror run.
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
             push --prune --force gitlab \
             'refs/heads/*:refs/heads/*' \
