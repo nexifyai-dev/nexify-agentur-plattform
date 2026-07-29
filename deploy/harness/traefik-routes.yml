@@ -1,0 +1,53 @@
+# FILE: deploy/harness/traefik-routes.yml
+# NIR: 26.07.2026 16:00
+# UPDATED: 26.07.2026 16:00
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Traefik Dynamic Configuration — Harness Open Source Web UI Route
+# WHY: Exponiert harness.nexifyai.cloud über Traefik mit TLS (Let's Encrypt)
+#      und leitet auf den lokalen Harness-Container (Port 3101) weiter.
+# BEST-PRACTICE: File-Provider-Route statt Labels, da harness `network_mode: bridge` nutzt.
+# PITFALL: V-01: Harness braucht korrekte GITNESS_URL_BASE — muss mit dem externen Hostnamen übereinstimmen.
+# PITFALL: V-02: SSH (Port 3022) läuft direkt am Host — kein Traefik-Routing nötig.
+# PITFALL: V-03 (KRITISCH): Laut docs/architecture/DEVIATION-REPORT-2026-07-24.md
+#          (I-01) wurde Traefik am 06.07.2026 vom VPS ENTFERNT — Routing läuft
+#          seither exklusiv über Cloudflare Tunnel (memory/VPS_INFRA.md:21-22).
+#          Diese Datei greift NICHT, solange kein Traefik auf dem VPS läuft —
+#          harness.nexifyai.cloud muss stattdessen per Cloudflare-Tunnel-Ingress
+#          freigeschaltet werden (siehe deploy/harness/cloudflare-tunnel.md).
+# DEPENDS: Traefik mit File-Provider, Let's Encrypt certResolver; Harness Container auf :3101
+# DOCS-REF: docs/architecture/HARNESS-INTEGRATION.md
+
+http:
+  routers:
+    harness:
+      rule: "Host(`harness.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      priority: 20
+      middlewares:
+        - harness-secHeaders
+      service: harness-web
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    harness-web:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3101"
+        passHostHeader: true
+        healthCheck:
+          path: /api/v1/system/health
+          interval: 30s
+          timeout: 10s
+
+  middlewares:
+    harness-secHeaders:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        contentTypeNosniff: true
+        frameDeny: false          # Harness braucht iframes intern (Gitspaces)
+        customFrameOptionsValue: "SAMEORIGIN"
+        referrerPolicy: "strict-origin-when-cross-origin"

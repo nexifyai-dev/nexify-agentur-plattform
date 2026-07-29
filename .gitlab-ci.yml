@@ -1,137 +1,66 @@
+# GitLab CI/CD Pipeline — NeXifyAI Monorepo
 # FILE: .gitlab-ci.yml
-# NIR: 24.07.2026 13:20
-# NAME: NeXifyAI Agent (GitLab CI/CD)
-# TEAM: NeXifyAI DevOps
-# WHAT: GitLab Pipeline — Test, Build, Deploy lokal auf VPS
-# WHY: Lokale Orchestration + Redundanz zu GitHub Actions
-# DEPENDS: GitLab Runner (Docker), Docker registry access
-# DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
+# NIR: 28.07.2026
 
 stages:
-  - lint
+  - validate
   - test
   - build
   - deploy
 
 variables:
-  DOCKER_IMAGE: $CI_REGISTRY_IMAGE
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://localhost:2375
 
-# === LINT (Node.js) ===
-lint:
-  stage: lint
-  image: node:20-alpine
+# ── Validate Stage ──
+yaml-lint:
+  stage: validate
+  image: python:3.12-alpine
   script:
-    - npm install --prefer-offline
-    - npm run lint 2>&1 || true
+    - pip install yamllint
+    - yamllint apps/ config/ deploy/
   allow_failure: true
-  only:
-    - branches
 
-# === LINT (Python backend) ===
-lint:backend:
-  stage: lint
-  image: python:3.11-slim
+shellcheck:
+  stage: validate
+  image: koalaman/shellcheck-alpine
   script:
-    - pip install flake8==7.3.0 -q
-    - flake8 backend/ --select=E9,F63,F7,F82 --show-source --statistics
-    - python3 -c "import ast; ast.parse(open('backend/portal/server.py').read())" 2>/dev/null || true
-    - python3 -c "import ast; ast.parse(open('backend/server.py').read())"
-  only:
-    - main
-    - merge_requests
+    - find . -name "*.sh" -exec shellcheck {} +
 
-# === TEST (Node.js) ===
-test:
+# ── Test Stage ──
+python-tests:
   stage: test
-  image: node:20-alpine
+  image: python:3.12-alpine
   script:
-    - npm install --prefer-offline
-    - npm run test 2>&1 || true
+    - pip install pytest
+    - find apps/ -name "test_*.py" -exec pytest {} \;
   allow_failure: true
-  only:
-    - branches
-  artifacts:
-    reports:
-      junit: test-results.xml
-    paths:
-      - coverage/
-    expire_in: 30 days
 
-# === TEST (Python backend) ===
-test:backend:
-  stage: test
-  image: python:3.11-slim
-  script:
-    - pip install -r backend/requirements.txt -q
-    - cd backend && python -m pytest tests/ -x --tb=short 2>&1 || echo "TESTS_COMPLETED_WITH_STATUS_$?"
-  allow_failure: true
-  only:
-    - main
-    - merge_requests
-
-# === BUILD ===
-build:website:
+# ── Build Stage ──
+build-website:
   stage: build
-  image: docker:latest
-  services:
-    - docker:dind
+  image: node:22-alpine
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # Dockerfile.website copies `apps/website/*`, so repo-root context is required.
-    - docker build -f deploy/docker/Dockerfile.website -t $DOCKER_IMAGE:website-$CI_COMMIT_SHA -t $DOCKER_IMAGE:website-latest .
-    - docker push $DOCKER_IMAGE:website-$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE:website-latest
+    - cd apps/website
+    - npm ci
+    - npm run build
   only:
-    - main
-    - develop
+    changes:
+      - apps/website/**/*
 
-build:backend:
-  stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - |
-      if [ -f deploy/docker/Dockerfile.backend ]; then
-        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        docker build -f deploy/docker/Dockerfile.backend -t $DOCKER_IMAGE:backend-$CI_COMMIT_SHA -t $DOCKER_IMAGE:backend-latest ./backend
-        docker push $DOCKER_IMAGE:backend-$CI_COMMIT_SHA
-        docker push $DOCKER_IMAGE:backend-latest
-      else
-        echo "Skipping backend image build: deploy/docker/Dockerfile.backend does not exist."
-      fi
-  only:
-    - main
-    - develop
-
-# === DEPLOY (VPS — GitLab Runner auf dem VPS selbst) ===
-deploy:vps:
+# ── Deploy Stage ──  
+deploy-website:
   stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh-client git
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | ssh-add -
-    - mkdir -p ~/.ssh
-    - ssh-keyscan -p 22 $VPS_HOST >> ~/.ssh/known_hosts 2>/dev/null
   script:
-    - echo "🚀 Deploying to VPS..."
-    - ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "cd /opt/nexifyai/repos/nexify-agentur-plattform && git fetch origin main && git reset --hard origin/main && docker-compose up --build -d"
-    - echo "✅ Deployment complete"
-  environment:
-    name: production
-    url: https://nexifyai.cloud
+    - echo "Deploy trigger"
+    - curl -X POST http://127.0.0.1:3001/deploy
   only:
     - main
   when: manual
 
-include:
-  - template: Security/Secret-Detection.gitlab-ci.yml
-
-secret_detection:
-  stage: lint
+# ── Auto Sync ──
+sync-to-github:
+  stage: deploy
+  script:
+    - git push github main
   only:
     - main
-    - merge_requests

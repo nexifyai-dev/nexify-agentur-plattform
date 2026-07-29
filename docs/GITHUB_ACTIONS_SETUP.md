@@ -17,7 +17,7 @@
 | **test.yml** | push/PR | 1. Lint+Test | ESLint, YAML check, Jest, Python tests, security scans |
 | **build.yml** | push (main/develop) | 2. Build | Docker multi-app build → GHCR (vitrine, konsole, backend) |
 | **deploy-vps.yml** | push (main) | 3. Deploy | SSH to VPS, git pull, `docker-compose up --build`, health check |
-| **gitlab-sync.yml** | push (main/develop) | 4. Mirror | Push to GitLab, trigger pipeline (optional) |
+| **mirror-to-gitlab.yml** | push (main/develop) | 4. Mirror | Branch- und Tag-Sync zu GitLab |
 | **secret-scan.yml** | push | Security | TruffleHog secret detection |
 
 ### GitLab CI/CD (`.gitlab-ci.yml`)
@@ -37,13 +37,13 @@
 - [x] GitHub deploy key deployed (`github_deploy_vps`)
 - [x] GitHub Secrets configured:
   - `DEPLOY_KEY_VPS` → private SSH key
-  - `VPS_HOST` → `srv1243952.hstgr.cloud`
+  - `VPS_HOST` → `gitlab.nexifyai.cloud`
   - `VPS_USER` → `root`
   - `VPS_PORT` → `22`
-- [x] `.github/workflows/` created (test.yml, build.yml, deploy-vps.yml, gitlab-sync.yml)
+- [x] `.github/workflows/` created (test.yml, build.yml, deploy-vps.yml, mirror-to-gitlab.yml)
 - [x] `.gitlab-ci.yml` created
 - [ ] GitLab project mirrored (needs manual setup via GitLab UI)
-- [ ] GitLab token set in repo for pipeline trigger (optional)
+- [ ] `VPS_GITLAB_URL`, `VPS_GITLAB_USERNAME`, `VPS_GITLAB_TOKEN` gesetzt
 - [ ] SSH key added to VPS `authorized_keys`
 
 ---
@@ -59,7 +59,7 @@ GitHub Push (main)
   ↓ (build success)
 3. deploy-vps.yml (SSH: git pull, docker-compose up)
   ↓ (deploy success)
-4. gitlab-sync.yml (mirror to GitLab, trigger pipeline if enabled)
+4. mirror-to-gitlab.yml (Branch- und Tag-Sync zu GitLab)
 ```
 
 ---
@@ -71,9 +71,12 @@ Set via GitHub UI (Settings → Secrets and variables → Actions):
 ```bash
 # Via CLI:
 gh secret set DEPLOY_KEY_VPS -b "$(cat /root/.ssh/github_deploy_vps)"
-gh secret set VPS_HOST -b "srv1243952.hstgr.cloud"
+gh secret set VPS_HOST -b "gitlab.nexifyai.cloud"
 gh secret set VPS_USER -b "root"
 gh secret set VPS_PORT -b "22"
+gh secret set VPS_GITLAB_URL -b "https://gitlab.nexifyai.cloud/<namespace>/nexify-agentur-plattform.git"
+gh secret set VPS_GITLAB_USERNAME -b "<gitlab-user>"
+gh secret set VPS_GITLAB_TOKEN
 ```
 
 ---
@@ -136,7 +139,7 @@ curl -X POST http://localhost:8922/api/v4/projects/import \
 # In GitLab UI: Project → Settings → CI/CD → Variables
 
 SSH_PRIVATE_KEY = [content of /root/.ssh/github_deploy_vps]
-VPS_HOST = srv1243952.hstgr.cloud
+VPS_HOST = gitlab.nexifyai.cloud
 VPS_USER = root
 ```
 

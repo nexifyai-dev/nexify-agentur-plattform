@@ -1,0 +1,10 @@
+[Unit]
+Description=NeXifyAI Watchdog Reactivate (every 2 minutes)
+
+[Timer]
+OnUnitActiveSec=2min
+AccuracySec=10s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

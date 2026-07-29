@@ -32,10 +32,12 @@ pnpm --dir apps/website install && pnpm --dir apps/website dev
 cd apps/hermes && pip install pyyaml && python server.py
 
 # Zugriff
-# - Website:     http://localhost:3000
-# - Backend API: http://localhost:3100/api
-# - Hermes UI:   http://localhost:8484  (default Hermes port)
-# - LightRAG:    http://localhost:9621
+# - Website:        http://localhost:3000
+# - Hermes WebUI:   http://localhost:8788
+# - LightRAG:       http://localhost:9622
+# - 9Router (LLM):  http://localhost:20128/v1
+# - AgentMemory:    http://localhost:3111
+# - CircuitBreaker: http://localhost:8912
 ```
 
 ### Auf VPS deployen
@@ -56,8 +58,8 @@ git push origin main  # triggers .gitlab-ci.yml
 nexify-agentur-plattform/
 ├── apps/                    # Applications
 │   ├── website/            # Marketing & Agency website (Next.js) → :3000
-│   ├── hermes/             # Hermes Agent Web UI (Python) → :8484
-│   └── paperclip/          # Paperclip app (planned)
+│   ├── hermes/             # Hermes Agent Web UI → :8788
+│   └── paperclip/          # Paperclip Factory (planned, Port 3100)
 ├── backend/                # FastAPI Backend (ops agent, CRM, email, offers)
 │   ├── server.py
 │   ├── portal/
@@ -96,10 +98,11 @@ cp .env.example .env
 ```
 
 **Kritische Variablen:**
-- `9ROUTER_BASE_URL`: http://127.0.0.1:20128/v1 (Local LLM Router)
-- `LIGHTRAG_URL`: http://127.0.0.1:9621 (RAG Engine)
-- `AGENTMEMORY_URL`: http://agentmemory.nexifyai.cloud (Brain)
-- `GITLAB_TOKEN`: Private token für CI/CD
+- `9ROUTER_BASE_URL`: http://127.0.0.1:20128/v1 (LLM Router — Upstage-first)
+- `LIGHTRAG_URL`: http://127.0.0.1:9622 (RAG Engine, solar-pro3)
+- `AGENTMEMORY_URL`: http://127.0.0.1:3111 (Brain — REST API)
+- `AGENTMEMORY_SECRET`: Bearer-Token aus Env (nie loggen)
+- `GITLAB_TOKEN`: Project Access Token für CI/CD
 - `GITHUB_TOKEN`: PAT für GitHub Actions
 
 ### Secrets Management
@@ -122,20 +125,20 @@ NIE in `.env` committen. Nutze GitLab CI/CD Secrets.
 
 ### GitHub Actions → GitLab Sync
 
-**File:** `.github/workflows/gitlab-sync.yml`
+**File:** `.github/workflows/mirror-to-gitlab.yml`
 
 Automatisch synchronisiert:
 - Commits (main, develop)
 - Tags (releases)
-- Pull Requests → Merge Requests
-- Workflows (GitHub Actions → GitLab CI)
+- Branches und Tags aus GitHub (ohne GitHub-interne Pull-Refs)
+- GitLab CI startet auf den gespiegelten Branch-Updates
 
 **Manuell triggern:**
 ```bash
 git push origin main  # Beide Repos updated
 ```
 
-### GitLab CI/CD (Primary)
+### GitLab CI/CD (Redundanz)
 
 **File:** `.gitlab-ci.yml`
 
@@ -152,15 +155,16 @@ gitlab-runner verify
 gitlab-runner run-single ...
 
 # Via GitLab WebUI
-# https://srv1243952.hstgr.cloud:8922/nexifyai-dev/nexify-agentur-plattform/-/pipelines
+# https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai/-/pipelines
 ```
 
 ### Deploy auf VPS
 
 **VPS Details:**
-- Host: `srv1243952.hstgr.cloud`
+- Host: `localhost` / CF-Tunnel (keine Public-IP-Binds)
 - User: `root` (via SSH-Key)
-- Deployment Path: `/opt/nexifyai/deployment/nexify-agentur-plattform/`
+- Deployment Path: `/opt/nexifyai/repos/nexify-agentur-plattform/`
+- Tunnel: `*.nexifyai.cloud` via Cloudflare
 
 **Deploy Script:**
 ```bash
@@ -169,7 +173,7 @@ gitlab-runner run-single ...
 
 **Status prüfen:**
 ```bash
-ssh root@srv1243952.hstgr.cloud "docker ps | grep nexify"
+ssh root@localhost "docker ps | grep nexify"
 ```
 
 ---
@@ -201,9 +205,9 @@ POST /api/save
 }
 ```
 
-**LightRAG** (Knowledge Graph):
+**LightRAG** (Knowledge Graph, Port 9622):
 ```
-POST http://127.0.0.1:9621/v1/api/kg_api/query
+POST http://127.0.0.1:9622/query
 {
   "mode": "local",
   "query": "deployment status"
@@ -237,7 +241,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh -o StrictHostKeyChecking=no root@srv1243952.hstgr.cloud "cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull && docker-compose up -d"
+          ssh -o StrictHostKeyChecking=no root@localhost "cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull && docker-compose up -d"
 ```
 
 **Setup:**
@@ -260,23 +264,26 @@ docker logs lightrag
 docker-compose logs -f backend
 
 # VPS (SSH)
-ssh root@srv1243952.hstgr.cloud "tail -f /var/log/nexify/*.log"
+ssh root@localhost "tail -f /var/log/nexify/*.log"
 ```
 
 ### Health Checks
 
 ```bash
-# Backend
-curl http://localhost:3100/health
-
-# Frontend
-curl http://localhost:3000
+# Hermes WebUI
+curl http://localhost:8788
 
 # LightRAG
-curl http://localhost:9621/health
+curl http://localhost:9622/health
 
 # 9Router (LLM)
-curl http://localhost:20128/health
+curl http://localhost:20128/v1/models
+
+# AgentMemory
+curl http://localhost:3111/agentmemory/health -H "Authorization: Bearer $AGENTMEMORY_SECRET"
+
+# CircuitBreaker
+curl http://localhost:8912/status
 ```
 
 ### Performance
@@ -301,12 +308,11 @@ git commit -m "feat: description"
 git push origin feature/my-feature
 ```
 
-### 2. Pull Request → Merge Request
+### 2. Pull Request
 
 - GitHub: Create PR
-- GitLab: Auto-creates MR (via gitlab-sync)
-- Reviews in BOTH platforms
-- Merge via GitLab (source of truth)
+- GitHub: Source of Truth für PR und Merge
+- GitLab: vollständiger Repository-Mirror und redundanter CI/CD-Pfad
 
 ### 3. Deploy
 
@@ -339,25 +345,25 @@ gitlab-runner logs
 ./deploy/deploy-vps.sh staging
 
 # VPS debugging
-ssh root@srv1243952.hstgr.cloud "docker-compose logs backend"
+ssh root@localhost "docker-compose logs backend"
 ```
 
 ### Performance Issues
 
 1. **Check resource usage:** `docker stats`
-2. **Check LightRAG:** `curl http://localhost:9621/health`
-3. **Check 9Router:** `curl http://localhost:20128/health`
+2. **Check LightRAG:** `curl http://localhost:9622/health`
+3. **Check 9Router:** `curl http://localhost:20128/v1/models`
 4. **Scale:** `docker-compose up -d --scale backend=3`
 
 ### Brain (AgentMemory/LightRAG) offline
 
 ```bash
 # Restart
-docker restart lightrag-lightrag-1
+docker restart lightrag
 docker restart agentmemory
 
 # Sync
-curl -X POST http://127.0.0.1:9621/v1/api/kg_api/reset
+curl -X POST http://127.0.0.1:9622/query -d '{"mode":"local","query":"reset"}'
 ```
 
 ---
@@ -402,6 +408,10 @@ Proprietary — NeXifyAI 2026
 
 ---
 
-**Generated:** 2026-07-24 04:45 UTC  
-**Sync Status:** GitHub ↔ GitLab ✓  
+**Generated:** 2026-07-27 12:30 CEST  
+**Sync Status:** GitHub ↔ GitLab ✓ (nexifyai_group/nexifyai)  
+**SOLL-Ref:** `/opt/nexifyai/docs/architecture/SOLL-GESAMTKONZEPT.md`  
 **Next Review:** 2026-08-01
+
+## Legacy endpoint (deprecated)
+curl http://localhost:9622/health  # OLD LightRAG port

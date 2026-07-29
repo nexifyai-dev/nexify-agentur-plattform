@@ -1,0 +1,83 @@
+# FILE: deploy/docker/Dockerfile.github-runner
+# NIR: 26.07.2026 13:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: GitHub Actions Self-Hosted Runner — läuft auf dem VPS, registriert sich am Repo
+# WHY: CI/CD-Jobs direkt auf VPS ausführen; kein SSH-Tunnel nötig, voller Zugang zu
+#      Docker-Socket, internen Diensten (LightRAG, AgentMemory, 9Router) und Secrets.
+# BEST-PRACTICE: Ephemere Runner (--ephemeral) für Sicherheit; --once für Single-Job-Mode
+#                ist für den Dauerbetrieb durch Restart-Policy ersetzt.
+# PITFALL: V-01: Runner-Token hat max. 1h TTL → immer per GITHUB_RUNNER_TOKEN_CMD live
+#          holen, nie statisch ins Compose schreiben.
+# PITFALL: V-02: Docker-in-Docker: Socket-Mount reicht, kein DinD-Daemon nötig.
+# DEPENDS: GITHUB_RUNNER_TOKEN (oder CMD), GITHUB_REPOSITORY, RUNNER_LABELS
+# DOCS-REF: https://github.com/actions/runner
+
+FROM ubuntu:22.04
+
+ARG RUNNER_VERSION=2.325.0
+ARG TARGETARCH=amd64
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    RUNNER_ALLOW_RUNASROOT=1
+
+# ── System-Pakete ────────────────────────────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    wget \
+    git \
+    jq \
+    unzip \
+    tar \
+    gnupg \
+    lsb-release \
+    sudo \
+    procps \
+    python3 \
+    python3-pip \
+  && rm -rf /var/lib/apt/lists/*
+
+# ── Node.js 22 (via NodeSource — gepinnte LTS-Version, kompatibel mit corepack) ──
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
+# ── Docker CLI (kein Daemon — Socket wird eingebunden) ──────────────────────
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+      | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+      https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+      > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin \
+  && rm -rf /var/lib/apt/lists/*
+
+# ── GitHub Actions Runner ────────────────────────────────────────────────────
+WORKDIR /home/runner/actions-runner
+
+RUN curl -fsSL \
+    "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${RUNNER_VERSION}.tar.gz" \
+    -o runner.tar.gz \
+  && tar xzf runner.tar.gz \
+  && rm runner.tar.gz \
+  && ./bin/installdependencies.sh
+
+# ── pnpm (gepinnte Version, kompatibel mit Repo-Lockfile) ───────────────────
+RUN npm install -g pnpm@9.15.4
+
+# ── gh CLI (für proaktive Workflow-Dispatch und PR-Kommentare) ───────────────
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+      | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] \
+      https://cli.github.com/packages stable main" \
+      > /etc/apt/sources.list.d/github-cli.list \
+  && apt-get update \
+  && apt-get install -y gh \
+  && rm -rf /var/lib/apt/lists/*
+
+# ── Entrypoint ───────────────────────────────────────────────────────────────
+COPY infra/github-runner/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

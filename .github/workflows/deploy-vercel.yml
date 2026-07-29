@@ -1,16 +1,21 @@
 # FILE: .github/workflows/deploy-vercel.yml
 # NIR: 25.07.2026 13:30
+# UPDATED: 26.07.2026 19:55
 # NAME: NeXifyAI Agent (Vercel Deployment)
 # TEAM: NeXifyAI DevOps
 # WHAT: Deploy apps/website to Vercel Production on push to main
 # WHY: Automated Vercel deploy ensures design-system fixes in main reach production
 #      without manual intervention. Fixes broken design caused by PRs #15-#18.
 # BEST-PRACTICE: Vercel CLI via pnpm dlx — no global install needed, always latest
-# PITFALL: V-01: VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID must be set in
-#          GitHub Secrets (Vercel → Settings → Tokens). Without them the job fails
-#          gracefully (continue-on-error: false removed intentionally — a failed
-#          deploy should be visible in CI).
-# DEPENDS: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID (GitHub Secrets)
+# PITFALL: V-01: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) / VERCEL_ORG_ID /
+#          VERCEL_PROJECT_ID must be set in GitHub Secrets (Vercel → Settings → Tokens).
+#          VERCEL_ACCESS_TOKEN is the legacy Vercel CLI secret name; both are supported.
+#          Without them the job skips gracefully with a warning — CI is not blocked
+#          when Vercel is not yet wired.
+# PITFALL: V-02: Use a preflight step to detect missing credentials before expensive
+#          steps (pnpm install, CLI deploy) — avoids wasted runner minutes.
+# DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name), VERCEL_ORG_ID,
+#          VERCEL_PROJECT_ID — set as GitHub Secrets or repository variables
 # DOCS-REF: https://vercel.com/docs/cli
 
 name: Deploy to Vercel (main → production)
@@ -35,21 +40,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ------------------------------------------------------------------
+      # Preflight: detect missing Vercel credentials BEFORE any expensive
+      # work (pnpm install, CLI deploy). Sets skip=true when unconfigured
+      # so subsequent steps can be skipped — CI stays green.
+      # ------------------------------------------------------------------
+      - name: Preflight — check Vercel credentials
+        id: preflight
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
+        run: |
+          MISSING=()
+          [ -z "${VERCEL_TOKEN:-}" ]      && MISSING+=(VERCEL_TOKEN)
+          [ -z "${VERCEL_ORG_ID:-}" ]     && MISSING+=(VERCEL_ORG_ID)
+          [ -z "${VERCEL_PROJECT_ID:-}" ] && MISSING+=(VERCEL_PROJECT_ID)
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::warning::Vercel credentials not configured (missing: ${MISSING[*]}). Skipping deploy — set them in GitHub Secrets or repository variables to enable."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: pnpm/action-setup@v4
+        if: steps.preflight.outputs.skip != 'true'
         with:
           version: 9
 
       - uses: actions/setup-node@v4
+        if: steps.preflight.outputs.skip != 'true'
         with:
           node-version: "20"
           cache: pnpm
           cache-dependency-path: apps/website/pnpm-lock.yaml
 
       - name: Install dependencies
+        if: steps.preflight.outputs.skip != 'true'
         working-directory: apps/website
         run: pnpm install --frozen-lockfile
 
       - name: Verify design system integrity (pre-deploy gate)
+        if: steps.preflight.outputs.skip != 'true'
         working-directory: apps/website
         shell: bash
         run: |
@@ -77,12 +109,13 @@ jobs:
           echo "✅ Design system integrity OK ($LINES lines, 1 [locale] block)"
 
       - name: Deploy to Vercel (production)
+        if: steps.preflight.outputs.skip != 'true'
         id: deploy
         working-directory: apps/website
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
         run: |
           set -euo pipefail
           # Use --json for reliable machine-readable output; parse URL with jq.
@@ -105,6 +138,7 @@ jobs:
           echo "✅ Deployed to: ${DEPLOY_URL:-<see Vercel dashboard>}"
 
       - name: Post-deploy health check
+        if: steps.preflight.outputs.skip != 'true'
         shell: bash
         run: |
           DEPLOY_URL="${{ steps.deploy.outputs.url }}"

@@ -3,10 +3,16 @@
 > **Brand:** NeXifyAI by NeXify – Chat it. Automate it.
 > **Version:** 2.0.0
 > **Gültig ab:** 08.05.2026
+> **Register-Pfad:** /workspace/nexify/04_register/DESIGN_SYSTEM_V2.md
+> **Canonical Source:** /workspace/DESIGN_SYSTEM_V2.md
 > **Basis:** shadcn/ui, Tailwind CSS v3+
 > **Dark Mode:** Standard für Admin + Fabrik
 
 ---
+
+> **STATUS (25.07.2026):** Verbindliche Source of Truth für alle NeXifyAI-UI-Arbeiten.
+> `design_guidelines.json` (Dark/Luxury Outfit/Manrope #0A0A0A, 04.07.) ist **superseded/legacy** — siehe
+> `/opt/nexifyai/docs/decisions/DECISION-2026-07-25-DESIGN-SYSTEM-V2-SOT.md`.
 
 ## 1. Philosophie
 
@@ -382,3 +388,4 @@ Logo-Verwendung:
 | 2026-06-20 | Typografie: Inter + Space Grotesk + DM Sans | expert-design |
 | 2026-06-20 | Dark Mode: Deep Navy als Standard-Background | expert-design |
 | 2026-06-20 | Komponenten-Regeln dokumentiert | expert-design |
+| 2026-07-25 | SoT bestätigt: v2.0 Deep Navy/Inter verbindlich; design_guidelines.json superseded | user + agent |
