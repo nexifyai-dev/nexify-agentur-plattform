@@ -130,7 +130,7 @@ NIE in `.env` committen. Nutze GitLab CI/CD Secrets.
 Automatisch synchronisiert:
 - Commits (main, develop)
 - Tags (releases)
-- Branches und Tags als vollständige Git-Ref-Spiegelung
+- Branches und Tags aus GitHub (ohne GitHub-interne Pull-Refs)
 - GitLab CI startet auf den gespiegelten Branch-Updates
 
 **Manuell triggern:**
