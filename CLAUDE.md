@@ -1,4 +1,19 @@
+<<<<<<< HEAD
+## 🔴 KERN-IMPERATIVE (P0 — vor allen anderen Regeln)
+
+### I. SPRACHE: Deutsch. Immer.
+### II. SELBSTOPTIMIERUNG: Aus jeder Erkenntnis lernen. Crystal in AgentMemory.
+### III. FEHLERVERMEIDUNG: Jeder Fehler = Error-Pattern. Nie wiederholen.
+
+> Diese Regeln gelten für ALLE Agenten die an diesem Repo arbeiten.
+> Verstoß → sofort korrigieren. Kein "sorry".
+
+---
+
+# NeXify AI — Website Monorepo
+=======
 # CLAUDE.md — Agent Development Guide
+>>>>>>> github/main
 
 **NIR:** 2026-07-24 04:50  
 **PURPOSE:** Instruktionen für AI-Agenten bei Repo-Arbeit  
@@ -26,8 +41,8 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 ### 2. Repo-Kontext
 
 - **Primary Repo:** GitHub (`git@github.com:nexifyai-dev/nexify-agentur-plattform.git`)
-- **Mirror:** GitLab (`localhost:8922/nexifyai-dev/nexify-agentur-plattform`)
-- **Sync:** Automatisch via `.github/workflows/gitlab-sync.yml`
+- **Mirror:** GitLab (`gitlab.nexifyai.cloud/nexifyai_group/nexifyai`)
+- **Sync:** Automatisch via `.github/workflows/mirror-to-gitlab.yml`
 - **Branch Pattern:** `main` (stable) | `develop` (staging) | `feature/*` (development)
 - **Governance Primärquelle:** `docs/governance/` (nicht Chat-Charta). Auszug: `docs/governance/CHARTA.md`
 - **Pre-Task Gates:** BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE bei Workflows)
@@ -103,7 +118,7 @@ Vor JEDEM Commit:
 1. Feature Branch:          feature/xyz
 2. Push + PR:              git push origin feature/xyz
 3. GitHub Actions (CI):     Tests + Lint + Build
-4. MR auf GitLab:          Auto-created (gitlab-sync.yml)
+4. GitLab Mirror:          Alle Git-Refs via mirror-to-gitlab.yml
 5. Code Review:            Minimum 1 approval
 6. Merge zu develop:       MR → Merge
 7. GitLab CI/CD:           Build + Test + Deploy staging
@@ -250,3 +265,9 @@ Rotate credentials in /opt/nexifyai/security/keys/
 ---
 
 **Fragen? Siehe `/docs/` oder `memory_recall("problem statement")`.**
+
+
+---
+## NeXifyAI Integration (28.07.2026)
+GitLab CI/CD Pipeline aktiv. LightRAG+AgentMemory Dual-Write via post-commit Hook.
+

@@ -1,0 +1,22 @@
+---
+description: Autonomiegrenzen, Eskalation, Circuit Breaker
+globs:
+alwaysApply: true
+---
+
+# Autonomie mit zwei harten Grenzen
+Volle Autonomie in Entwicklung/Integration — keine Rückfrage für Routine.
+**Protokollpflichtig statt blockierend:** Änderungen an kunden- oder
+regelwerksrelevanter Logik.
+**Wirklich blockierend** (zwei unabhängige Quellen): Cutover/Live-
+Änderungen am produktiven Hermes-System — auf Freigabe warten.
+
+## Circuit Breaker
+`http://127.0.0.1:8912` — vor jeder kostenrelevanten Aktion:
+`POST /check {"actor":"cursor","tool":"<name>","params":{...},"cost":<schätzung>,"state_hash":"<hash>"}`
+Bei `allow:false` sofort stoppen. Cursors eigene Abrechnung stoppt bei
+Budgetende NICHT automatisch — deshalb Pflicht, nicht optional.
+
+## Bekannte offene Lücke
+Budget/Iterationen aktuell global gezählt, nicht pro Kundenprojekt —
+vor parallelem Multi-Projekt-Betrieb beheben.

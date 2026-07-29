@@ -20,6 +20,9 @@ __pycache__/
 !.env.example
 backend/references/
 
+# Generated agentic governance reports
+test_reports/soll-deviation-scan.json
+
 # Local Cursor MCP configs may contain PATs — keep examples only in git
 .cursor/mcp.json
 **/gitlab-mcp.env

@@ -1,0 +1,70 @@
+# FILE: /deploy/hermes-webui-routes.yml
+# NIR: 26.07.2026 17:30
+# UPDATED: 26.07.2026 17:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Dev
+# WHAT: Traefik Dynamic Configuration — Hermes Agent WebUI Route
+# WHY: hermes-dash.nexifyai.cloud und webui.nexifyai.cloud waren nur als manuelle
+#      VPS-/Cloudflare-Tunnel-Konfiguration dokumentiert (memory/VPS_INFRA.md,
+#      infra/scripts/deploy.sh, infra/scripts/health-check.sh), aber nie als
+#      Traefik-IaC-Datei im Repo versioniert — anders als website-routes.yml.
+#      Ohne git-getrackte Quelle lässt sich die Route nach einem Ausfall nicht
+#      reproduzierbar wiederherstellen. Diese Datei schließt die Lücke.
+# BEST-PRACTICE: File-Provider-Route nach dem Muster von website-routes.yml;
+#                Middleware hier lokal definiert (nicht auf externe/undokumentierte
+#                *-secHeaders-Middlewares aus website-routes.yml verlassen).
+# PITFALL: V-01: hermes-dash.nexifyai.cloud und webui.nexifyai.cloud sind laut
+#          memory/VPS_INFRA.md:54 derselbe Dienst (Hermes WebUI :8787) — als
+#          Host-OR-Rule zusammengefasst, nicht als zwei Services.
+# PITFALL: V-02: PR #63 (deploy/harness/cloudflare-tunnel.md) dokumentiert
+#          `nexifyai.cloud` fälschlich als Hermes-Ziel — das ist die Website
+#          (siehe deploy/website-routes.yml). Diese Datei nutzt bewusst nur
+#          hermes-dash.nexifyai.cloud / webui.nexifyai.cloud.
+# PITFALL: V-03 (KRITISCH): Laut docs/architecture/DEVIATION-REPORT-2026-07-24.md
+#          (I-01) wurde Traefik am 06.07.2026 vom VPS ENTFERNT — Routing läuft
+#          seither exklusiv über Cloudflare Tunnel (memory/VPS_INFRA.md:21-22),
+#          das "REMOTE-MANAGED" via Cloudflare-API ist, nicht über lokale Dateien.
+#          Diese Traefik-Datei greift also NICHT, solange kein Traefik läuft —
+#          sie dokumentiert nur die Ziel-Config, falls Traefik reaktiviert wird.
+#          Der tatsächlich wirksame Fix ist eine neue Cloudflare-Tunnel-Ingress-
+#          Regel für hermes-dash.nexifyai.cloud (siehe
+#          deploy/hermes-webui-cloudflare-ingress.md) — vermutlich der wahre
+#          Grund, warum hermes-dash.nexifyai.cloud aktuell nicht lädt: nur
+#          webui.nexifyai.cloud/work.nexifyai.cloud sind im Tunnel-Ingress
+#          verdrahtet (memory/VPS_INFRA.md:54), hermes-dash nicht.
+# DEPENDS: Traefik mit File-Provider, Let's Encrypt certResolver; Hermes WebUI
+#          Container/Prozess auf 127.0.0.1:8787 (apps/hermes, HERMES_WEBUI_PORT)
+# DOCS-REF: memory/VPS_INFRA.md, infra/scripts/deploy.sh, infra/scripts/health-check.sh
+
+http:
+  routers:
+    hermes-webui:
+      rule: "Host(`hermes-dash.nexifyai.cloud`) || Host(`webui.nexifyai.cloud`)"
+      entryPoints:
+        - websecure
+      priority: 15
+      middlewares:
+        - hermes-webui-secHeaders
+      service: hermes-webui
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    hermes-webui:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8787"
+        passHostHeader: true
+        healthCheck:
+          path: /health
+          interval: 30s
+          timeout: 5s
+
+  middlewares:
+    hermes-webui-secHeaders:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        contentTypeNosniff: true
+        frameDeny: true
+        referrerPolicy: "strict-origin-when-cross-origin"

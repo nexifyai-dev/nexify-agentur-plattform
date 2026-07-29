@@ -28,11 +28,15 @@ VPS Workspace /workspace/nexify/
 
 **Richtung:** GitHub (Push) → VPS GitLab (Pull via Mirror)
 
-**Methode:** GitHub Actions Workflow triggert bei jedem Push auf `main` einen
-`git push --mirror` auf den VPS GitLab Remote.
+**Methode:** GitHub Actions triggert bei jedem Push auf `main` oder `develop`
+einen Branch-/Tag-Sync (`refs/heads/*`, `refs/tags/*`) auf den VPS-GitLab-Remote.
+Der Push verwendet `--force`, da GitHub die einzige Source of Truth ist und GitLab
+immer exakt den GitHub-Stand widerspiegeln soll (Abweichungen auf GitLab-Seite
+werden überschrieben). Fehlende Credentials oder Push-Fehler lassen den Workflow
+hart fehlschlagen.
 
 **Voraussetzung:** VPS GitLab Credentials als GitHub Secrets:
-- `VPS_GITLAB_URL` — z.B. `https://gitlab.nexifyai.cloud/nexify/nexify-agentur-plattform.git`
+- `VPS_GITLAB_URL` — `https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai.git`
 - `VPS_GITLAB_USERNAME` — GitLab Username/Token-Name
 - `VPS_GITLAB_TOKEN` — Personal Access Token (write_repository)
 
@@ -87,11 +91,13 @@ Trigger: `main` Branch + Merge Requests.
 
 ```bash
 # VPS → GitHub (falls GitHub Repo verloren)
-git clone --mirror gitlab.nexifyai.cloud:/nexify/nexify-agentur-plattform.git
+git clone --mirror https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai.git
 cd nexify-agentur-plattform.git
-git push --mirror https://github.com/nexifyai-dev/nexify-agentur-plattform.git
+git push --prune https://github.com/nexifyai-dev/nexify-agentur-plattform.git \
+  'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 
 # GitHub → VPS (falls VPS GitLab neu aufgesetzt)
 # Via mirror-to-gitlab.yml Workflow oder manuell:
-git push --mirror https://gitlab.nexifyai.cloud/nexify/nexify-agentur-plattform.git
+git push --prune --force https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai.git \
+  'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
 ```

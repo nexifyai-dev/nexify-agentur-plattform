@@ -36,8 +36,7 @@ Es ergänzt das bestehende SOP-Runbook, konsolidiert den Ist-Stand und setzt die
 - `build.yml` — Docker Image Build + GHCR Push
 - `deploy-vps.yml` — SSH-Deploy auf VPS mit Post-Deploy-Prüfung
 - `deploy-vercel.yml` — Vercel-Production-Deploy für `apps/website`
-- `gitlab-sync.yml` — Push nach GitLab + optionaler Pipeline-Trigger
-- `mirror-to-gitlab.yml` — vollständiges Git-Mirror nach VPS GitLab
+- `mirror-to-gitlab.yml` — vollständiges Git-Mirror nach VPS GitLab; Fehler sind blockierend
 - `secret-scan.yml` — Gitleaks-basierter Secret-Scan
 - `design-system-guard.yml` — Integritäts-Gate für `apps/website/app/globals.css`
 

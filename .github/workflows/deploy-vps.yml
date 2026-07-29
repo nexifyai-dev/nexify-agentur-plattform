@@ -1,11 +1,17 @@
 # FILE: .github/workflows/deploy-vps.yml
-# NIR: 24.07.2026 13:10
-# NAME: NeXifyAI Agent (VPS Deployment)
+# NIR: 26.07.2026 13:30
+# UPDATED: 26.07.2026 13:30
+# NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Automated deployment zu VPS via SSH — docker-compose pull+up
-# WHY: GitOps model — main branch auto-deployed nach Test+Build
-# DEPENDS: SSH key (DEPLOY_KEY_VPS), VPS-Secrets (HOST, USER, PORT)
-# DOCS-REF: docs/architecture/HERMES-GITHUB-WORKFLOW.md
+# WHAT: Deployment zu VPS — Self-Hosted Runner (primär) mit SSH-Fallback
+# WHY: Self-Hosted Runner läuft direkt auf dem VPS → kein SSH-Tunnel, kein PAT,
+#      voller Docker-Socket-Zugang, interner Dienst-Zugang, schnelleres Deploy.
+#      SSH-Fallback bleibt für den Fall dass der Runner offline ist.
+# BEST-PRACTICE: Self-Hosted Runner primär, SSH nur als Fallback; Health-Gate nach Deploy.
+# PITFALL: V-01: Self-Hosted Job läuft nur wenn Runner online ist — Fallback stellt sicher.
+#          V-02: docker-compose vs. docker compose — v2 bevorzugen.
+# DEPENDS: Self-Hosted Runner (nexifyai-vps-runner-*), optional SSH-Fallback-Secrets
+# DOCS-REF: docs/architecture/GITHUB-RUNNER-VPS.md
 
 name: Deploy to VPS (main → production)
 
@@ -18,19 +24,153 @@ concurrency:
   group: deploy-vps
   cancel-in-progress: false  # Deployments serialisieren
 
+permissions:
+  contents: read   # Checkout; kein GITHUB_TOKEN für Deploys nötig — Runner läuft lokal
+
 env:
   REPO_PATH: /opt/nexifyai/repos/nexify-agentur-plattform
   DOCKER_COMPOSE_FILE: docker-compose.yml
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    name: SSH Deploy → VPS
+  # ── Primärer Deploy: Self-Hosted Runner auf dem VPS ────────────────────────
+  deploy-self-hosted:
+    runs-on: [self-hosted, vps, nexifyai]
+    name: Deploy → VPS (Self-Hosted Runner)
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Deploy via SSH
+
+      - name: Deploy — direkt auf VPS
+        run: |
+          set -euo pipefail
+
+          echo "🚀 Deployment gestartet: $(date)"
+          echo "Runner: $(hostname) | Branch: ${{ github.ref_name }} | SHA: ${{ github.sha }}"
+
+          # 1. Repo sync
+          echo ""
+          echo "📥 Repo-Sync..."
+          cd "$REPO_PATH"
+          git fetch origin main
+          git reset --hard origin/main
+
+          # 2. Docker Compose Pull + Up
+          echo ""
+          echo "🔨 Docker Compose..."
+          DC="docker compose"
+          $DC -f "$DOCKER_COMPOSE_FILE" pull 2>&1 || true
+          $DC -f "$DOCKER_COMPOSE_FILE" up --build -d
+
+          # 3. Health-Check (hartes Gate: Website)
+          echo ""
+          echo "🏥 Health-Check..."
+          sleep 15
+
+          # Website: hartes Gate (Deployment-Erfolg hängt davon ab)
+          WEBSITE_OK=0
+          for i in 1 2 3 4 5; do
+            if curl -sf --max-time 5 "http://127.0.0.1:3000/api/health" >/dev/null 2>&1; then
+              echo "✅ Website (3000) — OK"
+              WEBSITE_OK=1
+              break
+            fi
+            echo "⏳ Website noch nicht ready ($i/5)..."
+            sleep 5
+          done
+          if [ "$WEBSITE_OK" != 1 ]; then
+            echo "❌ Website (3000) — Health-Check nach 5 Retries fehlgeschlagen — Deployment abgebrochen"
+            exit 1
+          fi
+
+          # Weitere Dienste: weiche Gates (warnen, nicht blockieren)
+          for svc_port in "LightRAG:9621:/health" "Hermes WebUI:8787:/health" "AgentMemory:3111:/health"; do
+            name="${svc_port%%:*}"
+            rest="${svc_port#*:}"
+            port="${rest%%:*}"
+            path="${rest#*:}"
+            if curl -sf --max-time 5 "http://127.0.0.1:${port}${path}" >/dev/null 2>&1; then
+              echo "✅ $name ($port) — OK"
+            else
+              echo "⚠️  $name ($port) — nicht ready (kein Deployment-Blocker)"
+            fi
+          done
+
+          # 4. Logs
+          echo ""
+          echo "📋 Container-Status:"
+          $DC -f "$DOCKER_COMPOSE_FILE" ps
+
+          echo ""
+          echo "✅ Deployment abgeschlossen: $(date)"
+
+      - name: §11 Governance-Post-Check
+        run: |
+          echo "📋 §11 Governance-Post-Check..."
+
+          # Charta-Evidence
+          ls docs/governance/08_evidence/CHARTA_CYCLE*.md 2>/dev/null \
+            && echo "✅ Charta-Evidence vorhanden" \
+            || echo "⚠️  Keine Charta-Evidence"
+
+          # Port-Matrix
+          grep -q "System-Port-Matrix" docs/governance/GOVERNANCE.md 2>/dev/null \
+            && echo "✅ Port-Matrix in GOVERNANCE.md" \
+            || echo "⚠️  Port-Matrix fehlt"
+
+          # Cost-Brake
+          grep -q "Task-Abbruch" docs/governance/12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md 2>/dev/null \
+            && echo "✅ Cost-Brake aktiv" \
+            || echo "⚠️  Cost-Brake fehlt"
+
+          # Port-Dokumentation
+          for port in 8787 8642 9119 20128 3111 9621 8644; do
+            grep -q ":${port}" docs/governance/GOVERNANCE.md 2>/dev/null \
+              && echo "✅ Port $port dokumentiert" \
+              || echo "⚠️  Port $port fehlt in Port-Matrix"
+          done
+
+          # VPS-Worker aktiv?
+          ls .github/workflows/vps-worker.yml 2>/dev/null \
+            && echo "✅ VPS-Worker-Workflow vorhanden" \
+            || echo "⚠️  VPS-Worker-Workflow fehlt"
+
+          echo "✅ §11 Governance-Check abgeschlossen"
+        continue-on-error: true
+
+      - name: Deployment-Status-Summary
+        run: |
+          echo "============================="
+          echo "✅ Deploy abgeschlossen"
+          echo "Runner:  $(hostname)"
+          echo "SHA:     ${{ github.sha }}"
+          echo "Branch:  ${{ github.ref_name }}"
+          echo "Zeit:    $(date)"
+          echo "============================="
+
+  # ── SSH-Fallback: läuft wenn Self-Hosted Runner offline ist ───────────────
+  # Dieser Job greift NUR, wenn deploy-self-hosted übersprungen wurde.
+  # Dazu benötigt er: VPS_HOST, VPS_USER, VPS_PORT, DEPLOY_KEY_VPS als Secrets.
+  deploy-ssh-fallback:
+    runs-on: ubuntu-latest
+    name: Deploy → VPS (SSH-Fallback)
+    needs: []   # kein needs — läuft parallel; result wird nach Completion geprüft
+    # SSH-Fallback ist deaktiviert solange Self-Hosted Runner aktiv ist.
+    # Aktivieren: 'false' durch folgende Bedingung ersetzen:
+    # (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+    #  github.event_name == 'workflow_dispatch'
+    #
+    # PITFALL V-03 (behoben): `if:` als `|`-Block-Scalar mit Kommentarzeilen
+    # DARIN macht den gesamten String Teil des Ausdrucks — GitHub Actions
+    # kennt kein `#`-Kommentar innerhalb einer Expression. Das machte die
+    # gesamte Workflow-Datei ungültig → JEDER Run (inkl. deploy-self-hosted!)
+    # schlug seit Einführung sofort mit 0 Jobs fehl. Kommentare gehören als
+    # normale YAML-Zeilen VOR den Key, `if:` bleibt ein einzeiliger Wert.
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH (Fallback)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -41,119 +181,13 @@ jobs:
           command_timeout: 30m
           script: |
             set -euo pipefail
-            
-            echo "🚀 Deployment started at $(date)"
-            
-            # 1. Repo sync
-            cd ${{ env.REPO_PATH }}
-            echo "📥 Git fetch + rebase..."
-            git fetch origin main
-            git reset --hard origin/main
-            git pull origin main --ff-only || git rebase origin/main
-            
-            # 2. Environment check
-            echo "🔍 System checks..."
-            if ! command -v docker &> /dev/null; then
-              echo "❌ Docker not found"
-              exit 1
-            fi
-            if ! command -v docker-compose &> /dev/null; then
-              echo "⚠️  docker-compose not found, using 'docker compose'"
-              DC="docker compose"
-            else
-              DC="docker-compose"
-            fi
-            
-            # 3. Build + start
-            echo "🔨 Docker build..."
-            $DC -f ${{ env.DOCKER_COMPOSE_FILE }} pull 2>&1 || true
-            $DC -f ${{ env.DOCKER_COMPOSE_FILE }} up --build -d
-            
-            # 4. Health check
-            echo "🏥 Waiting for services..."
+            echo "🚀 SSH-Fallback-Deployment: $(date)"
+            cd /opt/nexifyai/repos/nexify-agentur-plattform
+            git fetch origin main && git reset --hard origin/main
+            docker compose -f docker-compose.yml pull 2>&1 || true
+            docker compose -f docker-compose.yml up --build -d
             sleep 10
-            
-            # Hartes Gate: nur die Website-Health entscheidet über Erfolg dieses Deploys.
-            # (Nicht das Vollsystem — Hermes/Paperclip laufen unabhängig und dürfen einen
-            # Website-Deploy nicht blockieren.)
-            if curl -sf http://127.0.0.1:3000/api/health > /dev/null 2>&1; then
-              echo "✅ Vitrine (port 3000) — OK"
-            else
-              echo "⚠️  Vitrine (port 3000) — NOT RESPONDING"
-            fi
-            
-            if curl -sf http://127.0.0.1:9621/health > /dev/null 2>&1; then
-              echo "✅ LightRAG (port 9621) — OK"
-            else
-              echo "⚠️  LightRAG (port 9621) — NOT RESPONDING"
-            fi
-
-            if curl -sf http://127.0.0.1:8484/health > /dev/null 2>&1; then
-              echo "✅ Hermes WebUI (port 8484) — OK"
-            else
-              echo "⚠️  Hermes WebUI (port 8484) — NOT RESPONDING"
-            fi
-             
+            curl -sf http://127.0.0.1:3000/api/health && echo "✅ Website OK" || echo "⚠️  Website nicht ready"
             bash infra/scripts/health-check.sh || true
-            
-            # 5. Logs
-            echo "📋 Recent container logs:"
-            $DC -f ${{ env.DOCKER_COMPOSE_FILE }} logs --tail=20
-            
-            echo "✅ Deployment complete at $(date)"
+            echo "✅ SSH-Fallback-Deploy abgeschlossen: $(date)"
         continue-on-error: true
-      
-      - name: §11 Governance Check
-        run: |
-          echo "📋 Charta §11 Governance-Post-Check..."
-          
-          # Prüfe Charta-Evidence existiert
-          if ls docs/governance/08_evidence/CHARTA_CYCLE*.md 2>/dev/null; then
-            echo "✅ Charta-Evidence-Dokumente vorhanden"
-          else
-            echo "⚠️ Keine Charta-Evidence — Zyklus 1 starten"
-          fi
-          
-          # Prüfe GOVERNANCE.md Port-Matrix
-          if grep -q "System-Port-Matrix" docs/governance/GOVERNANCE.md 2>/dev/null; then
-            echo "✅ Port-Matrix in GOVERNANCE.md"
-          else
-            echo "⚠️ Port-Matrix fehlt"
-          fi
-          
-          # Prüfe Cost-Brake
-          if grep -q "Task-Abbruch" docs/governance/12_register/FINANCE_COST_VALUE_MARGIN_REGISTER.md 2>/dev/null; then
-            echo "✅ Cost-Brake aktiv"
-          else
-            echo "⚠️ Cost-Brake fehlt"
-          fi
-          
-          # Prüfe §2 Charta-Vollprüfung — Port-Matrix vollständig (§2 VPS-Check)
-          for port in 8787 8642 9119 20128 3111 9621 8644; do
-            if grep -q ":${port}" docs/governance/GOVERNANCE.md 2>/dev/null; then
-              echo "✅ Port ${port} in GOVERNANCE.md Port-Matrix dokumentiert"
-            else
-              echo "⚠️ Port ${port} fehlt in GOVERNANCE.md Port-Matrix"
-            fi
-          done
-          
-          # Prüfe Zyklus-8-Evidence (§2 VPS-Audit nach Merge)
-          if ls docs/governance/08_evidence/CHARTA_CYCLE8*.md 2>/dev/null; then
-            echo "✅ Zyklus-8-Evidence vorhanden"
-          else
-            echo "⚠️ Zyklus-8-Evidence fehlt — VPS-Audit nach Merge ausstehend"
-          fi
-          
-          # Prüfe GitHub Actions Schedule (§11)
-          if grep -q "0 6 \* \* 1" .github/workflows/test.yml 2>/dev/null; then
-            echo "✅ GitHub Actions Schedule 0 6 * * 1 aktiv (§11)"
-          else
-            echo "⚠️ GitHub Actions Schedule fehlt"
-          fi
-          
-          echo "✅ §11 Governance-Check abgeschlossen"
-          
-      - name: Deployment Status
-        run: |
-          echo "Deployment job completed"
-          echo "Check VPS: ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}"

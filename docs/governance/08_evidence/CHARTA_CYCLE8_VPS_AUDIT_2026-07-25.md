@@ -138,7 +138,7 @@ und kann nicht in CI getestet werden. Dokument-seitige Prüfung: ✅ vollständi
 ### VPS-Zugriff erforderlich (manuell)
 Die folgenden Checks können nur mit direktem VPS-Zugriff verifiziert werden:
 1. `bash infra/scripts/health-check.sh` auf VPS ausführen
-2. Charta-Standard in RAG indexiert? → `curl http://127.0.0.1:9621/health`
+2. Charta-Standard in RAG indexiert? → `curl http://127.0.0.1:9622/health`
 3. `pre-commit install` auf VPS ausführen
 4. Cost-Brake >150% auf Gateway-Ebene testen
 
