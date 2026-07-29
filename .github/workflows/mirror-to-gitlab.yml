@@ -1,6 +1,6 @@
 # FILE: .github/workflows/mirror-to-gitlab.yml
 # NIR: 24.07.2026 12:33
-# UPDATED: 29.07.2026 05:48
+# UPDATED: 29.07.2026 09:39
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Spiegelt Git-Branches und Tags zum self-hosted VPS-GitLab.
@@ -62,7 +62,7 @@ jobs:
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
-            push --prune gitlab \
+            push --force --prune gitlab \
             'refs/heads/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'; then
             echo "::error::GitLab branch/tag mirror push failed"
