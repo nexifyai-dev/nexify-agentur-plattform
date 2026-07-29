@@ -1,0 +1,10 @@
+[Unit]
+Description=NeXifyAI Watchdog Reactivate Hermes Orchestration
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/nexifyai/scripts/autopilot/watchdog-reactivate.sh
+User=root
+TimeoutStartSec=90
+NoNewPrivileges=true
