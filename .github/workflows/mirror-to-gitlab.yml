@@ -1,9 +1,9 @@
 # FILE: .github/workflows/mirror-to-gitlab.yml
 # NIR: 24.07.2026 12:33
-# UPDATED: 27.07.2026 12:05
+# UPDATED: 29.07.2026 05:48
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Spiegelt sämtliche Git-Refs zum self-hosted VPS-GitLab.
+# WHAT: Spiegelt Git-Branches und Tags zum self-hosted VPS-GitLab.
 # WHY: GitHub bleibt Source of Truth; GitLab stellt den redundanten CI/CD-Pfad bereit.
 # BEST-PRACTICE: Ein kanonischer Mirror-Workflow mit harten Credential-Gates.
 # PITFALL: V-GL-03: Fehlende Secrets dürfen keinen grünen Schein-Erfolg erzeugen.
@@ -58,10 +58,13 @@ jobs:
           gitlab_auth="$(printf '%s:%s' "$VPS_GITLAB_USERNAME" "$VPS_GITLAB_TOKEN" | base64 -w 0)"
 
           git -c "http.extraHeader=Authorization: Basic $github_auth" \
-            clone --mirror "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repository.git
+            clone --bare "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repository.git
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
-          if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" push --mirror gitlab; then
-            echo "::error::GitLab mirror push failed"
+          if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
+            push --prune gitlab \
+            'refs/heads/*:refs/heads/*' \
+            'refs/tags/*:refs/tags/*'; then
+            echo "::error::GitLab branch/tag mirror push failed"
             exit 1
           fi
