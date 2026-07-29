@@ -120,7 +120,7 @@ git push origin main
 1. Validate all three GitLab secrets
 2. Require HTTPS
 3. Add the GitLab remote without embedding credentials
-4. Push all refs with `git push --mirror`
+4. Push branches and tags with `git push --prune gitlab 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'`
 5. Fail the workflow on any mirror error
 
 **Expected Duration:** ~2 min
