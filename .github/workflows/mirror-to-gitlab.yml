@@ -62,9 +62,9 @@ jobs:
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
-            push --prune gitlab \
-            'refs/heads/*:refs/heads/*' \
-            'refs/tags/*:refs/tags/*'; then
+            push --prune --force gitlab \
+            '+refs/heads/*:refs/heads/*' \
+            '+refs/tags/*:refs/tags/*'; then
             echo "::error::GitLab branch/tag mirror push failed"
             exit 1
           fi
