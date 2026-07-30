@@ -78,7 +78,7 @@ export function HeroVisual() {
         <Zap size={17} className="text-zinc-300" />
         <div>
           <div className="text-[12px] font-bold text-white">{nl ? "Richtwaarde: 1–3 dagen" : "Richtwert: 1–3 Tage"}</div>
-          <div className="text-[10px] text-zinc-500">€ 999 / {nl ? "werkdag" : "Arbeitstag"}</div>
+          <div className="text-[10px] text-zinc-500">€ 449 / {nl ? "werkdag" : "Arbeitstag"}</div>
         </div>
       </div>
 

@@ -16,7 +16,7 @@ export function PricingPage() {
   const max = svc.maxDays ?? Math.max(svc.minDays * 2, svc.minDays + 6);
   const [days, setDays] = useState(min);
   const clamped = Math.min(Math.max(days, min), max);
-  const net = clamped * 999;
+  const net = clamped * 449;
   const vat = Math.round(net * 0.21);
   const fill = useMemo(() => (max === min ? 100 : ((clamped - min) / (max - min)) * 100), [clamped, min, max]);
 
@@ -32,8 +32,8 @@ export function PricingPage() {
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
           <Reveal>
             <div className="glass flex h-full flex-col p-8 md:p-10" data-testid="dayrate-card">
-              <div className="text-silver font-[family-name:var(--font-heading)] text-6xl font-semibold">€ 999</div>
-              <div className="mt-2 text-sm uppercase tracking-[0.2em] text-zinc-500">{t.common.netPerDay.replace("€ 999 netto / ", "netto / ")}</div>
+              <div className="text-silver font-[family-name:var(--font-heading)] text-6xl font-semibold">€ 449</div>
+              <div className="mt-2 text-sm uppercase tracking-[0.2em] text-zinc-500">{t.common.netPerDay.replace("€ 449 netto / ", "netto / ")}</div>
               <h2 className="mt-8 font-[family-name:var(--font-heading)] text-xl font-medium text-white">{t.pricing.dayRateTitle}</h2>
               <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-400">{t.pricing.dayRateText}</p>
               <div className="mt-auto grid gap-6 pt-8 sm:grid-cols-2">
@@ -132,8 +132,8 @@ export function PricingPage() {
                 <h3 className="text-[15px] font-semibold text-white">{s.shortTitle}</h3>
                 <div className="mt-3 font-[family-name:var(--font-heading)] text-2xl font-semibold text-zinc-200">
                   {s.from ? `${t.common.from} ` : ""}
-                  {fmt(s.minDays * 999)}
-                  {!s.from && s.maxDays && s.maxDays !== s.minDays ? ` – ${fmt(s.maxDays * 999)}` : ""}
+                  {fmt(s.minDays * 449)}
+                  {!s.from && s.maxDays && s.maxDays !== s.minDays ? ` – ${fmt(s.maxDays * 449)}` : ""}
                 </div>
                 <div className="mt-1 text-xs text-zinc-500">{s.days}</div>
               </div>

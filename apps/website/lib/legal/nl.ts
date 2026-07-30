@@ -200,7 +200,7 @@ export const legalPagesNl: Record<string, LegalPageData> = {
       {
         heading: "3. Inspanning, werkdagen en prijs",
         paragraphs: [
-          "Het reguliere dagtarief bedraagt € 999 netto per werkdag. Een werkdag omvat maximaal acht planbare vakuren.",
+          "Het reguliere dagtarief bedraagt € 449 netto per werkdag. Een werkdag omvat maximaal acht planbare vakuren.",
           "Urenramingen zijn schattingen op basis van de bekende omvang. Een bindende totaalprijs geldt alleen indien uitdrukkelijk overeengekomen. Bij gewijzigde eisen, ontbrekende content, externe blokkades of extra integraties wordt het meerwerk vóór uitvoering gemeld.",
           "Prijzen zijn exclusief toepasselijke omzetbelasting. Bij grensoverschrijdende B2B-diensten binnen de EU kan met een geldig btw-nummer de verleggingsregeling gelden.",
         ],

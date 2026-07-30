@@ -32,7 +32,7 @@ export const company = {
   website: "https://www.nexifyai.cloud",
   kvk: "90483944",
   vatId: "NL865786276B01",
-  dayRate: 999,
+  dayRate: 449,
   vatRate: 0.21,
   targetMarket: "Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden",
   businessOnly: true,
@@ -212,7 +212,7 @@ export const faqs = [
     a: "NeXify arbeitet AI-gestützt. Moderne Werkzeuge unterstützen Recherche, Strukturierung, Codeerstellung, Tests und Dokumentation. Fachliche Entscheidungen, Verantwortung, Prüfung und Freigabe bleiben beim erfahrenen Entwickler.",
   },
   {
-    q: "Sind 999 Euro pro Arbeitstag ein Festpreis?",
+    q: "Sind 449 Euro pro Arbeitstag ein Festpreis?",
     a: "Der Tagessatz ist fest. Vor Beginn erhalten Sie eine belastbare Aufwandsspanne. Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen.",
   },
   {
@@ -248,5 +248,5 @@ export const faqs = [
 export const featurePillars = [
   { title: "Ein Fachmann, ein Ergebnis", text: "Keine Übergabekette zwischen Vertrieb, Design, Entwicklung und QA. Derjenige, der Ihren Scope versteht, trifft auch die technischen Entscheidungen und prüft das Ergebnis.", icon: Code2 },
   { title: "AI-gestützt, nicht AI-abgegeben", text: "AI verkürzt Recherche, Umsetzung und Prüfung um bis zu 60 %. Erfahrung entscheidet, was richtig, wartbar und wirtschaftlich ist. Keine Experimente auf Ihre Kosten.", icon: Bot },
-  { title: "Transparenz pro Arbeitstag", text: "999 Euro netto pro Arbeitstag. Keine versteckten Posten, keine nachträglichen Überraschungen. Umfang, Annahmen und Zusatzaufwand werden vor Beginn dokumentiert.", icon: ChartNoAxesCombined },
+  { title: "Transparenz pro Arbeitstag", text: "449 Euro netto pro Arbeitstag. Keine versteckten Posten, keine nachträglichen Überraschungen. Umfang, Annahmen und Zusatzaufwand werden vor Beginn dokumentiert.", icon: ChartNoAxesCombined },
 ];

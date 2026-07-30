@@ -1,0 +1,22 @@
+[Unit]
+Description=Hermes Dashboard Header-Rewrite Proxy
+After=network-online.target hermes-dashboard.service
+Wants=network-online.target
+Requires=hermes-dashboard.service
+BindsTo=hermes-dashboard.service
+PartOf=hermes-dashboard.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /opt/nexifyai/scripts/hermes-dash-proxy.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hermes-dash-proxy
+MemoryMax=128M
+MemoryHigh=96M
+
+[Install]
+WantedBy=multi-user.target

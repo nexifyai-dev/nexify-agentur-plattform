@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLang } from "@/lib/lang-context";
 
 export function StickyCta() {
+  const { lang } = useLang();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function StickyCta() {
         href="/kontakt"
         className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-medium shadow-[0_8px_32px_rgba(0,0,0,.5)]"
       >
-        Projekt anfragen <ArrowRight className="size-4" />
+        {lang === "en" ? "Request project" : lang === "nl" ? "Project aanvragen" : "Projekt anfragen"} <ArrowRight className="size-4" />
       </Link>
     </div>
   );

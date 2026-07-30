@@ -16,7 +16,7 @@ export const company = {
   website: "https://www.nexifyai.cloud",
   kvk: "90483944",
   vatId: "NL865786276B01",
-  dayRate: 999,
+  dayRate: 449,
   vatRate: 0.21,
   targetMarket: "Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden",
   businessOnly: true,

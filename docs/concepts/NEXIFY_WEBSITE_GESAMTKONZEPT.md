@@ -17,7 +17,7 @@ Die Differenzierung entsteht aus vier miteinander verbundenen Aussagen:
 1. Pascal Courbois führt Scope, technische Entscheidungen und Qualität persönlich.
 2. Erfahrung und unternehmerische Reife reduzieren Fehlentscheidungen, unnötige Komplexität und Übergabeverluste.
 3. Die Umsetzung ist AI-gestützt, aber nicht an AI abgegeben.
-4. Der feste Tagessatz von 999 Euro netto wird durch kurze, standardisierte und hochmoderne Produktionsabläufe wirtschaftlich.
+4. Der feste Tagessatz von 449 Euro netto wird durch kurze, standardisierte und hochmoderne Produktionsabläufe wirtschaftlich.
 
 ## 2. Zielgruppen
 
@@ -41,7 +41,7 @@ Nicht primär:
 ### 3.1 Landingpage
 
 - 1 Arbeitstag
-- 999 Euro netto
+- 449 Euro netto
 - 1.208,79 Euro inklusive 21 % BTW
 - Fokus: ein Angebot, eine Zielgruppe, eine Hauptkonversion
 
@@ -86,7 +86,7 @@ Nicht primär:
 
 ## 4. Preisargumentation
 
-999 Euro pro Acht-Stunden-Arbeitstag entsprechen 124,875 Euro pro Stunde. Der Preis wird nicht als Billigangebot positioniert. Er ist ein fachlich marktgerechter Expertensatz mit ungewöhnlich niedriger Gesamtsumme, weil die Durchlaufzeit reduziert wird.
+449 Euro pro Acht-Stunden-Arbeitstag entsprechen 56,125 Euro pro Stunde. Der Preis wird nicht als Billigangebot positioniert. Er ist ein fachlich marktgerechter Expertensatz mit ungewöhnlich niedriger Gesamtsumme, weil die Durchlaufzeit reduziert wird.
 
 Die Kostenvorteile entstehen durch:
 

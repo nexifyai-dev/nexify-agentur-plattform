@@ -1,0 +1,11 @@
+[Unit]
+Description=Hermes Dashboard Health Check (5min)
+Requires=hermes-dash-health.service
+
+[Timer]
+OnBootSec=60
+OnUnitActiveSec=300
+AccuracySec=10
+
+[Install]
+WantedBy=timers.target

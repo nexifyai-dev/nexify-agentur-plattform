@@ -141,7 +141,7 @@ Danach nächsten Loop starten, bis alle Production-Gates geschlossen sind.
 2. Typecheck, Lint und Production-Build bestehen;
 3. alle vorgesehenen Routen und responsiven Zustände funktionieren;
 4. das bekannte Operator-Card-Overflow behoben und visuell geprüft ist;
-5. Preise exakt aus 999 Euro netto pro Arbeitstag berechnet werden;
+5. Preise exakt aus 449 Euro netto pro Arbeitstag berechnet werden;
 6. ausschließlich die Formulierung „AI-gestützt“ verwendet wird;
 7. Pascal, Erfahrung und persönliche Verantwortung klar sichtbar sind, ohne erfundene Alters- oder Erfahrungszahlen;
 8. Kontaktversand und Fehlerpfade nachweislich funktionieren;

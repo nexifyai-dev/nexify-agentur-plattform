@@ -9,7 +9,7 @@ export const en = {
     from: "from",
     workdays: "working days",
     workday: "working day",
-    netPerDay: "€ 999 net / working day",
+    netPerDay: "€ 449 net / working day",
     allServices: "All services",
   },
   home: {
@@ -17,11 +17,11 @@ export const en = {
     titleA: "Digital excellence.",
     titleB: "In days, not months.",
     subtitle:
-      "NeXify AI develops premium websites, online shops, web apps and AI automations – personally led by a skilled professional, accelerated by appropriate AI tools, transparent at a fixed daily rate of € 999 net.",
+      "NeXify AI develops premium websites, online shops, web apps and AI automations – personally led by a skilled professional, accelerated by appropriate AI tools, transparent at a fixed daily rate of € 449 net.",
     ctaPrimary: "Free initial consultation",
     ctaSecondary: "Explore services",
     stats: [
-      { value: "€ 999", label: "net per working day – transparently calculated" },
+      { value: "€ 449", label: "net per working day – transparently calculated" },
       { value: "1–3", label: "guide value for clearly scoped websites" },
       { value: "1", label: "single point of contact from concept to handover" },
       { value: "Chat", label: "AI advisor for an initial assessment" },
@@ -42,7 +42,7 @@ export const en = {
       {
         icon: "ChartNoAxesCombined",
         title: "Transparency per working day",
-        text: "€ 999 net per working day. Scope, assumptions and additional requirements are made visible before implementation – you retain full cost control at all times.",
+        text: "€ 449 net per working day. Scope, assumptions and additional requirements are made visible before implementation – you retain full cost control at all times.",
       },
     ],
     servicesEyebrow: "Services",
@@ -193,7 +193,7 @@ export const en = {
     eyebrow: "Services",
     title: "Eight modules. One standard: excellence.",
     intro:
-      "Every service has a clear time range, defined deliverables and a transparent price of € 999 net per working day. What you read here is what you get – no fine print, no agency overhead.",
+      "Every service has a clear time range, defined deliverables and a transparent price of € 449 net per working day. What you read here is what you get – no fine print, no agency overhead.",
     featuresLabel: "Scope of services",
     deliverablesLabel: "You receive",
     idealLabel: "Ideal for",
@@ -202,7 +202,7 @@ export const en = {
     eyebrow: "Pricing",
     title: "One rate. Full transparency.",
     intro:
-      "€ 999 net per working day – this rate applies to every service, every project, every day. A working day comprises up to eight plannable specialist hours for concept, design, development, testing and documentation.",
+      "€ 449 net per working day – this rate applies to every service, every project, every day. A working day comprises up to eight plannable specialist hours for concept, design, development, testing and documentation.",
     dayRateTitle: "The daily rate",
     dayRateText:
       "Before the project begins, you receive a reliable effort range in working days. A binding fixed total price is possible once scope, content, integrations and acceptance criteria are clearly defined. Additional requirements are always flagged before execution – never after.",
@@ -413,7 +413,7 @@ export const en = {
       a: "NeXify works in an AI-assisted way. Modern tools support research, structuring, code creation, testing and documentation. Technical decisions, accountability, review and approval remain with the experienced developer.",
     },
     {
-      q: "Is € 999 per working day a fixed price?",
+      q: "Is € 449 per working day a fixed price?",
       a: "The daily rate is fixed. Before starting, you receive a reliable effort range. A binding fixed total price is possible once scope, content, integrations and acceptance criteria are clearly defined.",
     },
     {
@@ -462,7 +462,7 @@ export const en = {
       { label: "Experience", value: "20+ years IT, commerce & sales" },
       { label: "Languages", value: "German, Dutch, English" },
       { label: "Market", value: "DE · AT · CH · NL" },
-      { label: "Model", value: "B2B, € 999 net/day" },
+      { label: "Model", value: "B2B, € 449 net/day" },
     ],
     journeyTitle: "Experience you can feel",
     journeyIntro: "More than 20 years of practice – technical, commercial and in sales. This combination is rare and makes the difference between a website and a tool that sells.",

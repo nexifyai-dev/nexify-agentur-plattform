@@ -240,7 +240,7 @@ export function SiteHeader() {
             <UserRound size={16} />
           </Link>
 
-          <Link href="/kontakt" className="btn-primary !hidden !px-6 !py-2.5 !text-[13px] md:!inline-flex" data-testid="header-cta">
+          <Link href="/kontakt" className="btn-primary hidden md:inline-flex !px-6 !py-2.5 !text-[13px]" data-testid="header-cta">
             {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
           </Link>
 
@@ -294,4 +294,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

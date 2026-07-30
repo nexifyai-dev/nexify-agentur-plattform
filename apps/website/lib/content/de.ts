@@ -26,7 +26,7 @@ export const de = {
     from: "ab",
     workdays: "Arbeitstage",
     workday: "Arbeitstag",
-    netPerDay: "€ 999 netto / Arbeitstag",
+    netPerDay: "€ 449 netto / Arbeitstag",
     allServices: "Alle Leistungen",
   },
   home: {
@@ -34,11 +34,11 @@ export const de = {
     titleA: "Digitale Exzellenz.",
     titleB: "In Tagen statt Monaten.",
     subtitle:
-      "NeXify AI entwickelt Premium-Websites, Onlineshops, Web-Apps und AI-Automatisierungen – persönlich verantwortet von einem Fachmann, beschleunigt durch passende AI-Werkzeuge, transparent zum festen Tagessatz von 999 € netto.",
+      "NeXify AI entwickelt Premium-Websites, Onlineshops, Web-Apps und AI-Automatisierungen – persönlich verantwortet von einem Fachmann, beschleunigt durch passende AI-Werkzeuge, transparent zum festen Tagessatz von 449 € netto.",
     ctaPrimary: "Kostenlose Erstberatung",
     ctaSecondary: "Leistungen entdecken",
     stats: [
-      { value: "999 €", label: "netto pro Arbeitstag – transparent kalkuliert" },
+      { value: "449 €", label: "netto pro Arbeitstag – transparent kalkuliert" },
       { value: "1–3", label: "Richtwert für klar abgegrenzte Websites" },
       { value: "1", label: "verantwortlicher Ansprechpartner von Konzept bis Übergabe" },
       { value: "Chat", label: "AI-Berater für eine erste Einordnung" },
@@ -59,7 +59,7 @@ export const de = {
       {
         icon: "ChartNoAxesCombined",
         title: "Transparenz pro Arbeitstag",
-        text: "999 € netto pro Arbeitstag. Umfang, Annahmen und Mehrbedarf werden vor der Umsetzung sichtbar gemacht – Sie behalten jederzeit die volle Kostenkontrolle.",
+        text: "449 € netto pro Arbeitstag. Umfang, Annahmen und Mehrbedarf werden vor der Umsetzung sichtbar gemacht – Sie behalten jederzeit die volle Kostenkontrolle.",
       },
     ],
     servicesEyebrow: "Leistungen",
@@ -210,7 +210,7 @@ export const de = {
     eyebrow: "Leistungen",
     title: "Acht Bausteine. Ein Anspruch: Exzellenz.",
     intro:
-      "Jede Leistung hat eine klare Zeitspanne, definierte Ergebnisse und einen transparenten Preis von 999 € netto pro Arbeitstag. Was Sie hier lesen, bekommen Sie – ohne Kleingedrucktes, ohne Agentur-Overhead.",
+      "Jede Leistung hat eine klare Zeitspanne, definierte Ergebnisse und einen transparenten Preis von 449 € netto pro Arbeitstag. Was Sie hier lesen, bekommen Sie – ohne Kleingedrucktes, ohne Agentur-Overhead.",
     featuresLabel: "Leistungsumfang",
     deliverablesLabel: "Sie erhalten",
     idealLabel: "Ideal für",
@@ -219,7 +219,7 @@ export const de = {
     eyebrow: "Preise",
     title: "Ein Satz. Volle Transparenz.",
     intro:
-      "999 € netto pro Arbeitstag – dieser Satz gilt für jede Leistung, jedes Projekt, jeden Tag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden für Konzeption, Design, Entwicklung, Tests und Dokumentation.",
+      "449 € netto pro Arbeitstag – dieser Satz gilt für jede Leistung, jedes Projekt, jeden Tag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden für Konzeption, Design, Entwicklung, Tests und Dokumentation.",
     dayRateTitle: "Der Tagessatz",
     dayRateText:
       "Vor Projektbeginn erhalten Sie eine belastbare Aufwandsspanne in Arbeitstagen. Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen. Mehrbedarf wird immer vor Ausführung angezeigt – nie danach.",
@@ -430,7 +430,7 @@ export const de = {
       a: "NeXify arbeitet AI-gestützt. Moderne Werkzeuge unterstützen Recherche, Strukturierung, Codeerstellung, Tests und Dokumentation. Fachliche Entscheidungen, Verantwortung, Prüfung und Freigabe bleiben beim erfahrenen Entwickler.",
     },
     {
-      q: "Sind 999 Euro pro Arbeitstag ein Festpreis?",
+      q: "Sind 449 Euro pro Arbeitstag ein Festpreis?",
       a: "Der Tagessatz ist fest. Vor Beginn erhalten Sie eine belastbare Aufwandsspanne. Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen.",
     },
     {
@@ -479,7 +479,7 @@ export const de = {
       { label: "Erfahrung", value: "20+ Jahre IT, Handel & Vertrieb" },
       { label: "Sprachen", value: "Deutsch, Nederlands, Englisch" },
       { label: "Markt", value: "DE · AT · CH · NL" },
-      { label: "Modell", value: "B2B, 999 € netto/Tag" },
+      { label: "Modell", value: "B2B, 449 € netto/Tag" },
     ],
     journeyTitle: "Erfahrung, die Sie spüren",
     journeyIntro: "Mehr als 20 Jahre Praxis – technisch, kaufmännisch und im Vertrieb. Diese Kombination ist selten und macht den Unterschied zwischen einer Website und einem Werkzeug, das verkauft.",

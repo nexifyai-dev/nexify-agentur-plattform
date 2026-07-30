@@ -9,7 +9,7 @@ export const nl: Dict = {
     from: "vanaf",
     workdays: "werkdagen",
     workday: "werkdag",
-    netPerDay: "€ 999 netto / werkdag",
+    netPerDay: "€ 449 netto / werkdag",
     allServices: "Alle diensten",
   },
   home: {
@@ -17,11 +17,11 @@ export const nl: Dict = {
     titleA: "Digitale excellentie.",
     titleB: "In dagen in plaats van maanden.",
     subtitle:
-      "NeXify AI ontwikkelt premium websites, webshops, web-apps en AI-automatiseringen – persoonlijk verantwoord door één vakman, versneld door passende AI-tools, transparant tegen een vast dagtarief van € 999 netto.",
+      "NeXify AI ontwikkelt premium websites, webshops, web-apps en AI-automatiseringen – persoonlijk verantwoord door één vakman, versneld door passende AI-tools, transparant tegen een vast dagtarief van € 449 netto.",
     ctaPrimary: "Gratis adviesgesprek",
     ctaSecondary: "Diensten ontdekken",
     stats: [
-      { value: "€ 999", label: "netto per werkdag – transparant berekend" },
+      { value: "€ 449", label: "netto per werkdag – transparant berekend" },
       { value: "1–3", label: "richtwaarde voor duidelijk afgebakende websites" },
       { value: "1", label: "verantwoordelijke contactpersoon van concept tot overdracht" },
       { value: "Chat", label: "AI-adviseur voor een eerste inschatting" },
@@ -42,7 +42,7 @@ export const nl: Dict = {
       {
         icon: "ChartNoAxesCombined",
         title: "Transparantie per werkdag",
-        text: "€ 999 netto per werkdag. Omvang, aannames en meerwerk worden vóór de uitvoering zichtbaar gemaakt – u houdt altijd volledige kostencontrole.",
+        text: "€ 449 netto per werkdag. Omvang, aannames en meerwerk worden vóór de uitvoering zichtbaar gemaakt – u houdt altijd volledige kostencontrole.",
       },
     ],
     servicesEyebrow: "Diensten",
@@ -193,7 +193,7 @@ export const nl: Dict = {
     eyebrow: "Diensten",
     title: "Acht bouwstenen. Eén ambitie: excellentie.",
     intro:
-      "Elke dienst heeft een duidelijke doorlooptijd, gedefinieerde resultaten en een transparante prijs van € 999 netto per werkdag. Wat u hier leest, krijgt u – zonder kleine lettertjes, zonder bureau-overhead.",
+      "Elke dienst heeft een duidelijke doorlooptijd, gedefinieerde resultaten en een transparante prijs van € 449 netto per werkdag. Wat u hier leest, krijgt u – zonder kleine lettertjes, zonder bureau-overhead.",
     featuresLabel: "Omvang",
     deliverablesLabel: "U ontvangt",
     idealLabel: "Ideaal voor",
@@ -202,7 +202,7 @@ export const nl: Dict = {
     eyebrow: "Prijzen",
     title: "Eén tarief. Volledige transparantie.",
     intro:
-      "€ 999 netto per werkdag – dit tarief geldt voor elke dienst, elk project, elke dag. Een werkdag omvat maximaal acht planbare vakuren voor concept, design, ontwikkeling, tests en documentatie.",
+      "€ 449 netto per werkdag – dit tarief geldt voor elke dienst, elk project, elke dag. Een werkdag omvat maximaal acht planbare vakuren voor concept, design, ontwikkeling, tests en documentatie.",
     dayRateTitle: "Het dagtarief",
     dayRateText:
       "Vóór projectstart ontvangt u een betrouwbare urenraming in werkdagen. Een bindende totaalprijs is mogelijk zodra omvang, content, integraties en acceptatiecriteria eenduidig vaststaan. Meerwerk wordt altijd vóór uitvoering gemeld – nooit achteraf.",
@@ -413,7 +413,7 @@ export const nl: Dict = {
       a: "NeXify werkt AI-ondersteund. Moderne tools ondersteunen onderzoek, structurering, codecreatie, tests en documentatie. Vakinhoudelijke beslissingen, verantwoordelijkheid, controle en goedkeuring blijven bij de ervaren ontwikkelaar.",
     },
     {
-      q: "Is € 999 per werkdag een vaste prijs?",
+      q: "Is € 449 per werkdag een vaste prijs?",
       a: "Het dagtarief staat vast. Vóór de start ontvangt u een betrouwbare urenraming. Een bindende totaalprijs is mogelijk zodra omvang, content, integraties en acceptatiecriteria eenduidig vaststaan.",
     },
     {
@@ -462,7 +462,7 @@ export const nl: Dict = {
       { label: "Ervaring", value: "20+ jaar IT, commercie & sales" },
       { label: "Talen", value: "Duits, Nederlands, Engels" },
       { label: "Markt", value: "DE · AT · CH · NL" },
-      { label: "Model", value: "B2B, € 999 netto/dag" },
+      { label: "Model", value: "B2B, € 449 netto/dag" },
     ],
     journeyTitle: "Ervaring die u merkt",
     journeyIntro: "Meer dan 20 jaar praktijk – technisch, commercieel en in sales. Die combinatie is zeldzaam en maakt het verschil tussen een website en een instrument dat verkoopt.",
