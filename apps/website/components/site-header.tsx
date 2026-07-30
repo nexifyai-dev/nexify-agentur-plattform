@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Menu, X, UserRound, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X, UserRound } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth";
@@ -53,18 +53,7 @@ export function SiteHeader() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- close menus on route change
     setOpen(false);
-    setAppsOpen(false);
   }, [pathname]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (appsRef.current && !appsRef.current.contains(e.target as Node)) {
-        setAppsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
 
   return (
@@ -92,9 +81,7 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-            )}
-          </div>
-        </nav>
+          </nav>
 
         <div className="flex items-center gap-3">
           <div className="flex items-center rounded-full border border-white/12 p-1" data-testid="lang-switcher">
