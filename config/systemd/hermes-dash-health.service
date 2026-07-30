@@ -1,0 +1,9 @@
+[Unit]
+Description=Hermes Dashboard Stack Health Check
+
+[Service]
+Type=oneshot
+ExecStart=/opt/nexifyai/scripts/autopilot/check-hermes-dash.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hermes-dash-health

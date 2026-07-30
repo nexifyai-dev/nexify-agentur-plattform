@@ -181,7 +181,7 @@ Erkannte Abweichungen aus visuellem/logischem Audit und behoben:
 8. **Test-Coverage**: `tests/test_iter10_ceo_health.py` (4/4 grün): Lifecycle (enqueue via DB → GET → claim → 409 double-claim → complete → recommendations verify), Auth-Gates, Health-Shape, Health-Auth
 
 ### E2E-Verifikation
-- 2 synthetische Cases (Restaurant, Kaffeerösterei) durch Worker verarbeitet — jeweils ~1000 Zeichen strukturierte Empfehlung (Kontext, 2-4 Positionen mit PT-Range, Preisrechnung Tage × 999 €, Risiken/Rückfragen, Nächster Schritt). LLM-Qualität hervorragend.
+- 2 synthetische Cases (Restaurant, Kaffeerösterei) durch Worker verarbeitet — jeweils ~1000 Zeichen strukturierte Empfehlung (Kontext, 2-4 Positionen mit PT-Range, Preisrechnung Tage × 449 €, Risiken/Rückfragen, Nächster Schritt). LLM-Qualität hervorragend.
 - Admin-Panel Screenshot: „Alle Systeme grün" Badge + 4 Empfehlungen bereit + Expandable-Detail mit Markdown
 - Preview `www.nexifyai.cloud/api/admin/health/infra` liefert `ok:true, degraded:[]` ✅
 - Post-Test Cleanup: Alle synthetischen Rows entfernt (0 rows remaining) — Feature bereit für echte E-Mail-Anfragen

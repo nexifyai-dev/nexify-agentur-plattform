@@ -196,7 +196,7 @@ export const legalDe: Record<string, LegalPageData> = {
       {
         heading: "3. Aufwand, Arbeitstage und Preis",
         paragraphs: [
-          "Der reguläre Tagessatz beträgt 999 Euro netto pro Arbeitstag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden.",
+          "Der reguläre Tagessatz beträgt 449 Euro netto pro Arbeitstag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden.",
           "Aufwandsspannen sind Schätzungen auf Grundlage des bekannten Umfangs. Ein verbindlicher Gesamtfestpreis gilt nur, wenn er ausdrücklich vereinbart wurde. Bei geänderten Anforderungen, fehlenden Inhalten, externen Blockern oder zusätzlichen Integrationen wird der Mehrbedarf vor Ausführung angezeigt.",
           "Preise verstehen sich zuzüglich der anwendbaren Umsatzsteuer. Bei grenzüberschreitenden B2B-Leistungen innerhalb der EU kann bei gültiger Umsatzsteuer-ID das Reverse-Charge-Verfahren gelten.",
         ],

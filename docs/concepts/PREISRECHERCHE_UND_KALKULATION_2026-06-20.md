@@ -6,11 +6,11 @@
 ## 1. Verbindliche Basis
 
 ```text
-Tagessatz netto:      999,00 €
+Tagessatz netto:      449,00 €
 Niederländische BTW:   21,00 %
-Tagessatz inkl. BTW: 1.208,79 €
+Tagessatz inkl. BTW: 543,29 €
 Planbarer Arbeitstag: bis zu 8 Fachstunden
-Rechnerischer Stundensatz: 124,875 € netto
+Rechnerischer Stundensatz: 56,125 € netto
 ```
 
 Der Stundensatz ist keine Abrechnungsgrundlage, sondern eine Vergleichsgröße. Angeboten und geplant wird grundsätzlich in Arbeitstagen oder als daraus abgeleiteter Projektpreis.
@@ -31,7 +31,7 @@ Quellen:
 
 ### Einordnung
 
-999 Euro pro Arbeitstag beziehungsweise rund 124,88 Euro pro Stunde liegen im Bereich professioneller Webdesign- und Expertenleistungen in etablierten Hochkostenmärkten. Der Wettbewerbsvorteil ist nicht ein künstlich niedriger Fachsatz, sondern die kurze Projektdauer durch persönliche Führung, standardisierte Grundlagen und AI-gestützte Produktivität.
+449 Euro pro Arbeitstag beziehungsweise rund 56,13 Euro pro Stunde liegen im Bereich professioneller Webdesign- und Expertenleistungen in etablierten Hochkostenmärkten. Der Wettbewerbsvorteil ist nicht ein künstlich niedriger Fachsatz, sondern die kurze Projektdauer durch persönliche Führung, standardisierte Grundlagen und AI-gestützte Produktivität.
 
 Die Projektpreise für Landingpage, Website und fokussierte MVPs liegen dadurch häufig deutlich unter typischen Agentur-Gesamtkosten. Diese Aussage wird transparent an einen klar begrenzten, entscheidungsreifen Scope gebunden. Inhalte, Drittanbieter, komplexe Integrationen, Migrationen, Sonderdesigns und regulatorische Anforderungen können den Aufwand erhöhen.
 
@@ -39,17 +39,17 @@ Die Projektpreise für Landingpage, Website und fokussierte MVPs liegen dadurch 
 
 | Leistung | Arbeitstage | Netto | 21 % BTW | Brutto-Vergleich |
 |---|---:|---:|---:|---:|
-| Landingpage | 1 | 999,00 € | 209,79 € | 1.208,79 € |
-| Unternehmenswebsite Minimum | 2 | 1.998,00 € | 419,58 € | 2.417,58 € |
-| Unternehmenswebsite Maximum | 3 | 2.997,00 € | 629,37 € | 3.626,37 € |
-| Onlineshop Minimum | 6 | 5.994,00 € | 1.258,74 € | 7.252,74 € |
-| Onlineshop Maximum | 8 | 7.992,00 € | 1.678,32 € | 9.670,32 € |
-| Großer Shop 50.000+ Artikel | ab 12 | ab 11.988,00 € | ab 2.517,48 € | ab 14.505,48 € |
-| Web-App-MVP | 6–8 | 5.994,00–7.992,00 € | 1.258,74–1.678,32 € | 7.252,74–9.670,32 € |
-| Mobile-App-MVP | 6–8 | 5.994,00–7.992,00 € | 1.258,74–1.678,32 € | 7.252,74–9.670,32 € |
-| komplexe Web-/Mobile-App | ab 12 | ab 11.988,00 € | ab 2.517,48 € | ab 14.505,48 € |
-| Automatisierung | ab 1 | ab 999,00 € | ab 209,79 € | ab 1.208,79 € |
-| AI-gestützter Agent | ab 3 | ab 2.997,00 € | ab 629,37 € | ab 3.626,37 € |
+| Landingpage | 1 | 449,00 € | 94,29 € | 543,29 € |
+| Unternehmenswebsite Minimum | 2 | 898,00 € | 188,58 € | 1.086,58 € |
+| Unternehmenswebsite Maximum | 3 | 1.347,00 € | 282,87 € | 1.629,87 € |
+| Onlineshop Minimum | 6 | 2.694,00 € | 565,74 € | 3.259,74 € |
+| Onlineshop Maximum | 8 | 3.592,00 € | 754,32 € | 4.346,32 € |
+| Großer Shop 50.000+ Artikel | ab 12 | ab 5.388,00 € | ab 1.131,48 € | ab 6.519,48 € |
+| Web-App-MVP | 6–8 | 5.994,00–3.592,00 € | 1.258,74–754,32 € | 7.252,74–4.346,32 € |
+| Mobile-App-MVP | 6–8 | 5.994,00–3.592,00 € | 1.258,74–754,32 € | 7.252,74–4.346,32 € |
+| komplexe Web-/Mobile-App | ab 12 | ab 5.388,00 € | ab 1.131,48 € | ab 6.519,48 € |
+| Automatisierung | ab 1 | ab 449,00 € | ab 94,29 € | ab 543,29 € |
+| AI-gestützter Agent | ab 3 | ab 1.347,00 € | ab 282,87 € | ab 1.629,87 € |
 
 ## 4. Leistungsgrenzen der Beispielpreise
 
