@@ -1,0 +1,90 @@
+/* ══════════════════════════════════════════════════════════
+   NeXify Design Tokens — Mono (Monochrome Grayscale)
+   Override für nexify-design-tokens.css
+   Skin: data-skin="mono"
+   ══════════════════════════════════════════════════════════ */
+
+[data-skin="mono"] {
+  /* === Brand === */
+  --nx-brand-50:  #fafafa;
+  --nx-brand-100: #f4f4f4;
+  --nx-brand-200: #e5e5e5;
+  --nx-brand-300: #d4d4d4;
+  --nx-brand-400: #a3a3a3;
+  --nx-brand-500: #737373;
+  --nx-brand-600: #525252;
+  --nx-brand-700: #404040;
+  --nx-brand-800: #262626;
+  --nx-brand-900: #171717;
+  --nx-brand-950: #0a0a0a;
+
+  /* === Surface === */
+  --nx-surface-0:    #ffffff;
+  --nx-surface-50:   #fafafa;
+  --nx-surface-100:  #f5f5f5;
+  --nx-surface-200:  #e5e5e5;
+  --nx-surface-300:  #d4d4d4;
+  --nx-surface-400:  #a3a3a3;
+  --nx-surface-500:  #737373;
+  --nx-surface-600:  #525252;
+  --nx-surface-700:  #404040;
+  --nx-surface-800:  #262626;
+  --nx-surface-900:  #171717;
+  --nx-surface-950:  #0a0a0a;
+
+  /* === Text === */
+  --nx-text-primary:    #0a0a0a;
+  --nx-text-secondary:  #525252;
+  --nx-text-tertiary:   #a3a3a3;
+  --nx-text-inverse:    #fafafa;
+  --nx-text-muted:      #d4d4d4;
+  --nx-text-link:       #404040;
+  --nx-text-link-hover: #171717;
+
+  /* === Border === */
+  --nx-border-light:  #e5e5e5;
+  --nx-border-medium: #d4d4d4;
+  --nx-border-heavy:  #a3a3a3;
+  --nx-border-focus:  #525252;
+
+  /* === Functional (grayscale-mapped) === */
+  --nx-success:       #525252;
+  --nx-success-soft:  #e5e5e5;
+  --nx-warning:       #737373;
+  --nx-warning-soft:  #f5f5f5;
+  --nx-error:         #171717;
+  --nx-error-soft:    #e5e5e5;
+  --nx-info:          #a3a3a3;
+  --nx-info-soft:     #f5f5f5;
+
+  /* === Accent === */
+  --nx-accent-1:  #737373;
+  --nx-accent-2:  #525252;
+  --nx-accent-3:  #404040;
+
+  /* === Glass / Overlay === */
+  --nx-glass-bg:       rgba(255,255,255,0.80);
+  --nx-glass-border:   rgba(0,0,0,0.06);
+  --nx-glass-blur:     16px;
+  --nx-overlay-bg:     rgba(0,0,0,0.40);
+
+  /* === Shadow === */
+  --nx-shadow-xs:   0 1px 2px rgba(0,0,0,0.04);
+  --nx-shadow-sm:   0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --nx-shadow-md:   0 4px 6px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  --nx-shadow-lg:   0 10px 15px rgba(0,0,0,0.06), 0 4px 6px rgba(0,0,0,0.04);
+  --nx-shadow-xl:   0 20px 25px rgba(0,0,0,0.08), 0 8px 10px rgba(0,0,0,0.04);
+
+  /* === Radius === */
+  --nx-radius-none: 0;
+  --nx-radius-sm:   4px;
+  --nx-radius-md:   8px;
+  --nx-radius-lg:   12px;
+  --nx-radius-xl:   16px;
+  --nx-radius-full: 9999px;
+
+  /* === Typography (inherited) === */
+  --nx-font-sans:   'Inter', 'SF Pro Display', system-ui, sans-serif;
+  --nx-font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  --nx-font-display: 'Space Grotesk', 'Inter', sans-serif;
+}

@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 
 load_dotenv()
+load_dotenv("/etc/nexifyai/credentials.env", override=False)
 
 import os
 import re
@@ -16,6 +17,7 @@ from datetime import datetime, timezone, timedelta
 import asyncpg
 import resend
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, EmailStr
@@ -42,6 +44,13 @@ FOLLOWUP_HOURS = int(os.environ.get("FOLLOWUP_HOURS", "24"))
 resend.api_key = RESEND_API_KEY
 
 app = FastAPI(title="NeXify AI Backend")
+
+# Serve demo files
+import os as _os
+
+_demo_dir = "/opt/nexifyai/repos/lead-pipeline/demos"
+_os.makedirs(_demo_dir, exist_ok=True)
+app.mount("/demos", StaticFiles(directory=_demo_dir), name="demos")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
@@ -694,6 +703,68 @@ async def send_email(
         except Exception as e2:
             logger.error(f"smtp fallback failed: {e2}")
             return None
+
+
+# --- Lead Pipeline Campaign Endpoint ---
+class CampaignLead(BaseModel):
+    contact_email: str
+    subject: str | None = None
+    body: str | None = None
+    calendly_url: str | None = None
+    name: str | None = None
+    url: str | None = None
+
+
+class CampaignSendReq(BaseModel):
+    leads: list[CampaignLead]
+    campaign_id: str | None = "default"
+
+
+@app.post("/campaign/send")
+async def campaign_send(req: CampaignSendReq):
+    """Pipeline ruft diesen Endpoint. Sendet personalised HTML emails via Resend/SMTP."""
+    results = []
+    for lead in req.leads:
+        to = lead.contact_email
+        if not to or "@" not in to:
+            results.append({"email": to, "ok": False, "error": "invalid_email"})
+            continue
+
+        subject = lead.subject or "KI-Chatbot Demo"
+        text_body = lead.body or ""
+
+        # HTML wrapper: professional template
+        html_body = f"""<div style="font-family:Manrope,Arial,sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a">
+  <div style="background:#0A0A0A;padding:20px 30px;border-radius:8px 8px 0 0">
+    <span style="color:#fff;font-size:20px;font-weight:700">NeXifyAI</span>
+  </div>
+  <div style="padding:30px;background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 8px 8px">
+    <p style="white-space:pre-line;font-size:15px;line-height:1.6">{text_body}</p>
+    {"<p><a href='" + lead.calendly_url + "' style='display:inline-block;background:#7c3aed;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px'>Demo-Call buchen →</a></p>" if lead.calendly_url else ""}
+  </div>
+  <div style="padding:20px 30px;font-size:12px;color:#888;border-top:1px solid #eee">
+    <p><strong>NeXifyAI</strong> · Pascal Courbois<br>
+    mail@nexifyai.cloud · <a href="https://nexifyai.cloud" style="color:#888">nexifyai.cloud</a><br>
+    Datenschutz: <a href="https://nexifyai.cloud/datenschutz" style="color:#888">nexifyai.cloud/datenschutz</a><br>
+    Abmelden: <a href="https://nexifyai.cloud/unsubscribe" style="color:#888">hier abmelden</a></p>
+    <p>© 2026 NeXifyAI · Diese E-Mail wurde im Rahmen unserer Dienstleistung gesendet.</p>
+  </div>
+</div>"""
+
+        try:
+            email_id = await send_email(to, subject, html_body)
+            if email_id:
+                results.append({"email": to, "ok": True, "id": email_id})
+            else:
+                results.append({"email": to, "ok": False, "error": "send_failed"})
+        except Exception as e:
+            logger.error(f"campaign send failed for {to}: {e}")
+            results.append({"email": to, "ok": False, "error": str(e)[:100]})
+
+    logger.info(
+        f"Campaign {req.campaign_id}: {sum(1 for r in results if r['ok'])}/{len(results)} sent"
+    )
+    return {"campaign_id": req.campaign_id, "results": results, "total": len(results)}
 
 
 def offer_pdf_bytes(
