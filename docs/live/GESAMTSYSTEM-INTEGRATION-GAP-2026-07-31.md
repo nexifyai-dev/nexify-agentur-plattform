@@ -60,7 +60,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
 | **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
 | **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
-| **GitHub** | SoT + PR | `#90`/`#99`–`#102` MERGED; `#103` draft gap/auth | OK | — |
+| **GitHub** | SoT + PR | `#90`/`#99`–`#103` MERGED; `#105` docs auth/OpenMCP | OK | — |
 | **Codespace pancake** | — | Branch war PR `#90` (**MERGED**) | OK | Codespace stoppen |
 | **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
 | **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
