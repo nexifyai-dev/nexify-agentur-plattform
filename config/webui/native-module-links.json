@@ -2,7 +2,7 @@
   "_meta": {
     "file": "config/webui/native-module-links.json",
     "nir": "31.07.2026 11:37",
-    "updated": "31.07.2026 12:03",
+    "updated": "31.07.2026 12:21",
     "what": "Canonical native-module link map for WebUI-Zentrale (no secrets)",
     "why": "Decision 2026-07-31 — Dashboard→WebUI native; Übergangspfad dokumentieren",
     "status": "SPEC stub — Preview consumers only; no prod WebUI live-patch",
@@ -40,10 +40,13 @@
       "id": "agentmemory",
       "label": "AgentMemory",
       "soll": "native",
-      "ist": "proxy",
+      "ist": "preview-shell",
       "href_local": "http://127.0.0.1:3113",
       "href_api": "http://127.0.0.1:3111",
-      "notes": "11 views native rebuild — largest parity item"
+      "preview_path": "apps/webui-preview/agentmemory-panel/",
+      "preview_spec": "docs/architecture/AGENTMEMORY-NATIVE-VIEW-STUB-2026-07-31.md",
+      "hermes_wire": "apps/webui-preview/hermes-wire/",
+      "notes": "11 views stub nav + Official Viewer Übergang; Hermes wire Preview Hub :8790"
     },
     {
       "id": "lightrag",
