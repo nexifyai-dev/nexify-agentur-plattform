@@ -15,6 +15,14 @@
       "url": "https://mcp.context7.com/mcp",
       "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor Übernahme."
     },
+    "lightrag": {
+      "command": "python3",
+      "args": ["/opt/nexifyai/mcp-servers/lightrag-mcp.py"],
+      "env": {
+        "LIGHTRAG_URL": "http://127.0.0.1:9622"
+      },
+      "description": "LightRAG Knowledge Graph (Vektorsuche). Origin :9622 — Secrets nur Env."
+    },
     "gitlab-oss": {
       "command": "npx",
       "args": ["-y", "@zereight/mcp-gitlab"],
