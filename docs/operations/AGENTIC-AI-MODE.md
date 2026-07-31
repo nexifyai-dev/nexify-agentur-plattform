@@ -108,6 +108,17 @@ Qualitaets-Gates:
 - `MAX_P0`, `MAX_P1`, `MAX_P2`, `MAX_BLOCKED` definieren Grenzwerte fuer den Remediation-Backlog.
 - `ENFORCE_GATES=1` aktiviert harte Durchsetzung (Longrun endet mit non-zero Exit bei Gate-Verletzung).
 
+While-True Modus (dauerhaft):
+
+- `MAX_CYCLES=0` aktiviert Endlosschleife (`while true`) fuer den Langlauf.
+- `KILL_SWITCH_FILE` stoppt den Loop kontrolliert, sobald die Datei existiert.
+
+Beispiel:
+
+```bash
+MAX_CYCLES=0 INTERVAL_SECONDS=900 ENFORCE_GATES=1 KILL_SWITCH_FILE=test_reports/longrun/KILL_SWITCH bash scripts/integration-longrun.sh
+```
+
 | Severity | Bedeutung |
 |----------|-----------|
 | ERROR | Sofort fixen (z. B. getrackte Secrets, fehlende Pflichtdateien) |
