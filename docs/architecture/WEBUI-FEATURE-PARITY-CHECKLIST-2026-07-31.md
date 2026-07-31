@@ -1,6 +1,6 @@
 # FILE: docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md
 # NIR: 31.07.2026 11:25
-# UPDATED: 31.07.2026 11:25
+# UPDATED: 31.07.2026 11:34
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Feature-Parity-Checkliste Workspace (:4001) → Mandat-WebUI-Zentrale
@@ -29,9 +29,10 @@ Kein Iframe-Dauerpfad. Kein zweites Control-Dashboard. n8n abbau. NousResearch `
 | OpenDesign lokal `:3002` | 200 |
 | Grafana lokal `:3000/api/health` | 200 |
 | Grafana via Traefik **HTTPS** `Host grafana` | 200 |
-| Grafana via Traefik **HTTP :8080** `Host grafana` | **Falschpositiv** → Portainer (`unsupported API version`) — Router nur `websecure` |
+| `127.0.0.1:8080` | **cAdvisor** — nicht Grafana; Smoke nur HTTPS/`--resolve` |
 | Paperclip `:3100` | **BLOCKED** (`blocked_no_app_tree`) |
-| OpenMCP Allowlist Stub | Draft PR `#100` (`config/openmcp/`) |
+| OpenMCP Allowlist Stub | **`#100` MERGED**; 4/4 operationIds live OpenAPI OK |
+| OfferCatalog `/leistungen` | **`#99` MERGED**; LD OfferCatalog+Service+Offer live |
 
 ## Parity-Matrix (Workspace → WebUI-Zentrale)
 

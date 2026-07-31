@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 11:32
+# UPDATED: 31.07.2026 11:34
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -13,16 +13,17 @@
 
 Kern-Runtime (AgentMemory, LightRAG, 9Router, Hermes Workspace/WebUI, GitLab) ist **live**.
 Voll-Integration in **eine** WebUI-Zentrale ist **nicht** erreicht: parallele Surfaces, Paperclip down,
-OpenMCP Stub in Draft `#100`, 1Backend Spec-first, Monitoring lokal/HTTPS OK aber CF-Hostname-Drift.
-Monorepo MCP LightRAG + Dual-Write Hooks: **PR `#98` MERGED**.
+OpenMCP Stub **`#100` MERGED** (Preview next), 1Backend Adapter-Spec, Monitoring HTTPS OK aber CF-DNS Drift.
+Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99` MERGED** (live verified).
 
 **Arbeitsplatz-SoT (Mandat):** `https://webui.nexifyai.cloud/`  
 **IST-Shell (Workspace):** `https://dashboard.nexifyai.cloud/` → `127.0.0.1:4001` (hermes-workspace)  
 **IST-Hermes-WebUI:** `https://webui.nexifyai.cloud/` → `:8787` (Login 302)  
-→ Decision: `/opt/nexifyai/docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`  
-→ Parity-Checkliste: `docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md`
+→ Decision: `docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`  
+→ Parity: `docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md`  
+→ Monitoring: `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` · OpenDesign: `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md`
 
-## Live Health (2026-07-31 11:28, keine Secrets)
+## Live Health (2026-07-31 11:34, keine Secrets)
 
 | Endpoint | Ergebnis |
 |----------|----------|
@@ -33,14 +34,15 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **PR `#98` MERGED**.
 | Hermes Gateway `:8644/health` | ok (prior) |
 | Hermes Workspace `:4001` / dashboard.* | 200 |
 | Hermes WebUI `:8787` / webui.* | 302 login; `/login` 200 |
-| Backend FastAPI `:8901/api/health` | ok (OpenAPI 61 paths); `/health` 404 |
-| OpenDesign html-anything `:3002` | 200 lokal |
-| Grafana `:3000/api/health` | 200 lokal; Traefik **HTTPS** Host grafana → 200 |
-| Grafana via `:8080` Host grafana | Falschpositiv Portainer (Router nur `websecure`) |
-| Paperclip `:3100` | DOWN — `blocked_no_app_tree` |
+| Backend FastAPI `:8901/api/health` | ok; OpenAPI **67** ops; `/health` 404 |
+| OpenDesign html-anything `:3002` | 200 lokal; `html.*` Traefik HTTPS 404 |
+| Grafana `:3000/api/health` | 200; Traefik HTTPS Host grafana → **200** |
+| `127.0.0.1:8080` | **cAdvisor** — nicht Grafana/Traefik (Smoke-Korrektur) |
+| Paperclip `:3100` | DOWN — `blocked_no_app_tree` (sense-only Doc) |
 | Redis `:6379` | up (revive policy) |
 | grafana/opendesign/openapi/openmcp public DNS | unresolved / classic DNS MISSING |
-| Circuit Breaker `:8912/check` | allow true |
+| GitHub→GitLab Mirror | success für `#98`/`#99`/`#100` |
+| Circuit Breaker `:8912/check` | allow true (prior) |
 
 ## Gap-Matrix IST vs SOLL
 
@@ -52,13 +54,13 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **PR `#98` MERGED**.
 | **LightRAG** | Native Module + Dual-Write | healthy; Dual-Write Hooks **#98 MERGED** | TEIL | Ingest Gap-Doc; Native UI |
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
 | **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
-| **OpenAPI** | ICD/Clients | `:8901/openapi.json` 61 paths live | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
+| **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
 | **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub **`#100` MERGED** | TEIL | Preview `openmcp run`; kein Prod |
-| **OpenDesign** | Native Design-Editor | `:3002` lokal; kein CF `opendesign.*` | TEIL | WebUI `/design` Übergang; CF blocked |
-| **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK | TEIL | CF DNS pending (403 write) |
-| **Paperclip** | Factory `:3100` | README-Stub | **BLOCKED** | echte Factory-Tree/Image — kein Fake-Deploy |
-| **GitLab OSS** | Mirror + CI | `:8922` OK; `deploy:vps` Manual-Gate Job | TEIL | Manual only; kein Blind-Cutover |
-| **GitHub** | SoT + PR | `#98`/`#99`/`#100` MERGED; `#101` parity draft; `#90` CI open | OK | — |
+| **OpenDesign** | Native Design-Editor | `:3002` lokal; `html.*` 404; kein CF | TEIL | `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md` |
+| **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
+| **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
+| **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
+| **GitHub** | SoT + PR | `#98`/`#99`/`#100` MERGED; `#101` draft; `#90` open | OK | — |
 | **Codespace pancake** | — | Branch PR `#90` (kein Drift-Fork) | OK | nach Merge Codespace stoppen |
 | **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
 | **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
@@ -82,6 +84,8 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 9. CF DNS grafana/opendesign — **pending** (write 403)
 10. WebUI Feature-Parity-Checkliste — Draft `#101`
 11. GitLab `deploy:vps` Manual-Gate Job — **diese Lieferung** (soll-deviation WARN)
+12. Monitoring/OpenDesign/Paperclip/Mirror Pointer-Docs + Decision Monorepo-Spiegel — **diese Lieferung**
+13. Live-verify `#99` `/leistungen` OfferCatalog LD + `#100` OpenAPI operationIds — **done**
 
 ## Remaining Blockers (Actions)
 
@@ -116,11 +120,16 @@ Detail: `docs/live/GITHUB-ORG-MONOREPO-DRIFT-2026-07-31.md` · `docs/architectur
 
 ## Evidence-Pfade
 
-- Dieses Doc · Parity-Checkliste · Decision WebUI vs Dashboard
+- Dieses Doc · Parity-Checkliste · `docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`
+- `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md`
+- `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md`
+- `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md`
+- `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md`
+- `docs/architecture/1BACKEND-ADAPTER-SPEC.md`
 - Backup: `/opt/nexifyai/backups/gesamtsystem-fix-*`
 - Traefik: `/opt/nexifyai/traefik/dynamic/main-routers.yml`
 - Autopilot: `/opt/nexifyai/config/autopilot/jobs.yaml`
-- OpenMCP stub: `config/openmcp/` (PR `#100`)
+- OpenMCP stub: `config/openmcp/` (`#100`)
 - SOLL: `/opt/nexifyai/docs/architecture/SOLL-GESAMTKONZEPT.md`
 
 ## Verify (Smoke)
@@ -131,9 +140,11 @@ curl -sk --resolve grafana.nexifyai.cloud:443:127.0.0.1 https://grafana.nexifyai
 curl -sS http://127.0.0.1:20128/api/health
 curl -sS http://127.0.0.1:9622/health
 curl -sS http://127.0.0.1:8901/api/health
+curl -sS https://www.nexifyai.cloud/leistungen | grep -o OfferCatalog | head -1
 unset GITHUB_TOKEN
-gh pr view 98 --json state,mergedAt
-gh pr view 99 --json isDraft,state,url
-gh pr view 100 --json isDraft,state,url
+gh pr view 99 --json state,mergedAt
+gh pr view 100 --json state,mergedAt
+gh pr view 101 --json isDraft,state,url
 gh pr view 90 --json isDraft,state,url
+gh run list --workflow=mirror-to-gitlab.yml --limit 3
 ```
