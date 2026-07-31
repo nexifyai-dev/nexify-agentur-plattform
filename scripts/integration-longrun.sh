@@ -11,6 +11,11 @@ INTERVAL_SECONDS="${INTERVAL_SECONDS:-900}"
 MAX_CYCLES="${MAX_CYCLES:-1}"
 REPORT_DIR="${REPORT_DIR:-$ROOT/test_reports/longrun}"
 KEEP_LAST="${KEEP_LAST:-20}"
+ENFORCE_GATES="${ENFORCE_GATES:-0}"
+MAX_P0="${MAX_P0:-0}"
+MAX_P1="${MAX_P1:-10}"
+MAX_P2="${MAX_P2:-50}"
+MAX_BLOCKED="${MAX_BLOCKED:-999}"
 
 mkdir -p "$REPORT_DIR"
 
@@ -45,6 +50,8 @@ run_cycle() {
   local scan_json="$REPORT_DIR/soll-deviation-scan-${stamp}.json"
   local delta_json="$REPORT_DIR/soll-deviation-delta-${stamp}.json"
   local remediation_json="$REPORT_DIR/remediation-plan-${stamp}.json"
+  local gate_json="$REPORT_DIR/remediation-gates-${stamp}.json"
+  local gate_rc=0
 
   {
     echo "# Integration Longrun"
@@ -83,6 +90,21 @@ run_cycle() {
 
   if [[ -f "$scan_json" ]]; then
     python3 scripts/generate-remediation-plan.py --input "$scan_json" --output "$remediation_json" || true
+  fi
+
+  if [[ -f "$remediation_json" ]]; then
+    gate_args=(
+      --input "$remediation_json"
+      --output "$gate_json"
+      --max-p0 "$MAX_P0"
+      --max-p1 "$MAX_P1"
+      --max-p2 "$MAX_P2"
+      --max-blocked "$MAX_BLOCKED"
+    )
+    if [[ "$ENFORCE_GATES" == "1" ]]; then
+      gate_args+=(--enforce)
+    fi
+    python3 scripts/evaluate-remediation-gates.py "${gate_args[@]}" || gate_rc=$?
   fi
 
   prev_scan="$(ls -1 "$REPORT_DIR"/soll-deviation-scan-*.json 2>/dev/null | grep -v "$scan_json" | tail -n 1 || true)"
@@ -145,22 +167,31 @@ PY
   echo "scan_snapshot=$scan_json"
   [[ -f "$delta_json" ]] && echo "delta_snapshot=$delta_json"
   [[ -f "$remediation_json" ]] && echo "remediation_snapshot=$remediation_json"
+  [[ -f "$gate_json" ]] && echo "gates_snapshot=$gate_json"
 
   cp "$out" "$REPORT_DIR/latest-integration-longrun.log"
   [[ -f "$scan_json" ]] && cp "$scan_json" "$REPORT_DIR/latest-soll-deviation-scan.json"
   [[ -f "$delta_json" ]] && cp "$delta_json" "$REPORT_DIR/latest-soll-deviation-delta.json"
   [[ -f "$remediation_json" ]] && cp "$remediation_json" "$REPORT_DIR/latest-remediation-plan.json"
+  [[ -f "$gate_json" ]] && cp "$gate_json" "$REPORT_DIR/latest-remediation-gates.json"
 
   prune_pattern "$REPORT_DIR/integration-longrun-*.log"
   prune_pattern "$REPORT_DIR/soll-deviation-scan-*.json"
   prune_pattern "$REPORT_DIR/soll-deviation-delta-*.json"
   prune_pattern "$REPORT_DIR/remediation-plan-*.json"
+  prune_pattern "$REPORT_DIR/remediation-gates-*.json"
+
+  if [[ "$ENFORCE_GATES" == "1" && "$gate_rc" -ne 0 ]]; then
+    return "$gate_rc"
+  fi
 }
 
 echo "# Start integration-longrun"
 echo "root=$ROOT"
 echo "interval=${INTERVAL_SECONDS}s"
 echo "max_cycles=$MAX_CYCLES"
+echo "enforce_gates=$ENFORCE_GATES"
+echo "thresholds: p0<=${MAX_P0} p1<=${MAX_P1} p2<=${MAX_P2} blocked<=${MAX_BLOCKED}"
 echo
 
 for ((i=1; i<=MAX_CYCLES; i++)); do

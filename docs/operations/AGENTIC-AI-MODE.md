@@ -92,14 +92,21 @@ Artefakte:
 - `test_reports/longrun/soll-deviation-scan-*.json`
 - `test_reports/longrun/soll-deviation-delta-*.json`
 - `test_reports/longrun/remediation-plan-*.json`
+- `test_reports/longrun/remediation-gates-*.json`
 - `test_reports/longrun/latest-integration-longrun.log`
 - `test_reports/longrun/latest-soll-deviation-scan.json`
 - `test_reports/longrun/latest-soll-deviation-delta.json`
 - `test_reports/longrun/latest-remediation-plan.json`
+- `test_reports/longrun/latest-remediation-gates.json`
 
 Retention/Rotation:
 
 - `KEEP_LAST` steuert, wie viele zeitgestempelte Longrun-Dateien pro Muster gehalten werden (Default: `20`).
+
+Qualitaets-Gates:
+
+- `MAX_P0`, `MAX_P1`, `MAX_P2`, `MAX_BLOCKED` definieren Grenzwerte fuer den Remediation-Backlog.
+- `ENFORCE_GATES=1` aktiviert harte Durchsetzung (Longrun endet mit non-zero Exit bei Gate-Verletzung).
 
 | Severity | Bedeutung |
 |----------|-----------|

@@ -54,6 +54,19 @@ Der Longrun erstellt jetzt pro Zyklus einen priorisierten Maßnahmenplan.
 - Blockierte Maßnahmen (ohne Secrets/VPS-Bind im Codespace): `3`
 - Ziel: Priorisierte Abarbeitung ohne manuelle Triage-Runden
 
+## Qualitaets-Gates (neu)
+
+Langlauf besitzt jetzt optionale harte Gates auf Basis des Maßnahmenplans:
+
+- Parameter: `MAX_P0`, `MAX_P1`, `MAX_P2`, `MAX_BLOCKED`
+- Schalter: `ENFORCE_GATES=1`
+- Gate-Artefakte: `test_reports/longrun/remediation-gates-*.json` + `latest-remediation-gates.json`
+
+Verifiziert am 31.07.2026:
+
+- Soft-Mode (`ENFORCE_GATES=0`): Lauf erfolgreich, Gate-Report erzeugt
+- Hard-Mode (`ENFORCE_GATES=1`, `MAX_P1=2`): Lauf endet korrekt mit Exit-Code `2` bei Gate-Verletzung
+
 ## Priorisierte Folgeaktionen
 
 1. P0: Secrets fuer Codespace-Lauf setzen (`AGENTMEMORY_SECRET`, `GITLAB_PERSONAL_ACCESS_TOKEN`) und erneut health-checken.
