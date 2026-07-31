@@ -51,6 +51,43 @@ def load_json(path: Path) -> dict | None:
         return None
 
 
+def parse_tunnel_ingress_hosts(path: Path) -> dict[str, str]:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+
+    host_to_service: dict[str, str] = {}
+    current_host = ""
+    for raw in text.splitlines():
+        line = raw.strip()
+        host_match = re.match(r"^-\s*hostname:\s*(.+)$", line)
+        if host_match:
+            current_host = host_match.group(1).strip().strip('"').strip("'")
+            continue
+        service_match = re.match(r"^service:\s*(.+)$", line)
+        if service_match and current_host:
+            service = service_match.group(1).strip().strip('"').strip("'")
+            host_to_service[current_host] = service
+            current_host = ""
+    return host_to_service
+
+
+def has_expected_github_origin(remotes_raw: str) -> bool:
+    patterns = (
+        r"github\.com[:/]nexifyai-dev/nexify-agentur-plattform(?:\.git)?",
+    )
+    return any(re.search(pat, remotes_raw) for pat in patterns)
+
+
+def command_output(cmd: list[str]) -> tuple[int, str]:
+    try:
+        proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False)
+    except OSError:
+        return 127, ""
+    return proc.returncode, (proc.stdout + proc.stderr)
+
+
 def scan() -> list[Finding]:
     findings: list[Finding] = []
 
@@ -74,6 +111,41 @@ def scan() -> list[Finding]:
             findings.append(
                 Finding("error", "GOV-MISSING", f"Pflichtdatei fehlt: {rel}", f"Anlegen: {rel}")
             )
+
+    # --- Tooling files for MCP + integrations ---
+    tooling_required = [
+        "scripts/mcp-health-codespace.sh",
+        "scripts/setup-codespace-mcp.sh",
+        "scripts/install-agent-hooks.sh",
+        "scripts/verify-gh-monorepo-clone.sh",
+        "deploy/cloudflare/tunnel-ingress.yml",
+    ]
+    for rel in tooling_required:
+        p = ROOT / rel
+        if p.exists():
+            findings.append(Finding("ok", "TOOLING-PRESENT", f"{rel} vorhanden"))
+        else:
+            findings.append(
+                Finding(
+                    "error",
+                    "TOOLING-MISSING",
+                    f"Pflicht-Tool fehlt: {rel}",
+                    f"Anlegen: {rel}",
+                )
+            )
+
+    clone_check = ROOT / "scripts/verify-gh-monorepo-clone.sh"
+    if clone_check.exists() and clone_check.stat().st_mode & 0o111:
+        findings.append(Finding("ok", "GH-CLONE-CHECK", "Monorepo-Clone-Check ist ausführbar"))
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "GH-CLONE-CHECK",
+                "Monorepo-Clone-Check fehlt Ausführungsrechte",
+                "chmod +x scripts/verify-gh-monorepo-clone.sh",
+            )
+        )
 
     # --- MCP: secrets must not be tracked ---
     if git_tracked(".cursor/mcp.json"):
@@ -135,16 +207,150 @@ def scan() -> list[Finding]:
     gitlab_ci = (ROOT / ".gitlab-ci.yml").read_text(encoding="utf-8") if (ROOT / ".gitlab-ci.yml").exists() else ""
     if "deploy:vps" in gitlab_ci:
         findings.append(Finding("ok", "VCS-GITLAB-CI", "GitLab CI deploy:vps Job definiert"))
+    elif re.search(r"(?m)^\s*stage:\s*deploy\s*$", gitlab_ci):
+        findings.append(Finding("ok", "VCS-GITLAB-CI", "GitLab CI enthält Deploy-Stage (abweichende Job-Namen)"))
     else:
-        findings.append(Finding("warn", "VCS-GITLAB-CI", "GitLab CI ohne deploy:vps"))
+        findings.append(Finding("warn", "VCS-GITLAB-CI", "GitLab CI ohne Deploy-Stage"))
+
+    # --- Git remotes must include GitHub origin + GitLab OSS ---
+    try:
+        remotes_raw = subprocess.run(
+            ["git", "remote", "-v"], cwd=ROOT, capture_output=True, text=True, check=False
+        ).stdout
+    except OSError:
+        remotes_raw = ""
+    if has_expected_github_origin(remotes_raw):
+        findings.append(Finding("ok", "VCS-ORIGIN", "GitHub origin remote korrekt gesetzt"))
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "VCS-ORIGIN",
+                "GitHub origin remote nicht eindeutig auf nexify-agentur-plattform",
+                "git remote set-url origin git@github.com:nexifyai-dev/nexify-agentur-plattform.git",
+            )
+        )
+    if "gitlab.nexifyai.cloud" in remotes_raw:
+        findings.append(Finding("ok", "VCS-GITLAB-REMOTE", "GitLab OSS remote vorhanden"))
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "VCS-GITLAB-REMOTE",
+                "GitLab OSS remote fehlt",
+                "bash scripts/ensure-gitlab-remote.sh",
+            )
+        )
+
+    # --- GitHub CLI and repo access (monorepo operational readiness) ---
+    gh_rc, gh_out = command_output(["gh", "--version"])
+    if gh_rc == 0:
+        findings.append(Finding("ok", "GH-CLI", "gh CLI verfügbar"))
+        auth_rc, _ = command_output(["gh", "auth", "status"])
+        if auth_rc == 0:
+            findings.append(Finding("ok", "GH-AUTH", "gh authentifiziert"))
+        else:
+            findings.append(
+                Finding(
+                    "warn",
+                    "GH-AUTH",
+                    "gh nicht authentifiziert",
+                    "gh auth login oder bestehende Token-Session aktivieren",
+                )
+            )
+
+        view_rc, _ = command_output(["gh", "repo", "view", "nexifyai-dev/nexify-agentur-plattform"])
+        if view_rc == 0:
+            findings.append(Finding("ok", "GH-REPO-VIEW", "GitHub Monorepo via gh erreichbar"))
+        else:
+            findings.append(
+                Finding(
+                    "warn",
+                    "GH-REPO-VIEW",
+                    "GitHub Monorepo via gh nicht erreichbar",
+                    "Netz/Auth fuer gh repo view pruefen",
+                )
+            )
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "GH-CLI",
+                "gh CLI nicht verfügbar",
+                "GitHub CLI installieren, um Repo-Operationen zu automatisieren",
+            )
+        )
+
+    # --- Local hook integrity for autonomous guardrails ---
+    hook_paths = [".git/hooks/post-merge", ".git/hooks/post-checkout", ".git/hooks/pre-push"]
+    missing_hooks = [hp for hp in hook_paths if not (ROOT / hp).exists()]
+    if missing_hooks:
+        findings.append(
+            Finding(
+                "warn",
+                "HOOKS-MISSING",
+                f"Lokale Hooks fehlen: {', '.join(missing_hooks)}",
+                "bash scripts/install-agent-hooks.sh",
+            )
+        )
+    else:
+        findings.append(Finding("ok", "HOOKS-INSTALLED", "Lokale Guardrail-Hooks installiert"))
+
+    # --- Tunnel ingress consistency: dashboard + webui as control-plane hosts ---
+    host_to_service = parse_tunnel_ingress_hosts(ROOT / "deploy/cloudflare/tunnel-ingress.yml")
+
+    for host in ("dashboard.nexifyai.cloud", "webui.nexifyai.cloud"):
+        if host in host_to_service:
+            findings.append(Finding("ok", "TUNNEL-HOST", f"Ingress enthält {host}"))
+        else:
+            findings.append(
+                Finding(
+                    "error",
+                    "TUNNEL-HOST-MISSING",
+                    f"Ingress fehlt: {host}",
+                    "deploy/cloudflare/tunnel-ingress.yml aktualisieren",
+                )
+            )
+
+    dashboard_service = host_to_service.get("dashboard.nexifyai.cloud", "")
+    webui_service = host_to_service.get("webui.nexifyai.cloud", "")
+    if dashboard_service and webui_service and dashboard_service != webui_service:
+        findings.append(
+            Finding(
+                "warn",
+                "CONTROL-PLANE-SPLIT",
+                (
+                    "dashboard.nexifyai.cloud und webui.nexifyai.cloud zeigen auf "
+                    f"unterschiedliche Targets ({dashboard_service} vs {webui_service})"
+                ),
+                "Zentralisierung planen: Dashboard-Funktionen in WebUI integrieren oder Redirect über WebUI-Gateway",
+            )
+        )
+    elif dashboard_service and webui_service:
+        findings.append(Finding("ok", "CONTROL-PLANE-UNIFIED", "Dashboard/WebUI teilen dasselbe Target"))
 
     # --- Runtime (optional — Cloud-Agent oft ohne VPS) ---
     # GitLab: /-/health ist auf OSS oft 404 — sign_in / public API sind die richtigen Probes
     runtime_checks = [
         ("AgentMemory REST", "http://127.0.0.1:3111/agentmemory/livez", False),
+        ("LightRAG", "http://127.0.0.1:9622/health", False),
+        ("OpenMCP Proxy", "http://127.0.0.1:8650/api/mcp/servers", False),
+        ("OpenDesign Local", "http://127.0.0.1:3002", False),
         ("9Router", "http://127.0.0.1:20128/api/health", False),
         ("GitLab OSS UI", "https://gitlab.nexifyai.cloud/users/sign_in", True),
         ("GitLab OSS API", "https://gitlab.nexifyai.cloud/api/v4/projects?per_page=1", True),
+        ("WebUI", "https://webui.nexifyai.cloud/health", True),
+        ("Dashboard", "https://dashboard.nexifyai.cloud/health", True),
+        ("Backend OpenAPI", "https://api.nexifyai.cloud/openapi.json", True),
+        ("OpenDesign Public", "https://opendesign.nexifyai.cloud", True),
+        ("Open Public", "https://open.nexifyai.cloud", True),
+        ("Grafana", "https://grafana.nexifyai.cloud/api/health", True),
+        ("Prometheus", "https://prometheus.nexifyai.cloud/-/healthy", True),
+        (
+            "Codespace URL",
+            "https://ubiquitous-space-pancake-q7r5qvj444wxc46pg.github.dev/",
+            True,
+        ),
     ]
     for label, url, expect_public in runtime_checks:
         if http_ok(url):

@@ -1,0 +1,23 @@
+{
+  "previous": "soll-deviation-scan-20260731T091250Z.json",
+  "current": "soll-deviation-scan-20260731T091308Z.json",
+  "counts": {
+    "previous": {
+      "ok": 32,
+      "warn": 6,
+      "error": 0
+    },
+    "current": {
+      "ok": 32,
+      "warn": 6,
+      "error": 0
+    }
+  },
+  "delta": {
+    "ok": 0,
+    "warn": 0,
+    "error": 0
+  },
+  "new_findings": [],
+  "resolved_findings": []
+}

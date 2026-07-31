@@ -1,0 +1,68 @@
+{
+  "source": "test_reports/soll-deviation-scan.json",
+  "summary": {
+    "scan": {
+      "ok": 32,
+      "warn": 6,
+      "error": 0
+    },
+    "actions_total": 6,
+    "priorities": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 3,
+      "P3": 0
+    },
+    "blocked_actions": 3
+  },
+  "actions": [
+    {
+      "priority": "P1",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "Backend OpenAPI nicht erreichbar (https://api.nexifyai.cloud/openapi.json)",
+      "runbook": "CF-Tunnel / DNS pr\u00fcfen",
+      "blocked": false
+    },
+    {
+      "priority": "P1",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "Grafana nicht erreichbar (https://grafana.nexifyai.cloud/api/health)",
+      "runbook": "CF-Tunnel / DNS pr\u00fcfen",
+      "blocked": false
+    },
+    {
+      "priority": "P1",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "Prometheus nicht erreichbar (https://prometheus.nexifyai.cloud/-/healthy)",
+      "runbook": "CF-Tunnel / DNS pr\u00fcfen",
+      "blocked": false
+    },
+    {
+      "priority": "P2",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "9Router nicht erreichbar (http://127.0.0.1:20128/api/health)",
+      "runbook": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked",
+      "blocked": true
+    },
+    {
+      "priority": "P2",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "AgentMemory REST nicht erreichbar (http://127.0.0.1:3111/agentmemory/livez)",
+      "runbook": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked",
+      "blocked": true
+    },
+    {
+      "priority": "P2",
+      "owner": "ops",
+      "code": "RUNTIME-DOWN",
+      "finding": "LightRAG nicht erreichbar (http://127.0.0.1:9622/health)",
+      "runbook": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked",
+      "blocked": true
+    }
+  ]
+}

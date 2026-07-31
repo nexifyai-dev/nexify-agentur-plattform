@@ -5,9 +5,9 @@
 
 ingress:
   - hostname: dashboard.nexifyai.cloud
-    service: http://localhost:9119
+    service: http://localhost:8644
   - hostname: hermes-dash.nexifyai.cloud
-    service: http://localhost:9119
+    service: http://localhost:8644
   - hostname: webui.nexifyai.cloud
     service: http://localhost:8644
   - hostname: ai-router.nexifyai.cloud

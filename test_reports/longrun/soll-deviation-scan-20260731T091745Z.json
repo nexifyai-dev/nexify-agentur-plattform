@@ -1,0 +1,235 @@
+{
+  "ok": 32,
+  "warn": 6,
+  "error": 0,
+  "findings": [
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "AGENTS.md vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "CHARTA.md vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "agent-config.yaml vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "docs/operations/REPO-SYNC-STRATEGY.md vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "docs/operations/AGENTIC-AI-MODE.md vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": ".gitlab-ci.yml vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": ".github/workflows/mirror-to-gitlab.yml vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": "deploy/mcp/gitlab-oss/README.md vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "GOV-PRESENT",
+      "message": ".cursor/mcp.json.example vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "TOOLING-PRESENT",
+      "message": "scripts/mcp-health-codespace.sh vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "TOOLING-PRESENT",
+      "message": "scripts/setup-codespace-mcp.sh vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "TOOLING-PRESENT",
+      "message": "deploy/cloudflare/tunnel-ingress.yml vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "MCP-UNTRACKED",
+      "message": ".cursor/mcp.json nicht im Index",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "MCP-EXAMPLE",
+      "message": "mcp.json.example enth\u00e4lt agentmemory",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "MCP-EXAMPLE",
+      "message": "mcp.json.example enth\u00e4lt context7",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "MCP-EXAMPLE",
+      "message": "mcp.json.example enth\u00e4lt gitlab-oss",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "MODEL-GOVERNANCE",
+      "message": "Modellstrategie dokumentiert: DeepSeek aktiv, Upstage-Migration geplant",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "VCS-MIRROR",
+      "message": "GitHub\u2192GitLab Mirror-Workflow vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "VCS-GITLAB-CI",
+      "message": "GitLab CI enth\u00e4lt Deploy-Stage (abweichende Job-Namen)",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "VCS-ORIGIN",
+      "message": "GitHub origin remote korrekt gesetzt",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "VCS-GITLAB-REMOTE",
+      "message": "GitLab OSS remote vorhanden",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "TUNNEL-HOST",
+      "message": "Ingress enth\u00e4lt dashboard.nexifyai.cloud",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "TUNNEL-HOST",
+      "message": "Ingress enth\u00e4lt webui.nexifyai.cloud",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "CONTROL-PLANE-UNIFIED",
+      "message": "Dashboard/WebUI teilen dasselbe Target",
+      "fix": ""
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "AgentMemory REST nicht erreichbar (http://127.0.0.1:3111/agentmemory/livez)",
+      "fix": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked"
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "LightRAG nicht erreichbar (http://127.0.0.1:9622/health)",
+      "fix": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked"
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "9Router nicht erreichbar (http://127.0.0.1:20128/api/health)",
+      "fix": "Auf VPS/Remote-SSH pr\u00fcfen; Cloud-Agent: Action blocked"
+    },
+    {
+      "severity": "ok",
+      "code": "RUNTIME-UP",
+      "message": "GitLab OSS UI erreichbar (https://gitlab.nexifyai.cloud/users/sign_in)",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "RUNTIME-UP",
+      "message": "GitLab OSS API erreichbar (https://gitlab.nexifyai.cloud/api/v4/projects?per_page=1)",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "RUNTIME-UP",
+      "message": "WebUI erreichbar (https://webui.nexifyai.cloud/health)",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "RUNTIME-UP",
+      "message": "Dashboard erreichbar (https://dashboard.nexifyai.cloud)",
+      "fix": ""
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "Backend OpenAPI nicht erreichbar (https://api.nexifyai.cloud/openapi.json)",
+      "fix": "CF-Tunnel / DNS pr\u00fcfen"
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "Grafana nicht erreichbar (https://grafana.nexifyai.cloud/api/health)",
+      "fix": "CF-Tunnel / DNS pr\u00fcfen"
+    },
+    {
+      "severity": "warn",
+      "code": "RUNTIME-DOWN",
+      "message": "Prometheus nicht erreichbar (https://prometheus.nexifyai.cloud/-/healthy)",
+      "fix": "CF-Tunnel / DNS pr\u00fcfen"
+    },
+    {
+      "severity": "ok",
+      "code": "RUNTIME-UP",
+      "message": "Codespace URL erreichbar (https://ubiquitous-space-pancake-q7r5qvj444wxc46pg.github.dev/)",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "VCS-SINGLE-MIRROR",
+      "message": "Genau ein kanonischer GitLab-Mirror",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "EXCLUDE-NOUS",
+      "message": "AGENTS.md schlie\u00dft NousResearch awesome-hermes-agent aus",
+      "fix": ""
+    },
+    {
+      "severity": "ok",
+      "code": "EXCLUDE-N8N",
+      "message": "AGENTS.md: n8n abgeschafft dokumentiert",
+      "fix": ""
+    }
+  ]
+}
