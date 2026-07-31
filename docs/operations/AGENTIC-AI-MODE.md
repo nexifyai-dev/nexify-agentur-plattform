@@ -125,6 +125,12 @@ Hook-Guardrails:
 - Hook-Installer: `bash scripts/install-agent-hooks.sh`
 - `STRICT_PRE_PUSH=1` macht den lokalen `pre-push` Hook blocking bei Deviation-Fehlern.
 
+GitHub Monorepo Clone Check:
+
+- `CHECK_GH_CLONE=1` (Default) prueft pro Zyklus die reale Clone-Faehigkeit fuer das Monorepo.
+- `GH_CLONE_REPO` steuert das Ziel-Repo (Default: `nexifyai-dev/nexify-agentur-plattform`).
+- Script: `scripts/verify-gh-monorepo-clone.sh`
+
 Zusatzchecks im Deviation-Scan:
 
 - `gh` Verfuegbarkeit/Auth/Repo-View fuer `nexifyai-dev/nexify-agentur-plattform`

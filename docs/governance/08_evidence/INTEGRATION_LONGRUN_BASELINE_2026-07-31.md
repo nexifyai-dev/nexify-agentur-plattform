@@ -90,6 +90,12 @@ Aktueller Stand im Codespace: `OK=32, WARN=10, ERROR=0` (WARNs sind Runtime/Reac
 - Hook-Integritaet wird im Deviation-Scan geprueft
 - `gh`-Betriebsfaehigkeit (CLI/Auth/Repo-View) wird im Deviation-Scan geprueft
 
+## Monorepo-Clone-Pruefung (neu)
+
+- Langlauf fuehrt optional einen realen `gh repo clone` Smoke-Check gegen das Monorepo aus
+- Ziel ist per `GH_CLONE_REPO` steuerbar (Default: `nexifyai-dev/nexify-agentur-plattform`)
+- Das erfuellt die dauerhafte Verankerung der GitHub-Clone-Faehigkeit im Agentenbetrieb
+
 ## Priorisierte Folgeaktionen
 
 1. P0: Secrets fuer Codespace-Lauf setzen (`AGENTMEMORY_SECRET`, `GITLAB_PERSONAL_ACCESS_TOKEN`) und erneut health-checken.
