@@ -91,6 +91,7 @@ Artefakte:
 - `test_reports/longrun/integration-longrun-*.log`
 - `test_reports/longrun/soll-deviation-scan-*.json`
 - `test_reports/longrun/soll-deviation-delta-*.json`
+- `test_reports/longrun/remediation-plan-*.json`
 
 | Severity | Bedeutung |
 |----------|-----------|

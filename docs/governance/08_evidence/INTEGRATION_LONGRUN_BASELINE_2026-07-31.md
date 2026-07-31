@@ -44,6 +44,15 @@
 - `test_reports/longrun/integration-longrun-20260731T091308Z.log`
 - `test_reports/longrun/soll-deviation-scan-20260731T091308Z.json`
 - `test_reports/longrun/soll-deviation-delta-20260731T091308Z.json`
+- `test_reports/longrun/remediation-plan-20260731T091745Z.json`
+
+## Automatischer Maßnahmenplan
+
+Der Longrun erstellt jetzt pro Zyklus einen priorisierten Maßnahmenplan.
+
+- Aktuelle Verteilung: `P0=0, P1=3, P2=3, P3=0`
+- Blockierte Maßnahmen (ohne Secrets/VPS-Bind im Codespace): `3`
+- Ziel: Priorisierte Abarbeitung ohne manuelle Triage-Runden
 
 ## Priorisierte Folgeaktionen
 

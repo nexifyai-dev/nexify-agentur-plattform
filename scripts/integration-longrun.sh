@@ -22,6 +22,7 @@ run_cycle() {
   local out="$REPORT_DIR/integration-longrun-${stamp}.log"
   local scan_json="$REPORT_DIR/soll-deviation-scan-${stamp}.json"
   local delta_json="$REPORT_DIR/soll-deviation-delta-${stamp}.json"
+  local remediation_json="$REPORT_DIR/remediation-plan-${stamp}.json"
 
   {
     echo "# Integration Longrun"
@@ -56,6 +57,10 @@ run_cycle() {
 
   if [[ -f "$ROOT/test_reports/soll-deviation-scan.json" ]]; then
     cp "$ROOT/test_reports/soll-deviation-scan.json" "$scan_json"
+  fi
+
+  if [[ -f "$scan_json" ]]; then
+    python3 scripts/generate-remediation-plan.py --input "$scan_json" --output "$remediation_json" || true
   fi
 
   prev_scan="$(ls -1 "$REPORT_DIR"/soll-deviation-scan-*.json 2>/dev/null | grep -v "$scan_json" | tail -n 1 || true)"
@@ -117,6 +122,7 @@ PY
   echo "report=$out"
   echo "scan_snapshot=$scan_json"
   [[ -f "$delta_json" ]] && echo "delta_snapshot=$delta_json"
+  [[ -f "$remediation_json" ]] && echo "remediation_snapshot=$remediation_json"
 }
 
 echo "# Start integration-longrun"
