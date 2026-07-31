@@ -1,6 +1,6 @@
 # FILE: docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md
 # NIR: 31.07.2026 11:33
-# UPDATED: 31.07.2026 11:40
+# UPDATED: 31.07.2026 11:50
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Monitoring→WebUI Pointer — Grafana native-Pfad, Smoke, CF-Gap
@@ -36,6 +36,10 @@
 
 Canonical: `config/webui/native-module-links.json` → module `monitoring-grafana`.
 Übergang: Traefik HTTPS `grafana.*` (200 verified). Native Panel = Preview-Branch nach Parity Kanban/Memory.
+
+## Ops-Fix 11:50
+
+`routes.yml` `auth-forward` (`8644/auth` 404) schattierte `main-routers` (`8881/verify`); admin catch-all disabled. `admin.*/grafana` → **302** Auth (erwartet). Backup: `/opt/nexifyai/backups/gesamtsystem-fix-*-authmw`.
 
 ## Nächste Acts
 
