@@ -85,6 +85,43 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
   };
 }
 
+type ArticleJsonLdInput = {
+  title: string;
+  description: string;
+  path: string;
+  datePublished: string;
+  dateModified?: string;
+};
+
+/** schema.org Article — server-side JSON-LD for crawlable Wissen posts. */
+export function articleJsonLd({
+  title,
+  description,
+  path,
+  datePublished,
+  dateModified,
+}: ArticleJsonLdInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    datePublished,
+    dateModified: dateModified ?? datePublished,
+    mainEntityOfPage: absoluteUrl(path),
+    author: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+  };
+}
+
 /** Escape `<` so inline JSON-LD cannot break out of the script tag. */
 export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
