@@ -92,6 +92,14 @@ Artefakte:
 - `test_reports/longrun/soll-deviation-scan-*.json`
 - `test_reports/longrun/soll-deviation-delta-*.json`
 - `test_reports/longrun/remediation-plan-*.json`
+- `test_reports/longrun/latest-integration-longrun.log`
+- `test_reports/longrun/latest-soll-deviation-scan.json`
+- `test_reports/longrun/latest-soll-deviation-delta.json`
+- `test_reports/longrun/latest-remediation-plan.json`
+
+Retention/Rotation:
+
+- `KEEP_LAST` steuert, wie viele zeitgestempelte Longrun-Dateien pro Muster gehalten werden (Default: `20`).
 
 | Severity | Bedeutung |
 |----------|-----------|

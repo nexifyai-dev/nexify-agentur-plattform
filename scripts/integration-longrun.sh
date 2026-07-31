@@ -10,10 +10,32 @@ cd "$ROOT"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-900}"
 MAX_CYCLES="${MAX_CYCLES:-1}"
 REPORT_DIR="${REPORT_DIR:-$ROOT/test_reports/longrun}"
+KEEP_LAST="${KEEP_LAST:-20}"
 
 mkdir -p "$REPORT_DIR"
 
 ts() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+prune_pattern() {
+  local pattern="$1"
+  mapfile -t files < <(ls -1t $pattern 2>/dev/null || true)
+  local candidates=()
+  local f
+  for f in "${files[@]}"; do
+    if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+      continue
+    fi
+    candidates+=("$f")
+  done
+
+  local count="${#candidates[@]}"
+  if [[ "$count" -le "$KEEP_LAST" ]]; then
+    return
+  fi
+  for ((idx=KEEP_LAST; idx<count; idx++)); do
+    rm -f "${candidates[$idx]}"
+  done
+}
 
 run_cycle() {
   local cycle="$1"
@@ -123,6 +145,16 @@ PY
   echo "scan_snapshot=$scan_json"
   [[ -f "$delta_json" ]] && echo "delta_snapshot=$delta_json"
   [[ -f "$remediation_json" ]] && echo "remediation_snapshot=$remediation_json"
+
+  cp "$out" "$REPORT_DIR/latest-integration-longrun.log"
+  [[ -f "$scan_json" ]] && cp "$scan_json" "$REPORT_DIR/latest-soll-deviation-scan.json"
+  [[ -f "$delta_json" ]] && cp "$delta_json" "$REPORT_DIR/latest-soll-deviation-delta.json"
+  [[ -f "$remediation_json" ]] && cp "$remediation_json" "$REPORT_DIR/latest-remediation-plan.json"
+
+  prune_pattern "$REPORT_DIR/integration-longrun-*.log"
+  prune_pattern "$REPORT_DIR/soll-deviation-scan-*.json"
+  prune_pattern "$REPORT_DIR/soll-deviation-delta-*.json"
+  prune_pattern "$REPORT_DIR/remediation-plan-*.json"
 }
 
 echo "# Start integration-longrun"
