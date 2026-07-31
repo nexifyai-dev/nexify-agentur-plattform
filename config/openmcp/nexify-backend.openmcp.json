@@ -1,0 +1,21 @@
+{
+  "$schema_comment": "getdatanaut/openmcp openmcp.json — operationId allowlist only; no secrets",
+  "configs": {
+    "nexify-backend": {}
+  },
+  "servers": {
+    "nexify-backend": {
+      "type": "openapi",
+      "openapi": "http://127.0.0.1:8901/openapi.json",
+      "serverUrl": "http://127.0.0.1:8901",
+      "headers": {},
+      "query": {},
+      "tools": [
+        "health_api_health_get",
+        "health_llm_api_health_llm_get",
+        "health_full_api_health_full_get",
+        "metrics_api_metrics_get"
+      ]
+    }
+  }
+}
