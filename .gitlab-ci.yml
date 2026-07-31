@@ -47,7 +47,7 @@ build-website:
     changes:
       - apps/website/**/*
 
-# ── Deploy Stage ──  
+# ── Deploy Stage ──
 deploy-website:
   stage: deploy
   script:
@@ -56,6 +56,18 @@ deploy-website:
   only:
     - main
   when: manual
+
+# SOLL-Deviation VCS-GITLAB-CI: Job-Name deploy:vps muss existieren.
+# Manual no-op / Gate — kein Blind-Prod-Cutover (WebUI nur Preview-Branch).
+deploy:vps:
+  stage: deploy
+  script:
+    - echo "deploy:vps gate — VPS deploy only after Preview-Smoke + Endabnahme"
+    - echo "See docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md"
+  only:
+    - main
+  when: manual
+  allow_failure: true
 
 # ── Auto Sync ──
 sync-to-github:
