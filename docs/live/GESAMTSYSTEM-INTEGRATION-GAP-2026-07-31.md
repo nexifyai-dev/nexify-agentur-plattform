@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 11:50
+# UPDATED: 31.07.2026 11:56
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -35,7 +35,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | Hermes Workspace `:4001` / dashboard.* | 200 |
 | Hermes WebUI `:8787` / webui.* | 302 login; `/login` 200 |
 | Backend FastAPI `:8901/api/health` | ok; OpenAPI **67** ops; `/health` 404 |
-| OpenDesign html-anything `:3002` | 200 lokal; `html.*` HTTPS **200**; `admin/html` **302** Auth |
+| OpenDesign html-anything `:3002` | 200 lokal; `html.*` **302 Auth** (restored); `admin/html` **302** |
 | Grafana `:3000/api/health` | 200; Traefik HTTPS Host grafana → **200** |
 | `127.0.0.1:8080` | **cAdvisor** — nicht Grafana/Traefik (Smoke-Korrektur) |
 | Paperclip `:3100` | DOWN — `blocked_no_app_tree` (sense-only Doc) |
@@ -55,13 +55,13 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
 | **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
-| **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub **`#100` MERGED** | TEIL | Preview `openmcp run`; kein Prod |
-| **OpenDesign** | Native Design-Editor | `:3002`+`html.*` 200; **`admin/html` 302** (Auth-MW-Fix) | TEIL | Native Panel; CF DNS; auth on `html.*` |
+| **OpenDesign** | Native Design-Editor | `:3002` OK; `html.*` **auth+TLS** Login-Smoke 302 | TEIL | Native Panel; CF DNS blocked |
+| **OpenMCP** | OpenAPI→MCP Workflow | Stub `#100`; Preview CLI help+allowlist verify 11:56 | TEIL | stdio run OK (timeout); kein Prod |
 | **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
 | **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
 | **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
-| **GitHub** | SoT + PR | `#98`/`#99`/`#100` MERGED; `#101` draft; `#90` open | OK | — |
-| **Codespace pancake** | — | Branch PR `#90` (kein Drift-Fork) | OK | nach Merge Codespace stoppen |
+| **GitHub** | SoT + PR | `#90`/`#99`–`#102` MERGED; `#103` draft gap/auth | OK | — |
+| **Codespace pancake** | — | Branch war PR `#90` (**MERGED**) | OK | Codespace stoppen |
 | **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
 | **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
 | **n8n** | Abbau | `n8n_integration: false` | OK | — |
@@ -87,6 +87,7 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 12. Monitoring/OpenDesign/Paperclip/Mirror Pointer-Docs + Decision Monorepo-Spiegel — **diese Lieferung**
 13. Live-verify `#99` `/leistungen` OfferCatalog LD + `#100` OpenAPI operationIds — **done**
 14. OpenDesign `html.*` TLS Fix — **done**; native-module-links — **#101 MERGED**; `admin.*` Auth-MW collision Fix — **done** (302 login, not 404)
+15. `html.*` auth-forward restore + Login-Smoke — **done** (302→Admin Login); CF DNS grafana/html — **blocked** (No answer); Paperclip — **blocked_no_app_tree**; OpenMCP preview CLI — **done** (help+allowlist; shebang bypass)
 
 ## Remaining Blockers (Actions)
 
@@ -95,9 +96,8 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 | GSC | Property www.nexifyai.cloud verifizieren | pending (SEO, Ops) |
 | POOLSIDE_API_KEY | Env fehlt | blocked |
 | Paperclip revive | no app tree / Factory absent | **blocked** |
-| CF DNS grafana/opendesign/openapi | Classic DNS MISSING; token list=403 | pending |
-| Cursor Session MCP | user-agentmemory/lightrag nicht in Session catalog | pending |
-| OpenMCP Runtime | Stub `#100` MERGED — Preview smoke next | pending |
+| CF DNS grafana/opendesign/openapi/html | Classic DNS No answer; write scope absent | **blocked** |
+| OpenMCP Runtime | Preview CLI help+allowlist+stdio start 11:56 | pending client wiring |
 | Backend `/health` | nach Ruff/MyPy cleanup | pending |
 | WebUI Cutover | Policy Preview-Smoke | blocked bis Smoke |
 | 1Backend Deploy | Adapter-Spec done; kein Parallel-OS | pending (no deploy) |

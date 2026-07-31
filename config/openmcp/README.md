@@ -1,6 +1,6 @@
 # FILE: config/openmcp/README.md
 # NIR: 31.07.2026 11:20
-# UPDATED: 31.07.2026 11:20
+# UPDATED: 31.07.2026 11:56
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: OpenMCP Phase-B Allowlist-Stub für NeXify Backend OpenAPI → MCP
@@ -32,8 +32,13 @@ Voraussetzung: Backend live auf `:8901`.
 curl -sS http://127.0.0.1:8901/api/health
 curl -sS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8901/openapi.json
 
-npx -y openmcp run --config config/openmcp/nexify-backend.openmcp.json
+# PITFALL: openmcp bin shebang `env node --no-warnings` fails on some hosts.
+# Bypass:
+node --no-warnings path/to/node_modules/openmcp/bin/index.js run \
+  --config config/openmcp/nexify-backend.openmcp.json
 ```
+
+**Preview-Evidence 2026-07-31 11:56:** Allowlist 4/4 Ops live `:8901` **200**; `openmcp --help` OK via `node --no-warnings`; `openmcp run --config …` startet stdio (Timeout-Kill, kein Prod-Bind). Kein Cursor-Client-Install committed.
 
 Optional Client-Install (schreibt lokale MCP-Client-Config — **nicht** committen):
 
@@ -59,7 +64,15 @@ Admin-/Auth-/Write-Ops absichtlich **nicht** in der Stub-Allowlist.
 
 Erst nach Smoke + Circuit-Breaker (`:8912`). Kein Prod-SSE/stdio-Cutover in diesem PR.
 
-## Explizit blocked (andere Actions)
+## Verify
 
-- Paperclip Factory `:3100` — Action **blocked**
-- Cloudflare public DNS für openmcp — Action **blocked**
+```bash
+python3 - <<'PY'
+import json,urllib.request
+stub=json.load(open('config/openmcp/nexify-backend.openmcp.json'))
+tools=stub['servers']['nexify-backend']['tools']
+oa=json.load(urllib.request.urlopen('http://127.0.0.1:8901/openapi.json'))
+ops={s['operationId'] for p in oa['paths'].values() for s in p.values() if isinstance(s,dict) and 'operationId' in s}
+print(all(t in ops for t in tools), tools)
+PY
+```
