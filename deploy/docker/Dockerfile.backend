@@ -7,6 +7,7 @@
 # BEST-PRACTICE: Python Slim-Image; Nicht-Root-User; Healthcheck via /health
 # PITFALL: V-01: requirements.txt enthält ein privates Paket (custom litellm wheel).
 #          Dieses wird via direkter URL aus customer-assets.emergentagent.com bezogen.
+#          Im Produktions-Build muss der custom Wheel-URL erreichbar sein.
 # DEPENDS: Python 3.11, Supabase Postgres (asyncpg), Resend, NINEROUTER_BASE_URL, NINEROUTER_API_KEY
 # DOCS-REF: backend/requirements.txt, backend/.env.example, backend/server.py
 
