@@ -257,12 +257,16 @@ def scan() -> list[Finding]:
     runtime_checks = [
         ("AgentMemory REST", "http://127.0.0.1:3111/agentmemory/livez", False),
         ("LightRAG", "http://127.0.0.1:9622/health", False),
+        ("OpenMCP Proxy", "http://127.0.0.1:8650/api/mcp/servers", False),
+        ("OpenDesign Local", "http://127.0.0.1:3002", False),
         ("9Router", "http://127.0.0.1:20128/api/health", False),
         ("GitLab OSS UI", "https://gitlab.nexifyai.cloud/users/sign_in", True),
         ("GitLab OSS API", "https://gitlab.nexifyai.cloud/api/v4/projects?per_page=1", True),
         ("WebUI", "https://webui.nexifyai.cloud/health", True),
-        ("Dashboard", "https://dashboard.nexifyai.cloud", True),
+        ("Dashboard", "https://dashboard.nexifyai.cloud/health", True),
         ("Backend OpenAPI", "https://api.nexifyai.cloud/openapi.json", True),
+        ("OpenDesign Public", "https://opendesign.nexifyai.cloud", True),
+        ("Open Public", "https://open.nexifyai.cloud", True),
         ("Grafana", "https://grafana.nexifyai.cloud/api/health", True),
         ("Prometheus", "https://prometheus.nexifyai.cloud/-/healthy", True),
         (

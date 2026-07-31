@@ -16,6 +16,7 @@ MAX_P0="${MAX_P0:-0}"
 MAX_P1="${MAX_P1:-10}"
 MAX_P2="${MAX_P2:-50}"
 MAX_BLOCKED="${MAX_BLOCKED:-999}"
+KILL_SWITCH_FILE="${KILL_SWITCH_FILE:-$ROOT/test_reports/longrun/KILL_SWITCH}"
 
 mkdir -p "$REPORT_DIR"
 
@@ -192,14 +193,32 @@ echo "interval=${INTERVAL_SECONDS}s"
 echo "max_cycles=$MAX_CYCLES"
 echo "enforce_gates=$ENFORCE_GATES"
 echo "thresholds: p0<=${MAX_P0} p1<=${MAX_P1} p2<=${MAX_P2} blocked<=${MAX_BLOCKED}"
+echo "kill_switch_file=$KILL_SWITCH_FILE"
 echo
 
-for ((i=1; i<=MAX_CYCLES; i++)); do
-  run_cycle "$i"
-  if [[ "$i" -lt "$MAX_CYCLES" ]]; then
+if [[ "$MAX_CYCLES" == "0" ]]; then
+  i=0
+  while true; do
+    if [[ -f "$KILL_SWITCH_FILE" ]]; then
+      echo "kill_switch_detected=$KILL_SWITCH_FILE"
+      break
+    fi
+    i=$((i + 1))
+    if ! run_cycle "$i"; then
+      echo "cycle_failed=$i"
+      break
+    fi
     echo "sleep_until_next_cycle=${INTERVAL_SECONDS}s"
     sleep "$INTERVAL_SECONDS"
-  fi
-done
+  done
+else
+  for ((i=1; i<=MAX_CYCLES; i++)); do
+    run_cycle "$i"
+    if [[ "$i" -lt "$MAX_CYCLES" ]]; then
+      echo "sleep_until_next_cycle=${INTERVAL_SECONDS}s"
+      sleep "$INTERVAL_SECONDS"
+    fi
+  done
+fi
 
 echo "# integration-longrun completed"
