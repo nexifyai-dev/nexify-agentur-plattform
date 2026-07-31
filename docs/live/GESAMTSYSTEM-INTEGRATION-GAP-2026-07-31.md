@@ -1,6 +1,6 @@
-# FILE: /opt/nexifyai/docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
+# FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 11:15
+# UPDATED: 31.07.2026 11:34
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -13,70 +13,79 @@
 
 Kern-Runtime (AgentMemory, LightRAG, 9Router, Hermes Workspace/WebUI, GitLab) ist **live**.
 Voll-Integration in **eine** WebUI-Zentrale ist **nicht** erreicht: parallele Surfaces, Paperclip down,
-OpenMCP/1Backend nur Repo/Teil-API, Monitoring lokal OK aber CF-Hostname-Drift, Monorepo-MCP LightRAG in PR#98.
+OpenMCP Stub **`#100` MERGED** (Preview next), 1Backend Adapter-Spec, Monitoring HTTPS OK aber CF-DNS Drift.
+Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99` MERGED** (live verified).
 
 **Arbeitsplatz-SoT (Mandat):** `https://webui.nexifyai.cloud/`  
 **IST-Shell (Workspace):** `https://dashboard.nexifyai.cloud/` → `127.0.0.1:4001` (hermes-workspace)  
 **IST-Hermes-WebUI:** `https://webui.nexifyai.cloud/` → `:8787` (Login 302)  
-→ Decision-Pointer: `/opt/nexifyai/docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`
+→ Decision: `docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`  
+→ Parity: `docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md`  
+→ Monitoring: `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` · OpenDesign: `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md`
 
-## Live Health (2026-07-31 11:15, keine Secrets)
+## Live Health (2026-07-31 11:34, keine Secrets)
 
 | Endpoint | Ergebnis |
 |----------|----------|
-| AgentMemory `127.0.0.1:3111/agentmemory/livez` | ok (Bearer) |
+| AgentMemory `127.0.0.1:3111/agentmemory/livez` | ok |
 | AgentMemory Viewer `:3113` / Tunnel | 200 |
-| LightRAG `:9622/health` | healthy; `/query` via `X-API-Key` OK |
+| LightRAG `:9622/health` | healthy |
 | 9Router `:20128/api/health` | ok |
-| Hermes Gateway `:8644/health` | ok |
+| Hermes Gateway `:8644/health` | ok (prior) |
 | Hermes Workspace `:4001` / dashboard.* | 200 |
-| Hermes WebUI `:8787` / webui.* | 302 login |
-| Backend FastAPI `:8901/api/health` | ok (OpenAPI 61 paths); `/health` 404 |
-| OpenDesign html-anything `:3002` | 200 lokal |
-| Grafana `:3000/api/health` | 200 lokal |
-| Paperclip `:3100` | DOWN — `blocked_no_app_tree` (apps/paperclip = README Planned) |
+| Hermes WebUI `:8787` / webui.* | 302 login; `/login` 200 |
+| Backend FastAPI `:8901/api/health` | ok; OpenAPI **67** ops; `/health` 404 |
+| OpenDesign html-anything `:3002` | 200 lokal; `html.*` Traefik HTTPS 404 |
+| Grafana `:3000/api/health` | 200; Traefik HTTPS Host grafana → **200** |
+| `127.0.0.1:8080` | **cAdvisor** — nicht Grafana/Traefik (Smoke-Korrektur) |
+| Paperclip `:3100` | DOWN — `blocked_no_app_tree` (sense-only Doc) |
 | Redis `:6379` | up (revive policy) |
 | grafana/opendesign/openapi/openmcp public DNS | unresolved / classic DNS MISSING |
-| Circuit Breaker `:8912/check` | allow true |
+| GitHub→GitLab Mirror | success für `#98`/`#99`/`#100` |
+| Circuit Breaker `:8912/check` | allow true (prior) |
 
 ## Gap-Matrix IST vs SOLL
 
 | Komponente | SOLL | IST 2026-07-31 | Status | Nächste Aktion |
 |------------|------|----------------|--------|----------------|
-| **WebUI-Zentrale** | Eine Surface; Dashboard-Funktionen nativ | webui=:8787 + dashboard=:4001 parallel | GAP | Decision Doc + Konsolidierungsplan Preview-Branch |
-| **Dashboard→WebUI native** | Keine Doppel-Dashboards/Iframes Dauer | Workspace hat Kanban/MCP/Terminal nativ; Grafana oft Traefik-Path | TEIL | Native Views Spec → Feature-Branch |
+| **WebUI-Zentrale** | Eine Surface; Dashboard-Funktionen nativ | webui=:8787 + dashboard=:4001 parallel | GAP | Parity-Checkliste + Preview-Branch Smoke |
+| **Dashboard→WebUI native** | Keine Doppel-Dashboards/Iframes Dauer | Workspace nativ; Grafana/Design oft Path | TEIL | Native Views laut Parity-Matrix |
 | **AgentMemory** | Pflicht Brain + MCP TOOLS=all + Inject | REST+Viewer OK; Session-MCP catalog teils missing | TEIL | Cursor Session MCP reconnect Action |
-| **LightRAG** | Native Module + Dual-Write | healthy; Query X-API-Key verifiziert | TEIL | Ingest Gap-Doc; Dual-Write Hook (PR#98) |
+| **LightRAG** | Native Module + Dual-Write | healthy; Dual-Write Hooks **#98 MERGED** | TEIL | Ingest Gap-Doc; Native UI |
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
-| **1Backend** | Neuintegration / Backend | VPS-Repo idle; **NeXify Backend :8901** deckt API | TEIL | ICD-Delta Monorepo; kein Blind-Vendor |
-| **OpenAPI** | ICD/Clients | `:8901/openapi.json` 61 paths live | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup (37 Ruff + MyPy pre-existing) |
-| **OpenMCP** | OpenAPI→MCP Workflow | Repo `/opt/nexifyai/repos/openmcp`, kein Prod-Dienst | GAP | Spec Phase B: `openmcp.json` Allowlist |
-| **OpenDesign** | Native Design-Editor | html-anything `:3002` lokal; kein CF `opendesign.*` | TEIL | Tunnel public hostname / WebUI-Route |
-| **Monitoring** | Grafana+Prom in System | Docker up; Traefik `:3000` FIX | TEIL | CF: grafana Host via tunnel wildcard Traefik; classic DNS MISSING |
-| **Paperclip** | Factory `:3100` | README-Stub; Gate sense-only; Redis OK | **BLOCKED** | Action blocked — echte Factory-Tree/Image nötig |
-| **GitLab OSS** | Mirror + CI | `:8922` OK; CI WARN ohne deploy:vps | TEIL | soll-deviation WARN |
-| **GitHub** | SoT + PR | #98 draft gap-fixes; #90 draft CI; #97 **MERGED** Venlo | OK | — |
-| **Codespace pancake** | — | = Monorepo Branch PR#90 (kein Drift-Fork) | OK | Pointer-Doc; nach Merge Codespace stoppen |
-| **Monorepo Hooks** | Dual-Write AM+LightRAG | in PR#98 | FIX-PR | Merge #98 |
-| **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | mcp.json(+example) in PR#98 | FIX-PR | Session reconnect |
+| **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
+| **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
+| **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub **`#100` MERGED** | TEIL | Preview `openmcp run`; kein Prod |
+| **OpenDesign** | Native Design-Editor | `:3002` lokal; `html.*` 404; kein CF | TEIL | `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md` |
+| **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
+| **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
+| **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
+| **GitHub** | SoT + PR | `#98`/`#99`/`#100` MERGED; `#101` draft; `#90` open | OK | — |
+| **Codespace pancake** | — | Branch PR `#90` (kein Drift-Fork) | OK | nach Merge Codespace stoppen |
+| **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
+| **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
 | **n8n** | Abbau | `n8n_integration: false` | OK | — |
 
-## Codespace (NEU 11:10)
+## Codespace
 
-`ubiquitous-space-pancake-q7r5qvj444wxc46pg.github.dev` → Repo `nexifyai-dev/nexify-agentur-plattform` · Branch `copilot/fix-github-actions-build-backend-image` · PR **#90 draft**.  
-Detail: Monorepo `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
+`ubiquitous-space-pancake-q7r5qvj444wxc46pg.github.dev` → Repo `nexifyai-dev/nexify-agentur-plattform` · Branch `copilot/fix-github-actions-build-backend-image` · PR **`#90`**.  
+Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 
 ## Sofort-Fixes (Session-Status)
 
-1. Traefik `grafana` Backend `:3030` → `:3000` — **done** (Backup `backups/gesamtsystem-fix-*`)
-2. Monorepo `.cursor/mcp.json` + example LightRAG — **PR#98 draft**
-3. Autopilot Job `gesamtsystem-integration-gap` — **PR#98 / VPS**
-4. Backend `/health` Alias — **deferred** (Ruff 37 errors / MyPy pre-existing auf `backend/server.py`)
-5. AgentMemory saves (≥3) + Action Paperclip — **done** 11:07
-6. LightRAG `/query` verify — **done** (X-API-Key)
-7. PR#98 → draft — **done**; PR#90 → draft — **done**; SEO #97 — **MERGED**
-8. OpenMCP/1Backend ICD-Delta — **Monorepo Doc**
-9. CF DNS grafana/opendesign — **pending** (Token: Zone read OK; named records MISSING; DNS list/write 403)
+1. Traefik `grafana` Backend `:3030` → `:3000` — **done**
+2. Monorepo `.cursor/mcp.json` + LightRAG — **`#98` MERGED**
+3. Autopilot Job `gesamtsystem-integration-gap` — **#98 / VPS**
+4. Backend `/health` Alias — **deferred** (Ruff/MyPy pre-existing)
+5. AgentMemory saves + Action Paperclip — **done**
+6. LightRAG `/query` verify — **done**
+7. SEO Venlo `#97` — **MERGED**; OfferCatalog `#99` — **MERGED**; live `/leistungen` OfferCatalog+Service+449 **verified**
+8. OpenMCP ICD + Allowlist Stub **`#100` MERGED**; 1Backend Adapter-Spec — **diese Lieferung**
+9. CF DNS grafana/opendesign — **pending** (write 403)
+10. WebUI Feature-Parity-Checkliste — Draft `#101`
+11. GitLab `deploy:vps` Manual-Gate Job — **diese Lieferung** (soll-deviation WARN)
+12. Monitoring/OpenDesign/Paperclip/Mirror Pointer-Docs + Decision Monorepo-Spiegel — **diese Lieferung**
+13. Live-verify `#99` `/leistungen` OfferCatalog LD + `#100` OpenAPI operationIds — **done**
 
 ## Remaining Blockers (Actions)
 
@@ -84,13 +93,14 @@ Detail: Monorepo `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 |----|-------|--------|
 | GSC | Property www.nexifyai.cloud verifizieren | pending (SEO, Ops) |
 | POOLSIDE_API_KEY | Env fehlt | blocked |
-| Paperclip revive | no app tree / Factory absent (README Planned ≠ :3100) | **blocked** |
-| CF DNS grafana/opendesign/openapi | Classic DNS MISSING; token scope list=403; Tunnel remote ohne grafana-Hostname (nur `*.`→:8080) | pending |
+| Paperclip revive | no app tree / Factory absent | **blocked** |
+| CF DNS grafana/opendesign/openapi | Classic DNS MISSING; token list=403 | pending |
 | Cursor Session MCP | user-agentmemory/lightrag nicht in Session catalog | pending |
-| OpenMCP Runtime | Repo only — Spec Phase B | pending |
+| OpenMCP Runtime | Stub `#100` MERGED — Preview smoke next | pending |
 | Backend `/health` | nach Ruff/MyPy cleanup | pending |
 | WebUI Cutover | Policy Preview-Smoke | blocked bis Smoke |
-| 1Backend Deploy | Spec-first, kein Parallel-OS | pending |
+| 1Backend Deploy | Adapter-Spec done; kein Parallel-OS | pending (no deploy) |
+| GitLab deploy:vps | Manual-Gate Job in `.gitlab-ci.yml` | pending verify after merge |
 
 ## GitHub Org Einbeziehung
 
@@ -106,29 +116,35 @@ Inventar via `unset GITHUB_TOKEN; gh repo list nexifyai-dev --limit 200`.
 | F Customer | `bookando-*`, `studienkolleg-*`, `lv-ai`, … | Isolation |
 | G VPS-only | `1backend`, `openmcp` (kein GH Org) | ICD-Delta; Import nur Adapter |
 
-Detail: Monorepo `docs/live/GITHUB-ORG-MONOREPO-DRIFT-2026-07-31.md` · `docs/architecture/OPENMCP-1BACKEND-ICD-DELTA-2026-07-31.md` · Plan `docs/architecture/MONOREPO-KONSOLIDIERUNG-PLAN.md`
+Detail: `docs/live/GITHUB-ORG-MONOREPO-DRIFT-2026-07-31.md` · `docs/architecture/OPENMCP-1BACKEND-ICD-DELTA-2026-07-31.md` · `docs/architecture/MONOREPO-KONSOLIDIERUNG-PLAN.md`
 
 ## Evidence-Pfade
 
-- Dieses Doc
-- `/opt/nexifyai/docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`
+- Dieses Doc · Parity-Checkliste · `docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md`
+- `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md`
+- `docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md`
+- `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md`
+- `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md`
+- `docs/architecture/1BACKEND-ADAPTER-SPEC.md`
 - Backup: `/opt/nexifyai/backups/gesamtsystem-fix-*`
 - Traefik: `/opt/nexifyai/traefik/dynamic/main-routers.yml`
-- Autopilot: `/opt/nexifyai/config/autopilot/jobs.yaml` · state `paperclip-redis-revive.json`
-- Active tunnel SoT: Cloudflare API ingress (local `/etc/cloudflared/config.yml` draft/token-drift)
-- Monorepo Branch: `cursor/gesamtsystem-integration-gap-7dd5` · PR#98
-- Codespace Doc: Monorepo `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`
+- Autopilot: `/opt/nexifyai/config/autopilot/jobs.yaml`
+- OpenMCP stub: `config/openmcp/` (`#100`)
 - SOLL: `/opt/nexifyai/docs/architecture/SOLL-GESAMTKONZEPT.md`
 
 ## Verify (Smoke)
 
 ```bash
 curl -sS http://127.0.0.1:3000/api/health
-curl -sS -H "Host: grafana.nexifyai.cloud" http://127.0.0.1:8080/api/health
+curl -sk --resolve grafana.nexifyai.cloud:443:127.0.0.1 https://grafana.nexifyai.cloud/api/health
 curl -sS http://127.0.0.1:20128/api/health
 curl -sS http://127.0.0.1:9622/health
-curl -sS -H "Authorization: Bearer $AGENTMEMORY_SECRET" http://127.0.0.1:3111/agentmemory/livez
 curl -sS http://127.0.0.1:8901/api/health
-bash /opt/nexifyai/scripts/autopilot/jobs/gesamtsystem-integration-gap.sh
-unset GITHUB_TOKEN; gh pr view 98 --json isDraft,state,url; gh pr view 90 --json isDraft,state,url; gh pr view 97 --json state
+curl -sS https://www.nexifyai.cloud/leistungen | grep -o OfferCatalog | head -1
+unset GITHUB_TOKEN
+gh pr view 99 --json state,mergedAt
+gh pr view 100 --json state,mergedAt
+gh pr view 101 --json isDraft,state,url
+gh pr view 90 --json isDraft,state,url
+gh run list --workflow=mirror-to-gitlab.yml --limit 3
 ```
