@@ -123,7 +123,7 @@ test('middleware strips locale-prefixed public routes back to the unprefixed tre
 
 test('service price model keeps required day-rate and offer ranges', () => {
   const data = read('lib/site-data.ts');
-  assert.match(data, /dayRate:\s*999/);
+  assert.match(data, /dayRate:\s*449/);
   assert.match(data, /vatRate:\s*0\.21/);
   for (const slug of ['landingpages', 'websites', 'onlineshops', 'enterprise-commerce', 'web-apps', 'mobile-apps', 'automatisierung', 'ai-agenten']) {
     assert.match(data, new RegExp(`slug: "${slug}"`));

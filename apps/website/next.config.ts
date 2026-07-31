@@ -67,6 +67,8 @@ const nextConfig: NextConfig = {
     { source: "/arbeitsweise", destination: "/prozess", permanent: true },
     { source: "/ueber-pascal", destination: "/ueber-mich", permanent: true },
     { source: "/projekte", destination: "/referenzen", permanent: true },
+    // Calendly proxy — keeps link domain nexifyai.cloud, avoids spam-filter mismatch
+    { source: "/demo-call", destination: "https://calendly.com/pascal-courbois/30min", permanent: false },
   ],
   rewrites: async () => {
     const rewrites = [

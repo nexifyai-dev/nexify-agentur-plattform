@@ -25,11 +25,11 @@ test('HomePage - has correct service count', () => {
 
 test('HomePage - has correct proof metrics', () => {
   const metrics = [
-    { value: '999', unit: '€', label: 'netto pro Arbeitstag' },
+    { value: '449', unit: '€', label: 'netto pro Arbeitstag' },
     { value: '1', unit: 'Tag', label: 'für eine Landingpage' },
     { value: '2–3', unit: 'Tage', label: 'für eine Website' },
     { value: '6–8', unit: 'Tage', label: 'für Shop oder App-MVP' },
   ];
   assert.equal(metrics.length, 4);
-  assert.equal(metrics[0].value, '999');
+  assert.equal(metrics[0].value, '449');
 });

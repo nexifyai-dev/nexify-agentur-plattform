@@ -50,7 +50,7 @@ test('site-data - company has required fields', () => {
   assert.ok(ts.isObjectLiteralExpression(company));
   assert.equal(getPropertyValue(company, 'brand').text, 'NeXify AI');
   assert.equal(getPropertyValue(company, 'owner').text, 'Pascal Courbois');
-  assert.equal(getPropertyValue(company, 'dayRate').text, '999');
+  assert.equal(getPropertyValue(company, 'dayRate').text, '449');
 });
 
 test('site-data - services array is not empty', () => {
