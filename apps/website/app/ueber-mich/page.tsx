@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { AboutPage } from "@/components/pages/about";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Persönliche Verantwortung statt Agentur-Overhead. IT, Vertrieb und AI-gestützte Umsetzung für DACH + NL.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Über mich", path: "/ueber-mich" },
+]);
+
 export default function Page() {
-  return <AboutPage />;
+  return (
+    <>
+      <AboutPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }

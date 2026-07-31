@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { PlatformPage } from "@/components/pages/platform";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Next.js, React, TypeScript, Supabase und AI-Agenten — der Stack hinter der Geschwindigkeit.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Plattform", path: "/plattform" },
+]);
+
 export default function Page() {
-  return <PlatformPage />;
+  return (
+    <>
+      <PlatformPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }

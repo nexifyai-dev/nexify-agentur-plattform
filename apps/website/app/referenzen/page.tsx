@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { ReferencesPage } from "@/components/pages/references";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Projektergebnisse: Websites in Tagen, Commerce mit 60.000+ Artikeln, spürbare Automation-Effekte.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Referenzen", path: "/referenzen" },
+]);
+
 export default function Page() {
-  return <ReferencesPage />;
+  return (
+    <>
+      <ReferencesPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }

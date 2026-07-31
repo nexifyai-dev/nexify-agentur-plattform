@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { ProcessPage } from "@/components/pages/process";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Fünf klare Schritte: Zielklärung, Rahmen, Umsetzung, Tests, Übergabe. AI-gestützt, persönlich verantwortet.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Prozess", path: "/prozess" },
+]);
+
 export default function Page() {
-  return <ProcessPage />;
+  return (
+    <>
+      <ProcessPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }
