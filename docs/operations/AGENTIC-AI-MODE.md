@@ -119,6 +119,17 @@ Beispiel:
 MAX_CYCLES=0 INTERVAL_SECONDS=900 ENFORCE_GATES=1 KILL_SWITCH_FILE=test_reports/longrun/KILL_SWITCH bash scripts/integration-longrun.sh
 ```
 
+Hook-Guardrails:
+
+- `AUTO_INSTALL_HOOKS=1` (Default) installiert/aktualisiert pro Zyklus lokale Git-Hooks (`post-merge`, `post-checkout`, `pre-push`).
+- Hook-Installer: `bash scripts/install-agent-hooks.sh`
+- `STRICT_PRE_PUSH=1` macht den lokalen `pre-push` Hook blocking bei Deviation-Fehlern.
+
+Zusatzchecks im Deviation-Scan:
+
+- `gh` Verfuegbarkeit/Auth/Repo-View fuer `nexifyai-dev/nexify-agentur-plattform`
+- lokale Hook-Integritaet (`.git/hooks/post-merge`, `.git/hooks/post-checkout`, `.git/hooks/pre-push`)
+
 | Severity | Bedeutung |
 |----------|-----------|
 | ERROR | Sofort fixen (z. B. getrackte Secrets, fehlende Pflichtdateien) |

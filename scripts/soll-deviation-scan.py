@@ -80,6 +80,14 @@ def has_expected_github_origin(remotes_raw: str) -> bool:
     return any(re.search(pat, remotes_raw) for pat in patterns)
 
 
+def command_output(cmd: list[str]) -> tuple[int, str]:
+    try:
+        proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False)
+    except OSError:
+        return 127, ""
+    return proc.returncode, (proc.stdout + proc.stderr)
+
+
 def scan() -> list[Finding]:
     findings: list[Finding] = []
 
@@ -108,6 +116,7 @@ def scan() -> list[Finding]:
     tooling_required = [
         "scripts/mcp-health-codespace.sh",
         "scripts/setup-codespace-mcp.sh",
+        "scripts/install-agent-hooks.sh",
         "deploy/cloudflare/tunnel-ingress.yml",
     ]
     for rel in tooling_required:
@@ -218,6 +227,60 @@ def scan() -> list[Finding]:
                 "bash scripts/ensure-gitlab-remote.sh",
             )
         )
+
+    # --- GitHub CLI and repo access (monorepo operational readiness) ---
+    gh_rc, gh_out = command_output(["gh", "--version"])
+    if gh_rc == 0:
+        findings.append(Finding("ok", "GH-CLI", "gh CLI verfügbar"))
+        auth_rc, _ = command_output(["gh", "auth", "status"])
+        if auth_rc == 0:
+            findings.append(Finding("ok", "GH-AUTH", "gh authentifiziert"))
+        else:
+            findings.append(
+                Finding(
+                    "warn",
+                    "GH-AUTH",
+                    "gh nicht authentifiziert",
+                    "gh auth login oder bestehende Token-Session aktivieren",
+                )
+            )
+
+        view_rc, _ = command_output(["gh", "repo", "view", "nexifyai-dev/nexify-agentur-plattform"])
+        if view_rc == 0:
+            findings.append(Finding("ok", "GH-REPO-VIEW", "GitHub Monorepo via gh erreichbar"))
+        else:
+            findings.append(
+                Finding(
+                    "warn",
+                    "GH-REPO-VIEW",
+                    "GitHub Monorepo via gh nicht erreichbar",
+                    "Netz/Auth fuer gh repo view pruefen",
+                )
+            )
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "GH-CLI",
+                "gh CLI nicht verfügbar",
+                "GitHub CLI installieren, um Repo-Operationen zu automatisieren",
+            )
+        )
+
+    # --- Local hook integrity for autonomous guardrails ---
+    hook_paths = [".git/hooks/post-merge", ".git/hooks/post-checkout", ".git/hooks/pre-push"]
+    missing_hooks = [hp for hp in hook_paths if not (ROOT / hp).exists()]
+    if missing_hooks:
+        findings.append(
+            Finding(
+                "warn",
+                "HOOKS-MISSING",
+                f"Lokale Hooks fehlen: {', '.join(missing_hooks)}",
+                "bash scripts/install-agent-hooks.sh",
+            )
+        )
+    else:
+        findings.append(Finding("ok", "HOOKS-INSTALLED", "Lokale Guardrail-Hooks installiert"))
 
     # --- Tunnel ingress consistency: dashboard + webui as control-plane hosts ---
     host_to_service = parse_tunnel_ingress_hosts(ROOT / "deploy/cloudflare/tunnel-ingress.yml")

@@ -67,6 +67,29 @@ Verifiziert am 31.07.2026:
 - Soft-Mode (`ENFORCE_GATES=0`): Lauf erfolgreich, Gate-Report erzeugt
 - Hard-Mode (`ENFORCE_GATES=1`, `MAX_P1=2`): Lauf endet korrekt mit Exit-Code `2` bei Gate-Verletzung
 
+## While-True Langlauf (neu)
+
+- `MAX_CYCLES=0` aktiviert den dauerhaften `while true` Betrieb
+- `KILL_SWITCH_FILE` beendet den Loop kontrolliert ohne harte Prozesskills
+- Gates bleiben auch im Endlosbetrieb aktiv und koennen bei `ENFORCE_GATES=1` den Lauf stoppen
+
+## Scan-Erweiterung (neu)
+
+Der Deviation-Scan prueft zusaetzlich:
+
+- OpenMCP Proxy lokal (`http://127.0.0.1:8650/api/mcp/servers`)
+- OpenDesign lokal (`http://127.0.0.1:3002`)
+- OpenDesign public (`https://opendesign.nexifyai.cloud`)
+- Open public (`https://open.nexifyai.cloud`)
+
+Aktueller Stand im Codespace: `OK=32, WARN=10, ERROR=0` (WARNs sind Runtime/Reachability-basiert).
+
+## Git-Guardrails (neu)
+
+- Hook-Selbstheilung via `scripts/install-agent-hooks.sh` in den Langlauf integriert
+- Hook-Integritaet wird im Deviation-Scan geprueft
+- `gh`-Betriebsfaehigkeit (CLI/Auth/Repo-View) wird im Deviation-Scan geprueft
+
 ## Priorisierte Folgeaktionen
 
 1. P0: Secrets fuer Codespace-Lauf setzen (`AGENTMEMORY_SECRET`, `GITLAB_PERSONAL_ACCESS_TOKEN`) und erneut health-checken.

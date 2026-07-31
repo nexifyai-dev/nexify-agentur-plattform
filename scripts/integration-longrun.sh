@@ -17,6 +17,7 @@ MAX_P1="${MAX_P1:-10}"
 MAX_P2="${MAX_P2:-50}"
 MAX_BLOCKED="${MAX_BLOCKED:-999}"
 KILL_SWITCH_FILE="${KILL_SWITCH_FILE:-$ROOT/test_reports/longrun/KILL_SWITCH}"
+AUTO_INSTALL_HOOKS="${AUTO_INSTALL_HOOKS:-1}"
 
 mkdir -p "$REPORT_DIR"
 
@@ -58,6 +59,14 @@ run_cycle() {
     echo "# Integration Longrun"
     echo "cycle=${cycle}"
     echo "timestamp=$(ts)"
+    echo
+
+    echo "## 0) Hook Guardrails"
+    if [[ "$AUTO_INSTALL_HOOKS" == "1" && -x scripts/install-agent-hooks.sh ]]; then
+      bash scripts/install-agent-hooks.sh || true
+    else
+      echo "hook_install=skipped"
+    fi
     echo
 
     echo "## 1) SOLL-Deviation"
@@ -194,6 +203,7 @@ echo "max_cycles=$MAX_CYCLES"
 echo "enforce_gates=$ENFORCE_GATES"
 echo "thresholds: p0<=${MAX_P0} p1<=${MAX_P1} p2<=${MAX_P2} blocked<=${MAX_BLOCKED}"
 echo "kill_switch_file=$KILL_SWITCH_FILE"
+echo "auto_install_hooks=$AUTO_INSTALL_HOOKS"
 echo
 
 if [[ "$MAX_CYCLES" == "0" ]]; then
