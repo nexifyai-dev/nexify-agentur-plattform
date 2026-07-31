@@ -1,6 +1,6 @@
 # FILE: docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md
 # NIR: 31.07.2026 11:33
-# UPDATED: 31.07.2026 11:33
+# UPDATED: 31.07.2026 11:37
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: OpenDesign / html-anything Pack-Status vs Monorepo + WebUI
@@ -10,15 +10,15 @@
 
 ## Inventar
 
-| Ebene | IST 2026-07-31 | Status |
-|-------|----------------|--------|
-| Runtime lokal | `html-anything` `127.0.0.1:3002` → Title „HTML Anything — the agentic HTML editor“ **200** | OK |
+| Ebene | IST 2026-07-31 11:37 | Status |
+|-------|------------------------|--------|
+| Runtime lokal | `html-anything` `127.0.0.1:3002` → HTML Anything **200** | OK |
 | Traefik Service | `html-anything` → `http://127.0.0.1:3002` | OK |
-| Traefik Host `html.nexifyai.cloud` | Router `websecure` + auth-forward | Live-Smoke **404** (Tunnel/DNS/Auth) |
-| Traefik Path `admin.*/html` | vorhanden | Live-Smoke **404** |
-| CF `opendesign.*` | DNS MISSING | **blocked** |
-| Monorepo `apps/` | kein vendored OpenDesign-Tree | OK (Klasse C migrate-pending) |
-| GH Org `open-design` / `html-anything` | Klasse C — Spec→Monorepo, kein Drift-Fork | pending Spec |
+| Traefik Host `html.nexifyai.cloud` | **FIX:** `tls: {}` → `certResolver: letsencrypt`; auth-forward deferred bis Smoke | HTTPS `--resolve` **200** |
+| Traefik Path `admin.*/html` | noch **404** (separate Path/Auth-Issue) | TEIL |
+| CF `opendesign.*` / public `html.*` DNS | MISSING | **blocked** |
+| Backup | `/opt/nexifyai/backups/gesamtsystem-fix-20260731-113655/` | OK |
+| Monorepo `apps/` | kein vendored OpenDesign-Tree | OK (Klasse C) |
 
 ## Mapping zum WebUI-Mandat
 
@@ -36,9 +36,9 @@
 
 ## Nächste Acts
 
-1. Traefik/Tunnel why `html.*` 404 (DNS vs auth-forward) — Ops sense.
-2. Feature-Parity Zeile OpenDesign: `P` → Spec Native Panel.
-3. CF hostname erst nach Token-Scope.
+1. `admin.*/html` Path 404 + auth-forward wieder aktivieren nach Login-Smoke.
+2. Feature-Parity: OpenDesign native Panel in WebUI-Preview (kein Iframe-Dauer).
+3. CF hostname `html`/`opendesign` erst nach Token-Scope.
 
 ## Verify
 
