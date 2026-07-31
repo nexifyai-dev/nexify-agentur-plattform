@@ -2,7 +2,7 @@
   "_meta": {
     "file": "config/webui/native-module-links.json",
     "nir": "31.07.2026 11:37",
-    "updated": "31.07.2026 11:37",
+    "updated": "31.07.2026 12:03",
     "what": "Canonical native-module link map for WebUI-Zentrale (no secrets)",
     "why": "Decision 2026-07-31 — Dashboard→WebUI native; Übergangspfad dokumentieren",
     "status": "SPEC stub — Preview consumers only; no prod WebUI live-patch",
@@ -27,12 +27,14 @@
       "id": "opendesign-html-anything",
       "label": "OpenDesign",
       "soll": "native",
-      "ist": "proxy",
+      "ist": "preview-shell",
       "href_local": "http://127.0.0.1:3002",
       "href_traefik_https": "https://html.nexifyai.cloud",
       "href_admin_path": "https://admin.nexifyai.cloud/html",
-      "health": "GET / → 200 HTML Anything",
-      "notes": "2026-07-31: html.* TLS certResolver fixed; admin path still 404; CF DNS pending"
+      "preview_path": "apps/webui-preview/opendesign-panel/",
+      "preview_spec": "docs/architecture/OPENDESIGN-NATIVE-PANEL-PREVIEW-2026-07-31.md",
+      "health": "GET / → 200 HTML Anything; Preview shell :8791",
+      "notes": "2026-07-31: html.* auth+TLS OK; CF DNS blocked (DNS API 403); native panel Preview-only"
     },
     {
       "id": "agentmemory",
