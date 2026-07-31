@@ -18,6 +18,8 @@ MAX_P2="${MAX_P2:-50}"
 MAX_BLOCKED="${MAX_BLOCKED:-999}"
 KILL_SWITCH_FILE="${KILL_SWITCH_FILE:-$ROOT/test_reports/longrun/KILL_SWITCH}"
 AUTO_INSTALL_HOOKS="${AUTO_INSTALL_HOOKS:-1}"
+CHECK_GH_CLONE="${CHECK_GH_CLONE:-1}"
+GH_CLONE_REPO="${GH_CLONE_REPO:-nexifyai-dev/nexify-agentur-plattform}"
 
 mkdir -p "$REPORT_DIR"
 
@@ -91,6 +93,14 @@ run_cycle() {
 
     echo "## 4) Git remotes"
     git remote -v || true
+    echo
+
+    echo "## 5) GitHub Monorepo Clone Check"
+    if [[ "$CHECK_GH_CLONE" == "1" && -x scripts/verify-gh-monorepo-clone.sh ]]; then
+      bash scripts/verify-gh-monorepo-clone.sh "$GH_CLONE_REPO" || true
+    else
+      echo "gh_clone_check=skipped"
+    fi
     echo
   } | tee "$out"
 
@@ -204,6 +214,7 @@ echo "enforce_gates=$ENFORCE_GATES"
 echo "thresholds: p0<=${MAX_P0} p1<=${MAX_P1} p2<=${MAX_P2} blocked<=${MAX_BLOCKED}"
 echo "kill_switch_file=$KILL_SWITCH_FILE"
 echo "auto_install_hooks=$AUTO_INSTALL_HOOKS"
+echo "check_gh_clone=$CHECK_GH_CLONE repo=$GH_CLONE_REPO"
 echo
 
 if [[ "$MAX_CYCLES" == "0" ]]; then

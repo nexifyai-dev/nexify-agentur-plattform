@@ -117,6 +117,7 @@ def scan() -> list[Finding]:
         "scripts/mcp-health-codespace.sh",
         "scripts/setup-codespace-mcp.sh",
         "scripts/install-agent-hooks.sh",
+        "scripts/verify-gh-monorepo-clone.sh",
         "deploy/cloudflare/tunnel-ingress.yml",
     ]
     for rel in tooling_required:
@@ -132,6 +133,19 @@ def scan() -> list[Finding]:
                     f"Anlegen: {rel}",
                 )
             )
+
+    clone_check = ROOT / "scripts/verify-gh-monorepo-clone.sh"
+    if clone_check.exists() and clone_check.stat().st_mode & 0o111:
+        findings.append(Finding("ok", "GH-CLONE-CHECK", "Monorepo-Clone-Check ist ausführbar"))
+    else:
+        findings.append(
+            Finding(
+                "warn",
+                "GH-CLONE-CHECK",
+                "Monorepo-Clone-Check fehlt Ausführungsrechte",
+                "chmod +x scripts/verify-gh-monorepo-clone.sh",
+            )
+        )
 
     # --- MCP: secrets must not be tracked ---
     if git_tracked(".cursor/mcp.json"):
