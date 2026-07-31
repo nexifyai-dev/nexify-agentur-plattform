@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "file": "config/webui/native-module-links.json",
+    "nir": "31.07.2026 11:37",
+    "updated": "31.07.2026 11:37",
+    "what": "Canonical native-module link map for WebUI-Zentrale (no secrets)",
+    "why": "Decision 2026-07-31 — Dashboard→WebUI native; Übergangspfad dokumentieren",
+    "status": "SPEC stub — Preview consumers only; no prod WebUI live-patch",
+    "depends": "docs/decisions/DECISION-2026-07-31-WEBUI-ZENTRALE-VS-DASHBOARD.md"
+  },
+  "schema_comment": "Links for native WebUI module wiring. Prefer path on webui.* after cutover; subdomain = Übergang.",
+  "mandate_host": "https://webui.nexifyai.cloud/",
+  "workspace_host": "https://dashboard.nexifyai.cloud/",
+  "modules": [
+    {
+      "id": "monitoring-grafana",
+      "label": "Monitoring",
+      "soll": "native",
+      "ist": "proxy",
+      "href_local": "http://127.0.0.1:3000",
+      "href_traefik_https": "https://grafana.nexifyai.cloud",
+      "href_admin_path": "https://admin.nexifyai.cloud/grafana",
+      "health": "GET /api/health",
+      "notes": "Smoke via curl -sk --resolve grafana.nexifyai.cloud:443:127.0.0.1; never :8080 (cAdvisor)"
+    },
+    {
+      "id": "opendesign-html-anything",
+      "label": "OpenDesign",
+      "soll": "native",
+      "ist": "proxy",
+      "href_local": "http://127.0.0.1:3002",
+      "href_traefik_https": "https://html.nexifyai.cloud",
+      "href_admin_path": "https://admin.nexifyai.cloud/html",
+      "health": "GET / → 200 HTML Anything",
+      "notes": "2026-07-31: html.* TLS certResolver fixed; admin path still 404; CF DNS pending"
+    },
+    {
+      "id": "agentmemory",
+      "label": "AgentMemory",
+      "soll": "native",
+      "ist": "proxy",
+      "href_local": "http://127.0.0.1:3113",
+      "href_api": "http://127.0.0.1:3111",
+      "notes": "11 views native rebuild — largest parity item"
+    },
+    {
+      "id": "lightrag",
+      "label": "LightRAG",
+      "soll": "native",
+      "ist": "proxy",
+      "href_local": "http://127.0.0.1:9622",
+      "notes": "Dual-write hooks #98 MERGED"
+    },
+    {
+      "id": "backend-openapi",
+      "label": "OpenAPI / OpenMCP",
+      "soll": "mcp-tools",
+      "ist": "stub",
+      "href_openapi": "http://127.0.0.1:8901/openapi.json",
+      "openmcp_config": "config/openmcp/nexify-backend.openmcp.json",
+      "notes": "#100 MERGED — preview openmcp run only"
+    }
+  ]
+}

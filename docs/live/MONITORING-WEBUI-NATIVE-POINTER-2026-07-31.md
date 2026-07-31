@@ -1,6 +1,6 @@
 # FILE: docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md
 # NIR: 31.07.2026 11:33
-# UPDATED: 31.07.2026 11:33
+# UPDATED: 31.07.2026 11:40
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Monitoring→WebUI Pointer — Grafana native-Pfad, Smoke, CF-Gap
@@ -30,6 +30,12 @@
 - Health-Job deckt Grafana-Container über Docker-Whitelist (`nexify-grafana`).
 - Kein Auto-Heal für CF DNS (write blocked).
 - Smoke-Skript Gap-Job: **immer** `curl -sk --resolve grafana.nexifyai.cloud:443:127.0.0.1 https://grafana.nexifyai.cloud/api/health` — **nie** `:8080`.
+
+
+## WebUI-Zentrale Link-Map
+
+Canonical: `config/webui/native-module-links.json` → module `monitoring-grafana`.
+Übergang: Traefik HTTPS `grafana.*` (200 verified). Native Panel = Preview-Branch nach Parity Kanban/Memory.
 
 ## Nächste Acts
 
