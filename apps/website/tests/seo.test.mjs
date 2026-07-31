@@ -29,9 +29,11 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /export function siteOrigin/);
   assert.match(src, /export function breadcrumbListJsonLd/);
   assert.match(src, /export function articleJsonLd/);
+  assert.match(src, /export function localBusinessPlaceJsonLd/);
   assert.match(src, /export function serializeJsonLd/);
   assert.match(src, /BreadcrumbList/);
   assert.match(src, /"@type": "Article"/);
+  assert.match(src, /\["LocalBusiness", "ProfessionalService"\]/);
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
@@ -123,4 +125,25 @@ test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
   const sitemap = read("app/sitemap.ts");
   assert.match(sitemap, /wissenArticleSlugs/);
   assert.match(sitemap, /\/wissen\/\$\{slug\}/);
+});
+
+test("venlo local SEO page has SSR metadata, BreadcrumbList and LocalBusiness/Place", () => {
+  const page = read("app/venlo/page.tsx");
+  assert.match(page, /pageMetadata/);
+  assert.match(page, /path:\s*"\/venlo"/);
+  assert.match(page, /breadcrumbListJsonLd/);
+  assert.match(page, /localBusinessPlaceJsonLd/);
+  assert.match(page, /449|company\.dayRate/);
+  assert.match(page, /Graaf van Loonstraat|company\.address/);
+  assert.match(page, /href="\/leistungen"/);
+  assert.match(page, /href="\/preise"/);
+  assert.match(page, /href="\/kontakt"/);
+  assert.match(page, /data-testid="venlo-page"/);
+  assert.doesNotMatch(page, /999/);
+
+  const sitemap = read("app/sitemap.ts");
+  assert.match(sitemap, /"\/venlo"/);
+
+  const footer = read("components/site-footer.tsx");
+  assert.match(footer, /href:\s*"\/venlo"/);
 });
