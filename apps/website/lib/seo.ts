@@ -85,6 +85,85 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
   };
 }
 
+type ArticleJsonLdInput = {
+  title: string;
+  description: string;
+  path: string;
+  datePublished: string;
+  dateModified?: string;
+};
+
+/** schema.org Article — server-side JSON-LD for crawlable Wissen posts. */
+export function articleJsonLd({
+  title,
+  description,
+  path,
+  datePublished,
+  dateModified,
+}: ArticleJsonLdInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    datePublished,
+    dateModified: dateModified ?? datePublished,
+    mainEntityOfPage: absoluteUrl(path),
+    author: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+  };
+}
+
+/** schema.org LocalBusiness + Place — local SEO landing (e.g. /venlo). */
+export function localBusinessPlaceJsonLd(path = "/venlo") {
+  const postalAddress = {
+    "@type": "PostalAddress" as const,
+    streetAddress: company.address,
+    postalCode: "5921 JA",
+    addressLocality: "Venlo",
+    addressRegion: "Limburg",
+    addressCountry: "NL",
+  };
+  return {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "ProfessionalService"],
+    name: company.legalName,
+    brand: company.brand,
+    url: absoluteUrl(path),
+    email: company.email,
+    telephone: company.phone,
+    priceRange: "€€",
+    address: postalAddress,
+    location: {
+      "@type": "Place",
+      name: `${company.brand} — Venlo`,
+      address: postalAddress,
+    },
+    areaServed: [
+      { "@type": "City", name: "Venlo" },
+      { "@type": "Country", name: "Netherlands" },
+      { "@type": "Country", name: "Germany" },
+      { "@type": "Country", name: "Austria" },
+      { "@type": "Country", name: "Switzerland" },
+    ],
+    makesOffer: {
+      "@type": "Offer",
+      price: String(company.dayRate),
+      priceCurrency: "EUR",
+      description: "Tagessatz netto pro Arbeitstag (bis zu acht planbare Fachstunden)",
+      unitText: "DAY",
+    },
+  };
+}
+
 /** Escape `<` so inline JSON-LD cannot break out of the script tag. */
 export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
