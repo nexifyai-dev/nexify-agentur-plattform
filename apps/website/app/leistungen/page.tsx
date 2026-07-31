@@ -1,6 +1,7 @@
-import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd, servicesOfferCatalogJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/json-ld";
 import { ServicesPage } from "@/components/pages/services";
+import { services } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
   title: "Leistungen — Websites, Shops, Apps & AI-Automatisierung",
@@ -15,11 +16,23 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
   { name: "Leistungen", path: "/leistungen" },
 ]);
 
+const servicesJsonLd = servicesOfferCatalogJsonLd(
+  services.map((s) => ({
+    slug: s.slug,
+    name: s.shortTitle,
+    description: s.description,
+    minDays: s.minDays,
+    maxDays: s.maxDays,
+    from: s.from,
+  })),
+);
+
 export default function Page() {
   return (
     <>
       <ServicesPage />
       <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={servicesJsonLd} />
     </>
   );
 }

@@ -30,9 +30,11 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /export function breadcrumbListJsonLd/);
   assert.match(src, /export function articleJsonLd/);
   assert.match(src, /export function localBusinessPlaceJsonLd/);
+  assert.match(src, /export function servicesOfferCatalogJsonLd/);
   assert.match(src, /export function serializeJsonLd/);
   assert.match(src, /BreadcrumbList/);
   assert.match(src, /"@type": "Article"/);
+  assert.match(src, /"@type": "OfferCatalog"/);
   assert.match(src, /\["LocalBusiness", "ProfessionalService"\]/);
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
@@ -52,6 +54,22 @@ test("leistungen and preise pages expose BreadcrumbList JSON-LD", () => {
     assert.match(page, /breadcrumbListJsonLd/);
     assert.match(page, /JsonLd/);
   }
+});
+
+test("leistungen page exposes OfferCatalog Service/Offer JSON-LD", () => {
+  const page = read("app/leistungen/page.tsx");
+  assert.match(page, /servicesOfferCatalogJsonLd/);
+  assert.match(page, /services\.map/);
+  assert.match(page, /shortTitle/);
+  assert.match(page, /minDays/);
+  assert.match(page, /JsonLd data=\{servicesJsonLd\}/);
+
+  const src = read("lib/seo.ts");
+  assert.match(src, /"@type": "OfferCatalog"/);
+  assert.match(src, /"@type": "Service"/);
+  assert.match(src, /"@type": "Offer"/);
+  assert.match(src, /company\.dayRate/);
+  assert.match(src, /PriceSpecification/);
 });
 
 test("marketing pages expose BreadcrumbList JSON-LD", () => {
