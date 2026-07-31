@@ -54,69 +54,69 @@ run_cycle() {
     echo
   } | tee "$out"
 
-    if [[ -f "$ROOT/test_reports/soll-deviation-scan.json" ]]; then
+  if [[ -f "$ROOT/test_reports/soll-deviation-scan.json" ]]; then
     cp "$ROOT/test_reports/soll-deviation-scan.json" "$scan_json"
-    fi
+  fi
 
-    prev_scan="$(ls -1 "$REPORT_DIR"/soll-deviation-scan-*.json 2>/dev/null | grep -v "$scan_json" | tail -n 1 || true)"
-    if [[ -n "${prev_scan:-}" && -f "$scan_json" ]]; then
+  prev_scan="$(ls -1 "$REPORT_DIR"/soll-deviation-scan-*.json 2>/dev/null | grep -v "$scan_json" | tail -n 1 || true)"
+  if [[ -n "${prev_scan:-}" && -f "$scan_json" ]]; then
     python3 - "$prev_scan" "$scan_json" "$delta_json" <<'PY'
-  import json
-  import sys
-  from pathlib import Path
+import json
+import sys
+from pathlib import Path
 
-  prev_path = Path(sys.argv[1])
-  curr_path = Path(sys.argv[2])
-  delta_path = Path(sys.argv[3])
+prev_path = Path(sys.argv[1])
+curr_path = Path(sys.argv[2])
+delta_path = Path(sys.argv[3])
 
-  prev = json.loads(prev_path.read_text(encoding="utf-8"))
-  curr = json.loads(curr_path.read_text(encoding="utf-8"))
+prev = json.loads(prev_path.read_text(encoding="utf-8"))
+curr = json.loads(curr_path.read_text(encoding="utf-8"))
 
-  def sig(f):
+def sig(f):
     return (f.get("severity", ""), f.get("code", ""), f.get("message", ""))
 
-  prev_set = {sig(f) for f in prev.get("findings", [])}
-  curr_set = {sig(f) for f in curr.get("findings", [])}
+prev_set = {sig(f) for f in prev.get("findings", [])}
+curr_set = {sig(f) for f in curr.get("findings", [])}
 
-  new_items = sorted(curr_set - prev_set)
-  resolved_items = sorted(prev_set - curr_set)
+new_items = sorted(curr_set - prev_set)
+resolved_items = sorted(prev_set - curr_set)
 
-  delta = {
+delta = {
     "previous": str(prev_path.name),
     "current": str(curr_path.name),
     "counts": {
-      "previous": {
-        "ok": prev.get("ok", 0),
-        "warn": prev.get("warn", 0),
-        "error": prev.get("error", 0),
-      },
-      "current": {
-        "ok": curr.get("ok", 0),
-        "warn": curr.get("warn", 0),
-        "error": curr.get("error", 0),
-      },
+        "previous": {
+            "ok": prev.get("ok", 0),
+            "warn": prev.get("warn", 0),
+            "error": prev.get("error", 0),
+        },
+        "current": {
+            "ok": curr.get("ok", 0),
+            "warn": curr.get("warn", 0),
+            "error": curr.get("error", 0),
+        },
     },
     "delta": {
-      "ok": curr.get("ok", 0) - prev.get("ok", 0),
-      "warn": curr.get("warn", 0) - prev.get("warn", 0),
-      "error": curr.get("error", 0) - prev.get("error", 0),
+        "ok": curr.get("ok", 0) - prev.get("ok", 0),
+        "warn": curr.get("warn", 0) - prev.get("warn", 0),
+        "error": curr.get("error", 0) - prev.get("error", 0),
     },
     "new_findings": [
-      {"severity": s, "code": c, "message": m} for s, c, m in new_items
+        {"severity": s, "code": c, "message": m} for s, c, m in new_items
     ],
     "resolved_findings": [
-      {"severity": s, "code": c, "message": m} for s, c, m in resolved_items
+        {"severity": s, "code": c, "message": m} for s, c, m in resolved_items
     ],
-  }
+}
 
-  delta_path.write_text(json.dumps(delta, indent=2), encoding="utf-8")
-  print(f"delta_report={delta_path}")
-  PY
-    fi
+delta_path.write_text(json.dumps(delta, indent=2), encoding="utf-8")
+print(f"delta_report={delta_path}")
+PY
+  fi
 
   echo "report=$out"
-    echo "scan_snapshot=$scan_json"
-    [[ -f "$delta_json" ]] && echo "delta_snapshot=$delta_json"
+  echo "scan_snapshot=$scan_json"
+  [[ -f "$delta_json" ]] && echo "delta_snapshot=$delta_json"
 }
 
 echo "# Start integration-longrun"
