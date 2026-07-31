@@ -98,3 +98,19 @@ Nur `mcp.json.example` und diese Doku gehören ins Repo.
 - **GitHub** bleibt Primary für PRs/Issues der Cloud-Agenten.
 - **GitLab OSS** ist Mirror + CI auf dem VPS (siehe `docs/operations/REPO-SYNC-STRATEGY.md`).
 - MCP `gitlab-oss` steuert MRs/Pipelines/Repos auf dem Self-Hosted System.
+
+## Codespace Schnellstart
+
+Fuer diese Repo-Umgebung existiert ein lokaler Bootstrap mit Health-Check:
+
+```bash
+bash scripts/setup-codespace-mcp.sh
+set -a; source .env.mcp.codespace; set +a
+bash scripts/mcp-health-codespace.sh
+```
+
+Abdeckung:
+
+- `.cursor/mcp.json` (agentmemory + context7 + gitlab-oss)
+- `.codex/config.toml` (zusatzlich agentmemory + gitlab-oss fuer Codex)
+- Erreichbarkeit von context7, agentmemory und GitLab OSS API/UI
