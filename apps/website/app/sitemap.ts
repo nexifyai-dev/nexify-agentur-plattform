@@ -13,6 +13,7 @@ const routes = [
   ...wissenArticleSlugs().map((slug) => `/wissen/${slug}`),
   "/faq",
   "/ueber-mich",
+  "/venlo",
   "/kontakt",
   "/rueckruf",
   "/impressum",
