@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 11:28
+# UPDATED: 31.07.2026 11:32
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -51,14 +51,14 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **PR `#98` MERGED**.
 | **AgentMemory** | Pflicht Brain + MCP TOOLS=all + Inject | REST+Viewer OK; Session-MCP catalog teils missing | TEIL | Cursor Session MCP reconnect Action |
 | **LightRAG** | Native Module + Dual-Write | healthy; Dual-Write Hooks **#98 MERGED** | TEIL | Ingest Gap-Doc; Native UI |
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
-| **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | Phase C Spec-first; kein Blind-Vendor |
+| **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` 61 paths live | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
-| **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub Draft **`#100`** | TEIL | Preview `openmcp run`; kein Prod |
+| **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub **`#100` MERGED** | TEIL | Preview `openmcp run`; kein Prod |
 | **OpenDesign** | Native Design-Editor | `:3002` lokal; kein CF `opendesign.*` | TEIL | WebUI `/design` Übergang; CF blocked |
 | **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK | TEIL | CF DNS pending (403 write) |
 | **Paperclip** | Factory `:3100` | README-Stub | **BLOCKED** | echte Factory-Tree/Image — kein Fake-Deploy |
-| **GitLab OSS** | Mirror + CI | `:8922` OK; CI WARN ohne deploy:vps | TEIL | soll-deviation WARN |
-| **GitHub** | SoT + PR | `#98` MERGED; `#99` OfferCatalog draft; `#100` OpenMCP draft; `#90` CI open | OK | — |
+| **GitLab OSS** | Mirror + CI | `:8922` OK; `deploy:vps` Manual-Gate Job | TEIL | Manual only; kein Blind-Cutover |
+| **GitHub** | SoT + PR | `#98`/`#99`/`#100` MERGED; `#101` parity draft; `#90` CI open | OK | — |
 | **Codespace pancake** | — | Branch PR `#90` (kein Drift-Fork) | OK | nach Merge Codespace stoppen |
 | **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
 | **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
@@ -77,10 +77,11 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 4. Backend `/health` Alias — **deferred** (Ruff/MyPy pre-existing)
 5. AgentMemory saves + Action Paperclip — **done**
 6. LightRAG `/query` verify — **done**
-7. SEO Venlo `#97` — **MERGED**; OfferCatalog `#99` — **draft OPEN**
-8. OpenMCP/1Backend ICD-Delta — Monorepo Doc; Allowlist Stub **`#100` draft**
+7. SEO Venlo `#97` — **MERGED**; OfferCatalog `#99` — **MERGED**; live `/leistungen` OfferCatalog+Service+449 **verified**
+8. OpenMCP ICD + Allowlist Stub **`#100` MERGED**; 1Backend Adapter-Spec — **diese Lieferung**
 9. CF DNS grafana/opendesign — **pending** (write 403)
-10. WebUI Feature-Parity-Checkliste — **diese Lieferung**
+10. WebUI Feature-Parity-Checkliste — Draft `#101`
+11. GitLab `deploy:vps` Manual-Gate Job — **diese Lieferung** (soll-deviation WARN)
 
 ## Remaining Blockers (Actions)
 
@@ -91,11 +92,11 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 | Paperclip revive | no app tree / Factory absent | **blocked** |
 | CF DNS grafana/opendesign/openapi | Classic DNS MISSING; token list=403 | pending |
 | Cursor Session MCP | user-agentmemory/lightrag nicht in Session catalog | pending |
-| OpenMCP Runtime | Stub `#100` — Preview smoke next | pending |
+| OpenMCP Runtime | Stub `#100` MERGED — Preview smoke next | pending |
 | Backend `/health` | nach Ruff/MyPy cleanup | pending |
 | WebUI Cutover | Policy Preview-Smoke | blocked bis Smoke |
-| 1Backend Deploy | Spec-first, kein Parallel-OS | pending |
-| GitLab deploy:vps | soll-deviation WARN | pending |
+| 1Backend Deploy | Adapter-Spec done; kein Parallel-OS | pending (no deploy) |
+| GitLab deploy:vps | Manual-Gate Job in `.gitlab-ci.yml` | pending verify after merge |
 
 ## GitHub Org Einbeziehung
 
