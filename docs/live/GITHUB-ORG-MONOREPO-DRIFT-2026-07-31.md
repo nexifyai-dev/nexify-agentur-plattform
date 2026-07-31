@@ -25,6 +25,10 @@ Stand: **~48+ Repos** in `nexifyai-dev` (2026-07-31).
 | F Customer | bookando, studienkolleg, lv-ai, … | Isolation-Policy |
 | G VPS-only | 1backend, openmcp | GitHub Import oder Monorepo stub + Action |
 
+## Codespace (2026-07-31)
+
+`ubiquitous-space-pancake` = Branch `copilot/fix-github-actions-build-backend-image` / PR#90 — siehe `CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`. Kein Fremd-Fork.
+
 ## CI/Hooks Drift
 
 | Item | IST | SOLL | Status |
