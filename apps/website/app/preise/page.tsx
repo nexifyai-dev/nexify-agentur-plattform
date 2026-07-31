@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { PricingPage } from "@/components/pages/pricing";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Transparente B2B-Preise: 449 € netto pro Arbeitstag. Keine versteckten Kosten.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Preise", path: "/preise" },
+]);
+
 export default function Page() {
-  return <PricingPage />;
+  return (
+    <>
+      <PricingPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }
