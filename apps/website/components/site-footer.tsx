@@ -21,6 +21,7 @@ const T = {
       { label: "Wissen", href: "/wissen" },
       { label: "FAQ", href: "/faq" },
       { label: "Über mich", href: "/ueber-mich" },
+      { label: "Venlo", href: "/venlo" },
     ],
     legalLinks: [
       { label: "Impressum", href: "/impressum" },
@@ -49,6 +50,7 @@ const T = {
       { label: "Knowledge", href: "/wissen" },
       { label: "FAQ", href: "/faq" },
       { label: "About Me", href: "/ueber-mich" },
+      { label: "Venlo", href: "/venlo" },
     ],
     legalLinks: [
       { label: "Imprint", href: "/impressum" },
@@ -77,6 +79,7 @@ const T = {
       { label: "Kennis", href: "/wissen" },
       { label: "FAQ", href: "/faq" },
       { label: "Over mij", href: "/ueber-mich" },
+      { label: "Venlo", href: "/venlo" },
     ],
     legalLinks: [
       { label: "Colofon", href: "/impressum" },

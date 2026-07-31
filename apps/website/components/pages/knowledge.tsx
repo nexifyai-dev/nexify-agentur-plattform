@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { ChevronDown, Clock3 } from "lucide-react";
+import { ArrowRight, ChevronDown, Clock3 } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { useContent } from "@/lib/content";
+import { WISSEN_ARTICLES } from "@/lib/content/wissen-articles";
 
 export function KnowledgePage() {
   const t = useContent();
@@ -18,7 +20,56 @@ export function KnowledgePage() {
           <p className="mt-5 max-w-2xl text-lg text-zinc-400">{t.wissen.intro}</p>
         </Reveal>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
+        <section className="mt-16" aria-labelledby="wissen-featured-heading" data-testid="wissen-featured">
+          <Reveal>
+            <h2
+              id="wissen-featured-heading"
+              className="font-[family-name:var(--font-heading)] text-2xl font-medium tracking-tight text-white"
+            >
+              Artikel zum Weiterlesen
+            </h2>
+            <p className="mt-2 max-w-2xl text-[14.5px] text-zinc-500">
+              Vollständige Beiträge mit festem Text im HTML — für Lesbarkeit und Auffindbarkeit.
+            </p>
+          </Reveal>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {WISSEN_ARTICLES.map((a, i) => (
+              <Reveal key={a.slug} delay={(i % 2) * 90}>
+                <article
+                  className="glass glass-lift flex h-full flex-col p-8"
+                  data-testid={`wissen-featured-${a.slug}`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="rounded-full border border-white/12 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                      {a.tag}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[11px] text-zinc-600">
+                      <Clock3 size={12} /> {a.readTime}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-[family-name:var(--font-heading)] text-xl font-medium leading-snug text-white">
+                    <Link
+                      href={`/wissen/${a.slug}`}
+                      className="transition-colors hover:text-zinc-200"
+                    >
+                      {a.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-zinc-500">{a.excerpt}</p>
+                  <Link
+                    href={`/wissen/${a.slug}`}
+                    className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-white"
+                    data-testid={`wissen-featured-link-${a.slug}`}
+                  >
+                    Artikel öffnen <ArrowRight size={14} />
+                  </Link>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        <div className="mt-20 grid gap-6 md:grid-cols-2">
           {t.wissen.articles.map((a, i) => {
             const open = openIdx === i;
             return (
