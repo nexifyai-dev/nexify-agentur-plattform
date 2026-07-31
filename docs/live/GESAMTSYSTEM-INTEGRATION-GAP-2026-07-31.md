@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 11:40
+# UPDATED: 31.07.2026 11:50
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -35,7 +35,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | Hermes Workspace `:4001` / dashboard.* | 200 |
 | Hermes WebUI `:8787` / webui.* | 302 login; `/login` 200 |
 | Backend FastAPI `:8901/api/health` | ok; OpenAPI **67** ops; `/health` 404 |
-| OpenDesign html-anything `:3002` | 200 lokal; `html.*` Traefik HTTPS 404 |
+| OpenDesign html-anything `:3002` | 200 lokal; `html.*` HTTPS **200**; `admin/html` **302** Auth |
 | Grafana `:3000/api/health` | 200; Traefik HTTPS Host grafana → **200** |
 | `127.0.0.1:8080` | **cAdvisor** — nicht Grafana/Traefik (Smoke-Korrektur) |
 | Paperclip `:3100` | DOWN — `blocked_no_app_tree` (sense-only Doc) |
@@ -56,7 +56,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
 | **OpenMCP** | OpenAPI→MCP Workflow | Allowlist Stub **`#100` MERGED** | TEIL | Preview `openmcp run`; kein Prod |
-| **OpenDesign** | Native Design-Editor | `:3002` OK; **`html.*` HTTPS 200** (TLS-Fix); CF DNS fehlt | TEIL | auth-forward + `admin/html` + Native Panel |
+| **OpenDesign** | Native Design-Editor | `:3002`+`html.*` 200; **`admin/html` 302** (Auth-MW-Fix) | TEIL | Native Panel; CF DNS; auth on `html.*` |
 | **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
 | **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
 | **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
@@ -86,7 +86,7 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 11. GitLab `deploy:vps` Manual-Gate Job — **diese Lieferung** (soll-deviation WARN)
 12. Monitoring/OpenDesign/Paperclip/Mirror Pointer-Docs + Decision Monorepo-Spiegel — **diese Lieferung**
 13. Live-verify `#99` `/leistungen` OfferCatalog LD + `#100` OpenAPI operationIds — **done**
-14. OpenDesign `html.*` TLS certResolver Fix — **done** (HTTPS 200); `config/webui/native-module-links.json` — **#101**; `admin.*` Host gesamt 404 — pending
+14. OpenDesign `html.*` TLS Fix — **done**; native-module-links — **#101 MERGED**; `admin.*` Auth-MW collision Fix — **done** (302 login, not 404)
 
 ## Remaining Blockers (Actions)
 

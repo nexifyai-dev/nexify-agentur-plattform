@@ -1,6 +1,6 @@
 # FILE: docs/live/OPENDESIGN-PACK-STATUS-2026-07-31.md
 # NIR: 31.07.2026 11:33
-# UPDATED: 31.07.2026 11:37
+# UPDATED: 31.07.2026 11:50
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: OpenDesign / html-anything Pack-Status vs Monorepo + WebUI
@@ -15,7 +15,7 @@
 | Runtime lokal | `html-anything` `127.0.0.1:3002` → HTML Anything **200** | OK |
 | Traefik Service | `html-anything` → `http://127.0.0.1:3002` | OK |
 | Traefik Host `html.nexifyai.cloud` | **FIX:** `tls: {}` → `certResolver: letsencrypt`; auth-forward deferred bis Smoke | HTTPS `--resolve` **200** |
-| Traefik Path `admin.*/html` | noch **404** (separate Path/Auth-Issue) | TEIL |
+| Traefik Path `admin.*/html` | **302** Auth-Redirect nach MW-Fix (`8881/verify`) | OK-TEIL |
 | CF `opendesign.*` / public `html.*` DNS | MISSING | **blocked** |
 | Backup | `/opt/nexifyai/backups/gesamtsystem-fix-20260731-113655/` | OK |
 | Monorepo `apps/` | kein vendored OpenDesign-Tree | OK (Klasse C) |
@@ -36,7 +36,7 @@
 
 ## Nächste Acts
 
-1. `admin.*/html` Path 404 + auth-forward wieder aktivieren nach Login-Smoke.
+1. Auth auf Subdomain `html.*` wieder aktivieren (aktuell deferred); Login-Smoke.
 2. Feature-Parity: OpenDesign native Panel in WebUI-Preview (kein Iframe-Dauer).
 3. CF hostname `html`/`opendesign` erst nach Token-Scope.
 
