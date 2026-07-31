@@ -1,6 +1,6 @@
 # FILE: /docs/governance/08_evidence/INTEGRATION_LONGRUN_BASELINE_2026-07-31.md
 # NIR: 31.07.2026 09:20
-# UPDATED: 31.07.2026 09:20
+# UPDATED: 31.07.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Baseline-Evidence fuer den proaktiven Integrations-Langlauf im Repo/Codespace.
@@ -28,20 +28,25 @@
 
 ## Ergebnis (Baseline)
 
-- Status: `ERROR=0`
+- Status: `OK=32, WARN=6, ERROR=0`
 - WARN-Gruppen:
-  - `CONTROL-PLANE-SPLIT` (dashboard/webui unterschiedliche Targets)
   - Runtime-Checks gegen lokale Dienste ohne VPS-Bind/Secrets (`agentmemory`, `lightrag`, `9router`)
   - Public Runtime Checks (`api`, `grafana`, `prometheus`) nicht erreichbar aus aktueller Umgebung
+
+## Delta seit erstem Lauf
+
+- `CONTROL-PLANE-SPLIT` ist aufgeloest (Ingress-Zentralisierung auf WebUI-Gateway)
+- Longrun erzeugt jetzt pro Zyklus Scan-Snapshots und Delta-JSON
 
 ## Relevante Artefakte
 
 - `test_reports/soll-deviation-scan.json`
-- `test_reports/longrun/integration-longrun-20260731T090724Z.log`
+- `test_reports/longrun/integration-longrun-20260731T091308Z.log`
+- `test_reports/longrun/soll-deviation-scan-20260731T091308Z.json`
+- `test_reports/longrun/soll-deviation-delta-20260731T091308Z.json`
 
 ## Priorisierte Folgeaktionen
 
-1. P0: Control-Plane zentralisieren (`dashboard.nexifyai.cloud` in `webui.nexifyai.cloud` integrieren/redirecten).
-2. P0: Secrets fuer Codespace-Lauf setzen (`AGENTMEMORY_SECRET`, `GITLAB_PERSONAL_ACCESS_TOKEN`) und erneut health-checken.
-3. P1: Externe Monitoring- und OpenAPI-Erreichbarkeit gegen produktive Tunnel-Konfiguration gegenpruefen.
-4. P1: Longrun zyklisch laufen lassen (z. B. alle 15 Minuten) und Baseline-Diff dokumentieren.
+1. P0: Secrets fuer Codespace-Lauf setzen (`AGENTMEMORY_SECRET`, `GITLAB_PERSONAL_ACCESS_TOKEN`) und erneut health-checken.
+2. P1: Externe Monitoring- und OpenAPI-Erreichbarkeit gegen produktive Tunnel-Konfiguration gegenpruefen.
+3. P1: Longrun zyklisch laufen lassen (z. B. alle 15 Minuten) und Delta-Reports in Governance-Evidence uebernehmen.
