@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 test('PricingCalculator Component - calculates correct prices', () => {
-  const dayRate = 999;
+  const dayRate = 449;
   const vatRate = 0.21;
   const days = 3;
   const net = days * dayRate;

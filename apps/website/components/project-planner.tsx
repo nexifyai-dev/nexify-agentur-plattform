@@ -163,10 +163,10 @@ export function ProjectPlanner() {
                     className={`rounded-2xl border p-4 text-left transition-all ${i === typeIdx ? "border-white/60 bg-white/[0.07]" : "border-white/10 bg-white/[0.02] hover:border-white/25"}`}>
                     <div className="text-[13.5px] font-semibold text-white">{s.shortTitle}</div>
                     <div className="mt-1.5 text-[12px] text-zinc-500">
-                      {s.minDays === max ? s.minDays : `${s.minDays}–${max}`}{s.from ? "+" : ""} {s.minDays === max && s.minDays === 1 && !s.from ? (lang === "nl" ? "werkdag" : "Arbeitstag") : (lang === "nl" ? "werkdagen" : "Arbeitstage")} · € 999 / {lang === "nl" ? "dag" : "Tag"} netto
+                      {s.minDays === max ? s.minDays : `${s.minDays}–${max}`}{s.from ? "+" : ""} {s.minDays === max && s.minDays === 1 && !s.from ? (lang === "nl" ? "werkdag" : "Arbeitstag") : (lang === "nl" ? "werkdagen" : "Arbeitstage")} · € 449 / {lang === "nl" ? "dag" : "Tag"} netto
                     </div>
                     <div className="text-silver mt-1 text-[13px] font-semibold">
-                      {s.from ? `${lang === "nl" ? "vanaf" : "ab"} ${eur(s.minDays * 999)}` : s.minDays === max ? eur(s.minDays * 999) : `${eur(s.minDays * 999)} – ${eur(max * 999)}`}
+                      {s.from ? `${lang === "nl" ? "vanaf" : "ab"} ${eur(s.minDays * 449)}` : s.minDays === max ? eur(s.minDays * 449) : `${eur(s.minDays * 449)} – ${eur(max * 449)}`}
                     </div>
                   </button>
                 );
@@ -218,7 +218,7 @@ export function ProjectPlanner() {
                         </div>
                         <div className="shrink-0 text-right">
                           <div className="text-[12px] text-zinc-400">{m.days_min === m.days_max ? m.days_min : `${m.days_min}–${m.days_max}`} {lang === "nl" ? "dagen" : "Tage"}</div>
-                          <div className="text-silver text-[13px] font-semibold">{m.days_min === m.days_max ? eur(m.days_min * 999) : `${eur(m.days_min * 999)} – ${eur(m.days_max * 999)}`}</div>
+                          <div className="text-silver text-[13px] font-semibold">{m.days_min === m.days_max ? eur(m.days_min * 449) : `${eur(m.days_min * 449)} – ${eur(m.days_max * 449)}`}</div>
                         </div>
                       </div>
                     ))}

@@ -9,7 +9,7 @@ export function CreateOfferForm({ onDone }: { onDone: () => void }) {
   const [f, setF] = useState({ name: "", email: "", company: "", language: "de", title: "", intro: "" });
   const [items, setItems] = useState([{ name: "", description: "", days_min: 1, days_max: 1 }]);
   const [state, setState] = useState("");
-  const total = items.reduce((s, i) => s + (Number(i.days_min) + Number(i.days_max)) / 2, 0) * 999;
+  const total = items.reduce((s, i) => s + (Number(i.days_min) + Number(i.days_max)) / 2, 0) * 449;
 
   const submit = async () => {
     setState("sending");

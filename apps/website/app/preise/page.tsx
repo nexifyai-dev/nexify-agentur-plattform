@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PricingPage } from "@/components/pages/pricing";
 
-export const metadata: Metadata = {
-  title: "Preise — 999 € netto pro Arbeitstag, volle Transparenz",
-  description: "Ein Tagessatz für alles: 999 € netto pro Arbeitstag. Interaktiver Projektkosten-Rechner, klare Leistungsspannen, keine versteckten Kosten. Ausschließlich B2B.",
-};
+export const metadata = pageMetadata({
+  title: "Preise — 449 € netto pro Arbeitstag, volle Transparenz",
+  description: "Ein Tagessatz für alles: 449 € netto pro Arbeitstag. Interaktiver Projektkosten-Rechner, klare Leistungsspannen, keine versteckten Kosten. Ausschließlich B2B.",
+  path: "/preise",
+  ogTitle: "Preise — 449 € netto / Arbeitstag | NeXify AI",
+  ogDescription: "Transparente B2B-Preise: 449 € netto pro Arbeitstag. Keine versteckten Kosten.",
+});
 
 export default function Page() {
   return <PricingPage />;

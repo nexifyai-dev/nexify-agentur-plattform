@@ -9,13 +9,16 @@ import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
+import { siteOrigin } from "@/lib/seo";
 import "./globals.css";
 
+const origin = siteOrigin();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? company.website),
+  metadataBase: new URL(origin),
   title: { default: "NeXify AI — Premium Websites, Apps & AI-Automatisierung", template: "%s | NeXify AI" },
   description:
-    "AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 999 Euro netto. Deutsch & Nederlands.",
+    "AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 449 Euro netto. Deutsch & Nederlands.",
   keywords: [
     "Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung",
     "AI-gestützte Automatisierung", "AI-Agenten", "NeXify AI", "Venlo", "webontwikkeling", "AI-automatisering",
@@ -23,21 +26,20 @@ export const metadata: Metadata = {
   authors: [{ name: company.owner }],
   creator: company.owner,
   publisher: company.legalName,
-  alternates: { canonical: "/" },
+  // Canonical/og:url pro Seite via pageMetadata() — kein Root-Canonical für alle Unterseiten
   openGraph: {
     type: "website",
     locale: "de_DE",
     alternateLocale: "nl_NL",
-    url: company.website,
     siteName: company.brand,
     title: "NeXify AI — Chat it. Automate it.",
-    description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit.",
+    description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit. 449 € netto / Arbeitstag.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI — Chat it. Automate it." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "NeXify AI — Chat it. Automate it.",
-    description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 999 / Arbeitstag netto.",
+    description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 449 / Arbeitstag netto.",
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
@@ -54,15 +56,29 @@ export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark" }
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": ["ProfessionalService", "LocalBusiness"],
     name: company.legalName,
-    url: company.website,
+    brand: company.brand,
+    url: origin,
     email: company.email,
     telephone: company.phone,
     founder: { "@type": "Person", name: company.owner },
-    address: { "@type": "PostalAddress", streetAddress: company.address, postalCode: "5921 JA", addressLocality: "Venlo", addressCountry: "NL" },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: company.address,
+      postalCode: "5921 JA",
+      addressLocality: "Venlo",
+      addressCountry: "NL",
+    },
     areaServed: ["DE", "AT", "CH", "NL"],
     priceRange: "€€",
+    makesOffer: {
+      "@type": "Offer",
+      price: String(company.dayRate),
+      priceCurrency: "EUR",
+      description: "Tagessatz netto pro Arbeitstag (bis zu acht planbare Fachstunden)",
+      unitText: "DAY",
+    },
   };
   return (
     <html lang="de" data-scroll-behavior="smooth">
