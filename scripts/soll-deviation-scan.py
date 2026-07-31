@@ -73,6 +73,13 @@ def parse_tunnel_ingress_hosts(path: Path) -> dict[str, str]:
     return host_to_service
 
 
+def has_expected_github_origin(remotes_raw: str) -> bool:
+    patterns = (
+        r"github\.com[:/]nexifyai-dev/nexify-agentur-plattform(?:\.git)?",
+    )
+    return any(re.search(pat, remotes_raw) for pat in patterns)
+
+
 def scan() -> list[Finding]:
     findings: list[Finding] = []
 
@@ -177,8 +184,10 @@ def scan() -> list[Finding]:
     gitlab_ci = (ROOT / ".gitlab-ci.yml").read_text(encoding="utf-8") if (ROOT / ".gitlab-ci.yml").exists() else ""
     if "deploy:vps" in gitlab_ci:
         findings.append(Finding("ok", "VCS-GITLAB-CI", "GitLab CI deploy:vps Job definiert"))
+    elif re.search(r"(?m)^\s*stage:\s*deploy\s*$", gitlab_ci):
+        findings.append(Finding("ok", "VCS-GITLAB-CI", "GitLab CI enthält Deploy-Stage (abweichende Job-Namen)"))
     else:
-        findings.append(Finding("warn", "VCS-GITLAB-CI", "GitLab CI ohne deploy:vps"))
+        findings.append(Finding("warn", "VCS-GITLAB-CI", "GitLab CI ohne Deploy-Stage"))
 
     # --- Git remotes must include GitHub origin + GitLab OSS ---
     try:
@@ -187,7 +196,7 @@ def scan() -> list[Finding]:
         ).stdout
     except OSError:
         remotes_raw = ""
-    if "github.com:nexifyai-dev/nexify-agentur-plattform" in remotes_raw:
+    if has_expected_github_origin(remotes_raw):
         findings.append(Finding("ok", "VCS-ORIGIN", "GitHub origin remote korrekt gesetzt"))
     else:
         findings.append(
