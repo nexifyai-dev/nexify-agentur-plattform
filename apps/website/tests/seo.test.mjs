@@ -27,9 +27,33 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   const src = read("lib/seo.ts");
   assert.match(src, /export function pageMetadata/);
   assert.match(src, /export function siteOrigin/);
+  assert.match(src, /export function breadcrumbListJsonLd/);
+  assert.match(src, /export function serializeJsonLd/);
+  assert.match(src, /BreadcrumbList/);
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
+});
+
+test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
+  const page = read("app/faq/page.tsx");
+  assert.match(page, /FAQPage/);
+  assert.match(page, /breadcrumbListJsonLd/);
+  assert.match(page, /path:\s*"\/faq"/);
+});
+
+test("leistungen and preise pages expose BreadcrumbList JSON-LD", () => {
+  for (const rel of ["app/leistungen/page.tsx", "app/preise/page.tsx"]) {
+    const page = read(rel);
+    assert.match(page, /breadcrumbListJsonLd/);
+    assert.match(page, /JsonLd/);
+  }
+});
+
+test("JsonLd component serializes application/ld+json safely", () => {
+  const src = read("components/json-ld.tsx");
+  assert.match(src, /application\/ld\+json/);
+  assert.match(src, /replace\(\/<\/g,\s*"\\\\u003c"\)/);
 });
 
 test("root layout has no global root-only canonical and uses 449 EUR", () => {

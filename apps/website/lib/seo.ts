@@ -64,3 +64,28 @@ export function pageMetadata({
     ...(noIndex ? { robots: { index: false, follow: false } } : {}),
   };
 }
+
+export type BreadcrumbItem = {
+  name: string;
+  /** Absolute path, e.g. `/` or `/faq`. */
+  path: string;
+};
+
+/** schema.org BreadcrumbList — server-side JSON-LD, absolute www URLs. */
+export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
+  };
+}
+
+/** Escape `<` so inline JSON-LD cannot break out of the script tag. */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}

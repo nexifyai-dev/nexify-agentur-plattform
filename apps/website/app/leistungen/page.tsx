@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { ServicesPage } from "@/components/pages/services";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Acht Leistungsbausteine zum Tagessatz 449 € netto: Websites, Shops, Apps und AI-Automatisierung.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Leistungen", path: "/leistungen" },
+]);
+
 export default function Page() {
-  return <ServicesPage />;
+  return (
+    <>
+      <ServicesPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }
