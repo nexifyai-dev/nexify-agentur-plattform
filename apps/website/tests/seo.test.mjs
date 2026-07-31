@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(root, rel), "utf8");
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** Mirror of siteOrigin() www-normalization (keeps unit test free of Next path aliases). */
 function siteOrigin(raw) {
@@ -86,8 +87,8 @@ test("marketing pages expose BreadcrumbList JSON-LD", () => {
     const page = read(rel);
     assert.match(page, /breadcrumbListJsonLd/);
     assert.match(page, /JsonLd/);
-    assert.match(page, new RegExp(`path:\\s*"${path.replace(/\//g, "\\/")}"`));
-    assert.match(page, new RegExp(`name:\\s*"${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+    assert.match(page, new RegExp(`path:\\s*"${escapeRegex(path)}"`));
+    assert.match(page, new RegExp(`name:\\s*"${escapeRegex(label)}"`));
   }
 });
 
