@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { CallbackPage } from "@/components/pages/callback";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Kostenlosen Rückruf mit Pascal Courbois buchen — persönliche Beratung zu Web, Shop und AI.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Rückruf", path: "/rueckruf" },
+]);
+
 export default function Page() {
-  return <CallbackPage />;
+  return (
+    <>
+      <CallbackPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }

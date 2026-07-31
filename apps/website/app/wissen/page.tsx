@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { KnowledgePage } from "@/components/pages/knowledge";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Praxisnahe Einblicke zu Websites, E-Commerce, AI-Agenten und Automatisierung.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Wissen", path: "/wissen" },
+]);
+
 export default function Page() {
-  return <KnowledgePage />;
+  return (
+    <>
+      <KnowledgePage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }

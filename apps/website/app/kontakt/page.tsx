@@ -1,4 +1,5 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { ContactPage } from "@/components/pages/contact";
 
 export const metadata = pageMetadata({
@@ -9,6 +10,16 @@ export const metadata = pageMetadata({
   ogDescription: "Projekt beschreiben, Einschätzung innerhalb eines Werktags. B2B, Deutsch & Nederlands.",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Kontakt", path: "/kontakt" },
+]);
+
 export default function Page() {
-  return <ContactPage />;
+  return (
+    <>
+      <ContactPage />
+      <JsonLd data={breadcrumbJsonLd} />
+    </>
+  );
 }
