@@ -1,6 +1,6 @@
 # FILE: docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md
 # NIR: 31.07.2026 11:10
-# UPDATED: 31.07.2026 11:10
+# UPDATED: 31.07.2026 12:03
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Befund GitHub Codespace / github.dev Workspace „ubiquitous space pancake“
@@ -11,20 +11,19 @@
 
 ## Kurzfazit
 
-Kein Fremd-Fork. Der Workspace zeigt auf **dasselbe** Feature-SoT-Repo und einen bestehenden CI-Fix-Branch.
+Kein Fremd-Fork. Der Workspace zeigte auf **dasselbe** Feature-SoT-Repo und CI-Fix-Branch **PR `#90`**.
+
+**2026-07-31 12:03:** PR `#90` **MERGED** → Codespace `ubiquitous-space-pancake-q7r5qvj444wxc46pg` per `gh codespace stop` → State **ShuttingDown** (Aufräumen ohne Secrets).
 
 | Feld | Wert |
 |------|------|
 | URL | `https://ubiquitous-space-pancake-q7r5qvj444wxc46pg.github.dev/` |
 | Codespace-Name | `ubiquitous-space-pancake-q7r5qvj444wxc46pg` |
 | Display | ubiquitous space pancake |
-| State | Available (2026-07-31) |
+| State | ShuttingDown (nach Stop 12:03) |
 | Repo | `nexifyai-dev/nexify-agentur-plattform` |
-| Branch | `copilot/fix-github-actions-build-backend-image` |
-| Drift vs `main` | ahead 5 / behind 0 |
-| Uncommitted | null (API) |
-| Machine | 2 cores / 8 GB / 32 GB |
-| Erstellt | 2026-07-31 ~10:46 CEST |
+| Branch (zuvor) | `copilot/fix-github-actions-build-backend-image` |
+| PR | `#90` MERGED |
 
 ## Inhalt / Commits (vs main)
 

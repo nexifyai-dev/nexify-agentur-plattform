@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeXify AI — OpenDesign Panel (Preview)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #ffffff;
+      --muted: #a1a1aa;
+      --accent: #e0e0e0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(255,255,255,0.06), transparent),
+        var(--bg);
+      color: var(--text);
+      font-family: Manrope, system-ui, sans-serif;
+    }
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    .brand {
+      font-family: Outfit, sans-serif;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      margin: 0 0 0.35rem;
+    }
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+    }
+    .lede {
+      color: var(--muted);
+      max-width: 36rem;
+      line-height: 1.6;
+      margin: 0 0 2rem;
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.25rem 1.35rem;
+      backdrop-filter: blur(12px);
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: #52525b;
+    }
+    .dot.ok { background: #86efac; }
+    .dot.bad { background: #f87171; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: Outfit, sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+    .btn:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+    .btn.primary {
+      background: var(--accent);
+      color: #0a0a0a;
+      border-color: transparent;
+    }
+    .btn.primary:hover { filter: brightness(1.05); }
+    .note {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .canvas {
+      margin-top: 1.5rem;
+      min-height: 280px;
+      border: 1px dashed var(--border);
+      border-radius: 1rem;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-family: Outfit, sans-serif;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" data-testid="opendesign-panel-preview">
+    <p class="eyebrow" data-testid="opendesign-panel-eyebrow">WebUI-Zentrale · Preview</p>
+    <h1 class="brand" data-testid="opendesign-panel-brand">NeXify AI</h1>
+    <p class="lede" data-testid="opendesign-panel-lede">
+      Native OpenDesign-Modulfläche für die Workstation-Zentrale.
+      Prod-Hermes-WebUI bleibt unverändert — diese Shell ist Preview-only.
+    </p>
+
+    <section class="panel" data-testid="opendesign-panel-status-card">
+      <div class="row">
+        <div class="status" data-testid="opendesign-health">
+          <span class="dot" id="health-dot" aria-hidden="true"></span>
+          <span id="health-label">Runtime html-anything: prüfe…</span>
+        </div>
+        <div class="actions">
+          <a
+            class="btn primary"
+            data-testid="opendesign-open-editor"
+            href="https://html.nexifyai.cloud/"
+            rel="noopener noreferrer"
+          >Editor öffnen (Übergang)</a>
+          <a
+            class="btn"
+            data-testid="opendesign-admin-path"
+            href="https://admin.nexifyai.cloud/html/"
+            rel="noopener noreferrer"
+          >admin /html</a>
+        </div>
+      </div>
+      <p class="note" data-testid="opendesign-panel-note">
+        Native Canvas folgt im Preview-Branch nach Parity-Smoke.
+        Übergang: Auth-geschütztes <code>html.*</code> / <code>admin/html</code> → :3002.
+        Kein Iframe-Dauerpfad.
+      </p>
+      <div class="canvas" data-testid="opendesign-native-canvas-placeholder">
+        Native Design-Canvas — Platzhalter (Preview)
+      </div>
+    </section>
+  </main>
+  <script>
+    (async function probe() {
+      const dot = document.getElementById('health-dot');
+      const label = document.getElementById('health-label');
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 2500);
+        const res = await fetch('http://127.0.0.1:3002/', { mode: 'no-cors', signal: ctrl.signal });
+        clearTimeout(t);
+        // no-cors → opaque; treat reachability attempt without throw as likely up
+        dot.classList.add('ok');
+        label.textContent = 'Runtime html-anything: erreichbar (lokal :3002, opaque CORS)';
+      } catch (e) {
+        try {
+          // fallback: same-origin note when served without CORS
+          dot.classList.add('bad');
+          label.textContent = 'Runtime html-anything: nicht erreichbar von dieser Origin (lokal :3002 prüfen)';
+        } catch (_) {}
+      }
+    })();
+  </script>
+</body>
+</html>
