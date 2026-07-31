@@ -5,9 +5,9 @@
 # WHAT: Production Dockerfile für den FastAPI-Backend-Server
 # WHY: Reproduzierbarer Container-Build für den NeXify-API-Server
 # BEST-PRACTICE: Python Slim-Image; Nicht-Root-User; Healthcheck via /health
-# PITFALL: V-01: requirements.txt enthält ein privates Paket (custom litellm wheel von customer-assets.emergentagent.com).
-#          Im CI wird der Build per continue-on-error toleriert; im Produktions-Build
-#          muss das private Paket über den custom Wheel-URL erreichbar sein.
+# PITFALL: V-01: requirements.txt enthält ein privates Paket (custom litellm wheel).
+#          Dieses wird via direkter URL aus customer-assets.emergentagent.com bezogen.
+#          Im Produktions-Build muss der custom Wheel-URL erreichbar sein.
 # DEPENDS: Python 3.11, Supabase Postgres (asyncpg), Resend, NINEROUTER_BASE_URL, NINEROUTER_API_KEY
 # DOCS-REF: backend/requirements.txt, backend/.env.example, backend/server.py
 
@@ -23,8 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-# Note: requirements.txt includes a private package (custom litellm wheel from customer-assets.emergentagent.com).
-# In production: ensure the custom wheel URL is reachable.
+# Note: requirements.txt includes a private litellm wheel from customer-assets.emergentagent.com.
+# In production: ensure network access to that host, or pre-download the wheel to /wheels/
 COPY requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt

@@ -50,6 +50,25 @@ test("leistungen and preise pages expose BreadcrumbList JSON-LD", () => {
   }
 });
 
+test("marketing pages expose BreadcrumbList JSON-LD", () => {
+  const pages = [
+    ["app/prozess/page.tsx", "/prozess", "Prozess"],
+    ["app/plattform/page.tsx", "/plattform", "Plattform"],
+    ["app/referenzen/page.tsx", "/referenzen", "Referenzen"],
+    ["app/wissen/page.tsx", "/wissen", "Wissen"],
+    ["app/kontakt/page.tsx", "/kontakt", "Kontakt"],
+    ["app/ueber-mich/page.tsx", "/ueber-mich", "Über mich"],
+    ["app/rueckruf/page.tsx", "/rueckruf", "Rückruf"],
+  ];
+  for (const [rel, path, label] of pages) {
+    const page = read(rel);
+    assert.match(page, /breadcrumbListJsonLd/);
+    assert.match(page, /JsonLd/);
+    assert.match(page, new RegExp(`path:\\s*"${path.replace(/\//g, "\\/")}"`));
+    assert.match(page, new RegExp(`name:\\s*"${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+  }
+});
+
 test("JsonLd component serializes application/ld+json safely", () => {
   const src = read("components/json-ld.tsx");
   assert.match(src, /application\/ld\+json/);
