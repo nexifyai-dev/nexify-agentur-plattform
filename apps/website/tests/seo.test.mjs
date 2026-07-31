@@ -28,8 +28,10 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /export function pageMetadata/);
   assert.match(src, /export function siteOrigin/);
   assert.match(src, /export function breadcrumbListJsonLd/);
+  assert.match(src, /export function articleJsonLd/);
   assert.match(src, /export function serializeJsonLd/);
   assert.match(src, /BreadcrumbList/);
+  assert.match(src, /"@type": "Article"/);
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
@@ -96,4 +98,29 @@ test("llm.txt is present for AI crawlers", () => {
   const llm = read("public/llm.txt");
   assert.match(llm, /449/);
   assert.match(llm, /www\.nexifyai\.cloud/);
+});
+
+test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
+  const articles = read("lib/content/wissen-articles.ts");
+  assert.match(articles, /ai-automatisierung-kmu/);
+  assert.match(articles, /was-kostet-web-app-2026/);
+  assert.match(articles, /449/);
+  assert.doesNotMatch(articles, /999/);
+
+  const page = read("app/wissen/[slug]/page.tsx");
+  assert.match(page, /generateStaticParams/);
+  assert.match(page, /pageMetadata/);
+  assert.match(page, /breadcrumbListJsonLd/);
+  assert.match(page, /articleJsonLd/);
+  assert.match(page, /href="\/preise"/);
+  assert.match(page, /href="\/leistungen"/);
+  assert.match(page, /href="\/kontakt"/);
+
+  const index = read("components/pages/knowledge.tsx");
+  assert.match(index, /WISSEN_ARTICLES/);
+  assert.match(index, /href=\{`\/wissen\/\$\{a\.slug\}`\}/);
+
+  const sitemap = read("app/sitemap.ts");
+  assert.match(sitemap, /wissenArticleSlugs/);
+  assert.match(sitemap, /\/wissen\/\$\{slug\}/);
 });
