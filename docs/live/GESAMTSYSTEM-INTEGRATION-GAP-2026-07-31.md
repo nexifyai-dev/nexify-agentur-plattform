@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 12:04
+# UPDATED: 31.07.2026 12:21
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -50,12 +50,12 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 |------------|------|----------------|--------|----------------|
 | **WebUI-Zentrale** | Eine Surface; Dashboard-Funktionen nativ | webui=:8787 + dashboard=:4001 parallel | GAP | Parity-Checkliste + Preview-Branch Smoke |
 | **Dashboard→WebUI native** | Keine Doppel-Dashboards/Iframes Dauer | Workspace nativ; Grafana/Design oft Path | TEIL | Native Views laut Parity-Matrix |
-| **AgentMemory** | Pflicht Brain + MCP TOOLS=all + Inject | REST+Viewer OK; Session-MCP catalog teils missing | TEIL | Cursor Session MCP reconnect Action |
+| **AgentMemory** | Pflicht Brain + MCP TOOLS=all + Inject | REST+Viewer OK; **Preview Stub 11 Views** | TEIL | `apps/webui-preview/agentmemory-panel` → Hermes wire |
 | **LightRAG** | Native Module + Dual-Write | healthy; Dual-Write Hooks **#98 MERGED** | TEIL | Ingest Gap-Doc; Native UI |
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
 | **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
-| **OpenDesign** | Native Design-Editor | Preview-Shell `apps/webui-preview/opendesign-panel`; Runtime Auth OK | TEIL | Draft native panel; CF DNS blocked |
+| **OpenDesign** | Native Design-Editor | Preview-Shell + **Hermes wire Hub** | TEIL | Cutover nach Smoke; CF DNS blocked |
 | **OpenMCP** | OpenAPI→MCP Workflow | Stub `#100`; Preview CLI help+allowlist verify 11:56 | TEIL | stdio run OK (timeout); kein Prod |
 | **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
 | **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
@@ -87,7 +87,9 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 12. Monitoring/OpenDesign/Paperclip/Mirror Pointer-Docs + Decision Monorepo-Spiegel — **diese Lieferung**
 13. Live-verify `#99` `/leistungen` OfferCatalog LD + `#100` OpenAPI operationIds — **done**
 14. OpenDesign `html.*` TLS Fix — **done**; native-module-links — **#101 MERGED**; `admin.*` Auth-MW collision Fix — **done** (302 login, not 404)
-N. OpenDesign native Panel Preview (`apps/webui-preview/opendesign-panel`) — **Draft**; Codespace pancake **stopped**; CF DNS list **403 blocked** (`docs/live/CF-DNS-SCOPE-BLOCKED-2026-07-31.md`); OpenMCP Cursor-Client **lokal only** (mcp.json gitignore)
+15. OpenDesign native Panel Preview — **`#106` MERGED**; Codespace stop; CF DNS **403 blocked**; OpenMCP lokal only
+16. Hermes Preview Wire Hub (`apps/webui-preview/hermes-wire`) + AgentMemory 11-View Stub (`agentmemory-panel`) — **diese Lieferung**
+17. PR-Triage: `#105`/`#106` **MERGED**; keine offenen Drafts (leer-Liste)
 
 ## Remaining Blockers (Actions)
 

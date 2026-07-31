@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeXify AI — Hermes Preview Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#0a0a0a; --surface:rgba(255,255,255,.03); --border:rgba(255,255,255,.1); --text:#fff; --muted:#a1a1aa; --accent:#e0e0e0; }
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse 70% 40% at 50% -10%,rgba(255,255,255,.05),transparent),var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif}
+    .shell{max-width:960px;margin:0 auto;padding:2rem 1.25rem 3rem}
+    h1{font-family:Outfit,sans-serif;font-weight:300;letter-spacing:-.03em;font-size:clamp(1.6rem,3.5vw,2.25rem);margin:0 0 .5rem}
+    .eyebrow{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 1.25rem}
+    .lede{color:var(--muted);max-width:40rem;line-height:1.6;margin:0 0 1.75rem}
+    .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:1.1rem;padding:1.1rem 1.2rem}
+    .card h2{font-family:Outfit,sans-serif;font-weight:500;font-size:1.15rem;margin:0 0 .4rem}
+    .card p{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 1rem}
+    a.btn{display:inline-block;text-decoration:none;color:#0a0a0a;background:var(--accent);padding:.55rem 1rem;border-radius:999px;font-family:Outfit,sans-serif;font-weight:500;font-size:.9rem}
+    .warn{margin-top:1.5rem;font-size:.85rem;color:var(--muted)}
+    code{color:#d4d4d8}
+  </style>
+</head>
+<body>
+  <main class="shell" data-testid="hermes-preview-hub">
+    <p class="eyebrow" data-testid="hermes-preview-eyebrow">WebUI-Zentrale · Hermes Preview Wire</p>
+    <h1 data-testid="hermes-preview-brand">NeXify AI</h1>
+    <p class="lede" data-testid="hermes-preview-lede">
+      Preview-Hub verdrahtet native Modul-Panels für die künftige WebUI-Zentrale.
+      Prod Hermes <code>:8787</code> bleibt unverändert — kein Live-Patch.
+    </p>
+    <div class="grid" data-testid="hermes-preview-module-grid">
+      <article class="card" data-testid="hermes-wire-opendesign">
+        <h2>OpenDesign</h2>
+        <p>Native Panel Preview — Editor-Übergang + Health.</p>
+        <a class="btn" href="http://127.0.0.1:8791/" data-testid="hermes-wire-opendesign-open">Panel :8791</a>
+      </article>
+      <article class="card" data-testid="hermes-wire-agentmemory">
+        <h2>AgentMemory</h2>
+        <p>Native Brain View Stub — 11 Views Checkliste + Viewer-Link.</p>
+        <a class="btn" href="http://127.0.0.1:8792/" data-testid="hermes-wire-agentmemory-open">Panel :8792</a>
+      </article>
+      <article class="card" data-testid="hermes-wire-monitoring">
+        <h2>Monitoring</h2>
+        <p>Pointer only — Grafana HTTPS / native-module-links.</p>
+        <a class="btn" href="https://grafana.nexifyai.cloud/" rel="noopener" data-testid="hermes-wire-monitoring-open">Grafana</a>
+      </article>
+    </div>
+    <p class="warn" data-testid="hermes-preview-warn">
+      Registry: <code>config/webui/hermes-preview-module-registry.json</code>.
+      Cutover erst nach Preview-Smoke + Endabnahme.
+    </p>
+  </main>
+</body>
+</html>
