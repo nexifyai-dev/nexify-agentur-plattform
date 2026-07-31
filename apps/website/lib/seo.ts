@@ -164,6 +164,79 @@ export function localBusinessPlaceJsonLd(path = "/venlo") {
   };
 }
 
+export type ServiceOfferItem = {
+  slug: string;
+  name: string;
+  description: string;
+  minDays: number;
+  maxDays?: number;
+  from?: boolean;
+};
+
+/**
+ * schema.org OfferCatalog of Service + Offer — services page SEO.
+ * Prices = Tagessatz × Arbeitstage (netto); ranges use PriceSpecification.
+ */
+export function servicesOfferCatalogJsonLd(
+  items: ServiceOfferItem[],
+  path = "/leistungen",
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: `Leistungen — ${company.brand}`,
+    description:
+      "Acht Leistungsbausteine zum festen Tagessatz: Websites, Shops, Apps und AI-Automatisierung.",
+    url: absoluteUrl(path),
+    numberOfItems: items.length,
+    itemListElement: items.map((s, index) => {
+      const minTotal = s.minDays * company.dayRate;
+      const maxTotal = (s.maxDays ?? s.minDays) * company.dayRate;
+      const ranged = Boolean(s.from) || (s.maxDays != null && s.maxDays !== s.minDays);
+      const daysLabel =
+        s.maxDays != null && s.maxDays !== s.minDays
+          ? `${s.minDays}–${s.maxDays} Arbeitstage`
+          : s.from
+            ? `ab ${s.minDays} Arbeitstag(en)`
+            : `${s.minDays} Arbeitstag${s.minDays === 1 ? "" : "e"}`;
+
+      return {
+        "@type": "Offer",
+        position: index + 1,
+        name: s.name,
+        url: absoluteUrl(`${path}#${s.slug}`),
+        description: `${daysLabel} à ${company.dayRate} € netto`,
+        itemOffered: {
+          "@type": "Service",
+          name: s.name,
+          description: s.description,
+          url: absoluteUrl(`${path}#${s.slug}`),
+          provider: {
+            "@type": "Organization",
+            name: company.legalName,
+            url: siteOrigin(),
+          },
+          areaServed: ["DE", "AT", "CH", "NL"],
+        },
+        priceCurrency: "EUR",
+        ...(ranged
+          ? {
+              priceSpecification: {
+                "@type": "PriceSpecification",
+                priceCurrency: "EUR",
+                minPrice: String(minTotal),
+                ...(s.maxDays != null ? { maxPrice: String(maxTotal) } : {}),
+                unitText: "TOTAL",
+              },
+            }
+          : {
+              price: String(minTotal),
+            }),
+      };
+    }),
+  };
+}
+
 /** Escape `<` so inline JSON-LD cannot break out of the script tag. */
 export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
