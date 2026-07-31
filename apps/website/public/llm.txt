@@ -1,0 +1,39 @@
+# NeXify AI — llm.txt
+# https://www.nexifyai.cloud
+
+> Premium Websites, Onlineshops, Web-Apps, Mobile Apps und AI-Automatisierung
+> für Unternehmen in D/A/CH und den Niederlanden (B2B only).
+
+## Company
+- Brand: NeXify AI — Chat it. Automate it.
+- Owner: Pascal Courbois (Eenmanszaak, Venlo, NL)
+- Email: mail@nexifyai.cloud
+- Phone: +31 6 133 188 56
+- KvK: 90483944
+- Site: https://www.nexifyai.cloud
+
+## Pricing
+- Day rate: € 449 net per working day (max. 8 specialist hours)
+- Transparent B2B pricing; no hidden agency overhead
+
+## Services
+- Landingpages & websites (often in days, not months)
+- Onlineshops / Commerce (Next.js)
+- Web apps & cross-platform mobile
+- AI automation & AI agents for SMEs
+- Personal delivery by one specialist, accelerated with AI tools
+
+## Languages
+- German (primary), Dutch, English
+
+## Preferred crawl targets
+- https://www.nexifyai.cloud/
+- https://www.nexifyai.cloud/leistungen
+- https://www.nexifyai.cloud/preise
+- https://www.nexifyai.cloud/prozess
+- https://www.nexifyai.cloud/faq
+- https://www.nexifyai.cloud/kontakt
+- https://www.nexifyai.cloud/sitemap.xml
+
+## Contact
+For project inquiries: https://www.nexifyai.cloud/kontakt or mail@nexifyai.cloud
