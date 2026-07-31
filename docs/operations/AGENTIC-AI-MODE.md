@@ -73,6 +73,23 @@ python3 scripts/soll-deviation-scan.py
 # Report: test_reports/soll-deviation-scan.json
 ```
 
+## Integrations-Langlauf (proaktiv)
+
+Fuer kontinuierliche Integrationspruefung (OpenAPI, MCP, Monitoring, Domain-Routing, VCS-Wiring):
+
+```bash
+# Einmaliger Lauf
+bash scripts/integration-longrun.sh
+
+# Zyklisch, z. B. 24 Zyklen alle 15 Minuten
+MAX_CYCLES=24 INTERVAL_SECONDS=900 bash scripts/integration-longrun.sh
+```
+
+Artefakte:
+
+- `test_reports/soll-deviation-scan.json`
+- `test_reports/longrun/integration-longrun-*.log`
+
 | Severity | Bedeutung |
 |----------|-----------|
 | ERROR | Sofort fixen (z. B. getrackte Secrets, fehlende Pflichtdateien) |
