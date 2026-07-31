@@ -16,7 +16,7 @@ const PROJECT_TYPES: Record<string, { days: number; label: string }> = {
 
 function localEstimate(type: string, description: string, features: string[]) {
   const project = PROJECT_TYPES[type] || { days: 5, label: "Individuelles Projekt" };
-  const dayRate = 999;
+  const dayRate = 449;
   const priceMin = project.days * dayRate;
   const priceMax = Math.ceil(project.days * 1.3) * dayRate;
   return {
