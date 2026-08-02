@@ -20,6 +20,8 @@ export function apiErr(detail: unknown): string {
 
 export const API_FALLBACK = "https://admin.nexifyai.cloud"; // legacy reference only — not used for credentialed auth
 
+// API JSON responses are untyped; callers pass T when they need a concrete shape.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic default for untyped JSON payloads
 export async function api<T = any>(path: string, options: RequestInit = {}): Promise<T> {
   // Same-origin first (local app/api handlers + catch-all proxy).
   // Do NOT rely on cross-origin API_FALLBACK for credentialed auth — cookies
