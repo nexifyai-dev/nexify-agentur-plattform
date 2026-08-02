@@ -1,0 +1,56 @@
+[
+  {
+    "schema": "nexify.gtm.crm_pending.v1",
+    "created_at": "2026-08-02T08:49:46Z",
+    "status": "pending_legal_gate",
+    "score": 100,
+    "score_reasons": [
+      "+25 passende Leistung",
+      "+20 Budget/Rahmen angedeutet",
+      "+15 Entscheider/Firmenkontext",
+      "+15 DACH/NL/Remote",
+      "+15 Deadline < 60 Tage",
+      "+10 kein reiner Zwischenhändler"
+    ],
+    "day_rate_eur": 449,
+    "service_slug": "websites",
+    "source": {
+      "id": "D01",
+      "title": "Next.js Unternehmenswebsite Relaunch KMU",
+      "url": "https://www.freelance.de/example-project-website",
+      "company": "Beispiel GmbH",
+      "region": "DE-NRW"
+    },
+    "contact_reason": "Öffentlicher Demand-Treffer auf D01: Next.js Unternehmenswebsite Relaunch KMU. Zusammenfassung: Mittelständischer Hersteller sucht Relaunch der B2B-Website inkl. Leistungsseiten und SEO.",
+    "outreach_draft_allowed": false,
+    "send_allowed": false,
+    "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+    "utm_hint": "utm_source=D01&utm_medium=outbound&utm_campaign=websites"
+  },
+  {
+    "schema": "nexify.gtm.crm_pending.v1",
+    "created_at": "2026-08-02T08:49:46Z",
+    "status": "below_threshold",
+    "score": 20,
+    "score_reasons": [
+      "+25 passende Leistung",
+      "+15 DACH/NL/Remote",
+      "+10 kein reiner Zwischenhändler",
+      "-30 reines Staffing/ANÜ"
+    ],
+    "day_rate_eur": 449,
+    "service_slug": "web-apps",
+    "source": {
+      "id": "D01",
+      "title": "ANÜ Senior Java Entwickler 12 Monate",
+      "url": "https://www.freelance.de/example-anue",
+      "company": null,
+      "region": "DE"
+    },
+    "contact_reason": "Öffentlicher Demand-Treffer auf D01: ANÜ Senior Java Entwickler 12 Monate. Zusammenfassung: Körperleihe ohne Produktlieferung.",
+    "outreach_draft_allowed": false,
+    "send_allowed": false,
+    "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+    "utm_hint": "utm_source=D01&utm_medium=outbound&utm_campaign=web-apps"
+  }
+]

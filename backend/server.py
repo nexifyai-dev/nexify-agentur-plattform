@@ -6,6 +6,10 @@ load_dotenv()
 load_dotenv(
     "/etc/nexifyai/credentials.env", override=True
 )  # ops SoT overrides local .env
+# Local supabase-db (172.21.0.4): credentials.env often has pooler user
+# postgres.<project_ref>, which fails password auth against docker Postgres.
+# backend-db-local.env must win last (USER=postgres + local password).
+load_dotenv("/etc/nexifyai/backend-db-local.env", override=True)
 
 import os
 import re
