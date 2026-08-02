@@ -42,28 +42,28 @@ Nicht primär:
 
 - 1 Arbeitstag
 - 449 Euro netto
-- 1.208,79 Euro inklusive 21 % BTW
+- 543,29 Euro inklusive 21 % BTW (Vergleichsrechnung)
 - Fokus: ein Angebot, eine Zielgruppe, eine Hauptkonversion
 
 ### 3.2 Unternehmenswebsite
 
 - 2 bis 3 Arbeitstage
-- 1.998 bis 2.997 Euro netto
-- 2.417,58 bis 3.626,37 Euro inklusive 21 % BTW
+- 898 bis 1.347 Euro netto
+- 1.086,58 bis 1.629,87 Euro inklusive 21 % BTW (Vergleichsrechnung)
 - Fokus: Positionierung, Leistungen, Vertrauen, Kontakt, Standard-Rechtsseiten
 
 ### 3.3 Onlineshop
 
 - 6 bis 8 Arbeitstage
-- 5.994 bis 7.992 Euro netto
-- 7.252,74 bis 9.670,32 Euro inklusive 21 % BTW
+- 2.694 bis 3.592 Euro netto
+- 3.259,74 bis 4.346,32 Euro inklusive 21 % BTW (Vergleichsrechnung)
 - Fokus: Katalog, Suche, Checkout, Zahlungen, Kommunikation, Basisintegrationen
 
 ### 3.4 Commerce ab 50.000 Artikeln
 
 - ab 12 Arbeitstagen
-- ab 11.988 Euro netto
-- ab 14.505,48 Euro inklusive 21 % BTW
+- ab 5.388 Euro netto
+- ab 6.519,48 Euro inklusive 21 % BTW (Vergleichsrechnung)
 - zusätzlicher Scope nach Datenmodell, Varianten, Suchindex, PIM/ERP, Importen, Last und Betriebsanforderungen
 
 ### 3.5 Web-App
