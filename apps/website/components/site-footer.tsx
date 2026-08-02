@@ -16,12 +16,14 @@ const T = {
       { label: "Leistungen", href: "/leistungen" },
       { label: "Preise", href: "/preise" },
       { label: "Vergleich", href: "/vergleich" },
+      { label: "Alternativen", href: "/alternativen" },
       { label: "Prozess", href: "/prozess" },
-      { label: "Vergleich", href: "/vergleich" },
       { label: "Plattform", href: "/plattform" },
       { label: "Referenzen", href: "/referenzen" },
       { label: "Wissen", href: "/wissen" },
       { label: "Checkliste", href: "/checkliste" },
+      { label: "Sprechstunde", href: "/sprechstunde" },
+      { label: "Partner", href: "/partner" },
       { label: "FAQ", href: "/faq" },
       { label: "Über mich", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -48,12 +50,14 @@ const T = {
       { label: "Services", href: "/leistungen" },
       { label: "Pricing", href: "/preise" },
       { label: "Compare", href: "/vergleich" },
+      { label: "Alternatives", href: "/alternativen" },
       { label: "Process", href: "/prozess" },
-      { label: "Compare", href: "/vergleich" },
       { label: "Platform", href: "/plattform" },
       { label: "References", href: "/referenzen" },
       { label: "Knowledge", href: "/wissen" },
       { label: "Checklist", href: "/checkliste" },
+      { label: "Office hours", href: "/sprechstunde" },
+      { label: "Partners", href: "/partner" },
       { label: "FAQ", href: "/faq" },
       { label: "About Me", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -80,12 +84,14 @@ const T = {
       { label: "Diensten", href: "/leistungen" },
       { label: "Prijzen", href: "/preise" },
       { label: "Vergelijk", href: "/vergleich" },
+      { label: "Alternatieven", href: "/alternativen" },
       { label: "Proces", href: "/prozess" },
-      { label: "Vergelijk", href: "/vergleich" },
       { label: "Platform", href: "/plattform" },
       { label: "Referenties", href: "/referenzen" },
       { label: "Kennis", href: "/wissen" },
       { label: "Checklist", href: "/checkliste" },
+      { label: "Spreekuur", href: "/sprechstunde" },
+      { label: "Partners", href: "/partner" },
       { label: "FAQ", href: "/faq" },
       { label: "Over mij", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -120,7 +126,7 @@ export function SiteFooter() {
           <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.nav}</h3>
           <ul className="mt-5 space-y-2.5">
             {t.links.map((l) => (
-              <li key={l.href}>
+              <li key={`${l.href}-${l.label}`}>
                 <Link href={l.href} className="text-sm text-zinc-400 transition-colors hover:text-white">
                   {l.label}
                 </Link>
