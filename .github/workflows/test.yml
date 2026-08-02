@@ -100,12 +100,14 @@ jobs:
       - name: Test JS (Website tests)
         run: pnpm --dir apps/website test
 
-      - name: Backend tests (Python)
+      - name: Backend unit tests (offline, fail-hard)
         run: |
-          if [ -d "./backend" ]; then
-            pip install flake8==7.3.0 pytest==9.1.1 -q
-            cd backend && python -m pytest tests/ -x --tb=short 2>&1 || true
-          fi
+          pip install flake8==7.3.0 pytest==9.1.1 -q
+          cd backend && python -m pytest tests/unit -m unit --tb=short
+
+      - name: Backend integration tests (remote env, gated)
+        run: |
+          cd backend && python -m pytest tests/ --ignore=tests/unit -x --tb=short
         continue-on-error: true
 
   docker-build-test:
