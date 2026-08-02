@@ -1,0 +1,86 @@
+[
+  {
+    "schema": "nexify.gtm.crm_pending.v1",
+    "created_at": "2026-08-02T08:52:57Z",
+    "status": "pending_legal_gate",
+    "score": 65,
+    "score_reasons": [
+      "+25 passende Leistung",
+      "+15 Entscheider/Firmenkontext",
+      "+15 DACH/NL/Remote",
+      "+10 kein reiner Zwischenhändler"
+    ],
+    "day_rate_eur": 449,
+    "service_slug": "automatisierung",
+    "source": {
+      "id": "demo-handwerk-01",
+      "title": "Schreinerei sucht Digitalisierung Angebotswesen",
+      "url": "https://example.invalid/handwerk",
+      "company": "Demo Schreinerei GmbH",
+      "region": "NRW"
+    },
+    "contact_reason": "Öffentlicher Demand-Treffer auf demo-handwerk-01: Schreinerei sucht Digitalisierung Angebotswesen. Zusammenfassung: KMU Handwerk, Anfragen aus Portalen, kein CRM-Flow",
+    "outreach_draft_allowed": false,
+    "send_allowed": false,
+    "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+    "utm_hint": "utm_source=demo-handwerk-01&utm_medium=outbound&utm_campaign=automatisierung",
+    "icp": "handwerk",
+    "source_id": "demo-handwerk-01"
+  },
+  {
+    "schema": "nexify.gtm.crm_pending.v1",
+    "created_at": "2026-08-02T08:52:57Z",
+    "status": "pending_legal_gate",
+    "score": 65,
+    "score_reasons": [
+      "+25 passende Leistung",
+      "+15 Entscheider/Firmenkontext",
+      "+15 DACH/NL/Remote",
+      "+10 kein reiner Zwischenhändler"
+    ],
+    "day_rate_eur": 449,
+    "service_slug": "web-apps",
+    "source": {
+      "id": "demo-steuer-01",
+      "title": "Steuerkanzlei will Mandantenportal",
+      "url": "https://example.invalid/steuer",
+      "company": "Demo Steuerberatung",
+      "region": "Bayern"
+    },
+    "contact_reason": "Öffentlicher Demand-Treffer auf demo-steuer-01: Steuerkanzlei will Mandantenportal. Zusammenfassung: Onboarding und Belegnachfass manuell",
+    "outreach_draft_allowed": false,
+    "send_allowed": false,
+    "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+    "utm_hint": "utm_source=demo-steuer-01&utm_medium=outbound&utm_campaign=web-apps",
+    "icp": "steuerberater",
+    "source_id": "demo-steuer-01"
+  },
+  {
+    "schema": "nexify.gtm.crm_pending.v1",
+    "created_at": "2026-08-02T08:52:57Z",
+    "status": "pending_legal_gate",
+    "score": 65,
+    "score_reasons": [
+      "+25 passende Leistung",
+      "+15 Entscheider/Firmenkontext",
+      "+15 DACH/NL/Remote",
+      "+10 kein reiner Zwischenhändler"
+    ],
+    "day_rate_eur": 449,
+    "service_slug": "onlineshops",
+    "source": {
+      "id": "demo-ecom-01",
+      "title": "Online-Shop Support-Automatisierung",
+      "url": "https://example.invalid/ecom",
+      "company": "Demo Shop UG",
+      "region": "Hamburg"
+    },
+    "contact_reason": "Öffentlicher Demand-Treffer auf demo-ecom-01: Online-Shop Support-Automatisierung. Zusammenfassung: Ticketvolumen steigt, Checkout-Reibung",
+    "outreach_draft_allowed": false,
+    "send_allowed": false,
+    "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+    "utm_hint": "utm_source=demo-ecom-01&utm_medium=outbound&utm_campaign=onlineshops",
+    "icp": "ecommerce",
+    "source_id": "demo-ecom-01"
+  }
+]
