@@ -1,16 +1,3 @@
-// FILE: /apps/website/app/danke/page.tsx
-// NIR: 02.08.2026 10:50
-// UPDATED: 02.08.2026 10:50
-// NAME: NeXifyAI Agent
-// TEAM: NeXifyAI GTM
-// WHAT: Thank-you landing after contact / lead-magnet
-// WHY: Confirm receipt + soft CTA to /rueckruf without fake urgency
-// BEST-PRACTICE: noIndex; brand-first; one CTA group
-// PITFALL: V-GTM-DANK: No fake metrics
-// DEPENDS: lib/seo
-// DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md
-// SESSION: zero-cost-leads-mailing-7dd5
-
 import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
 
@@ -22,6 +9,7 @@ export const metadata = pageMetadata({
   noIndex: true,
 });
 
+/** Thank-you / post-conversion landing — no fake metrics; honest next steps. */
 export default function DankePage() {
   return (
     <main className="flex min-h-[70vh] items-center pt-24" data-testid="thank-you-page">
@@ -38,8 +26,11 @@ export default function DankePage() {
           <Link href="/rueckruf" className="btn-primary inline-flex" data-testid="thank-you-booking">
             Optional: Rückruf-Slot sichern
           </Link>
-          <Link href="/checkliste" className="btn-secondary inline-flex" data-testid="thank-you-checkliste">
-            Checkliste ansehen
+          <Link href="/wissen" className="btn-secondary inline-flex" data-testid="thank-you-wissen">
+            Wissen lesen
+          </Link>
+          <Link href="/" className="inline-flex text-sm text-zinc-400 underline-offset-4 hover:underline">
+            Zur Startseite
           </Link>
         </div>
       </div>
