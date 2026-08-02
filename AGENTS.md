@@ -56,3 +56,51 @@ Arbeits-Scope ist **ausschließlich** dieses Repository
 werden bis Ende August 2026 **ignoriert** — kein Cross-Repo-Edit, kein
 Fremd-Deploy, keine Fremd-PR-Arbeit. Ausnahme nur bei explizitem neuem
 Mandat.
+
+## Cursor Cloud specific instructions
+> Für zukünftige Cloud-Agenten: Der Update-Script (läuft beim VM-Start)
+> installiert bereits die Website-Deps (`pnpm --dir apps/website install
+> --frozen-lockfile`). Diese Sektion nennt nur nicht-offensichtliche
+> Start-/Run-Stolpersteine; Standardbefehle stehen in der Website-Skill
+> (`.cursor/skills/website-dev/SKILL.md`) und im `README.md`.
+
+### Website (`apps/website`) — primäres, voll lauffähiges Produkt
+- Next.js 16 + React 19 + Tailwind v4, Paketmanager **pnpm**. Alle Befehle
+  **aus `apps/website`** ausführen (Verzeichnis ist eigener pnpm-Workspace-Root
+  mit eigenem `pnpm-lock.yaml`). Standardbefehle (lint/typecheck/test/build/dev):
+  siehe `website-dev`-Skill.
+- Dev-Server: `pnpm dev` → http://localhost:3000. Healthcheck: `GET /api/health`
+  (JSON `{"status":"ok"}`). `/` antwortet mit 307-Redirect nach `/de`.
+- Next.js warnt beim Start über „multiple lockfiles / inferred workspace root"
+  (Repo-Root-`pnpm-workspace.yaml` vs. `apps/website/…`) — **harmlos**, ignorieren.
+- Ohne Backend: `/api/planner/plan` liefert eine deterministische lokale
+  Schätzung (funktioniert offline, ist der beste Hello-World-Flow), während
+  `/api/contact` und `/api/offers/request` bewusst 5xx liefern, bis
+  `BACKEND_ORIGIN` (Proxy an echtes Backend) und/oder `RESEND_API_KEY` gesetzt
+  sind.
+
+### Backend (`backend`) — FastAPI, sekundär, läuft nur degradiert lokal
+- **Nicht** im Update-Script (braucht System-Paket + venv). Setup einmalig:
+  `sudo apt-get install -y python3.12-venv`, dann venv **außerhalb** des Repos
+  anlegen (z. B. `~/.venvs/nexify-backend`) und `pip install -r
+  backend/requirements.txt`.
+- **Gotcha (Boot-Crash):** `server.py` mountet StaticFiles hart auf
+  `/opt/nexifyai/repos/lead-pipeline/demos` und ruft `os.makedirs` darauf → ohne
+  diesen (beschreibbaren) Pfad bricht der Start mit `PermissionError: /opt/nexifyai`
+  ab. Vor dem Start einmalig anlegen:
+  `sudo mkdir -p /opt/nexifyai/repos/lead-pipeline/demos && sudo chown -R "$(id -u):$(id -g)" /opt/nexifyai`.
+- Start: `cd backend && uvicorn server:app --host 0.0.0.0 --port 8000`. Boot
+  gelingt, meldet aber erwartungsgemäß „Supabase connection failed" (kein lokales
+  Postgres auf :5432) und „email agent disabled" (keine IMAP-Creds) — graceful
+  degradation, kein Fehler. Health: `GET /api/health` → `{"status":"ok",
+  "db":"unavailable"}`. OpenAPI unter `/openapi.json`.
+- Backend-Tests (`backend/tests/`) sind **Integrationstests gegen eine entfernte
+  `REACT_APP_BACKEND_URL`** und laufen offline nicht durch; CI führt sie mit
+  `continue-on-error` aus. Der CI-Backend-Job macht nur flake8 (nur E9,F63,F7,F82)
+  + `ast`-Syntaxcheck von `server.py`/`portal/server.py`.
+
+### Nicht vorhanden / irreführend
+- Root-`docker-compose.yml` bringt **Harness/CI-Infra** hoch (nicht das Produkt);
+  das im `README.md` erwähnte `deploy/docker-compose.yml` **existiert nicht**.
+- Die „Brain"-Dienste (9Router, AgentMemory, LightRAG, CircuitBreaker) haben in
+  diesem Repo **keinen Quellcode** — extern/privat, für lokale Dev-Arbeit nicht nötig.
