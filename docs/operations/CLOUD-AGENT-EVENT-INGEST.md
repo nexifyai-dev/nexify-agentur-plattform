@@ -69,6 +69,11 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 6. GitHub Repo: Allow auto-merge; required checks; Labels `automerge`, `do-not-merge`, `agent-fix`
 7. VPS: `bash deploy/autopilot/install-event-ingest.sh` + Ingest-URL hinter Traefik/CF
 
+## Issues Lifecycle
+
+Siehe [`ISSUES-AUTOMATION.md`](./ISSUES-AUTOMATION.md) — Auto-Label, Triage, Stale, Human-gate.
+`event-to-cloud-agent` launched Issues nur noch bei Labels `agent-fix|cursor-fix|autonomous|P0` und **nie** bei `human-gate|blocked`.
+
 ## Guards
 
 - Kein Force-Push auf `main`/`develop`
