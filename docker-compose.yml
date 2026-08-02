@@ -1,3 +1,10 @@
+# Product UI language default is German (de). OS locale stays C.UTF-8 for portable containers.
+# TZ=Europe/Berlin is owned by docs/operations/TIMEZONE-EUROPE-BERLIN.md (separate PR).
+x-nexify-locale: &nexify_locale
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+  LANGUAGE: de:en
+
 services:
 
   # ── Harness Open Source — Git-Hosting, CI/CD, Code Review ─────────────────
