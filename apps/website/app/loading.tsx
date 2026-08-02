@@ -1,8 +1,4 @@
-/** Minimal Suspense fallback — no “Wird geladen…” copy that crawlers could misread as page content. */
+/** Suspense fallback: reserve full viewport so site-footer stays below the fold (CLS). */
 export default function Loading() {
-  return (
-    <div className="grid min-h-[40vh] place-items-center" aria-hidden="true">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--text-3)]" />
-    </div>
-  );
+  return <div className="min-h-[100svh]" aria-hidden="true" />;
 }

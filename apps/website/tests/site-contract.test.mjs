@@ -146,11 +146,18 @@ test('layout self-hosts the brand fonts without remote Google fetches', () => {
 test('root layout defers heavy client widgets after idle', () => {
   const layout = read('app/layout.tsx');
   assert.match(layout, /DeferredWidgets/);
+  assert.match(layout, /min-h-\[100svh\]/);
   assert.doesNotMatch(layout, /import \{ ChatWidget \}/);
   assert.doesNotMatch(layout, /import \{ ExitIntent \}/);
+  assert.doesNotMatch(layout, /import \{ StickyCta \}/);
+  assert.doesNotMatch(layout, /import \{ CookieConsent \}/);
   const deferred = read('components/deferred-widgets.tsx');
   assert.match(deferred, /requestIdleCallback/);
   assert.match(deferred, /dynamic\(/);
+  assert.match(deferred, /StickyCta/);
+  assert.match(deferred, /CookieConsent/);
+  const loading = read('app/loading.tsx');
+  assert.match(loading, /min-h-\[100svh\]/);
 });
 
 test('design keeps reference overflow guards', () => {

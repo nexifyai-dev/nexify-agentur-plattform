@@ -118,7 +118,7 @@ export function SiteFooter() {
   const t = T[lang];
 
   return (
-    <footer className="mt-28 border-t border-white/8 bg-black/40" data-testid="site-footer">
+    <footer className="mt-28 border-t border-white/8 bg-black/40 [content-visibility:auto] [contain-intrinsic-size:auto_720px]" data-testid="site-footer">
       <div className="site-container grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div className="max-w-xs">
           <Logo />

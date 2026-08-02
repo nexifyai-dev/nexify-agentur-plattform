@@ -64,8 +64,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const me = asUser(await api<User>("/api/auth/me"));
-      if (!me) throw new Error("empty session");
-      setUser(me);
+      if (me) {
+        setUser(me);
+        return;
+      }
+      // Anonymous: /api/auth/me returns 200 {} — do not call /auth/refresh (401 noise)
+      setUser(false);
     } catch {
       try {
         const me = asUser(await api<User>("/api/auth/refresh", { method: "POST" }));

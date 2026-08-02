@@ -1,13 +1,13 @@
 // FILE: /opt/nexifyai/repos/nexify-agentur-plattform/apps/website/components/deferred-widgets.tsx
 // NIR: 02.08.2026 11:10
-// UPDATED: 02.08.2026 11:10
+// UPDATED: 02.08.2026 11:15
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
-// WHAT: Idle-deferred Chat + ExitIntent (dynamic import, no SSR)
-// WHY: Cut unused JS / long tasks from mobile LCP critical path
-// BEST-PRACTICE: requestIdleCallback + timeout fallback; ssr:false
-// PITFALL: V-XX: never block first paint waiting for chat session
-// DEPENDS: chat-widget, exit-intent
+// WHAT: Idle-deferred fixed overlays (chat, exit-intent, sticky CTA, cookie)
+// WHY: Cut unused JS; keep overlays out of early paint; never push footer (position:fixed)
+// BEST-PRACTICE: requestIdleCallback + timeout; ssr:false for heavy widgets
+// PITFALL: V-CLS-01: Sticky/Cookie must stay fixed — never in document flow above footer
+// DEPENDS: chat-widget, exit-intent, sticky-cta, cookie-consent
 // DOCS-REF: docs/operations/PAGESPEED-RETEST-2026-08-02.md
 // SESSION: pagespeed-cls-lcp-llms-7dd5
 
@@ -15,6 +15,8 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { CookieConsent } from "@/components/cookie-consent";
+import { StickyCta } from "@/components/sticky-cta";
 
 const ChatWidget = dynamic(
   () => import("@/components/chat-widget").then((m) => ({ default: m.ChatWidget })),
@@ -27,15 +29,16 @@ const ExitIntent = dynamic(
 );
 
 function scheduleIdle(cb: () => void): () => void {
-  if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-    const id = window.requestIdleCallback(cb, { timeout: 2500 });
-    return () => window.cancelIdleCallback(id);
+  const w = typeof window !== "undefined" ? window : undefined;
+  if (w && typeof w.requestIdleCallback === "function") {
+    const id = w.requestIdleCallback(cb, { timeout: 2500 });
+    return () => w.cancelIdleCallback(id);
   }
-  const t = window.setTimeout(cb, 1600);
-  return () => window.clearTimeout(t);
+  const t = globalThis.setTimeout(cb, 1600);
+  return () => globalThis.clearTimeout(t);
 }
 
-/** Loads heavy client widgets after first paint / idle. */
+/** Loads fixed overlays after first paint / idle — never shifts site-footer. */
 export function DeferredWidgets() {
   const [ready, setReady] = useState(false);
 
@@ -45,8 +48,10 @@ export function DeferredWidgets() {
 
   return (
     <>
+      <StickyCta />
       <ExitIntent />
       <ChatWidget />
+      <CookieConsent />
     </>
   );
 }

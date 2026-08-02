@@ -58,6 +58,12 @@ body::before {
    so the sticky header scrolled away and overlays intercepted nav clicks. */
 main, footer { position: relative; z-index: 1; }
 header[data-testid="site-header"] { position: fixed; z-index: 50; }
+/* Footer below fold until main fills viewport — primary CLS attribution fix */
+#main-content { min-height: 100svh; }
+footer[data-testid="site-footer"] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
 ::selection { background: rgba(212, 212, 216, 0.3); color: #fff; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; }
