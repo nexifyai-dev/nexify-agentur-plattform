@@ -13,6 +13,7 @@ const NAV = {
     { label: "Leistungen", href: "/leistungen" },
     { label: "Preise", href: "/preise" },
     { label: "Prozess", href: "/prozess" },
+    { label: "Vergleich", href: "/vergleich" },
     { label: "Referenzen", href: "/referenzen" },
     { label: "Wissen", href: "/wissen" },
     { label: "Über mich", href: "/ueber-mich" },
@@ -21,6 +22,7 @@ const NAV = {
     { label: "Services", href: "/leistungen" },
     { label: "Pricing", href: "/preise" },
     { label: "Process", href: "/prozess" },
+    { label: "Compare", href: "/vergleich" },
     { label: "References", href: "/referenzen" },
     { label: "Knowledge", href: "/wissen" },
     { label: "About", href: "/ueber-mich" },
@@ -29,6 +31,7 @@ const NAV = {
     { label: "Diensten", href: "/leistungen" },
     { label: "Prijzen", href: "/preise" },
     { label: "Proces", href: "/prozess" },
+    { label: "Vergelijk", href: "/vergleich" },
     { label: "Referenties", href: "/referenzen" },
     { label: "Kennis", href: "/wissen" },
     { label: "Over mij", href: "/ueber-mich" },
@@ -108,6 +111,13 @@ export function SiteHeader() {
             <UserRound size={16} />
           </Link>
 
+          <Link
+            href="/rueckruf"
+            className="btn-ghost hidden !px-4 !py-2.5 !text-[13px] lg:inline-flex"
+            data-testid="header-booking-cta"
+          >
+            {lang === "en" ? "Book call" : lang === "nl" ? "Gesprek boeken" : "Termin buchen"}
+          </Link>
           <Link href="/kontakt" className="btn-primary hidden md:inline-flex !px-6 !py-2.5 !text-[13px]" data-testid="header-cta">
             {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
           </Link>
