@@ -19,6 +19,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
 | [GBP-OPS-CHECKLIST.md](GBP-OPS-CHECKLIST.md) | Google Business Ops (Human Gate) |
 | [EMAIL-NURTURE-OPTIN.md](EMAIL-NURTURE-OPTIN.md) | Opt-in Nurture (UWG-safe) |
+| [UWG-EMAIL-OPTIN-ONLY.md](UWG-EMAIL-OPTIN-ONLY.md) | **Hard stop:** DE Cold-Mail ohne Consent (§7 UWG) |
 | [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
 | [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |

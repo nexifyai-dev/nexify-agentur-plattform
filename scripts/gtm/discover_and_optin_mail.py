@@ -194,7 +194,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     p.add_argument("--mail-list", type=Path, help="JSON array of opt-in leads")
     p.add_argument("--dry-run", action="store_true", default=False, help="Print mails only")
-    p.add_argument("--send", action="store_true", help="Actually send (requires creds)")
+    p.add_argument(
+        "--send",
+        action="store_true",
+        help="Actually send (requires creds + consent=true per lead; §7 UWG)",
+    )
     p.add_argument("--limit", type=int, default=5, help="Max mails this run (default 5)")
     args = p.parse_args(argv)
 
@@ -212,6 +216,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.send and args.dry_run:
             print("refusing: --send and --dry-run together", file=sys.stderr)
             return 2
+        if args.send:
+            print(
+                "UWG-WARN (§7): --send only for opt-in leads with consent=true. "
+                "Cold email without consent is illegal in DE (also B2B).",
+                file=sys.stderr,
+            )
         leads = load_leads(args.mail_list)
         stats = run_mail(leads, dry_run=dry, limit=max(1, args.limit))
         print(json.dumps({"mail_stats": stats}, ensure_ascii=False))

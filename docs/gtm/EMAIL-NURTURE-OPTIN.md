@@ -15,6 +15,8 @@
 
 **Nur** Adressen mit `consent=true` und `source` ∈ {checkliste, kontakt, planner, partner, botschafter, sprechstunde}.
 
+> **§7 UWG:** Cold-E-Mail ohne Einwilligung ist in DE **auch B2B** unzulässig. Siehe [UWG-EMAIL-OPTIN-ONLY.md](UWG-EMAIL-OPTIN-ONLY.md).
+
 | # | Tag | Betreff | Ziel |
 |---|-----|---------|------|
 | 1 | 0 | Ihre Checkliste / nächster Schritt | Asset + Soft CTA Sprechstunde |

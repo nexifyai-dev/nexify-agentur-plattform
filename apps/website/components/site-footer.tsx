@@ -83,7 +83,7 @@ const T = {
     links: [
       { label: "Diensten", href: "/leistungen" },
       { label: "Prijzen", href: "/preise" },
-      { label: "Vergelijk", href: "/vergelijk" if False else "/vergleich" },
+      { label: "Vergelijk", href: "/vergleich" },
       { label: "Alternatieven", href: "/alternativen" },
       { label: "Proces", href: "/prozess" },
       { label: "Platform", href: "/plattform" },
