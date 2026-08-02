@@ -34,7 +34,7 @@
 | Deployment-Domain | INTERNAL | Workspace-Register | ✅ |
 | Affiliate-Daten | CONFIDENTIAL | NUR Kunden-Repo | ⚠️ Metadata only |
 | Nutzerdaten | RESTRICTED | NUR Kunden-Repo | ❌ Niemals |
-| Zahlungsdaten | RESTRICTED | NUR Stripe | ❌ Niemals |
+| Zahlungsdaten | RESTRICTED | NUR Revolut Merchant (PCI via Hosted Checkout) | ❌ Niemals |
 | API-Keys / Secrets | RESTRICTED | NUR Kunden-.env | ❌ Niemals |
 
 ## 3. NeXify-Interne Daten

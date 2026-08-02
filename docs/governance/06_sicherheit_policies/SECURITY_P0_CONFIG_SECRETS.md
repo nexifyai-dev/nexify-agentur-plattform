@@ -8,8 +8,10 @@
 #   - QDRANT_API_KEY (64-char hex)
 #   - JWT_SECRET_KEY (64-char hex)
 #   - JWT_REFRESH_SECRET (64-char hex)
-#   - STRIPE_SECRET_KEY (sk_liv...)
-#   - STRIPE_WEBHOOK_SECRET (whsec_...)
+#   - REVOLUT_API_SECRET_KEY (Merchant secret — never commit)
+#   - REVOLUT_API_PUBLIC_KEY (Merchant public)
+#   - REVOLUT_WEBHOOK_SECRET (optional Merchant webhook signing)
+#   (Stripe STRIPE_* / whsec_* are NOT used — see docs/operations/REVOLUT-MERCHANT.md)
 #
 # UND: config/ ist NICHT in .gitignore
 # → Bei git add . oder git add config/ landen Secrets auf GitHub

@@ -1134,7 +1134,19 @@ async def admin_send_email(body: AdminEmailIn, admin: dict = Depends(get_admin))
 
 @router.post("/api/portal/offers/{offer_id}/pay")
 async def pay_offer(offer_id: str, user: dict = Depends(get_current_user)):
-    import httpx
+    import revolut_merchant as revolut
+
+    if not revolut.payments_enabled():
+        raise HTTPException(
+            status_code=503,
+            detail="Zahlungen sind deaktiviert (PAYMENTS_PROVIDER).",
+        )
+    cfg = revolut.load_config()
+    if not cfg.enabled:
+        raise HTTPException(
+            status_code=503,
+            detail="Revolut Merchant ist nicht konfiguriert (REVOLUT_API_SECRET_KEY).",
+        )
 
     pool = await _DB()
     async with pool.acquire() as con:
@@ -1162,42 +1174,32 @@ async def pay_offer(offer_id: str, user: dict = Depends(get_current_user)):
         }
     nl = row["language"] == "nl"
     offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
-    payload = {
-        "amount": 44900,
-        "currency": "EUR",
-        "capture_mode": "automatic",
-        "merchant_order_ext_ref": offer_id,
-        "description": f"NeXify AI – {'Aanbetaling 1e werkdag' if nl else 'Anzahlung 1. Arbeitstag'}: {offer.get('title', '')[:100]}",
-        "redirect_url": f"{FRONTEND_URL}/konto?paid={offer_id}",
-    }
-    base = os.environ.get("REVOLUT_API_BASE", "https://merchant.revolut.com")
-    headers = {
-        "Authorization": f"Bearer {os.environ['REVOLUT_SECRET_KEY']}",
-        "Content-Type": "application/json",
-        "Revolut-Api-Version": "2024-09-01",
-    }
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        try:
-            resp = await client.post(
-                f"{base}/api/orders", json=payload, headers=headers
-            )
-        except httpx.RequestError as e:
-            raise HTTPException(
-                status_code=502, detail=f"Revolut nicht erreichbar: {e}"
-            )
-    if resp.status_code not in (200, 201):
-        logger.error(f"revolut order failed: {resp.status_code} {resp.text[:300]}")
+    description = (
+        f"NeXify AI – {'Aanbetaling 1e werkdag' if nl else 'Anzahlung 1. Arbeitstag'}: "
+        f"{offer.get('title', '')[:100]}"
+    )
+    client = revolut.RevolutMerchantClient(cfg)
+    try:
+        data = await client.create_order(
+            amount_minor=44900,
+            currency="EUR",
+            description=description,
+            redirect_url=f"{FRONTEND_URL}/konto?paid={offer_id}",
+            merchant_order_ext_ref=offer_id,
+            capture_mode="automatic",
+        )
+    except revolut.RevolutMerchantError as e:
+        logger.error("revolut order failed: %s", e)
         raise HTTPException(
             status_code=502, detail="Zahlung konnte nicht initialisiert werden."
-        )
-    data = resp.json()
+        ) from e
     async with pool.acquire() as con:
         await con.execute(
             "update nexify_offers set payment_order_id=$1, payment_checkout_url=$2, payment_status=$3, payment_amount=$4 where id=$5",
             data["id"],
             data.get("checkout_url"),
             data.get("state", "pending").lower(),
-            999,
+            449,
             uuid.UUID(offer_id),
         )
     return {"checkout_url": data.get("checkout_url"), "order_id": data["id"]}
@@ -1205,7 +1207,7 @@ async def pay_offer(offer_id: str, user: dict = Depends(get_current_user)):
 
 @router.get("/api/portal/offers/{offer_id}/payment-status")
 async def payment_status(offer_id: str, user: dict = Depends(get_current_user)):
-    import httpx
+    import revolut_merchant as revolut
 
     pool = await _DB()
     async with pool.acquire() as con:
@@ -1216,25 +1218,15 @@ async def payment_status(offer_id: str, user: dict = Depends(get_current_user)):
         )
     if not row or not row["payment_order_id"]:
         raise HTTPException(status_code=404, detail="Keine Zahlung vorhanden.")
-    base = os.environ.get("REVOLUT_API_BASE", "https://merchant.revolut.com")
-    headers = {
-        "Authorization": f"Bearer {os.environ['REVOLUT_SECRET_KEY']}",
-        "Revolut-Api-Version": "2024-09-01",
-    }
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        try:
-            resp = await client.get(
-                f"{base}/api/orders/{row['payment_order_id']}", headers=headers
-            )
-        except httpx.RequestError as e:
-            raise HTTPException(
-                status_code=502, detail=f"Revolut nicht erreichbar: {e}"
-            )
-    if resp.status_code != 200:
+    client = revolut.RevolutMerchantClient()
+    try:
+        order = await client.retrieve_order(row["payment_order_id"])
+    except revolut.RevolutMerchantError as e:
+        logger.error("revolut status failed: %s", e)
         raise HTTPException(
             status_code=502, detail="Status konnte nicht geprüft werden."
-        )
-    state = resp.json().get("state", "pending").lower()
+        ) from e
+    state = order.get("state", "pending").lower()
     async with pool.acquire() as con:
         await con.execute(
             "update nexify_offers set payment_status=$1 where id=$2",

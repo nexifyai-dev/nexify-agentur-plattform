@@ -30,6 +30,7 @@ import booking
 import agent as agent_mod
 import email_agent
 import channel_sync
+import revolut_invoices
 from memory import mem_add, mem_search
 from ninerouter import CostBrakeError, router as nine
 
@@ -138,6 +139,7 @@ app.include_router(portal.router)
 app.include_router(booking.router)
 app.include_router(agent_mod.router)
 app.include_router(channel_sync.router)
+app.include_router(revolut_invoices.router)
 
 DB_POOL: asyncpg.Pool | None = None
 HISTORY: dict[str, list[dict]] = {}
@@ -282,7 +284,7 @@ create index if not exists idx_channel_events_email on nexify_channel_events (lo
 create index if not exists idx_channel_events_phone on nexify_channel_events (lower(contact_phone));
 create index if not exists idx_channel_events_ref   on nexify_channel_events (lower(contact_ref));
 create index if not exists idx_channel_events_ts    on nexify_channel_events (ts desc);
-"""
+""" + revolut_invoices.INVOICE_SCHEMA
 
 LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
 
@@ -1991,6 +1993,9 @@ async def startup():
         send_email_fn=send_email,
         internal_notify_email=INTERNAL_NOTIFY_EMAIL or "",
         frontend_url=os.environ.get("FRONTEND_URL", ""),
+    )
+    revolut_invoices.init(
+        db, send_email, ci_email, os.environ.get("FRONTEND_URL", "")
     )
     asyncio.create_task(followup_worker())
     asyncio.create_task(agent_mod.task_worker())
