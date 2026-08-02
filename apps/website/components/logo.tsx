@@ -35,7 +35,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
             Ne<span className="text-silver font-bold">X</span>ify{" "}
             <span className="font-light text-zinc-400">AI</span>
           </span>
-          <span className="mt-1 hidden text-[8.5px] uppercase tracking-[0.34em] text-zinc-500 sm:block">Chat it. Automate it.</span>
+          <span className="mt-1 hidden text-[8.5px] uppercase tracking-[0.34em] text-zinc-400 sm:block">Chat it. Automate it.</span>
         </span>
       )}
     </span>

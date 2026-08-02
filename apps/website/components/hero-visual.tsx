@@ -61,7 +61,7 @@ export function HeroVisual() {
         <Bot size={17} className="text-zinc-300" />
         <div>
           <div className="text-[12px] font-bold text-white">{nl ? "AI-adviseur actief" : "AI-Berater aktiv"}</div>
-          <div className="text-[10px] text-zinc-500">DE & NL · im Chat</div>
+          <div className="text-[10px] text-zinc-400">DE & NL · im Chat</div>
         </div>
         <span className="ml-1 inline-block size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
       </div>
@@ -70,7 +70,7 @@ export function HeroVisual() {
         <FileText size={17} className="text-zinc-300" />
         <div>
           <div className="text-[12px] font-bold text-white">{nl ? "Eerste inschatting" : "Erste Einordnung"}</div>
-          <div className="text-[10px] text-zinc-500">{nl ? "na uw aanvraag" : "nach Ihrer Anfrage"}</div>
+          <div className="text-[10px] text-zinc-400">{nl ? "na uw aanvraag" : "nach Ihrer Anfrage"}</div>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export function HeroVisual() {
         <Zap size={17} className="text-zinc-300" />
         <div>
           <div className="text-[12px] font-bold text-white">{nl ? "Richtwaarde: 1–3 dagen" : "Richtwert: 1–3 Tage"}</div>
-          <div className="text-[10px] text-zinc-500">€ 449 / {nl ? "werkdag" : "Arbeitstag"}</div>
+          <div className="text-[10px] text-zinc-400">€ 449 / {nl ? "werkdag" : "Arbeitstag"}</div>
         </div>
       </div>
 

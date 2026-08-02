@@ -1,0 +1,38 @@
+# NeXify AI
+
+> Premium B2B agency for AI-assisted websites, online shops, web/mobile apps and automation. Transparent day rate €449 net. Primary markets: DACH + Netherlands. German UI default; Dutch seat in Venlo.
+
+NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accelerated with AI tools — not anonymous agency overhead. Contact for project estimates within one working day, or use the on-site AI advisor chat.
+
+## Services
+
+- [Home](https://www.nexifyai.cloud/): Positioning, day rate, process overview
+- [Leistungen](https://www.nexifyai.cloud/leistungen): Service catalogue (landing pages, websites, shops, apps, automation, AI agents)
+- [Preise](https://www.nexifyai.cloud/preise): €449 net / working day calculator and scope notes
+- [Prozess](https://www.nexifyai.cloud/prozess): How engagement works from first contact to delivery
+- [Vergleich](https://www.nexifyai.cloud/vergleich): How NeXify differs from typical agencies and chatbots
+- [FAQ](https://www.nexifyai.cloud/faq): Pricing, timelines, AI usage, collaboration
+
+## Company & contact
+
+- [Kontakt](https://www.nexifyai.cloud/kontakt): Project inquiry form (honest estimate within one working day)
+- [Rückruf](https://www.nexifyai.cloud/rueckruf): Book a callback slot
+- [Über mich](https://www.nexifyai.cloud/ueber-mich): Founder Pascal Courbois
+- [Venlo](https://www.nexifyai.cloud/venlo): Local business / NL seat page
+- Email: mail@nexifyai.cloud
+- Phone: +31 6 133 188 56
+- KvK: 90483944 · VAT: NL865786276B01
+
+## Knowledge
+
+- [Wissen](https://www.nexifyai.cloud/wissen): Articles on AI automation, web-app cost, delivery for SMEs
+- [Sitemap](https://www.nexifyai.cloud/sitemap.xml): Machine-readable URL index
+- [llm.txt](https://www.nexifyai.cloud/llm.txt): Legacy short company card (kept for older crawlers)
+
+## Optional
+
+- [Impressum](https://www.nexifyai.cloud/impressum): Legal imprint
+- [Datenschutz](https://www.nexifyai.cloud/datenschutz): Privacy policy (incl. AI chat)
+- [AGB](https://www.nexifyai.cloud/agb): Terms
+- [Cookie-Richtlinie](https://www.nexifyai.cloud/cookie-richtlinie): Cookie policy
+- [Checkliste](https://www.nexifyai.cloud/checkliste): Website/AI readiness checklist lead magnet

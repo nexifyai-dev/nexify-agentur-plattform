@@ -19,23 +19,17 @@ export function HomePage() {
         <div className="pointer-events-none absolute left-1/2 top-[-320px] h-[560px] w-[min(900px,140vw)] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[140px]" />
         <div className="site-container relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-          <Reveal>
+            {/* No Reveal on LCP hero — opacity:0 until JS delayed LCP (~2.9s). */}
             <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400" data-testid="hero-badge">
               <span className="inline-block size-1.5 rounded-full bg-emerald-400" />
               {t.home.badge}
             </span>
-          </Reveal>
-          <Reveal delay={100}>
             <h1 className="mt-8 max-w-4xl font-[family-name:var(--font-heading)] text-[2.35rem] font-light leading-[1.08] tracking-tight text-white sm:text-5xl sm:leading-[1.05] lg:text-7xl">
               {t.home.titleA}
               <br />
               <span className="text-silver font-medium">{t.home.titleB}</span>
             </h1>
-          </Reveal>
-          <Reveal delay={200}>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-400">{t.home.subtitle}</p>
-          </Reveal>
-          <Reveal delay={300}>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link href="/kontakt" className="btn-primary" data-testid="hero-cta">
                 {t.home.ctaPrimary} <ArrowRight size={16} />
@@ -44,26 +38,20 @@ export function HomePage() {
                 {t.home.ctaSecondary}
               </Link>
             </div>
-          </Reveal>
           </div>
 
-          <Reveal delay={250}>
-            <HeroVisual />
-          </Reveal>
+          <HeroVisual />
         </div>
 
         <div className="site-container relative">
-
-          <Reveal delay={400}>
-            <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:mt-20 lg:grid-cols-4" data-testid="hero-stats">
-              {t.home.stats.map((s, i) => (
-                <div key={i} className="bg-[#0c0c0f] p-5 sm:p-7">
-                  <div className="text-silver font-[family-name:var(--font-heading)] text-2xl font-semibold sm:text-3xl">{s.value}</div>
-                  <div className="mt-2 text-[12px] leading-snug text-zinc-500 sm:text-[13px]">{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+          <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:mt-20 lg:grid-cols-4" data-testid="hero-stats">
+            {t.home.stats.map((s, i) => (
+              <div key={i} className="bg-[#0c0c0f] p-5 sm:p-7">
+                <div className="text-silver font-[family-name:var(--font-heading)] text-2xl font-semibold sm:text-3xl">{s.value}</div>
+                <div className="mt-2 text-[12px] leading-snug text-zinc-400 sm:text-[13px]">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -97,7 +85,7 @@ export function HomePage() {
                       <Icon size={22} className="text-zinc-300" />
                     </div>
                     <h3 className="mt-6 font-[family-name:var(--font-heading)] text-xl font-medium text-white">{p.title}</h3>
-                    <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-500">{p.text}</p>
+                    <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-400">{p.text}</p>
                   </div>
                 </Reveal>
               );
@@ -114,7 +102,7 @@ export function HomePage() {
               <div>
                 <span className="eyebrow">{t.home.servicesEyebrow}</span>
                 <h2 className="mt-4 max-w-2xl font-[family-name:var(--font-heading)] text-3xl font-light tracking-tight text-white sm:text-4xl">{t.home.servicesTitle}</h2>
-                <p className="mt-4 max-w-xl text-zinc-500">{t.home.servicesText}</p>
+                <p className="mt-4 max-w-xl text-zinc-400">{t.home.servicesText}</p>
               </div>
               <Link href="/leistungen" className="btn-ghost !py-2.5 text-sm" data-testid="home-all-services">
                 {t.common.allServices} <ArrowUpRight size={15} />
@@ -129,10 +117,10 @@ export function HomePage() {
                   <Link href={`/leistungen#${s.slug}`} className={`glass glass-lift block h-full p-6 ${i === 0 || i === 5 ? "lg:col-span-2" : ""}`} data-testid={`service-card-${s.slug}`}>
                     <div className="flex items-start justify-between">
                       <Icon size={22} className="text-zinc-300" />
-                      <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500">{s.days}</span>
+                      <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-400">{s.days}</span>
                     </div>
                     <h3 className="mt-5 font-[family-name:var(--font-heading)] text-lg font-medium leading-snug text-white">{s.title}</h3>
-                    <p className="mt-2 text-[13px] leading-relaxed text-zinc-500">{s.eyebrow}</p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">{s.eyebrow}</p>
                   </Link>
                 </Reveal>
               );
@@ -154,7 +142,7 @@ export function HomePage() {
                 <div className="h-full bg-[#0c0c0f] p-6 transition-colors hover:bg-[#101014]" data-testid={`process-step-${s.n}`}>
                   <div className="text-silver font-[family-name:var(--font-heading)] text-2xl font-semibold">{s.n}</div>
                   <h3 className="mt-4 text-[15px] font-semibold text-white">{s.title}</h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-zinc-500">{s.text}</p>
+                  <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">{s.text}</p>
                 </div>
               </Reveal>
             ))}

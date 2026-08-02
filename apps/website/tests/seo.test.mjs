@@ -119,6 +119,19 @@ test("llm.txt is present for AI crawlers", () => {
   const llm = read("public/llm.txt");
   assert.match(llm, /449/);
   assert.match(llm, /www\.nexifyai\.cloud/);
+  assert.match(llm, /llms\.txt/);
+});
+
+test("llms.txt follows llmstxt.org recommendations", () => {
+  const llms = read("public/llms.txt");
+  assert.match(llms, /^# NeXify AI\n/m);
+  assert.match(llms, /^> /m);
+  assert.match(llms, /https:\/\/www\.nexifyai\.cloud\/leistungen/);
+  assert.match(llms, /https:\/\/www\.nexifyai\.cloud\/kontakt/);
+  assert.match(llms, /mail@nexifyai\.cloud/);
+  assert.match(llms, /## Optional/);
+  const wellKnown = read("public/.well-known/llms.txt");
+  assert.match(wellKnown, /llms\.txt/);
 });
 
 test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
