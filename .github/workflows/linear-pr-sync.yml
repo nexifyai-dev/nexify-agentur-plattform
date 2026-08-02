@@ -25,6 +25,8 @@ jobs:
   sync:
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - name: Comment Linear links (idempotent)
         env:

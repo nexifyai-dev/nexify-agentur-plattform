@@ -60,6 +60,7 @@ defaults:
     shell: bash
 
 env:
+  TZ: Europe/Berlin
   REPO_DIR: /opt/nexifyai/repos/nexify-agentur-plattform
   SECRETS_FILE: /etc/nexifyai/secrets.env
 

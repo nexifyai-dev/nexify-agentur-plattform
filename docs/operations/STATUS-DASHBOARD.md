@@ -5,7 +5,8 @@
 **WHAT:** Single ops glance — automation %, human gate, smoke, sibling PRs.  
 **WHY:** Laptop-off needs a living status doc, not chat archaeology.  
 **Refresh:** `.github/workflows/daily-smoke.yml` + `scripts/refresh-status-dashboard.sh`  
-**Human Gate:** [`HUMAN-GATE-5MIN.md`](./HUMAN-GATE-5MIN.md)
+**Human Gate:** [`HUMAN-GATE-5MIN.md`](./HUMAN-GATE-5MIN.md)  
+**Timezone:** Europe/Berlin — [`TIMEZONE-EUROPE-BERLIN.md`](./TIMEZONE-EUROPE-BERLIN.md)
 
 > Placeholder rows below are replaced by the refresh script on schedule / workflow_dispatch. Agents may also run the script locally on the VPS.
 

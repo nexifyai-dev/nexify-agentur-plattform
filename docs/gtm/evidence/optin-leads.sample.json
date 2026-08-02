@@ -1,0 +1,9 @@
+[
+  {
+    "email": "optin-demo@example.com",
+    "name": "Demo",
+    "consent": true,
+    "source": "checkliste",
+    "unsubscribed": false
+  }
+]

@@ -34,7 +34,15 @@ export function ServicesPage() {
                         <span className="w-full text-[11px] font-bold uppercase tracking-widest text-zinc-600 sm:w-auto">{t.common.netPerDay}</span>
                       </div>
                       <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">{s.eyebrow}</p>
-                      <h2 className="mt-2 font-[family-name:var(--font-heading)] text-2xl font-medium tracking-tight text-white sm:text-3xl">{s.title}</h2>
+                      <h2 className="mt-2 font-[family-name:var(--font-heading)] text-2xl font-medium tracking-tight text-white sm:text-3xl">
+                        <Link
+                          href={`/leistungen/${s.slug}`}
+                          className="transition-colors hover:text-zinc-200"
+                          data-testid={`service-link-${s.slug}`}
+                        >
+                          {s.title}
+                        </Link>
+                      </h2>
                       <p className="mt-4 leading-relaxed text-zinc-400">{s.description}</p>
                       <p className="mt-4 border-l-2 border-zinc-500 pl-4 text-[15px] font-medium italic text-zinc-300">{s.promise}</p>
                       <div className="mt-6 flex flex-wrap gap-2">
@@ -44,6 +52,13 @@ export function ServicesPage() {
                           </span>
                         ))}
                       </div>
+                      <Link
+                        href={`/leistungen/${s.slug}`}
+                        className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-300 transition-colors hover:text-white"
+                        data-testid={`service-detail-cta-${s.slug}`}
+                      >
+                        Leistungsseite öffnen <ArrowRight size={14} />
+                      </Link>
                     </div>
                     <div className="grid gap-6 sm:grid-cols-2">
                       <div>

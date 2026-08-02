@@ -8,6 +8,8 @@ version: "3.9"
 
 x-common: &common
   restart: unless-stopped
+  environment:
+    - TZ=Europe/Berlin
   logging:
     driver: json-file
     options:
@@ -48,6 +50,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - NEXIFY_MODE=production
       - NEXIFY_LOG_LEVEL=info
     deploy:
@@ -70,6 +73,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - QDRANT__SERVICE__GRPC_PORT=6334
     deploy:
       resources:
@@ -86,6 +90,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - NEXIFY_BRAIN_URL=http://brain:9090
       - NEXIFY_MODE=production
     depends_on:
@@ -121,6 +126,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_pw
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
@@ -163,6 +169,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - BASE_URL=https://analytics.nexifyai.cloud
       - SECRET_KEY_FILE=/run/secrets/plausible_secret
 
@@ -194,6 +201,7 @@ services:
     networks:
       - nexify-net
     environment:
+      - TZ=Europe/Berlin
       - BACKUP_SCHEDULE=0 2 * * *
       - BACKUP_RETENTION=7
     profiles:

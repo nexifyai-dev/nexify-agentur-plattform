@@ -28,6 +28,8 @@ permissions:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
     steps:
       - name: Push mirror to VPS GitLab

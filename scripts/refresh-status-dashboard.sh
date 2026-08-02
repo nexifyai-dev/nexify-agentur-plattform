@@ -14,6 +14,9 @@
 
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DASH="$ROOT/docs/operations/STATUS-DASHBOARD.md"
 TSV="${SMOKE_RESULTS_FILE:-/tmp/nexify-daily-smoke.tsv}"
