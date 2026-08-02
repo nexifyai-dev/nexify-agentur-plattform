@@ -1,57 +1,12 @@
 #!/usr/bin/env bash
 # FILE: .githooks/post-commit-dual-write
 # NIR: 31.07.2026 10:55
-# WHAT: Optional Dual-Write pointer AgentMemory + LightRAG after commit (no secrets inline)
-# WHY: Close hook drift — tracked hook; install via `git config core.hooksPath .githooks` or copy
-# DEPENDS: env AGENTMEMORY_SECRET, optional LIGHTRAG_URL; scripts under /opt/nexifyai/scripts
-# PITFALL: Never echo secrets; skip if Kill-Switch or offline
+# UPDATED: 02.08.2026 09:05
+# WHAT: Alias/Compat — leitet auf .githooks/post-commit weiter
+# WHY: Historischer Name aus #98; Git führt nur `post-commit` aus
+# DOCS-REF: docs/operations/BRAIN-DUAL-WRITE.md
 
 set -euo pipefail
-
-if [[ -f /opt/nexifyai/state/autopilot/KILL_SWITCH ]]; then
-  exit 0
-fi
-
-MSG=$(git log -1 --pretty=%s 2>/dev/null || true)
-if echo "$MSG" | grep -qE '^\[autopilot\]|^Merge '; then
-  exit 0
-fi
-
-# Keep existing deviation auto-fix trigger (local hook chain)
-if [[ -x /opt/nexifyai/repos/nexify-agentur-plattform/.git/hooks/post-commit ]]; then
-  :
-fi
-
-HASH=$(git rev-parse --short HEAD 2>/dev/null || echo unknown)
-REPO=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-SUMMARY="Monorepo commit ${HASH} in ${REPO}: ${MSG}"
-
-# Best-effort Dual-Write — failures must not block git
-if [[ -x /opt/nexifyai/scripts/sync-to-lightrag.py ]]; then
-  printf '%s\n' "$SUMMARY" | python3 /opt/nexifyai/scripts/sync-to-lightrag.py --stdin --title "git-commit-${HASH}" >/dev/null 2>&1 || true
-fi
-
-if [[ -n "${AGENTMEMORY_SECRET:-}" ]]; then
-  export NEXIFY_COMMIT_SUMMARY="$SUMMARY"
-  python3 - <<'PY' >/dev/null 2>&1 || true
-import json, os, urllib.request
-secret = os.environ.get("AGENTMEMORY_SECRET", "")
-if not secret:
-    raise SystemExit(0)
-body = json.dumps({
-    "content": os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit"),
-    "type": "workflow",
-    "project": "platform",
-    "tags": ["git", "dual-write", "monorepo"],
-}).encode()
-req = urllib.request.Request(
-    "http://127.0.0.1:3111/agentmemory/remember",
-    data=body,
-    headers={"Authorization": f"Bearer {secret}", "Content-Type": "application/json"},
-    method="POST",
-)
-urllib.request.urlopen(req, timeout=5).read()
-PY
-fi
-
-exit 0
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[[ -z "$ROOT" ]] && exit 0
+exec bash "$ROOT/.githooks/post-commit"

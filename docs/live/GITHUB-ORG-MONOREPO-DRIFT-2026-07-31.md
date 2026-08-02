@@ -36,8 +36,8 @@ Stand: **~48+ Repos** in `nexifyai-dev` (2026-07-31).
 | `.github/workflows/mirror-to-gitlab.yml` | vorhanden | GitHub→GitLab Spiegel | OK |
 | GitHub CI (build/test/secret-scan/…) | vorhanden | green on PR | prüfen je PR |
 | GitLab `deploy:vps` | soll-deviation WARN | vorhanden oder dokumentiert optional | WARN |
-| `.git/hooks/post-commit` | nur deviation-auto-fix | + Dual-Write AM/LightRAG | GAP |
-| `.cursor/mcp.json` | fehlte LightRAG | AM+Context7+LightRAG+gitlab-oss | FIX dieser PR |
+| `.githooks/post-commit-dual-write` + `scripts/brain-dual-write.sh` | tracked; No-op ohne Env | `core.hooksPath=.githooks` + Secrets in Env | TEIL — `docs/operations/BRAIN-DUAL-WRITE.md` |
+| `.cursor/mcp.json` | Example: AM TOOLS=all + LightRAG + gitlab-oss | lokal aus Example; project vs user Duplikat vermeiden | OK Example |
 
 ## Sync-Pointer
 

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# FILE: .githooks/post-commit
+# NIR: 02.08.2026 09:05
+# WHAT: Git post-commit entrypoint → optional Dual-Write Helper
+# WHY: Git führt nur Dateien namens `post-commit` aus (nicht *-dual-write)
+# DEPENDS: scripts/brain-dual-write.sh; Env AGENTMEMORY_* / LIGHTRAG_*
+# DOCS-REF: docs/operations/BRAIN-DUAL-WRITE.md
+
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[[ -z "$ROOT" ]] && exit 0
+
+if [[ -f /opt/nexifyai/state/autopilot/KILL_SWITCH ]]; then
+  exit 0
+fi
+
+MSG=$(git -C "$ROOT" log -1 --pretty=%s 2>/dev/null || true)
+if echo "$MSG" | grep -qE '^\[autopilot\]|^Merge '; then
+  exit 0
+fi
+
+HELPER="$ROOT/scripts/brain-dual-write.sh"
+if [[ -f "$HELPER" ]]; then
+  bash "$HELPER" commit >/dev/null 2>&1 || true
+fi
+
+exit 0
