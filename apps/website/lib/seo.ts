@@ -96,6 +96,31 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
   };
 }
 
+type WebPageJsonLdInput = {
+  title: string;
+  description: string;
+  path: string;
+  dateModified?: string;
+};
+
+/** schema.org WebPage — legal/info pages (indexable). */
+export function webPageJsonLd({ title, description, path, dateModified }: WebPageJsonLdInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: absoluteUrl(path),
+    inLanguage: ["de", "nl", "en"],
+    isPartOf: {
+      "@type": "WebSite",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    ...(dateModified ? { dateModified } : {}),
+  };
+}
+
 type ArticleJsonLdInput = {
   title: string;
   description: string;
