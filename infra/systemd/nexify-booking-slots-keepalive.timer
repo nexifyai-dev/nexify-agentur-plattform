@@ -1,0 +1,14 @@
+# FILE: infra/systemd/nexify-booking-slots-keepalive.timer
+# NIR: 02.08.2026 09:20
+# WHAT: Daily — ensure booking conversion path has free slots
+
+[Unit]
+Description=Timer — NeXify Booking Slots Keepalive
+
+[Timer]
+OnCalendar=*-*-* 06:15:00
+Persistent=true
+Unit=nexify-booking-slots-keepalive.service
+
+[Install]
+WantedBy=timers.target
