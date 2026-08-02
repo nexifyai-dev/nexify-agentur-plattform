@@ -21,7 +21,7 @@ Das einzige voll lauffähige Produkt im Repo ist die Website unter `apps/website
 - Typecheck: `pnpm typecheck`
 - Test: `pnpm test`  (Node-Test-Runner, nur `tests/*.test.mjs`)
 - Build: `pnpm build`
-- Dev-Server: `pnpm dev` → http://localhost:3000 (Health: `GET /api/health`; `/` → 307 `/de`)
+- Dev-Server: `pnpm dev` → http://localhost:3000 (Health: `GET /api/health`; `/` bleibt unprefixed, Legacy-`/{locale}` wird per 308 auf die kanonische Route zurückgeführt)
 
 ## Nicht-offensichtliche Konventionen / Stolpersteine
 - **pnpm** verwenden, nicht npm/yarn. Es liegen `pnpm-lock.yaml` **und** eine
@@ -29,10 +29,12 @@ Das einzige voll lauffähige Produkt im Repo ist die Website unter `apps/website
 - `apps/website/pnpm-workspace.yaml` macht `apps/website` zum eigenen
   pnpm-Workspace-Root → Install aus diesem Verzeichnis. Next.js warnt wegen
   mehrerer Lockfiles / „inferred workspace root" — **harmlos**.
-- `pnpm test` führt **nur** `tests/*.test.mjs` aus (Site-Contract-Tests). Die
-  vielen `tests/*.test.tsx` / `*.test.ts` sind **nicht** an einen Runner
-  angebunden. `test:design` (Playwright) braucht Browser-Binaries, die nicht
-  installiert sind.
+- `pnpm test` führt die Site-Contract-Tests unter `tests/*.test.mjs` aus; die
+  früheren `*.test.tsx`-Contracts wurden in diesen Runner überführt.
+- `test:design` / `test:design-audit` (Playwright) brauchen Browser-Binaries;
+  lokal ggf. erst `pnpm exec playwright install --with-deps chromium` ausführen.
+- Der volle Design-Audit läuft in GitHub Actions für website-/CI-relevante PRs
+  sowie nightly; lokal bleibt er optional.
 - pnpm meldet beim Install „Ignored build scripts: sharp, unrs-resolver" — für
   Dev ok.
 - Ohne Backend liefert `/api/planner/plan` eine deterministische lokale
