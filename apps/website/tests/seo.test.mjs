@@ -121,6 +121,18 @@ test("llm.txt is present for AI crawlers", () => {
   assert.match(llm, /www\.nexifyai\.cloud/);
 });
 
+test("admin and konto layouts export noindex robots (client pages cannot)", () => {
+  for (const rel of ["app/admin/layout.tsx", "app/konto/layout.tsx"]) {
+    const src = read(rel);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
+  const robots = read("app/robots.ts");
+  assert.match(robots, /\/admin/);
+  assert.match(robots, /\/konto/);
+  assert.match(robots, /\/login/);
+  assert.match(robots, /\/registrieren/);
+});
+
 test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
   const articles = read("lib/content/wissen-articles.ts");
   assert.match(articles, /ai-automatisierung-kmu/);
