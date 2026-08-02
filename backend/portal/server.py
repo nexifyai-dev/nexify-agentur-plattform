@@ -159,10 +159,23 @@ class PortalHandler(SimpleHTTPRequestHandler):
     _ALLOWED_ORIGINS = {"https://admin.nexifyai.cloud"}
 
     def _cors_origin(self) -> str:
-        """Return Access-Control-Allow-Origin value, validated against whitelist.
-        Only echoes back the Origin header if it matches an allowed origin."""
+        """Return Access-Control-Allow-Origin from allowlist (constant, never echo raw Origin)."""
         origin = self.headers.get("Origin", "")
-        return origin if origin in self._ALLOWED_ORIGINS else ""
+        # Return the allowlisted constant — avoids HTTP response splitting / header injection
+        # from any CR/LF in a crafted Origin while preserving CORS for the known admin UI.
+        if origin in self._ALLOWED_ORIGINS:
+            return "https://admin.nexifyai.cloud"
+        return ""
+
+    @staticmethod
+    def _safe_header_value(value: str, default: str) -> str:
+        """Strip CR/LF and cap length so proxied headers cannot split HTTP responses."""
+        if not value:
+            return default
+        cleaned = value.replace("\r", "").replace("\n", "").strip()
+        if not cleaned:
+            return default
+        return cleaned[:128]
 
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -703,7 +716,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req, timeout=10) as resp:
                 self.send_response(resp.status)
-                self.send_header("Content-Type", resp.headers.get("Content-Type", "application/json"))
+                self.send_header("Content-Type", self._safe_header_value(resp.headers.get("Content-Type", "application/json"), "application/json"))
                 self.send_header("Access-Control-Allow-Origin", self._cors_origin())
                 self.end_headers()
                 self.wfile.write(resp.read())
@@ -725,7 +738,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             req = urllib.request.Request(target_url)
             with urllib.request.urlopen(req, timeout=10) as resp:
                 self.send_response(resp.status)
-                ct = resp.headers.get("Content-Type", "text/html")
+                ct = self._safe_header_value(resp.headers.get("Content-Type", "text/html"), "text/html")
                 self.send_header("Content-Type", ct)
                 self.send_header("Access-Control-Allow-Origin", self._cors_origin())
                 self.end_headers()
