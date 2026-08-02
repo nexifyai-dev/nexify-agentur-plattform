@@ -152,6 +152,39 @@ export default function VergleichPage() {
               </Link>
             </div>
           </section>
+
+          <section className="mt-14" data-testid="vergleich-leistungen-links">
+            <h2 className="font-[family-name:var(--font-heading)] text-xl font-light text-white">
+              Leistungen im Detail
+            </h2>
+            <p className="mt-2 text-sm text-zinc-500">
+              Jede Leistung hat eine eigene SEO-Seite mit FAQ und Termin-CTA.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {[
+                ["websites", "Website"],
+                ["automatisierung", "Automatisierung"],
+                ["ai-agenten", "AI-Agenten"],
+                ["ki-begleiter", "KI-Begleiter"],
+                ["audit", "Audit"],
+                ["white-label", "White-Label"],
+              ].map(([slug, label]) => (
+                <Link
+                  key={slug}
+                  href={`/leistungen/${slug}`}
+                  className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200"
+                >
+                  {label}
+                </Link>
+              ))}
+              <Link href="/leistungen" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-500 hover:text-zinc-300">
+                alle Leistungen
+              </Link>
+              <Link href="/branchen" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-500 hover:text-zinc-300">
+                Branchen
+              </Link>
+            </div>
+          </section>
         </div>
       </main>
       <JsonLd data={breadcrumbJsonLd} />

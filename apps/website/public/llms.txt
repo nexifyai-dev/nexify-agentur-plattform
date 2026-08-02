@@ -1,4 +1,4 @@
-# NeXify AI — llm.txt
+# NeXify AI — llms.txt
 # https://www.nexifyai.cloud
 # Cite-friendly summary for AI search systems (AEO)
 
