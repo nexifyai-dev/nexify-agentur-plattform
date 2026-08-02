@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # FILE: scripts/event-ingest/webhook_receiver_stub.py
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:30
+# UPDATED: 02.08.2026 11:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: VPS Webhook-Ingest Stub → repository_dispatch / Cloud Agent / AgentMemory.
-# WHY: Slack/Linear/Sentry/Vercel/Health müssen ohne Desktop in Cursor einlaufen.
+# WHY: Slack/Linear/Sentry/Vercel/Health/GitLab müssen ohne Desktop in Cursor einlaufen.
 # BEST-PRACTICE: Shared-secret header; normalize → GitHub repository_dispatch.
 # PITFALL: V-WH-01: Keine Secrets in Logs; dedupe_key Pflicht.
 # DEPENDS: EVENT_INGEST_SHARED_SECRET, GITHUB_TOKEN|GH_PAT, CURSOR_API_KEY (optional)
@@ -48,7 +48,7 @@ SOURCE_TO_DISPATCH = {
     "sentry": "sentry-alert",
     "vercel": "vercel-deploy-fail",
     "health": "health-alert",
-    "gitlab": "gitlab-ci-fail",
+    "gitlab": "gitlab-event",
     "cloudflare": "cloudflare-alert",
     "resend": "resend-bounce",
     "website": "website-error",

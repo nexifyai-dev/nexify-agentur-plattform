@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Mail, Phone, Timer } from "lucide-react";
+import { ArrowRight, Mail, Phone, Timer } from "lucide-react";
+import { DelightSuccess } from "@/components/delight-success";
+import { InboundSpeedPromise } from "@/components/inbound-speed-promise";
 import { API_BASE, company } from "@/lib/company";
 import { useLang } from "@/lib/lang-context";
 import { useContent } from "@/lib/content";
@@ -37,15 +39,18 @@ export function ContactForm() {
 
   if (state === "success") {
     return (
-      <div className="glass flex h-full flex-col items-center justify-center gap-4 p-10 text-center" data-testid="contact-success">
-        <CheckCircle2 size={44} className="text-emerald-400" />
-        <p className="max-w-md leading-relaxed text-zinc-300">{t.contact.success}</p>
-      </div>
+      <DelightSuccess
+        lang={lang}
+        variant="contact"
+        compact
+        testId="contact-success"
+      />
     );
   }
 
   return (
     <form onSubmit={submit} className="glass space-y-4 p-5 sm:p-8 md:p-10" data-testid="contact-form">
+      <InboundSpeedPromise lang={lang} />
       <div className="grid gap-4 sm:grid-cols-2">
         <input className="field" required placeholder={t.contact.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="contact-name-input" />
         <input className="field" required type="email" placeholder={t.contact.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="contact-email-input" />
