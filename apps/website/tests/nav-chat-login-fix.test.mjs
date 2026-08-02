@@ -52,7 +52,9 @@ test('service worker never caches HTML navigations or /api', () => {
 test('pageMetadata exposes hreflang language alternates', () => {
   const src = read('../lib/seo.ts');
   assert.match(src, /languages:\s*\{/);
+  assert.match(src, /\bde:/);
   assert.match(src, /"x-default"/);
+  assert.match(src, /de \+ x-default are primary/);
 });
 
 test('login and register layouts are noindex', () => {
