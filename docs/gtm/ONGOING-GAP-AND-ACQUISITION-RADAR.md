@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
 # NIR: 02.08.2026 10:10
-# UPDATED: 02.08.2026 11:00
+# UPDATED: 02.08.2026 11:24
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Living checklist — acquisition, conversion, ops gaps for Cursor agents
@@ -9,7 +9,7 @@
 # PITFALL: V-GTM-RADAR-01: Do not duplicate open PRs (blog, free GTM, outreach, Revolut, Gesamtkonzept)
 # DEPENDS: .cursor/rules/60-proactive-acquisition-gaps.mdc, FREE-ACQUISITION-PLAYBOOK (PR #175)
 # DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md
-# SESSION: proactive-gaps-acquisition-7dd5
+# SESSION: proactive-gaps-acquisition-7dd5 + unconsidered-gaps-scan-7dd5
 
 # Ongoing Gap & Acquisition Radar
 

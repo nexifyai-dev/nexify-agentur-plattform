@@ -26,7 +26,7 @@ Oder vom Repo-Root: `pnpm --dir apps/website <script>`.
 
 ## Hinweise
 
-- `GET /api/health` → `{"status":"ok"}`; `/` → 307 nach `/de`
+- `GET /api/health` → `{"status":"ok"}`; `/` bleibt unprefixed, Legacy-Locale-Pfade werden per 308 auf die kanonische unprefixed Route zurückgeführt
 - Mehrere Lockfiles / „inferred workspace root“-Warnung von Next.js: harmlos
 - Ohne Backend: `/api/planner/plan` lokal nutzbar; Contact/Offers brauchen `BACKEND_ORIGIN` / `RESEND_API_KEY`
 - Ausführliche Stolpersteine: `.cursor/skills/website-dev/SKILL.md` und `AGENTS.md`
