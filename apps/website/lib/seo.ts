@@ -222,7 +222,7 @@ export function servicesOfferCatalogJsonLd(
     "@type": "OfferCatalog",
     name: `Leistungen — ${company.brand}`,
     description:
-      "Acht Leistungsbausteine zum festen Tagessatz: Websites, Shops, Apps und AI-Automatisierung.",
+      "Leistungsbausteine zum festen Tagessatz: Websites, Shops, Apps, KI und Automatisierung.",
     url: absoluteUrl(path),
     numberOfItems: items.length,
     itemListElement: items.map((s, index) => {
@@ -240,13 +240,13 @@ export function servicesOfferCatalogJsonLd(
         "@type": "Offer",
         position: index + 1,
         name: s.name,
-        url: absoluteUrl(`${path}#${s.slug}`),
+        url: absoluteUrl(`${path}/${s.slug}`),
         description: `${daysLabel} à ${company.dayRate} € netto`,
         itemOffered: {
           "@type": "Service",
           name: s.name,
           description: s.description,
-          url: absoluteUrl(`${path}#${s.slug}`),
+          url: absoluteUrl(`${path}/${s.slug}`),
           provider: {
             "@type": "Organization",
             name: company.legalName,

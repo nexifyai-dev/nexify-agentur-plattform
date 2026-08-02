@@ -83,6 +83,9 @@ def slot_dict(r) -> dict:
 
 async def create_slots_core(slots: list[str], duration_min: int = 30) -> dict:
     pool = await _DB()
+    if not pool:
+        logger.warning("create_slots_core: DB unavailable")
+        raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
     created, skipped = 0, 0
     async with pool.acquire() as con:
         for s in slots:
@@ -111,20 +114,30 @@ async def create_slots_core(slots: list[str], duration_min: int = 30) -> dict:
 
 async def list_slots_core(include_all: bool = True) -> list[dict]:
     pool = await _DB()
-    async with pool.acquire() as con:
-        if include_all:
-            rows = await con.fetch(
-                "select * from nexify_slots where start_at > now() - interval '30 days' order by start_at asc limit 300"
-            )
-        else:
-            rows = await con.fetch(
-                "select * from nexify_slots where status='free' and start_at > now() + interval '2 hours' order by start_at asc limit 100"
-            )
-    return [slot_dict(r) for r in rows]
+    if not pool:
+        # Public calendar must stay usable: empty list, never 500 AttributeError
+        logger.warning("list_slots_core: DB unavailable — returning []")
+        return []
+    try:
+        async with pool.acquire() as con:
+            if include_all:
+                rows = await con.fetch(
+                    "select * from nexify_slots where start_at > now() - interval '30 days' order by start_at asc limit 300"
+                )
+            else:
+                rows = await con.fetch(
+                    "select * from nexify_slots where status='free' and start_at > now() + interval '2 hours' order by start_at asc limit 100"
+                )
+        return [slot_dict(r) for r in rows]
+    except Exception as e:
+        logger.error(f"list_slots_core failed: {e}")
+        return []
 
 
 async def delete_slot_core(slot_id: str) -> dict:
     pool = await _DB()
+    if not pool:
+        raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
     async with pool.acquire() as con:
         res = await con.execute(
             "delete from nexify_slots where id = $1 and status = 'free'",
@@ -175,6 +188,17 @@ async def public_slots():
 @router.post("/api/booking/book")
 async def book_slot(body: BookIn):
     pool = await _DB()
+    if not pool:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Terminbuchung derzeit nicht möglich (Datenbank offline). "
+                "Bitte Kontaktformular oder mail@nexifyai.cloud nutzen."
+                if body.language != "nl"
+                else "Boeken momenteel niet mogelijk (database offline). "
+                "Gebruik het contactformulier of mail@nexifyai.cloud."
+            ),
+        )
     async with pool.acquire() as con:
         row = await con.fetchrow(
             """update nexify_slots set status='booked', name=$2, email=$3, phone=$4, company=$5, topic=$6,

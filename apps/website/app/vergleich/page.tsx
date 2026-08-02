@@ -138,17 +138,51 @@ export default function VergleichPage() {
               Passt das zu Ihrem Vorhaben?
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
-              30 Minuten Rückruf oder kurze Projektskizze — ohne Pitch-Theater. Ausschließlich B2B.
+              Produktisierter Einstieg wie bei starken KI-Agenturen — bei uns transparent: Fit-Call →
+              Audit (449&nbsp;€) → Pilot (5 Tage). Ausschließlich B2B.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-booking">
                 Termin buchen <ArrowRight className="size-4" />
               </Link>
-              <Link href="/kontakt" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-contact">
-                Projekt anfragen
+              <Link href="/audit" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-audit">
+                Audit ansehen
               </Link>
               <Link href="/preise" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-pricing">
-                Preise ansehen
+                Pakete & Preise
+              </Link>
+            </div>
+          </section>
+
+          <section className="mt-14" data-testid="vergleich-leistungen-links">
+            <h2 className="font-[family-name:var(--font-heading)] text-xl font-light text-white">
+              Leistungen im Detail
+            </h2>
+            <p className="mt-2 text-sm text-zinc-500">
+              Jede Leistung hat eine eigene SEO-Seite mit FAQ und Termin-CTA.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {[
+                ["websites", "Website"],
+                ["automatisierung", "Automatisierung"],
+                ["ai-agenten", "AI-Agenten"],
+                ["ki-begleiter", "KI-Begleiter"],
+                ["audit", "Audit"],
+                ["white-label", "White-Label"],
+              ].map(([slug, label]) => (
+                <Link
+                  key={slug}
+                  href={`/leistungen/${slug}`}
+                  className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200"
+                >
+                  {label}
+                </Link>
+              ))}
+              <Link href="/leistungen" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-500 hover:text-zinc-300">
+                alle Leistungen
+              </Link>
+              <Link href="/branchen" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-500 hover:text-zinc-300">
+                Branchen
               </Link>
             </div>
           </section>

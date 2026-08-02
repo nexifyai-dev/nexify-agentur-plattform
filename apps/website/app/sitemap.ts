@@ -1,13 +1,16 @@
 import type { MetadataRoute } from "next";
 import { branchenSlugs } from "@/lib/content/branchen";
 import { wissenArticleSlugs } from "@/lib/content/wissen-articles";
+import { leistungSeoSlugs } from "@/lib/gtm/leistungen-seo";
 import { siteOrigin } from "@/lib/seo";
 
 const routes = [
   "",
   "/leistungen",
+  ...leistungSeoSlugs().map((slug) => `/leistungen/${slug}`),
   "/branchen",
   ...branchenSlugs().map((slug) => `/branchen/${slug}`),
+  "/audit",
   "/preise",
   "/prozess",
   "/vergleich",
@@ -16,12 +19,20 @@ const routes = [
   "/wissen",
   ...wissenArticleSlugs().map((slug) => `/wissen/${slug}`),
   "/faq",
-  "/vergleich",
   "/checkliste",
+  "/botschafter",
+  "/partner",
+  "/sprechstunde",
+  "/alternativen",
+  "/vergleich/chatgpt",
+  "/vergleich/freelance",
+  "/ki-agentur",
   "/ueber-mich",
   "/venlo",
+  "/danke",
   "/kontakt",
   "/rueckruf",
+  "/danke",
   "/impressum",
   "/datenschutz",
   "/agb",
@@ -33,10 +44,15 @@ const routes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteOrigin();
-  return routes.map((r) => ({
-    url: r ? `${base}${r}` : `${base}/`,
-    lastModified: new Date(),
-    changeFrequency: r === "" || r.startsWith("/wissen/") ? "weekly" : "monthly",
-    priority: r === "" ? 1 : r.startsWith("/wissen/") ? 0.75 : 0.7,
-  }));
+  return routes.map((r) => {
+    const isHome = r === "";
+    const isLeistung = r.startsWith("/leistungen/");
+    const isWissen = r.startsWith("/wissen/");
+    return {
+      url: isHome ? `${base}/` : `${base}${r}`,
+      lastModified: new Date(),
+      changeFrequency: isHome || isLeistung || isWissen ? "weekly" : "monthly",
+      priority: isHome ? 1 : isLeistung ? 0.85 : isWissen ? 0.75 : 0.7,
+    };
+  });
 }
