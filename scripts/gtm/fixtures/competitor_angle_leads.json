@@ -1,0 +1,27 @@
+[
+  {
+    "email": "dryrun-handwerk@example.invalid",
+    "company": "Demo Schreinerei GmbH",
+    "contact_name": "Max Mustermann",
+    "icp": "handwerk",
+    "consent": true,
+    "source": "demo-optin",
+    "unsubscribed": false
+  },
+  {
+    "email": "dryrun-steuer@example.invalid",
+    "company": "Demo Steuerberatung",
+    "icp": "steuerberater",
+    "consent": true,
+    "source": "demo-optin",
+    "unsubscribed": false
+  },
+  {
+    "email": "dryrun-ecom@example.invalid",
+    "company": "Demo Shop UG",
+    "icp": "ecommerce",
+    "consent": true,
+    "source": "demo-optin",
+    "unsubscribed": false
+  }
+]

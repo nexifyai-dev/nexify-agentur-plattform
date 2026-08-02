@@ -138,17 +138,18 @@ export default function VergleichPage() {
               Passt das zu Ihrem Vorhaben?
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
-              30 Minuten Rückruf oder kurze Projektskizze — ohne Pitch-Theater. Ausschließlich B2B.
+              Produktisierter Einstieg wie bei starken KI-Agenturen — bei uns transparent: Fit-Call →
+              Audit (449&nbsp;€) → Pilot (5 Tage). Ausschließlich B2B.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-booking">
                 Termin buchen <ArrowRight className="size-4" />
               </Link>
-              <Link href="/kontakt" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-contact">
-                Projekt anfragen
+              <Link href="/audit" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-audit">
+                Audit ansehen
               </Link>
               <Link href="/preise" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-pricing">
-                Preise ansehen
+                Pakete & Preise
               </Link>
             </div>
           </section>

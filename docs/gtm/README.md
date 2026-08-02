@@ -16,6 +16,8 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [SUPPLY_WAVE1_CHECKLIST_V1.md](SUPPLY_WAVE1_CHECKLIST_V1.md) | Wave-1-Checkliste |
 | [CONVERSION_LOOP_V1.md](CONVERSION_LOOP_V1.md) | Lead → Angebot → KPI |
 | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) | Skalierungsgrenzen |
+| [STRONGEST-COMPETITORS-2026.md](STRONGEST-COMPETITORS-2026.md) | Top-Konkurrenten + Taktik-Matrix + Adoption |
+| [STEAL-LIKE-AN-ARTIST-WEEKLY.md](STEAL-LIKE-AN-ARTIST-WEEKLY.md) | Wöchentliche Steal-Checklist für Agents |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
 | [GBP-OPS-CHECKLIST.md](GBP-OPS-CHECKLIST.md) | Google Business Ops (Human Gate) |
 | [EMAIL-NURTURE-OPTIN.md](EMAIL-NURTURE-OPTIN.md) | Opt-in Nurture (UWG-safe) |
@@ -25,6 +27,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar |
 
+<<<<<<< HEAD
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
 `python3 scripts/gtm/prepare_directory_drafts.py --limit 3`  
@@ -33,6 +36,11 @@ Scripts:
 Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py`  
 
 Automation: `.cursor/automations/free-gtm-dach-to-agent.md` · `.github/workflows/free-gtm-weekly.yml`
+=======
+Script: `python3 scripts/gtm/demand_scan_prepare.py --demo`  
+ICP/Competitor outreach: `python3 scripts/gtm/icp_competitor_outreach.py --discover-demo`  
+Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_competitor_angle_templates.py`
+>>>>>>> 7141e134 (feat(gtm): strongest competitors tactics — audit, branchen, outreach)
 
 ## Issue closures (2026-08-02)
 
