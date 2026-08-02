@@ -1,0 +1,38 @@
+---
+description: Proactive acquisition/lead/conversion/ops gap scan — every task
+globs:
+alwaysApply: true
+---
+
+# Proactive Acquisition & Gap Radar (Pflicht)
+
+Bei **jedem** Task (auch nicht-GTM) aktiv nach Lücken suchen — nicht warten,
+bis der User fragt. Regel: `.cursor/rules/60-proactive-acquisition-gaps.mdc`.
+Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+
+## Pflicht-Scan (kurz, vor Abschluss)
+
+1. **Acquisition / Lead** — neue kostenfreie/günstige DACH-Hebel?
+2. **Conversion** — CTAs, Booking (`/rueckruf`), Sticky, Exit-Intent, Lead-Magnet?
+3. **Trust** — echte Reviews/Logos/SLA nur mit Nachweis; **keine Fake-Reviews**
+4. **Ops / Stack** — untergenutzte Dienste, Smoke-Fails, Human-Gates (#123, #201)
+5. **Koordination** — offene PRs (Blog, free GTM, Outreach, Revolut, Gesamtkonzept)
+   **nicht** duplizieren; nur **neue** Gaps
+
+## Handeln
+
+| Fund | Aktion |
+|------|--------|
+| Quick Win (<~1–2h, im Scope) | Im gleichen PR fixen |
+| Größer / blockiert / human-gate | GitHub Issue: Labels `gtm`, `agent-fix`, `P1` (oder `P0`/`human-gate`) |
+| Radar-Update | Checkbox/Zeile in `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md` |
+
+Session-Ende: nach `session-learn` auch Acquisition-Opportunities notieren
+(`scripts/learning/note-acquisition-gaps.py` / siehe Continuous-Learning).
+
+## HARD STOPs
+
+- Keine Fake-Reviews / AggregateRating ohne echte Reviews
+- Kein Hermes-Produktions-Cutover
+- Keine Secrets in Issues/Docs/Commits
+- Kein Paid-Ads-Spend / keine neuen kostenpflichtigen SaaS-Abos ohne Mandat
