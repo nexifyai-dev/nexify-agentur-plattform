@@ -115,16 +115,16 @@ async def get_current_user(request: Request) -> dict:
 
         expected = os.environ.get("ADMIN_API_TOKEN")
         if not expected or not _hmac.compare_digest(svc, expected):
-            raise HTTPException(status_code=401, detail="Invalid service token")
+            raise HTTPException(status_code=401, detail="Ungültiger Service-Token")
         pool = await _DB()
         if not pool:
-            raise HTTPException(status_code=503, detail="Database unavailable")
+            raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
         async with pool.acquire() as con:
             row = await con.fetchrow(
                 "select * from nexify_users where role = 'admin' order by created_at limit 1"
             )
         if not row:
-            raise HTTPException(status_code=401, detail="No admin user")
+            raise HTTPException(status_code=401, detail="Kein Admin-Benutzer vorhanden")
         return user_dict(row)
     token = request.cookies.get("access_token")
     if not token:
@@ -132,30 +132,30 @@ async def get_current_user(request: Request) -> dict:
         if auth.startswith("Bearer "):
             token = auth[7:]
     if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        raise HTTPException(status_code=401, detail="Nicht authentifiziert")
     try:
         payload = jwt.decode(token, secret(), algorithms=[JWT_ALGORITHM])
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
+        raise HTTPException(status_code=401, detail="Sitzung abgelaufen")
     except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail="Ungültiges Token")
     if payload.get("type") != "access":
-        raise HTTPException(status_code=401, detail="Invalid token type")
+        raise HTTPException(status_code=401, detail="Ungültiger Token-Typ")
     pool = await _DB()
     if not pool:
-        raise HTTPException(status_code=503, detail="Database unavailable")
+        raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
     async with pool.acquire() as con:
         row = await con.fetchrow(
             "select * from nexify_users where id = $1", uuid.UUID(payload["sub"])
         )
     if not row:
-        raise HTTPException(status_code=401, detail="User not found")
+        raise HTTPException(status_code=401, detail="Benutzer nicht gefunden")
     return user_dict(row)
 
 
 async def get_admin(user: dict = Depends(get_current_user)) -> dict:
     if user["role"] != "admin":
-        raise HTTPException(status_code=403, detail="Admin only")
+        raise HTTPException(status_code=403, detail="Nur für Administratoren")
     return user
 
 
@@ -530,7 +530,7 @@ async def ceo_queue_claim(qid: str, body: CeoClaimIn, _: dict = Depends(get_admi
     """Atomar auf 'processing' setzen. Idempotent — returns 409 wenn schon geclaimed."""
     pool = await _DB()
     if not pool:
-        raise HTTPException(status_code=503, detail="db unavailable")
+        raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
     async with pool.acquire() as con:
         row = await con.fetchrow(
             "update nexify_ceo_queue set status='processing', claimed_by=$1, claimed_at=now(), updated_at=now() "
@@ -539,7 +539,7 @@ async def ceo_queue_claim(qid: str, body: CeoClaimIn, _: dict = Depends(get_admi
             uuid.UUID(qid),
         )
     if not row:
-        raise HTTPException(status_code=409, detail="not pending or already claimed")
+        raise HTTPException(status_code=409, detail="Eintrag nicht ausstehend oder bereits übernommen")
     return {
         "ok": True,
         "id": str(row["id"]),
@@ -561,7 +561,7 @@ async def ceo_queue_complete(
 ):
     pool = await _DB()
     if not pool:
-        raise HTTPException(status_code=503, detail="db unavailable")
+        raise HTTPException(status_code=503, detail="Datenbank nicht verfügbar")
     status = "done" if body.status not in ("done", "failed") else body.status
     async with pool.acquire() as con:
         row = await con.fetchrow(
@@ -571,7 +571,7 @@ async def ceo_queue_complete(
             uuid.UUID(qid),
         )
     if not row:
-        raise HTTPException(status_code=404, detail="queue entry not found")
+        raise HTTPException(status_code=404, detail="Warteschlangeneintrag nicht gefunden")
     return {"ok": True, "status": status}
 
 
@@ -677,20 +677,20 @@ async def me(user: dict = Depends(get_current_user)):
 async def refresh(request: Request, response: Response):
     token = request.cookies.get("refresh_token")
     if not token:
-        raise HTTPException(status_code=401, detail="No refresh token")
+        raise HTTPException(status_code=401, detail="Kein Refresh-Token")
     try:
         payload = jwt.decode(token, secret(), algorithms=[JWT_ALGORITHM])
     except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid refresh token")
+        raise HTTPException(status_code=401, detail="Ungültiges Refresh-Token")
     if payload.get("type") != "refresh":
-        raise HTTPException(status_code=401, detail="Invalid token type")
+        raise HTTPException(status_code=401, detail="Ungültiger Token-Typ")
     pool = await _DB()
     async with pool.acquire() as con:
         row = await con.fetchrow(
             "select * from nexify_users where id = $1", uuid.UUID(payload["sub"])
         )
     if not row:
-        raise HTTPException(status_code=401, detail="User not found")
+        raise HTTPException(status_code=401, detail="Benutzer nicht gefunden")
     set_auth_cookies(response, str(row["id"]), row["email"], row["role"])
     return user_dict(row)
 
@@ -759,7 +759,7 @@ async def offer_decision(
 ):
     if body.decision not in ("accepted", "declined"):
         raise HTTPException(
-            status_code=400, detail="decision must be accepted or declined"
+            status_code=400, detail="Entscheidung muss accepted oder declined sein"
         )
     pool = await _DB()
     async with pool.acquire() as con:
