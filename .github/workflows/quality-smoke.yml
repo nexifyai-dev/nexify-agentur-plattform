@@ -1,0 +1,109 @@
+# FILE: .github/workflows/quality-smoke.yml
+# NIR: 02.08.2026 09:15
+# UPDATED: 02.08.2026 09:15
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Quality
+# WHAT: Schedule + PR curl smoke (public) and Playwright critical-path L3.
+# WHY: Quality System absolute coverage without VPS self-hosted runner dependency.
+# BEST-PRACTICE: Public URLs only required on ubuntu-latest; localhost SKIP with note.
+# PITFALL: V-QG-01: Do not require :3111/:8644/:9622 from GitHub-hosted runners.
+# DEPENDS: scripts/quality-smoke.sh; apps/website Playwright; pnpm 9
+# DOCS-REF: docs/operations/QUALITY-GATES.md
+# SESSION: quality-gates-absolute-7dd5
+
+name: Quality Smoke
+
+on:
+  schedule:
+    # 05:30 UTC — after typical edge settle; independent of production backlog PRs
+    - cron: "30 5 * * *"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: quality-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  public-smoke:
+    name: Public curl smoke (L1/L2)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run quality smoke (public + localhost skip notes)
+        id: smoke
+        env:
+          SMOKE_BASE_URL: ${{ vars.SMOKE_BASE_URL || 'https://www.nexifyai.cloud' }}
+          SMOKE_AI_ROUTER_URL: ${{ vars.SMOKE_AI_ROUTER_URL || 'https://ai-router.nexifyai.cloud/api/health' }}
+          SMOKE_AGENTMEMORY_URL: ${{ vars.SMOKE_AGENTMEMORY_URL || 'https://agentmemory.nexifyai.cloud' }}
+          SMOKE_API_HEALTH_URL: ${{ vars.SMOKE_API_HEALTH_URL || 'https://api.nexifyai.cloud/api/health' }}
+          QUALITY_SMOKE_RESULTS_FILE: ${{ runner.temp }}/nexify-quality-smoke.tsv
+          # Hosted runners: leave LOCAL unset → SKIP localhost AM/gateway/lightrag with clear note
+          QUALITY_SMOKE_LOCAL: "0"
+        run: |
+          set -euo pipefail
+          chmod +x scripts/quality-smoke.sh
+          bash scripts/quality-smoke.sh
+          {
+            echo "## Quality smoke"
+            echo ""
+            echo '```'
+            cat "${QUALITY_SMOKE_RESULTS_FILE}"
+            echo '```'
+            echo ""
+            echo "Note: AgentMemory/Gateway/LightRAG localhost probes are SKIP on ubuntu-latest (public URLs only)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload smoke TSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/nexify-quality-smoke.tsv
+          if-no-files-found: ignore
+
+  website-critical-e2e:
+    name: Website Playwright critical path (L3)
+    runs-on: ubuntu-latest
+    # Keep e2e on PR + dispatch for merge confidence (schedule covered by public-smoke).
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: apps/website/pnpm-lock.yaml
+
+      - name: Install website deps
+        run: pnpm --dir apps/website install --frozen-lockfile
+
+      - name: Build website (Playwright webServer uses start)
+        run: pnpm --dir apps/website build
+
+      - name: Install Chromium for Playwright
+        run: pnpm --dir apps/website exec playwright install --with-deps chromium
+
+      - name: Run critical-path e2e
+        run: pnpm --dir apps/website exec playwright test tests/e2e/critical-path.spec.ts
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-critical-${{ github.run_id }}
+          path: |
+            apps/website/playwright-report/
+            apps/website/test-results/
+          if-no-files-found: ignore
