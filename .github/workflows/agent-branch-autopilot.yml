@@ -1,6 +1,6 @@
 # FILE: .github/workflows/agent-branch-autopilot.yml
 # NIR: 02.08.2026 08:35
-# UPDATED: 02.08.2026 08:35
+# UPDATED: 02.08.2026 08:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Nach Push auf Agent-Branches: Draft-PR öffnen + automerge-Label setzen.
@@ -84,14 +84,31 @@ jobs:
           url="$(gh pr create --repo "$REPO" --base main --head "$BRANCH" --draft \
             --title "$subject" \
             --body "$body" \
-            --label automerge || true)"
+            --label automerge 2>/dev/null || true)"
 
           if [ -z "${url:-}" ]; then
             # Retry without label if label API flaky
             url="$(gh pr create --repo "$REPO" --base main --head "$BRANCH" --draft \
               --title "$subject" \
-              --body "$body")"
-            num="$(echo "$url" | grep -Eo '[0-9]+$')"
+              --body "$body" 2>/dev/null || true)"
+          fi
+
+          if [ -z "${url:-}" ]; then
+            # Race or missing repo setting: Actions may not create PRs
+            existing="$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number,isDraft,url -q '.[0] // empty')"
+            if [ -n "$existing" ]; then
+              num="$(echo "$existing" | jq -r .number)"
+              echo "PR already open after create race: #$num"
+              gh pr edit "$num" --repo "$REPO" --add-label "automerge" 2>/dev/null || true
+              echo "url=$(echo "$existing" | jq -r .url)"
+              exit 0
+            fi
+            echo "::error::Cannot create draft PR. Enable Settings → Actions → General → Allow GitHub Actions to create and approve pull requests (or open the PR manually)."
+            exit 1
+          fi
+
+          num="$(echo "$url" | grep -Eo '[0-9]+$' || true)"
+          if [ -n "${num:-}" ]; then
             gh pr edit "$num" --repo "$REPO" --add-label automerge 2>/dev/null || true
           fi
           echo "created=$url"
