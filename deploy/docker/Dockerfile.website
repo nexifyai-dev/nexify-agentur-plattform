@@ -14,6 +14,9 @@ RUN pnpm build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+# Product default language: German (de) — see docs/operations/LOCALE-DE-STANDARD.md
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup -S nodejs && adduser -S nextjs

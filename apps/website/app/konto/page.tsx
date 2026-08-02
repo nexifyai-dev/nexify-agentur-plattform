@@ -9,6 +9,7 @@ import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
 import { SupportTickets } from "@/components/support-tickets";
+import Link from "next/link";
 
 type Offer = {
   id: string; name: string; email: string; company: string | null; language: string;
@@ -28,6 +29,10 @@ const T = {
     requestBtn: "Anfrage senden", save: "Speichern", saved: "Gespeichert ✔", logout: "Abmelden",
     name: "Name", company: "Firma", phone: "Telefon", note: "Optionale Nachricht an uns …",
     total: "Richtpreis (netto)", you: "Sie", nexify: "NeXify AI",
+    statusHelpTitle: "Status & Rechnungen",
+    statusHelp:
+      "Angebotsstatus sehen Sie an den Badges (Offen / Angenommen / Abgelehnt). PDF-Download öffnet das Angebot. Rechnungen und Zahlungsbelege erscheinen hier, sobald die Zahlungsanbindung live ist — bis dahin gilt die Bestätigung nach Zahlungseingang per E-Mail.",
+    bookCall: "Rückruf vereinbaren",
   },
   en: {
     title: "Your Customer Portal", hello: "Welcome back", offers: "Your Offers", profile: "Your Data", request: "Request New Offer",
@@ -39,6 +44,10 @@ const T = {
     requestBtn: "Send Request", save: "Save", saved: "Saved ✔", logout: "Logout",
     name: "Name", company: "Company", phone: "Phone", note: "Optional message to us …",
     total: "Guide price (net)", you: "You", nexify: "NeXify AI",
+    statusHelpTitle: "Status & invoices",
+    statusHelp:
+      "Offer status is shown on the badges (Open / Accepted / Declined). PDF downloads the offer. Invoices will appear here once payments go live — until then you receive email confirmation after payment.",
+    bookCall: "Book a callback",
   },
   nl: {
     title: "Uw klantportaal", hello: "Welkom terug", offers: "Uw offertes", profile: "Uw gegevens", request: "Nieuwe offerte aanvragen",
@@ -50,6 +59,10 @@ const T = {
     requestBtn: "Aanvraag versturen", save: "Opslaan", saved: "Opgeslagen ✔", logout: "Uitloggen",
     name: "Naam", company: "Bedrijf", phone: "Telefoon", note: "Optioneel bericht aan ons …",
     total: "Richtprijs (netto)", you: "U", nexify: "NeXify AI",
+    statusHelpTitle: "Status & facturen",
+    statusHelp:
+      "Offertestatus ziet u aan de badges (Open / Aangenomen / Afgewezen). PDF downloadt de offerte. Facturen verschijnen hier zodra betalingen live zijn — tot die tijd bevestiging per e-mail na betaling.",
+    bookCall: "Terugbelafspraak",
   },
 };
 
@@ -304,6 +317,20 @@ export default function PortalPage() {
             <SupportTickets />
           </div>
 
+          <div className="space-y-4">
+          <div className="glass h-fit p-6" data-testid="portal-status-help">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+              {t.statusHelpTitle}
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-400">{t.statusHelp}</p>
+            <Link
+              href="/rueckruf"
+              className="mt-4 inline-flex text-sm font-semibold text-zinc-200 transition-colors hover:text-white"
+              data-testid="portal-book-call"
+            >
+              {t.bookCall} →
+            </Link>
+          </div>
           <div className="glass h-fit p-6" data-testid="portal-profile">
             <h2 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
               <UserIcon size={13} /> {t.profile}
@@ -317,6 +344,7 @@ export default function PortalPage() {
                 {saved ? t.saved : t.save}
               </button>
             </div>
+          </div>
           </div>
         </div>
       </div>

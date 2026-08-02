@@ -1,6 +1,6 @@
 // FILE: /opt/nexifyai/repos/nexify-agentur-plattform/apps/website/app/api/contact/route.ts
 // NIR: 02.08.2026 06:55
-// UPDATED: 02.08.2026 06:55
+// UPDATED: 02.08.2026 10:40
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
 // WHAT: Contact form API — FastAPI proxy, then Resend fallback

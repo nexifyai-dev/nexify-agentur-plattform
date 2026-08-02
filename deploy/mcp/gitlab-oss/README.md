@@ -111,6 +111,6 @@ bash scripts/mcp-health-codespace.sh
 
 Abdeckung:
 
-- `.cursor/mcp.json` (agentmemory + context7 + gitlab-oss)
-- `.codex/config.toml` (zusatzlich agentmemory + gitlab-oss fuer Codex)
+- `.cursor/mcp.json` (agentmemory + context7 + gitlab-oss) — Cursor Agent / Cloud Agent
 - Erreichbarkeit von context7, agentmemory und GitLab OSS API/UI
+- OpenAI Codex: entfernt 2026-08-02 (kein `.codex/` mehr im Repo)
