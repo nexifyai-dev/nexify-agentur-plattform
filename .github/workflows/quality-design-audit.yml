@@ -1,0 +1,71 @@
+# FILE: .github/workflows/quality-design-audit.yml
+# NIR: 02.08.2026 09:50
+# UPDATED: 02.08.2026 09:50
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Quality
+# WHAT: Nightly full Playwright design-audit with screenshot artifacts.
+# WHY: Issue #166 — full audit budgeted off default CI; critical-path stays elsewhere.
+# BEST-PRACTICE: schedule + workflow_dispatch; schedule + workflow_dispatch only (no PR path — runtime cost).
+# PITFALL: V-QA-02: Do not run full design-audit on every unrelated PR.
+# DEPENDS: apps/website Playwright; pnpm 9; Node 20
+# DOCS-REF: docs/operations/QUALITY-GATES.md
+# SESSION: issues-quality-ci-7dd5
+
+name: Quality Design Audit (nightly)
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+
+concurrency:
+  group: quality-design-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  design-audit:
+    name: Playwright design-audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: apps/website/pnpm-lock.yaml
+
+      - name: Install website deps
+        run: pnpm --dir apps/website install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm --dir apps/website exec playwright install --with-deps chromium
+
+      - name: Build website
+        run: pnpm --dir apps/website build
+
+      - name: Run design-audit.spec.ts
+        working-directory: apps/website
+        env:
+          CI: "true"
+        run: pnpm exec playwright test tests/e2e/design-audit.spec.ts --reporter=list
+
+      - name: Upload Playwright report + screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-audit-${{ github.run_id }}
+          path: |
+            apps/website/playwright-report/
+            apps/website/test-results/
+          if-no-files-found: ignore
+          retention-days: 14
