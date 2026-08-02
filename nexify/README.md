@@ -1,6 +1,10 @@
 # NeXify AI — Agentur-Plattform
 
-Das kanonische Wissens- und Governance-Repository von **NeXify AI by NeXify — chat it. Automate it.**
+Wissens- und Regelwerksordner von **NeXify AI by NeXify — chat it. Automate it.**
+
+> **Hinweis:** Verbindliche Governance liegt unter `docs/governance/` im Repo-Root.
+> Design-SoT: `design_guidelines.json` (nicht ältere „Graphite Premium“-Referenzen hier).
+> Öffentliches Produkt: Website `apps/website` · Live https://www.nexifyai.cloud · API https://api.nexifyai.cloud.
 
 ## Struktur
 

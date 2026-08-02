@@ -1,6 +1,9 @@
 # NeXify Design-Audit — Gap-Analyse & Best-Elements-Extraktion
 
-**Datum:** 2026-06-20 | **Status:** VERBINDLICH | **Version:** 1.0.0
+> **Superseded für Produkt-UI (2026-08-02):** Verbindliches Design ist Root-`design_guidelines.json`
+> (Dark/Luxury, Outfit/Manrope, `#0A0A0A`). „Graphite Premium“ unten ist **historische Audit-Quelle**, keine aktuelle Brand-Linie.
+
+**Datum:** 2026-06-20 | **Status:** HISTORISCH (Audit) | **Version:** 1.0.0
 **Geprüfte Quellen:** 6 Design-System-Dokumente
 **Autor:** Hermes Agent (Design-Audit Subagent)
 

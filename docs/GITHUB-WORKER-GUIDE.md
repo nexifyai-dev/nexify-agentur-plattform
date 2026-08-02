@@ -1,7 +1,8 @@
 # GitHub Worker Integration Guide
 
 **NIR:** 2026-07-24 04:58 UTC  
-**PURPOSE:** Enable GitHub Actions as primary CI + GitLab backup worker
+**PURPOSE:** Enable GitHub Actions as primary CI + GitLab backup worker  
+**Produkt (2026-08-02):** NeXify AI by NeXify — chat it. Automate it. · Live https://www.nexifyai.cloud · Vercel-Deploy siehe `deploy-vercel.yml`
 
 ---
 
