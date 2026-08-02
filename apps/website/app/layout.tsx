@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
 import { CookieConsent } from "@/components/cookie-consent";
+import { StickyCta } from "@/components/sticky-cta";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark", viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
@@ -99,6 +100,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <SiteHeader />
           <div id="main-content">{children}</div>
           <SiteFooter />
+          <StickyCta />
           <ChatWidget />
           <CookieConsent />
           <PwaRegister />

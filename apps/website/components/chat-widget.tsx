@@ -228,7 +228,7 @@ export function ChatWidget() {
                 </div>
               </div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} className="text-zinc-500 transition-colors hover:text-white" aria-label="Schließen" data-testid="chat-close">
+            <button type="button" onClick={() => setOpen(false)} className="inline-flex size-11 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-white/5 hover:text-white" aria-label="Schließen" data-testid="chat-close">
               <X size={18} />
             </button>
           </div>
