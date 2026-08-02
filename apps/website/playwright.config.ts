@@ -16,7 +16,8 @@ export default defineConfig({
     { name: 'chromium-design', use: { ...devices['Desktop Chrome'] } },
   ],
   webServer: {
-    command: 'pnpm start -- -p 3137',
+    command: 'bash scripts/e2e-webserver.sh',
+    env: { ...process.env, E2E_PORT: '3137', E2E_BIND_HOST: '127.0.0.1', PORT: '3137' },
     url: 'http://127.0.0.1:3137',
     reuseExistingServer: false,
     timeout: 120_000,
