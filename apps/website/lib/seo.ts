@@ -61,8 +61,9 @@ export function pageMetadata({
   return {
     title,
     description,
-    // DE-first acquisition: same URL serves cookie locales, but hreflang must not
-    // claim equal EN/NL content. Primary = de + x-default (NL = seat/legal only).
+    // DE-first: unprefixed routes + cookie locale share one URL; hreflang must
+    // not claim equal EN/NL. Primary = de + x-default (NL = seat/legal only).
+    // See docs/operations/LOCALE-DE-STANDARD.md
     alternates: {
       canonical: canonicalPath,
       languages: {
