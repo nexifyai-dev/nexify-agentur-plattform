@@ -16,6 +16,12 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/**
+ * HARD: unknown first segments must NOT soft-404 as HomePage.
+ * Live (2026-08-02): /jobs,/status,/security matched /[locale] → 200 + homepage.
+ */
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
