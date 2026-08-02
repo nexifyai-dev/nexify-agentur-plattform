@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # FILE: /scripts/setup-codespace-mcp.sh
-# WHAT: Bootstrapt MCP-Konfigurationen fuer Cursor und Codex im Codespace.
+# WHAT: Bootstrapt MCP-Konfigurationen fuer Cursor Agent / Cloud Agent im Codespace.
 # WHY: Einheitliche, lokale Einrichtung fuer agentmemory + context7 + gitlab-oss.
 set -euo pipefail
 

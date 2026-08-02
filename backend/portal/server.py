@@ -159,10 +159,23 @@ class PortalHandler(SimpleHTTPRequestHandler):
     _ALLOWED_ORIGINS = {"https://admin.nexifyai.cloud"}
 
     def _cors_origin(self) -> str:
-        """Return Access-Control-Allow-Origin value, validated against whitelist.
-        Only echoes back the Origin header if it matches an allowed origin."""
+        """Return Access-Control-Allow-Origin from allowlist (constant, never echo raw Origin)."""
         origin = self.headers.get("Origin", "")
-        return origin if origin in self._ALLOWED_ORIGINS else ""
+        # Return the allowlisted constant — avoids HTTP response splitting / header injection
+        # from any CR/LF in a crafted Origin while preserving CORS for the known admin UI.
+        if origin in self._ALLOWED_ORIGINS:
+            return "https://admin.nexifyai.cloud"
+        return ""
+
+    @staticmethod
+    def _safe_header_value(value: str, default: str) -> str:
+        """Strip CR/LF and cap length so proxied headers cannot split HTTP responses."""
+        if not value:
+            return default
+        cleaned = value.replace("\r", "").replace("\n", "").strip()
+        if not cleaned:
+            return default
+        return cleaned[:128]
 
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -682,9 +695,11 @@ class PortalHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(e.read())
         except json.JSONDecodeError as je:
-            self._send_json({"error": f"JSON error: {str(je)}", "preview": raw[:300] if raw else ""}, 502)
+            log.warning("_proxy_chat JSON decode failed: %s", je, exc_info=True)
+            self._send_json({"error": "upstream_json_error"}, 502)
         except Exception as ex:
-            self._send_json({"error": str(ex)}, 502)
+            log.warning("_proxy_chat failed: %s", ex, exc_info=True)
+            self._send_json({"error": "upstream_error"}, 502)
 
     def _send_json(self, data, status=200):
         self.send_response(status)
@@ -703,7 +718,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req, timeout=10) as resp:
                 self.send_response(resp.status)
-                self.send_header("Content-Type", resp.headers.get("Content-Type", "application/json"))
+                self.send_header("Content-Type", self._safe_header_value(resp.headers.get("Content-Type", "application/json"), "application/json"))
                 self.send_header("Access-Control-Allow-Origin", self._cors_origin())
                 self.end_headers()
                 self.wfile.write(resp.read())
@@ -715,7 +730,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             self.wfile.write(e.read() or b"{}")
         except Exception as ex:
             log.warning("_proxy_get failed for %s: %s", url, ex, exc_info=True)
-            self._send_json({"error": str(ex)}, 502)
+            self._send_json({"error": "proxy_error"}, 502)
 
     def _proxy_factory(self, path):
         """Proxy /factory/* → Paperclip Vite dev server on :3100, stripping /factory prefix."""
@@ -725,7 +740,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             req = urllib.request.Request(target_url)
             with urllib.request.urlopen(req, timeout=10) as resp:
                 self.send_response(resp.status)
-                ct = resp.headers.get("Content-Type", "text/html")
+                ct = self._safe_header_value(resp.headers.get("Content-Type", "text/html"), "text/html")
                 self.send_header("Content-Type", ct)
                 self.send_header("Access-Control-Allow-Origin", self._cors_origin())
                 self.end_headers()
@@ -744,7 +759,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
                 log.warning("_proxy_factory error-body write failed for %s: %s", target_url, e2)
         except Exception as ex:
             log.warning("_proxy_factory failed for %s: %s", target_url, ex, exc_info=True)
-            self._send_json({"error": str(ex)}, 502)
+            self._send_json({"error": "factory_proxy_error"}, 502)
 
     def _serve_demo(self, lead_id):
         """Fetch lead demo_config from Spaether and render as HTML."""

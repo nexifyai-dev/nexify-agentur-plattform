@@ -26,7 +26,7 @@ Live-Kette (SQLite `~/.9router/db/data.sqlite`, 2026-07-25):
 - **DeepSeek** – primärer Chat/Reasoning
 - **Xiaomi MiMo** – Token-Plan (tp-), AMS-Region
 - **NScale** – skalierbares Hosting
-- **Codex** – OAuth (nexify.login@gmail.com)
+- ~~**Codex** – OAuth~~ — **retired 2026-08-02** (NeXify nutzt nur noch Cursor Agent / Cloud Agent; kein OpenAI Codex)
 - **Vercel AI Gateway** – Gateway glm-5.2
 - **You.com** – Websuche
 - **AI Proxy (eigen)** – Platzhalter für Eigenmodelle
