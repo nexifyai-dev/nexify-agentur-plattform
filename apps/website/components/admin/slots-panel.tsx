@@ -6,7 +6,7 @@ import { api } from "@/lib/auth";
 
 type Slot = { id: string; start_at: string; duration_min: number; status: string; name: string | null; email: string | null; phone: string | null; company: string | null; topic: string | null; language: string | null };
 
-const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" });
+const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Berlin" });
 // One 24-hour window in milliseconds for recent-booking filtering.
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -71,7 +71,7 @@ export function SlotsPanel() {
         {state === "created" && <p className="text-sm text-emerald-400" data-testid="slot-add-success">Zeitfenster angelegt ✔ – ist sofort auf /rueckruf buchbar</p>}
         {state === "duplicate" && <p className="text-sm text-zinc-400">Zeitfenster existiert bereits.</p>}
         {state && !["saving", "created", "duplicate"].includes(state) && <p className="text-sm text-red-400">{state}</p>}
-        <p className="text-xs text-zinc-600">Zeiten gelten für Europe/Amsterdam. Interessenten buchen auf der Seite /rueckruf – Sie und der Interessent erhalten automatisch eine Bestätigungs-E-Mail.</p>
+        <p className="text-xs text-zinc-600">Zeiten gelten für Europe/Berlin. Interessenten buchen auf der Seite /rueckruf – Sie und der Interessent erhalten automatisch eine Bestätigungs-E-Mail.</p>
       </div>
 
       <div>

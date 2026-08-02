@@ -11,7 +11,7 @@ export type OfferJson = { title?: string; intro?: string; items?: OfferItem[]; n
 export type Offer = { id: string; name: string; email: string; company: string | null; language: string; offer: OfferJson; price_total: number | null; status: string; created_at: string };
 export type Session = { id: string; language: string; created_at: string; msg_count: number; last_at: string | null };
 
-export const fmtDate = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" });
+export const fmtDate = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Berlin" });
 export const eur = (n: number) => `€ ${n.toLocaleString("de-DE")}`;
 
 const STATUS_LABEL: Record<string, string> = { sent: "Offen", followed_up: "Nachgefasst", accepted: "Angenommen", declined: "Abgelehnt" };

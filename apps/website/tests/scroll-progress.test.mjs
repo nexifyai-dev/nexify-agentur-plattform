@@ -11,7 +11,7 @@ test('ScrollProgress - tracks scroll position', () => {
 });
 
 test('ScrollProgress - clamps to 0-1', () => {
-  const getProgress = (scrollTop: number, scrollHeight: number, clientHeight: number) =>
+  const getProgress = (scrollTop, scrollHeight, clientHeight) =>
     Math.min(1, Math.max(0, scrollTop / (scrollHeight - clientHeight)));
   assert.equal(getProgress(0, 2000, 800), 0);
   assert.equal(getProgress(1200, 2000, 800), 1);
