@@ -132,6 +132,9 @@ test("llms.txt follows llmstxt.org recommendations", () => {
   assert.match(llms, /## Optional/);
   const wellKnown = read("public/.well-known/llms.txt");
   assert.match(wellKnown, /llms\.txt/);
+  const nextConfig = read("next.config.ts");
+  assert.match(nextConfig, /source:\s*"\/llms\.txt"/);
+  assert.match(nextConfig, /text\/plain; charset=utf-8/);
 });
 
 test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {

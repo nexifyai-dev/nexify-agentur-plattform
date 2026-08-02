@@ -56,6 +56,27 @@ const nextConfig: NextConfig = {
         { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
       ],
     },
+    {
+      source: "/llms.txt",
+      headers: [
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
+    {
+      source: "/.well-known/llms.txt",
+      headers: [
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
+    {
+      source: "/llm.txt",
+      headers: [
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
   ],
   redirects: async () => [
     // PR47 / Emergent SoT: marketing pages are UNPREFIXED (`/preise`, …).
