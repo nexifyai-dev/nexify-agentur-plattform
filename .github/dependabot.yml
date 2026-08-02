@@ -1,0 +1,48 @@
+# FILE: .github/dependabot.yml
+# NIR: 02.08.2026 08:55
+# UPDATED: 02.08.2026 08:55
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Dev
+# WHAT: Dependabot version + security update schedule for backend, website, Actions
+# WHY: Keep dependency alerts actionable after enabling Dependabot security updates
+# BEST-PRACTICE: Weekly cadence, grouped minor/patch where sensible, ignore major without review
+# PITFALL: V-SEC: never commit registry tokens; litellm majors need human PR review
+# DEPENDS: GitHub Dependabot enabled on repo
+# DOCS-REF: docs/operations/GITHUB-CURSOR-CONTROL-PLANE-STATUS.md
+# SESSION: github-ops-automation-7dd5
+
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /backend
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - security
+    commit-message:
+      prefix: "chore(deps)"
+
+  - package-ecosystem: npm
+    directory: /apps/website
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(deps)"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "chore(deps)"
