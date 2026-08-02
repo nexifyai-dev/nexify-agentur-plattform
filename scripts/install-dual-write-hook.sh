@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # FILE: scripts/install-dual-write-hook.sh
 # NIR: 02.08.2026 09:05
-# UPDATED: 02.08.2026 09:05
+# UPDATED: 02.08.2026 10:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: One-liner installer for AgentMemory+LightRAG post-commit dual-write.
 # WHY: Hook exists in .githooks/ but is easy to miss without core.hooksPath.
 # BEST-PRACTICE: Prefer core.hooksPath=.githooks; fallback copy into .git/hooks.
 # PITFALL: Never inline secrets; requires AGENTMEMORY_SECRET in env for AM write.
-# DEPENDS: .githooks/post-commit-dual-write; optional /opt/nexifyai/scripts/sync-to-lightrag.py
-# DOCS-REF: docs/operations/HUMAN-GATE-5MIN.md
-# SESSION: full-auto-config-close-7dd5
+# DEPENDS: .githooks/post-commit-dual-write; optional LIGHTRAG_URL + LIGHTRAG_API_KEY
+# DOCS-REF: docs/operations/CONTINUOUS-LEARNING.md · docs/operations/HUMAN-GATE-5MIN.md
+# SESSION: continuous-learning-7dd5
 
 set -euo pipefail
 
@@ -51,4 +51,4 @@ if [[ -d "$HOOK_DIR" ]]; then
 fi
 
 echo "dual_write_ready=1"
-echo "note=Set AGENTMEMORY_SECRET in environment for AM remember; LightRAG uses sync-to-lightrag.py if present"
+echo "note=Set AGENTMEMORY_SECRET for AM remember; LIGHTRAG_URL (+ LIGHTRAG_API_KEY) for index; see CONTINUOUS-LEARNING.md"

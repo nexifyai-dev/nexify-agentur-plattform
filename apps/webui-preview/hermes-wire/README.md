@@ -1,6 +1,6 @@
 # FILE: apps/webui-preview/hermes-wire/README.md
 # NIR: 31.07.2026 12:20
-# UPDATED: 02.08.2026 09:50
+# UPDATED: 02.08.2026 10:28
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Hermes Preview Hub — verdrahtet native Preview-Panels ohne Prod-Patch
@@ -17,6 +17,12 @@ python3 -m http.server 8790 --directory apps/webui-preview/hermes-wire
 ```
 
 Registry SoT: `config/webui/hermes-preview-module-registry.json`
+
+## Continuous Learning
+
+Hermes-Profile: nach Task AgentMemory `remember` + `lessons` (Env-Bearer).
+Preview AgentMemory-Panel zeigt gespeicherte Lessons. SoT:
+`docs/operations/CONTINUOUS-LEARNING.md`. Kein Prod-Cutover hier.
 
 ## Locale (Preview)
 

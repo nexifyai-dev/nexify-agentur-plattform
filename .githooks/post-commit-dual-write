@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # FILE: .githooks/post-commit-dual-write
 # NIR: 31.07.2026 10:55
+# UPDATED: 02.08.2026 10:10
 # WHAT: Optional Dual-Write pointer AgentMemory + LightRAG after commit (no secrets inline)
 # WHY: Close hook drift — tracked hook; install via `git config core.hooksPath .githooks` or copy
-# DEPENDS: env AGENTMEMORY_SECRET, optional LIGHTRAG_URL; scripts under /opt/nexifyai/scripts
-# PITFALL: Never echo secrets; skip if Kill-Switch or offline
+# BEST-PRACTICE: Prefer scripts/learning for structured lessons; this hook covers git history.
+# DEPENDS: env AGENTMEMORY_SECRET, optional LIGHTRAG_URL + LIGHTRAG_API_KEY
+# PITFALL: Never echo secrets; skip if Kill-Switch or offline; no fake dual-write claims
+# DOCS-REF: docs/operations/CONTINUOUS-LEARNING.md
 
 set -euo pipefail
 
@@ -17,18 +20,34 @@ if echo "$MSG" | grep -qE '^\[autopilot\]|^Merge '; then
   exit 0
 fi
 
-# Keep existing deviation auto-fix trigger (local hook chain)
-if [[ -x /opt/nexifyai/repos/nexify-agentur-plattform/.git/hooks/post-commit ]]; then
-  :
-fi
-
 HASH=$(git rev-parse --short HEAD 2>/dev/null || echo unknown)
 REPO=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-SUMMARY="Monorepo commit ${HASH} in ${REPO}: ${MSG}"
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)
+SUMMARY="Monorepo commit ${HASH} (${BRANCH}) in ${REPO}: ${MSG}"
+export TZ="${TZ:-Europe/Berlin}"
 
 # Best-effort Dual-Write — failures must not block git
-if [[ -x /opt/nexifyai/scripts/sync-to-lightrag.py ]]; then
-  printf '%s\n' "$SUMMARY" | python3 /opt/nexifyai/scripts/sync-to-lightrag.py --stdin --title "git-commit-${HASH}" >/dev/null 2>&1 || true
+# LightRAG direct insert when URL (+ optional API key) set
+if [[ -n "${LIGHTRAG_URL:-}" ]]; then
+  export NEXIFY_COMMIT_SUMMARY="$SUMMARY"
+  export NEXIFY_COMMIT_HASH="$HASH"
+  python3 - <<'PY' >/dev/null 2>&1 || true
+import json, os, urllib.request
+url = os.environ.get("LIGHTRAG_URL", "").rstrip("/")
+key = (os.environ.get("LIGHTRAG_API_KEY") or "").strip()
+if not url:
+    raise SystemExit(0)
+headers = {"Content-Type": "application/json"}
+if key:
+    headers["X-API-Key"] = key
+text = os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit")
+body = json.dumps({
+    "text": f"# Git Commit Learning\n{text}\nTZ=Europe/Berlin\nQuelle: post-commit-dual-write\n",
+    "file_source": f"continuous-learning/git-commit/{os.environ.get('NEXIFY_COMMIT_HASH','unknown')}",
+}).encode()
+req = urllib.request.Request(f"{url}/documents/text", data=body, headers=headers, method="POST")
+urllib.request.urlopen(req, timeout=8).read()
+PY
 fi
 
 if [[ -n "${AGENTMEMORY_SECRET:-}" ]]; then
@@ -38,14 +57,17 @@ import json, os, urllib.request
 secret = os.environ.get("AGENTMEMORY_SECRET", "")
 if not secret:
     raise SystemExit(0)
+base = (os.environ.get("AGENTMEMORY_URL") or "http://127.0.0.1:3111").rstrip("/")
+if not base.endswith("/agentmemory"):
+    base = f"{base}/agentmemory"
 body = json.dumps({
     "content": os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit"),
     "type": "workflow",
-    "project": "platform",
-    "tags": ["git", "dual-write", "monorepo"],
+    "project": "nexify-agentur-plattform",
+    "concepts": ["git", "dual-write", "monorepo", "continuous-learning", "Europe/Berlin"],
 }).encode()
 req = urllib.request.Request(
-    "http://127.0.0.1:3111/agentmemory/remember",
+    f"{base}/remember",
     data=body,
     headers={"Authorization": f"Bearer {secret}", "Content-Type": "application/json"},
     method="POST",

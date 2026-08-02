@@ -57,6 +57,23 @@ Alles andere: auto (Hooks + `agent-branch-autopilot` + `pr-auto-merge`
 inkl. Draft→ready wenn `automerge` + CI green). Rule:
 `.cursor/rules/40-no-confirmation.mdc`.
 
+## Continuous Learning (Dauerhaftes Lernen)
+
+Pflicht für Cursor Agent und alle AI-Lösungen:
+
+**Recall → Act → Verify → Learn → Index LightRAG**
+
+- Vor Planung: `memory_recall` / `memory_lesson_recall`
+- Nach Task: `memory_lesson_save` + `memory_save` (Erfolg → Lesson/Crystal;
+  Failure → Error-Pattern mit PITFALL-ID via
+  `scripts/learning/error-pattern-save.py`)
+- Session-Ende: Hook `stop` → `scripts/learning/session-learn.sh` (fail-soft)
+- Commit-Pfad: `.githooks/post-commit-dual-write` (AM remember + LightRAG best-effort)
+- SoT: `docs/operations/CONTINUOUS-LEARNING.md` · Rule:
+  `.cursor/rules/50-continuous-learning.mdc`
+- Metadaten: TZ `Europe/Berlin`, Lerntexte DE; **keine Secrets** in Payloads
+- Kein falscher Dual-Write: nur melden, was wirklich geschrieben wurde
+
 ## Branding
 „NeXify AI by NeXify — chat it. Automate it." — durchgängig.
 

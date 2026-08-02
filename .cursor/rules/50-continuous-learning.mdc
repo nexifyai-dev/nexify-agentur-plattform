@@ -1,0 +1,56 @@
+---
+description: Continuous learning — Recall → Act → Verify → Learn → Index LightRAG
+globs:
+alwaysApply: true
+---
+
+# Continuous Learning (Pflicht für alle AI-Lösungen inkl. Cursor Agent)
+
+Jeder Agent-Lauf folgt systematisch:
+
+**Recall → Act → Verify → Learn → Index LightRAG**
+
+Korrekturen nie verlieren. Fehler → Error-Pattern (PITFALL-ID). Erfolge → Lesson/Crystal.
+
+## Vor Planung (Recall)
+
+1. `memory_recall` / `memory_smart_search` mit Task-Keywords
+2. `memory_lesson_recall` für bekannte Fallstricke und Best Practices
+3. AgentMemory erreichbar unter `:3111` — wenn down: soft continue, trotzdem lokal dokumentieren
+
+## Nach abgeschlossenem Task (Learn)
+
+1. `memory_lesson_save` — was funktioniert hat / zu vermeiden ist (DE, kontextreich)
+2. `memory_save` — type `workflow` | `pattern` | `bug` | `architecture` | `fact`
+3. Bei Erfolg optional `memory_crystallize` (wenn Action-Chain abgeschlossen)
+4. LightRAG-Index: MCP `lightrag_insert_text` **oder** Hook/Script mit `LIGHTRAG_URL` + `LIGHTRAG_API_KEY` (X-API-Key) — **kein** Fake-Dual-Write behaupten, wenn Insert fehlschlägt
+
+## Bei Failure
+
+Sofort Error-Pattern speichern:
+
+```bash
+python3 scripts/learning/error-pattern-save.py \
+  --pitfall V-XX \
+  --summary "Kurzbeschreibung" \
+  --fix "Root-Cause + Remediation"
+```
+
+Oder MCP: `memory_lesson_save` mit Tags `error-pattern,pitfall-V-XX` + `memory_save` type `bug`.
+
+## Session-Ende (Hook)
+
+`.cursor/hooks.json` → `stop` → `scripts/learning/session-learn.sh`  
+Fail-soft wenn AgentMemory/LightRAG down. Keine Secrets in Payloads.
+
+## Metadaten
+
+- Timezone: `Europe/Berlin`
+- Sprache Lern-Payloads: Deutsch (DE)
+- Project-Slug: `nexify-agentur-plattform` (kein Filesystem-Pfad)
+
+## HARTE Grenzen
+
+- Keine Secrets/Tokens/Passwörter in Lesson/Memory/LightRAG-Texten
+- Kein Hermes-Prod-Cutover ohne Endabnahme
+- Protocol SoT: `docs/operations/CONTINUOUS-LEARNING.md`
