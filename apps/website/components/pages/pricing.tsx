@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, Minus } from "lucide-react";
+import Link from "next/link";
+import { Check, Minus, ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { ProjectPlanner } from "@/components/project-planner";
 import { useContent } from "@/lib/content";
+import { marketDayRateAnchor, productizedOffers } from "@/lib/gtm/productized-offers";
 
 const fmt = (n: number) => `€ ${n.toLocaleString("de-DE")}`;
 
@@ -27,6 +29,55 @@ export function PricingPage() {
           <span className="eyebrow">{t.pricing.eyebrow}</span>
           <h1 className="mt-4 font-[family-name:var(--font-heading)] text-4xl font-light tracking-tight text-white sm:text-5xl">{t.pricing.title}</h1>
           <p className="mt-5 max-w-2xl text-lg text-zinc-400">{t.pricing.intro}</p>
+          <p className="mt-3 max-w-2xl text-sm text-zinc-500" data-testid="pricing-market-anchor">
+            Marktanker (Richtwert): klassische IT-/Agentur-Tagessätze oft{" "}
+            {marketDayRateAnchor.low.toLocaleString("de-DE")}–
+            {marketDayRateAnchor.high.toLocaleString("de-DE")}&nbsp;€ netto — NeXify AI: 449&nbsp;€ netto.
+            Keine Einzelzitate von Wettbewerbern.
+          </p>
+        </Reveal>
+
+        <Reveal>
+          <div className="mt-14" data-testid="productized-packages">
+            <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light text-white">
+              Produktisierte Einstiege
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-zinc-500">
+              Audit → Pilot → Retainer — Festtage × 449&nbsp;€. Klarer Pfad statt Stundenpoker.
+            </p>
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {productizedOffers.map((o) => (
+                <div key={o.id} className="glass flex h-full flex-col p-6" data-testid={`package-${o.id}`}>
+                  {o.badge ? (
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+                      {o.badge}
+                    </span>
+                  ) : null}
+                  <h3 className="mt-2 text-[15px] font-semibold text-white">{o.name}</h3>
+                  <div className="mt-3 font-[family-name:var(--font-heading)] text-2xl font-semibold text-zinc-200">
+                    {fmt(o.priceNet)}
+                  </div>
+                  <div className="mt-1 text-xs text-zinc-500">{o.durationHint}</div>
+                  <p className="mt-3 text-sm text-zinc-400">{o.headline}</p>
+                  <ul className="mt-4 flex-1 space-y-2">
+                    {o.bullets.map((b) => (
+                      <li key={b} className="flex gap-2 text-[13px] text-zinc-500">
+                        <Check size={13} className="mt-0.5 shrink-0 text-emerald-400/80" /> {b}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={o.ctaHref}
+                    className="btn-primary mt-6 inline-flex items-center justify-center gap-2"
+                    data-testid={`package-cta-${o.id}`}
+                  >
+                    {o.ctaLabel}
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </Reveal>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.2fr]">

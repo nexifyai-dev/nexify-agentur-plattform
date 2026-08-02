@@ -1,18 +1,32 @@
 #!/usr/bin/env bash
 # FILE: .githooks/post-commit-dual-write
 # NIR: 31.07.2026 10:55
-# UPDATED: 02.08.2026 10:10
-# WHAT: Optional Dual-Write pointer AgentMemory + LightRAG after commit (no secrets inline)
-# WHY: Close hook drift — tracked hook; install via `git config core.hooksPath .githooks` or copy
-# BEST-PRACTICE: Prefer scripts/learning for structured lessons; this hook covers git history.
-# DEPENDS: env AGENTMEMORY_SECRET, optional LIGHTRAG_URL + LIGHTRAG_API_KEY
-# PITFALL: Never echo secrets; skip if Kill-Switch or offline; no fake dual-write claims
+# UPDATED: 02.08.2026 12:08
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Architecture
+# WHAT: Best-effort Commit-Learning via AgentMemory + LightRAG; delegiert an .githooks/post-commit falls vorhanden
+# WHY: Hält den dokumentierten Hook funktionsfähig und bleibt kompatibel mit einem späteren zentralen Entry-Point
+# BEST-PRACTICE: Delegieren, wenn ein neuer post-commit-Hook existiert; sonst lokale Fallback-Logik mit Redaction
+# PITFALL: Niemals Roh-Secrets persistieren; bei Kill-Switch/offline immer fail-soft bleiben
+# DEPENDS: env AGENTMEMORY_SECRET, optional LIGHTRAG_URL + LIGHTRAG_API_KEY; optional .githooks/post-commit
 # DOCS-REF: docs/operations/CONTINUOUS-LEARNING.md
 
 set -euo pipefail
 
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[[ -z "$ROOT" ]] && exit 0
+
 if [[ -f /opt/nexifyai/state/autopilot/KILL_SWITCH ]]; then
   exit 0
+fi
+
+if [[ -x "$ROOT/.githooks/post-commit" ]]; then
+  exec bash "$ROOT/.githooks/post-commit"
+fi
+
+HELPER="$ROOT/scripts/brain-dual-write.sh"
+if [[ -f "$HELPER" ]]; then
+  bash "$HELPER" commit >/dev/null 2>&1 || true
 fi
 
 MSG=$(git log -1 --pretty=%s 2>/dev/null || true)
@@ -32,15 +46,23 @@ if [[ -n "${LIGHTRAG_URL:-}" ]]; then
   export NEXIFY_COMMIT_SUMMARY="$SUMMARY"
   export NEXIFY_COMMIT_HASH="$HASH"
   python3 - <<'PY' >/dev/null 2>&1 || true
-import json, os, urllib.request
+import json, os, re, urllib.request
 url = os.environ.get("LIGHTRAG_URL", "").rstrip("/")
 key = (os.environ.get("LIGHTRAG_API_KEY") or "").strip()
 if not url:
     raise SystemExit(0)
+secret_re = re.compile(
+    r"(?i)((?:api[_-]?key|token|secret|password|bearer|authorization)\s*[:=]\s*)\S+"
+    r"|gh[pousr]_[A-Za-z0-9_]+"
+    r"|glpat-[A-Za-z0-9_-]+"
+    r"|sk-[A-Za-z0-9]+"
+)
+def redact(text: str) -> str:
+    return secret_re.sub(lambda m: (m.group(1) + "[REDACTED]") if m.group(1) else "[REDACTED]", text)[:4000]
 headers = {"Content-Type": "application/json"}
 if key:
     headers["X-API-Key"] = key
-text = os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit")
+text = redact(os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit"))
 body = json.dumps({
     "text": f"# Git Commit Learning\n{text}\nTZ=Europe/Berlin\nQuelle: post-commit-dual-write\n",
     "file_source": f"continuous-learning/git-commit/{os.environ.get('NEXIFY_COMMIT_HASH','unknown')}",
@@ -53,15 +75,23 @@ fi
 if [[ -n "${AGENTMEMORY_SECRET:-}" ]]; then
   export NEXIFY_COMMIT_SUMMARY="$SUMMARY"
   python3 - <<'PY' >/dev/null 2>&1 || true
-import json, os, urllib.request
+import json, os, re, urllib.request
 secret = os.environ.get("AGENTMEMORY_SECRET", "")
 if not secret:
     raise SystemExit(0)
+secret_re = re.compile(
+    r"(?i)((?:api[_-]?key|token|secret|password|bearer|authorization)\s*[:=]\s*)\S+"
+    r"|gh[pousr]_[A-Za-z0-9_]+"
+    r"|glpat-[A-Za-z0-9_-]+"
+    r"|sk-[A-Za-z0-9]+"
+)
+def redact(text: str) -> str:
+    return secret_re.sub(lambda m: (m.group(1) + "[REDACTED]") if m.group(1) else "[REDACTED]", text)[:4000]
 base = (os.environ.get("AGENTMEMORY_URL") or "http://127.0.0.1:3111").rstrip("/")
 if not base.endswith("/agentmemory"):
     base = f"{base}/agentmemory"
 body = json.dumps({
-    "content": os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit"),
+    "content": redact(os.environ.get("NEXIFY_COMMIT_SUMMARY", "monorepo commit")),
     "type": "workflow",
     "project": "nexify-agentur-plattform",
     "concepts": ["git", "dual-write", "monorepo", "continuous-learning", "Europe/Berlin"],
@@ -75,5 +105,4 @@ req = urllib.request.Request(
 urllib.request.urlopen(req, timeout=5).read()
 PY
 fi
-
 exit 0
