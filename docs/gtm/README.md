@@ -13,6 +13,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [SUPPLY_WAVE1_CHECKLIST_V1.md](SUPPLY_WAVE1_CHECKLIST_V1.md) | Wave-1-Checkliste |
 | [CONVERSION_LOOP_V1.md](CONVERSION_LOOP_V1.md) | Lead → Angebot → KPI |
 | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) | Skalierungsgrenzen |
+| [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
 
 Script: `python3 scripts/gtm/demand_scan_prepare.py --demo`  

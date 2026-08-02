@@ -15,10 +15,13 @@ const T = {
     links: [
       { label: "Leistungen", href: "/leistungen" },
       { label: "Preise", href: "/preise" },
+      { label: "Vergleich", href: "/vergleich" },
       { label: "Prozess", href: "/prozess" },
+      { label: "Vergleich", href: "/vergleich" },
       { label: "Plattform", href: "/plattform" },
       { label: "Referenzen", href: "/referenzen" },
       { label: "Wissen", href: "/wissen" },
+      { label: "Checkliste", href: "/checkliste" },
       { label: "FAQ", href: "/faq" },
       { label: "Über mich", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -44,10 +47,13 @@ const T = {
     links: [
       { label: "Services", href: "/leistungen" },
       { label: "Pricing", href: "/preise" },
+      { label: "Compare", href: "/vergleich" },
       { label: "Process", href: "/prozess" },
+      { label: "Compare", href: "/vergleich" },
       { label: "Platform", href: "/plattform" },
       { label: "References", href: "/referenzen" },
       { label: "Knowledge", href: "/wissen" },
+      { label: "Checklist", href: "/checkliste" },
       { label: "FAQ", href: "/faq" },
       { label: "About Me", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -73,10 +79,13 @@ const T = {
     links: [
       { label: "Diensten", href: "/leistungen" },
       { label: "Prijzen", href: "/preise" },
+      { label: "Vergelijk", href: "/vergleich" },
       { label: "Proces", href: "/prozess" },
+      { label: "Vergelijk", href: "/vergleich" },
       { label: "Platform", href: "/plattform" },
       { label: "Referenties", href: "/referenzen" },
       { label: "Kennis", href: "/wissen" },
+      { label: "Checklist", href: "/checkliste" },
       { label: "FAQ", href: "/faq" },
       { label: "Over mij", href: "/ueber-mich" },
       { label: "Venlo", href: "/venlo" },
@@ -156,6 +165,17 @@ export function SiteFooter() {
               <Link href="/rueckruf" className="font-semibold text-zinc-300 transition-colors hover:text-white" data-testid="footer-callback-link">
                 {lang === "nl" ? "Terugbelafspraak boeken →" : "Rückruf-Termin buchen →"}
               </Link>
+            </li>
+            <li>
+              <a
+                href={`https://wa.me/${company.phoneHref.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-zinc-300 transition-colors hover:text-white"
+                data-testid="footer-whatsapp-link"
+              >
+                WhatsApp
+              </a>
             </li>
             <li>
               <button
