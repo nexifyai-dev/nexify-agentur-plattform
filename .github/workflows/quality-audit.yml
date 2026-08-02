@@ -1,0 +1,96 @@
+# FILE: .github/workflows/quality-audit.yml
+# NIR: 02.08.2026 09:15
+# UPDATED: 02.08.2026 09:15
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Quality
+# WHAT: Governance audits — SOLL deviation, knowledge mandate, doc↔impl gap (artifacts).
+# WHY: Dedicated Quality System report lane; fail on ERROR only for scan scripts.
+# BEST-PRACTICE: Start as report+artifact; WARN does not fail; ERROR fails the job.
+# PITFALL: V-QA-01: Runtime WARN on hosted runners for localhost is expected — not ERROR.
+# DEPENDS: scripts/soll-deviation-scan.py; check_knowledge_mandate.py; doc-implementation-gap-scan.py
+# DOCS-REF: docs/operations/QUALITY-GATES.md
+# SESSION: quality-gates-absolute-7dd5
+
+name: Quality Audit
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # Monday 06:00 UTC — align with Charta monitoring window
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - "docs/governance/**"
+      - "scripts/soll-deviation-scan.py"
+      - "scripts/check_knowledge_mandate.py"
+      - "scripts/doc-implementation-gap-scan.py"
+      - ".github/workflows/quality-audit.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: quality-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  audit:
+    name: SOLL + Knowledge + Doc-gap
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: SOLL deviation scan (fail on ERROR only)
+        id: soll
+        run: |
+          set -euo pipefail
+          python3 scripts/soll-deviation-scan.py | tee /tmp/soll-scan.txt
+          {
+            echo "## SOLL deviation"
+            echo ""
+            echo '```'
+            cat /tmp/soll-scan.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Knowledge mandate check (hard fail)
+        run: |
+          set -euo pipefail
+          python3 scripts/check_knowledge_mandate.py | tee /tmp/knowledge-mandate.txt
+          {
+            echo "## Knowledge mandate"
+            echo ""
+            echo '```'
+            cat /tmp/knowledge-mandate.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Doc implementation gap scan (fail on ERROR only)
+        run: |
+          set -euo pipefail
+          python3 scripts/doc-implementation-gap-scan.py | tee /tmp/doc-gap.txt
+          {
+            echo "## Doc implementation gap"
+            echo ""
+            echo '```'
+            cat /tmp/doc-gap.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-audit-${{ github.run_id }}
+          path: |
+            test_reports/soll-deviation-scan.json
+            test_reports/doc-implementation-gap.md
+            test_reports/doc-implementation-gap.json
+          if-no-files-found: warn
