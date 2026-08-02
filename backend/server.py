@@ -763,7 +763,7 @@ async def campaign_send(req: CampaignSendReq):
                 results.append({"email": to, "ok": False, "error": "send_failed"})
         except Exception as e:
             logger.error(f"campaign send failed for {to}: {e}")
-            results.append({"email": to, "ok": False, "error": str(e)[:100]})
+            results.append({"email": to, "ok": False, "error": "send_failed"})
 
     logger.info(
         f"Campaign {req.campaign_id}: {sum(1 for r in results if r['ok'])}/{len(results)} sent"
@@ -1619,7 +1619,7 @@ async def chat(body: ChatMessageIn):
                         yield f"data: {json.dumps({'type': 'delta', 'content': emit})}\n\n"
         except Exception as e:
             logger.error(f"chat stream error: {e}")
-            yield f"data: {json.dumps({'type': 'error', 'content': str(e)})}\n\n"
+            yield f"data: {json.dumps({'type': 'error', 'content': 'stream_error'})}\n\n"
         text = "".join(full)
         ready = OFFER_READY_MARKER in text
         tail = pending.replace(OFFER_READY_MARKER, "").rstrip()
