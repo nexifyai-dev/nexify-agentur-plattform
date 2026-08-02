@@ -40,3 +40,5 @@ Automation: `.cursor/automations/free-gtm-dach-to-agent.md` · `.github/workflow
 - `TESTIMONIAL-PERMISSION-PIPELINE_V1.md` (#211)
 - Lead-Magnet PDF (#212)
 - Ops decision `docs/operations/OPENMCP-SPAETHER-PAPERCLIP-DECISION-2026-08-02.md` (#209)
+
+| [ZERO-COST-ACQUISITION-PLAYBOOK.md](ZERO-COST-ACQUISITION-PLAYBOOK.md) | Wöchentliche Lead-Discovery + Mail-Cadence |
