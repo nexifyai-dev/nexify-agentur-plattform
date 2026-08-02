@@ -142,7 +142,7 @@ export function PricingPage() {
         </div>
 
         <Reveal>
-          <div className="mt-16">
+          <div id="planner" className="mt-16 scroll-mt-28">
             <ProjectPlanner />
           </div>
         </Reveal>

@@ -47,6 +47,31 @@ test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
   assert.match(page, /FAQPage/);
   assert.match(page, /breadcrumbListJsonLd/);
   assert.match(page, /path:\s*"\/faq"/);
+  assert.match(page, /flattenFaqItems/);
+  assert.match(page, /faqCategories/);
+});
+
+test("faq categories are expansive with H2 sections in UI", () => {
+  const cats = read("lib/content/faq-categories.ts");
+  assert.match(cats, /export const faqCategoriesDe/);
+  assert.match(cats, /flattenFaqItems/);
+  const deBlock = cats.split("export const faqCategoriesDe")[1].split("export const faqCategoriesNl")[0];
+  const qCount = (deBlock.match(/\bq:/g) || []).length;
+  assert.ok(qCount >= 40, `expected >=40 DE FAQ items, got ${qCount}`);
+  assert.ok((deBlock.match(/id: "/g) || []).length >= 8, "expected >=8 categories");
+
+  const ui = read("components/pages/faq.tsx");
+  assert.match(ui, /faqCategories\.map/);
+  assert.match(ui, /<h2[\s\S]*cat\.title/);
+  assert.match(ui, /<h3[\s\S]*f\.q/);
+  assert.match(ui, /data-testid="faq-page"/);
+  assert.match(ui, /data-testid=\{`faq-section-\$\{cat\.id\}`\}/);
+  assert.match(ui, /href="\/leistungen"/);
+  assert.match(ui, /href="\/preise"/);
+  assert.match(ui, /href="\/kontakt"/);
+  assert.match(ui, /href="\/wissen"/);
+  assert.match(ui, /preise#planner/);
+  assert.doesNotMatch(cats, /999/);
 });
 
 test("leistungen and preise pages expose BreadcrumbList JSON-LD", () => {
