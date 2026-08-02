@@ -40,6 +40,18 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
+  assert.match(src, /openGraph:[\s\S]*images:\s*ogImages/);
+  assert.match(src, /twitter:[\s\S]*card:\s*"summary_large_image"/);
+  assert.match(src, /twitter:[\s\S]*images:\s*\["\/og-image\.png"\]/);
+});
+
+test("server not-found pages export noindex robots (avoid soft-404 indexing)", () => {
+  for (const rel of ["app/not-found.tsx", "app/[locale]/not-found.tsx"]) {
+    const src = read(rel);
+    assert.doesNotMatch(src, /["']use client["']/);
+    assert.match(src, /export const metadata/);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
 });
 
 test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
