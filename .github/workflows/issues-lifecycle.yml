@@ -1,11 +1,11 @@
 # FILE: .github/workflows/issues-lifecycle.yml
 # NIR: 02.08.2026 08:55
-# UPDATED: 02.08.2026 08:58
+# UPDATED: 02.08.2026 11:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: GitHub Issues E2E — auto-label, triage comment, agent dispatch, stale hygiene.
-# WHY: Laptop-off Issues-Behandlung ohne manuelles Triage-Spam.
-# BEST-PRACTICE: human-gate/blocked/P0 stale-exempt; Cloud-Agent nur ohne human-gate.
+# WHAT: GitHub Issues E2E — auto-label, triage comment, slash-command labeling, stale hygiene.
+# WHY: Laptop-off Issues-Behandlung ohne manuelles Triage-Spam; Dispatch zentral über event-to-cloud-agent.
+# BEST-PRACTICE: human-gate/blocked/P0 stale-exempt; PR-Kommentare nicht als Issues fehlbehandeln.
 # PITFALL: V-IL-01: Keine Secret-Werte kommentieren; V-IL-02: Backfill max einmal.
 # DEPENDS: scripts/issues/lifecycle_triage.py; Labels human-gate,blocked,stale,triage,agent-fix,P0
 # DOCS-REF: docs/operations/ISSUES-AUTOMATION.md
@@ -64,6 +64,7 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_STATE: ${{ github.event.issue.state }}
           ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          ISSUE_IS_PR: ${{ toJson(github.event.issue.pull_request) != 'null' }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           LABEL_NAME: ${{ github.event.label.name }}
           BACKFILL: ${{ github.event.inputs.backfill_labels || 'false' }}
