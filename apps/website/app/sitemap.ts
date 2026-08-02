@@ -33,6 +33,7 @@ const routes = [
   "/alternativen",
   "/ueber-mich",
   "/venlo",
+  "/danke",
   "/kontakt",
   "/rueckruf",
   "/impressum",
