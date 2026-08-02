@@ -1,0 +1,26 @@
+---
+description: Neukunden P0 — every session must advance acquisition
+globs:
+alwaysApply: true
+---
+
+# Neukunden P0 (existenziell)
+
+**Neukunden sind überlebenswichtig.** Jede Agent-Session MUSS mindestens einen
+konkreten Acquisition-/Conversion-Schritt voranbringen — nicht nur dokumentieren.
+
+## Pflicht vor Abschluss
+
+1. Mindestens **eine** ausführbare Aktion (Queue, Mail, CTA, Content, Pitch).
+2. Offene GTM-PRs (#173/#175/#213/#232) **extend**, nicht duplizieren.
+3. Delight: `/danke`, Speed-Promise ≤1 Werktag, `/rueckruf`.
+
+## Zero-cost first
+
+Keine Paid Ads · keine neuen Paid-SaaS · keine Fake-Reviews · B2B-Outreach
+nur mit Unsubscribe + Cap · Secrets nie in Chat/Git.
+
+## Artefakte
+
+`docs/gtm/WEEKLY-ACQUISITION-PLAYBOOK.md` · `docs/gtm/7-DAY-ATTACK-PLAN.md` ·
+`scripts/outreach/` · `docs/operations/LEAD-OUTREACH-AUTOMATION.md`
