@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # NIR: 02.08.2026 11:05
-# UPDATED: 02.08.2026 11:10
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Hard rule — DE email acquisition only with explicit opt-in (§7 UWG)
@@ -9,7 +9,7 @@
 # PITFALL: V-CAC-01: Never treat legitimate_interest as email-send basis in DE
 # DEPENDS: EMAIL-NURTURE-OPTIN.md, RESEARCH-FREE-CAC-2026.md, ZERO-COST-ACQUISITION-PLAYBOOK.md, scripts/gtm/*, scripts/leads/*, scripts/outreach/*
 # DOCS-REF: https://www.ihk-muenchen.de/ratgeber/recht/werbung-fairer-wettbewerb/marketing-per-email-telefon-brief-etc/
-# SESSION: zero-cost-leads-mailing-7dd5
+# SESSION: strongest-competitors-tactics-7dd5
 
 # UWG §7 — E-Mail nur mit Opt-in (DE)
 
@@ -25,6 +25,7 @@
 
 | Pfad | Gate |
 |------|------|
+| `scripts/gtm/icp_competitor_outreach.py --send` | `consent=true` + `source` ∈ ALLOWED_SOURCES + `OUTREACH_LIVE=1` |
 | `scripts/gtm/discover_and_optin_mail.py --send` | `consent=true` + `source` ∈ ALLOWED_SOURCES |
 | `scripts/leads/run_pipeline.py mail --send` | `consent=true` **oder** Self-Test-Domain `@nexifyai.cloud` / `.nl` / `.de` |
 | `scripts/outreach/run_daily.py --live` | `consent=true` + `send_allowed` (CI workflow **forced dry-run**) |
@@ -52,6 +53,9 @@ python3 scripts/leads/run_pipeline.py mail --send --limit 1   # nur @nexifyai.*
 
 # GTM opt-in path (#234)
 python3 scripts/gtm/discover_and_optin_mail.py --dry-run
+
+# Competitor-angle path (#241) — OUTREACH_LIVE=1 + consent required
+python3 scripts/gtm/icp_competitor_outreach.py --mail-list leads.json --dry-run
 
 # Daily workflow: immer --dry-run
 python3 scripts/outreach/run_daily.py --dry-run --json

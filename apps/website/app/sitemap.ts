@@ -8,7 +8,7 @@ import { siteOrigin } from "@/lib/seo";
  * Sitemap SoT for GSC — only URLs that exist as unprefixed Emergent routes.
  * Do NOT list soft-404s, locale-prefixed paths, or missing page files.
  *
- * Pending (add when live page.tsx exists): /ki-agentur, /vergleich/chatgpt, /vergleich/freelance
+ * Pending: add further comparison/service detail routes only after real page.tsx files ship.
  */
 const staticRoutes: {
   path: string;
