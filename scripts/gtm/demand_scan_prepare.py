@@ -153,6 +153,15 @@ def write_pending(records: list[dict[str, Any]], out_dir: Path) -> list[Path]:
     return written
 
 
+def demo_hits():
+    return DEMO_HITS
+
+
+def prepare(hits):
+    """Build CRM-pending records for all hits (including below_threshold)."""
+    return [build_pending(h) for h in hits]
+
+
 DEMO_HITS = [
     {
         "source_id": "D01",
