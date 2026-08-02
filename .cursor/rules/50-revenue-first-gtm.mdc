@@ -1,0 +1,17 @@
+---
+description: Bei Konflikt Revenue-GTM vor Infra-Polish — Zero-Paid Neukunden zuerst
+alwaysApply: true
+---
+
+# Revenue-First GTM (bei Konflikt)
+
+Wenn Zeit/Scope knappt zwischen **Infra-Polish** (CI-Kosmetik, Dashboard-Feinschliff,
+nicht-blockierende Runtime-Hinweise) und **Revenue-Taktiken** (Angebote, Audit-CTA,
+Branchen-SEO, Outreach, Partner, Pricing-Anchors):
+
+1. **Bevorzuge Revenue-Taktiken** — Neukunden, Begeisterung, Marge.
+2. Infra nur wenn HARD STOP (Security/Secrets, Prod-Cutover, kaputte Booking/Mail).
+3. Quelle der Taktiken: `docs/gtm/STRONGEST-COMPETITORS-2026.md` + Weekly Steal Checklist.
+4. Keine Paid Ads; keine Fake-Cases; UWG/DSGVO B2B.
+
+Ausnahme: Explizites User-Mandat für Infra oder Governance-Protokollpflicht.
