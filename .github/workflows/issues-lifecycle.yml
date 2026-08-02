@@ -1,0 +1,93 @@
+# FILE: .github/workflows/issues-lifecycle.yml
+# NIR: 02.08.2026 08:55
+# UPDATED: 02.08.2026 08:58
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: GitHub Issues E2E — auto-label, triage comment, agent dispatch, stale hygiene.
+# WHY: Laptop-off Issues-Behandlung ohne manuelles Triage-Spam.
+# BEST-PRACTICE: human-gate/blocked/P0 stale-exempt; Cloud-Agent nur ohne human-gate.
+# PITFALL: V-IL-01: Keine Secret-Werte kommentieren; V-IL-02: Backfill max einmal.
+# DEPENDS: scripts/issues/lifecycle_triage.py; Labels human-gate,blocked,stale,triage,agent-fix,P0
+# DOCS-REF: docs/operations/ISSUES-AUTOMATION.md
+# SESSION: automate-issues-lifecycle-7dd5
+
+name: Issues Lifecycle
+
+on:
+  issues:
+    types: [opened, edited, labeled, closed, reopened]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+    inputs:
+      backfill_labels:
+        description: "One-shot: label open issues that have zero labels (max once)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: issues-lifecycle-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  triage-and-label:
+    if: >
+      github.repository == 'nexifyai-dev/nexify-agentur-plattform' &&
+      (
+        github.event_name == 'issues' ||
+        github.event_name == 'issue_comment' ||
+        (github.event_name == 'workflow_dispatch' && inputs.backfill_labels == true)
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Auto-label + triage + optional dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTION: ${{ github.event.action }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_STATE: ${{ github.event.issue.state }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          BACKFILL: ${{ github.event.inputs.backfill_labels || 'false' }}
+          HAS_CURSOR_KEY: ${{ secrets.CURSOR_API_KEY != '' }}
+        run: python3 scripts/issues/lifecycle_triage.py
+
+  stale:
+    if: >
+      github.repository == 'nexifyai-dev/nexify-agentur-plattform' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-issue-stale: 14
+          days-before-issue-close: 7
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          stale-issue-label: stale
+          exempt-issue-labels: "P0,blocked,human-gate"
+          stale-issue-message: >
+            Dieses Issue ist seit 14 Tagen ohne Aktivität (Issues Lifecycle).
+            Bitte kommentieren oder Labels aktualisieren — sonst Auto-Close in 7 Tagen.
+            Exempt: P0 / blocked / human-gate.
+          close-issue-message: >
+            Auto-geschlossen wegen Inaktivität (14d stale + 7d).
+            Human-gate/P0/blocked Issues werden nie so geschlossen — Reopen + Label falls nötig.
+          operations-per-run: 40
+          ascending: true
