@@ -1,0 +1,10 @@
+# NeXify AI — security contact (RFC 9116)
+# Canonical: https://www.nexifyai.cloud/.well-known/security.txt
+
+Contact: mailto:mail@nexifyai.cloud
+Expires: 2027-08-02T00:00:00.000Z
+Preferred-Languages: de, nl, en
+Canonical: https://www.nexifyai.cloud/.well-known/security.txt
+Policy: https://www.nexifyai.cloud/datenschutz
+Acknowledgments: https://www.nexifyai.cloud/ueber-mich
+Hiring: mailto:mail@nexifyai.cloud?subject=Security%20/%20Karriere

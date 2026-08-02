@@ -16,6 +16,8 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [SUPPLY_WAVE1_CHECKLIST_V1.md](SUPPLY_WAVE1_CHECKLIST_V1.md) | Wave-1-Checkliste |
 | [CONVERSION_LOOP_V1.md](CONVERSION_LOOP_V1.md) | Lead → Angebot → KPI |
 | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) | Skalierungsgrenzen |
+| [STRONGEST-COMPETITORS-2026.md](STRONGEST-COMPETITORS-2026.md) | Top-Konkurrenten + Taktik-Matrix + Adoption |
+| [STEAL-LIKE-AN-ARTIST-WEEKLY.md](STEAL-LIKE-AN-ARTIST-WEEKLY.md) | Wöchentliche Steal-Checklist für Agents |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
 | [GOOGLE-SEARCH-CONSOLE.md](../operations/GOOGLE-SEARCH-CONSOLE.md) | GSC Domain-Ownership (DNS) + Sitemap/Index Human-Checklist |
 | [GBP-OPS-CHECKLIST.md](GBP-OPS-CHECKLIST.md) | Google Business Ops (Human Gate) |
@@ -24,13 +26,17 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
 | [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
+| [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar |
 
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
 `python3 scripts/gtm/prepare_directory_drafts.py --limit 3`  
 `python3 scripts/gtm/discover_and_optin_mail.py --discover-demo --mail-list docs/gtm/evidence/optin-leads.sample.json --dry-run`  
+`python3 scripts/gtm/icp_competitor_outreach.py --discover-demo`  
 
-Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py`  
+**UWG §7:** nur Opt-in-Mails — siehe `docs/gtm/UWG-EMAIL-OPTIN-ONLY.md` (`consent=true` + `OUTREACH_LIVE=1`).
+
+Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py` · `python3 scripts/gtm/test_competitor_angle_templates.py`  
 
 Automation: `.cursor/automations/free-gtm-dach-to-agent.md` · `.github/workflows/free-gtm-weekly.yml`
 
