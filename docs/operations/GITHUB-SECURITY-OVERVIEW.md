@@ -1,6 +1,6 @@
 # FILE: docs/operations/GITHUB-SECURITY-OVERVIEW.md
 # NIR: 02.08.2026 09:45
-# UPDATED: 02.08.2026 09:45
+# UPDATED: 02.08.2026 11:15
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Kurznotiz zu GitHub Security Overview (Policy, Private Reporting, CodeQL).
@@ -43,3 +43,21 @@ gh api repos/nexifyai-dev/nexify-agentur-plattform/private-vulnerability-reporti
 
 gh api repos/nexifyai-dev/nexify-agentur-plattform --jq .security_and_analysis
 ```
+
+## Accepted risks (Dependabot — do not fake-dismiss)
+
+| Package | Severity | Reason | Status |
+|---------|----------|--------|--------|
+| `ecdsa` (via python-jose) | high | No upstream patched release for Minerva-class timing; Linux JWT stack; migrate when alternative ready | Keep `tolerable_risk` with comment — do not silent-dismiss |
+| Starlette **1.x** bumps | various | Incompatible with pinned FastAPI until FastAPI supports Starlette 1.x (closed #149 / #251) | Documented; Dependabot 1.x PRs closed |
+| CVE-2025-62727 (Range DoS) starlette ≤0.49.0 | high | **Fixable on 0.x**: `starlette==0.49.1` needs FastAPI ≥0.121 (`starlette<0.50`) — not a 1.x-only fix | PR #260 |
+
+Dismiss alerts only with `tolerable_risk` + written reason when no patch exists, or after the fix lands on `main` (auto → fixed). Never dismiss critical/high without reason.
+
+## Triage snapshot (2026-08-02)
+
+- Code scanning open: 0
+- Secret scanning open: 0
+- Repo security advisories: 0
+- Dependabot open (pre-merge #260): 2× high (#86, #87, GHSA-7f5h-v6xp-fcq8)
+
