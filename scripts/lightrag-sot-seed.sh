@@ -14,6 +14,9 @@
 
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LIGHTRAG_URL="${LIGHTRAG_URL:-http://127.0.0.1:9621}"
 # Origin UI/health often on :9622; document insert bridge is :9621 (see sync-to-lightrag.py)

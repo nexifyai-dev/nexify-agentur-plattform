@@ -14,6 +14,9 @@
 
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 SITE_HEALTH="${SMOKE_BASE_URL:-https://www.nexifyai.cloud}/api/health"
 # Some setups expose health on apex
 SITE_HEALTH_ALT="${SMOKE_SITE_HEALTH_URL:-https://nexifyai.cloud/api/health}"

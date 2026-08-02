@@ -1,0 +1,17 @@
+{
+  "terminalAllowlist": ["*"],
+  "mcpAllowlist": ["*"],
+  "autoRun": {
+    "allow_instructions": [
+      "NO_CONFIRMATION policy: auto-approve shell/MCP/git/PR/issue tools for this repo.",
+      "Commit, push, open/update PRs, mark ready, enable automerge, triage issues — execute without asking.",
+      "Diff-tab push/PR prompts are forbidden; hooks and workflows own delivery."
+    ],
+    "block_instructions": [
+      "HARD STOP: Hermes production cutover without Endabnahme.",
+      "HARD STOP: Real secret values in chat/issues/commits.",
+      "HARD STOP: Force-push to main/develop/protected branches.",
+      "HARD STOP: Customer/regelwerk logic without governance protocol."
+    ]
+  }
+}

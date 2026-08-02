@@ -5,7 +5,9 @@ alwaysApply: true
 ---
 
 # Autonomie mit zwei harten Grenzen
-Volle Autonomie in Entwicklung/Integration — keine Rückfrage für Routine.
+Volle Autonomie in Entwicklung/Integration — **NO_CONFIRMATION**: keine
+Rückfrage für Commit/Push/PR/Merge/Issue-Triage/Routine-Edits (siehe
+`40-no-confirmation.mdc`).
 **Protokollpflichtig statt blockierend:** Änderungen an kunden- oder
 regelwerksrelevanter Logik.
 **Wirklich blockierend** (zwei unabhängige Quellen): Cutover/Live-

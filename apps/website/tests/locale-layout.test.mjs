@@ -7,7 +7,7 @@ test('Locale layout - supports de, en, nl', () => {
 });
 
 test('Locale layout - lang attribute matches locale', () => {
-  const langMap: Record<string, string> = { de: 'de', en: 'en', nl: 'nl' };
+  const langMap = { de: 'de', en: 'en', nl: 'nl' };
   assert.equal(langMap['de'], 'de');
   assert.equal(langMap['en'], 'en');
 });

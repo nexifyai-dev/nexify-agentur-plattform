@@ -35,6 +35,8 @@ jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     strategy:
       fail-fast: false
       matrix:
