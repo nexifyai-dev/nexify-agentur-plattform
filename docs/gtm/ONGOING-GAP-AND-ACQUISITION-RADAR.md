@@ -94,6 +94,7 @@ Agents: neue Zeilen hier + Issue-Nummer nach `gh issue create`.
 | 2026-08-02 | OpenMCP/Spaether/Paperclip utilization decision | #209 | **closing** |
 | 2026-08-02 | GSC verify + WhatsApp Business Profile (Human) | #210 | P1 — GSC Ownership+Sitemap DONE; WhatsApp offen |
 | 2026-08-02 | GSC Property + Sitemap submit (Human) | #238 | **closed** — submitted 2026-08-02 |
+| 2026-08-02 | GSC coverage weekly check | #245 | P2 — recurring Coverage / Soft-404 / Indexing |
 | 2026-08-02 | Echte Testimonial-Pipeline (Permission-first) | #211 | **closing** (pipeline) |
 | 2026-08-02 | Lead-Magnet PDF Asset + Thank-you mail | #212 | **closing** |
 
