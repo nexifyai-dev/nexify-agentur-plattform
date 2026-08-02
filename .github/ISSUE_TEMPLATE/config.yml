@@ -1,0 +1,6 @@
+# FILE: .github/ISSUE_TEMPLATE/config.yml
+blank_issues_enabled: true
+contact_links:
+  - name: Issues Automation Docs
+    url: https://github.com/nexifyai-dev/nexify-agentur-plattform/blob/main/docs/operations/ISSUES-AUTOMATION.md
+    about: Lifecycle (label → agent → PR → close → stale)
