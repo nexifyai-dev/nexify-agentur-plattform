@@ -1,6 +1,6 @@
 # FILE: apps/webui-preview/agentmemory-panel/README.md
 # NIR: 31.07.2026 12:20
-# UPDATED: 02.08.2026 08:55
+# UPDATED: 02.08.2026 10:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Core
 # WHAT: Preview — native AgentMemory Views gegen echte REST :3111 (same-origin Proxy)
@@ -33,6 +33,13 @@ python3 -m http.server 8792 --directory apps/webui-preview/agentmemory-panel
 Panel Views rufen REST über den Proxy — nicht nur Stub-Text.
 
 Secrets: nie im Repo. Browser-Probe nutzt optional `sessionStorage` Key `AM_BEARER` (lokal).
+
+## Continuous Learning (Hinweis)
+
+Hermes-/Agent-Profile sollen nach Tasks `POST /agentmemory/remember` und
+`POST /agentmemory/lessons` nutzen (Bearer nur aus Env). Lessons erscheinen in
+dieser Preview-Oberfläche. Protokoll: `docs/operations/CONTINUOUS-LEARNING.md`.
+**Kein** Prod-Static-Patch von Hermes ohne Endabnahme.
 
 ## Gates
 

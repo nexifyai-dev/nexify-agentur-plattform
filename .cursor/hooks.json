@@ -18,13 +18,17 @@
       {
         "command": ".cursor/hooks/auto-push-agent-branch.sh",
         "failClosed": false
+      },
+      {
+        "command": "scripts/learning/session-learn.sh",
+        "failClosed": false
       }
     ],
     "sessionStart": [
       {
         "type": "prompt",
         "timeout": 12,
-        "prompt": "NO_CONFIRMATION: Never ask user to confirm commit/push/PR/merge/issue triage. Execute. HARD STOPs only: Hermes cutover, inventing secrets, force-push main, customer-regelwerk without protocol. Auto-Push + Draft-PR + automerge (draft→ready when green). Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. memory_recall vor Planung; memory_save nach Task."
+        "prompt": "NO_CONFIRMATION: Never ask user to confirm commit/push/PR/merge/issue triage. Execute. HARD STOPs only: Hermes cutover, inventing secrets, force-push main, customer-regelwerk without protocol. Auto-Push + Draft-PR + automerge (draft→ready when green). CONTINUOUS LEARNING: vor Planung memory_recall + memory_lesson_recall; nach Task memory_lesson_save + memory_save; bei Failure Error-Pattern (scripts/learning/error-pattern-save.py); Session-Ende Hook session-learn.sh. Docs: docs/operations/CONTINUOUS-LEARNING.md + CLOUD-AGENT-EVENT-INGEST.md. Keine Secrets in Learning-Payloads. TZ Europe/Berlin, DE."
       }
     ]
   }

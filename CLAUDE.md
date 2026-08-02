@@ -124,29 +124,27 @@ Vor JEDEM Commit:
 10. Merge zu main:         Production auto-deploy
 ```
 
-### 7. Brain Integration
+### 7. Brain Integration + Continuous Learning
+
+**Protokoll:** Recall → Act → Verify → Learn → Index LightRAG  
+SoT: `docs/operations/CONTINUOUS-LEARNING.md` · Rule: `.cursor/rules/50-continuous-learning.mdc`
 
 **Vor Arbeitsbeginn:**
 ```python
-# 1. Load project context
 memory_recall("nexify-agentur-plattform deployment status")
-
-# 2. Save after completion
-memory_save(
-    content="Deployed feature XYZ to production. Tested e2e. Zero errors.",
-    type="workflow"
-)
+memory_lesson_recall("pitfall OR error-pattern")  # wenn Tool verfügbar
 ```
 
-**Schreiben in AgentMemory + LightRAG:**
+**Nach Abschluss:**
 ```python
-# Pseudo-code
-agentmemory.save(
-    entity="deployment-xyz",
-    data={"status": "complete", "tests": "passing"},
-    review_due="2026-08-01"
-)
+memory_lesson_save(content="Was funktioniert / vermeiden …", confidence=0.6, tags="…")
+memory_save(content="…", type="workflow")  # oder bug|pattern|architecture|fact
+# Failure → scripts/learning/error-pattern-save.py --pitfall V-XX …
+# LightRAG: MCP insert oder Env LIGHTRAG_URL + LIGHTRAG_API_KEY — kein Fake-Dual-Write
 ```
+
+**Session-Ende (Hook):** `scripts/learning/session-learn.sh` (fail-soft).  
+**Commit:** `.githooks/post-commit-dual-write` (AM + LightRAG best-effort).
 
 ### 8. MCP-Integration
 
@@ -266,4 +264,6 @@ Rotate credentials in /opt/nexifyai/security/keys/
 
 ---
 ## NeXifyAI Integration (28.07.2026)
-GitLab CI/CD Pipeline aktiv. LightRAG+AgentMemory Dual-Write via post-commit Hook.
+GitLab CI/CD Pipeline aktiv. Post-commit Dual-Write (AM remember + LightRAG best-effort)
+via `.githooks/post-commit-dual-write`. Continuous Learning: Rule 50 + Session-Hook +
+`docs/operations/CONTINUOUS-LEARNING.md` (CI-Learn-Workflow speichert Outcomes soft).
