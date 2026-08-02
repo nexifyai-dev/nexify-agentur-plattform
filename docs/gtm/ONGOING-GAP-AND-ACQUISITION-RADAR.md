@@ -109,3 +109,5 @@ python3 scripts/learning/note-acquisition-gaps.py --summary "…"
 ```
 
 Oder manuell: 1–3 Acquisition-Opportunities in AgentMemory speichern + Radar updaten.
+
+| 2026-08-02 | SEO/AEO full-service landings + PAGE1 keyword map | cursor/seo-page1-all-services-7dd5 | **shipping** |
