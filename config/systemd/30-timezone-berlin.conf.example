@@ -1,0 +1,9 @@
+# FILE: config/systemd/30-timezone-berlin.conf.example
+# WHAT: Drop-in template — Environment=TZ=Europe/Berlin for NeXify units
+# WHY: Process-local TZ even when timers already follow host Europe/Berlin
+# INSTALL: sudo cp config/systemd/30-timezone-berlin.conf.example \
+#   /etc/systemd/system/<unit>.d/30-timezone-berlin.conf && sudo systemctl daemon-reload
+# DOCS-REF: docs/operations/TIMEZONE-EUROPE-BERLIN.md
+
+[Service]
+Environment=TZ=Europe/Berlin
