@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { ICONS } from "@/components/icon-map";
 import { useContent } from "@/lib/content";
@@ -60,9 +61,9 @@ export function ProcessPage() {
             <section className="glass h-full p-8" data-testid="process-transparency">
               <h2 className="font-[family-name:var(--font-heading)] text-xl font-medium text-white">{t.process.transparencyTitle}</h2>
               <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-400">{t.process.transparencyText}</p>
-              <a href="/konto" className="mt-6 inline-flex text-sm font-semibold text-zinc-200 underline underline-offset-4 hover:text-white" data-testid="process-portal-link">
+              <Link href="/konto" className="mt-6 inline-flex text-sm font-semibold text-zinc-200 underline underline-offset-4 hover:text-white" data-testid="process-portal-link">
                 Kundenportal
-              </a>
+              </Link>
             </section>
           </Reveal>
           <Reveal delay={80}>
@@ -82,10 +83,10 @@ export function ProcessPage() {
 
         <Reveal>
           <div className="mt-16 flex flex-wrap gap-4">
-            <a href="/kontakt" className="btn-primary" data-testid="process-cta-contact">Kontakt</a>
-            <a href="/preise" className="btn-ghost" data-testid="process-cta-pricing">Preise</a>
-            <a href="/vergleich" className="btn-ghost" data-testid="process-cta-compare">Vergleich</a>
-            <a href="/rueckruf" className="btn-ghost" data-testid="process-cta-callback">Rückruf</a>
+            <Link href="/kontakt" className="btn-primary" data-testid="process-cta-contact">Kontakt</Link>
+            <Link href="/preise" className="btn-ghost" data-testid="process-cta-pricing">Preise</Link>
+            <Link href="/vergleich" className="btn-ghost" data-testid="process-cta-compare">Vergleich</Link>
+            <Link href="/rueckruf" className="btn-ghost" data-testid="process-cta-callback">Rückruf</Link>
           </div>
         </Reveal>
       </div>
