@@ -1,0 +1,20 @@
+# Next.js / website Docker build exclusions (context: apps/website or copied into root builds)
+.git
+.github
+.next
+node_modules
+out
+coverage
+.turbo
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+tests/
+playwright-report
+test-results
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store

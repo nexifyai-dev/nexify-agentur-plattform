@@ -28,3 +28,9 @@ Standard-Lieferpfad: Branch → GitHub PR → CI → GitLab-Mirror → Staging �
 - Nicht direkt auf `main` committen.
 - Keine Force-Push auf shared Branches ohne Absprache.
 - Cloud-Agent: PRs über vorgesehene Tools, nicht `gh` writes wenn gesperrt.
+
+## Automation (2026-08-02)
+
+- Nach Commit auf `cursor/*`: Hook auto-push (kein Diff-Tab).
+- Push triggert `agent-branch-autopilot` → Draft-PR + Label `automerge`.
+- CI green → `pr-auto-merge` (Guards). Details: `docs/operations/CLOUD-AGENT-EVENT-INGEST.md`.

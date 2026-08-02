@@ -1,0 +1,146 @@
+# FILE: .github/workflows/event-to-cloud-agent.yml
+# NIR: 02.08.2026 08:30
+# UPDATED: 02.08.2026 08:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: GitHub-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
+# WHY: Alle Meldungen müssen Agent-Läufe starten ohne Desktop/IDE.
+# BEST-PRACTICE: Circuit-Breaker vor Launch; Dry-Skip wenn Secret fehlt; Idempotenz-Key.
+# PITFALL: V-CA-01: Ohne CURSOR_API_KEY nur AgentMemory-Action anlegen, nie Secret loggen.
+# DEPENDS: CURSOR_API_KEY (GitHub Secret), optional CIRCUIT_BREAKER_URL, AGENTMEMORY_SECRET
+# DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
+# SESSION: cloud-agent-event-ingest-7dd5
+
+name: Event → Cursor Cloud Agent
+
+on:
+  workflow_run:
+    workflows: ["CI — Test & Lint"]
+    types: [completed]
+  issues:
+    types: [opened, reopened, labeled]
+  pull_request:
+    types: [opened, reopened, labeled]
+  repository_dispatch:
+    types:
+      - agent-fix
+      - sentry-alert
+      - slack-alert
+      - linear-issue
+      - vercel-deploy-fail
+      - health-alert
+      - gitlab-ci-fail
+      - cloudflare-alert
+      - resend-bounce
+      - website-error
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Prompt for cloud agent"
+        required: true
+        type: string
+      source:
+        description: "Event source tag"
+        required: false
+        default: manual
+        type: string
+      auto_pr:
+        description: "Create PR automatically"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: cloud-agent-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number || github.event.client_payload.dedupe_key || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  dispatch-cloud-agent:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide whether to launch
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WR_NAME: ${{ github.event.workflow_run.name }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          ACTION: ${{ github.event.action }}
+          DISPATCH_TYPE: ${{ github.event.action }}
+        run: |
+          set -euo pipefail
+          launch=0
+          reason="skip"
+          case "$EVENT_NAME" in
+            workflow_run)
+              if [ "${WR_CONCLUSION:-}" = "failure" ]; then
+                launch=1
+                reason="ci_failure:${WR_NAME:-CI}"
+              fi
+              ;;
+            issues)
+              if echo ",${ISSUE_LABELS}," | grep -Eq ',(agent-fix|cursor-fix|autonomous),'; then
+                launch=1
+                reason="issue_label"
+              elif [ "${ACTION:-}" = "opened" ] || [ "${ACTION:-}" = "reopened" ]; then
+                launch=1
+                reason="issue_opened_triage"
+              fi
+              ;;
+            pull_request)
+              if echo ",${PR_LABELS}," | grep -Eq ',(agent-fix|cursor-fix),'; then
+                launch=1
+                reason="pr_label_fix"
+              fi
+              ;;
+            repository_dispatch|workflow_dispatch)
+              launch=1
+              reason="dispatch:${DISPATCH_TYPE:-manual}"
+              ;;
+          esac
+          echo "launch=$launch" >> "$GITHUB_OUTPUT"
+          echo "reason=$reason" >> "$GITHUB_OUTPUT"
+          echo "gate launch=$launch reason=$reason"
+
+      - name: Build prompt + launch (or queue Action)
+        if: steps.gate.outputs.launch == '1'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          AGENTMEMORY_SECRET: ${{ secrets.AGENTMEMORY_SECRET }}
+          AGENTMEMORY_URL: ${{ secrets.AGENTMEMORY_URL }}
+          CIRCUIT_BREAKER_URL: ${{ secrets.CIRCUIT_BREAKER_URL }}
+          EVENT_NAME: ${{ github.event_name }}
+          GATE_REASON: ${{ steps.gate.outputs.reason }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          REF: ${{ github.event.pull_request.head.ref || github.event.workflow_run.head_branch || 'main' }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          WR_URL: ${{ github.event.workflow_run.html_url }}
+          WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+          MANUAL_PROMPT: ${{ github.event.inputs.prompt }}
+          MANUAL_SOURCE: ${{ github.event.inputs.source }}
+          MANUAL_AUTO_PR: ${{ github.event.inputs.auto_pr }}
+          DISPATCH_TYPE: ${{ github.event.action }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 scripts/event-ingest/dispatch_cloud_agent.py \
+            --repo-url "$REPO_URL" \
+            --ref "$REF" \
+            --event-name "$EVENT_NAME" \
+            --reason "$GATE_REASON" \
+            --run-id "$GITHUB_RUN_ID"
