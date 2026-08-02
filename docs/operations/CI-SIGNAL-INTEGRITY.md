@@ -30,8 +30,9 @@ workflow turns red when they are absent so “Deploy success” cannot mean “d
 
 ## Primary fix
 
-`deploy-vercel.yml` preflight **exits 1** when any of `VERCEL_TOKEN` (or
-`VERCEL_ACCESS_TOKEN`), `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` is empty.
+`deploy-vercel.yml` preflight **exits 1** when `VERCEL_TOKEN` is missing
+(fallbacks: `VERCEL_ACCESS_TOKEN`, secret or variable). `VERCEL_ORG_ID` and
+`VERCEL_PROJECT_ID` are optional context hints and emit warnings when absent.
 
 ## Follow-up (not in this change)
 
