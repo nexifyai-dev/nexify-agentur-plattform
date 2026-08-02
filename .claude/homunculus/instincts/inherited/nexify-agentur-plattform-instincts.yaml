@@ -168,11 +168,9 @@ Follow the ecc-bundle-integration workflow:
 3. Add or update .claude/skills/[skill-name]/SKILL.md
 4. Add or update .claude/homunculus/instincts/inherited/[skill-name]-instincts.yaml
 5. Add or update .claude/commands/project-snapshot-or-cleanup.md
-6. Add or update .codex/config.toml
-7. Add or update .codex/AGENTS.md
-8. Add or update .codex/agents/[agent].toml
-9. Add or update .agents/skills/[skill-name]/SKILL.md
-10. Add or update .agents/skills/[skill-name]/agents/openai.yaml
+6. Add or update .agents/skills/[skill-name]/SKILL.md
+7. Add or update .agents/skills/[skill-name]/agents/openai.yaml (Agents Skills metadata; not OpenAI Codex)
+8. Do not recreate .codex/ — OpenAI Codex retired 2026-08-02; Cursor Agent only
 
 ## Evidence
 
@@ -435,7 +433,7 @@ source_repo: nexifyai-dev/nexify-agentur-plattform
 
 ## Action
 
-Add or update all relevant ECC bundle files across .claude, .codex, and .agents directories as per the workflow steps.
+Add or update all relevant ECC bundle files across .claude, .agents, and .cursor directories as per the workflow steps. Do not recreate .codex/ (OpenAI Codex retired 2026-08-02).
 
 ## Evidence
 
