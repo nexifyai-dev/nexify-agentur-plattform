@@ -84,7 +84,7 @@ jobs:
             echo "skip: draft PR"
             exit 0
           fi
-          if [ "$base" != "main" ] && [ "$base" != "develop" ]; then
+          if [ "$base" != "main" ]; then
             echo "skip: base branch '$base' not allowlisted"
             exit 0
           fi
