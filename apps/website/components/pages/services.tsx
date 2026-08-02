@@ -77,9 +77,18 @@ export function ServicesPage() {
         <Reveal>
           <div className="mt-16 flex flex-col items-stretch justify-between gap-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:flex-row sm:items-center sm:p-8">
             <p className="max-w-xl text-zinc-400">{t.pricing.vatNote}</p>
-            <Link href="/kontakt" className="btn-primary w-full justify-center sm:w-auto" data-testid="services-cta">
-              {t.common.cta} <ArrowRight size={16} />
-            </Link>
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <Link
+                href="/blog"
+                className="btn-ghost w-full justify-center sm:w-auto"
+                data-testid="services-blog-link"
+              >
+                Blog lesen
+              </Link>
+              <Link href="/kontakt" className="btn-primary w-full justify-center sm:w-auto" data-testid="services-cta">
+                {t.common.cta} <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
         </Reveal>
       </div>

@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+export const metadata: Metadata = {
+  title: "Seite nicht gefunden",
+  description: "Die angeforderte Seite existiert nicht (mehr).",
+  robots: { index: false, follow: false },
+};
+
 export default function NotFound() {
   return (
-    <main className="grid min-h-[70vh] place-items-center px-5 text-center">
+    <main className="grid min-h-[70vh] place-items-center px-5 text-center" data-testid="locale-not-found-page">
       <div>
         <p className="font-mono text-[80px] font-bold tracking-[-.08em] text-[var(--text-4)]">404</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-[-.04em] text-[var(--text-1)]">Seite nicht gefunden.</h1>
@@ -12,7 +19,7 @@ export default function NotFound() {
           Der Link ist möglicherweise veraltet oder die URL enthält einen Tippfehler.
         </p>
         <Button asChild className="mt-8" variant="outline">
-          <Link href="/de"><ArrowLeft className="size-4" /> Zur Startseite</Link>
+          <Link href="/"><ArrowLeft className="size-4" /> Zur Startseite</Link>
         </Button>
       </div>
     </main>

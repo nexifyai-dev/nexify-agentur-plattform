@@ -183,6 +183,28 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* BLOG TEASER — internal SEO */}
+      <section className="py-12 md:py-16" data-testid="home-blog-teaser">
+        <div className="site-container">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <span className="eyebrow">Blog · DACH</span>
+                <h2 className="mt-4 max-w-2xl font-[family-name:var(--font-heading)] text-3xl font-light tracking-tight text-white sm:text-4xl">
+                  Praxis zu KI &amp; Automatisierung
+                </h2>
+                <p className="mt-4 max-w-xl text-zinc-500">
+                  Deutschsprachige Artikel für KMU — Kosten, Use-Cases Venlo/NRW und Findbarkeit.
+                </p>
+              </div>
+              <Link href="/blog" className="btn-ghost !py-2.5 text-sm" data-testid="home-blog-link">
+                Zum Blog <ArrowUpRight size={15} />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* CTA BAND */}
       <section className="py-16 md:py-28">
         <div className="site-container">
