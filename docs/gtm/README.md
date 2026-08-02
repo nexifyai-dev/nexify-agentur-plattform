@@ -14,10 +14,20 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [CONVERSION_LOOP_V1.md](CONVERSION_LOOP_V1.md) | Lead → Angebot → KPI |
 | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) | Skalierungsgrenzen |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
+| [GBP-OPS-CHECKLIST.md](GBP-OPS-CHECKLIST.md) | Google Business Ops (Human Gate) |
+| [EMAIL-NURTURE-OPTIN.md](EMAIL-NURTURE-OPTIN.md) | Opt-in Nurture (UWG-safe) |
+| [UWG-EMAIL-OPTIN-ONLY.md](UWG-EMAIL-OPTIN-ONLY.md) | **Hard stop:** DE Cold-Mail ohne Consent (§7 UWG) |
+| [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
+| [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
+| [NEUKUNDEN-BEGEISTERUNG.md](NEUKUNDEN-BEGEISTERUNG.md) | P0 Delight nach First Touch · Koordination Zero-Cost-Leads |
+| [ONBOARDING-EMAIL-TEMPLATES.md](ONBOARDING-EMAIL-TEMPLATES.md) | Inbound-Mail-Templates + Versand-Hook |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
 
 Script: `python3 scripts/gtm/demand_scan_prepare.py --demo`  
 Tests: `python3 scripts/gtm/test_demand_scan_prepare.py`
+
+Onboarding-Mail (dry-run): `python3 scripts/gtm/send-onboarding-email.py --template lead_magnet --to dry@example.com --name Test`  
+Tests: `python3 scripts/gtm/test_send_onboarding_email.py`
 
 ## Issue closures (2026-08-02)
 
@@ -29,5 +39,5 @@ Tests: `python3 scripts/gtm/test_demand_scan_prepare.py`
 
 ## ICP Demand 2026
 - `ICP-HIGH-DEMAND-2026.md`, `COMPETITOR-PLAYBOOK-COPY.md`, `ICP-MAIL-TEMPLATES-DE.md`, `ICP-7-DAY-ATTACK.md`
-- Scripts: `scripts/gtm/icp_lead_discover.py`, `icp_mail_send.py`
+- Scripts: `scripts/gtm/icp_lead_discover.py`, `scripts/gtm/icp_mail_send.py`
 - Website: `/branchen`

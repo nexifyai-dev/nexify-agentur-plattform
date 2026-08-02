@@ -13,7 +13,7 @@
 |-------|------|
 | Local | `apps/website/.env.local` (gitignored) from `.env.example` |
 | Vercel | Project → **Settings → Environment Variables** (Production / Preview / Development) |
-| GitHub Actions deploy | Repo secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
+| GitHub Actions deploy | Secret/Variable `VERCEL_TOKEN` (or `VERCEL_ACCESS_TOKEN`), optional `VERCEL_ORG_ID` + `VERCEL_PROJECT_ID` |
 
 ## Variable names
 
@@ -31,7 +31,7 @@
 
 Workflow: `.github/workflows/deploy-vercel.yml` (push `main` + `workflow_dispatch`).
 
-Missing secrets → preflight **skips deploy** (see CI signal integrity docs / #147 — skip must not look like success for gated checks).
+Missing token secret/variable → preflight **fails deploy** (see CI signal integrity docs / #138). Missing `VERCEL_ORG_ID`/`VERCEL_PROJECT_ID` warns and continues.
 
 ## Preview vs Production
 
