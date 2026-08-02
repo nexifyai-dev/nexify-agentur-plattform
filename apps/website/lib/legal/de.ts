@@ -1,73 +1,150 @@
-export type LegalSection = { heading: string; paragraphs?: string[]; bullets?: string[] };
-export type LegalPageData = { slug: string; title: string; intro: string; updated: string; sections: LegalSection[] };
+// FILE: apps/website/lib/legal/de.ts
+// UPDATED: 02.08.2026 10:00
+// WHAT: Deutsche Rechtstexte (Impressum, Datenschutz, AGB, AVV, Widerruf, Cookies, KI-Hinweise)
+// WHY: Production-grade Best-Practice-Templates; keine erfundenen Stammdaten
+// PITFALL: Fehlende Fakten als [BITTE ERGÄNZEN]
 
-const C = {
-  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
-  owner: "Pascal Courbois",
-  address: "Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande",
-  email: "mail@nexifyai.cloud",
-  phone: "+31 6 133 188 56",
-  kvk: "90483944",
-  vat: "NL865786276B01",
+export type LegalSubsection = {
+  id?: string;
+  heading: string;
+  paragraphs?: string[];
+  bullets?: string[];
+};
+
+export type LegalSection = {
+  id?: string;
+  heading: string;
+  paragraphs?: string[];
+  bullets?: string[];
+  subsections?: LegalSubsection[];
+};
+
+export type LegalRelatedLink = { label: string; href: string };
+
+export type LegalPageData = {
+  slug: string;
+  title: string;
+  intro: string;
+  updated: string;
+  sections: LegalSection[];
+  related?: LegalRelatedLink[];
 };
 
 export const legalDe: Record<string, LegalPageData> = {
   impressum: {
     slug: "impressum",
     title: "Impressum",
-    intro: "Anbieterkennzeichnung und Kontaktinformationen von NeXify AI by NeXify – Chat it. Automate it.",
-    updated: "Juni 2026",
+    intro: "Anbieterkennzeichnung gemäß §§ 5, 6 Digitale-Dienste-Gesetz (DDG) für NeXify AI by NeXify – Chat it. Automate it. Sitz: Venlo (NL), Angebot ausgerichtet auf den DACH-Markt.",
+    updated: "2. August 2026",
+    related: [
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "AGB", href: "/agb" },
+      { label: "AVV", href: "/avv" },
+      { label: "Widerruf", href: "/widerruf" },
+      { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+    ],
     sections: [
-      { heading: "Angaben zum Unternehmen", paragraphs: [C.legalName, `Eenmanszaak (Einzelunternehmen nach niederländischem Recht), Inhaber: ${C.owner}`, C.address] },
-      { heading: "Kontakt", paragraphs: [`E-Mail: ${C.email}`, `Telefon: ${C.phone}`, "Web: nexifyai.cloud"] },
       {
-        heading: "Register- und Steuerangaben",
+        id: "unternehmen",
+        heading: "1. Angaben zum Unternehmen",
         paragraphs: [
-          `Kamer van Koophandel (KvK): ${C.kvk}`,
-          `BTW-Identifikationsnummer (Umsatzsteuer-ID): ${C.vat}`,
-          "Tätigkeitsbereich: IT-Beratung, AI-gestützte Automatisierung, Softwareentwicklung, Webentwicklung und E-Commerce-Lösungen.",
+          "NeXify AI by NeXify – Chat it. Automate it.",
+          "Eenmanszaak (Einzelunternehmen nach niederländischem Recht), Inhaber: Pascal Courbois.",
+          "Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande.",
+          "Das Unternehmen ist unter dem Markennamen „NeXify AI“ bzw. „NeXify AI by NeXify – Chat it. Automate it.“ tätig.",
         ],
       },
       {
-        heading: "Vertretung und redaktionelle Verantwortung",
-        paragraphs: [`${C.owner}, Inhaber / Directeur.`, `Verantwortlich für redaktionelle Inhalte: ${C.owner}, Anschrift wie oben.`],
+        id: "kontakt",
+        heading: "2. Kontakt",
+        paragraphs: [
+          "E-Mail: mail@nexifyai.cloud",
+          "Telefon: +31 6 133 188 56",
+          "Web: https://www.nexifyai.cloud",
+          "Elektronische Erreichbarkeit ist jederzeit über die genannte E-Mail-Adresse gewährleistet.",
+        ],
       },
       {
-        heading: "Aufsicht und anwendbares Recht",
+        id: "register",
+        heading: "3. Register- und Steuerangaben",
+        paragraphs: [
+          "Kamer van Koophandel (KvK / niederländische Handelskammer): 90483944.",
+          "BTW-Identifikationsnummer (Umsatzsteuer-ID): NL865786276B01.",
+          "[BITTE ERGÄNZEN: RSIN (falls separat auszuweisen) / Handelsregisterauszug-Datum der letzten Prüfung]",
+          "Tätigkeitsbereich: IT-Beratung, AI-gestützte Automatisierung, Softwareentwicklung, Webentwicklung, E-Commerce-Lösungen und digitale B2B-Dienstleistungen.",
+        ],
+      },
+      {
+        id: "vertretung",
+        heading: "4. Vertretung und redaktionelle Verantwortung",
+        paragraphs: [
+          "Pascal Courbois, Inhaber / Directeur.",
+          "Verantwortlich für redaktionelle Inhalte dieser Website: Pascal Courbois, Anschrift wie unter Ziffer 1.",
+          "Es besteht keine journalistische Redaktion im Sinne des Medienstaatsvertrags; Inhalte dienen der Unternehmensdarstellung und der Anbahnung von B2B-Aufträgen.",
+        ],
+      },
+      {
+        id: "ddg",
+        heading: "5. Anbieterkennzeichnung und anwendbares Recht",
         paragraphs: [
           "Als in den Niederlanden ansässiges Einzelunternehmen unterliegt NeXify AI dem niederländischen Handels- und Gewerberecht. Zuständige Handelskammer ist die Kamer van Koophandel (KvK).",
-          "Für datenschutzrechtliche Belange ist die Autoriteit Persoonsgegevens (Den Haag, Niederlande) die zuständige Aufsichtsbehörde.",
+          "Soweit sich dieses Angebot erkennbar an Nutzer in Deutschland richtet (deutsche Sprache, DACH-Fokus), werden die Informationspflichten der deutschen Anbieterkennzeichnung nach §§ 5, 6 DDG (vormals § 5 TMG) freiwillig und vollständig erfüllt.",
+          "Für datenschutzrechtliche Belange ist die Autoriteit Persoonsgegevens (Den Haag, Niederlande) die federführende Aufsichtsbehörde.",
         ],
       },
       {
-        heading: "B2B-Ausrichtung",
+        id: "versicherung",
+        heading: "6. Berufshaftpflicht / Versicherung",
         paragraphs: [
-          "Das Angebot richtet sich ausschließlich an Unternehmer, juristische Personen des öffentlichen Rechts und vergleichbare Organisationen, die in Ausübung ihrer gewerblichen oder selbstständigen beruflichen Tätigkeit handeln. Verträge mit Verbrauchern werden nicht geschlossen.",
+          "[BITTE ERGÄNZEN: Berufshaftpflichtversicherung – Versicherer, Police-Nr., räumlicher Geltungsbereich, Deckungssumme]",
+          "Soweit eine Berufshaftpflicht besteht, wird sie auf Anfrage von Geschäftspartnern in angemessenem Umfang nachgewiesen.",
         ],
       },
       {
-        heading: "Haftung für Inhalte",
+        id: "b2b",
+        heading: "7. B2B-Ausrichtung",
         paragraphs: [
-          "Die Inhalte dieser Website werden mit größter Sorgfalt erstellt und regelmäßig aktualisiert. Eine Gewähr für Richtigkeit, Vollständigkeit und Aktualität wird nur übernommen, soweit dies ausdrücklich vereinbart oder gesetzlich zwingend vorgeschrieben ist.",
-          "Preisangaben auf dieser Website stellen kein bindendes Angebot dar, sondern eine transparente Orientierung. Verbindlich sind ausschließlich individuell erstellte und schriftlich bestätigte Angebote.",
+          "Das Angebot richtet sich ausschließlich an Unternehmer, juristische Personen des öffentlichen Rechts und vergleichbare Organisationen. Verträge mit Verbrauchern werden nicht geschlossen.",
+          "Mit Nutzung der Website und Kontaktaufnahme bestätigt der Interessent, als Unternehmer zu handeln, sofern er eine Beauftragung anstrebt.",
         ],
       },
       {
-        heading: "Haftung für Links",
+        id: "haftung-inhalte",
+        heading: "8. Haftung für Inhalte",
         paragraphs: [
-          "Verlinkte externe Angebote unterliegen der Verantwortung ihrer jeweiligen Betreiber. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Rechtswidrige Inhalte werden nach Kenntnis und angemessener Prüfung entfernt oder die Verlinkung beendet.",
+          "Die Inhalte dieser Website werden mit Sorgfalt erstellt. Eine Gewähr für Richtigkeit, Vollständigkeit und Aktualität wird nur übernommen, soweit ausdrücklich vereinbart oder gesetzlich zwingend.",
+          "Preisangaben und Richtdauern sind Orientierung, kein bindendes Angebot. Verbindlich sind individuell bestätigte Angebote.",
         ],
       },
       {
-        heading: "Urheberrecht",
+        id: "haftung-links",
+        heading: "9. Haftung für Links",
         paragraphs: [
-          "Sämtliche Inhalte, Grafiken, Logos und Gestaltungselemente dieser Website unterliegen dem Urheberrecht. Jede Verwertung außerhalb der gesetzlichen Schranken bedarf der vorherigen schriftlichen Zustimmung. Marken- und Produktnamen Dritter sind Eigentum ihrer jeweiligen Inhaber.",
+          "Verlinkte externe Angebote unterliegen der Verantwortung ihrer Betreiber. Rechtswidrige Inhalte werden nach Kenntnis entfernt oder die Verlinkung beendet.",
         ],
       },
       {
-        heading: "Online-Streitbeilegung",
+        id: "urheber",
+        heading: "10. Urheberrecht und Marken",
         paragraphs: [
-          "Da NeXify AI ausschließlich B2B-Leistungen anbietet, besteht keine Verpflichtung und keine Teilnahme an Verbraucherschlichtungsverfahren. Anfragen zu Verträgen oder Leistungen können direkt an die oben genannte E-Mail-Adresse gerichtet werden.",
+          "Inhalte, Grafiken, Logos und Gestaltung unterliegen dem Urheberrecht. Verwertung außerhalb gesetzlicher Schranken bedarf schriftlicher Zustimmung.",
+          "Marken Dritter sind Eigentum ihrer Inhaber.",
+        ],
+      },
+      {
+        id: "streit",
+        heading: "11. Online-Streitbeilegung",
+        paragraphs: [
+          "Als ausschließlich B2B-Anbieter besteht keine Teilnahme an Verbraucherschlichtung. Die EU-OS-Plattform ist nicht einschlägig.",
+          "Anfragen: mail@nexifyai.cloud.",
+        ],
+      },
+      {
+        id: "hinweis",
+        heading: "12. Hinweis zur Rechtsqualität",
+        paragraphs: [
+          "Diese Anbieterkennzeichnung ist eine Best-Practice-Darstellung (u. a. §§ 5, 6 DDG, KvK). Sie ersetzt keine anwaltliche Prüfung.",
         ],
       },
     ],
@@ -75,100 +152,173 @@ export const legalDe: Record<string, LegalPageData> = {
   datenschutz: {
     slug: "datenschutz",
     title: "Datenschutzerklärung",
-    intro: "Umfassende Informationen zur Verarbeitung personenbezogener Daten auf dieser Website, im KI-Chat und im Rahmen geschäftlicher Anfragen gemäß DSGVO / AVG.",
-    updated: "Juni 2026",
+    intro: "Informationspflichten nach Art. 12–14 DSGVO (AVG) zur Verarbeitung personenbezogener Daten auf dieser Website, im KI-Chat und im Rahmen geschäftlicher B2B-Anfragen.",
+    updated: "2. August 2026",
+    related: [
+      { label: "Impressum", href: "/impressum" },
+      { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" },
+      { label: "AVV", href: "/avv" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+      { label: "AGB", href: "/agb" },
+    ],
     sections: [
       {
+        id: "verantwortlicher",
         heading: "1. Verantwortlicher",
-        paragraphs: [`${C.legalName}, ${C.address}.`, `Inhaber: ${C.owner}. Kontakt: ${C.email}, ${C.phone}.`],
-      },
-      {
-        heading: "2. Grundsätze der Verarbeitung",
         paragraphs: [
-          "NeXify AI verarbeitet personenbezogene Daten zweckgebunden, verhältnismäßig und nur so lange, wie dies für den jeweiligen Zweck, gesetzliche Pflichten oder die Wahrung berechtigter Interessen erforderlich ist (Art. 5 DSGVO).",
-          "Diese Website ist grundsätzlich ohne Nutzerkonto und ohne Marketing-Tracking nutzbar. Nicht notwendige Analyse- oder Werbecookies werden nicht standardmäßig eingesetzt.",
+          "NeXify AI by NeXify – Chat it. Automate it., Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande.",
+          "Inhaber: Pascal Courbois. Kontakt: mail@nexifyai.cloud, +31 6 133 188 56.",
+          "Web: https://www.nexifyai.cloud.",
         ],
       },
       {
-        heading: "3. Hosting, CDN und technische Protokolldaten",
+        id: "dsb",
+        heading: "2. Datenschutzbeauftragter",
         paragraphs: [
-          "Beim Aufruf der Website können technisch erforderliche Daten verarbeitet werden, insbesondere IP-Adresse, Zeitpunkt, aufgerufene Ressource, Referrer, Browser-/Geräteinformationen und Statuscodes. Dies dient der Auslieferung, Stabilität, Fehleranalyse und dem Schutz vor Missbrauch.",
-          "Zur Auslieferung und Absicherung der Website können Content-Delivery- und Schutzdienste (z. B. Cloudflare) sowie Hosting-Infrastruktur (z. B. Vercel oder eigene Server in der EU) eingesetzt werden. Mit den Anbietern bestehen, soweit erforderlich, Auftragsverarbeitungsverträge.",
-          "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und funktionsfähigen Webangebot). Protokolle werden auf das notwendige Maß begrenzt und nach Ablauf betrieblicher oder gesetzlicher Erfordernisse gelöscht oder anonymisiert.",
+          "Es ist derzeit kein Datenschutzbeauftragter im Sinne von Art. 37 DSGVO bestellt. Anfragen: mail@nexifyai.cloud (Betreff: Datenschutz).",
+          "[BITTE ERGÄNZEN: Bestätigung, ob künftig ein externer DSB bestellt wird / Kontaktdaten falls vorhanden]",
         ],
       },
       {
-        heading: "4. Kontaktformular und Kommunikation",
+        id: "grundsaetze",
+        heading: "3. Grundsätze der Verarbeitung",
         paragraphs: [
-          "Bei einer Anfrage werden die von Ihnen übermittelten Angaben verarbeitet, insbesondere Name, Unternehmen, Kontaktdaten, Projektangaben und Nachricht. Zweck ist die Bearbeitung der Anfrage, vorvertragliche Kommunikation und gegebenenfalls die Durchführung des Vertrags.",
-          "Rechtsgrundlagen sind Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen bzw. Vertragserfüllung) sowie Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an sachgerechter B2B-Kommunikation). Pflichtangaben sind im Formular gekennzeichnet.",
-          "Anfragedaten werden in einer gesicherten Datenbank (Supabase, PostgreSQL, Serverstandort EU) gespeichert.",
+          "Verarbeitung zweckgebunden, verhältnismäßig und speicherbegrenzt (Art. 5 DSGVO).",
+          "Website grundsätzlich ohne Nutzerkonto und ohne Marketing-Tracking nutzbar (siehe Cookie-Richtlinie).",
         ],
       },
       {
-        heading: "5. KI-Berater „NeXify AI“ (Live-Chat)",
+        id: "rechtsgrundlagen",
+        heading: "4. Rechtsgrundlagen im Überblick (Art. 6 DSGVO)",
         paragraphs: [
-          "Auf dieser Website steht ein KI-gestützter Berater („NeXify AI“) zur Verfügung. Bei Nutzung des Chats werden Ihre Chat-Nachrichten sowie eine zufällig erzeugte Sitzungskennung verarbeitet und gespeichert, um den Gesprächsverlauf bereitzustellen, Anfragen zu qualifizieren und auf Wunsch ein Angebot zu erstellen.",
-          "Zur Erzeugung der Antworten werden Chat-Inhalte an ein KI-Sprachmodell (Large Language Model) eines spezialisierten Anbieters übermittelt. Übermitteln Sie im Chat bitte keine sensiblen oder besonders schutzbedürftigen Daten. Die Chat-Inhalte werden nicht zur allgemeinen Modellschulung freigegeben, soweit dies nicht ausdrücklich vereinbart und rechtlich zulässig ist.",
-          "Geben Sie im Chat freiwillig Name, E-Mail-Adresse und Firma an, um ein Angebot zu erhalten, werden diese Daten zur Erstellung und Zusendung des Angebots sowie für eine angemessene geschäftliche Nachverfolgung (Follow-up-E-Mail) verwendet.",
-          "Rechtsgrundlagen: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen auf Ihre Anfrage) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an effizienter Erstberatung). Sie sind nicht verpflichtet, den Chat zu nutzen – alle Anliegen können alternativ per E-Mail oder Telefon gestellt werden.",
-          "Gedächtnisfunktion: Um wiederkehrende Interessenten und Kunden über mehrere Kontakte hinweg individuell beraten zu können, können zentrale Gesprächsinhalte (z. B. Branche, Projektziele, Präferenzen) in verdichteter Form als Merkposten gespeichert werden. Hierfür wird der spezialisierte Dienst Mem0 (Mem0 AI, USA) eingesetzt; die Übermittlung erfolgt auf Grundlage von EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Rechtsgrundlage der Speicherung ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an personalisierter, effizienter Betreuung). Sie können dieser Speicherung jederzeit formlos widersprechen (mail@nexifyai.cloud); die Merkposten werden dann gelöscht.",
-          "Keine automatisierte Entscheidung im Sinne des Art. 22 DSGVO: Der KI-Berater trifft keine Entscheidungen mit Rechtswirkung oder ähnlich erheblicher Beeinträchtigung. Angebote sind unverbindliche Indikationen und werden vor Vertragsschluss stets menschlich geprüft.",
+          "Je nach Vorgang stützen wir uns insbesondere auf:",
         ],
-      },
-      {
-        heading: "6. E-Mail-Versand und Dienstleister",
-        paragraphs: [
-          "Für den technischen Versand von Formularbestätigungen, Angeboten und transaktionalen E-Mails wird ein spezialisierter E-Mail-Dienst (Resend) eingesetzt. Dabei werden nur die für Versand, Zustellung und Missbrauchsschutz notwendigen Daten verarbeitet (Empfängeradresse, Inhalt, Zustellstatus).",
-          "Eingehende E-Mails an mail@nexifyai.cloud (Postfach bei Hostinger) werden zur effizienten Bearbeitung KI-gestützt vorsortiert (z. B. Erkennung unerwünschter Werbung) und bei geschäftlichen Anfragen automatisiert beantwortet. Sie werden im automatisierten Antwortprozess mit einem KI-System kommunizieren; eine persönliche Bearbeitung durch Pascal Courbois erfolgt jederzeit auf Wunsch und bei allen Anliegen, die menschliche Prüfung erfordern. Rechtsgrundlagen: Art. 6 Abs. 1 lit. b und lit. f DSGVO (effiziente Bearbeitung eingehender Geschäftskommunikation).",
-          "Interner CEO-Agent (Fabrik-Empfehlungen): Aus dem Betreff und den ersten Zeilen einer geschäftlichen Anfrage wird intern ein strukturierter Angebotsentwurf (Positionen, Preis-Schätzung, Rückfragen) durch ein KI-System erzeugt und Pascal Courbois zur Freigabe vorgelegt. Es findet KEIN automatischer Angebotsversand statt – die Entscheidung trifft ausschließlich der Mensch (Art. 22 Abs. 1 DSGVO ist damit nicht berührt). Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an schneller, qualitätsgesicherter Angebotsvorbereitung).",
-          "Dienstleister werden sorgfältig ausgewählt, vertraglich gebunden (Art. 28 DSGVO) und nur im erforderlichen Umfang eingesetzt. Bei Übermittlungen außerhalb des Europäischen Wirtschaftsraums werden geeignete Garantien (z. B. EU-Standardvertragsklauseln) und zusätzliche Schutzmaßnahmen geprüft.",
-        ],
-      },
-      {
-        heading: "7. Datenbank und Speicherorte",
-        paragraphs: [
-          "Anfragen, Chat-Verläufe, Leads und Angebotsdaten werden in einer PostgreSQL-Datenbank des Anbieters Supabase gespeichert. Der Serverstandort liegt in der Europäischen Union. Zugriffe sind verschlüsselt (TLS) und auf das erforderliche Minimum beschränkt.",
-        ],
-      },
-      {
-        heading: "8. Geschäftskontakte und B2B-Projekte",
-        paragraphs: [
-          "Im Rahmen von Angeboten und Projekten können Ansprechpartner-, Vertrags-, Kommunikations-, Abrechnungs- und Projektdaten verarbeitet werden. Rechtsgrundlagen sind vorvertragliche Maßnahmen, Vertragserfüllung, gesetzliche Pflichten (insbesondere steuerliche Aufbewahrung) sowie berechtigte Interessen an Dokumentation, Qualitätssicherung und Rechtsverteidigung.",
-        ],
-      },
-      {
-        heading: "9. AI-gestützte Verarbeitung in Projekten",
-        paragraphs: [
-          "NeXify AI kann AI-gestützte Werkzeuge für Strukturierung, Entwürfe, Entwicklung, Tests und Dokumentation einsetzen. Personenbezogene oder vertrauliche Daten werden nur übertragen, wenn dies für den vereinbarten Zweck erforderlich, vertraglich zulässig und technisch angemessen abgesichert ist.",
-          "AI-Ausgaben werden nicht ungeprüft als fachlich verbindliche Entscheidung behandelt. Weitere Hinweise stehen unter „KI-Hinweise“.",
-        ],
-      },
-      {
-        heading: "10. Speicherdauer",
-        paragraphs: [
-          "Anfrage- und Chatdaten werden grundsätzlich so lange gespeichert, wie dies zur Bearbeitung und für angemessene Anschlusskommunikation erforderlich ist, und anschließend gelöscht oder anonymisiert.",
-          "Vertrags- und Abrechnungsdaten werden entsprechend gesetzlicher Aufbewahrungspflichten (in den Niederlanden in der Regel 7 Jahre) gespeichert. Daten können länger aufbewahrt werden, wenn dies zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist.",
-        ],
-      },
-      {
-        heading: "11. Ihre Rechte",
         bullets: [
-          "Auskunft über verarbeitete personenbezogene Daten (Art. 15 DSGVO)",
-          "Berichtigung unrichtiger oder unvollständiger Daten (Art. 16 DSGVO)",
-          "Löschung, soweit keine vorrangigen Pflichten entgegenstehen (Art. 17 DSGVO)",
-          "Einschränkung der Verarbeitung (Art. 18 DSGVO)",
-          "Datenübertragbarkeit (Art. 20 DSGVO)",
-          "Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21 DSGVO)",
-          "Widerruf einer Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)",
-          "Beschwerde bei einer Datenschutzaufsichtsbehörde, insbesondere der Autoriteit Persoonsgegevens (NL) oder der für Sie zuständigen Behörde",
+          "Art. 6 Abs. 1 lit. a – Einwilligung (optionale Cookie-Kategorien Statistik/Marketing)",
+          "Art. 6 Abs. 1 lit. b – Vertrag / vorvertragliche Maßnahmen",
+          "Art. 6 Abs. 1 lit. c – rechtliche Verpflichtung (z. B. steuerliche Aufbewahrung)",
+          "Art. 6 Abs. 1 lit. f – berechtigte Interessen (Sicherheit, Stabilität, B2B-Kommunikation, Missbrauchsschutz)",
         ],
       },
       {
-        heading: "12. Sicherheit und Aktualisierung",
+        id: "hosting",
+        heading: "5. Hosting, CDN und Protokolldaten",
         paragraphs: [
-          "NeXify AI setzt angemessene technische und organisatorische Maßnahmen ein, darunter Transportverschlüsselung (TLS), Zugriffsbeschränkungen, Datensparsamkeit und regelmäßige Aktualisierungen. Kein Internetdienst kann jedoch absolute Sicherheit garantieren.",
-          "Diese Erklärung wird angepasst, wenn Prozesse, Dienstleister oder rechtliche Anforderungen dies erfordern. Es gilt die jeweils auf dieser Seite veröffentlichte Fassung.",
+          "Beim Aufruf: IP-Adresse, Zeitpunkt, Ressource, Referrer, Browser-/Geräteinfos, Statuscodes – für Auslieferung, Stabilität, Fehleranalyse, Missbrauchsschutz.",
+          "CDN/Schutz (z. B. Cloudflare) und Hosting (z. B. Vercel / EU-Server) möglich; AVV nach Art. 28 soweit erforderlich.",
+          "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Protokolle begrenzt und zeitnah gelöscht/anonymisiert.",
+        ],
+      },
+      {
+        id: "kontaktformular",
+        heading: "6. Kontaktformular und Kommunikation",
+        paragraphs: [
+          "Verarbeitet werden u. a. Name, Unternehmen, Kontaktdaten, Projektangaben, Nachricht – zur Anfragenbearbeitung und Vertragsanbahnung.",
+          "Rechtsgrundlagen: Art. 6 Abs. 1 lit. b und lit. f. Speicherung ggf. in Supabase/PostgreSQL (EU).",
+        ],
+      },
+      {
+        id: "ki-chat",
+        heading: "7. KI-Berater „NeXify AI“ (Live-Chat)",
+        paragraphs: [
+          "Chat-Nachrichten und Sitzungskennung werden verarbeitet, um den Verlauf bereitzustellen und Anfragen zu qualifizieren.",
+          "Inhalte können an ein LLM eines spezialisierten Anbieters übermittelt werden. Keine besonderen Kategorien (Art. 9) und keine Geheimnisse im Chat.",
+          "Keine automatisierte Entscheidung i. S. v. Art. 22 DSGVO; Angebote sind unverbindlich und werden vor Vertragsschluss menschlich geprüft.",
+        ],
+        subsections: [
+          {
+            id: "ki-gedaechtnis",
+            heading: "7.1 Gedächtnisfunktion / Merkposten",
+            paragraphs: [
+              "Verdichtete Merkposten können über Mem0 (USA) mit EU-SCC (Art. 46 Abs. 2 lit. c) gespeichert werden.",
+              "Widerspruch: mail@nexifyai.cloud – Merkposten werden dann gelöscht, soweit keine Aufbewahrungspflicht entgegensteht.",
+            ],
+          },
+        ],
+      },
+      {
+        id: "email",
+        heading: "8. E-Mail-Versand und Vorsortierung",
+        paragraphs: [
+          "Transaktionale E-Mails ggf. über Resend o. ä.",
+          "Eingehende E-Mails an mail@nexifyai.cloud können KI-gestützt vorsortiert/beantwortet werden; menschliche Bearbeitung jederzeit möglich.",
+          "Angebotsentwürfe werden Pascal Courbois zur Freigabe vorgelegt – kein automatischer Versand ohne Freigabe.",
+        ],
+      },
+      {
+        id: "empfaenger",
+        heading: "9. Empfänger",
+        paragraphs: [
+          "Kategorien von Empfängern:",
+        ],
+        bullets: [
+          "Hosting-, CDN- und Sicherheitsdienstleister",
+          "Datenbank-/Backend-Anbieter (EU)",
+          "E-Mail-Versanddienstleister",
+          "KI-Modell- und Memory-Anbieter (ggf. Drittland mit Garantien)",
+          "Steuerberater, Rechtsanwälte, Behörden soweit erforderlich",
+        ],
+      },
+      {
+        id: "drittland",
+        heading: "10. Drittlandübermittlungen",
+        paragraphs: [
+          "Außerhalb EWR nur mit geeigneten Garantien (insb. EU-SCC Art. 46) und ggf. Zusatzmaßnahmen; Angemessenheitsbeschlüsse werden berücksichtigt.",
+        ],
+      },
+      {
+        id: "speicher",
+        heading: "11. Speicherdauer",
+        paragraphs: [
+          "Anfrage-/Chatdaten: solange zur Bearbeitung nötig, dann Löschung/Anonymisierung.",
+          "Vertrags-/Abrechnungsdaten: gesetzliche Aufbewahrung (NL i. d. R. 7 Jahre).",
+          "Consent: lokal im Browser bis Löschung/Änderung.",
+        ],
+      },
+      {
+        id: "rechte",
+        heading: "12. Ihre Rechte",
+        paragraphs: [
+          "Vorbehaltlich gesetzlicher Voraussetzungen:",
+        ],
+        bullets: [
+          "Auskunft (Art. 15)",
+          "Berichtigung (Art. 16)",
+          "Löschung (Art. 17)",
+          "Einschränkung (Art. 18)",
+          "Datenübertragbarkeit (Art. 20)",
+          "Widerspruch (Art. 21)",
+          "Widerruf Einwilligung (Art. 7 Abs. 3)",
+          "Beschwerde bei Autoriteit Persoonsgegevens (NL) oder zuständiger Behörde",
+        ],
+      },
+      {
+        id: "pflicht",
+        heading: "13. Pflicht zur Bereitstellung",
+        paragraphs: [
+          "Keine allgemeine Pflicht zur Angabe; ohne erforderliche Anfrageangaben ggf. keine Bearbeitung möglich.",
+        ],
+      },
+      {
+        id: "art22",
+        heading: "14. Automatisierte Entscheidungsfindung",
+        paragraphs: [
+          "Keine ausschließlich automatisierte Entscheidung mit Rechtswirkung i. S. v. Art. 22 DSGVO.",
+        ],
+      },
+      {
+        id: "avv-hinweis",
+        heading: "15. Auftragsverarbeitung für Kundenprojekte",
+        paragraphs: [
+          "Weisungsgebundene Verarbeitung für Kunden: AVV nach Art. 28 – siehe Seite „AVV“.",
+        ],
+      },
+      {
+        id: "sicherheit",
+        heading: "16. Sicherheit und Aktualisierung",
+        paragraphs: [
+          "TOM u. a. TLS, Zugriffsbeschränkungen, Datensparsamkeit. Absolute Sicherheit nicht garantierbar.",
+          "Es gilt die jeweils veröffentlichte Fassung dieser Erklärung.",
         ],
       },
     ],
@@ -176,268 +326,406 @@ export const legalDe: Record<string, LegalPageData> = {
   agb: {
     slug: "agb",
     title: "Allgemeine Geschäftsbedingungen (B2B)",
-    intro: "Vertragsgrundlagen für Beratungs-, Entwicklungs-, Design-, Automatisierungs- und Betriebsleistungen von NeXify AI.",
-    updated: "Juni 2026",
+    intro: "Vertragsgrundlagen für Beratungs-, Entwicklungs-, Design-, Automatisierungs-, Integrations- und Betriebsleistungen von NeXify AI – ausschließlich im unternehmerischen Geschäftsverkehr.",
+    updated: "2. August 2026",
+    related: [
+      { label: "Impressum", href: "/impressum" },
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "AVV", href: "/avv" },
+      { label: "Widerruf", href: "/widerruf" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+    ],
     sections: [
       {
+        id: "geltung",
         heading: "1. Geltungsbereich und Unternehmerstatus",
         paragraphs: [
-          "Diese Bedingungen gelten für alle Verträge zwischen NeXify AI und Unternehmern, juristischen Personen oder vergleichbaren Organisationen, die in Ausübung ihrer gewerblichen oder selbstständigen beruflichen Tätigkeit handeln. Verträge mit Verbrauchern werden nicht geschlossen.",
-          "Abweichende Bedingungen des Auftraggebers gelten nur, wenn NeXify AI ihnen ausdrücklich in Textform zustimmt. Individuelle vertragliche Vereinbarungen haben Vorrang vor diesen Bedingungen.",
+          "Diese Bedingungen gelten für Verträge zwischen NeXify AI (NeXify AI by NeXify – Chat it. Automate it.) und Unternehmern/juristischen Personen. Verträge mit Verbrauchern werden nicht geschlossen.",
+          "Abweichende AGB des Auftraggebers nur bei ausdrücklicher Textform-Zustimmung. Individuelle Vereinbarungen haben Vorrang.",
         ],
       },
       {
+        id: "vertrag",
         heading: "2. Vertragsschluss und Leistungsumfang",
         paragraphs: [
-          "Angebote sind freibleibend, sofern sie nicht ausdrücklich als verbindlich bezeichnet werden. Dies gilt auch für automatisiert erstellte Angebotsindikationen des KI-Beraters NeXify AI, die stets unverbindliche Orientierungen darstellen. Ein Vertrag entsteht durch Annahme, Auftragsbestätigung oder Beginn der vereinbarten Leistung.",
-          "Maßgeblich sind Angebot, Leistungsbeschreibung, vereinbarte Akzeptanzkriterien und dokumentierte Änderungen. Nicht ausdrücklich eingeschlossene Leistungen gelten als Zusatzaufwand.",
+          "Angebote freibleibend, sofern nicht verbindlich bezeichnet. KI-Angebotsindikationen sind unverbindlich.",
+          "Vertrag durch Annahme, Auftragsbestätigung oder – soweit angekündigt – Leistungsbeginn. Maßgeblich: Angebot, Scope, Akzeptanzkriterien, Änderungen.",
         ],
       },
       {
+        id: "preis",
         heading: "3. Aufwand, Arbeitstage und Preis",
         paragraphs: [
-          "Der reguläre Tagessatz beträgt 449 Euro netto pro Arbeitstag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden.",
-          "Aufwandsspannen sind Schätzungen auf Grundlage des bekannten Umfangs. Ein verbindlicher Gesamtfestpreis gilt nur, wenn er ausdrücklich vereinbart wurde. Bei geänderten Anforderungen, fehlenden Inhalten, externen Blockern oder zusätzlichen Integrationen wird der Mehrbedarf vor Ausführung angezeigt.",
-          "Preise verstehen sich zuzüglich der anwendbaren Umsatzsteuer. Bei grenzüberschreitenden B2B-Leistungen innerhalb der EU kann bei gültiger Umsatzsteuer-ID das Reverse-Charge-Verfahren gelten.",
+          "Regulärer Tagessatz: 449 Euro netto / Arbeitstag (bis zu acht Fachstunden), sofern nichts anderes vereinbart.",
+          "Schätzungen unverbindlich; Festpreis nur bei ausdrücklicher Vereinbarung. Mehrbedarf vor Ausführung anzeigen.",
+          "Preise zzgl. USt; Reverse Charge bei gültiger USt-ID möglich.",
         ],
       },
       {
+        id: "mitwirkung",
         heading: "4. Mitwirkung des Auftraggebers",
         paragraphs: [
-          "Der Auftraggeber stellt Inhalte, Zugangsdaten, Freigaben, Ansprechpartner, rechtliche Texte und fachliche Entscheidungen rechtzeitig bereit. Verzögerungen oder Mehraufwand aus fehlender Mitwirkung können Termin und Preis beeinflussen.",
-          "Zugangsdaten sind über vereinbarte sichere Wege bereitzustellen. Geheimnisse dürfen nicht unaufgefordert in öffentliche Tickets, Chats oder Repositories eingestellt werden.",
+          "Inhalte, Zugänge, Freigaben und Entscheidungen rechtzeitig bereitstellen. Fehlende Mitwirkung kann Termin/Preis beeinflussen.",
+          "Geheimnisse nicht unaufgefordert in öffentliche Tickets/Chats/Repos.",
         ],
       },
       {
+        id: "ai",
         heading: "5. AI-gestützte Arbeitsweise",
         paragraphs: [
-          "NeXify AI setzt moderne AI-gestützte Entwicklungs-, Analyse- und Prüfwerkzeuge ein. Diese dienen der Beschleunigung und Qualitätssicherung. Die fachliche Verantwortung wird nicht an ein AI-System übertragen.",
-          "Soweit der Auftraggeber besondere Vorgaben zur Verarbeitung, Modellwahl, Datenresidenz oder Geheimhaltung hat, müssen diese vor Projektbeginn mitgeteilt und vereinbart werden.",
+          "AI-Werkzeuge zur Beschleunigung; fachliche Verantwortung bleibt beim Menschen. Besondere Vorgaben zu Modell/Datenresidenz vorab vereinbaren.",
         ],
       },
       {
+        id: "termine",
         heading: "6. Termine und Lieferfristen",
         paragraphs: [
-          "Auf der Website genannte Richtdauern (z. B. „Website in 2–3 Arbeitstagen“) beziehen sich auf reine Umsetzungszeit ab vollständiger Bereitstellung aller erforderlichen Inhalte und Freigaben. Verbindliche Termine bedürfen der ausdrücklichen Vereinbarung.",
-          "Höhere Gewalt, Ausfälle von Drittanbietern und vom Auftraggeber zu vertretende Verzögerungen verlängern Fristen angemessen.",
+          "Richtdauern ab vollständiger Content-Bereitstellung. Verbindliche Termine nur bei ausdrücklicher Vereinbarung.",
+          "Höhere Gewalt und Drittanbieter-Ausfälle verlängern Fristen angemessen.",
         ],
       },
       {
+        id: "abnahme",
         heading: "7. Abnahme",
         paragraphs: [
-          "Abnahmepflichtige Leistungen werden nach Bereitstellung geprüft. Wesentliche Mängel sind nachvollziehbar und innerhalb der vereinbarten oder angemessenen Frist zu melden. Unwesentliche Abweichungen hindern die Abnahme nicht.",
-          "Produktive Nutzung, Veröffentlichung oder ausbleibende Rückmeldung nach angemessener Prüfzeit kann als Abnahme gelten, soweit dies im konkreten Vertrag zulässig und angekündigt ist.",
+          "Wesentliche Mängel fristgerecht und nachvollziehbar melden. Unwesentliche Abweichungen hindern Abnahme nicht.",
+          "Produktive Nutzung oder ausbleibende Rückmeldung kann als Abnahme gelten, soweit vereinbart/angekündigt.",
         ],
       },
       {
+        id: "rechte",
         heading: "8. Nutzungsrechte und Open Source",
         paragraphs: [
-          "Nach vollständiger Zahlung erhält der Auftraggeber die vereinbarten Nutzungsrechte am individuell erstellten Werk. Vorbestehende Werkzeuge, generische Komponenten, Frameworks, Methoden und Know-how verbleiben bei ihren jeweiligen Rechteinhabern beziehungsweise NeXify AI.",
-          "Open-Source-Komponenten und Dienste Dritter unterliegen ihren eigenen Lizenz- und Nutzungsbedingungen. Diese werden nicht durch den Projektvertrag ersetzt.",
+          "Nach vollständiger Zahlung: vereinbarte Nutzungsrechte am individuellen Werk. Vorbestehende Tools/Know-how verbleiben bei NeXify AI.",
+          "OSS und Drittdienste: eigene Lizenzbedingungen.",
         ],
       },
       {
+        id: "dritte",
         heading: "9. Drittanbieter und laufende Kosten",
         paragraphs: [
-          "Hosting, Domains, Zahlungsanbieter, App-Stores, externe APIs, AI-Modell-Nutzungskosten, Lizenzen, Transaktions- und Nutzungskosten sind nur enthalten, wenn dies ausdrücklich vereinbart ist. Änderungen, Ausfälle oder Einschränkungen von Drittanbietern liegen außerhalb des unmittelbaren Einflusses von NeXify AI.",
+          "Hosting, Domains, APIs, AI-Nutzung, Lizenzen nur enthalten wenn ausdrücklich vereinbart.",
         ],
       },
       {
+        id: "gewaehr",
         heading: "10. Gewährleistung und Haftung",
         paragraphs: [
-          "NeXify AI behebt reproduzierbare Mängel innerhalb eines angemessenen Zeitraums. Kein Softwareprodukt ist unter allen denkbaren Bedingungen vollständig fehlerfrei; geschuldet ist die vereinbarte Beschaffenheit und fachgerechte Umsetzung.",
-          "Unbeschränkte Haftung gilt bei Vorsatz, grober Fahrlässigkeit, Verletzung von Leben, Körper oder Gesundheit sowie zwingender gesetzlicher Haftung. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vertragstypisch vorhersehbaren Schaden begrenzt; im Übrigen ist die Haftung für leichte Fahrlässigkeit ausgeschlossen.",
-          "Für Datenverlust haftet NeXify AI nur in dem Umfang, der auch bei ordnungsgemäßer, regelmäßiger Datensicherung durch den Auftraggeber eingetreten wäre.",
+          "Reproduzierbare Mängel in angemessener Frist beheben. Geschuldet: vereinbarte Beschaffenheit.",
+          "Unbeschränkt: Vorsatz, grobe Fahrlässigkeit, Leben/Körper/Gesundheit, zwingende Haftung. Leichte Fahrlässigkeit bei Kardinalpflichten: vertragstypisch vorhersehbarer Schaden; sonst ausgeschlossen.",
+          "Datenverlust nur im Umfang trotz ordnungsgemäßer Sicherung.",
         ],
       },
       {
+        id: "zahlung",
         heading: "11. Zahlung",
         paragraphs: [
-          "Rechnungen sind innerhalb der ausgewiesenen Frist ohne Abzug zahlbar. Bei größeren Vorhaben können Abschläge, Vorauszahlungen oder Meilensteinzahlungen vereinbart werden.",
-          "Bei Zahlungsverzug gelten die gesetzlichen B2B-Folgen einschließlich Verzugszinsen und angemessener Inkasso- beziehungsweise Rechtsverfolgungskosten. NeXify AI kann Leistungen bei erheblichem Zahlungsrückstand nach Ankündigung aussetzen.",
+          "Zahlung innerhalb ausgewiesener Frist. Abschläge/Meilensteine möglich. Verzug: gesetzliche B2B-Folgen; Aussetzung nach Ankündigung möglich.",
         ],
       },
       {
+        id: "vertraulich",
         heading: "12. Vertraulichkeit und Datenschutz",
         paragraphs: [
-          "Beide Parteien behandeln nicht öffentliche Geschäfts- und Projektdaten vertraulich. Die Vertraulichkeit gilt über das Vertragsende hinaus fort.",
-          "Soweit NeXify AI personenbezogene Daten im Auftrag verarbeitet, wird eine Vereinbarung zur Auftragsverarbeitung nach Art. 28 DSGVO geschlossen (siehe Seite „AVV“).",
+          "Vertraulichkeit auch nach Vertragsende. Weisungsgebundene Verarbeitung: AVV Art. 28.",
         ],
       },
       {
+        id: "referenz",
         heading: "13. Referenznennung",
         paragraphs: [
-          "NeXify AI darf den Auftraggeber nach Projektabschluss mit Name und Logo als Referenz nennen, sofern der Auftraggeber dem nicht widerspricht oder etwas anderes vereinbart wurde. Vertrauliche Projektdetails werden dabei nicht offengelegt.",
+          "Name/Logo als Referenz nach Projektabschluss zulässig, sofern kein Widerspruch/andere Vereinbarung.",
         ],
       },
       {
-        heading: "14. Laufzeit, Kündigung und Projektunterbrechung",
+        id: "laufzeit",
+        heading: "14. Laufzeit, Kündigung, Unterbrechung",
         paragraphs: [
-          "Projektverträge enden mit Erbringung der vereinbarten Leistung. Laufende Leistungen können nach den vereinbarten Fristen gekündigt werden. Das Recht zur außerordentlichen Kündigung bleibt bestehen.",
-          "Bei Unterbrechung aus dem Verantwortungsbereich des Auftraggebers werden bereits erbrachte Leistungen abgerechnet; eine spätere Wiederaufnahme kann neu eingeplant werden.",
+          "Projektende mit Leistungserbringung. Laufende Leistungen nach vereinbarten Fristen kündbar. Außerordentlich unberührt.",
+          "Unterbrechung durch Auftraggeber: Abrechnung erbrachter Leistungen.",
         ],
       },
       {
-        heading: "15. Recht, Gerichtsstand und Schlussbestimmungen",
+        id: "saas",
+        heading: "15. SaaS-ähnliche / Betriebsleistungen",
         paragraphs: [
-          "Es gilt niederländisches Recht unter Ausschluss des UN-Kaufrechts und kollisionsrechtlicher Verweisungen, soweit keine zwingenden Vorschriften entgegenstehen. Gerichtsstand für Kaufleute und vergleichbare B2B-Auftraggeber ist der Sitz von NeXify AI, soweit zulässig.",
-          "Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. Anstelle der unwirksamen Bestimmung gilt die gesetzlich zulässige Regelung, die dem wirtschaftlichen Zweck am nächsten kommt.",
+          "Laufende Betriebs-/Agenten-Dienste: SLAs nur soweit vereinbart. Ohne SLA keine Garantie für Drittverfügbarkeit.",
+        ],
+      },
+      {
+        id: "recht",
+        heading: "16. Recht, Gerichtsstand, Schluss",
+        paragraphs: [
+          "Niederländisches Recht; Ausschluss UN-Kaufrecht/Kollisionsrecht soweit zulässig. Gerichtsstand (Kaufleute): Venlo, NL, soweit zulässig.",
+          "Teilunwirksamkeit lässt übrigen Vertrag unberührt.",
         ],
       },
     ],
   },
   "ki-hinweise": {
     slug: "ki-hinweise",
-    title: "Hinweise zu AI-gestützter Arbeit",
-    intro: "Wie NeXify AI moderne AI-Werkzeuge einsetzt – transparent erklärt, inklusive des KI-Beraters NeXify AI auf dieser Website.",
-    updated: "Juni 2026",
+    title: "KI-Hinweise",
+    intro: "Transparenz zu AI-gestützter Arbeit und zum KI-Berater – orientiert an Art. 50 EU AI Act und Art. 22 DSGVO.",
+    updated: "2. August 2026",
+    related: [
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "AGB", href: "/agb" },
+      { label: "AVV", href: "/avv" },
+      { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" },
+    ],
     sections: [
       {
-        heading: "AI-gestützt statt AI-abgegeben",
+        id: "transparenz",
+        heading: "1. Sie interagieren mit einem KI-System",
         paragraphs: [
-          "NeXify AI nutzt AI-Werkzeuge für Recherche, Strukturierung, Entwürfe, Entwicklungsunterstützung, Tests, Übersetzungen und Dokumentation. Diese Werkzeuge beschleunigen Arbeitsschritte, ersetzen aber nicht fachliche Verantwortung, Prüfung und Freigabe.",
+          "Der Berater „NeXify AI“ ist ein KI-System. Interaktion mit Automatisierung, nicht mit einem Menschen – außer bei ausdrücklicher menschlicher Übernahme.",
+          "Transparenz gemäß Art. 50 Abs. 1 VO (EU) 2024/1689 (AI Act); Pflichten ab 2. August 2026 – Hinweise bereits jetzt umgesetzt.",
         ],
       },
       {
-        heading: "Der NeXify AI Berater auf dieser Website",
+        id: "rolle",
+        heading: "2. Rolle und Grenzen",
         paragraphs: [
-          "NeXify AI ist ein KI-gestützter Beratungs- und Vertriebsassistent. Er beantwortet Fragen zu Leistungen und Preisen, qualifiziert Anfragen und kann auf ausdrücklichen Wunsch ein unverbindliches Angebot erstellen und per E-Mail versenden.",
-          "Sie interagieren dabei mit einem automatisierten System, nicht mit einem Menschen. Alle von NeXify AI erstellten Angebote sind unverbindliche Indikationen; verbindliche Angebote werden ausschließlich von Pascal Courbois persönlich geprüft und bestätigt.",
-          "Der Assistent verfügt über eine Gedächtnisfunktion: Zentrale Gesprächsinhalte können gespeichert werden, damit Sie bei erneutem Kontakt nicht von vorne beginnen müssen. Zudem können E-Mails an mail@nexifyai.cloud KI-gestützt vorsortiert und beantwortet werden. Details und Widerspruchsmöglichkeiten finden Sie in der Datenschutzerklärung.",
-          "Der AI-Berater kann Fehler machen. Bei Unklarheiten oder wichtigen Entscheidungen kontaktieren Sie uns bitte direkt per E-Mail oder Telefon.",
+          "Fragen zu Leistungen/Preisen, Qualifizierung, unverbindliche Angebotsindikationen.",
+          "Verbindliche Angebote nur nach Prüfung durch Pascal Courbois. Der Assistent kann Fehler machen.",
         ],
       },
       {
-        heading: "Menschliche Kontrolle",
+        id: "art22",
+        heading: "3. Keine ausschließlich automatisierten Entscheidungen",
+        paragraphs: [
+          "Keine Art.-22-Entscheidungen mit Rechtswirkung. Vertraglich Relevantes unterliegt menschlicher Kontrolle.",
+        ],
+      },
+      {
+        id: "mensch",
+        heading: "4. Menschliche Kontrolle in Projekten",
         bullets: [
-          "Ziele, Architektur und fachliche Entscheidungen werden durch einen verantwortlichen Fachmann gesteuert.",
-          "AI-Ausgaben werden auf Plausibilität, Sicherheit, Projektkontext und Qualität geprüft.",
-          "Rechtliche, steuerliche, medizinische oder andere hochriskante Entscheidungen werden nicht allein auf AI-Ausgaben gestützt.",
-          "Produktive Änderungen werden anhand des vereinbarten Risikos getestet und dokumentiert.",
-          "Automatisiert erstellte Angebote werden vor Vertragsschluss immer menschlich geprüft.",
+          "Ziele/Architektur durch Fachmann",
+          "AI-Ausgaben auf Plausibilität/Sicherheit prüfen",
+          "Hochrisiko-Domänen nicht allein auf AI stützen",
+          "Produktive Änderungen risikogerecht testen",
         ],
       },
       {
-        heading: "Daten und Vertraulichkeit",
+        id: "daten",
+        heading: "5. Daten, Chat-Logs und Training",
         paragraphs: [
-          "Vertrauliche oder personenbezogene Daten werden nur im erforderlichen Umfang verarbeitet. Modell-, Hosting- und Datenverarbeitungswege werden passend zum Projekt gewählt. Kundendaten werden nicht bewusst zur allgemeinen Modellschulung freigegeben, sofern dies nicht ausdrücklich vereinbart und rechtlich zulässig ist.",
-          "Details zur Datenverarbeitung im Chat finden Sie in der Datenschutzerklärung, Abschnitt „NeXify AI Berater“.",
+          "Chat-/Sitzungsdaten laut Datenschutzerklärung. Keine bewusste Freigabe zur allgemeinen Modellschulung ohne Vereinbarung.",
+          "Projekte: Geheimhaltung, ggf. AVV, Datenresidenz/Modellwahl.",
         ],
       },
       {
-        heading: "EU AI Act und Transparenz",
+        id: "synthetisch",
+        heading: "6. Kennzeichnung synthetischer Inhalte",
         paragraphs: [
-          "NeXify AI verfolgt die Anforderungen der EU-KI-Verordnung (AI Act) und setzt deren Transparenzpflichten um: Nutzer werden darüber informiert, wenn sie mit einem KI-System interagieren, und KI-generierte Angebotsindikationen werden als solche gekennzeichnet.",
-          "Bei Kundenprojekten mit KI-Komponenten beraten wir zur Risikoklassifizierung und zu den jeweils geltenden Pflichten.",
+          "Bei synthetischen Audio-/Bild-/Video-/Textsystemen: Art. 50 Abs. 2 AI Act projektspezifisch berücksichtigen.",
         ],
       },
       {
-        heading: "Grenzen",
+        id: "risiko",
+        heading: "7. Risikoklassifizierung",
         paragraphs: [
-          "AI-Systeme können unvollständige, veraltete oder falsche Ergebnisse erzeugen. NeXify AI begegnet diesem Risiko durch Quellenprüfung, Tests, Review, begrenzte Rechte und nachvollziehbare Arbeitsstände. Eine absolute Fehlerfreiheit kann nicht garantiert werden.",
+          "Beratung zur groben Einordnung; Compliance-Verantwortung des Betreibers bleibt beim Kunden, soweit nicht anders vereinbart.",
+        ],
+      },
+      {
+        id: "kontakt",
+        heading: "8. Kontakt",
+        paragraphs: [
+          "mail@nexifyai.cloud.",
         ],
       },
     ],
   },
   "cookie-richtlinie": {
     slug: "cookie-richtlinie",
-    title: "Cookie- und Speicherhinweise",
-    intro: "Diese Website ist auf datensparsame Nutzung ohne standardmäßiges Marketing-Tracking ausgelegt.",
-    updated: "Juni 2026",
+    title: "Cookie-Richtlinie",
+    intro: "Cookies und ähnliche Speichertechniken gemäß § 25 TDDDG und DSGVO – abgestimmt auf den Cookie-Banner (Notwendig, Statistik, Marketing).",
+    updated: "2. August 2026",
+    related: [
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "Impressum", href: "/impressum" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+    ],
     sections: [
       {
-        heading: "Notwendige Speichertechniken",
+        id: "grundlage",
+        heading: "1. Rechtsgrundlagen",
         paragraphs: [
-          "Technisch notwendige Cookies oder lokale Speicherungen (localStorage) können eingesetzt werden, um Sicherheit, Formularzustände, Ihre Sprachwahl (Deutsch/Niederländisch), den Zustand des Chat-Assistenten oder elementare Websitefunktionen bereitzustellen. Sie dienen nicht der verhaltensbasierten Werbung.",
+          "§ 25 TDDDG (ePrivacy) und DSGVO. Technisch unbedingt erforderlich: ohne Einwilligung (§ 25 Abs. 2). Sonst: Einwilligung (§ 25 Abs. 1 / Art. 6 Abs. 1 lit. a).",
         ],
       },
       {
-        heading: "Konkret eingesetzte Speicherungen",
+        id: "manager",
+        heading: "2. Einwilligungs-Manager und Kategorien",
+        paragraphs: [
+          "Auswahl im Banner; Speicherung lokal als nexify-consent. Änderung über Cookie-Einstellungen im Footer.",
+        ],
+        subsections: [
+          {
+            heading: "2.1 Notwendig (immer aktiv)",
+            paragraphs: [
+              "Sprachwahl, Sitzung, Sicherheit, Consent-Speicher. § 25 Abs. 2 TDDDG / Art. 6 Abs. 1 lit. f.",
+            ],
+          },
+          {
+            heading: "2.2 Statistik (Opt-in)",
+            paragraphs: [
+              "Nutzungsstatistiken. Derzeit nicht im Einsatz – keine Statistik-Dienste ohne Einwilligung und ohne Aktivierung.",
+            ],
+          },
+          {
+            heading: "2.3 Marketing (Opt-in)",
+            paragraphs: [
+              "Kampagnenmessung/Marketing. Derzeit nicht im Einsatz. Vor Aktivierung: Name, Anbieter, Zweck hier ergänzen.",
+            ],
+          },
+        ],
+      },
+      {
+        id: "konkret",
+        heading: "3. Konkret eingesetzte Speicherungen",
         bullets: [
-          "nexify-lang (localStorage): speichert Ihre Sprachwahl DE/NL – bis zur Löschung durch Sie.",
-          "nova-greeted (localStorage): merkt sich, dass sich der Chat-Assistent bereits vorgestellt hat, um wiederholtes automatisches Öffnen zu vermeiden.",
-          "nexify-consent (localStorage): speichert Ihre Auswahl im Cookie-Banner (Kategorien und Zeitpunkt der Entscheidung) – bis zur Löschung oder Änderung durch Sie.",
-          "Sitzungskennung des Chats: technische Zuordnung Ihres Gesprächsverlaufs während der Nutzung.",
-          "Anmelde-Cookie des Kundenportals (HttpOnly): hält Ihre Sitzung nach dem Login aufrecht; technisch notwendig für den Portalbetrieb.",
+          "nexify-lang (localStorage): Sprachwahl",
+          "nexify-consent (localStorage): Banner-Auswahl + Zeitstempel",
+          "nova-greeted (localStorage): Chat-Begrüßungsmerker",
+          "Chat-Sitzungskennung während der Nutzung",
+          "Portal-Login-Cookie (HttpOnly), soweit Portal genutzt",
         ],
       },
       {
-        heading: "Ihre Cookie-Einstellungen (Einwilligungs-Manager)",
+        id: "dritte",
+        heading: "4. Drittdienste",
         paragraphs: [
-          "Beim ersten Besuch dieser Website können Sie über den Cookie-Banner wählen, welche Kategorien Sie zulassen: „Notwendig“ (immer aktiv), „Statistik“ und „Marketing“. Ihre Entscheidung wird ausschließlich lokal in Ihrem Browser gespeichert (nexify-consent) und nicht an Dritte übermittelt.",
-          "Die Kategorien Statistik und Marketing sind standardmäßig deaktiviert (Opt-in im Sinne von Art. 6 Abs. 1 lit. a DSGVO bzw. § 25 TDDDG). Solange Sie nicht einwilligen, werden keine entsprechenden Dienste geladen. Derzeit setzt diese Website in beiden Kategorien keine Dienste ein; sie sind für mögliche künftige Erweiterungen vorgesehen und würden vor Aktivierung hier transparent benannt.",
-          "Sie können Ihre Auswahl jederzeit mit Wirkung für die Zukunft ändern oder widerrufen: über den Link „Cookie-Einstellungen“ im Seitenfuß jeder Seite.",
+          "CDN/Security (z. B. Cloudflare) kann technisch notwendige Cookies setzen.",
         ],
       },
       {
-        heading: "Keine standardmäßigen Marketing-Cookies",
+        id: "browser",
+        heading: "5. Browser und Widerruf",
         paragraphs: [
-          "Ohne gesonderte Ankündigung und Einwilligung werden keine nicht notwendigen Werbe-, Retargeting- oder plattformübergreifenden Tracking-Cookies gesetzt. Wird die Website künftig um solche Dienste erweitert, werden Information und Einwilligungsmechanismus vor Aktivierung angepasst.",
+          "Browser-Löschung möglich; notwendige Speicherungen können Funktionen einschränken. Widerruf über Cookie-Einstellungen.",
         ],
       },
       {
-        heading: "Drittdienste",
+        id: "updates",
+        heading: "6. Aktualisierung",
         paragraphs: [
-          "Zur Auslieferung der Website können CDN- und Schutzdienste (z. B. Cloudflare) technisch notwendige Cookies setzen, die ausschließlich der Sicherheit und Lastverteilung dienen.",
-        ],
-      },
-      {
-        heading: "Browser-Einstellungen",
-        paragraphs: [
-          "Sie können Cookies und lokale Speicherungen über Ihren Browser einsehen, löschen oder blockieren. Bei technisch notwendigen Speicherungen können einzelne Funktionen (z. B. die Sprachwahl) dadurch eingeschränkt sein.",
+          "Neue Statistik-/Marketing-Dienste werden vor Aktivierung hier und im Banner benannt.",
         ],
       },
     ],
   },
   avv: {
     slug: "avv",
-    title: "Auftragsverarbeitung (AVV)",
-    intro: "Grundsätze für Projekte, in denen NeXify AI personenbezogene Daten im Auftrag eines Kunden verarbeitet (Art. 28 DSGVO).",
-    updated: "Juni 2026",
+    title: "Auftragsverarbeitung (AVV / DPA)",
+    intro: "Struktur und Grundsätze einer AVV nach Art. 28 DSGVO. Kein Ersatz für die projektbezogene Vertragsfassung.",
+    updated: "2. August 2026",
+    related: [
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "AGB", href: "/agb" },
+      { label: "KI-Hinweise", href: "/ki-hinweise" },
+      { label: "Impressum", href: "/impressum" },
+    ],
     sections: [
       {
-        heading: "Wann eine AVV erforderlich ist",
+        id: "wann",
+        heading: "1. Wann eine AVV erforderlich ist",
         paragraphs: [
-          "Eine Vereinbarung zur Auftragsverarbeitung wird geschlossen, wenn NeXify AI personenbezogene Daten ausschließlich nach dokumentierter Weisung des Kunden verarbeitet und die gesetzlichen Voraussetzungen einer Auftragsverarbeitung vorliegen – etwa beim Betrieb von Web-Apps, Shops oder Automatisierungen mit Kundendaten.",
+          "Bei weisungsgebundener Verarbeitung von Kundendaten (Web-Apps, Shops, Automationen, Agenten).",
+          "Keine AVV, soweit NeXify AI eigener Verantwortlicher ist (z. B. Website-Leads).",
         ],
       },
       {
-        heading: "Typische Bestandteile",
+        id: "form",
+        heading: "2. Form und Standardklauseln",
+        paragraphs: [
+          "Schriftlich oder elektronisch nachweisbar (Art. 28 Abs. 9).",
+          "Vorlage: EU-SCC Verantwortlicher–Auftragsverarbeiter (Durchführungsbeschluss (EU) 2021/915). Drittland: ggf. zusätzlich (EU) 2021/914 Module 2/3.",
+        ],
+      },
+      {
+        id: "pflicht",
+        heading: "3. Pflichtinhalte Art. 28 Abs. 3",
+        paragraphs: [
+          "Mindestens:",
+        ],
         bullets: [
-          "Gegenstand, Dauer, Art und Zweck der Verarbeitung",
-          "Kategorien betroffener Personen und personenbezogener Daten",
-          "Weisungs- und Unterstützungsprozesse",
-          "Vertraulichkeitsverpflichtungen der eingesetzten Personen",
-          "Technische und organisatorische Maßnahmen (TOM)",
-          "Regeln für Unterauftragsverarbeiter und deren Genehmigung",
-          "Unterstützung bei Betroffenenrechten und Datenschutz-Folgenabschätzungen",
-          "Löschung, Rückgabe und Nachweise nach Vertragsende",
-          "Melde- und Unterstützungspflichten bei Datenschutzvorfällen",
-          "Kontroll- und Auditrechte des Verantwortlichen",
+          "Gegenstand und Dauer",
+          "Art und Zweck",
+          "Art der Daten",
+          "Kategorien Betroffener",
+          "Pflichten/Rechte des Verantwortlichen",
+          "Weisungsbindung (lit. a)",
+          "Vertraulichkeit (lit. b)",
+          "TOM / Art. 32 (lit. c)",
+          "Unterauftragsverarbeitung (lit. d)",
+          "Betroffenenrechte (lit. e)",
+          "Sicherheit/Meldung/DSFA (lit. f)",
+          "Löschung/Rückgabe (lit. g)",
+          "Nachweise/Audits (lit. h)",
         ],
       },
       {
-        heading: "Typische Unterauftragsverarbeiter",
+        id: "module",
+        heading: "4. Module / Anhänge",
         paragraphs: [
-          "Je nach Projekt können insbesondere folgende Kategorien von Unterauftragsverarbeitern eingesetzt werden: Hosting- und Cloud-Infrastruktur (z. B. Vercel, Hetzner, EU-Rechenzentren), Datenbankdienste (z. B. Supabase), E-Mail-Versanddienste (z. B. Resend), CDN- und Sicherheitsdienste (z. B. Cloudflare) sowie – bei AI-Funktionen – Anbieter von KI-Sprachmodellen.",
-          "Die konkrete, projektbezogene Liste wird in der jeweiligen AVV dokumentiert und aktuell gehalten.",
+          "Typische Struktur:",
         ],
-      },
-      {
-        heading: "Technische und organisatorische Maßnahmen",
         bullets: [
-          "Transportverschlüsselung (TLS) für alle Datenübertragungen",
-          "Zugriffskontrolle nach dem Least-Privilege-Prinzip",
-          "Getrennte Umgebungen für Entwicklung, Test und Produktion",
-          "Protokollierung sicherheitsrelevanter Ereignisse",
-          "Regelmäßige Updates und Sicherheits-Patches",
-          "Datensparsamkeit und Pseudonymisierung, wo möglich",
+          "Anhang A: Verarbeitungsbeschreibung",
+          "Anhang B: TOM",
+          "Anhang C: Unterauftragsverarbeiter",
+          "Anhang D: Kontakte",
+          "Optional: SCC / Transfer-Hinweise",
         ],
       },
       {
-        heading: "Projektbezogene Fassung",
+        id: "uav",
+        heading: "5. Unterauftragsverarbeiter",
         paragraphs: [
-          "Da Datenarten, Systeme, Hosting, Unterauftragnehmer und Risiken vom jeweiligen Projekt abhängen, wird die AVV projektbezogen erstellt oder ergänzt. Eine aktuelle Vorlage und die zugehörigen technischen und organisatorischen Maßnahmen werden im Rahmen der Beauftragung bereitgestellt.",
+          "Kategorien: Hosting/Cloud, DB, E-Mail, CDN/Security, KI-Modell/Memory.",
+          "[BITTE ERGÄNZEN: Master-Liste mit Rechtsname, Sitzland, Zweck, AVV-/SCC-Status]",
+          "Wechsel nach vereinbartem Genehmigungsmodus.",
+        ],
+      },
+      {
+        id: "tom",
+        heading: "6. TOM (Art. 32)",
+        paragraphs: [
+          "Projektspezifisch u. a.:",
+        ],
+        bullets: [
+          "TLS / Verschlüsselung ruhender Daten wo möglich",
+          "Least Privilege",
+          "Getrennte Umgebungen",
+          "Security-Logging",
+          "Patches",
+          "Datensparsamkeit/Pseudonymisierung",
+          "Backup nach Scope",
+          "Vertraulichkeitsverpflichtungen",
+        ],
+      },
+      {
+        id: "vorfall",
+        heading: "7. Datenschutzvorfälle",
+        paragraphs: [
+          "Unverzügliche Meldung an den Verantwortlichen und Unterstützung bei Meldepflichten im vereinbarten Umfang.",
+        ],
+      },
+      {
+        id: "ende",
+        heading: "8. Vertragsende",
+        paragraphs: [
+          "Löschung oder Rückgabe nach Weisung; angemessener Nachweis, soweit keine Aufbewahrungspflicht.",
+        ],
+      },
+      {
+        id: "projekt",
+        heading: "9. Projektfassung und Kontakt",
+        paragraphs: [
+          "Diese Seite ist Strukturübersicht. Verbindliche AVV im Auftrag. Kontakt: mail@nexifyai.cloud.",
         ],
       },
     ],
@@ -445,28 +733,50 @@ export const legalDe: Record<string, LegalPageData> = {
   widerruf: {
     slug: "widerruf",
     title: "Hinweis zum Widerrufsrecht",
-    intro: "NeXify AI bietet Leistungen ausschließlich im unternehmerischen Geschäftsverkehr (B2B) an.",
-    updated: "Juni 2026",
+    intro: "Klarstellung: NeXify AI schließt Verträge ausschließlich im B2B-Geschäftsverkehr – gesetzliches Fernabsatz-Widerrufsrecht gilt grundsätzlich nicht.",
+    updated: "2. August 2026",
+    related: [
+      { label: "AGB", href: "/agb" },
+      { label: "Impressum", href: "/impressum" },
+      { label: "Datenschutz", href: "/datenschutz" },
+    ],
     sections: [
       {
-        heading: "Kein Verbrauchervertrag",
+        id: "kein-verbraucher",
+        heading: "1. Kein Verbrauchervertrag",
         paragraphs: [
-          "Verträge werden ausschließlich mit Unternehmern, juristischen Personen und vergleichbaren Organisationen geschlossen, die in Ausübung ihrer gewerblichen oder selbstständigen beruflichen Tätigkeit handeln. Das gesetzliche Verbraucherwiderrufsrecht für Fernabsatzverträge findet daher grundsätzlich keine Anwendung.",
-          "Mit Anfrage und Beauftragung bestätigt der Auftraggeber, als Unternehmer im Sinne des anwendbaren Rechts zu handeln.",
+          "Ausschließlich Unternehmer/juristische Personen. Gesetzliches Verbraucherwiderrufsrecht für Fernabsatz findet grundsätzlich keine Anwendung.",
+          "Mit Anfrage/Beauftragung bestätigt der Auftraggeber seinen Unternehmerstatus.",
         ],
       },
       {
-        heading: "Ausnahmefälle",
+        id: "wann-doch",
+        heading: "2. Wann ein Widerrufsrecht gelten würde",
         paragraphs: [
-          "Sollte im Ausnahmefall eine Person entgegen dieser Ausrichtung als Verbraucher handeln wollen, muss dies vor Vertragsschluss ausdrücklich offengelegt und gesondert vereinbart werden. In diesem Fall werden die gesetzlichen Informationspflichten und Widerrufsbelehrungen individuell bereitgestellt – oder der Vertragsschluss wird abgelehnt.",
+          "Nur bei Verbrauchervertrag entgegen Ausrichtung – dann individuelle Belehrung oder Ablehnung des Vertragsschlusses.",
         ],
       },
       {
-        heading: "Kulanz bei Projektabbruch",
+        id: "digitale",
+        heading: "3. Digitale Inhalte / Dienstleistungen",
         paragraphs: [
-          "Unabhängig vom fehlenden gesetzlichen Widerrufsrecht gilt: Vor Beginn der Umsetzung kann ein beauftragtes Projekt in Textform kostenfrei storniert werden, sofern noch keine Leistungen erbracht wurden. Bereits erbrachte Konzeptions- oder Umsetzungsleistungen werden anteilig nach Tagessatz abgerechnet.",
+          "Bei Verbraucherverträgen kann das Widerrufsrecht unter gesetzlich geregelten Voraussetzungen erlöschen. Für das Standardgeschäft von NeXify AI nicht einschlägig.",
+        ],
+      },
+      {
+        id: "kulanz",
+        heading: "4. Kulanz (B2B)",
+        paragraphs: [
+          "Vor Leistungsbeginn kostenfreie Stornierung in Textform möglich, sofern noch nichts erbracht. Erbrachtes anteilig abrechenbar.",
+        ],
+      },
+      {
+        id: "kontakt",
+        heading: "5. Kontakt",
+        paragraphs: [
+          "mail@nexifyai.cloud / +31 6 133 188 56.",
         ],
       },
     ],
-  },
+  }
 };
