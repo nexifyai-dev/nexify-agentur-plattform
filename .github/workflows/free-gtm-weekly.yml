@@ -1,0 +1,128 @@
+# FILE: .github/workflows/free-gtm-weekly.yml
+# NIR: 02.08.2026 09:30
+# UPDATED: 02.08.2026 09:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Wöchentliche Free-GTM Drafts (Verzeichnisse) + optional Cloud Agent
+# WHY: Zero-cost Akquise ohne CURSOR_API_KEY degradiert auf Content-PRs via Actions
+# BEST-PRACTICE: Draft-PR immer; Cloud Launch nur mit Secret; human-gate für GBP
+# PITFALL: V-GTM-FREE-03: Nie Secrets loggen; kein Auto-Submit hinter Captcha
+# DEPENDS: scripts/gtm/prepare_directory_drafts.py, optional CURSOR_API_KEY
+# DOCS-REF: docs/gtm/FREE-ACQUISITION-PLAYBOOK-DACH.md
+# SESSION: free-acquisition-dach-7dd5
+
+name: Free GTM DACH Weekly
+
+on:
+  schedule:
+    # Montag 06:00 UTC ≈ 08:00 Europe/Berlin
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Anzahl Draft-Kanäle"
+        required: false
+        default: "3"
+        type: string
+      dispatch_cloud_agent:
+        description: "repository_dispatch Cloud Agent wenn CURSOR_API_KEY gesetzt"
+        required: false
+        default: true
+        type: boolean
+  repository_dispatch:
+    types: [free-gtm-dach]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: free-gtm-dach-weekly
+  cancel-in-progress: false
+
+jobs:
+  prepare-drafts:
+    name: Directory drafts → PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate directory drafts
+        id: drafts
+        env:
+          LIMIT: ${{ github.event.inputs.limit || '3' }}
+        run: |
+          set -euo pipefail
+          python3 scripts/gtm/prepare_directory_drafts.py --limit "${LIMIT}"
+          if git status --porcelain docs/gtm/evidence/directory-drafts | grep -q .; then
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update draft PR
+        if: steps.drafts.outputs.changed == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="cursor/free-gtm-drafts-$(date -u +%Y%W)-7dd5"
+          git config user.name "nexifyai-bot"
+          git config user.email "bot@nexifyai.cloud"
+          git checkout -B "$BRANCH"
+          git add docs/gtm/evidence/directory-drafts
+          git commit -m "docs(gtm): weekly free directory listing drafts"
+          git push -u origin "HEAD:$BRANCH" --force
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            echo "PR already open #$EXISTING"
+          else
+            gh pr create \
+              --title "docs(gtm): weekly free directory listing drafts" \
+              --label "automerge" \
+              --body "$(cat <<'PRBODY'
+          ## Summary
+          - Automatische Free-Verzeichnis-Drafts (NAP + Snippets) für DACH/NL
+          - Human: Captcha/Login/Submit wo nötig — siehe Draft-Dateien
+          - Keine Paid Ads / keine neuen SaaS
+
+          ## Test plan
+          - [ ] Draft-Markdown NAP-konsistent
+          - [ ] Keine Premium-Hinweise aktiviert
+          - [ ] Playbook-Checkliste Montag abgehakt
+          PRBODY
+          )"
+          fi
+
+      - name: Optional cloud agent dispatch
+        if: ${{ github.event.inputs.dispatch_cloud_agent != 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HAS_CURSOR_KEY: ${{ secrets.CURSOR_API_KEY != '' }}
+        run: |
+          set -euo pipefail
+          if [ "${HAS_CURSOR_KEY}" != "true" ]; then
+            echo "CURSOR_API_KEY missing — skip cloud agent (drafts PR path still ok)"
+            exit 0
+          fi
+          WEEK=$(date -u +%Y%W)
+          PAYLOAD=$(printf '{"source":"free-gtm-weekly","dedupe_key":"free-gtm-%s"}' "$WEEK")
+          gh api "repos/${GITHUB_REPOSITORY}/dispatches" \
+            -f event_type=free-gtm-dach \
+            -f client_payload="$PAYLOAD" \
+            || echo "dispatch_soft_fail"
+
+      - name: Comment human-gate reminder (GBP)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          NUM=$(gh issue list --label human-gate --state open --search "Google Business OR GBP" --json number --jq '.[0].number // empty')
+          if [ -n "${NUM}" ]; then
+            TODAY=$(date -u +%Y-%m-%d)
+            gh issue comment "$NUM" --body "Weekly Free-GTM run ${TODAY}: Directory drafts prepared. GBP Verify weiterhin Human-Gate."
+          else
+            echo "no_gbp_human_gate_issue"
+          fi

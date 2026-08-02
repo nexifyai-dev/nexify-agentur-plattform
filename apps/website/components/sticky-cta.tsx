@@ -29,7 +29,7 @@ export function StickyCta() {
           className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black shadow-[0_8px_32px_rgba(0,0,0,.5)]"
           data-testid="sticky-cta-link"
         >
-          {lang === "en" ? "Request project" : lang === "nl" ? "Project aanvragen" : "Projekt anfragen"}{" "}
+          {lang === "en" ? "Free consultation" : lang === "nl" ? "Gratis advies" : "Kostenlose Beratung"}{" "}
           <ArrowRight className="size-4 shrink-0" />
         </Link>
       </div>

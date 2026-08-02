@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, ChevronDown, Clock3 } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { ContentPageCta } from "@/components/content-page-cta";
 import { useContent } from "@/lib/content";
 import { WISSEN_ARTICLES } from "@/lib/content/wissen-articles";
 
@@ -105,6 +106,8 @@ export function KnowledgePage() {
             );
           })}
         </div>
+
+        <ContentPageCta />
       </div>
     </main>
   );

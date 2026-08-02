@@ -57,7 +57,22 @@ export const nl: Dict = {
       "Beschrijf uw plan – doorgaans ontvangt u binnen één werkdag een eerlijke inschatting met omvang en prijsindicatie. Of vraag het direct aan NeXify AI, onze AI-adviseur in de chat.",
     ctaBandBtn: "Aanvraag versturen",
     ctaBandBtn2: "Chat met NeXify AI",
+    ctaBandWissen: "Kennis & inzichten",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-agenten", "Automatisering", "E-commerce", "Web-apps", "Mobile apps", "SEO", "Cloud-infrastructuur", "API-integratie"],
+    githubProof: {
+      eyebrow: "Open source & transparantie",
+      title: "Techniek die u kunt nakijken",
+      text:
+        "Ons agency-platform en de website staan openbaar op GitHub — Next.js, FastAPI, TypeScript. Geen black box: stack, topics en leverbeloften zijn zichtbaar. Projectresultaten blijven geanonimiseerd (zie referenties).",
+      repoCta: "GitHub-repository",
+      casesCta: "Geanonimiseerde cases bekijken",
+      items: [
+        { value: "Next.js", label: "Agency-site & delivery-stack" },
+        { value: "FastAPI", label: "Backend & integraties" },
+        { value: "€ 449", label: "netto / dag — openbaar geprijsd" },
+        { value: "DACH+NL", label: "B2B-focus, gevestigd in Venlo" },
+      ],
+    },
   },
   services: [
     {
@@ -329,6 +344,12 @@ export const nl: Dict = {
     intro: "Praktijkgerichte kennis over websites, commerce, automatisering en AI-agenten – zonder marketingmist, mét duidelijke aanbevelingen.",
     readMore: "Verder lezen",
     readLess: "Inklappen",
+    cta: {
+      title: "Van kennis naar een concreet project?",
+      text: "Gratis eerste advies — inspanningsrange en prijskader doorgaans binnen één werkdag. Dagtarief € 449 netto, persoonlijk verantwoord.",
+      primary: "Project aanvragen",
+      secondary: "Diensten & prijzen",
+    },
     articles: [
       {
         tag: "Strategie",
