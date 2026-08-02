@@ -3,7 +3,7 @@
 
 /* ─────────────────────────────────────────────────────────────
    NeXify Premium — Design System
-   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Inter Tight
+   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Outfit / Manrope (design_guidelines.json)
    ───────────────────────────────────────────────────────────── */
 
 /* ══════════════════════════════════════════════════════════════
@@ -316,7 +316,7 @@ input.field:focus, textarea.field:focus, select.field:focus {
 
 /* ─────────────────────────────────────────────────────────────
    NeXify Premium — Design System
-   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Inter Tight
+   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Outfit / Manrope (design_guidelines.json)
    ───────────────────────────────────────────────────────────── */
 
 /* ══════════════════════════════════════════════════════════════
@@ -349,8 +349,8 @@ input.field:focus, textarea.field:focus, select.field:focus {
   --blue:   #60A5FA;
 
   /* ── Fonts ── */
-  --font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
   /* ── Spacing (8px grid) ── */
@@ -1084,10 +1084,8 @@ body::after {
   }
 }
 
-/* ── Font reconciliation: the restored premium block above still defines its own
-   display/body tokens, so we intentionally override them here with the shared
-   self-hosted Fontsource families imported in app/layout.tsx. This block stays
-   last so the brand fonts win the cascade everywhere. ── */
+/* ── Font SoT: Outfit/Manrope per design_guidelines.json (also declared in premium
+   token block). Cascade pin remains last for any future drift. ── */
 :root {
   --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
