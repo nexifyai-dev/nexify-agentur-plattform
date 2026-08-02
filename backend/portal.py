@@ -12,6 +12,13 @@ import bcrypt
 from fastapi import APIRouter, HTTPException, Request, Response, Depends
 from pydantic import BaseModel, EmailStr
 
+from lifecycle import (
+    DEFAULT_ACCOUNT_MANAGER,
+    LIFECYCLE_PHASES,
+    derive_lifecycle_phase,
+    lifecycle_timeline,
+)
+
 logger = logging.getLogger("nexify.portal")
 router = APIRouter()
 
@@ -1243,6 +1250,13 @@ async def payment_status(offer_id: str, user: dict = Depends(get_current_user)):
         )
     if state == "completed" and row["payment_status"] != "completed":
         offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+        async with pool.acquire() as con:
+            await con.execute(
+                "update nexify_offers set lifecycle_phase=$1 where id=$2 and (lifecycle_phase is null or lifecycle_phase in ('anfrage','angebot','freigabe'))",
+                "umsetzung",
+                uuid.UUID(offer_id),
+            )
+            await _ensure_deposit_invoice(con, row, state)
         asyncio.create_task(
             _SEND_EMAIL(
                 os.environ.get("INTERNAL_NOTIFY_EMAIL"),
@@ -1681,3 +1695,266 @@ async def seed_admin(db_getter):
                 email,
             )
             logger.info("admin password updated")
+
+
+# === PROJECT LIFECYCLE + INVOICES (Gesamtkonzept Kundenportal) ===
+
+
+def _json_field(raw):
+    if raw is None:
+        return None
+    if isinstance(raw, (dict, list)):
+        return raw
+    try:
+        return json.loads(raw)
+    except (TypeError, json.JSONDecodeError):
+        return None
+
+
+def project_payload(row, invoices=None) -> dict:
+    phase = derive_lifecycle_phase(row)
+    keys = set(row.keys()) if hasattr(row, "keys") else set()
+    deliverables = (
+        _json_field(row["deliverables_json"]) if "deliverables_json" in keys else None
+    )
+    next_actions = (
+        _json_field(row["next_actions_json"]) if "next_actions_json" in keys else None
+    )
+    am = (
+        _json_field(row["account_manager_json"])
+        if "account_manager_json" in keys
+        else None
+    )
+    if not isinstance(deliverables, list):
+        deliverables = []
+    if not isinstance(next_actions, list):
+        next_actions = []
+    if not isinstance(am, dict) or not am.get("name"):
+        am = dict(DEFAULT_ACCOUNT_MANAGER)
+    return {
+        "offer_id": str(row["id"]),
+        "lifecycle_phase": phase,
+        "timeline": lifecycle_timeline(phase),
+        "deliverables": deliverables,
+        "next_actions": next_actions,
+        "account_manager": am,
+        "payment_status": row["payment_status"] if "payment_status" in keys else None,
+        "offer_status": row["status"],
+        "invoices": invoices or [],
+    }
+
+
+class ProjectUpdateIn(BaseModel):
+    lifecycle_phase: str | None = None
+    deliverables: list | None = None
+    next_actions: list | None = None
+    account_manager: dict | None = None
+
+
+class InvoiceCreateIn(BaseModel):
+    title: str
+    amount_cents: int
+    number: str | None = None
+    currency: str = "EUR"
+    status: str = "issued"
+    pdf_url: str | None = None
+    revolut_order_id: str | None = None
+    notes: str | None = None
+
+
+def _invoice_dict(r) -> dict:
+    return {
+        "id": str(r["id"]),
+        "offer_id": str(r["offer_id"]),
+        "number": r["number"],
+        "title": r["title"],
+        "amount_cents": r["amount_cents"],
+        "currency": r["currency"] or "EUR",
+        "status": r["status"],
+        "pdf_url": r["pdf_url"],
+        "revolut_order_id": r["revolut_order_id"],
+        "notes": r["notes"],
+        "issued_at": r["issued_at"].isoformat() if r["issued_at"] else None,
+        "download_path": f"/api/portal/invoices/{r['id']}/pdf",
+    }
+
+
+async def _ensure_deposit_invoice(con, row, payment_state: str) -> None:
+    if payment_state != "completed":
+        return
+    existing = await con.fetchrow(
+        "select id from nexify_invoices where offer_id=$1 and revolut_order_id is not null limit 1",
+        row["id"],
+    )
+    if existing:
+        return
+    offer = json.loads(row["offer_json"]) if row["offer_json"] else {}
+    title = f"Anzahlung 1. Arbeitstag – {offer.get('title', 'NeXify AI')}"[:180]
+    await con.execute(
+        """insert into nexify_invoices
+           (id, offer_id, number, title, amount_cents, currency, status, revolut_order_id, notes)
+           values ($1,$2,$3,$4,$5,'EUR','paid',$6,$7)""",
+        uuid.uuid4(),
+        row["id"],
+        f"NX-{str(row['id'])[:8].upper()}-DEP",
+        title,
+        44900,
+        row["payment_order_id"],
+        "Automatisch aus Revolut-Zahlung (Merchant Order).",
+    )
+
+
+@router.get("/api/portal/offers/{offer_id}/project")
+async def portal_offer_project(offer_id: str, user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        if user["role"] == "admin":
+            row = await con.fetchrow(
+                "select * from nexify_offers where id=$1", uuid.UUID(offer_id)
+            )
+        else:
+            row = await con.fetchrow(
+                "select * from nexify_offers where id=$1 and lower(email)=$2",
+                uuid.UUID(offer_id),
+                user["email"].lower(),
+            )
+        if not row:
+            raise HTTPException(status_code=404, detail="Auftrag nicht gefunden.")
+        inv_rows = await con.fetch(
+            "select * from nexify_invoices where offer_id=$1 order by issued_at desc nulls last, created_at desc",
+            row["id"],
+        )
+    return project_payload(row, [_invoice_dict(r) for r in inv_rows])
+
+
+@router.patch("/api/admin/offers/{offer_id}/project")
+async def admin_update_project(
+    offer_id: str, body: ProjectUpdateIn, _: dict = Depends(get_admin)
+):
+    if body.lifecycle_phase and body.lifecycle_phase not in LIFECYCLE_PHASES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"lifecycle_phase must be one of: {', '.join(LIFECYCLE_PHASES)}",
+        )
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "select * from nexify_offers where id=$1", uuid.UUID(offer_id)
+        )
+        if not row:
+            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+
+        def _as_jsonb(value, fallback):
+            if value is None:
+                if fallback is None:
+                    return None
+                if isinstance(fallback, (dict, list)):
+                    return json.dumps(fallback)
+                return fallback
+            return json.dumps(value)
+
+        await con.execute(
+            """update nexify_offers set lifecycle_phase=$1, deliverables_json=$2::jsonb,
+               next_actions_json=$3::jsonb, account_manager_json=$4::jsonb where id=$5""",
+            body.lifecycle_phase
+            if body.lifecycle_phase is not None
+            else row["lifecycle_phase"],
+            _as_jsonb(body.deliverables, row["deliverables_json"]),
+            _as_jsonb(body.next_actions, row["next_actions_json"]),
+            _as_jsonb(body.account_manager, row["account_manager_json"]),
+            uuid.UUID(offer_id),
+        )
+        row = await con.fetchrow(
+            "select * from nexify_offers where id=$1", uuid.UUID(offer_id)
+        )
+        inv_rows = await con.fetch(
+            "select * from nexify_invoices where offer_id=$1 order by issued_at desc",
+            row["id"],
+        )
+    return project_payload(row, [_invoice_dict(r) for r in inv_rows])
+
+
+@router.post("/api/admin/offers/{offer_id}/invoices")
+async def admin_create_invoice(
+    offer_id: str, body: InvoiceCreateIn, _: dict = Depends(get_admin)
+):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        row = await con.fetchrow(
+            "select id from nexify_offers where id=$1", uuid.UUID(offer_id)
+        )
+        if not row:
+            raise HTTPException(status_code=404, detail="Angebot nicht gefunden.")
+        iid = uuid.uuid4()
+        number = body.number or f"NX-{str(iid)[:8].upper()}"
+        await con.execute(
+            """insert into nexify_invoices
+               (id, offer_id, number, title, amount_cents, currency, status, pdf_url, revolut_order_id, notes)
+               values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)""",
+            iid,
+            uuid.UUID(offer_id),
+            number,
+            body.title,
+            body.amount_cents,
+            body.currency,
+            body.status,
+            body.pdf_url,
+            body.revolut_order_id,
+            body.notes,
+        )
+        inv = await con.fetchrow("select * from nexify_invoices where id=$1", iid)
+    return _invoice_dict(inv)
+
+
+@router.get("/api/portal/invoices")
+async def portal_invoices(user: dict = Depends(get_current_user)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        if user["role"] == "admin":
+            rows = await con.fetch(
+                "select i.* from nexify_invoices i order by i.issued_at desc nulls last limit 200"
+            )
+        else:
+            rows = await con.fetch(
+                """select i.* from nexify_invoices i
+                   join nexify_offers o on o.id = i.offer_id
+                   where lower(o.email)=$1
+                   order by i.issued_at desc nulls last""",
+                user["email"].lower(),
+            )
+    return [_invoice_dict(r) for r in rows]
+
+
+@router.get("/api/portal/invoices/{invoice_id}/pdf")
+async def portal_invoice_pdf(invoice_id: str, user: dict = Depends(get_current_user)):
+    from fastapi.responses import RedirectResponse, Response as RawResponse
+
+    pool = await _DB()
+    async with pool.acquire() as con:
+        inv = await con.fetchrow(
+            "select * from nexify_invoices where id=$1", uuid.UUID(invoice_id)
+        )
+        if not inv:
+            raise HTTPException(status_code=404, detail="Rechnung nicht gefunden.")
+        offer = await con.fetchrow(
+            "select * from nexify_offers where id=$1", inv["offer_id"]
+        )
+    if not offer:
+        raise HTTPException(status_code=404, detail="Auftrag nicht gefunden.")
+    if user["role"] != "admin" and offer["email"].lower() != user["email"].lower():
+        raise HTTPException(status_code=404, detail="Rechnung nicht gefunden.")
+    if inv["pdf_url"]:
+        return RedirectResponse(inv["pdf_url"], status_code=302)
+    gen = _EXTRAS.get("invoice_pdf")
+    if not gen:
+        raise HTTPException(
+            status_code=503,
+            detail="Rechnungs-PDF-Generator nicht verfügbar. Bitte Account Manager kontaktieren.",
+        )
+    pdf = gen(inv, offer)
+    fname = f"NeXify-Rechnung-{inv['number'] or invoice_id[:8]}.pdf"
+    return RawResponse(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{fname}"'},
+    )

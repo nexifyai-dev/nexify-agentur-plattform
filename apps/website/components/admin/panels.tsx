@@ -5,6 +5,7 @@ import { Bot, ChevronDown, Download, Send } from "lucide-react";
 import { api } from "@/lib/auth";
 import { API_BASE } from "@/lib/company";
 import { ChatMarkdown } from "@/components/chat-markdown";
+import { ProjectStatusForm } from "@/components/admin/project-status-form";
 
 export type OfferItem = { name: string; description: string; days_min: number; days_max: number };
 export type OfferJson = { title?: string; intro?: string; items?: OfferItem[]; next_steps?: string[] } | null;
@@ -54,6 +55,9 @@ export function OfferRow({ o }: { o: Offer }) {
           <a href={`${API_BASE}/api/portal/offers/${o.id}/pdf`} target="_blank" rel="noreferrer" className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-[12px] font-semibold text-zinc-300 hover:border-white/30 hover:text-white" data-testid="admin-offer-pdf">
             <Download size={13} /> PDF
           </a>
+          <div className="mb-5">
+            <ProjectStatusForm offerId={o.id} />
+          </div>
           {o.offer?.items && (
             <div className="space-y-1.5">
               {o.offer.items.map((it: OfferItem, i: number) => (

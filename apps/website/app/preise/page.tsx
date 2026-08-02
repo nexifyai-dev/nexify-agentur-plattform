@@ -3,11 +3,11 @@ import { JsonLd } from "@/components/json-ld";
 import { PricingPage } from "@/components/pages/pricing";
 
 export const metadata = pageMetadata({
-  title: "Preise — 449 € netto pro Arbeitstag, volle Transparenz",
-  description: "Ein Tagessatz für alles: 449 € netto pro Arbeitstag. Interaktiver Projektkosten-Rechner, klare Leistungsspannen, keine versteckten Kosten. Ausschließlich B2B.",
+  title: "Preise — 449 € netto statt 1.000–1.500 € IT-Tagessatz",
+  description: "Fester Tagessatz 449 € netto: AI-Begleiter senkt Overhead gegenüber typischen 1.000–1.500 €. Projektkosten-Rechner, Revolut-Anzahlung, Belege im Kundenportal. B2B.",
   path: "/preise",
   ogTitle: "Preise — 449 € netto / Arbeitstag | NeXify AI",
-  ogDescription: "Transparente B2B-Preise: 449 € netto pro Arbeitstag. Keine versteckten Kosten.",
+  ogDescription: "449 € statt typisch 1.000–1.500 €. Transparent, B2B, Revolut-Belege im Portal.",
 });
 
 const breadcrumbJsonLd = breadcrumbListJsonLd([

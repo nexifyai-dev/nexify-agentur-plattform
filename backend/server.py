@@ -244,6 +244,26 @@ alter table nexify_offers add column if not exists payment_order_id text;
 alter table nexify_offers add column if not exists payment_checkout_url text;
 alter table nexify_offers add column if not exists payment_status text;
 alter table nexify_offers add column if not exists payment_amount numeric;
+alter table nexify_offers add column if not exists lifecycle_phase text;
+alter table nexify_offers add column if not exists deliverables_json jsonb;
+alter table nexify_offers add column if not exists next_actions_json jsonb;
+alter table nexify_offers add column if not exists account_manager_json jsonb;
+create table if not exists nexify_invoices (
+  id uuid primary key,
+  offer_id uuid not null,
+  number text,
+  title text,
+  amount_cents int,
+  currency text default 'EUR',
+  status text default 'issued',
+  pdf_url text,
+  revolut_order_id text,
+  notes text,
+  issued_at timestamptz default now(),
+  created_at timestamptz default now()
+);
+create index if not exists nexify_invoices_offer_idx on nexify_invoices(offer_id);
+
 create table if not exists nexify_tickets (
   id uuid primary key, user_id uuid, name text, email text, subject text,
   language text default 'de', status text default 'open', source text default 'portal',
@@ -979,6 +999,72 @@ def offer_pdf_bytes(
         c.drawString(48, y, ln)
         y -= 10
 
+    c.save()
+    return buf.getvalue()
+
+
+
+def invoice_pdf_bytes(inv, offer_row) -> bytes:
+    """Generate a B2B invoice/receipt PDF for portal download (Revolut-backed deposit or admin invoice)."""
+    import io
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.colors import HexColor
+    from reportlab.pdfgen import canvas as pdfcanvas
+
+    language = (offer_row["language"] if offer_row else "de") or "de"
+    nl = language == "nl"
+    buf = io.BytesIO()
+    c = pdfcanvas.Canvas(buf, pagesize=A4)
+    W, H = A4
+    bg, line = HexColor("#0a0a0c"), HexColor("#2a2a30")
+    white, silver, muted = HexColor("#fafafa"), HexColor("#c0c0c8"), HexColor("#8f8f98")
+    c.setFillColor(bg)
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    c.setFillColor(white)
+    c.setFont("Times-Bold", 22)
+    c.drawString(48, H - 64, "NeXify")
+    c.setFillColor(silver)
+    c.drawString(48 + c.stringWidth("NeXify", "Times-Bold", 22) + 4, H - 64, "AI")
+    c.setStrokeColor(line)
+    c.setLineWidth(0.7)
+    c.line(48, H - 92, W - 48, H - 92)
+    y = H - 130
+    c.setFillColor(muted)
+    c.setFont("Helvetica-Bold", 8)
+    label = "FACTUUR / BETALINGSBEVESTIGING" if nl else "RECHNUNG / ZAHLUNGSBELEG"
+    c.drawString(48, y, f"{label}  ·  {inv['number'] or ''}")
+    y -= 28
+    c.setFillColor(white)
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(48, y, (inv["title"] or ("Factuur" if nl else "Rechnung"))[:80])
+    y -= 24
+    name = offer_row["name"] if offer_row else ""
+    company = offer_row["company"] if offer_row else None
+    c.setFillColor(muted)
+    c.setFont("Helvetica", 10)
+    c.drawString(48, y, f"{'Voor' if nl else 'Für'}: {name}" + (f" · {company}" if company else ""))
+    y -= 20
+    amount = (inv["amount_cents"] or 0) / 100.0
+    c.setFillColor(white)
+    c.setFont("Helvetica-Bold", 14)
+    amt = f"€ {amount:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    c.drawString(48, y, f"{'Bedrag (netto)' if nl else 'Betrag (netto)'}: {amt}")
+    y -= 18
+    c.setFillColor(muted)
+    c.setFont("Helvetica", 9)
+    status = inv["status"] or "issued"
+    c.drawString(48, y, f"Status: {status}" + (f"  ·  Revolut Order: {inv['revolut_order_id']}" if inv["revolut_order_id"] else ""))
+    y -= 28
+    note = inv["notes"] or (
+        "Betaling via Revolut Merchant."
+        if nl
+        else "Zahlung via Revolut Merchant. Beleg für Anzahlung; steuerliche Rechnung folgt sofern erforderlich."
+    )
+    c.setFont("Helvetica", 9)
+    c.drawString(48, y, note[:95])
+    c.setFillColor(muted)
+    c.setFont("Helvetica", 7)
+    c.drawCentredString(W / 2, 42, "NeXify AI by NeXify · Pascal Courbois · Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01")
     c.save()
     return buf.getvalue()
 
@@ -1968,6 +2054,7 @@ async def startup():
         os.environ.get("FRONTEND_URL", ""),
         extras={
             "offer_pdf": offer_pdf_bytes,
+            "invoice_pdf": invoice_pdf_bytes,
             "offer_email_html": offer_email_html,
             "send_account_invite": send_account_invite,
             "ai_ticket_reply": ai_ticket_reply,
