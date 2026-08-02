@@ -1,0 +1,69 @@
+# FILE: .github/workflows/linear-pr-sync.yml
+# NIR: 02.08.2026 08:30
+# UPDATED: 02.08.2026 08:30
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Verlinkt Linear-Issue-IDs in PR-Kommentaren (idempotent).
+# WHY: Cloud-Agent-PRs sollen ohne Desktop in Linear nachvollziehbar sein.
+# BEST-PRACTICE: Skip wenn LINEAR_API_KEY fehlt; kein Secret-Echo.
+# PITFALL: V-LIN-01: Nur commenten wenn NEX-\d+ im Title/Body und noch kein Sync-Marker.
+# DEPENDS: optional LINEAR_API_KEY, LINEAR_TEAM_KEY (default NEX)
+# DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
+# SESSION: cloud-agent-event-ingest-7dd5
+
+name: Linear PR Sync
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  sync:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment Linear links (idempotent)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+          TEAM: ${{ vars.LINEAR_TEAM_KEY || 'NEX' }}
+        run: |
+          set -euo pipefail
+          text="${TITLE}
+          ${BODY}"
+          ids="$(printf '%s' "$text" | grep -Eo "${TEAM}-[0-9]+" | sort -u || true)"
+          if [ -z "$ids" ]; then
+            echo "no Linear ids — skip"
+            exit 0
+          fi
+
+          existing="$(gh api "repos/$REPO/issues/$PR/comments" --jq '.[].body' || true)"
+          if printf '%s' "$existing" | grep -q '<!-- nexify-linear-sync -->'; then
+            echo "sync comment already present"
+            exit 0
+          fi
+
+          links=""
+          for id in $ids; do
+            links="${links}- [${id}](https://linear.app/nexifyai/issue/${id})\n"
+            if [ -n "${LINEAR_API_KEY:-}" ]; then
+              # Best-effort GraphQL attach comment on Linear issue (ignore failures)
+              curl -sS -m 10 https://api.linear.app/graphql \
+                -H "Authorization: ${LINEAR_API_KEY}" \
+                -H "Content-Type: application/json" \
+                -d "{\"query\":\"mutation(\$b:CommentCreateInput!){commentCreate(input:\$b){success}}\",\"variables\":{\"b\":{\"body\":\"GitHub PR https://github.com/${REPO}/pull/${PR}\",\"issueId\":null}}}\}" \
+                >/dev/null 2>&1 || true
+            fi
+          done
+
+          body="$(printf '<!-- nexify-linear-sync -->\n### Linear\n%b\n_Auto-sync (idempotent)._' "$links")"
+          gh pr comment "$PR" --repo "$REPO" --body "$body"
+          echo "commented Linear links for: $ids"
