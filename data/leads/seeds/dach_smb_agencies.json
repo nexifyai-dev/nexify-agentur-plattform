@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "name": "dach_smb_agencies_public",
+    "note": "Public company websites only. do_not_mail=true for directories/associations used as sources.",
+    "legal": "B2B UWG legitimate interest for comparable digital/AI services."
+  },
+  "targets": [
+    {
+      "company": "NeXify AI Self-Test",
+      "website": "https://www.nexifyai.cloud",
+      "email": "mail@nexifyai.cloud",
+      "region": "NL",
+      "service_slug": "ai-agenten",
+      "role_hypothesis": "Self-test",
+      "contact_reason": "Self-test mailbox — verify SMTP + template before external B2B batch.",
+      "source_url": "https://www.nexifyai.cloud/impressum"
+    },
+    {
+      "company": "Agenturfamilie",
+      "website": "https://www.agenturfamilie.de",
+      "region": "DE",
+      "service_slug": "ai-agenten",
+      "role_hypothesis": "Geschäftsführung Agentur",
+      "contact_reason": "DACH-Agentur — AI-Begleiter/Automation als Ergänzung."
+    },
+    {
+      "company": "Sistrix",
+      "website": "https://www.sistrix.de",
+      "region": "DE",
+      "service_slug": "web-apps",
+      "role_hypothesis": "Partnerships / Marketing",
+      "contact_reason": "SEO-SaaS DACH — Partnerschaft/Integration denkbar."
+    },
+    {
+      "company": "Handwerkskammer Düsseldorf",
+      "website": "https://www.hwk-duesseldorf.de",
+      "region": "DE",
+      "do_not_mail": true,
+      "service_slug": "automatisierung",
+      "contact_reason": "Kammer = Verzeichnis-Quelle, kein Cold-Sales-Ziel."
+    },
+    {
+      "company": "IHK München",
+      "website": "https://www.ihk-muenchen.de",
+      "region": "DE",
+      "do_not_mail": true,
+      "service_slug": "automatisierung",
+      "contact_reason": "IHK = Verzeichnis-Quelle, nicht Cold-Mail-Ziel."
+    },
+    {
+      "company": "wlw",
+      "website": "https://www.wlw.de",
+      "region": "DE",
+      "do_not_mail": true,
+      "service_slug": "websites",
+      "contact_reason": "B2B-Verzeichnis — Supply-Profil / Demand-Quelle."
+    },
+    {
+      "company": "Bitkom",
+      "website": "https://www.bitkom.org",
+      "region": "DE",
+      "do_not_mail": true,
+      "service_slug": "ai-agenten",
+      "contact_reason": "Verband = Visibility, kein Mitglieder-Spam."
+    },
+    {
+      "company": "OpenSourceProjects",
+      "website": "https://opensourceprojects.dev",
+      "region": "EU",
+      "do_not_mail": true,
+      "service_slug": "web-apps",
+      "contact_reason": "Discovery-Kanal — Listing, kein Integrationsziel."
+    }
+  ]
+}

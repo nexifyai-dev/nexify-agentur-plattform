@@ -6,6 +6,7 @@ alwaysApply: true
 
 # Proactive Acquisition & Gap Radar (Pflicht)
 
+<<<<<<< HEAD
 Bei **jedem** Task (auch nicht-GTM) aktiv nach Lücken suchen — nicht warten,
 bis der User fragt. Regel: `.cursor/rules/60-proactive-acquisition-gaps.mdc`.
 Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
@@ -36,3 +37,19 @@ Session-Ende: nach `session-learn` auch Acquisition-Opportunities notieren
 - Kein Hermes-Produktions-Cutover
 - Keine Secrets in Issues/Docs/Commits
 - Kein Paid-Ads-Spend / keine neuen kostenpflichtigen SaaS-Abos ohne Mandat
+=======
+Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+Zero-cost leads: `docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md`.
+
+## Lead-Queue (bei GTM-Arbeit Pflicht)
+
+```bash
+python3 scripts/leads/run_pipeline.py discover --seed data/leads/seeds/dach_smb_agencies.json
+python3 scripts/leads/run_pipeline.py status
+python3 scripts/leads/run_pipeline.py mail --limit 8
+python3 scripts/leads/run_pipeline.py allow --limit 8
+python3 scripts/leads/run_pipeline.py mail --send --limit 8
+```
+
+HARD STOPs: keine Fake-Reviews, kein Hermes-Cutover, keine Secrets, kein Paid-Ads-Spend.
+>>>>>>> 0d1c83b8 (feat(gtm): activate zero-cost lead discovery + Hostinger mailing)
