@@ -75,6 +75,7 @@ test('booking slots returns empty array fallback without inventing appointments'
   const slots = read('../app/api/booking/slots/route.ts');
   const book = read('../app/api/booking/book/route.ts');
   assert.match(slots, /NextResponse\.json\(\[\]\)/);
+  assert.match(slots, /upstream\.ok/);
   assert.match(book, /status: 503/);
 });
 
