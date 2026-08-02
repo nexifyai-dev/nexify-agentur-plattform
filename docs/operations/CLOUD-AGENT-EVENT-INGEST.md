@@ -96,3 +96,7 @@ python3 scripts/event-ingest/dispatch_cloud_agent.py \
 
 gh workflow run "Event → Cursor Cloud Agent" -f prompt="Smoke triage" -f source=manual
 ```
+
+## Draft → ready (#135)
+
+`pr-auto-merge.yml`: when label `automerge` is present, base=`main`, checks green, and PR is draft → `gh pr ready` then enable squash auto-merge. Label `do-not-merge` blocks.
