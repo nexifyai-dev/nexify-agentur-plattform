@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ChatWidget } from "@/components/chat-widget";
 import { CookieConsent } from "@/components/cookie-consent";
 import { StickyCta } from "@/components/sticky-cta";
+import { ExitIntent } from "@/components/exit-intent";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
@@ -110,6 +111,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div id="main-content">{children}</div>
           <SiteFooter />
           <StickyCta />
+          <ExitIntent />
           <ChatWidget />
           <CookieConsent />
           <PwaRegister />
