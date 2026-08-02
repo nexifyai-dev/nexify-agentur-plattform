@@ -17,7 +17,7 @@ test('globals.css must not force header to position:relative (breaks fixed nav)'
 test('cookie banner uses pointer-events-none shell so footer links stay clickable', () => {
   const src = read('../components/cookie-consent.tsx');
   assert.match(src, /pointer-events-none fixed inset-x-0 bottom-0/);
-  assert.match(src, /pointer-events-auto mx-auto max-w-2xl/);
+  assert.match(src, /pointer-events-auto mx-auto mb-\[4\.5rem\] max-w-2xl/);
 });
 
 test('next.config validates BACKEND_ORIGIN before adding /api rewrite', () => {
