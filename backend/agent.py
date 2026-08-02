@@ -3,7 +3,9 @@ import json
 import uuid
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 from datetime import datetime
+from typing import Any, cast
 from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends
@@ -16,16 +18,24 @@ import channel_sync
 logger = logging.getLogger("nexify.agent")
 router = APIRouter()
 
-_DB = None
-_LLM = None
+# Injected in init(); cast keeps mypy happy before startup wiring.
+_DB = cast(Callable[[], Awaitable[Any]], None)
+_LLM = cast(Any, None)
 _MODEL = ""
-_SEND_EMAIL = None
-_CI_EMAIL = None
+_SEND_EMAIL = cast(Callable[..., Any], None)
+_CI_EMAIL = cast(Callable[..., Any], None)
 FRONTEND_URL = ""
 TZ = ZoneInfo("Europe/Amsterdam")
 
 
-def init(db_getter, llm_client, model: str, send_email, ci_email, frontend_url: str):
+def init(
+    db_getter: Callable[[], Awaitable[Any]],
+    llm_client: Any,
+    model: str,
+    send_email: Callable[..., Any],
+    ci_email: Callable[..., Any],
+    frontend_url: str,
+):
     global _DB, _LLM, _MODEL, _SEND_EMAIL, _CI_EMAIL, FRONTEND_URL
     _DB = db_getter
     _LLM = llm_client

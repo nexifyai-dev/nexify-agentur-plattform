@@ -3,7 +3,9 @@ import json
 import uuid
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 from datetime import datetime, timezone, timedelta
+from typing import Any, cast
 
 import jwt
 import bcrypt
@@ -13,9 +15,10 @@ from pydantic import BaseModel, EmailStr
 logger = logging.getLogger("nexify.portal")
 router = APIRouter()
 
-_DB = None
-_SEND_EMAIL = None
-_CI_EMAIL = None
+# Injected in init(); cast keeps mypy happy before startup wiring.
+_DB = cast(Callable[[], Awaitable[Any]], None)
+_SEND_EMAIL = cast(Callable[..., Any], None)
+_CI_EMAIL = cast(Callable[..., Any], None)
 FRONTEND_URL = ""
 _EXTRAS: dict = {}
 JWT_ALGORITHM = "HS256"
@@ -23,7 +26,11 @@ LOGIN_ATTEMPTS: dict[str, list] = {}
 
 
 def init(
-    db_getter, send_email, ci_email, frontend_url: str, extras: dict | None = None
+    db_getter: Callable[[], Awaitable[Any]],
+    send_email: Callable[..., Any],
+    ci_email: Callable[..., Any],
+    frontend_url: str,
+    extras: dict | None = None,
 ):
     global _DB, _SEND_EMAIL, _CI_EMAIL, FRONTEND_URL, _EXTRAS
     _DB = db_getter
