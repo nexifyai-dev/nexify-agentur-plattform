@@ -12,11 +12,11 @@
         "AGENTMEMORY_TOOLS": "all",
         "AGENTMEMORY_INJECT_CONTEXT": "true"
       },
-      "description": "Systemweites Betriebsged\u00e4chtnis (Pflicht). REST :3111, Viewer :3113."
+      "description": "Systemweites Betriebsgedächtnis (Pflicht). REST :3111, Viewer :3113. TOOLS=all = voller Tool-Satz (nicht nur Shim)."
     },
     "context7": {
       "url": "https://mcp.context7.com/mcp",
-      "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor \u00dcbernahme."
+      "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor Übernahme."
     },
     "lightrag": {
       "command": "python3",
@@ -26,7 +26,7 @@
       "env": {
         "LIGHTRAG_URL": "http://127.0.0.1:9622"
       },
-      "description": "LightRAG Knowledge Graph (Vektorsuche). Origin :9622 \u2014 Secrets nur Env."
+      "description": "LightRAG Knowledge Graph (Vektorsuche). Origin :9622 — Secrets nur Env. Embedding IST: Upstage embedding-passage."
     },
     "gitlab-oss": {
       "command": "npx",
@@ -46,21 +46,27 @@
       "args": [
         "hostinger-domains-mcp"
       ],
-      "description": "Hostinger Domains MCP \u2014 token via /etc/nexifyai/hostinger-api.env (wrapper)."
+      "description": "Hostinger Domains MCP — token via /etc/nexifyai/hostinger-api.env (wrapper)."
     },
     "hostinger-dns": {
       "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
       "args": [
         "hostinger-dns-mcp"
       ],
-      "description": "Hostinger DNS MCP \u2014 token via env file; never commit secrets."
+      "description": "Hostinger DNS MCP — token via env file; never commit secrets."
     },
     "hostinger-vps": {
       "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
       "args": [
         "hostinger-vps-mcp"
       ],
-      "description": "Hostinger VPS MCP \u2014 read-first; no destructive deletes without approval."
+      "description": "Hostinger VPS MCP — read-first; no destructive deletes without approval."
     }
+  },
+  "_comments": {
+    "agentmemory_single": "Prefer EINEN agentmemory-Eintrag mit AGENTMEMORY_TOOLS=all. Nicht zusätzlich einen zweiten 'user-agentmemory' mit Teil-Toolset parallel aktiv halten, wenn beide denselben :3111 treffen — doppelte Recall/Save und Cursor zeigt project-0-* vs user-* Duplikate.",
+    "project_vs_user_duplicate": "Cursor kann Project-MCP (.cursor/mcp.json) UND User-MCP (~/.cursor/mcp.json) laden. Bei Duplikat-Servern (agentmemory, lightrag, context7, gitlab-oss): Project-Example ist kanonisch für dieses Repo; User-Kopie deaktivieren oder identisch halten, sonst Tool-Noise und Circuit-Breaker-Wiederholungen.",
+    "secrets": "Nie echte Secrets in mcp.json committen — nur ${ENV}-Platzhalter. Lokal: cp .cursor/mcp.json.example .cursor/mcp.json",
+    "dual_write": "Optionaler Commit-Dual-Write: docs/operations/BRAIN-DUAL-WRITE.md — nicht Teil von MCP."
   }
 }
