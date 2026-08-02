@@ -1,15 +1,15 @@
 # FILE: .github/workflows/pr-auto-merge.yml
 # NIR: 02.08.2026 08:25
-# UPDATED: 02.08.2026 08:25
+# UPDATED: 02.08.2026 08:55
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Label-basiertes Auto-Merge für grüne PRs (kein Force-Main).
+# WHAT: Label-basiertes Auto-Merge; Draft→Ready bei automerge + grünen Checks.
 # WHY: Cursor-/Agent-PRs sollen nach CI + Guards mergen, ohne Blind-Merge.
-# BEST-PRACTICE: Nur Squash+Auto-Merge API; Draft/do-not-merge/base≠main blocken.
-# PITFALL: V-AM-01: Ohne required checks ist enableAutoMerge wirkungslos → Branch Protection nötig.
+# BEST-PRACTICE: Squash+Auto-Merge; do-not-merge/base≠main blocken; Draft→ready wenn gates ok.
+# PITFALL: V-AM-01: Ohne required checks wirkungslos; V-AM-02: Draft ohne ready → nie merge (#135).
 # DEPENDS: Repo Settings → Rulesets/Branch protection (required status checks)
 # DOCS-REF: docs/operations/AGENT-TRIGGERS-INTEGRATIONS.md
-# SESSION: agent-triggers-integrations-7dd5
+# SESSION: fix-draft-automerge-loop-7dd5
 
 name: PR Auto-Merge (label-gated)
 
@@ -80,10 +80,6 @@ jobs:
             echo "skip: PR not open"
             exit 0
           fi
-          if [ "$is_draft" = "true" ]; then
-            echo "skip: draft PR"
-            exit 0
-          fi
           if [ "$base" != "main" ] && [ "$base" != "develop" ]; then
             echo "skip: base branch '$base' not allowlisted"
             exit 0
@@ -106,6 +102,16 @@ jobs:
           if [ -n "$failing" ]; then
             echo "skip: failing checks: $failing"
             exit 0
+          fi
+
+          # P0 #135: Draft + automerge + green checks → mark ready, then enable auto-merge.
+          # Keeps draft-first autopilot; do-not-merge and failing checks still block.
+          if [ "$is_draft" = "true" ]; then
+            echo "draft with automerge + green checks → gh pr ready #$PR"
+            if ! gh pr ready "$PR" --repo "$REPO"; then
+              echo "::warning::Could not mark PR ready (permissions?); skip auto-merge"
+              exit 0
+            fi
           fi
 
           # Enable GitHub native auto-merge (squash). Requires repo auto-merge + branch protection.
