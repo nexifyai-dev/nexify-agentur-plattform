@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/CHANNEL_REGISTER_V1.md
 # NIR: 02.08.2026 07:40
-# UPDATED: 02.08.2026 07:40
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Register aller kostenfreien Supply- und Demand-Kanäle
@@ -8,8 +8,8 @@
 # BEST-PRACTICE: Status nur nach Evidence-URL aktualisieren
 # PITFALL: V-GTM-03: „3 Monate gratis“-Fallen (Gelbe Seiten Starteintrag) meiden
 # DEPENDS: NAP_MASTER_V1.md, OFFER_SNIPPETS_*.md
-# DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md
-# SESSION: gtm-kostenfrei-angebote-c6e3
+# DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md, docs/operations/GOOGLE-SEARCH-CONSOLE.md
+# SESSION: gsc-ownership-confirmed-7dd5
 
 # Channel-Register V1 (Free-Tier only)
 
@@ -20,6 +20,7 @@
 
 | ID | Kanal | URL | Prio | Free? | Owner-Gate | utm_source | Status | Evidence |
 |----|-------|-----|------|-------|------------|------------|--------|----------|
+| S00 | Google Search Console | https://search.google.com/search-console | A1 | ja | Ownership+Sitemap DONE; Index/Prefs #243 | gsc | live_ownership | [Ops](../operations/GOOGLE-SEARCH-CONSOLE.md) |
 | S01 | Google Unternehmensprofil | https://business.google.com/ | A1 | ja | Verify (Video/Post) | google_business | pending_owner | [S01](evidence/supply-wave1/S01-google-business.md) |
 | S02 | LinkedIn Company | https://www.linkedin.com/company/ | A1 | ja | Owner Login | linkedin_company | pending_owner | [S02](evidence/supply-wave1/S02-linkedin-company.md) |
 | S03 | LinkedIn Personal (Pascal) | https://www.linkedin.com/ | A1 | ja | Owner Login | linkedin_personal | pending_owner | [S03](evidence/supply-wave1/S03-linkedin-personal.md) |

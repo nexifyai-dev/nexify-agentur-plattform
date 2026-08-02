@@ -14,6 +14,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [CONVERSION_LOOP_V1.md](CONVERSION_LOOP_V1.md) | Lead → Angebot → KPI |
 | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) | Skalierungsgrenzen |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar (Agents pflegen) |
+| [GOOGLE-SEARCH-CONSOLE.md](../operations/GOOGLE-SEARCH-CONSOLE.md) | GSC Domain-Ownership (DNS) + Sitemap/Index Human-Checklist |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
 
 Script: `python3 scripts/gtm/demand_scan_prepare.py --demo`  
