@@ -3,10 +3,15 @@
 # Perfektes Gesamtkonzept · 2026-06-20
 # ═══════════════════════════════════════════════════════════════
 
+> **Status:** ⚠️ HISTORISCH (2026-06-20) — **nicht** aktuelle Design-SoT  
+> **Aktuelle SoT:** Root-`design_guidelines.json` (Dark/Luxury, Outfit/Manrope, `#0A0A0A`)  
+> „Graphite Premium“ / dieses Master-Dokument sind Legacy-Konsolidierung — nicht für
+> neue UI-Arbeit übernehmen. Website = `apps/website` + Design-Guidelines.
+
 > **Konsolidiert von:** Hermes Agent (vps-admin) — Langlauf Run 2
 > **Designer:** Rekonstruiert + vereint aus 5 fragmentierten Systemen
 > **Experten:** UI-Architektur · Marketing/Brand · Design-System
-> **Status:** 🟢 Kanonisch — ersetzt alle Vorgänger
+> **Früherer Status-Claim „Kanonisch“:** widerrufen zugunsten `design_guidelines.json`
 
 ---
 
@@ -243,7 +248,7 @@ Das Herz des Premium-Designs. Lichtquelle: **45° von links-oben**.
 Layer 0 — Surface (flach)
   └─ kein Schatten, nur 1px border-subtle
   └─ Bg, Sidebar, Inputs
-     
+
 Layer 1 — Cards, Panels (leicht erhaben)
   ├─ shadow: 0 1px 2px rgba(0,0,0,0.04)
   └─ Hover: translateY(-1px) + shadow Verstärkung

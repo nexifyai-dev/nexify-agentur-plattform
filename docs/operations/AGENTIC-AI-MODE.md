@@ -153,12 +153,19 @@ Zusatzchecks im Deviation-Scan:
 
 Cursor-Command: `/pr-flow`
 
+## Brain Dual-Write (optional)
+
+Siehe `docs/operations/BRAIN-DUAL-WRITE.md`. Helper: `scripts/brain-dual-write.sh`.
+Nicht als „überall aktiv“ dokumentieren — No-op ohne Env / ohne Hook-Path.
+
 ## Modell-Strategie
 
 Verbindlich ist `docs/governance/GOVERNANCE.md` §5: DeepSeek V4 ist aktiv
 und vollintegriert; Upstage befindet sich in geplanter, gestaffelter
 Migration. Abweichende Cutover-Behauptungen benötigen einen aktualisierten
 Governance-Nachweis.
+
+**LightRAG Embedding IST (2026-08-02):** Upstage `embedding-passage` (nicht „nur Ollama bge-m3“).
 
 ## Ausgeschlossen
 
