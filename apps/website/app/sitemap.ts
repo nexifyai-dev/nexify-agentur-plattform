@@ -4,8 +4,6 @@ import { branchenSlugs } from "@/lib/gtm/branchen";
 import { leistungSeoSlugs } from "@/lib/gtm/leistungen-seo";
 import { siteOrigin } from "@/lib/seo";
 
-import { branchenSlugs } from "@/lib/gtm/branchen";
-
 const routes = [
   "",
   "/leistungen",
@@ -16,9 +14,6 @@ const routes = [
   "/preise",
   "/prozess",
   "/vergleich",
-  "/audit",
-  "/branchen",
-  ...branchenSlugs().map((slug) => `/branchen/${slug}`),
   "/plattform",
   "/referenzen",
   "/wissen",
@@ -29,13 +24,9 @@ const routes = [
   "/partner",
   "/sprechstunde",
   "/alternativen",
-  "/vergleich",
   "/vergleich/chatgpt",
   "/vergleich/freelance",
-  "/checkliste",
   "/ki-agentur",
-  "/partner",
-  "/alternativen",
   "/ueber-mich",
   "/venlo",
   "/danke",
