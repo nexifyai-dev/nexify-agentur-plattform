@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeXify AI — Monitoring Panel (Preview)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0a0a0a;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.1);--text:#fff;--muted:#a1a1aa;--accent:#e0e0e0}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse 70% 45% at 80% -10%,rgba(255,255,255,.05),transparent),var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif}
+    .shell{max-width:960px;margin:0 auto;padding:2rem 1.25rem 3rem}
+    h1{font-family:Outfit,sans-serif;font-weight:300;letter-spacing:-.03em;margin:0 0 .4rem;font-size:clamp(1.6rem,3.5vw,2.3rem)}
+    .eyebrow{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 1.2rem}
+    .lede{color:var(--muted);line-height:1.6;max-width:38rem;margin:0 0 1.5rem}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:1.15rem;padding:1.2rem}
+    .status{display:flex;gap:.5rem;align-items:center;color:var(--muted);margin-bottom:1rem}
+    .dot{width:.55rem;height:.55rem;border-radius:999px;background:#52525b}
+    .dot.ok{background:#86efac}.dot.bad{background:#f87171}
+    .actions{display:flex;flex-wrap:wrap;gap:.65rem}
+    .btn{text-decoration:none;color:#0a0a0a;background:var(--accent);padding:.55rem 1rem;border-radius:999px;font-family:Outfit,sans-serif;font-weight:500;font-size:.9rem;border:0;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .note{margin-top:1rem;font-size:.85rem;color:var(--muted);line-height:1.5}
+    pre{white-space:pre-wrap;color:var(--muted);font-size:.85rem;margin:1rem 0 0}
+  </style>
+</head>
+<body>
+  <main class="shell" data-testid="monitoring-panel-preview">
+    <p class="eyebrow">WebUI-Zentrale · Preview</p>
+    <h1 data-testid="monitoring-panel-brand">NeXify AI</h1>
+    <p class="lede" data-testid="monitoring-panel-lede">
+      Native Monitoring-Modulfläche (Stub). Grafana lokal <code>:3000</code> · Traefik HTTPS Host grafana.
+      CF public DNS weiterhin blocked — kein Fake-Record.
+    </p>
+    <section class="panel">
+      <div class="status" data-testid="monitoring-health">
+        <span class="dot" id="dot"></span>
+        <span id="label">Grafana /api/health: prüfe…</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="probe" data-testid="monitoring-probe">Probe local :3000</button>
+        <a class="btn ghost" href="https://grafana.nexifyai.cloud/" rel="noopener" data-testid="monitoring-open-grafana">Grafana HTTPS</a>
+        <a class="btn ghost" href="http://127.0.0.1:8790/" data-testid="monitoring-back-hub">Hermes Preview Hub</a>
+      </div>
+      <p class="note">Smoke: <code>curl -sk --resolve grafana.nexifyai.cloud:443:127.0.0.1 https://grafana.nexifyai.cloud/api/health</code> — nie :8080 (cAdvisor).</p>
+      <pre id="out" data-testid="monitoring-out"></pre>
+    </section>
+  </main>
+  <script>
+    async function probe() {
+      const dot=document.getElementById('dot');
+      const label=document.getElementById('label');
+      const out=document.getElementById('out');
+      try {
+        const res=await fetch('http://127.0.0.1:3000/api/health');
+        const data=await res.json();
+        dot.className='dot '+(res.ok?'ok':'bad');
+        label.textContent='Grafana /api/health: HTTP '+res.status+' db='+(data.database||'?');
+        out.textContent=JSON.stringify(data,null,2);
+      } catch(e) {
+        dot.className='dot bad';
+        label.textContent='Grafana lokal nicht erreichbar / CORS — CLI-Smoke nutzen';
+        out.textContent=String(e);
+      }
+    }
+    document.getElementById('probe').addEventListener('click', probe);
+    probe();
+  </script>
+</body>
+</html>
