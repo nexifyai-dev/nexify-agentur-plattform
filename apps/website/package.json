@@ -11,7 +11,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:design": "playwright test",
     "test:all": "pnpm test && pnpm typecheck && pnpm lint && pnpm build && pnpm test:design",
-    "test:design-audit": "playwright test tests/e2e/design-audit.spec.ts"
+    "test:design-audit": "playwright test tests/e2e/design-audit.spec.ts",
+    "test:e2e:critical": "playwright test tests/e2e/critical-path.spec.ts"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "5.3.0",

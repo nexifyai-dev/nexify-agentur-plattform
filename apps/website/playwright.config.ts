@@ -16,7 +16,7 @@ export default defineConfig({
     { name: 'chromium-design', use: { ...devices['Desktop Chrome'] } },
   ],
   webServer: {
-    command: 'pnpm start -- -p 3137',
+    command: 'pnpm exec next start -p 3137',
     url: 'http://127.0.0.1:3137',
     reuseExistingServer: false,
     timeout: 120_000,
