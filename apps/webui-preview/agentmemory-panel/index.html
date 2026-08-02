@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NeXify AI — AgentMemory Panel (Preview Stub)</title>
+  <title>NeXify AI — AgentMemory Panel (Preview)</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
     :root{--bg:#0a0a0a;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.1);--text:#fff;--muted:#a1a1aa;--accent:#e0e0e0}
@@ -11,35 +11,38 @@
     .shell{max-width:1100px;margin:0 auto;padding:2rem 1.25rem 3rem}
     .brand{font-family:Outfit,sans-serif;font-weight:300;letter-spacing:-.03em;font-size:clamp(1.7rem,4vw,2.4rem);margin:0 0 .35rem}
     .eyebrow{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 1.25rem}
-    .lede{color:var(--muted);max-width:40rem;line-height:1.6;margin:0 0 1.5rem}
+    .lede{color:var(--muted);max-width:42rem;line-height:1.6;margin:0 0 1.5rem}
     .layout{display:grid;gap:1rem;grid-template-columns:220px 1fr}
     @media(max-width:800px){.layout{grid-template-columns:1fr}}
     .nav,.panel{background:var(--surface);border:1px solid var(--border);border-radius:1.15rem;padding:1rem}
     .nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--muted);font:inherit;padding:.55rem .65rem;border-radius:.65rem;cursor:pointer}
     .nav button.active,.nav button:hover{background:rgba(255,255,255,.06);color:var(--text)}
-    .status{display:flex;gap:.5rem;align-items:center;color:var(--muted);font-size:.9rem;margin-bottom:1rem}
+    .status{display:flex;gap:.5rem;align-items:center;color:var(--muted);font-size:.9rem;margin-bottom:1rem;flex-wrap:wrap}
     .dot{width:.55rem;height:.55rem;border-radius:999px;background:#52525b}
     .dot.ok{background:#86efac}.dot.bad{background:#f87171}
     .actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:1rem}
     .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:999px;padding:.55rem 1rem;font-family:Outfit,sans-serif;font-weight:500;text-decoration:none;cursor:pointer}
     .btn.primary{background:var(--accent);color:#0a0a0a;border-color:transparent}
-    .results{font-size:.9rem;color:var(--muted);line-height:1.5;white-space:pre-wrap;min-height:8rem}
-    input[type=search],input[type=password]{width:100%;max-width:28rem;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:.75rem;color:var(--text);padding:.6rem .75rem;margin:.35rem 0 .75rem;font:inherit}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+    .results{font-size:.9rem;color:var(--muted);line-height:1.5;white-space:pre-wrap;min-height:10rem;max-height:28rem;overflow:auto}
+    input[type=search],input[type=password],textarea{width:100%;max-width:36rem;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:.75rem;color:var(--text);padding:.6rem .75rem;margin:.35rem 0 .75rem;font:inherit}
+    textarea{min-height:4.5rem;resize:vertical}
     label{font-size:.8rem;color:var(--muted);display:block}
     .note{font-size:.82rem;color:var(--muted);margin-top:1rem}
+    .meta{font-size:.78rem;color:var(--muted)}
   </style>
 </head>
 <body>
   <main class="shell" data-testid="agentmemory-panel-preview">
-    <p class="eyebrow">WebUI-Zentrale · Preview Stub</p>
+    <p class="eyebrow">WebUI-Zentrale · Preview · Issue #141</p>
     <h1 class="brand" data-testid="agentmemory-panel-brand">NeXify AI</h1>
     <p class="lede" data-testid="agentmemory-panel-lede">
-      Native AgentMemory-Modulfläche (Stub). Official REST <code>:3111</code> · Viewer <code>:3113</code>.
-      Secrets nie im Code — Token nur optional in <code>sessionStorage</code>.
+      Native AgentMemory-Modulfläche gegen echte REST <code>/agentmemory/*</code>
+      (Upstream <code>:3111</code> via same-origin Proxy). Viewer <code>:3113</code> nur Übergang — kein Iframe-Dauerziel.
+      Secrets nie im Code — Token optional in <code>sessionStorage</code>.
     </p>
     <div class="layout">
       <nav class="nav" data-testid="agentmemory-view-nav" aria-label="AgentMemory Views">
-        <!-- 11 native views checklist (Mandat) -->
         <button type="button" class="active" data-view="overview" data-testid="am-view-overview">Overview</button>
         <button type="button" data-view="live" data-testid="am-view-live">Live Stream</button>
         <button type="button" data-view="sessions" data-testid="am-view-sessions">Sessions</button>
@@ -56,88 +59,219 @@
         <div class="status" data-testid="agentmemory-health">
           <span class="dot" id="dot"></span>
           <span id="healthLabel">REST livez: prüfe…</span>
+          <span class="meta" id="baseHint"></span>
         </div>
         <div class="actions">
           <a class="btn primary" href="http://127.0.0.1:3113/" target="_blank" rel="noopener" data-testid="am-open-viewer">Official Viewer :3113</a>
           <button type="button" class="btn" id="btnProbe" data-testid="am-probe-livez">Probe livez</button>
+          <button type="button" class="btn" id="btnRunView" data-testid="am-run-view">View laden</button>
           <button type="button" class="btn" id="btnSearch" data-testid="am-run-smart-search">Smart Search</button>
+          <button type="button" class="btn" id="btnRemember" data-testid="am-run-remember">Remember</button>
         </div>
         <label for="tok">Bearer Token (sessionStorage only, optional)</label>
         <input id="tok" type="password" autocomplete="off" placeholder="nicht committen — lokal einfügen" data-testid="am-token-input" />
-        <label for="q">Query</label>
-        <input id="q" type="search" value="Gesamtsystem WebUI AgentMemory" data-testid="am-search-input" />
-        <div class="results" id="out" data-testid="am-results">View: Overview — Stub. Wähle Smart Search für REST-Probe.</div>
-        <p class="note">Official: POST /agentmemory/smart-search · POST /agentmemory/remember · GET /agentmemory/livez (agent-memory.dev / mintlify api-search).</p>
+        <label for="q">Query / Filter</label>
+        <input id="q" type="search" value="Hermes WebUI bleiben native panels" data-testid="am-search-input" />
+        <label for="rememberBody">Remember content (POST /agentmemory/remember)</label>
+        <textarea id="rememberBody" data-testid="am-remember-input">Preview panel smoke: Hermes WebUI bleiben — native AM REST probe.</textarea>
+        <div class="results" id="out" data-testid="am-results">View: Overview — wähle View laden für REST.</div>
+        <p class="note">
+          Start: <code>python3 apps/webui-preview/agentmemory-panel/serve.py</code>
+          → same-origin Proxy. Official: livez · smart-search · remember · sessions · memories · lessons · frontier · audit · export · graph/stats.
+          Registry: <code>prod_patch_allowed: false</code>. Decision: GitHub #141.
+        </p>
       </section>
     </div>
   </main>
   <script>
-    const views = {
-      overview: 'Overview — Native Brain Shell (Preview). Viewer bleibt Übergang bis 11 Views fertig.',
-      live: 'Live Stream — Viewer Observation Stream (Official :3113). Native Rebuild pending.',
-      sessions: 'Sessions — Session Explorer / Replay (Official).',
-      browser: 'Memory Browser — Filter by project/type/confidence.',
-      search: 'Smart Search — hybrid BM25+vector+graph (POST /agentmemory/smart-search).',
-      graph: 'Knowledge Graph — force-directed (Official Viewer).',
-      lessons: 'Lessons / Crystals — includeLessons in smart-search.',
-      actions: 'Actions Queue — pending/blocked/done (NeXify Pflicht).',
-      sentinels: 'Sentinels — event watchers (NeXify Gesamtlösung).',
-      health: 'Health — livez + viewerPort (REST).',
-      audit: 'Audit / Export — governance + export tools (MCP TOOLS=all).'
+    /**
+     * Prefer same-origin /agentmemory (serve.py proxy). Fallback direct :3111 for curl-like probes.
+     */
+    const AM_BASE = (location.port === '8792' || location.pathname.includes('agentmemory-panel'))
+      ? ''
+      : 'http://127.0.0.1:3111';
+
+    const viewMeta = {
+      overview: { hint: 'Overview — livez + sessions count + frontier next.', run: 'overview' },
+      live: { hint: 'Live — GET /agentmemory/observations (latest). Native stream later.', run: 'live' },
+      sessions: { hint: 'Sessions — GET /agentmemory/sessions', run: 'sessions' },
+      browser: { hint: 'Memory Browser — GET /agentmemory/memories?limit=20', run: 'browser' },
+      search: { hint: 'Smart Search — POST /agentmemory/smart-search', run: 'search' },
+      graph: { hint: 'Knowledge Graph — GET /agentmemory/graph/stats', run: 'graph' },
+      lessons: { hint: 'Lessons — POST /agentmemory/lessons/search', run: 'lessons' },
+      actions: { hint: 'Actions — GET /agentmemory/frontier + /agentmemory/next', run: 'actions' },
+      sentinels: { hint: 'Sentinels — POST /agentmemory/sentinels/check (read-safe)', run: 'sentinels' },
+      health: { hint: 'Health — GET /agentmemory/livez + /agentmemory/health', run: 'health' },
+      audit: { hint: 'Audit / Export — GET /agentmemory/audit + /agentmemory/export (truncated)', run: 'audit' }
     };
+
+    let activeView = 'overview';
     const out = document.getElementById('out');
     const tokInput = document.getElementById('tok');
+    document.getElementById('baseHint').textContent = 'API base: ' + (AM_BASE || '(same-origin proxy)');
+
     tokInput.value = sessionStorage.getItem('AM_BEARER') || '';
     tokInput.addEventListener('change', () => {
       if (tokInput.value) sessionStorage.setItem('AM_BEARER', tokInput.value);
       else sessionStorage.removeItem('AM_BEARER');
     });
+
+    function authHeaders(json) {
+      const token = sessionStorage.getItem('AM_BEARER') || '';
+      const h = {};
+      if (json) h['Content-Type'] = 'application/json';
+      if (token) h['Authorization'] = 'Bearer ' + token;
+      return h;
+    }
+
+    async function amFetch(path, opts) {
+      const res = await fetch(AM_BASE + path, opts);
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch (_) { data = { raw: text.slice(0, 2000) }; }
+      return { ok: res.ok, status: res.status, data };
+    }
+
+    function show(payload) {
+      const s = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
+      out.textContent = s.slice(0, 12000);
+    }
+
     document.querySelectorAll('.nav button').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        out.textContent = views[btn.dataset.view] || btn.dataset.view;
+        activeView = btn.dataset.view;
+        const meta = viewMeta[activeView];
+        out.textContent = (meta && meta.hint) || activeView;
       });
     });
+
     async function probe() {
       const dot = document.getElementById('dot');
       const label = document.getElementById('healthLabel');
-      const token = sessionStorage.getItem('AM_BEARER') || '';
       try {
-        const headers = {};
-        if (token) headers['Authorization'] = 'Bearer ' + token;
-        const res = await fetch('http://127.0.0.1:3111/agentmemory/livez', { headers });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
+        const { ok, status, data } = await amFetch('/agentmemory/livez', { headers: authHeaders(false) });
+        if (!ok) throw new Error('HTTP ' + status + ' ' + JSON.stringify(data));
         dot.className = 'dot ok';
         label.textContent = 'REST livez: ' + (data.status || 'ok') + ' viewerPort=' + (data.viewerPort || '?');
-        out.textContent = JSON.stringify(data, null, 2);
+        show(data);
       } catch (e) {
         dot.className = 'dot bad';
-        label.textContent = 'REST livez: fail — Token setzen oder CORS/Proxy Preview nutzen';
-        out.textContent = String(e);
+        label.textContent = 'REST livez: fail — Token setzen oder serve.py Proxy nutzen';
+        show(String(e));
       }
     }
+
     async function smartSearch() {
-      const token = sessionStorage.getItem('AM_BEARER') || '';
+      const q = document.getElementById('q').value || 'AgentMemory';
+      const { status, data } = await amFetch('/agentmemory/smart-search', {
+        method: 'POST',
+        headers: authHeaders(true),
+        body: JSON.stringify({ query: q, limit: 8, includeLessons: true })
+      });
+      show({ status, data });
+    }
+
+    async function remember() {
+      const content = document.getElementById('rememberBody').value || 'preview remember';
+      const { status, data } = await amFetch('/agentmemory/remember', {
+        method: 'POST',
+        headers: authHeaders(true),
+        body: JSON.stringify({
+          content: content,
+          type: 'fact',
+          concepts: ['hermes-webui', 'agentmemory-preview', 'issue-141'],
+          project: 'nexify-agentur-plattform'
+        })
+      });
+      show({ status, data });
+    }
+
+    async function runView() {
       const q = document.getElementById('q').value || 'AgentMemory';
       try {
-        const res = await fetch('http://127.0.0.1:3111/agentmemory/smart-search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: 'Bearer ' + token } : {})
-          },
-          body: JSON.stringify({ query: q, limit: 5, includeLessons: true })
-        });
-        const data = await res.json();
-        out.textContent = JSON.stringify(data, null, 2).slice(0, 4000);
+        switch (activeView) {
+          case 'overview': {
+            const livez = await amFetch('/agentmemory/livez', { headers: authHeaders(false) });
+            const sessions = await amFetch('/agentmemory/sessions', { headers: authHeaders(false) });
+            const next = await amFetch('/agentmemory/next', { headers: authHeaders(false) });
+            show({ livez, sessions, next });
+            break;
+          }
+          case 'live': {
+            const r = await amFetch('/agentmemory/observations?limit=15', { headers: authHeaders(false) });
+            show(r);
+            break;
+          }
+          case 'sessions': {
+            show(await amFetch('/agentmemory/sessions', { headers: authHeaders(false) }));
+            break;
+          }
+          case 'browser': {
+            show(await amFetch('/agentmemory/memories?limit=20', { headers: authHeaders(false) }));
+            break;
+          }
+          case 'search':
+            await smartSearch();
+            break;
+          case 'graph': {
+            show(await amFetch('/agentmemory/graph/stats', { headers: authHeaders(false) }));
+            break;
+          }
+          case 'lessons': {
+            show(await amFetch('/agentmemory/lessons/search', {
+              method: 'POST',
+              headers: authHeaders(true),
+              body: JSON.stringify({ query: q, limit: 8 })
+            }));
+            break;
+          }
+          case 'actions': {
+            const frontier = await amFetch('/agentmemory/frontier', { headers: authHeaders(false) });
+            const next = await amFetch('/agentmemory/next', { headers: authHeaders(false) });
+            show({ frontier, next });
+            break;
+          }
+          case 'sentinels': {
+            show(await amFetch('/agentmemory/sentinels/check', {
+              method: 'POST',
+              headers: authHeaders(true),
+              body: JSON.stringify({})
+            }));
+            break;
+          }
+          case 'health': {
+            const livez = await amFetch('/agentmemory/livez', { headers: authHeaders(false) });
+            const health = await amFetch('/agentmemory/health', { headers: authHeaders(false) });
+            show({ livez, health });
+            break;
+          }
+          case 'audit': {
+            const audit = await amFetch('/agentmemory/audit?limit=20', { headers: authHeaders(false) });
+            const exp = await amFetch('/agentmemory/export', { headers: authHeaders(false) });
+            const truncated = {
+              audit,
+              export_status: exp.status,
+              export_preview: typeof exp.data === 'object'
+                ? JSON.stringify(exp.data).slice(0, 1500)
+                : String(exp.data).slice(0, 1500)
+            };
+            show(truncated);
+            break;
+          }
+          default:
+            show(viewMeta[activeView] && viewMeta[activeView].hint);
+        }
       } catch (e) {
-        out.textContent = 'smart-search fail: ' + e + '\n(Browser CORS — Preview hinter same-origin Proxy oder Token+Proxy später)';
+        show('view fail: ' + e + '\nNutze python3 serve.py (same-origin Proxy) + optional Bearer.');
       }
     }
+
     document.getElementById('btnProbe').addEventListener('click', probe);
     document.getElementById('btnSearch').addEventListener('click', smartSearch);
+    document.getElementById('btnRemember').addEventListener('click', remember);
+    document.getElementById('btnRunView').addEventListener('click', runView);
     probe();
   </script>
 </body>
