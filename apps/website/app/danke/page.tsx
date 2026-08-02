@@ -1,7 +1,22 @@
-import Link from "next/link";
+// FILE: apps/website/app/danke/page.tsx
+// NIR: 02.08.2026 11:25
+// UPDATED: 02.08.2026 11:25
+// NAME: NeXifyAI Agent
+// TEAM: NeXifyAI GTM
+// WHAT: Thank-you / delight page with variant deep-links after first touch
+// WHY: Neukunden P0 — clear next steps, honest Werktag target, Dark/Luxury
+// BEST-PRACTICE: noindex; reuse DelightSuccess; keep legacy thank-you-page testid
+// PITFALL: V-DELIGHT-04: Do not claim PDF/download completed if asset missing
+// DEPENDS: components/delight-success, lib/seo
+// DOCS-REF: docs/gtm/NEUKUNDEN-BEGEISTERUNG.md
+// SESSION: neukunden-begeisterung-7dd5
+
+import type { Metadata } from "next";
+import { DelightSuccess } from "@/components/delight-success";
+import type { DelightVariant } from "@/lib/delight-copy";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({
+export const metadata: Metadata = pageMetadata({
   title: "Danke — Anfrage erhalten | NeXify AI",
   description:
     "Vielen Dank für Ihre Anfrage. Wir melden uns in der Regel innerhalb eines Werktags persönlich.",
@@ -9,30 +24,25 @@ export const metadata = pageMetadata({
   noIndex: true,
 });
 
-/** Thank-you / post-conversion landing — no fake metrics; honest next steps. */
-export default function DankePage() {
+const VARIANTS: DelightVariant[] = ["contact", "booking", "offer", "lead_magnet", "generic"];
+
+function parseVariant(raw: string | string[] | undefined): DelightVariant {
+  const v = Array.isArray(raw) ? raw[0] : raw;
+  if (v && (VARIANTS as string[]).includes(v)) return v as DelightVariant;
+  return "generic";
+}
+
+export default async function DankePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const variant = parseVariant(sp.variant);
   return (
-    <main className="flex min-h-[70vh] items-center pt-24" data-testid="thank-you-page">
-      <div className="site-container max-w-2xl text-center">
-        <p className="text-silver text-sm uppercase tracking-[0.2em]">NeXify AI</p>
-        <h1 className="mt-4 font-[family-name:var(--font-heading)] text-4xl font-semibold text-zinc-50">
-          Danke — wir haben Ihre Anfrage.
-        </h1>
-        <p className="mt-4 text-lg text-zinc-400">
-          In der Regel antworten wir innerhalb eines Werktags persönlich. Kein Bot-Spam, keine
-          Fake-Dringlichkeit.
-        </p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/rueckruf" className="btn-primary inline-flex" data-testid="thank-you-booking">
-            Optional: Rückruf-Slot sichern
-          </Link>
-          <Link href="/wissen" className="btn-secondary inline-flex" data-testid="thank-you-wissen">
-            Wissen lesen
-          </Link>
-          <Link href="/" className="inline-flex text-sm text-zinc-400 underline-offset-4 hover:underline">
-            Zur Startseite
-          </Link>
-        </div>
+    <main className="pb-16 pt-28 md:pb-24 md:pt-40" data-testid="danke-page">
+      <div className="site-container max-w-2xl" data-testid="thank-you-page">
+        <DelightSuccess lang="de" variant={variant} showCompare={variant === "lead_magnet"} />
       </div>
     </main>
   );

@@ -1,15 +1,17 @@
 # FILE: .github/workflows/event-to-cloud-agent.yml
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:58
+# UPDATED: 02.08.2026 11:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: GitHub-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
-# WHY: Alle Meldungen müssen Agent-Läufe starten ohne Desktop/IDE.
-# BEST-PRACTICE: Circuit-Breaker vor Launch; Dry-Skip wenn Secret fehlt; Idempotenz-Key.
-# PITFALL: V-CA-01: Ohne CURSOR_API_KEY nur AgentMemory-Action anlegen, nie Secret loggen.
+# WHAT: GitHub-/GitLab-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
+# WHY: PRs, Issues, Reviews, Kommentare, Discussions und GitLab-Dispatches sollen laptop-off bearbeitet werden.
+# BEST-PRACTICE: Circuit-Breaker vor Launch; Dry-Skip wenn Secret fehlt; Idempotenz-Key;
+#   concurrency cancel-in-progress; workflow_run nur bei failure; Key-Gate vor Checkout.
+# PITFALL: V-CA-01: Ohne CURSOR_API_KEY nie Secret loggen; V-CA-03: concurrency darf
+#   NICHT auf run_id fallen (sonst kein Cancel bei CI-Flood).
 # DEPENDS: CURSOR_API_KEY (GitHub Secret), optional CIRCUIT_BREAKER_URL, AGENTMEMORY_SECRET
 # DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
-# SESSION: cloud-agent-event-ingest-7dd5
+# SESSION: throttle-event-ingest-7dd5
 
 name: Event → Cursor Cloud Agent
 
@@ -18,9 +20,19 @@ on:
     workflows: ["CI — Test & Lint"]
     types: [completed]
   issues:
-    types: [opened, reopened, labeled]
+    types: [opened, edited, reopened, labeled]
+  issue_comment:
+    types: [created]
   pull_request:
-    types: [opened, reopened, labeled]
+    types: [opened, edited, reopened, synchronize, ready_for_review, labeled]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  pull_request_review_comment:
+    types: [created, edited]
+  discussion:
+    types: [created, edited]
+  discussion_comment:
+    types: [created, edited]
   repository_dispatch:
     types:
       - agent-fix
@@ -30,6 +42,7 @@ on:
       - vercel-deploy-fail
       - health-alert
       - gitlab-ci-fail
+      - gitlab-event
       - cloudflare-alert
       - resend-bounce
       - website-error
@@ -54,45 +67,79 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+  discussions: write
 
+# Coalesce floods: same issue/PR/dispatch-key/CI-branch shares one slot; cancel older.
 concurrency:
-  group: cloud-agent-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number || github.event.client_payload.dedupe_key || github.run_id }}
+  group: >-
+    cloud-agent-${{ github.event_name }}-${{
+      github.event.issue.number ||
+      github.event.pull_request_review.pull_request.number ||
+      github.event.pull_request_review_comment.pull_request.number ||
+      github.event.pull_request.number ||
+      github.event.discussion.number ||
+      github.event.comment.discussion.number ||
+      github.event.client_payload.dedupe_key ||
+      github.event.workflow_run.head_branch ||
+      github.event.action ||
+      'manual'
+    }}
   cancel-in-progress: true
 
 jobs:
   dispatch-cloud-agent:
-    # Skip unlabeled noise early — unlabeled issue opens were flooding the Actions queue.
     if: |
       github.repository == 'nexifyai-dev/nexify-agentur-plattform' && (
         github.event_name == 'workflow_dispatch' ||
         github.event_name == 'repository_dispatch' ||
-        github.event_name == 'workflow_run' ||
-        (github.event_name == 'issues' && (
-          contains(join(github.event.issue.labels.*.name, ','), 'agent-fix') ||
-          contains(join(github.event.issue.labels.*.name, ','), 'cursor-fix') ||
-          contains(join(github.event.issue.labels.*.name, ','), 'autonomous')
-        )) ||
-        (github.event_name == 'pull_request' && (
-          contains(join(github.event.pull_request.labels.*.name, ','), 'agent-fix') ||
-          contains(join(github.event.pull_request.labels.*.name, ','), 'cursor-fix')
-        ))
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
+        github.event_name == 'issues' ||
+        github.event_name == 'issue_comment' ||
+        github.event_name == 'pull_request' ||
+        github.event_name == 'pull_request_review' ||
+        github.event_name == 'pull_request_review_comment' ||
+        github.event_name == 'discussion' ||
+        github.event_name == 'discussion_comment'
       )
     runs-on: ubuntu-latest
     env:
       TZ: Europe/Berlin
     steps:
+      # Flood guard: without CURSOR_API_KEY skip before checkout (no runner waste).
+      - name: Require CURSOR_API_KEY
+        id: key
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CURSOR_API_KEY}" ]; then
+            echo "has_key=0" >> "$GITHUB_OUTPUT"
+            echo "CURSOR_API_KEY missing — early dry-skip (no checkout, no launch)"
+          else
+            echo "has_key=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.key.outputs.has_key == '1'
 
       - name: Decide whether to launch
         id: gate
+        if: steps.key.outputs.has_key == '1'
         env:
           EVENT_NAME: ${{ github.event_name }}
           WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           WR_NAME: ${{ github.event.workflow_run.name }}
           ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          ISSUE_IS_PR: ${{ toJson(github.event.issue.pull_request) != 'null' }}
           PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
           ACTION: ${{ github.event.action }}
           DISPATCH_TYPE: ${{ github.event.action }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          DISCUSSION_TITLE: ${{ github.event.discussion.title }}
+          DISCUSSION_BODY: ${{ github.event.discussion.body }}
         run: |
           set -euo pipefail
           launch=0
@@ -109,15 +156,58 @@ jobs:
               if echo ",${ISSUE_LABELS}," | grep -Eqi ',(human-gate|blocked),'; then
                 launch=0
                 reason="issue_human_gate_skip"
-              elif echo ",${ISSUE_LABELS}," | grep -Eqi ',(agent-fix|cursor-fix|autonomous|P0),'; then
+              else
                 launch=1
-                reason="issue_label"
+                reason="issue:${ACTION:-opened}"
+              fi
+              ;;
+            issue_comment)
+              if [ "${ISSUE_IS_PR:-false}" != "true" ] && printf '%s' "${COMMENT_BODY:-}" | grep -Eqi '(^|[[:space:]])/(triage|agent-fix)\b'; then
+                launch=0
+                reason="issue_comment_command_handled_elsewhere"
+              elif echo ",${ISSUE_LABELS}," | grep -Eqi ',(human-gate|blocked),'; then
+                launch=0
+                reason="issue_comment_human_gate_skip"
+              else
+                launch=1
+                if [ "${ISSUE_IS_PR:-false}" = "true" ]; then
+                  reason="pr_comment"
+                else
+                  reason="issue_comment"
+                fi
               fi
               ;;
             pull_request)
-              if echo ",${PR_LABELS}," | grep -Eq ',(agent-fix|cursor-fix),'; then
+              if [ "${ACTION:-}" = "labeled" ] && ! echo ",${LABEL_NAME:-},${PR_LABELS}," | grep -Eqi ',(agent-fix|cursor-fix|autonomous|P0),'; then
+                launch=0
+                reason="pr_label_skip"
+              else
                 launch=1
-                reason="pr_label_fix"
+                reason="pr:${ACTION:-opened}"
+              fi
+              ;;
+            pull_request_review)
+              if [ -n "${REVIEW_BODY:-}" ] || [ "${REVIEW_STATE:-}" = "changes_requested" ]; then
+                launch=1
+                reason="pr_review:${REVIEW_STATE:-commented}"
+              fi
+              ;;
+            pull_request_review_comment)
+              if [ -n "${COMMENT_BODY:-}" ]; then
+                launch=1
+                reason="pr_review_comment"
+              fi
+              ;;
+            discussion)
+              if [ -n "${DISCUSSION_TITLE:-}" ] || [ -n "${DISCUSSION_BODY:-}" ]; then
+                launch=1
+                reason="discussion:${ACTION:-created}"
+              fi
+              ;;
+            discussion_comment)
+              if [ -n "${COMMENT_BODY:-}" ]; then
+                launch=1
+                reason="discussion_comment:${ACTION:-created}"
               fi
               ;;
             repository_dispatch|workflow_dispatch)
@@ -129,23 +219,53 @@ jobs:
           echo "reason=$reason" >> "$GITHUB_OUTPUT"
           echo "gate launch=$launch reason=$reason"
 
+      - name: Resolve starting ref
+        id: ref
+        if: steps.key.outputs.has_key == '1' && steps.gate.outputs.launch == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_IS_PR: ${{ toJson(github.event.issue.pull_request) != 'null' }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          WR_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          ref="${PR_HEAD_REF:-}"
+          if [ -z "$ref" ] && [ "$EVENT_NAME" = "issue_comment" ] && [ "${ISSUE_IS_PR:-false}" = "true" ]; then
+            ref="$(gh pr view "$ISSUE_NUMBER" --repo "$REPO" --json headRefName -q .headRefName 2>/dev/null || true)"
+          fi
+          ref="${ref:-${WR_HEAD_BRANCH:-main}}"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+
       - name: Build prompt + launch (or queue Action)
-        if: steps.gate.outputs.launch == '1'
+        if: steps.key.outputs.has_key == '1' && steps.gate.outputs.launch == '1'
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           AGENTMEMORY_SECRET: ${{ secrets.AGENTMEMORY_SECRET }}
           AGENTMEMORY_URL: ${{ secrets.AGENTMEMORY_URL }}
           CIRCUIT_BREAKER_URL: ${{ secrets.CIRCUIT_BREAKER_URL }}
           EVENT_NAME: ${{ github.event_name }}
+          ACTION: ${{ github.event.action }}
           GATE_REASON: ${{ steps.gate.outputs.reason }}
           REPO_URL: https://github.com/${{ github.repository }}
-          REF: ${{ github.event.pull_request.head.ref || github.event.workflow_run.head_branch || 'main' }}
+          REF: ${{ steps.ref.outputs.ref }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          ISSUE_IS_PR: ${{ toJson(github.event.issue.pull_request) != 'null' }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          DISCUSSION_TITLE: ${{ github.event.discussion.title }}
+          DISCUSSION_BODY: ${{ github.event.discussion.body }}
           WR_URL: ${{ github.event.workflow_run.html_url }}
           WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
