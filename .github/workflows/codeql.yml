@@ -1,0 +1,59 @@
+# FILE: .github/workflows/codeql.yml
+# NIR: 02.08.2026 09:05
+# UPDATED: 02.08.2026 09:05
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: GitHub CodeQL analysis for JavaScript/TypeScript and Python.
+# WHY: Issue #134 — Code Scanning + Ruleset-compatible check names.
+# BEST-PRACTICE: Official github/codeql-action; languages match repo surface.
+# PITFALL: V-SEC-01: Do not upload SARIF from untrusted forks without permissions guard.
+# DEPENDS: GitHub Advanced Security / Code Scanning enabled on repo
+# DOCS-REF: https://docs.github.com/en/code-security/code-scanning
+# SESSION: lead-ops-batch-7dd5
+
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
