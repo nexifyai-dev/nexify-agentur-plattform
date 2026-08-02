@@ -1,6 +1,6 @@
 # FILE: apps/webui-preview/hermes-wire/README.md
 # NIR: 31.07.2026 12:20
-# UPDATED: 31.07.2026 12:20
+# UPDATED: 02.08.2026 09:50
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: Hermes Preview Hub — verdrahtet native Preview-Panels ohne Prod-Patch
@@ -17,6 +17,13 @@ python3 -m http.server 8790 --directory apps/webui-preview/hermes-wire
 ```
 
 Registry SoT: `config/webui/hermes-preview-module-registry.json`
+
+## Locale (Preview)
+
+- Hub und Panels: `<html lang="de">`
+- Preview setzt `localStorage.hermes-lang = "de"` (Hub-Script) — **ohne** Prod Hermes anzufassen
+- Prod `apps/hermes/static/i18n.js` Fallback bleibt Upstream-`en` bis Cutover-Freigabe
+- SoT: `docs/operations/LOCALE-DE-STANDARD.md`
 
 ## Gates
 
