@@ -7,11 +7,24 @@
         "failClosed": false
       }
     ],
+    "afterShellExecution": [
+      {
+        "command": ".cursor/hooks/auto-push-agent-branch.sh",
+        "matcher": "git\\s+commit",
+        "failClosed": false
+      }
+    ],
+    "stop": [
+      {
+        "command": ".cursor/hooks/auto-push-agent-branch.sh",
+        "failClosed": false
+      }
+    ],
     "sessionStart": [
       {
         "type": "prompt",
         "timeout": 12,
-        "prompt": "Event-Ingest Pflicht: Cloud Agents / Automations / VPS Autopilot decken PC-aus ab. Vor Arbeit memory_recall; nach Task memory_save + Actions. Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. Keine Secrets loggen."
+        "prompt": "Automations-Pflicht: Event-Ingest (Cloud/VPS) + Auto-Push nach Commit + Draft-PR + label automerge. Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. memory_recall vor Planung; memory_save nach Task. Keine Secrets."
       }
     ]
   }

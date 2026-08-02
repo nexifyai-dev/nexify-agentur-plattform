@@ -1,0 +1,97 @@
+# FILE: .github/workflows/agent-branch-autopilot.yml
+# NIR: 02.08.2026 08:35
+# UPDATED: 02.08.2026 08:35
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Nach Push auf Agent-Branches: Draft-PR öffnen + automerge-Label setzen.
+# WHY: Kein manuelles Diff-Tab Push/PR — vollautomatischer Lieferpfad.
+# BEST-PRACTICE: Nur cursor/* feature/* bugfix/*; nie main; Draft zuerst.
+# PITFALL: V-AP-01: Skip wenn PR schon existiert; kein Force-Push.
+# DEPENDS: contents:read, pull-requests:write
+# DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
+# SESSION: cloud-agent-event-ingest-7dd5
+
+name: Agent Branch Autopilot (Draft-PR)
+
+on:
+  push:
+    branches:
+      - "cursor/**"
+      - "feature/**"
+      - "bugfix/**"
+      - "fix/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: agent-branch-autopilot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ensure-draft-pr:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform' && github.ref_name != 'main' && github.ref_name != 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or update draft PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          existing="$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number,isDraft,url -q '.[0] // empty')"
+          if [ -n "$existing" ]; then
+            num="$(echo "$existing" | jq -r .number)"
+            echo "PR already open: #$num"
+            # Ensure automerge label present for stack (merge still gated by checks + pr-auto-merge.yml)
+            gh pr edit "$num" --repo "$REPO" --add-label "automerge" 2>/dev/null || \
+              gh label create automerge --repo "$REPO" --color "0E8A16" --description "Enable auto-merge when checks green" 2>/dev/null || true
+            gh pr edit "$num" --repo "$REPO" --add-label "automerge" 2>/dev/null || true
+            echo "url=$(echo "$existing" | jq -r .url)"
+            exit 0
+          fi
+
+          # Ensure labels exist (idempotent)
+          for label in automerge agent-fix; do
+            gh label create "$label" --repo "$REPO" --color "0E8A16" --description "Agent automation" 2>/dev/null || true
+          done
+
+          # Title from latest commit message subject via API
+          subject="$(gh api "repos/$REPO/commits/$SHA" --jq '.commit.message' | head -n1)"
+          subject="${subject:-$BRANCH}"
+
+          body="$(cat <<EOF
+          ## Summary
+          Auto-opened draft PR for agent branch \`$BRANCH\` (no manual Diff-Tab push/PR).
+
+          - Commit: \`$SHA\`
+          - Label \`automerge\`: merge when CI green (see \`pr-auto-merge.yml\` guards)
+          - Add \`do-not-merge\` to block
+
+          ## Test plan
+          - [ ] CI green
+          - [ ] No secrets in diff
+          - [ ] Scope limited to this repo
+
+          <!-- nexify-agent-branch-autopilot -->
+          EOF
+          )"
+
+          url="$(gh pr create --repo "$REPO" --base main --head "$BRANCH" --draft \
+            --title "$subject" \
+            --body "$body" \
+            --label automerge || true)"
+
+          if [ -z "${url:-}" ]; then
+            # Retry without label if label API flaky
+            url="$(gh pr create --repo "$REPO" --base main --head "$BRANCH" --draft \
+              --title "$subject" \
+              --body "$body")"
+            num="$(echo "$url" | grep -Eo '[0-9]+$')"
+            gh pr edit "$num" --repo "$REPO" --add-label automerge 2>/dev/null || true
+          fi
+          echo "created=$url"

@@ -64,8 +64,17 @@ if [[ -f "$HEALTH_STATE" ]] && grep -qi 'fail\|critical\|down' "$HEALTH_STATE" 2
   PROMPT="HEALTH ALERT from VPS Autopilot. State file indicates failure. Diagnose services, open fix PR if repo-related, else document Action. $(date -Is)"
 fi
 
+DEDUPE="autopilot-$(date +%Y%m%d%H)"
+CLIENT_PAYLOAD="$(PROMPT="$PROMPT" DEDUPE="$DEDUPE" python3 - <<'PY'
+import json, os
+print(json.dumps({
+    "prompt": os.environ["PROMPT"],
+    "dedupe_key": os.environ["DEDUPE"],
+    "auto_pr": True,
+}))
+PY
+)"
 export CLIENT_PAYLOAD
-CLIENT_PAYLOAD="$(python3 -c 'import json,os,sys; print(json.dumps({"prompt":sys.argv[1],"dedupe_key":"autopilot-'+$(date +%Y%m%d%H)+'","auto_pr":True}))' "$PROMPT")"
 export DISPATCH_TYPE=health-alert
 
 python3 "$DISPATCH" \
