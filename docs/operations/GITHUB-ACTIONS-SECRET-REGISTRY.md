@@ -33,6 +33,7 @@
 | Name | Used for |
 |------|----------|
 | `VERCEL_TOKEN` | Discouraged — prefer secret |
+| `VERCEL_ACCESS_TOKEN` | Legacy alias for deploy-vercel token |
 | `VERCEL_ORG_ID` | OK as variable |
 | `VERCEL_PROJECT_ID` | OK as variable |
 | `SMOKE_BASE_URL` | Optional override for daily smoke (default production site) |

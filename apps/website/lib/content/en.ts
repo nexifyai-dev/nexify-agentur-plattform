@@ -492,11 +492,11 @@ export const en = {
     messagePlaceholder: "What would you like to build? Website, shop, app, automation … The more specific, the more precise the assessment.",
     submit: "Send enquiry",
     sending: "Sending …",
-    success: "Thank you! Your enquiry has been received – you will shortly receive a confirmation by email and a personal response within one working day.",
+    success: "Thank you! Your enquiry has been received – you will shortly receive a confirmation by email and a personal response from Pascal usually within one working day.",
     error: "Sending failed. Please try again or write directly to",
     directTitle: "Direct line",
     responseTitle: "Response time",
-    responseText: "Within one working day – usually much faster.",
+    responseText: "Target: personal reply within one working day — often sooner. Honest target, not a fake SLA.",
     b2bNote: "Exclusively B2B: quotations are directed at companies, self-employed professionals and organisations.",
   },
 };
