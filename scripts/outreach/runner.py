@@ -19,7 +19,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from .config import OutreachConfig
+from .config import OutreachConfig, UWG_WARNING
 from . import firecrawl_client
 from . import smtp_hostinger
 from . import store
@@ -82,7 +82,18 @@ def run_daily(cfg: OutreachConfig, *, sleep_fn=time.sleep) -> RunResult:
         result.blocked = f"daily_cap_reached:{cfg.daily_cap}"
         return result
 
-    if cfg.live and not cfg.smtp_ready:
+    # UWG §7: --live without --allow-opt-in-send must not send
+    if cfg.live and not cfg.allow_opt_in_send:
+        result.blocked = "uwg_opt_in_required:need_--allow-opt-in-send_and_consent=true"
+        logger.error("%s", UWG_WARNING)
+        store.record_event(
+            cfg.state_dir,
+            "blocked",
+            {"reason": result.blocked, "uwg": True, "human_gate": True, "warning": UWG_WARNING},
+        )
+        return result
+
+    if cfg.effective_live and not cfg.smtp_ready:
         result.blocked = cfg.blocked_reason or "smtp_not_ready"
         store.record_event(
             cfg.state_dir,
@@ -94,12 +105,14 @@ def run_daily(cfg: OutreachConfig, *, sleep_fn=time.sleep) -> RunResult:
     leads = store.load_queue(cfg.queue_dir)
     candidates = select_candidates(cfg, leads)[:remaining]
     logger.info(
-        "outreach: queue=%d candidates=%d remaining_cap=%d live=%s",
+        "outreach: queue=%d candidates=%d remaining_cap=%d live=%s allow_opt_in=%s",
         len(leads),
         len(candidates),
         remaining,
         cfg.live,
+        cfg.allow_opt_in_send,
     )
+    do_live = cfg.effective_live
 
     for i, lead in enumerate(candidates):
         result.attempted += 1
@@ -124,7 +137,7 @@ def run_daily(cfg: OutreachConfig, *, sleep_fn=time.sleep) -> RunResult:
             lead, booking_url=cfg.booking_url, unsubscribe_url=unsub
         )
 
-        if not cfg.live:
+        if not do_live:
             result.dry_run += 1
             result.details.append(
                 {"email": email, "status": "dry_run", "subject": subject[:80]}
@@ -168,7 +181,7 @@ def run_daily(cfg: OutreachConfig, *, sleep_fn=time.sleep) -> RunResult:
                 result.details.append({"email": email, "status": "error", "error": err})
 
         # Pace only for live sends (dry-run stays fast for CI/agent loops)
-        if cfg.live and i < len(candidates) - 1:
+        if do_live and i < len(candidates) - 1:
             delay = random.uniform(cfg.pace_min_sec, cfg.pace_max_sec)
             sleep_fn(delay)
 
