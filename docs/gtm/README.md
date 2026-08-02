@@ -23,6 +23,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
 | [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
+| [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar |
 
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
