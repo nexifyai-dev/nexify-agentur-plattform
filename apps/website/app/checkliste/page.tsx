@@ -16,6 +16,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, FileDown } from "lucide-react";
+import { DelightSuccess } from "@/components/delight-success";
+import { InboundSpeedPromise } from "@/components/inbound-speed-promise";
 import { company } from "@/lib/company";
 
 const PDF_HREF = "/docs/nexify-website-ki-checkliste.pdf";
@@ -99,25 +101,8 @@ export default function ChecklistePage() {
         </ul>
 
         {state === "ok" ? (
-          <div
-            className="mt-10 rounded-2xl border border-emerald-400/25 bg-emerald-400/5 p-6 text-sm text-emerald-200"
-            data-testid="checkliste-success"
-          >
-            Danke — wir haben Ihre Anfrage entgegengenommen. Bei konfiguriertem Mail-Versand
-            erhalten Sie den Download-Link zusätzlich per E-Mail.
-            <div className="mt-4 flex flex-wrap gap-3">
-              <a
-                href={PDF_HREF}
-                className="btn-primary inline-flex items-center gap-2 !px-5 !py-2.5 !text-[13px]"
-                data-testid="checkliste-pdf-download"
-              >
-                PDF herunterladen
-                <FileDown className="size-4" />
-              </a>
-              <Link href="/rueckruf" className="underline hover:text-white">
-                Termin buchen
-              </Link>
-            </div>
+          <div className="mt-10" data-testid="checkliste-success">
+            <DelightSuccess lang="de" variant="lead_magnet" showCompare compact />
           </div>
         ) : (
           <form
@@ -125,6 +110,7 @@ export default function ChecklistePage() {
             className="mt-10 space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
             data-testid="checkliste-form"
           >
+            <InboundSpeedPromise lang="de" />
             <div className="grid gap-3 sm:grid-cols-2">
               <input
                 className="field"
