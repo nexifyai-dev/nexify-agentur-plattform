@@ -14,7 +14,10 @@
 Kern-Runtime (AgentMemory, LightRAG, 9Router, Hermes Workspace/WebUI, GitLab) ist **live**.
 Voll-Integration in **eine** WebUI-Zentrale ist **nicht** erreicht: parallele Surfaces, Paperclip down,
 OpenMCP Stub **`#100` MERGED** (Preview next), 1Backend Adapter-Spec, Monitoring HTTPS OK aber CF-DNS Drift.
-Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99` MERGED** (live verified).
+Monorepo MCP LightRAG: **`#98` MERGED** (`.githooks/post-commit-dual-write` tracked).
+**Dual-Write Runtime:** optional / Env-gated — siehe `docs/operations/BRAIN-DUAL-WRITE.md`
+(+ `scripts/brain-dual-write.sh`, 2026-08-02). Nicht als „überall aktiv“ lesen.
+OfferCatalog **`#99` MERGED** (live verified).
 
 **Arbeitsplatz-SoT (Mandat):** `https://webui.nexifyai.cloud/`  
 **IST-Shell (Workspace):** `https://dashboard.nexifyai.cloud/` → `127.0.0.1:4001` (hermes-workspace)  
@@ -51,7 +54,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **WebUI-Zentrale** | Eine Surface; Dashboard-Funktionen nativ | webui=:8787 + dashboard=:4001 parallel | GAP | Parity-Checkliste + Preview-Branch Smoke |
 | **Dashboard→WebUI native** | Keine Doppel-Dashboards/Iframes Dauer | Workspace nativ; Grafana/Design oft Path | TEIL | Native Views laut Parity-Matrix |
 | **AgentMemory** | Pflicht Brain + MCP TOOLS=all + Inject | REST+Viewer OK; **Preview Stub 11 Views** | TEIL | `apps/webui-preview/agentmemory-panel` → Hermes wire |
-| **LightRAG** | Native Module + Dual-Write | healthy; Dual-Write Hooks **#98 MERGED** | TEIL | Ingest Gap-Doc; Native UI |
+| **LightRAG** | Native Module + Dual-Write | healthy; Embed IST **Upstage** `embedding-passage`; Dual-Write Helper optional (`BRAIN-DUAL-WRITE.md`) | TEIL | Native UI; Hook lokal aktivieren |
 | **9Router** | Allowlist + Cascades | `/api/health` ok; Poolside Key fehlt | TEIL | Action blocked Keys |
 | **1Backend** | Neuintegration / Backend | VPS-Repo idle; NeXify Backend `:8901` deckt API | TEIL | `docs/architecture/1BACKEND-ADAPTER-SPEC.md` — Adapter-only |
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
@@ -64,7 +67,7 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
 | **GitHub** | SoT + PR | `#90`/`#99`–`#103` MERGED; `#105` docs auth/OpenMCP | OK | — |
 | **Codespace pancake** | — | `#90` MERGED; Codespace **ShuttingDown** | OK | optional delete later |
-| **Monorepo Hooks** | Dual-Write AM+LightRAG | **#98 MERGED** | OK | Session reconnect MCP |
+| **Monorepo Hooks** | Dual-Write AM+LightRAG | Hook tracked; Runtime optional (`BRAIN-DUAL-WRITE.md`, 2026-08-02) | TEIL | `git config core.hooksPath .githooks` + Env |
 | **MCP Cursor lean** | AM+Context7+LightRAG (+gitlab-oss) | example in `#98` | TEIL | Session reconnect |
 | **n8n** | Abbau | `n8n_integration: false` | OK | — |
 
