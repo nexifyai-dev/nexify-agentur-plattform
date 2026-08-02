@@ -86,6 +86,13 @@ Pflicht für Cursor Agent und alle AI-Lösungen:
 ## Branding
 „NeXify AI by NeXify — chat it. Automate it." — durchgängig.
 
+## P0 — Neukunden & Begeisterung
+**Neukunden gewinnen und stets begeistern** ist Priorität P0 (Rule
+`.cursor/rules/61-neukunden-begeisterung.mdc`). Jeder Task: hilft es
+Neukunden zu gewinnen *oder* zu begeistern? Sonst depriorisieren.
+Outbound/Scraping: Zero-Cost-Leads-Agent; Delight/Onboarding/Conversion-UX:
+dieser Track (`docs/gtm/NEUKUNDEN-BEGEISTERUNG.md`).
+
 ## Sprache / Locale (verbindlich)
 - **Standard:** Deutsch (`de` / `de-DE`) für Agent-Kommunikation, Produkt-UI und owned Copy.
 - **NL:** Firmensitz (Venlo) — **kein** Default für Acquisition oder Apps.

@@ -1,48 +1,76 @@
 # FILE: .github/dependabot.yml
-# NIR: 02.08.2026 08:55
-# UPDATED: 02.08.2026 08:55
+# NIR: 02.08.2026 09:20
+# UPDATED: 02.08.2026 09:30
 # NAME: NeXifyAI Agent
-# TEAM: NeXifyAI Dev
-# WHAT: Dependabot version + security update schedule for backend, website, Actions
-# WHY: Keep dependency alerts actionable after enabling Dependabot security updates
-# BEST-PRACTICE: Weekly cadence, grouped minor/patch where sensible, ignore major without review
-# PITFALL: V-SEC: never commit registry tokens; litellm majors need human PR review
+# TEAM: NeXifyAI DevOps
+# WHAT: Dependabot updates for website (pnpm), backend (pip), and GitHub Actions
+# WHY: Security bumps (#143 next) + litellm path without manual chase; rebase onto #148 base
+# BEST-PRACTICE: Group minor/patch; open PRs against main; label automerge for safe patches
+# PITFALL: Do not auto-merge major without CI green; never force-push main; litellm majors need human review
 # DEPENDS: GitHub Dependabot enabled on repo
-# DOCS-REF: docs/operations/GITHUB-CURSOR-CONTROL-PLANE-STATUS.md
-# SESSION: github-ops-automation-7dd5
+# DOCS-REF: docs/operations/PRODUCTION-READINESS-BOARD.md
+# SESSION: production-readiness-close-7dd5
 
 version: 2
 updates:
-  - package-ecosystem: pip
-    directory: /backend
+  - package-ecosystem: "npm"
+    directory: "/apps/website"
     schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Amsterdam"
+    open-pull-requests-limit: 8
+    target-branch: "main"
     labels:
-      - dependencies
-      - security
+      - "dependencies"
+      - "automerge"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      website-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
-  - package-ecosystem: npm
-    directory: /apps/website
+  - package-ecosystem: "pip"
+    directory: "/backend"
     schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
+      interval: "weekly"
+      day: "monday"
+      time: "06:15"
+      timezone: "Europe/Amsterdam"
+    open-pull-requests-limit: 8
+    target-branch: "main"
     labels:
-      - dependencies
+      - "dependencies"
+      - "python"
+      - "security"
+      - "automerge"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      backend-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
-  - package-ecosystem: github-actions
-    directory: /
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: "weekly"
+      day: "monday"
+      time: "06:30"
+      timezone: "Europe/Amsterdam"
     open-pull-requests-limit: 5
+    target-branch: "main"
     labels:
-      - dependencies
+      - "dependencies"
+      - "github-actions"
+      - "automerge"
     commit-message:
       prefix: "chore(deps)"
