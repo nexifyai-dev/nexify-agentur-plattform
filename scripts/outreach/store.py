@@ -3,13 +3,13 @@
 # UPDATED: 02.08.2026 09:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
-# WHAT: JSONL lead queue + sent/bounce/unsub state (GDPR source/consent fields)
+# WHAT: JSONL lead queue + sent/bounce/unsub state (GDPR + UWG consent fields)
 # WHY: File-backed store works without DB when Supabase is down; auditable
 # BEST-PRACTICE: Append-only state; never store purchased list provenance as OK
-# PITFALL: V-OUT-03: Refuse leads without source + email
+# PITFALL: V-OUT-03/UWG-01: Refuse without source+email; DE send requires consent=true
 # DEPENDS: data/outreach/*
-# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
-# SESSION: lead-outreach-automation-7dd5
+# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
+# SESSION: uwg-optin-only-7dd5
 
 from __future__ import annotations
 
@@ -78,7 +78,9 @@ def normalize_lead(raw: dict[str, Any]) -> dict[str, Any]:
         "source": str(source_id),
         "source_url": raw.get("source_url") or src.get("url") or raw.get("url") or "",
         "source_type": raw.get("source_type") or "public_b2b",
-        "legal_basis": raw.get("legal_basis") or "legitimate_interest_b2b",
+        # DE §7 UWG: email send needs opt-in — never default to LI as send basis
+        "legal_basis": raw.get("legal_basis") or "opt_in_required",
+        "consent": raw.get("consent") is True,
         "consent_recorded_at": raw.get("consent_recorded_at"),
         "contact_reason": raw.get("contact_reason") or "",
         "service_slug": raw.get("service_slug") or "",
@@ -93,7 +95,11 @@ def normalize_lead(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_for_send(lead: dict[str, Any], *, require_send_allowed: bool) -> str | None:
-    """Return error reason or None if sendable."""
+    """Return error reason or None if sendable.
+
+    Hard gate (DE §7 UWG): consent must be exactly True. legitimate_interest
+    alone is NOT a send basis for cold email (B2B included).
+    """
     email = (lead.get("email") or "").strip().lower()
     if not email or not EMAIL_RE.match(email):
         return "invalid_email"
@@ -102,6 +108,8 @@ def validate_for_send(lead: dict[str, Any], *, require_send_allowed: bool) -> st
     st = (lead.get("source_type") or "").lower()
     if st in FORBIDDEN_SOURCES or (lead.get("source") or "").lower() in FORBIDDEN_SOURCES:
         return "forbidden_source"
+    if lead.get("consent") is not True:
+        return "missing_consent"
     if require_send_allowed and not lead.get("send_allowed"):
         return "send_not_allowed"
     status = lead.get("status") or ""
