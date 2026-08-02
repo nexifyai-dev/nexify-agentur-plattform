@@ -28,10 +28,19 @@ export const metadata: Metadata = {
   creator: company.owner,
   publisher: company.legalName,
   // Canonical/og:url pro Seite via pageMetadata() — kein Root-Canonical für alle Unterseiten
+  // Locale-SoT: de + x-default primary (Acquisition DACH); NL nur Sitz-Alternate
+  alternates: {
+    languages: {
+      de: "/",
+      en: "/",
+      nl: "/",
+      "x-default": "/",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "de_DE",
-    alternateLocale: "nl_NL",
+    alternateLocale: ["en_GB", "nl_NL"],
     siteName: company.brand,
     title: "NeXify AI — Chat it. Automate it.",
     description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit. 449 € netto / Arbeitstag.",
