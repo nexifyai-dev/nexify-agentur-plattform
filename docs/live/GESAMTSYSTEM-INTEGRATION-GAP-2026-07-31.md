@@ -1,6 +1,6 @@
 # FILE: docs/live/GESAMTSYSTEM-INTEGRATION-GAP-2026-07-31.md
 # NIR: 31.07.2026 10:45
-# UPDATED: 31.07.2026 12:21
+# UPDATED: 31.07.2026 12:27
 # NAME: NeXifyAI Langlauf Agent
 # TEAM: NeXifyAI Core
 # WHAT: IST vs SOLL Gap-Matrix Gesamtsystem-Integration (keine Secrets)
@@ -57,7 +57,9 @@ Monorepo MCP LightRAG + Dual-Write Hooks: **`#98` MERGED**. OfferCatalog **`#99`
 | **OpenAPI** | ICD/Clients | `:8901/openapi.json` live (**67** ops); `/health` 404 | OK-TEIL | `/health` Alias **blocked** bis Ruff/MyPy cleanup |
 | **OpenDesign** | Native Design-Editor | Preview-Shell + **Hermes wire Hub** | TEIL | Cutover nach Smoke; CF DNS blocked |
 | **OpenMCP** | OpenAPI→MCP Workflow | Stub `#100`; Preview CLI help+allowlist verify 11:56 | TEIL | stdio run OK (timeout); kein Prod |
-| **Monitoring** | Grafana+Prom in System | Docker + Traefik HTTPS OK; CF DNS MISSING | TEIL | `docs/live/MONITORING-WEBUI-NATIVE-POINTER-2026-07-31.md` |
+| **Monitoring** | Grafana+Prom in System | Preview panel `:8793`; Traefik HTTPS OK; CF DNS **blocked** | TEIL | CF Token DNS-Scope |
+| **OpenAPI** | ICD/Clients | `:8901` live; Preview panel `:8794` | OK-TEIL | `/health` Alias deferred |
+| **OpenMCP** | OpenAPI→MCP Workflow | Stub `#100`; Preview panel + lokal CLI | TEIL | Client wiring optional |
 | **Paperclip** | Factory `:3100` | README-Stub; Autopilot sense-only | **BLOCKED** | `docs/live/PAPERCLIP-AUTOPILOT-SENSE-ONLY-2026-07-31.md` |
 | **GitLab OSS** | Mirror + CI | Mirror OK; `deploy:vps` Manual-Gate | TEIL | `docs/live/GITLAB-GITHUB-MIRROR-HEALTH-2026-07-31.md` |
 | **GitHub** | SoT + PR | `#90`/`#99`–`#103` MERGED; `#105` docs auth/OpenMCP | OK | — |
