@@ -126,7 +126,7 @@ export function HomePage() {
               const Icon = ICONS[s.icon];
               return (
                 <Reveal key={s.slug} delay={(i % 4) * 90}>
-                  <Link href="/leistungen" className={`glass glass-lift block h-full p-6 ${i === 0 || i === 5 ? "lg:col-span-2" : ""}`} data-testid={`service-card-${s.slug}`}>
+                  <Link href={`/leistungen#${s.slug}`} className={`glass glass-lift block h-full p-6 ${i === 0 || i === 5 ? "lg:col-span-2" : ""}`} data-testid={`service-card-${s.slug}`}>
                     <div className="flex items-start justify-between">
                       <Icon size={22} className="text-zinc-300" />
                       <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500">{s.days}</span>

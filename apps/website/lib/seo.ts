@@ -50,7 +50,17 @@ export function pageMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalPath },
+    // Unprefixed routes + cookie/localStorage locale (de/en/nl) share one URL.
+    // hreflang points at the same path so crawlers know DE/EN/NL are available.
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        de: canonicalPath,
+        en: canonicalPath,
+        nl: canonicalPath,
+        "x-default": canonicalPath,
+      },
+    },
     openGraph: {
       title: ogT,
       description: ogD,
