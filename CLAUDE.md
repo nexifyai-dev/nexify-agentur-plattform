@@ -1,4 +1,5 @@
-<<<<<<< HEAD
+# CLAUDE.md — Agent Development Guide
+
 ## 🔴 KERN-IMPERATIVE (P0 — vor allen anderen Regeln)
 
 ### I. SPRACHE: Deutsch. Immer.
@@ -10,13 +11,9 @@
 
 ---
 
-# NeXify AI — Website Monorepo
-=======
-# CLAUDE.md — Agent Development Guide
->>>>>>> github/main
-
-**NIR:** 2026-07-24 04:50  
-**PURPOSE:** Instruktionen für AI-Agenten bei Repo-Arbeit  
+**NIR:** 2026-07-24 04:50
+**UPDATED:** 2026-08-02 08:16
+**PURPOSE:** Instruktionen für AI-Agenten bei Repo-Arbeit
 **VERSION:** 1.0
 
 ---
@@ -270,4 +267,3 @@ Rotate credentials in /opt/nexifyai/security/keys/
 ---
 ## NeXifyAI Integration (28.07.2026)
 GitLab CI/CD Pipeline aktiv. LightRAG+AgentMemory Dual-Write via post-commit Hook.
-
