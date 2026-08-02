@@ -1,0 +1,41 @@
+# FILE: .github/ISSUE_TEMPLATE/agent-task.yml
+# NIR: 02.08.2026 08:55
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Agent-executable task template (triggers agent-fix).
+# DOCS-REF: docs/operations/ISSUES-AUTOMATION.md
+
+name: Agent task
+description: Code/Docs-Aufgabe für Cursor Cloud Agent (PC-off)
+title: "[agent-task] "
+labels: ["agent-task", "agent-fix", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Triggert Label `agent-fix` → Cloud Agent (wenn `CURSOR_API_KEY` gesetzt).
+        Scope: **nur** `nexifyai-dev/nexify-agentur-plattform`. Kein Hermes-Cutover.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Ziel
+      description: Was soll der Agent liefern?
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      value: |
+        - Branch: `cursor/<kurz>-7dd5`
+        - Draft-PR mit `Fixes #<n>`
+        - Keine Secrets committen
+        - Kein Force-Push auf main
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance / Test plan
+    validations:
+      required: true
