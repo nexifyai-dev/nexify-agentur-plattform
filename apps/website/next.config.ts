@@ -88,6 +88,15 @@ const nextConfig: NextConfig = {
     { source: "/arbeitsweise", destination: "/prozess", permanent: true },
     { source: "/ueber-pascal", destination: "/ueber-mich", permanent: true },
     { source: "/projekte", destination: "/referenzen", permanent: true },
+    // Soft-404 aliases → real pages (were homepage soft-404 via /[locale])
+    { source: "/hilfe", destination: "/faq", permanent: true },
+    { source: "/help", destination: "/faq", permanent: true },
+    { source: "/docs", destination: "/wissen", permanent: true },
+    { source: "/cookies", destination: "/cookie-richtlinie", permanent: true },
+    { source: "/ki", destination: "/ki-hinweise", permanent: true },
+    { source: "/dpa", destination: "/avv", permanent: true },
+    { source: "/thank-you", destination: "/danke", permanent: true },
+    { source: "/thanks", destination: "/danke", permanent: true },
     // Calendly proxy — keeps link domain nexifyai.cloud, avoids spam-filter mismatch
     { source: "/demo-call", destination: "https://calendly.com/pascal-courbois/30min", permanent: false },
   ],
