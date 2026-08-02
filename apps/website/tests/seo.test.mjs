@@ -40,6 +40,18 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
+  assert.match(src, /openGraph:[\s\S]*images:\s*ogImages/);
+  assert.match(src, /twitter:[\s\S]*card:\s*"summary_large_image"/);
+  assert.match(src, /twitter:[\s\S]*images:\s*\["\/og-image\.png"\]/);
+});
+
+test("server not-found pages export noindex robots (avoid soft-404 indexing)", () => {
+  for (const rel of ["app/not-found.tsx", "app/[locale]/not-found.tsx"]) {
+    const src = read(rel);
+    assert.doesNotMatch(src, /["']use client["']/);
+    assert.match(src, /export const metadata/);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
 });
 
 test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
@@ -119,6 +131,18 @@ test("llm.txt is present for AI crawlers", () => {
   const llm = read("public/llm.txt");
   assert.match(llm, /449/);
   assert.match(llm, /www\.nexifyai\.cloud/);
+});
+
+test("admin and konto layouts export noindex robots (client pages cannot)", () => {
+  for (const rel of ["app/admin/layout.tsx", "app/konto/layout.tsx"]) {
+    const src = read(rel);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
+  const robots = read("app/robots.ts");
+  assert.match(robots, /\/admin/);
+  assert.match(robots, /\/konto/);
+  assert.match(robots, /\/login/);
+  assert.match(robots, /\/registrieren/);
 });
 
 test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
