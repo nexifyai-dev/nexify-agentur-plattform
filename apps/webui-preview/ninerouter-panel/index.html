@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeXify AI — 9Router Panel (Preview)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0a0a0a;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.1);--text:#fff;--muted:#a1a1aa;--accent:#e0e0e0}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse 80% 50% at 90% 0%,rgba(255,255,255,.04),transparent),var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif}
+    .shell{max-width:1100px;margin:0 auto;padding:2rem 1.25rem 3rem}
+    .brand{font-family:Outfit,sans-serif;font-weight:300;letter-spacing:-.03em;font-size:clamp(1.7rem,4vw,2.4rem);margin:0 0 .35rem}
+    .eyebrow{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 1.25rem}
+    .lede{color:var(--muted);max-width:42rem;line-height:1.6;margin:0 0 1.5rem}
+    .layout{display:grid;gap:1rem;grid-template-columns:220px 1fr}
+    @media(max-width:800px){.layout{grid-template-columns:1fr}}
+    .nav,.panel{background:var(--surface);border:1px solid var(--border);border-radius:1.15rem;padding:1rem}
+    .nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--muted);font:inherit;padding:.55rem .65rem;border-radius:.65rem;cursor:pointer}
+    .nav button.active,.nav button:hover{background:rgba(255,255,255,.06);color:var(--text)}
+    .status{display:flex;gap:.5rem;align-items:center;color:var(--muted);font-size:.9rem;margin-bottom:1rem;flex-wrap:wrap}
+    .dot{width:.55rem;height:.55rem;border-radius:999px;background:#52525b}
+    .dot.ok{background:#86efac}.dot.bad{background:#f87171}
+    .actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:1rem}
+    .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:999px;padding:.55rem 1rem;font-family:Outfit,sans-serif;font-weight:500;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#0a0a0a;border-color:transparent}
+    .results{font-size:.9rem;color:var(--muted);line-height:1.5;white-space:pre-wrap;min-height:10rem;max-height:28rem;overflow:auto}
+    input,textarea,select{width:100%;max-width:36rem;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:.75rem;color:var(--text);padding:.6rem .75rem;margin:.35rem 0 .75rem;font:inherit}
+    textarea{min-height:4rem;resize:vertical}
+    label{font-size:.8rem;color:var(--muted);display:block}
+    .note{font-size:.82rem;color:var(--muted);margin-top:1rem}
+  </style>
+</head>
+<body>
+  <main class="shell" data-testid="ninerouter-panel-preview">
+    <p class="eyebrow">WebUI-Zentrale · Preview · Issue #141</p>
+    <h1 class="brand" data-testid="ninerouter-panel-brand">NeXify AI</h1>
+    <p class="lede" data-testid="ninerouter-panel-lede">
+      Native 9Router-Modulfläche gegen intern <code>:20128</code> (same-origin Proxy).
+      Health · Models · Chat Completions Probe. Kein Iframe, kein Hermes Cutover.
+    </p>
+    <div class="layout">
+      <nav class="nav" data-testid="ninerouter-view-nav" aria-label="9Router Views">
+        <button type="button" class="active" data-view="health" data-testid="nr-view-health">Health</button>
+        <button type="button" data-view="models" data-testid="nr-view-models">Models</button>
+        <button type="button" data-view="chat" data-testid="nr-view-chat">Chat Probe</button>
+      </nav>
+      <section class="panel" data-testid="ninerouter-panel-main">
+        <div class="status" data-testid="ninerouter-health">
+          <span class="dot" id="dot"></span>
+          <span id="healthLabel">9Router health: prüfe…</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="btnProbe" data-testid="nr-probe-health">Probe health</button>
+          <button type="button" class="btn" id="btnRun" data-testid="nr-run-view">View laden</button>
+        </div>
+        <label for="tok">Bearer / API Key (sessionStorage, optional)</label>
+        <input id="tok" type="password" autocomplete="off" data-testid="nr-token-input" placeholder="optional" />
+        <label for="model">Model (chat probe)</label>
+        <input id="model" type="text" value="solar-mini" data-testid="nr-model-input" />
+        <label for="prompt">Prompt</label>
+        <textarea id="prompt" data-testid="nr-prompt-input">Ping from 9Router preview panel — reply with ok.</textarea>
+        <div class="results" id="out" data-testid="nr-results">View: Health</div>
+        <p class="note">
+          Start: <code>python3 apps/webui-preview/ninerouter-panel/serve.py</code>
+          → <code>http://127.0.0.1:8794/</code>. Public edge: <code>https://ai-router.nexifyai.cloud</code>.
+        </p>
+      </section>
+    </div>
+  </main>
+  <script>
+    const TOKEN_KEY = "nexify.ninerouter.preview.token";
+    const views = {
+      health: { method: "GET", path: "/router/api/health" },
+      models: { method: "GET", path: "/router/v1/models" },
+      chat: {
+        method: "POST",
+        path: "/router/v1/chat/completions",
+        body: () => ({
+          model: document.getElementById("model").value.trim() || "solar-mini",
+          messages: [{ role: "user", content: document.getElementById("prompt").value }],
+          max_tokens: 64,
+        }),
+      },
+    };
+    let current = "health";
+    const tok = document.getElementById("tok");
+    const out = document.getElementById("out");
+    const dot = document.getElementById("dot");
+    const healthLabel = document.getElementById("healthLabel");
+    tok.value = sessionStorage.getItem(TOKEN_KEY) || "";
+    tok.addEventListener("change", () => sessionStorage.setItem(TOKEN_KEY, tok.value.trim()));
+    document.querySelectorAll("[data-view]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-view]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        current = btn.dataset.view;
+        out.textContent = "View: " + current;
+      });
+    });
+    async function api(spec) {
+      const headers = { "Content-Type": "application/json" };
+      const key = tok.value.trim();
+      if (key) headers["Authorization"] = key.startsWith("Bearer ") ? key : "Bearer " + key;
+      const init = { method: spec.method, headers };
+      if (spec.body) init.body = JSON.stringify(spec.body());
+      const res = await fetch(spec.path, init);
+      const text = await res.text();
+      let parsed = text;
+      try { parsed = JSON.stringify(JSON.parse(text), null, 2); } catch (_) {}
+      return { ok: res.ok, status: res.status, body: parsed };
+    }
+    async function probe() {
+      try {
+        const r = await api(views.health);
+        dot.className = "dot " + (r.ok ? "ok" : "bad");
+        healthLabel.textContent = "9Router health: " + r.status + (r.ok ? " ok" : " fail");
+        out.textContent = r.body;
+      } catch (e) {
+        dot.className = "dot bad";
+        healthLabel.textContent = "9Router health: unreachable";
+        out.textContent = String(e);
+      }
+    }
+    document.getElementById("btnProbe").addEventListener("click", probe);
+    document.getElementById("btnRun").addEventListener("click", async () => {
+      const r = await api(views[current]);
+      out.textContent = "[" + r.status + "]\n" + r.body;
+    });
+    probe();
+  </script>
+</body>
+</html>
