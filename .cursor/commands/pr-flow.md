@@ -29,8 +29,10 @@ Standard-Lieferpfad: Branch → GitHub PR → CI → GitLab-Mirror → Staging �
 - Keine Force-Push auf shared Branches ohne Absprache.
 - Cloud-Agent: PRs über vorgesehene Tools, nicht `gh` writes wenn gesperrt.
 
-## Automation (2026-08-02)
+## Automation (2026-08-02) — NO_CONFIRMATION
 
-- Nach Commit auf `cursor/*`: Hook auto-push (kein Diff-Tab).
+- Nie nachfragen: Commit → Push → Draft-PR → ready+automerge wenn green.
+- Nach Commit auf `cursor/*`: Hook auto-push + lokaler Draft-PR-Fallback (kein Diff-Tab).
 - Push triggert `agent-branch-autopilot` → Draft-PR + Label `automerge`.
-- CI green → `pr-auto-merge` (Guards). Details: `docs/operations/CLOUD-AGENT-EVENT-INGEST.md`.
+- CI green → `pr-auto-merge` markiert Draft **ready** und aktiviert squash auto-merge (Fix #135).
+- Details: `docs/operations/CLOUD-AGENT-EVENT-INGEST.md`.

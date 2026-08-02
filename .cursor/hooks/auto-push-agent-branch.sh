@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # FILE: .cursor/hooks/auto-push-agent-branch.sh
 # NIR: 02.08.2026 08:35
-# UPDATED: 02.08.2026 08:35
-# WHAT: After agent stop / shell git commit — auto-push agent branch (no Diff-Tab).
-# WHY: User-Mandat: alles automatisiert inkl. Push.
-# BEST-PRACTICE: Nur cursor|feature|bugfix|fix Branches; nie main/develop; no force.
+# UPDATED: 02.08.2026 09:05
+# WHAT: After agent stop / git commit — auto-push + ensure draft PR (no Diff-Tab).
+# WHY: User-Mandat NO_CONFIRMATION: Push + PR ohne Nachfrage.
+# BEST-PRACTICE: Nur cursor|feature|bugfix|fix; nie main/develop; no force.
 # PITFALL: V-PUSH-01: Skip without network/auth; never --force.
 set -euo pipefail
 
@@ -50,22 +50,65 @@ esac
 # Detached / dirty index without commits ahead — still try push of existing commits
 ahead="$(git rev-list --count @{u}..HEAD 2>/dev/null || git rev-list --count origin/main..HEAD 2>/dev/null || echo 1)"
 if [[ "$ahead" == "0" ]]; then
-  printf '%s\n' '{"permission":"allow","agent_message":"auto-push skip: nothing ahead"}'
-  exit 0
-fi
-
-# Circuit breaker soft
-curl -sS -m 2 -X POST http://127.0.0.1:8912/check \
-  -H 'Content-Type: application/json' \
-  -d "{\"actor\":\"cursor\",\"tool\":\"git_push\",\"params\":{\"branch\":\"$branch\"},\"cost\":0.01,\"state_hash\":\"autopush-$(date +%s)\"}" \
-  >/dev/null 2>&1 || true
-
-unset GITHUB_TOKEN || true
-if git push -u origin "HEAD:refs/heads/$branch" 2>/tmp/nexify-autopush.err; then
-  msg="auto-push ok: $branch (Draft-PR via agent-branch-autopilot workflow)"
-  printf '%s\n' "{\"permission\":\"allow\",\"agent_message\":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$msg")}"
+  # Still ensure PR exists even if already pushed
+  :
 else
-  err="$(tr '\n' ' ' </tmp/nexify-autopush.err | head -c 200)"
-  printf '%s\n' "{\"permission\":\"allow\",\"agent_message\":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "auto-push soft-fail: $err")}"
+  # Circuit breaker soft
+  curl -sS -m 2 -X POST http://127.0.0.1:8912/check \
+    -H 'Content-Type: application/json' \
+    -d "{\"actor\":\"cursor\",\"tool\":\"git_push\",\"params\":{\"branch\":\"$branch\"},\"cost\":0.01,\"state_hash\":\"autopush-$(date +%s)\"}" \
+    >/dev/null 2>&1 || true
+
+  unset GITHUB_TOKEN || true
+  if ! git push -u origin "HEAD:refs/heads/$branch" 2>/tmp/nexify-autopush.err; then
+    err="$(tr '\n' ' ' </tmp/nexify-autopush.err | head -c 200)"
+    printf '%s\n' "{\"permission\":\"allow\",\"agent_message\":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "auto-push soft-fail: $err")}"
+    exit 0
+  fi
 fi
+
+# Ensure draft PR locally (fallback if Actions flaky) — no user prompt
+pr_msg="auto-push ok: $branch"
+if command -v gh >/dev/null 2>&1; then
+  unset GITHUB_TOKEN || true
+  existing="$(gh pr list --head "$branch" --state open --json number,url -q '.[0] // empty' 2>/dev/null || true)"
+  if [[ -z "$existing" ]]; then
+    subject="$(git log -1 --pretty=%s 2>/dev/null || echo "$branch")"
+    body="$(cat <<EOF
+## Summary
+Auto-opened draft PR (NO_CONFIRMATION / no Diff-Tab).
+
+- Branch: \`$branch\`
+- Label \`automerge\`: ready+merge when CI green (\`pr-auto-merge.yml\`)
+- Add \`do-not-merge\` to block
+
+## Test plan
+- [ ] CI green
+- [ ] No secrets in diff
+
+<!-- nexify-auto-push-draft-pr -->
+EOF
+)"
+    for label in automerge agent-fix; do
+      gh label create "$label" --color "0E8A16" --description "Agent automation" 2>/dev/null || true
+    done
+    url="$(gh pr create --base main --head "$branch" --draft \
+      --title "$subject" --body "$body" --label automerge 2>/tmp/nexify-autopr.err || true)"
+    if [[ -n "${url:-}" ]]; then
+      pr_msg="auto-push ok: $branch + draft PR $url"
+    else
+      # Workflow agent-branch-autopilot may still open it
+      pr_msg="auto-push ok: $branch (PR via agent-branch-autopilot if hook create failed)"
+    fi
+  else
+    num="$(echo "$existing" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("number",""))' 2>/dev/null || true)"
+    if [[ -n "$num" ]]; then
+      gh pr edit "$num" --add-label automerge 2>/dev/null || true
+    fi
+    url="$(echo "$existing" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("url",""))' 2>/dev/null || true)"
+    pr_msg="auto-push ok: $branch (PR already open${url:+: $url})"
+  fi
+fi
+
+printf '%s\n' "{\"permission\":\"allow\",\"agent_message\":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$pr_msg")}"
 exit 0
