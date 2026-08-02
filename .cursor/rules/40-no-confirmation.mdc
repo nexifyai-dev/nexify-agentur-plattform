@@ -1,0 +1,30 @@
+---
+description: NO_CONFIRMATION — never ask user to confirm PR/commit/push/merge
+globs:
+alwaysApply: true
+---
+
+# NO_CONFIRMATION (Agent Ops)
+
+Cursor agents **never ask** for confirmation on: commits, push, PR create/update,
+ready-for-review, automerge enable, issue triage, routine file edits, or tool use.
+
+## Execute, do not ask
+
+- Commit → push (`cursor/*` etc.) → Draft-PR → CI → ready + automerge when green.
+- Do **not** wait on Diff-tab, do **not** ask „soll ich einen PR öffnen?“.
+- Report URLs/outcomes after the fact.
+
+## HARD STOPs (only exceptions — still no casual ask; stop and escalate)
+
+1. **Hermes production cutover** without explicit Endabnahme.
+2. **Inventing / pasting real secret values** into chat, issues, or commits.
+3. **Force-push** to `main` / protected branches.
+4. **Customer / Regelwerk logic** without governance protocol (document, do not improvise).
+
+Everything else: auto.
+
+## Delivery path
+
+Hooks + `agent-branch-autopilot.yml` + `pr-auto-merge.yml` (draft→ready when
+`automerge` + checks green). Docs: `docs/operations/CLOUD-AGENT-EVENT-INGEST.md`.

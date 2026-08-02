@@ -4,6 +4,9 @@
 # WHY: Proaktive Langlauf-Ueberwachung fuer MCP, OpenAPI, Monitoring und VCS-Wiring.
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 

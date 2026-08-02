@@ -5,6 +5,8 @@
 """Scan repository and runtime hints for SOLL deviations. Exit 1 if any ERROR severity."""
 
 from __future__ import annotations
+import os
+os.environ.setdefault("TZ", "Europe/Berlin")
 
 import json
 import re
