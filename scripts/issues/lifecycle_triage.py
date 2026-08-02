@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # FILE: scripts/issues/lifecycle_triage.py
 # NIR: 02.08.2026 08:58
-# UPDATED: 02.08.2026 08:58
+# UPDATED: 02.08.2026 11:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Issues Lifecycle — auto-label, triage comment, agent repository_dispatch.
-# WHY: Keep GHA YAML free of unindented heredocs / injection risks.
-# BEST-PRACTICE: Env-based inputs; human-gate never launches; marker comments.
+# WHAT: Issues Lifecycle — auto-label, triage comment, slash-command labeling.
+# WHY: Keep GHA YAML free of unindented heredocs / injection risks; Launches laufen zentral im Event-Router.
+# BEST-PRACTICE: Env-based inputs; PR comments via issue_comment sauber skippen; marker comments.
 # PITFALL: V-IL-01: Never print secrets; V-IL-03: Backfill unlabeled only.
-# DEPENDS: gh CLI, GH_TOKEN, jq optional via json module
+# DEPENDS: gh CLI, GH_TOKEN, json module
 # DOCS-REF: docs/operations/ISSUES-AUTOMATION.md
 # SESSION: automate-issues-lifecycle-7dd5
 """GitHub Issues lifecycle triage for Actions."""
@@ -266,6 +266,7 @@ def main() -> int:
     label_name = env("LABEL_NAME")
     backfill_flag = env("BACKFILL", "false").lower() in ("1", "true", "yes")
     has_cursor_key = env("HAS_CURSOR_KEY", "false").lower() in ("1", "true", "yes")
+    issue_is_pr = env("ISSUE_IS_PR", "false").lower() in ("1", "true", "yes")
 
     if not repo:
         print("REPO missing", file=sys.stderr)
@@ -283,6 +284,10 @@ def main() -> int:
         print(f"issue #{num} closed — no triage")
         return 0
 
+    if event == "issue_comment" and issue_is_pr:
+        print("issue_comment belongs to PR — skipped in issues lifecycle")
+        return 0
+
     if event == "issue_comment":
         if not re.search(r"(^|\s)/(triage|agent-fix)\b", comment_body, re.I):
             print("issue_comment ignored (no /triage|/agent-fix)")
@@ -297,19 +302,12 @@ def main() -> int:
 
     if event == "issues" and action in ("opened", "reopened"):
         ensure_triage_comment(repo, num, labels, has_cursor_key)
-        labels = issue_labels(repo, num)
-        maybe_dispatch(repo, num, labels, "opened", has_cursor_key)
-    elif event == "issues" and action == "labeled":
-        if re.fullmatch(r"(agent-fix|P0)", label_name or "", re.I):
-            maybe_dispatch(repo, num, labels, f"labeled-{label_name}", has_cursor_key)
     elif event == "issues" and action == "edited":
         # re-label only; no new triage spam
         pass
     elif event == "issue_comment":
         if re.search(r"(^|\s)/agent-fix\b", comment_body, re.I):
             add_labels(repo, num, ["agent-fix"])
-            labels = issue_labels(repo, num)
-            maybe_dispatch(repo, num, labels, "comment-agent-fix", has_cursor_key)
 
     return 0
 
