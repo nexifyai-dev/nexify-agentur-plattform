@@ -10,6 +10,10 @@ permissions:
   contents: read
   checks: write
 
+env:
+  LANG: de_DE.UTF-8
+  LC_ALL: C.UTF-8
+
 jobs:
   # === BACKEND: Python lint + test ===
   backend:
@@ -57,7 +61,7 @@ jobs:
         with:
           version: 9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "20"
           cache: pnpm
@@ -71,7 +75,7 @@ jobs:
       - name: Lint
         run: pnpm --dir apps/website lint
 
-      - name: Unit tests (*.test.mjs contracts incl. former *.test.tsx)
+      - name: Unit tests (*.test.mjs contract runner)
         run: pnpm --dir apps/website test
 
       - name: Build Next.js

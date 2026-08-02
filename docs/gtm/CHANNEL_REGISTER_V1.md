@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/CHANNEL_REGISTER_V1.md
 # NIR: 02.08.2026 07:40
-# UPDATED: 02.08.2026 09:30
+# UPDATED: 02.08.2026 11:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Register aller kostenfreien Supply- und Demand-Kanäle
@@ -40,6 +40,13 @@
 | S18 | freelancermap.de Profil | https://www.freelancermap.de/ | A3 | Free Profile | Account | freelancermap | ready_to_submit | [S18](evidence/supply-wave1/S18-freelancermap.md) |
 | S19 | ProvenExpert | https://www.provenexpert.com/ | A3 | Free Basis | Account | provenexpert | ready_to_submit | [S19](evidence/supply-wave1/S19-provenexpert.md) |
 | S20 | Website Leistungen/Preise | https://www.nexifyai.cloud/leistungen | A4 | eigen | Deploy | website | live | kanonisch |
+| S33 | Vergleichsseite | https://www.nexifyai.cloud/vergleich | A1 | eigen | Deploy | vergleich | live | page |
+| S34 | Alternativen-Hub | https://www.nexifyai.cloud/alternativen | A1 | eigen | Deploy | alternativen | live | page |
+| S35 | Checkliste Lead-Magnet | https://www.nexifyai.cloud/checkliste | A1 | eigen | Deploy | checkliste | live | page |
+| S36 | AI-Sprechstunde | https://www.nexifyai.cloud/sprechstunde | A1 | eigen | Deploy | sprechstunde | live | page |
+| S37 | Partner / Referral | https://www.nexifyai.cloud/partner | A2 | eigen | Deploy | partner | live | page |
+| S38 | Campus-Botschafter | https://www.nexifyai.cloud/botschafter | A3 | eigen | Deploy | botschafter | live | page |
+| S39 | WhatsApp Business Link | wa.me (Footer) | A1 | eigen | Deploy | whatsapp | live | footer |
 | S21 | 11880 | https://www.11880.com/ | A2 | ja | Account | 11880 | ready_to_submit | [S21](evidence/supply-wave2/S21-11880.md) |
 | S22 | GoYellow | https://www.goyellow.de/ | A2 | ja | Account | goyellow | ready_to_submit | [S22](evidence/supply-wave2/S22-goyellow.md) |
 | S23 | Yelp DE | https://www.yelp.de/ | A2 | Free Claim | Owner Login | yelp | ready_to_submit | [S23](evidence/supply-wave2/S23-yelp.md) |

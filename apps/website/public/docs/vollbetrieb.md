@@ -340,8 +340,8 @@ Ergebnis: Hermes unterstützt ACP nativ (`hermes acp`) sowie MCP-Server-Modus (`
 
 Goose unterstützt zwei dokumentierte, unterschiedliche Mechanismen — welcher zum Einsatz kommt, hing von einer offenen Tatsache ab:
 
-- **ACP (Agent Client Protocol):** Goose kann andere ACP-Agenten als Provider einbinden (bestätigt für Claude Code, Codex, Amp, Pi) UND Goose selbst läuft als ACP-Daemon, den andere Tools einbinden können (bestätigt, bidirektional).
-- **MCP-Subagent-Muster (Fallback):** Ein Agent, der sich als MCP-Server exponiert, lässt sich als `subagent`-Extension in Goose einbinden (analog zum dokumentierten Codex-Beispiel: `type: stdio, cmd, args, env`).
+- **ACP (Agent Client Protocol):** Goose kann andere ACP-Agenten als Provider einbinden (bestätigt für Claude Code, Amp, Pi; NeXify-Primäragent: Cursor Agent) UND Goose selbst läuft als ACP-Daemon, den andere Tools einbinden können (bestätigt, bidirektional).
+- **MCP-Subagent-Muster (Fallback):** Ein Agent, der sich als MCP-Server exponiert, lässt sich als `subagent`-Extension in Goose einbinden (`type: stdio, cmd, args, env`). OpenAI Codex ist bei NeXify abgeschaltet (2026-08-02).
 
 </details>
 

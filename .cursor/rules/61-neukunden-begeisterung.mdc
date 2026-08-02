@@ -1,0 +1,32 @@
+---
+description: P0 — Neukunden stets begeistern (delight after first touch)
+alwaysApply: true
+---
+
+# Neukunden-Begeisterung (P0)
+
+Vor **jeder** Aufgabe kurz prüfen:
+
+> Hilft das, **Neukunden zu gewinnen** oder **Neukunden zu begeistern**?
+
+- **Ja (gewinnen):** Acquisition/Inbound/Conversion — mit Zero-Cost-Leads-Agent koordinieren (Scraping/Mailing), **nicht** doppelte Scraper bauen.
+- **Ja (begeistern):** Post-Contact, Booking, Onboarding, Portal-Empty-State, ehrliche Erwartungen, warme DE-Copy — **dieser** Scope.
+- **Nein zu beidem:** depriorisieren oder nur als Hardening/Compliance mitnehmen.
+
+## Delight-Pflichten (nach First Touch)
+
+1. Klare **nächste Schritte** + Zeitrahmen („Ziel ≤ 1 Werktag“, kein Fake-SLA).
+2. Verstärkung: **Rückruf**, E-Mail, WhatsApp — persönliches Follow-up erwarten.
+3. Design: `design_guidelines.json` (Dark/Luxury, Outfit/Manrope, `#0A0A0A`) — kein generisches AI-Purple.
+4. Keine erfundenen Reviews/Kennzahlen, keine Paid Ads, keine Secrets im Repo.
+
+## Artefakte
+
+- UI: `DelightSuccess`, `InboundSpeedPromise`, `/danke`, Portal-Empty `/konto`
+- Copy: `apps/website/lib/delight-copy.ts`
+- Mail: `docs/gtm/ONBOARDING-EMAIL-TEMPLATES.md` + `scripts/gtm/send-onboarding-email.py`
+- Journey: `docs/gtm/NEUKUNDEN-BEGEISTERUNG.md`
+
+## Koordination
+
+Outbound/Lead-Queue = Zero-Cost-Leads-Agent (`bc2da7d5`). Delight/Onboarding/Conversion-UX = diese Rule.
