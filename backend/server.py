@@ -1,7 +1,11 @@
+# ruff: noqa: E402
+# dotenv must run before local imports that read os.environ at import time
 from dotenv import load_dotenv
 
 load_dotenv()
-load_dotenv("/etc/nexifyai/credentials.env", override=False)
+load_dotenv(
+    "/etc/nexifyai/credentials.env", override=True
+)  # ops SoT overrides local .env
 
 import os
 import re
@@ -670,7 +674,7 @@ def _smtp_send(to: str, subject: str, html: str) -> str:
 
     msg = MIMEText(html, "html", "utf-8")
     msg["Subject"] = subject
-    msg["From"] = SENDER_EMAIL
+    msg["From"] = SENDER_EMAIL or ""
     msg["To"] = to
     reply_to = os.environ.get("REPLY_TO_EMAIL")
     if reply_to:
@@ -1118,7 +1122,7 @@ async def health_llm():
 def _db_pool_snapshot(pool: asyncpg.Pool | None) -> dict:
     if not pool:
         return {"available": False}
-    snapshot = {"available": True}
+    snapshot: dict[str, object] = {"available": True}
     for field, method_name in (
         ("size", "get_size"),
         ("idle", "get_idle_size"),
@@ -1941,7 +1945,12 @@ async def startup():
             user=os.environ.get("SUPABASE_DB_USER"),
             password=os.environ.get("SUPABASE_DB_PASSWORD"),
             database=os.environ.get("SUPABASE_DB_NAME", "postgres"),
-            ssl="require",
+            ssl=(
+                False
+                if os.environ.get("SUPABASE_DB_SSL", "require").lower()
+                in ("0", "false", "disable", "disabled", "off", "no")
+                else "require"
+            ),
             min_size=1,
             max_size=4,
             statement_cache_size=0,
