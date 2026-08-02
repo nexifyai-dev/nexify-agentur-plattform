@@ -23,10 +23,15 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, company: form.company || null, phone: form.phone || null, language: lang }),
       });
-      if (!res.ok) throw new Error("failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : "failed");
+      }
       setState("success");
-    } catch {
+    } catch (err) {
       setState("error");
+      // keep generic UI copy; detail is for operators via network tab
+      void err;
     }
   };
 
