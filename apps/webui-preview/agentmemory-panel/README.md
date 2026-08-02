@@ -1,29 +1,41 @@
 # FILE: apps/webui-preview/agentmemory-panel/README.md
 # NIR: 31.07.2026 12:20
-# UPDATED: 31.07.2026 12:20
-# NAME: NeXifyAI Langlauf Agent
+# UPDATED: 02.08.2026 08:55
+# NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Core
-# WHAT: Preview Stub — native AgentMemory Views für WebUI-Zentrale
-# WHY: Größter Parity-Posten (11 Views); kein Prod Hermes Patch; Official REST :3111 / Viewer :3113
+# WHAT: Preview — native AgentMemory Views gegen echte REST :3111 (same-origin Proxy)
+# WHY: Größter Parity-Posten (11 Views); kein Prod Hermes Patch; CORS-sicher via serve.py
 # OFFICIAL: https://agent-memory.dev/ · https://agentmemory.mintlify.app/reference/api-search
+# DECISION: GitHub #141 — Hermes WebUI bleiben · Native-Panels Härten
 # KATEGORIE: platform
 
-## Start
+## Start (empfohlen)
+
+```bash
+python3 apps/webui-preview/agentmemory-panel/serve.py
+# → http://127.0.0.1:8792/
+# Proxy: /agentmemory/* → http://127.0.0.1:3111 (AGENTMEMORY_URL override)
+```
+
+Fallback ohne Proxy (CORS kann scheitern):
 
 ```bash
 python3 -m http.server 8792 --directory apps/webui-preview/agentmemory-panel
-# → http://127.0.0.1:8792/
 ```
 
 ## Official Endpoints (gegengeprüft)
 
 | Surface | Port | Rolle |
 |---------|------|-------|
-| REST | `3111` `/agentmemory/*` | livez, remember, smart-search |
-| Viewer | `3113` | Ship-with Viewer (Session/Memory/Graph/Health) |
+| REST | `3111` `/agentmemory/*` | livez, remember, smart-search, sessions, memories, lessons, frontier, audit, export, graph/stats |
+| Viewer | `3113` | Ship-with Viewer (Übergang, kein Iframe-Dauerziel) |
 
-Secrets: nie im Repo. Browser-Probe nutzt optional `sessionStorage` Key (lokal).
+Panel Views rufen REST über den Proxy — nicht nur Stub-Text.
+
+Secrets: nie im Repo. Browser-Probe nutzt optional `sessionStorage` Key `AM_BEARER` (lokal).
 
 ## Gates
 
-Kein Mount in Prod WebUI ohne Preview-Smoke + Endabnahme.
+- Registry: `config/webui/hermes-preview-module-registry.json` → `prod_patch_allowed: false`
+- Kein Mount in Prod WebUI ohne Preview-Smoke + Endabnahme
+- Kein Traefik / Live-Dash Touch in Preview-PRs
