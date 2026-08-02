@@ -4,25 +4,32 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export type Lang = "de" | "en" | "nl";
 
-const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: "de", setLang: () => {} });
+/** Product default — never infer NL/EN from navigator.language for acquisition. */
+export const DEFAULT_LANG: Lang = "de";
+
+const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({
+  lang: DEFAULT_LANG,
+  setLang: () => {},
+});
+
+function isLang(value: string | null | undefined): value is Lang {
+  return value === "de" || value === "en" || value === "nl";
+}
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("de");
+  const [lang, setLangState] = useState<Lang>(DEFAULT_LANG);
 
   useEffect(() => {
     const stored = window.localStorage.getItem("nexify-lang");
     const cookieMatch = document.cookie.match(/(?:^|;\s*)NEXT_LOCALE=(de|en|nl)/);
-    const fromCookie = cookieMatch?.[1] as Lang | undefined;
-    const initial =
-      stored === "nl" || stored === "de" || stored === "en"
-        ? stored
-        : fromCookie === "nl" || fromCookie === "de" || fromCookie === "en"
-          ? fromCookie
-          : null;
-    if (initial) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize persisted locale on initial mount
-      setLangState(initial);
-      document.documentElement.lang = initial;
+    const fromCookie = cookieMatch?.[1];
+    // Explicit user preference only — no Accept-Language / navigator.language
+    const initial: Lang = isLang(stored) ? stored : isLang(fromCookie) ? fromCookie : DEFAULT_LANG;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize persisted locale on initial mount
+    setLangState(initial);
+    document.documentElement.lang = initial;
+    if (!isLang(stored)) {
+      window.localStorage.setItem("nexify-lang", initial);
     }
   }, []);
 

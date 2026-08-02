@@ -61,7 +61,7 @@ sleep 5 && for h in webui ai-router work api open dashboard; do curl -s -o /dev/
 - API-Key (= 9router-Key „system"): **[ROTIEREN — siehe docs/architecture/SECURITY-INCIDENT-2026-07-11.md, aus Git entfernt]**
 
 ## 9router (:20128, ai-router.nexifyai.cloud)
-- v0.5.18. 7 aktive Provider: DeepSeek, Xiaomi MiMo (sk- + token-plan tp-), NScale, Codex(OAuth nexify.login@gmail.com), Vercel AI Gateway, You.com.
+- v0.5.18. Aktive Provider: DeepSeek, Xiaomi MiMo (sk- + token-plan tp-), NScale, Vercel AI Gateway, You.com. **Codex OAuth retired 2026-08-02** (Cursor Agent only; siehe `docs/operations/CODEX-REMOVED-2026-08-02.md`).
 - 21 Modelle. Combo `nexifyai-combo-llm` (→ glm-5.2, leakt Reasoning – meiden für Kundentexte).
 - Sauberes Chat-Modell: `ds/deepseek-chat` (→ deepseek-v4-flash). `deepseek-v4-pro` legt Text in reasoning_content → content leer, NICHT nutzen.
 - ⚠️ `mimo/mimo-v2.5` (sk-Konto) = 402 Insufficient balance. Token-Plan (tp-) hat noch Guthaben.
