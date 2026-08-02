@@ -2,36 +2,65 @@
   "mcpServers": {
     "agentmemory": {
       "command": "npx",
-      "args": ["-y", "@agentmemory/mcp"],
+      "args": [
+        "-y",
+        "@agentmemory/mcp"
+      ],
       "env": {
         "AGENTMEMORY_URL": "http://127.0.0.1:3111",
         "AGENTMEMORY_SECRET": "${AGENTMEMORY_SECRET}",
         "AGENTMEMORY_TOOLS": "all",
         "AGENTMEMORY_INJECT_CONTEXT": "true"
       },
-      "description": "Systemweites Betriebsgedächtnis (Pflicht). REST :3111, Viewer :3113."
+      "description": "Systemweites Betriebsged\u00e4chtnis (Pflicht). REST :3111, Viewer :3113."
     },
     "context7": {
       "url": "https://mcp.context7.com/mcp",
-      "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor Übernahme."
+      "description": "Aktuelle Bibliotheks-/API-Dokumentation zur Verifikation vor \u00dcbernahme."
     },
     "lightrag": {
       "command": "python3",
-      "args": ["/opt/nexifyai/mcp-servers/lightrag-mcp.py"],
+      "args": [
+        "/opt/nexifyai/mcp-servers/lightrag-mcp.py"
+      ],
       "env": {
         "LIGHTRAG_URL": "http://127.0.0.1:9622"
       },
-      "description": "LightRAG Knowledge Graph (Vektorsuche). Origin :9622 — Secrets nur Env."
+      "description": "LightRAG Knowledge Graph (Vektorsuche). Origin :9622 \u2014 Secrets nur Env."
     },
     "gitlab-oss": {
       "command": "npx",
-      "args": ["-y", "@zereight/mcp-gitlab"],
+      "args": [
+        "-y",
+        "@zereight/mcp-gitlab"
+      ],
       "env": {
         "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_PERSONAL_ACCESS_TOKEN}",
         "GITLAB_API_URL": "https://gitlab.nexifyai.cloud/api/v4",
         "GITLAB_READ_ONLY_MODE": "false"
       },
       "description": "Self-hosted GitLab OSS (VPS). Nicht built-in Gitlab-SaaS-MCP verwenden."
+    },
+    "hostinger-domains": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-domains-mcp"
+      ],
+      "description": "Hostinger Domains MCP \u2014 token via /etc/nexifyai/hostinger-api.env (wrapper)."
+    },
+    "hostinger-dns": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-dns-mcp"
+      ],
+      "description": "Hostinger DNS MCP \u2014 token via env file; never commit secrets."
+    },
+    "hostinger-vps": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-vps-mcp"
+      ],
+      "description": "Hostinger VPS MCP \u2014 read-first; no destructive deletes without approval."
     }
   }
 }
