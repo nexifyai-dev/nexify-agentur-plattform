@@ -33,5 +33,8 @@
       },
       "description": "Self-hosted GitLab OSS (VPS). Nicht built-in Gitlab-SaaS-MCP verwenden."
     }
+  },
+  "_nexify_notes": {
+    "payments": "No Stripe MCP. Use Revolut Merchant — docs/operations/REVOLUT-MERCHANT.md. Uninstall Stripe Cursor plugin in UI if still installed."
   }
 }
