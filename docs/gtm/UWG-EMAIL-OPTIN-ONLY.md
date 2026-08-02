@@ -1,25 +1,15 @@
 # FILE: /docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
-<<<<<<< HEAD
 # NIR: 02.08.2026 11:05
-=======
-# NIR: 02.08.2026 11:00
->>>>>>> 5396353d (fix(gtm): harden competitor outreach for §7 UWG opt-in)
-# UPDATED: 02.08.2026 11:10
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Hard rule — DE email acquisition only with explicit opt-in (§7 UWG)
 # WHY: Cold email without consent is illegal in Germany even for B2B
 # BEST-PRACTICE: consent=true + allowed source; default dry-run; no bought lists
 # PITFALL: V-CAC-01: Never treat legitimate_interest as email-send basis in DE
-<<<<<<< HEAD
 # DEPENDS: EMAIL-NURTURE-OPTIN.md, RESEARCH-FREE-CAC-2026.md, ZERO-COST-ACQUISITION-PLAYBOOK.md, scripts/gtm/*, scripts/leads/*, scripts/outreach/*
 # DOCS-REF: https://www.ihk-muenchen.de/ratgeber/recht/werbung-fairer-wettbewerb/marketing-per-email-telefon-brief-etc/
-# SESSION: zero-cost-leads-mailing-7dd5
-=======
-# DEPENDS: EMAIL-NURTURE-OPTIN.md, RESEARCH-FREE-CAC-2026.md, scripts/gtm/discover_and_optin_mail.py, scripts/gtm/icp_competitor_outreach.py
-# DOCS-REF: https://www.ihk-muenchen.de/ratgeber/recht/werbung-fairer-wettbewerb/marketing-per-email-telefon-brief-etc/
 # SESSION: strongest-competitors-tactics-7dd5
->>>>>>> 5396353d (fix(gtm): harden competitor outreach for §7 UWG opt-in)
 
 # UWG §7 — E-Mail nur mit Opt-in (DE)
 
@@ -63,6 +53,9 @@ python3 scripts/leads/run_pipeline.py mail --send --limit 1   # nur @nexifyai.*
 
 # GTM opt-in path (#234)
 python3 scripts/gtm/discover_and_optin_mail.py --dry-run
+
+# Competitor-angle path (#241) — OUTREACH_LIVE=1 + consent required
+python3 scripts/gtm/icp_competitor_outreach.py --mail-list leads.json --dry-run
 
 # Daily workflow: immer --dry-run
 python3 scripts/outreach/run_daily.py --dry-run --json
