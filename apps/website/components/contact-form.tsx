@@ -45,7 +45,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} className="glass space-y-4 p-8 md:p-10" data-testid="contact-form">
+    <form onSubmit={submit} className="glass space-y-4 p-5 sm:p-8 md:p-10" data-testid="contact-form">
       <div className="grid gap-4 sm:grid-cols-2">
         <input className="field" required placeholder={t.contact.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="contact-name-input" />
         <input className="field" required type="email" placeholder={t.contact.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="contact-email-input" />
@@ -54,15 +54,15 @@ export function ContactForm() {
       </div>
       <textarea className="field min-h-36" required placeholder={t.contact.messagePlaceholder} value={form.message} onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))} data-testid="contact-message-input" />
       <label className="flex items-start gap-2.5 text-xs leading-relaxed text-zinc-500">
-        <input type="checkbox" required className="mt-0.5 accent-white" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} data-testid="contact-privacy-checkbox" />
+        <input type="checkbox" required className="mt-0.5 size-4 shrink-0 accent-white" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} data-testid="contact-privacy-checkbox" />
         <span>
           {lang === "nl" ? "Ik heb de privacyverklaring gelezen. *" : "Ich habe die Datenschutzerklärung zur Kenntnis genommen. *"}{" "}
           <Link href="/datenschutz" className="underline hover:text-white">{lang === "nl" ? "Privacyverklaring" : "Datenschutz"}</Link>
         </span>
       </label>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <p className="text-xs text-zinc-600">{t.contact.b2bNote}</p>
-        <button type="submit" className="btn-primary" disabled={state === "sending" || !privacy} data-testid="contact-submit-btn">
+        <button type="submit" className="btn-primary w-full sm:w-auto" disabled={state === "sending" || !privacy} data-testid="contact-submit-btn">
           {state === "sending" ? t.contact.sending : t.contact.submit} <ArrowRight size={15} />
         </button>
       </div>

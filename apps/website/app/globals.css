@@ -266,8 +266,35 @@ input.field:focus, textarea.field:focus, select.field:focus {
 
 @media (max-width: 640px) {
   .site-container { width: calc(100% - 32px); }
-  .chat-panel { right: 16px; }
-  .chat-launcher { right: 16px; bottom: 16px; }
+  /* Full-bleed chat on phones — avoids clipped panel + awkward side gutter. */
+  .chat-panel {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+  .chat-launcher {
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    width: 56px;
+    height: 56px;
+  }
+  /* iOS zoom prevention: inputs must be ≥16px */
+  input.field, textarea.field, select.field { font-size: 16px; }
+  /* Room for sticky CTA + chat launcher so footer/forms stay reachable */
+  #main-content {
+    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+  }
+  .btn-primary, .btn-ghost {
+    min-height: 44px;
+  }
 }
 
 @keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }

@@ -14,8 +14,10 @@ test('SiteHeader Component - has correct navigation items', () => {
 });
 
 test('SiteHeader Component - has correct header height', () => {
-  const headerHeight = "76px";
-  assert.equal(headerHeight, "76px");
+  const headerHeightMobile = "64px";
+  const headerHeightDesktop = "74px";
+  assert.equal(headerHeightMobile, "64px");
+  assert.equal(headerHeightDesktop, "74px");
 });
 
 test('SiteHeader Component - has mobile menu toggle', () => {

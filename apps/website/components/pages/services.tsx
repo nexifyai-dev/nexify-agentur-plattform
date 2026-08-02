@@ -24,14 +24,14 @@ export function ServicesPage() {
             return (
               <Reveal key={s.slug} delay={60}>
                 <article className="glass overflow-hidden" data-testid={`service-detail-${s.slug}`} id={s.slug}>
-                  <div className="grid gap-8 p-8 md:p-10 lg:grid-cols-[1.1fr_1fr]">
+                  <div className="grid gap-8 p-5 sm:p-8 md:p-10 lg:grid-cols-[1.1fr_1fr]">
                     <div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                         <div className="flex size-12 items-center justify-center rounded-xl border border-white/12 bg-white/[0.04]">
                           <Icon size={22} className="text-zinc-300" />
                         </div>
                         <span className="rounded-full border border-white/12 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-400">{s.days}</span>
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-zinc-600">{t.common.netPerDay}</span>
+                        <span className="w-full text-[11px] font-bold uppercase tracking-widest text-zinc-600 sm:w-auto">{t.common.netPerDay}</span>
                       </div>
                       <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">{s.eyebrow}</p>
                       <h2 className="mt-2 font-[family-name:var(--font-heading)] text-2xl font-medium tracking-tight text-white sm:text-3xl">{s.title}</h2>
@@ -75,9 +75,9 @@ export function ServicesPage() {
         </div>
 
         <Reveal>
-          <div className="mt-16 flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-white/10 bg-white/[0.03] p-8">
+          <div className="mt-16 flex flex-col items-stretch justify-between gap-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:flex-row sm:items-center sm:p-8">
             <p className="max-w-xl text-zinc-400">{t.pricing.vatNote}</p>
-            <Link href="/kontakt" className="btn-primary" data-testid="services-cta">
+            <Link href="/kontakt" className="btn-primary w-full justify-center sm:w-auto" data-testid="services-cta">
               {t.common.cta} <ArrowRight size={16} />
             </Link>
           </div>

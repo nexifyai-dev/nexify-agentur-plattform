@@ -31,8 +31,8 @@ export function PricingPage() {
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
           <Reveal>
-            <div className="glass flex h-full flex-col p-8 md:p-10" data-testid="dayrate-card">
-              <div className="text-silver font-[family-name:var(--font-heading)] text-6xl font-semibold">€ 449</div>
+            <div className="glass flex h-full flex-col p-5 sm:p-8 md:p-10" data-testid="dayrate-card">
+              <div className="text-silver font-[family-name:var(--font-heading)] text-5xl font-semibold sm:text-6xl">€ 449</div>
               <div className="mt-2 text-sm uppercase tracking-[0.2em] text-zinc-500">{t.common.netPerDay.replace("€ 449 netto / ", "netto / ")}</div>
               <h2 className="mt-8 font-[family-name:var(--font-heading)] text-xl font-medium text-white">{t.pricing.dayRateTitle}</h2>
               <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-400">{t.pricing.dayRateText}</p>
@@ -62,7 +62,7 @@ export function PricingPage() {
           </Reveal>
 
           <Reveal delay={120}>
-            <div className="glass h-full p-8 md:p-10" data-testid="pricing-calculator">
+            <div className="glass h-full p-5 sm:p-8 md:p-10" data-testid="pricing-calculator">
               <h2 className="font-[family-name:var(--font-heading)] text-xl font-medium text-white">{t.pricing.calcTitle}</h2>
               <p className="mt-2 text-sm text-zinc-500">{t.pricing.calcText}</p>
 
@@ -76,7 +76,7 @@ export function PricingPage() {
                       setDays(s.minDays);
                     }}
                     data-testid={`calc-service-${s.slug}`}
-                    className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition-all ${
+                    className={`min-h-10 rounded-full border px-3.5 py-2.5 text-xs font-semibold transition-all ${
                       i === serviceIdx ? "border-white/60 bg-white text-black" : "border-white/12 text-zinc-400 hover:border-white/30 hover:text-white"
                     }`}
                   >

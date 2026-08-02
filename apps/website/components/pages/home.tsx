@@ -16,7 +16,7 @@ export function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden pb-16 pt-32 md:pb-24 md:pt-40 lg:pt-44">
         <div className="hero-grid-bg" />
-        <div className="pointer-events-none absolute left-1/2 top-[-320px] h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[140px]" />
+        <div className="pointer-events-none absolute left-1/2 top-[-320px] h-[560px] w-[min(900px,140vw)] -translate-x-1/2 rounded-full bg-white/[0.05] blur-[140px]" />
         <div className="site-container relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
           <Reveal>
@@ -26,7 +26,7 @@ export function HomePage() {
             </span>
           </Reveal>
           <Reveal delay={100}>
-            <h1 className="mt-8 max-w-4xl font-[family-name:var(--font-heading)] text-5xl font-light leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
+            <h1 className="mt-8 max-w-4xl font-[family-name:var(--font-heading)] text-[2.35rem] font-light leading-[1.08] tracking-tight text-white sm:text-5xl sm:leading-[1.05] lg:text-7xl">
               {t.home.titleA}
               <br />
               <span className="text-silver font-medium">{t.home.titleB}</span>
@@ -57,9 +57,9 @@ export function HomePage() {
           <Reveal delay={400}>
             <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:mt-20 lg:grid-cols-4" data-testid="hero-stats">
               {t.home.stats.map((s, i) => (
-                <div key={i} className="bg-[#0c0c0f] p-7">
-                  <div className="text-silver font-[family-name:var(--font-heading)] text-3xl font-semibold">{s.value}</div>
-                  <div className="mt-2 text-[13px] leading-snug text-zinc-500">{s.label}</div>
+                <div key={i} className="bg-[#0c0c0f] p-5 sm:p-7">
+                  <div className="text-silver font-[family-name:var(--font-heading)] text-2xl font-semibold sm:text-3xl">{s.value}</div>
+                  <div className="mt-2 text-[12px] leading-snug text-zinc-500 sm:text-[13px]">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -187,11 +187,11 @@ export function HomePage() {
       <section className="py-16 md:py-28">
         <div className="site-container">
           <Reveal>
-            <div className="glass relative overflow-hidden p-12 text-center md:p-20" data-testid="cta-band">
-              <div className="pointer-events-none absolute left-1/2 top-[-160px] h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-white/[0.06] blur-[100px]" />
+            <div className="glass relative overflow-hidden p-6 text-center sm:p-12 md:p-20" data-testid="cta-band">
+              <div className="pointer-events-none absolute left-1/2 top-[-160px] h-[300px] w-[min(600px,120vw)] -translate-x-1/2 rounded-full bg-white/[0.06] blur-[100px]" />
               <div className="relative">
                 <div className="mx-auto mb-8 w-fit"><LogoMark size={56} /></div>
-                <h2 className="mx-auto max-w-2xl font-[family-name:var(--font-heading)] text-3xl font-light tracking-tight text-white sm:text-5xl">{t.home.ctaBandTitle}</h2>
+                <h2 className="mx-auto max-w-2xl font-[family-name:var(--font-heading)] text-2xl font-light tracking-tight text-white sm:text-5xl">{t.home.ctaBandTitle}</h2>
                 <p className="mx-auto mt-6 max-w-xl text-zinc-400">{t.home.ctaBandText}</p>
                 <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
                   <Link href="/kontakt" className="btn-primary" data-testid="cta-band-btn">

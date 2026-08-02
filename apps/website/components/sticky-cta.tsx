@@ -18,13 +18,21 @@ export function StickyCta() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
-      <Link
-        href="/kontakt"
-        className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-medium shadow-[0_8px_32px_rgba(0,0,0,.5)]"
-      >
-        {lang === "en" ? "Request project" : lang === "nl" ? "Project aanvragen" : "Projekt anfragen"} <ArrowRight className="size-4" />
-      </Link>
+    <div
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-50 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden"
+      data-testid="sticky-cta"
+    >
+      {/* Leave clear space on the right for the chat launcher (60px + margin). */}
+      <div className="pointer-events-auto mx-auto flex max-w-lg pr-[4.75rem]">
+        <Link
+          href="/kontakt"
+          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black shadow-[0_8px_32px_rgba(0,0,0,.5)]"
+          data-testid="sticky-cta-link"
+        >
+          {lang === "en" ? "Request project" : lang === "nl" ? "Project aanvragen" : "Projekt anfragen"}{" "}
+          <ArrowRight className="size-4 shrink-0" />
+        </Link>
+      </div>
     </div>
   );
 }

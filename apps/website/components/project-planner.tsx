@@ -145,7 +145,7 @@ export function ProjectPlanner() {
   const reset = () => { setState("idle"); setResult(null); setTypeIdx(null); setIndustry(""); setGoal(""); setFeats([]); setDetails(""); };
 
   return (
-    <div className="glass relative overflow-hidden p-8 md:p-12" data-testid="project-planner">
+    <div className="glass relative overflow-hidden p-5 sm:p-8 md:p-12" data-testid="project-planner">
       <div className="pointer-events-none absolute right-[-140px] top-[-140px] h-[320px] w-[320px] rounded-full bg-white/[0.05] blur-[100px]" />
       <div className="relative">
         <span className="eyebrow flex items-center gap-2"><Wand2 size={13} /> {t.eyebrow}</span>
@@ -184,7 +184,7 @@ export function ProjectPlanner() {
                 <div className="mt-2.5 flex flex-wrap gap-2">
                   {FEATURES[lang].map((f) => (
                     <button key={f} onClick={() => toggleFeat(f)} data-testid="planner-feature-chip"
-                      className={`rounded-full border px-3 py-1.5 text-[12px] font-medium transition-all ${feats.includes(f) ? "border-white/60 bg-white text-black" : "border-white/12 text-zinc-400 hover:border-white/30 hover:text-white"}`}>
+                    className={`min-h-[44px] rounded-full border px-3 py-2.5 text-[12px] font-medium transition-all ${feats.includes(f) ? "border-white/60 bg-white text-black" : "border-white/12 text-zinc-400 hover:border-white/30 hover:text-white"}`}>
                       {f}
                     </button>
                   ))}
