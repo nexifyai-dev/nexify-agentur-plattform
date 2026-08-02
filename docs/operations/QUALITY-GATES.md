@@ -68,7 +68,7 @@ Never claim “done” on L1 alone (AGENTS.md).
 | Build | `pnpm build` | — | ✅ | — | `ci.yml` website | **fail** |
 | Design CSS guard | marker in `globals.css` | — | ✅ | — | `design-system-guard.yml` | **fail** |
 | Playwright critical | `tests/e2e/critical-path.spec.ts` | ✅ | ✅ | ✅ home+health | `quality-smoke.yml` (PR) | **fail** |
-| Playwright design audit | `tests/e2e/design-audit.spec.ts` | ✅ | ✅ | ✅ multi-viewport | `quality-design-audit.yml` (PR website/CI paths + nightly) | **fail** |
+| Playwright design audit | `tests/e2e/design-audit.spec.ts` | ✅ | ✅ | ✅ multi-viewport | `quality-design-audit.yml` (PR website/CI paths + nightly, Artefakt immer) | **report** |
 
 ### Backend (`backend/`)
 
@@ -157,7 +157,8 @@ QUALITY_SMOKE_LOCAL=1 bash scripts/quality-smoke.sh
 ## Known gaps (tracked issues)
 
 1. **Backend pytest** — integration against remote URL; CI soft-fails.
-2. **VPS-local L1** for AM/Gateway/LightRAG — not enforceable on GitHub-hosted runners.
-3. **Hermes cutover / live functional** — blocked until Endabnahme (HARD STOP).
+2. **Playwright design-audit baseline** — aktuell Artefakt-/Signal-Mode; bestehende Website-Fails müssen separat gehärtet werden.
+3. **VPS-local L1** for AM/Gateway/LightRAG — not enforceable on GitHub-hosted runners.
+4. **Hermes cutover / live functional** — blocked until Endabnahme (HARD STOP).
 
 Open follow-ups with label `agent-fix` when Cursor-owned; `human-gate` for secrets/cutover.

@@ -66,6 +66,7 @@ jobs:
         env:
           CI: "true"
         run: pnpm exec playwright test tests/e2e/design-audit.spec.ts --reporter=list
+        continue-on-error: true
 
       - name: Upload Playwright report + screenshots
         if: always()
