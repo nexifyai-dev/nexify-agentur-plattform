@@ -125,8 +125,8 @@ export function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[90] p-4 sm:p-6" data-testid="cookie-banner">
-      <div className="mx-auto max-w-2xl rounded-2xl border border-white/15 bg-black/90 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-6">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[90] p-4 sm:p-6" data-testid="cookie-banner">
+      <div className="pointer-events-auto mx-auto max-w-2xl rounded-2xl border border-white/15 bg-black/90 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-6">
         <div className="flex items-start gap-3">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04]">
             <Cookie size={16} className="text-zinc-300" />
