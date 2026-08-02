@@ -20,7 +20,7 @@ curl $NINEROUTER_URL/v1/models | jq '.data[].id'
 curl "$NINEROUTER_URL/v1/models/info?id=openai/gpt-4o"
 ```
 
-Combos (e.g. `vip`, `mycodex`) auto-fallback through multiple providers.
+Combos (e.g. `vip`) auto-fallback through multiple providers. NeXify: kein Codex/`mycodex` — Cursor Agent only (2026-08-02).
 
 ## OpenAI format
 

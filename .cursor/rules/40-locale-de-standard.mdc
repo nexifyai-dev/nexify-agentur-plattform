@@ -1,0 +1,12 @@
+---
+description: Deutsch (de) ist Standard-Locale für Agents, Produkt-UI und Ops
+alwaysApply: true
+---
+
+# Locale: Deutsch first
+
+- **Kommunikation:** Agents antworten auf Deutsch (außer User verlangt explizit anders).
+- **Produkt-UI / Website / owned API-Copy:** Default `de` / `de-DE`. NL = Firmensitz, nicht Acquisition-Default.
+- **Englisch:** nur Identifier, Upstream-UIs, dokumentierte Exceptions (`docs/operations/LOCALE-DE-STANDARD.md`).
+- **Host/Shell:** `LANG=de_DE.UTF-8` wo verfügbar; kein Hermes-Prod-Cutover für i18n ohne Endabnahme.
+- **TZ parallel:** `Europe/Berlin` — Locale und Zeitzone nicht vermischen/überschreiben.

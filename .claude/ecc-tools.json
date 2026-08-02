@@ -46,7 +46,7 @@
           ".agents/skills/nexify-agentur-plattform/agents/openai.yaml",
           ".claude/commands/project-snapshot-or-cleanup.md"
         ],
-        "recommendation": "Add cross-harness, adapter-compliance, or harness-audit evidence for Claude, Codex, OpenCode, Zed, dmux, and agent surfaces."
+        "recommendation": "Add cross-harness, adapter-compliance, or harness-audit evidence for Claude, Cursor Agent, OpenCode, Zed, dmux, and agent surfaces."
       },
       {
         "id": "security-evidence",
@@ -177,11 +177,6 @@
     ".agents/skills/nexify-agentur-plattform/SKILL.md",
     ".agents/skills/nexify-agentur-plattform/agents/openai.yaml",
     ".claude/identity.json",
-    ".codex/config.toml",
-    ".codex/AGENTS.md",
-    ".codex/agents/explorer.toml",
-    ".codex/agents/reviewer.toml",
-    ".codex/agents/docs-researcher.toml",
     ".claude/homunculus/instincts/inherited/nexify-agentur-plattform-instincts.yaml",
     ".claude/commands/feature-development.md",
     ".claude/commands/ecc-bundle-integration.md",
@@ -193,11 +188,6 @@
       ".agents/skills/nexify-agentur-plattform/SKILL.md",
       ".agents/skills/nexify-agentur-plattform/agents/openai.yaml",
       ".claude/identity.json",
-      ".codex/config.toml",
-      ".codex/AGENTS.md",
-      ".codex/agents/explorer.toml",
-      ".codex/agents/reviewer.toml",
-      ".codex/agents/docs-researcher.toml",
       ".claude/homunculus/instincts/inherited/nexify-agentur-plattform-instincts.yaml"
     ],
     "workflow-pack": [
@@ -212,11 +202,6 @@
       ".agents/skills/nexify-agentur-plattform/SKILL.md",
       ".agents/skills/nexify-agentur-plattform/agents/openai.yaml",
       ".claude/identity.json",
-      ".codex/config.toml",
-      ".codex/AGENTS.md",
-      ".codex/agents/explorer.toml",
-      ".codex/agents/reviewer.toml",
-      ".codex/agents/docs-researcher.toml",
       ".claude/homunculus/instincts/inherited/nexify-agentur-plattform-instincts.yaml"
     ],
     "workflow-pack": [
@@ -234,42 +219,17 @@
     {
       "moduleId": "runtime-core",
       "path": ".agents/skills/nexify-agentur-plattform/SKILL.md",
-      "description": "Codex-facing copy of the generated repository skill."
+      "description": "Shared Agents Skills copy of the generated repository skill (Cursor Agent / multi-agent)."
     },
     {
       "moduleId": "runtime-core",
       "path": ".agents/skills/nexify-agentur-plattform/agents/openai.yaml",
-      "description": "Codex skill metadata so the repo skill appears cleanly in the skill interface."
+      "description": "Agents Skills interface metadata (openai.yaml format; not OpenAI Codex CLI)."
     },
     {
       "moduleId": "runtime-core",
       "path": ".claude/identity.json",
       "description": "Suggested identity.json baseline derived from repository conventions."
-    },
-    {
-      "moduleId": "runtime-core",
-      "path": ".codex/config.toml",
-      "description": "Repo-local Codex MCP and multi-agent baseline aligned with ECC defaults."
-    },
-    {
-      "moduleId": "runtime-core",
-      "path": ".codex/AGENTS.md",
-      "description": "Codex usage guide that points at the generated repo skill and workflow bundle."
-    },
-    {
-      "moduleId": "runtime-core",
-      "path": ".codex/agents/explorer.toml",
-      "description": "Read-only explorer role config for Codex multi-agent work."
-    },
-    {
-      "moduleId": "runtime-core",
-      "path": ".codex/agents/reviewer.toml",
-      "description": "Read-only reviewer role config focused on correctness and security."
-    },
-    {
-      "moduleId": "runtime-core",
-      "path": ".codex/agents/docs-researcher.toml",
-      "description": "Read-only docs researcher role config for API verification."
     },
     {
       "moduleId": "runtime-core",
@@ -316,10 +276,11 @@
         ".claude/commands/ci-cd-workflow-update.md"
       ]
     },
-    "codex": {
-      "configPath": ".codex/config.toml",
-      "agentsGuidePath": ".codex/AGENTS.md",
-      "skillPath": ".agents/skills/nexify-agentur-plattform/SKILL.md"
+    "cursor": {
+      "agentsGuidePath": "AGENTS.md",
+      "skillPath": ".agents/skills/nexify-agentur-plattform/SKILL.md",
+      "rulesPath": ".cursor/rules",
+      "mcpExamplePath": ".cursor/mcp.json.example"
     }
   }
 }
