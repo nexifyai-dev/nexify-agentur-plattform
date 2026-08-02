@@ -1,0 +1,129 @@
+# FILE: /.github/workflows/lead-outreach-daily.yml
+# NIR: 02.08.2026 09:20
+# UPDATED: 02.08.2026 09:20
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Daily B2B lead outreach via Hostinger SMTP (≤800, slow pacing)
+# WHY: Cursor/VPS automation to win customers; Resend reserved for transactional
+# BEST-PRACTICE: Self-hosted VPS runner; dry-run if SMTP missing → human-gate issue
+# PITFALL: V-OUT-01: Cap hardcoded in script; V-OUT-05: never use Resend here
+# DEPENDS: /etc/nexifyai/secrets.env (IMAP_*/SMTP_*), scripts/outreach/run_daily.py
+# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
+# SESSION: lead-outreach-automation-7dd5
+
+name: Lead Outreach Daily
+
+on:
+  schedule:
+    # 07:30 UTC ≈ 09:30 Europe/Berlin — after vps-worker full-health
+    - cron: "30 7 * * *"
+  workflow_dispatch:
+    inputs:
+      live:
+        description: "Send live (OUTREACH_LIVE=1). Default dry-run."
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      dispatch_agent_on_fail:
+        description: "repository_dispatch Cursor agent on failure"
+        required: false
+        default: true
+        type: boolean
+  repository_dispatch:
+    types: [lead-outreach-run]
+
+concurrency:
+  group: lead-outreach-daily
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  actions: write
+
+jobs:
+  outreach:
+    name: Hostinger drip (≤800)
+    runs-on: [self-hosted, vps, nexifyai]
+    timeout-minutes: 720
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run daily outreach
+        id: run
+        env:
+          SECRETS_FILE: /etc/nexifyai/secrets.env
+          # schedule/default = dry-run; workflow_dispatch live=true or repository_dispatch = live
+          OUTREACH_LIVE: "0"
+          OUTREACH_DAILY_CAP: "800"
+          OUTREACH_PACE_MIN_SEC: "30"
+          OUTREACH_PACE_MAX_SEC: "60"
+          FIRECRAWL_URL: "http://127.0.0.1:3003"
+          INPUT_LIVE: ${{ github.event.inputs.live }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set +e
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            export OUTREACH_LIVE=1
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$INPUT_LIVE" = "true" ]; then
+            export OUTREACH_LIVE=1
+          else
+            export OUTREACH_LIVE=0
+          fi
+          python3 scripts/outreach/run_daily.py --json --secrets-file "$SECRETS_FILE" | tee /tmp/outreach-result.json
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          blocked=""
+          if [ -f /tmp/outreach-result.json ]; then
+            blocked=$(python3 -c "import json; d=json.load(open('/tmp/outreach-result.json')); print(d.get('blocked') or '')" 2>/dev/null || true)
+          fi
+          echo "blocked=$blocked" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Human-gate comment if SMTP missing
+        if: steps.run.outputs.exit_code == '2'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BLOCKED: ${{ steps.run.outputs.blocked }}
+        run: |
+          set -euo pipefail
+          body=$(printf '%s\n' \
+            '## Lead Outreach — HUMAN-GATE' \
+            '' \
+            'Daily outreach exited with code 2 (credentials / hard block).' \
+            '' \
+            "- blocked: \`${BLOCKED:-unknown}\`" \
+            '- Required env (names only): `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`/`IMAP_USER`, `SMTP_PASSWORD`/`IMAP_PASSWORD`' \
+            '- Mailbox: `mail@nexifyai.cloud` (Hostinger)' \
+            '- Cap: ≤800/day · pacing 30–60s · channel: Hostinger SMTP (not Resend)' \
+            '' \
+            'See `docs/operations/LEAD-OUTREACH-AUTOMATION.md` and tracking issue #123.')
+          if gh issue view 123 --json state -q .state 2>/dev/null | grep -qi open; then
+            gh issue comment 123 --body "$body"
+          else
+            gh issue create \
+              --title "[ops] Lead outreach blocked — Hostinger SMTP credentials" \
+              --label "ops,human-gate,blocked,P0" \
+              --body "$body" || true
+          fi
+
+      - name: Dispatch Cursor Cloud Agent on failure
+        if: steps.run.outputs.exit_code == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh api "repos/${REPO}/dispatches" \
+            -f event_type=agent-fix \
+            -f client_payload[source]=lead-outreach-daily \
+            -f client_payload[dedupe_key]="lead-outreach-${RUN_ID}" \
+            -f client_payload[prompt]="Lead outreach daily job had send errors. Inspect data/outreach/state/errors.jsonl and scripts/outreach/. Fix retries, bounce handling, or queue corruption. Do not raise daily cap above 800. Do not use Resend for cold outreach. No Hermes cutover." \
+            || true
+
+      - name: Fail job on hard errors
+        if: steps.run.outputs.exit_code == '1'
+        run: exit 1

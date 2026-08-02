@@ -33,6 +33,7 @@ on:
       - cloudflare-alert
       - resend-bounce
       - website-error
+      - lead-outreach-run
   workflow_dispatch:
     inputs:
       prompt:
