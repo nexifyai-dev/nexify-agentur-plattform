@@ -1,51 +1,39 @@
 # FILE: /docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
-<<<<<<< HEAD
 # NIR: 02.08.2026 10:10
-# UPDATED: 02.08.2026 10:40
-=======
-# NIR: 02.08.2026 10:40
-# UPDATED: 02.08.2026 10:45
->>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)
+# UPDATED: 02.08.2026 11:24
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Living checklist — acquisition, conversion, ops gaps for Cursor agents
 # WHY: Permanent proactivity; never wait for user to ask for gap scans
 # BEST-PRACTICE: Update this file when finding/fixing gaps; open Issues for larger items
 # PITFALL: V-GTM-RADAR-01: Do not duplicate open PRs (blog, free GTM, outreach, Revolut, Gesamtkonzept)
-<<<<<<< HEAD
 # DEPENDS: .cursor/rules/60-proactive-acquisition-gaps.mdc, FREE-ACQUISITION-PLAYBOOK (PR #175)
 # DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md
-# SESSION: proactive-gaps-acquisition-7dd5
-=======
-# DEPENDS: .cursor/rules/60-proactive-acquisition-gaps.mdc
-# DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md
-# SESSION: unconsidered-gaps-scan-7dd5
->>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)
+# SESSION: proactive-gaps-acquisition-7dd5 + unconsidered-gaps-scan-7dd5
 
 # Ongoing Gap & Acquisition Radar
 
 **Rule:** `.cursor/rules/60-proactive-acquisition-gaps.mdc` (alwaysApply)  
-<<<<<<< HEAD
 **Agents:** Nach jedem Task dieses Dokument pflegen (Checkboxen / „Neu“-Zeilen).  
-=======
-**Agents:** Nach jedem Task dieses Dokument pflegen.  
->>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)
 **HARD:** Keine Fake-Reviews · kein Hermes-Cutover · keine Secrets · kein Paid-Ads-Spend.
 
 ## Koordination (nicht duplizieren)
 
 | Track | PR / Artefakt | Status |
 |-------|---------------|--------|
-<<<<<<< HEAD
 | Free GTM Playbook | #175 `cursor/free-acquisition-dach-7dd5` | open |
 | Blog DACH SEO | #190 `cursor/website-blog-dach-gtm-7dd5` | open |
 | Outreach drip | #173 `cursor/lead-outreach-automation-7dd5` | open |
 | Revolut payments | #205 `cursor/revolut-replace-stripe-7dd5` | open |
 | FAQ expand | #199 | open |
 | Continuous learning | #203 | open |
-| Website Gesamtkonzept | Agent `5ccd455e` | coordinate |
+| Legal pages | #202 | open |
+| Website Gesamtkonzept / Portal | #214 | open |
+| Acquisition radar + vergleich/checkliste | #213 | open |
+| Soft-404 + security.txt + /danke | PR `unconsidered-gaps-scan` | shipping |
 | Legal data human | #201 | human-gate |
 | Actions secrets/runner | #123 | human-gate P0 |
+| GTM backlog | #206–#212 | open — **nicht neu öffnen** |
 
 ---
 
@@ -113,24 +101,6 @@ Agents: neue Zeilen hier + Issue-Nummer nach `gh issue create`.
 | 2026-08-02 | Lead-Magnet PDF Asset + Thank-you mail | #212 | **closing** |
 
 ---
-
-## Session-Learn Reminder
-
-Nach Continuous-Learning (#203) / `scripts/learning/session-learn.sh`:
-=======
-| Free GTM Playbook | #175 | open |
-| Blog DACH SEO | #190 | open |
-| Outreach drip | #173 | open |
-| Revolut payments | #205 | open |
-| FAQ expand | #199 | open |
-| Continuous learning | #203 | open |
-| Legal pages | #202 | open |
-| Website Gesamtkonzept / Portal | #214 | open |
-| Acquisition radar + vergleich/checkliste | #213 | open |
-| Soft-404 + security.txt + /danke | PR unconsidered-gaps-scan | shipping |
-| Legal data human | #201 | human-gate |
-| Actions secrets/runner | #123 | human-gate P0 |
-| GTM backlog | #206–#212 | open — **nicht neu öffnen** |
 
 ## Bereits abgedeckt (nicht als „neu“ wiederholen)
 
@@ -208,13 +178,9 @@ Live OK (2026-08-02): www 200 · api/health 200 · SPF+DKIM+DMARC · AVV/KI-Hinw
 | 2026-08-02 | Lead-SLA Messung (1 Werktag) | #215 | P1 |
 
 ## Session-Learn
->>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)
 
 ```bash
 python3 scripts/learning/note-acquisition-gaps.py --summary "…"
 ```
-<<<<<<< HEAD
 
 Oder manuell: 1–3 Acquisition-Opportunities in AgentMemory speichern + Radar updaten.
-=======
->>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)

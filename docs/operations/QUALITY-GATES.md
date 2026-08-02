@@ -1,6 +1,6 @@
 # FILE: docs/operations/QUALITY-GATES.md
 # NIR: 02.08.2026 09:15
-# UPDATED: 02.08.2026 10:15
+# UPDATED: 02.08.2026 11:24
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Quality
 # WHAT: Inventory of tests, CI jobs, and L1/L2/L3 verification levels for absolute error-freedom.
@@ -26,12 +26,12 @@
 - Former `*.test.tsx` contracts renamed to `*.test.mjs` (node:test; no React/Vitest needed)
 - Wired in `ci.yml` (website job) and `test.yml` (unit-test job)
 
-## Playwright design-audit (nightly)
+## Playwright design-audit (PR + nightly)
 
 - Spec: `apps/website/tests/e2e/design-audit.spec.ts`
-- Nightly: `.github/workflows/quality-design-audit.yml` (`0 4 * * *` + `workflow_dispatch`)
+- CI: `.github/workflows/quality-design-audit.yml` (PRs nach `main` bei Website-/CI-Pfaden, plus `0 4 * * *` und `workflow_dispatch`)
 - Local/script: `pnpm --dir apps/website test:design-audit`
-- Not on every PR (runtime cost)
+- Nicht auf jedem Repo-PR, sondern gezielt auf relevanten Website-/CI-Änderungen (Runtime-Budget)
 
 ## Backend pytest (offline unit lane)
 
@@ -68,8 +68,7 @@ Never claim “done” on L1 alone (AGENTS.md).
 | Build | `pnpm build` | — | ✅ | — | `ci.yml` website | **fail** |
 | Design CSS guard | marker in `globals.css` | — | ✅ | — | `design-system-guard.yml` | **fail** |
 | Playwright critical | `tests/e2e/critical-path.spec.ts` | ✅ | ✅ | ✅ home+health | `quality-smoke.yml` (PR) | **fail** |
-| Playwright design audit | `tests/e2e/design-audit.spec.ts` | ✅ | ✅ | ✅ multi-viewport | **local / gap** — not in default CI (runtime) | report |
-| Component `.test.tsx` | ~29 files | — | — | — | **GAP** — not wired to runner | issue |
+| Playwright design audit | `tests/e2e/design-audit.spec.ts` | ✅ | ✅ | ✅ multi-viewport | `quality-design-audit.yml` (PR website/CI paths + nightly) | **fail** |
 
 ### Backend (`backend/`)
 
@@ -157,10 +156,8 @@ QUALITY_SMOKE_LOCAL=1 bash scripts/quality-smoke.sh
 
 ## Known gaps (tracked issues)
 
-1. **Website `.test.tsx` not on runner** — only `*.test.mjs` via `node --test`.
-2. **Full Playwright design-audit** — configured, not default CI (cost/time); critical-path is wired.
-3. **Backend pytest** — integration against remote URL; CI soft-fails.
-4. **VPS-local L1** for AM/Gateway/LightRAG — not enforceable on GitHub-hosted runners.
-5. **Hermes cutover / live functional** — blocked until Endabnahme (HARD STOP).
+1. **Backend pytest** — integration against remote URL; CI soft-fails.
+2. **VPS-local L1** for AM/Gateway/LightRAG — not enforceable on GitHub-hosted runners.
+3. **Hermes cutover / live functional** — blocked until Endabnahme (HARD STOP).
 
 Open follow-ups with label `agent-fix` when Cursor-owned; `human-gate` for secrets/cutover.
