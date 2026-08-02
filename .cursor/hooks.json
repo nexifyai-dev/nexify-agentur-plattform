@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeMCPExecution": [
+      {
+        "command": ".cursor/hooks/circuit-breaker-mcp.sh",
+        "failClosed": false
+      }
+    ],
+    "sessionStart": [
+      {
+        "type": "prompt",
+        "timeout": 12,
+        "prompt": "Event-Ingest Pflicht: Cloud Agents / Automations / VPS Autopilot decken PC-aus ab. Vor Arbeit memory_recall; nach Task memory_save + Actions. Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. Keine Secrets loggen."
+      }
+    ]
+  }
+}
