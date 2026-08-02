@@ -7,8 +7,9 @@ alwaysApply: true
 # Proactive Acquisition & Gap Radar (Pflicht)
 
 Bei **jedem** Task (auch nicht-GTM) aktiv nach Lücken suchen — nicht warten,
-bis der User fragt. Regel: `.cursor/rules/60-proactive-acquisition-gaps.mdc`.
-Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+bis der User fragt. Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+Zero-cost Cadence: `docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md`.
+UWG opt-in: `docs/gtm/UWG-EMAIL-OPTIN-ONLY.md`.
 
 ## Pflicht-Scan (kurz, vor Abschluss)
 
@@ -18,6 +19,23 @@ Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
 4. **Ops / Stack** — untergenutzte Dienste, Smoke-Fails, Human-Gates (#123, #201)
 5. **Koordination** — offene PRs (Blog, free GTM, Outreach, Revolut, Gesamtkonzept)
    **nicht** duplizieren; nur **neue** Gaps
+6. **Lead-Queue (bei GTM-Arbeit Pflicht)** — Queue vorrücken:
+   `discover` → `status` → `allow` → `mail` dry-run; `--send` nur mit `consent=true` / Self-Test
+
+## Lead-Pipeline (Zero-Cost)
+
+```bash
+python3 scripts/leads/run_pipeline.py discover --seed data/leads/seeds/dach_smb_agencies.json
+python3 scripts/leads/run_pipeline.py status
+python3 scripts/leads/run_pipeline.py allow --limit 8
+python3 scripts/leads/run_pipeline.py mail --limit 8
+# --send NUR mit consent=true oder Self-Test @nexifyai.* (§7 UWG); Seeds ≠ consent
+```
+
+- Cold Mail = Hostinger (`/etc/nexifyai/mail-nexifyai.env`) — **nicht** Resend.
+- CI workflow `lead-outreach-daily.yml` = **forced dry-run** until consent queue exists.
+- WhatsApp-LLM-Cron **nicht** reaktivieren.
+- Keine purchased/leak Listen; nur öffentliche Kontakt-/Impressum-Quellen (Discovery ≠ Consent).
 
 ## Handeln
 
@@ -26,9 +44,7 @@ Living Checklist: `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
 | Quick Win (<~1–2h, im Scope) | Im gleichen PR fixen |
 | Größer / blockiert / human-gate | GitHub Issue: Labels `gtm`, `agent-fix`, `P1` (oder `P0`/`human-gate`) |
 | Radar-Update | Checkbox/Zeile in `docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md` |
-
-Session-Ende: nach `session-learn` auch Acquisition-Opportunities notieren
-(`scripts/learning/note-acquisition-gaps.py` / siehe Continuous-Learning).
+| Lead-Queue leer / stuck | Discover + dry-run im gleichen Task; Send-Blocker dokumentieren |
 
 ## HARD STOPs
 
@@ -36,3 +52,5 @@ Session-Ende: nach `session-learn` auch Acquisition-Opportunities notieren
 - Kein Hermes-Produktions-Cutover
 - Keine Secrets in Issues/Docs/Commits
 - Kein Paid-Ads-Spend / keine neuen kostenpflichtigen SaaS-Abos ohne Mandat
+- Kein illegales Spam / keine Consumer-Freemail-Harvests
+- **§7 UWG:** keine Cold-E-Mail ohne `consent=true` (auch B2B); Seeds ≠ Consent

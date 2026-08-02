@@ -6,6 +6,10 @@ load_dotenv()
 load_dotenv(
     "/etc/nexifyai/credentials.env", override=True
 )  # ops SoT overrides local .env
+# Local supabase-db (172.21.0.4): credentials.env often has pooler user
+# postgres.<project_ref>, which fails password auth against docker Postgres.
+# backend-db-local.env must win last (USER=postgres + local password).
+load_dotenv("/etc/nexifyai/backend-db-local.env", override=True)
 
 import os
 import re
@@ -32,6 +36,7 @@ import email_agent
 import channel_sync
 from memory import mem_add, mem_search
 from ninerouter import CostBrakeError, router as nine
+from locale_util import DEFAULT_LOCALE, parse_accept_language
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nexify")
@@ -104,6 +109,19 @@ def _cleanup_rate_limit_buckets(now: float) -> None:
             RATE_LIMIT_BUCKETS[key] = fresh
         else:
             RATE_LIMIT_BUCKETS.pop(key, None)
+
+
+@app.middleware("http")
+async def locale_middleware(request: Request, call_next):
+    """Attach request.state.locale from Accept-Language; default German (de)."""
+    request.state.locale = parse_accept_language(
+        request.headers.get("accept-language"),
+        default=DEFAULT_LOCALE,
+    )
+    response = await call_next(request)
+    if "content-language" not in response.headers:
+        response.headers["Content-Language"] = request.state.locale
+    return response
 
 
 @app.middleware("http")
@@ -561,7 +579,7 @@ async def llm_complete(
         return result
     except CostBrakeError as e:
         logger.error("llm_complete cost-brake: %s", e)
-        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
+        raise HTTPException(status_code=503, detail="LLM-Budgetgrenze aktiv – bitte später erneut versuchen.") from e
 
 
 async def open_chat_stream(
@@ -571,7 +589,7 @@ async def open_chat_stream(
         return await nine.stream(messages, purpose="customer", max_tokens=max_tokens)
     except CostBrakeError as e:
         logger.error("open_chat_stream cost-brake: %s", e)
-        raise HTTPException(status_code=503, detail="LLM budget brake active") from e
+        raise HTTPException(status_code=503, detail="LLM-Budgetgrenze aktiv – bitte später erneut versuchen.") from e
 
 
 def offer_email_html(offer: dict, name: str, language: str, price_total: int) -> str:
@@ -1624,15 +1642,15 @@ async def planner_plan(body: PlannerIn):
         )
     except Exception as e:
         logger.error(f"planner llm failed: {e}")
-        raise HTTPException(status_code=502, detail="plan generation failed")
+        raise HTTPException(status_code=502, detail="Projektplan konnte nicht erstellt werden.")
     raw = raw.strip()
     start, end = raw.find("{"), raw.rfind("}")
     if start == -1 or end == -1:
-        raise HTTPException(status_code=502, detail="plan parse failed")
+        raise HTTPException(status_code=502, detail="Projektplan konnte nicht verarbeitet werden.")
     try:
         plan = json.loads(raw[start : end + 1])
     except Exception:
-        raise HTTPException(status_code=502, detail="plan parse failed")
+        raise HTTPException(status_code=502, detail="Projektplan konnte nicht verarbeitet werden.")
     days_min = sum(int(m.get("days_min", 1)) for m in plan.get("modules", []))
     days_max = sum(
         int(m.get("days_max", m.get("days_min", 1))) for m in plan.get("modules", [])
@@ -1818,7 +1836,7 @@ async def request_offer(body: OfferRequestIn):
             )
         except Exception as e:
             logger.error(f"offer llm failed: {e}")
-            raise HTTPException(status_code=502, detail="offer generation failed")
+            raise HTTPException(status_code=502, detail="Angebot konnte nicht erstellt werden.")
         offer = _parse_json_lenient(raw)
         if offer and offer.get("items"):
             break
@@ -1827,7 +1845,7 @@ async def request_offer(body: OfferRequestIn):
         )
         offer = None
     if not offer:
-        raise HTTPException(status_code=502, detail="offer parse failed")
+        raise HTTPException(status_code=502, detail="Angebot konnte nicht verarbeitet werden.")
 
     total_min = sum(int(i.get("days_min", 1)) for i in offer.get("items", []))
     total_max = sum(

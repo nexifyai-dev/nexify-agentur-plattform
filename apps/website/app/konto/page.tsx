@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
@@ -9,8 +8,8 @@ import { API_BASE } from "@/lib/company";
 import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
-import { PortalProjectPanel } from "@/components/portal-project-panel";
 import { SupportTickets } from "@/components/support-tickets";
+import Link from "next/link";
 
 type Offer = {
   id: string; name: string; email: string; company: string | null; language: string;
@@ -22,7 +21,7 @@ type Msg = { id: string; sender: string; body: string; created_at: string };
 const T = {
   de: {
     title: "Ihr Kundenportal", hello: "Willkommen zurück", offers: "Ihre Angebote", profile: "Ihre Daten", request: "Neues Angebot anfordern",
-    noOffers: "Noch keine Angebote. Fordern Sie unten ein Angebot an, chatten Sie mit NeXify AI oder starten Sie über Kontakt / Projektplaner.",
+    noOffers: "Noch keine Angebote vorhanden. Fordern Sie unten ein neues Angebot an oder sprechen Sie mit dem NeXify AI Berater im Chat.",
     accept: "Angebot annehmen", decline: "Ablehnen", accepted: "Angenommen", declined: "Abgelehnt", sent: "Offen", followed_up: "Offen",
     pay: "Ersten Tagessatz jetzt bezahlen (€ 449)", paid: "Anzahlung bezahlt ✔", payPending: "Zahlung wird geprüft …",
     questions: "Rückfragen & Nachrichten", writeQuestion: "Ihre Rückfrage …", send: "Senden",
@@ -32,7 +31,7 @@ const T = {
     total: "Richtpreis (netto)", you: "Sie", nexify: "NeXify AI",
     statusHelpTitle: "Status & Rechnungen",
     statusHelp:
-      "Im geöffneten Angebot sehen Sie die Phasen Anfrage → Angebot → Freigabe → Umsetzung → Abnahme → Rechnung, Liefergegenstände/Evidence, nächste Schritte und Rechnungs-Download (u. a. Revolut-Anzahlung). Bei Fragen: Rückruf oder Nachricht an Ihren Ansprechpartner.",
+      "Angebotsstatus sehen Sie an den Badges (Offen / Angenommen / Abgelehnt). PDF-Download öffnet das Angebot. Rechnungen und Zahlungsbelege erscheinen hier, sobald die Zahlungsanbindung live ist — bis dahin gilt die Bestätigung nach Zahlungseingang per E-Mail.",
     bookCall: "Rückruf vereinbaren",
   },
   en: {
@@ -47,7 +46,7 @@ const T = {
     total: "Guide price (net)", you: "You", nexify: "NeXify AI",
     statusHelpTitle: "Status & invoices",
     statusHelp:
-      "Open an offer to see phases from enquiry to invoice, deliverables/evidence, next actions and invoice download (including Revolut deposit). For questions: callback or message your contact.",
+      "Offer status is shown on the badges (Open / Accepted / Declined). PDF downloads the offer. Invoices will appear here once payments go live — until then you receive email confirmation after payment.",
     bookCall: "Book a callback",
   },
   nl: {
@@ -62,7 +61,7 @@ const T = {
     total: "Richtprijs (netto)", you: "U", nexify: "NeXify AI",
     statusHelpTitle: "Status & facturen",
     statusHelp:
-      "Open een offerte voor fasen van aanvraag tot factuur, deliverables/evidence, volgende stappen en factuurdownload (o.a. Revolut-aanbetaling). Bij vragen: terugbelafspraak of bericht aan uw contactpersoon.",
+      "Offertestatus ziet u aan de badges (Open / Aangenomen / Afgewezen). PDF downloadt de offerte. Facturen verschijnen hier zodra betalingen live zijn — tot die tijd bevestiging per e-mail na betaling.",
     bookCall: "Terugbelafspraak",
   },
 };
@@ -81,7 +80,7 @@ function StatusBadge({ status, t }: { status: string; t: (typeof T)["de"] }) {
   );
 }
 
-function OfferCard({ offer, t, lang, onChanged }: { offer: Offer; t: (typeof T)["de"]; lang: "de" | "en" | "nl"; onChanged: () => void }) {
+function OfferCard({ offer, t, onChanged }: { offer: Offer; t: (typeof T)["de"]; onChanged: () => void }) {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
@@ -211,8 +210,6 @@ function OfferCard({ offer, t, lang, onChanged }: { offer: Offer; t: (typeof T)[
             </div>
           )}
 
-          <PortalProjectPanel offerId={offer.id} lang={lang} />
-
           <div className="mt-8">
             <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
               <MessageSquare size={13} /> {t.questions}
@@ -305,7 +302,7 @@ export default function PortalPage() {
             <h2 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.offers}</h2>
             {offers.length === 0 && <div className="glass p-8 text-sm text-zinc-500" data-testid="portal-no-offers">{t.noOffers}</div>}
             {offers.map((o) => (
-              <OfferCard key={o.id} offer={o} t={t} lang={lang} onChanged={loadOffers} />
+              <OfferCard key={o.id} offer={o} t={t} onChanged={loadOffers} />
             ))}
 
             <div className="glass p-6">

@@ -33,3 +33,23 @@ test_reports/longrun/latest-*.log
 # Local Cursor MCP configs may contain PATs — keep examples only in git
 .cursor/mcp.json
 **/gitlab-mcp.env
+
+# Lead outreach runtime state
+data/outreach/state/
+data/outreach/unsub/
+data/outreach/queue/*.jsonl
+!data/outreach/queue/.gitkeep
+
+# Lead outreach runtime state
+data/outreach/state/
+data/outreach/unsub/
+data/outreach/queue/*.jsonl
+!data/outreach/queue/.gitkeep
+
+# Zero-cost lead queue runtime (keep seeds + README)
+data/leads/*
+!data/leads/.gitkeep
+!data/leads/README.md
+!data/leads/seeds/
+!data/leads/seeds/**
+
