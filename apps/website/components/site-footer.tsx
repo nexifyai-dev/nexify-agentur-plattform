@@ -14,6 +14,7 @@ const T = {
     contact: "Kontakt",
     links: [
       { label: "Leistungen", href: "/leistungen" },
+      { label: "Branchen", href: "/branchen" },
       { label: "Preise", href: "/preise" },
       { label: "Vergleich", href: "/vergleich" },
       { label: "Alternativen", href: "/alternativen" },
@@ -48,6 +49,7 @@ const T = {
     contact: "Contact",
     links: [
       { label: "Services", href: "/leistungen" },
+      { label: "Industries", href: "/branchen" },
       { label: "Pricing", href: "/preise" },
       { label: "Compare", href: "/vergleich" },
       { label: "Alternatives", href: "/alternativen" },
@@ -82,6 +84,7 @@ const T = {
     contact: "Contact",
     links: [
       { label: "Diensten", href: "/leistungen" },
+      { label: "Branches", href: "/branchen" },
       { label: "Prijzen", href: "/preise" },
       { label: "Vergelijk", href: "/vergleich" },
       { label: "Alternatieven", href: "/alternativen" },
