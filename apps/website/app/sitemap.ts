@@ -36,6 +36,7 @@ const routes = [
   "/danke",
   "/kontakt",
   "/rueckruf",
+  "/danke",
   "/impressum",
   "/datenschutz",
   "/agb",

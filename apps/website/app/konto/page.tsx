@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageCircle, MessageSquare, Send, Sparkles, User as UserIcon, XCircle } from "lucide-react";
 import { api, useAuth } from "@/lib/auth";
-import { API_BASE } from "@/lib/company";
+import { API_BASE, company } from "@/lib/company";
+import { PORTAL_EMPTY } from "@/lib/delight-copy";
 import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
@@ -242,6 +244,7 @@ export default function PortalPage() {
   const { user, setUser } = useAuth();
   const { lang } = useLang();
   const t = T[lang];
+  const empty = PORTAL_EMPTY[lang];
   const [offers, setOffers] = useState<Offer[]>([]);
   const [profile, setProfile] = useState({ name: "", company: "", phone: "" });
   const [saved, setSaved] = useState(false);
@@ -300,12 +303,39 @@ export default function PortalPage() {
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
           <div className="space-y-4">
             <h2 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.offers}</h2>
-            {offers.length === 0 && <div className="glass p-8 text-sm text-zinc-500" data-testid="portal-no-offers">{t.noOffers}</div>}
+            {offers.length === 0 && (
+              <div className="glass relative overflow-hidden p-8 md:p-10" data-testid="portal-no-offers">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_0%,rgba(255,255,255,0.07),transparent)]" aria-hidden />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+                    <Sparkles size={12} aria-hidden /> {empty.eyebrow}
+                  </span>
+                  <h3 className="mt-3 font-[family-name:var(--font-heading)] text-2xl font-light tracking-tight text-white sm:text-3xl">{empty.title}</h3>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">{empty.body}</p>
+                  <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.22em] text-zinc-500">{empty.guideTitle}</p>
+                  <ol className="mt-3 space-y-2">
+                    {empty.steps.map((step, i) => (
+                      <li key={step} className="flex gap-3 text-sm leading-relaxed text-zinc-300">
+                        <span className="shrink-0 font-semibold text-zinc-500">{String(i + 1).padStart(2, "0")}</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <a href="#portal-request" className="btn-primary !py-2.5 !text-[13px]" data-testid="portal-empty-cta-request">{empty.ctaRequest}</a>
+                    <Link href="/rueckruf" className="btn-ghost !py-2.5 !text-[13px]" data-testid="portal-empty-cta-book">{empty.ctaBook}</Link>
+                    <a href={company.whatsappHref} target="_blank" rel="noopener noreferrer" className="btn-ghost !py-2.5 !text-[13px]" data-testid="portal-empty-cta-whatsapp">
+                      <MessageCircle size={14} /> {empty.ctaWhatsApp}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
             {offers.map((o) => (
               <OfferCard key={o.id} offer={o} t={t} onChanged={loadOffers} />
             ))}
 
-            <div className="glass p-6">
+            <div className="glass p-6" id="portal-request">
               <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.request}</h3>
               <textarea className="field mt-4 min-h-24 !text-[13px]" placeholder={t.requestPlaceholder} value={reqText} onChange={(e) => setReqText(e.target.value)} data-testid="portal-request-input" />
               {reqDone && <p className="mt-2 text-sm text-emerald-400" data-testid="portal-request-success">{reqDone}</p>}

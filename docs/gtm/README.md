@@ -22,7 +22,8 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [UWG-EMAIL-OPTIN-ONLY.md](UWG-EMAIL-OPTIN-ONLY.md) | **Hard stop:** DE Cold-Mail ohne Consent (§7 UWG) |
 | [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
 | [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
-| [evidence/](evidence/) | Listing- und Demand-Evidence |
+| [NEUKUNDEN-BEGEISTERUNG.md](NEUKUNDEN-BEGEISTERUNG.md) | P0 Delight nach First Touch · Koordination Zero-Cost-Leads |
+| [ONBOARDING-EMAIL-TEMPLATES.md](ONBOARDING-EMAIL-TEMPLATES.md) | Inbound-Mail-Templates + Versand-Hook || [evidence/](evidence/) | Listing- und Demand-Evidence |
 
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
@@ -32,6 +33,9 @@ Scripts:
 Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py`  
 
 Automation: `.cursor/automations/free-gtm-dach-to-agent.md` · `.github/workflows/free-gtm-weekly.yml`
+
+Onboarding-Mail (dry-run): `python3 scripts/gtm/send-onboarding-email.py --template lead_magnet --to dry@example.com --name Test`  
+Tests: `python3 scripts/gtm/test_send_onboarding_email.py`
 
 ## Issue closures (2026-08-02)
 
