@@ -15,7 +15,7 @@ name: Daily Smoke (hosted)
 
 on:
   schedule:
-    # 05:15 UTC daily — before VPS worker 06:00
+    # 05:15 UTC daily (= 07:15 Europe/Berlin CEST) — before VPS worker; GHA schedule cron is UTC-only
     - cron: "15 5 * * *"
   workflow_dispatch:
 
@@ -31,6 +31,8 @@ jobs:
   smoke:
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - uses: actions/checkout@v4
 

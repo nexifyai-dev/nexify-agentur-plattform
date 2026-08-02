@@ -9,6 +9,8 @@ on:
 jobs:
   isolation-check:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     name: Customer Boundary Enforcement
     steps:
       - uses: actions/checkout@v4

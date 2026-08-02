@@ -4,6 +4,8 @@
 """Exit 0 if mandatory knowledge/flowsearch artifacts exist and are consistent."""
 
 from __future__ import annotations
+import os
+os.environ.setdefault("TZ", "Europe/Berlin")
 
 import json
 import sys
