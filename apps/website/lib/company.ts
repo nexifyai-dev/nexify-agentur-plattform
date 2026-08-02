@@ -12,6 +12,8 @@ export const company = {
   email: "mail@nexifyai.cloud",
   phone: "+31 6 133 188 56",
   phoneHref: "+31613318856",
+  /** Public B2B WhatsApp deep link (same number as phone). */
+  whatsappHref: "https://wa.me/31613318856",
   // @NEXIFYAI-MARKER: prelogin-canonical-www-20260713 — apex redirects to www
   website: "https://www.nexifyai.cloud",
   kvk: "90483944",
