@@ -135,8 +135,22 @@ test('layout self-hosts the brand fonts without remote Google fetches', () => {
   const css = read('app/globals.css');
   assert.match(layout, /import "@fontsource-variable\/manrope";/);
   assert.match(layout, /import "@fontsource-variable\/outfit";/);
-  assert.match(css, /--font-heading:\s*"Outfit Variable",\s*sans-serif;/);
-  assert.match(css, /--font-body:\s*"Manrope Variable",\s*sans-serif;/);
+  assert.match(css, /--font-heading:\s*"Outfit Variable"/);
+  assert.match(css, /--font-body:\s*"Manrope Variable"/);
+  assert.match(css, /font-family:\s*"Outfit Fallback"/);
+  assert.match(css, /size-adjust:/);
+  assert.doesNotMatch(css, /animation:\s*shimmer/);
+  assert.match(css, /\.text-silver\s*\{[^}]*color:\s*#e4e4e7/s);
+});
+
+test('root layout defers heavy client widgets after idle', () => {
+  const layout = read('app/layout.tsx');
+  assert.match(layout, /DeferredWidgets/);
+  assert.doesNotMatch(layout, /import \{ ChatWidget \}/);
+  assert.doesNotMatch(layout, /import \{ ExitIntent \}/);
+  const deferred = read('components/deferred-widgets.tsx');
+  assert.match(deferred, /requestIdleCallback/);
+  assert.match(deferred, /dynamic\(/);
 });
 
 test('design keeps reference overflow guards', () => {

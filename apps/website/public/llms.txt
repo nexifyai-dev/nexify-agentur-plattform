@@ -1,65 +1,38 @@
-# NeXify AI — llms.txt
-# https://www.nexifyai.cloud
-# Cite-friendly summary for AI search systems (AEO)
+# NeXify AI
 
-> Premium Websites, Onlineshops, Web-Apps, Mobile Apps, Automatisierung und AI-Agenten
-> für Unternehmen in D/A/CH und den Niederlanden (B2B only). Tagessatz 449 € netto.
+> Premium B2B agency for AI-assisted websites, online shops, web/mobile apps and automation. Transparent day rate €449 net. Primary markets: DACH + Netherlands. German UI default; Dutch seat in Venlo.
 
-## Company
-- Brand: NeXify AI — Chat it. Automate it.
-- Owner: Pascal Courbois (Eenmanszaak, Venlo, NL)
+NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accelerated with AI tools — not anonymous agency overhead. Contact for project estimates within one working day, or use the on-site AI advisor chat.
+
+## Services
+
+- [Home](https://www.nexifyai.cloud/): Positioning, day rate, process overview
+- [Leistungen](https://www.nexifyai.cloud/leistungen): Service catalogue (landing pages, websites, shops, apps, automation, AI agents)
+- [Preise](https://www.nexifyai.cloud/preise): €449 net / working day calculator and scope notes
+- [Prozess](https://www.nexifyai.cloud/prozess): How engagement works from first contact to delivery
+- [Vergleich](https://www.nexifyai.cloud/vergleich): How NeXify differs from typical agencies and chatbots
+- [FAQ](https://www.nexifyai.cloud/faq): Pricing, timelines, AI usage, collaboration
+
+## Company & contact
+
+- [Kontakt](https://www.nexifyai.cloud/kontakt): Project inquiry form (honest estimate within one working day)
+- [Rückruf](https://www.nexifyai.cloud/rueckruf): Book a callback slot
+- [Über mich](https://www.nexifyai.cloud/ueber-mich): Founder Pascal Courbois
+- [Venlo](https://www.nexifyai.cloud/venlo): Local business / NL seat page
 - Email: mail@nexifyai.cloud
 - Phone: +31 6 133 188 56
-- KvK: 90483944
-- Site: https://www.nexifyai.cloud
-- Delivery: remote DACH + NL — no fake local-office network
+- KvK: 90483944 · VAT: NL865786276B01
 
-## Pricing
-- Day rate: € 449 net per working day (max. 8 specialist hours)
-- Transparent B2B pricing; no hidden agency overhead
-- Productized entry: KI-/Prozess-Audit = 1 day (€ 449); Pilot = 5 days (€ 2.245)
+## Knowledge
 
-## Services (dedicated landings)
-- Landingpages — /leistungen/landingpages
-- Unternehmenswebsites — /leistungen/websites
-- Onlineshops — /leistungen/onlineshops
-- Enterprise-Commerce 50K+ — /leistungen/enterprise-commerce
-- Web-Apps — /leistungen/web-apps
-- Mobile Apps — /leistungen/mobile-apps
-- Automatisierung — /leistungen/automatisierung
-- AI-Agenten — /leistungen/ai-agenten
-- KI-Begleiter — /leistungen/ki-begleiter
-- Kundenportal — /leistungen/kundenportal
-- KI-Plattform (Router/Memory/RAG) — /leistungen/ki-plattform
-- KI-Beratung — /leistungen/beratung
-- Workshops — /leistungen/workshops
-- White-Label — /leistungen/white-label
-- KI-/Prozess-Audit — /leistungen/audit und /audit
+- [Wissen](https://www.nexifyai.cloud/wissen): Articles on AI automation, web-app cost, delivery for SMEs
+- [Sitemap](https://www.nexifyai.cloud/sitemap.xml): Machine-readable URL index
+- [llm.txt](https://www.nexifyai.cloud/llm.txt): Legacy short company card (kept for older crawlers)
 
-## Branchen
-- Hub: /branchen
-- handwerk, steuerberater, ecommerce, immobilien, agenturen
+## Optional
 
-## Comparison
-- /vergleich — classical IT day rates vs NeXify
-- /vergleich/chatgpt — vs DIY ChatGPT
-- /vergleich/freelance — vs Freelance
-
-## Preferred crawl targets
-- https://www.nexifyai.cloud/
-- https://www.nexifyai.cloud/leistungen
-- https://www.nexifyai.cloud/sitemap.xml
-- https://www.nexifyai.cloud/llms.txt
-- https://www.nexifyai.cloud/faq
-- https://www.nexifyai.cloud/preise
-- https://www.nexifyai.cloud/kontakt
-- https://www.nexifyai.cloud/rueckruf
-
-## Hard facts (do not invent)
-- No AggregateRating / fake reviews on the site
-- Exclusively B2B
-- Not a BAFA-certified consultant
-- n8n is not an integration target
-
-## Contact
-Project inquiries: https://www.nexifyai.cloud/kontakt or mail@nexifyai.cloud
+- [Impressum](https://www.nexifyai.cloud/impressum): Legal imprint
+- [Datenschutz](https://www.nexifyai.cloud/datenschutz): Privacy policy (incl. AI chat)
+- [AGB](https://www.nexifyai.cloud/agb): Terms
+- [Cookie-Richtlinie](https://www.nexifyai.cloud/cookie-richtlinie): Cookie policy
+- [Checkliste](https://www.nexifyai.cloud/checkliste): Website/AI readiness checklist lead magnet
