@@ -1,0 +1,50 @@
+# FILE: .github/workflows/gtm-dach-agent.yml
+# WHAT: Schedule/manual → workflow_dispatch event-to-cloud-agent (GTM DACH)
+# WHY: Dauerhafte DACH-Acquisition ohne Desktop-IDE
+# DEPENDS: event-to-cloud-agent.yml, GITHUB_TOKEN or GTM_DISPATCH_TOKEN
+# DOCS-REF: docs/gtm/DACH-ACQUISITION-PLAYBOOK.md
+
+name: GTM DACH Content Agent
+
+on:
+  schedule:
+    - cron: "15 7 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "blog | outreach-draft | directories"
+        required: false
+        default: blog
+        type: string
+  repository_dispatch:
+    types: [gtm-dach-content]
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: gtm-dach-agent
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dispatch Cursor cloud agent workflow
+        env:
+          GH_TOKEN: ${{ secrets.GTM_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+          MODE: ${{ github.event.inputs.mode || 'blog' }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 scripts/gtm/dispatch_dach_agent.py \
+            --mode "$MODE" \
+            --event-name "$EVENT_NAME" \
+            --repo "$REPO" \
+            --run-id "$RUN_ID"

@@ -4,6 +4,7 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 
 | Datei | Zweck |
 |-------|-------|
+| [DACH-ACQUISITION-PLAYBOOK.md](DACH-ACQUISITION-PLAYBOOK.md) | DE-first Acquisition: Blog, SEO, Cursor Agent, Gates |
 | [GTM_KOSTENFREI_GESAMTPLAN_V1.md](GTM_KOSTENFREI_GESAMTPLAN_V1.md) | Gesamtplan |
 | [NAP_MASTER_V1.md](NAP_MASTER_V1.md) | Firma/NAP/UTM |
 | [CHANNEL_REGISTER_V1.md](CHANNEL_REGISTER_V1.md) | Supply/Demand-Kanäle |

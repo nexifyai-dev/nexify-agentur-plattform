@@ -2,7 +2,8 @@
 # https://www.nexifyai.cloud
 
 > Premium Websites, Onlineshops, Web-Apps, Mobile Apps und AI-Automatisierung
-> für Unternehmen in D/A/CH und den Niederlanden (B2B only).
+> für Unternehmen im DACH-Raum (Primärmarkt DE/AT/CH). Sitz: Venlo, NL (nicht
+> primärer Acquisition-Locale).
 
 ## Company
 - Brand: NeXify AI — Chat it. Automate it.
@@ -24,14 +25,18 @@
 - Personal delivery by one specialist, accelerated with AI tools
 
 ## Languages
-- German (primary), Dutch, English
+- German (primary acquisition), Dutch (seat/legal), English (secondary UI)
 
 ## Preferred crawl targets
 - https://www.nexifyai.cloud/
 - https://www.nexifyai.cloud/leistungen
 - https://www.nexifyai.cloud/preise
 - https://www.nexifyai.cloud/prozess
+- https://www.nexifyai.cloud/blog
+- https://www.nexifyai.cloud/blog/rss.xml
+- https://www.nexifyai.cloud/wissen
 - https://www.nexifyai.cloud/faq
+- https://www.nexifyai.cloud/venlo
 - https://www.nexifyai.cloud/kontakt
 - https://www.nexifyai.cloud/sitemap.xml
 

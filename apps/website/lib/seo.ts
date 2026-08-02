@@ -47,17 +47,26 @@ export function pageMetadata({
   const ogT = ogTitle ?? title;
   const ogD = ogDescription ?? description;
 
+  // Nested openGraph/twitter replace parent shallowly — re-declare images + card
+  // so pageMetadata does not drop root OG/Twitter share images.
+  const ogImages = [
+    {
+      url: "/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "NeXify AI — Chat it. Automate it.",
+    },
+  ];
+
   return {
     title,
     description,
-    // Unprefixed routes + cookie/localStorage locale (de/en/nl) share one URL.
-    // hreflang points at the same path so crawlers know DE/EN/NL are available.
+    // DE-first acquisition: same URL serves cookie locales, but hreflang must not
+    // claim equal EN/NL content. Primary = de + x-default (NL = seat/legal only).
     alternates: {
       canonical: canonicalPath,
       languages: {
         de: canonicalPath,
-        en: canonicalPath,
-        nl: canonicalPath,
         "x-default": canonicalPath,
       },
     },
@@ -66,10 +75,14 @@ export function pageMetadata({
       description: ogD,
       url,
       type: "website",
+      locale: "de_DE",
+      images: ogImages,
     },
     twitter: {
+      card: "summary_large_image",
       title: ogT,
       description: ogD,
+      images: ["/og-image.png"],
     },
     ...(noIndex ? { robots: { index: false, follow: false } } : {}),
   };
@@ -118,6 +131,7 @@ export function articleJsonLd({
     description,
     datePublished,
     dateModified: dateModified ?? datePublished,
+    inLanguage: "de",
     mainEntityOfPage: absoluteUrl(path),
     author: {
       "@type": "Organization",
@@ -129,6 +143,37 @@ export function articleJsonLd({
       name: company.brand,
       url: siteOrigin(),
     },
+  };
+}
+
+/** schema.org BlogPosting — crawlable /blog/[slug] posts. */
+export function blogPostingJsonLd({
+  title,
+  description,
+  path,
+  datePublished,
+  dateModified,
+}: ArticleJsonLdInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    datePublished,
+    dateModified: dateModified ?? datePublished,
+    inLanguage: "de",
+    mainEntityOfPage: absoluteUrl(path),
+    author: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    image: absoluteUrl("/og-image.png"),
   };
 }
 

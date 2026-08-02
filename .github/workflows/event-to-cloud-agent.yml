@@ -33,6 +33,7 @@ on:
       - cloudflare-alert
       - resend-bounce
       - website-error
+      - gtm-dach-content
   workflow_dispatch:
     inputs:
       prompt:

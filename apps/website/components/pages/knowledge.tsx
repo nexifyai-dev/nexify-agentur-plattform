@@ -18,6 +18,13 @@ export function KnowledgePage() {
           <span className="eyebrow">{t.wissen.eyebrow}</span>
           <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-heading)] text-4xl font-light tracking-tight text-white sm:text-5xl">{t.wissen.title}</h1>
           <p className="mt-5 max-w-2xl text-lg text-zinc-400">{t.wissen.intro}</p>
+          <p className="mt-4 text-[14px] text-zinc-500" data-testid="wissen-blog-crosslink">
+            Längere DACH-Beiträge auch im{" "}
+            <Link href="/blog" className="font-semibold text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/50">
+              Blog
+            </Link>
+            .
+          </p>
         </Reveal>
 
         <section className="mt-16" aria-labelledby="wissen-featured-heading" data-testid="wissen-featured">

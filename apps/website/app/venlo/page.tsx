@@ -36,8 +36,10 @@ export default function VenloPage() {
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-zinc-400">
             NeXify AI sitzt in Venlo (Niederlande) – nah an der deutschen Grenze.
-            Für Unternehmen in Limburg, Nordrhein-Westfalen und der gesamten Region
-            DACH + NL: klare Ansprechpartner, AI-beschleunigte Umsetzung, fester
+            Primärmarkt für Neukunden ist der deutschsprachige DACH-Raum (DE/AT/CH);
+            NL ist Firmensitz und sekundärer Sprachraum, nicht der Hauptkanal für
+            Acquisition. Für Unternehmen in Limburg, Nordrhein-Westfalen und ganz
+            DACH: klare Ansprechpartner, AI-beschleunigte Umsetzung, fester
             Tagessatz von {company.dayRate}&nbsp;€ netto.
           </p>
 
