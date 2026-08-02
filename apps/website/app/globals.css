@@ -18,10 +18,10 @@
   --line-2: rgba(255, 255, 255, 0.16);
   --silver: #d4d4d8;
   --silver-2: #a1a1aa;
-  --muted: #8f8f98;
+  --muted: #a1a1aa;
   --white: #fafafa;
-  --font-heading: "Outfit Variable", sans-serif;
-  --font-body: "Manrope Variable", sans-serif;
+  --font-heading: "Outfit Variable", "Outfit Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope Variable", "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
   --grad-silver: linear-gradient(120deg, #fafafa 0%, #c8c8d0 30%, #71717a 50%, #e4e4e7 72%, #fafafa 100%);
   --grad-btn: linear-gradient(120deg, #e4e4e7, #ffffff 45%, #c4c4cc);
 }
@@ -73,15 +73,12 @@ h1, h2, h3, h4 { font-family: var(--font-heading); }
 
 .site-container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
+/* Solid silver — WCAG AA on #09090b; no background-position animation (CLS). */
 .text-silver {
-  background: var(--grad-silver);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer 8s linear infinite;
+  color: #e4e4e7;
+  background: none;
+  -webkit-text-fill-color: #e4e4e7;
 }
-@keyframes shimmer { to { background-position: 200% center; } }
 
 .eyebrow {
   display: inline-flex;
@@ -299,10 +296,9 @@ input.field:focus, textarea.field:focus, select.field:focus {
 
 @keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 .float-chip { animation: float-y 6s ease-in-out infinite; }
-@keyframes core-pulse { 0%,100% { filter: drop-shadow(0 0 18px rgba(255,255,255,0.25)); } 50% { filter: drop-shadow(0 0 42px rgba(255,255,255,0.5)); } }
-.core-pulse { animation: core-pulse 4s ease-in-out infinite; }
-@keyframes dash-flow { to { stroke-dashoffset: -240; } }
-.dash-flow { stroke-dasharray: 6 10; animation: dash-flow 8s linear infinite; }
+@keyframes core-pulse { 0%,100% { opacity: 0.92; } 50% { opacity: 1; } }
+.core-pulse { animation: core-pulse 4s ease-in-out infinite; will-change: opacity; }
+.dash-flow { stroke-dasharray: 6 10; }
 
 /* ══════════════════════════════════════════════════════════════════════════
    §  [locale] PAGE DESIGN SYSTEM  (restored from commit 772e3944)
@@ -336,8 +332,8 @@ input.field:focus, textarea.field:focus, select.field:focus {
   /* ── Text Hierarchy ── */
   --text-1: #E8E8E8;   /* Primär: Headlines, aktive Labels */
   --text-2: #999999;   /* Sekundär: Body, Beschreibungen */
-  --text-3: #666666;   /* Tertiär: Kicker, Meta */
-  --text-4: #444444;   /* Ghost: Labels, Hints */
+  --text-3: #8a8a8a;   /* Tertiär — AA on #0A0A0A */
+  --text-4: #737373;   /* Ghost — AA for large/UI text */
 
   /* ── Accent ── */
   --white: #FFFFFF;
@@ -349,8 +345,8 @@ input.field:focus, textarea.field:focus, select.field:focus {
   --blue:   #60A5FA;
 
   /* ── Fonts ── */
-  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-outfit), "Outfit", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    var(--font-manrope), "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
   /* ── Spacing (8px grid) ── */
@@ -1084,10 +1080,26 @@ body::after {
   }
 }
 
-/* ── Font SoT: Outfit/Manrope per design_guidelines.json (also declared in premium
-   token block). Cascade pin remains last for any future drift. ── */
+/* ── Font SoT: Outfit/Manrope per design_guidelines.json ── */
+@font-face {
+  font-family: "Outfit Fallback";
+  src: local("Arial");
+  size-adjust: 104%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Manrope Fallback";
+  src: local("Arial");
+  size-adjust: 103%;
+  ascent-override: 94%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
 :root {
-  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Outfit Variable", "Outfit Fallback", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Manrope Variable", "Manrope Fallback", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Outfit Variable", "Outfit Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
 }

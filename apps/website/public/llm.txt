@@ -1,4 +1,5 @@
-# NeXify AI — llm.txt
+# NeXify AI — llm.txt (legacy short card)
+# Canonical for AI agents: https://www.nexifyai.cloud/llms.txt
 # https://www.nexifyai.cloud
 # Cite-friendly summary for AI search systems (AEO)
 
@@ -13,6 +14,7 @@
 - KvK: 90483944
 - Site: https://www.nexifyai.cloud
 - Delivery: remote DACH + NL — no fake local-office network
+- Full index: https://www.nexifyai.cloud/llms.txt
 
 ## Pricing
 - Day rate: € 449 net per working day (max. 8 specialist hours)
@@ -52,6 +54,7 @@
 - https://www.nexifyai.cloud/llms.txt
 - https://www.nexifyai.cloud/faq
 - https://www.nexifyai.cloud/preise
+- https://www.nexifyai.cloud/prozess
 - https://www.nexifyai.cloud/kontakt
 - https://www.nexifyai.cloud/rueckruf
 
