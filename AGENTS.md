@@ -21,6 +21,12 @@ den VPS selbst — verbunden via Cursor Remote-SSH direkt auf den Server.
 Siehe `.cursor/rules/10-hermes-consolidation.mdc` für den vollständigen,
 aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
 
+## Proaktive Acquisition- & Gap-Scans (Pflicht)
+Jeder Task: Acquisition/Lead/Conversion/Ops-Lücken scannen und fixen oder
+Issue (`gtm` + `agent-fix` + `P1`). Rule:
+`.cursor/rules/60-proactive-acquisition-gaps.mdc` · Radar:
+`docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+
 ## Ausdrücklich ausgeschlossen (bereits geprüft, nicht erneut prüfen)
 - **`0xNyk/awesome-hermes-agent`** — NousResearchs eigenes, unabhängiges
   „Hermes Agent"-Projekt. NICHTS von dort übernehmen. Dritte
