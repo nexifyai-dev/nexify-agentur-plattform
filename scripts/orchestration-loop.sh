@@ -9,6 +9,9 @@
 #!/usr/bin/env bash
 # NeXifyAI Auto-Work Orchestration — liest next_action, ruft Hermes, §12-Schutz
 set -euo pipefail
+
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
 STATE_FILE="/root/.nexify/loop/state.json"
 
 # Kill-Switch respektieren (Autopilot/OPS)

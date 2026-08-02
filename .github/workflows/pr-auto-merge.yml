@@ -36,6 +36,8 @@ jobs:
   enable-automerge:
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - name: Resolve PR number
         id: pr

@@ -25,7 +25,7 @@ _MODEL = ""
 _SEND_EMAIL = cast(Callable[..., Any], None)
 _CI_EMAIL = cast(Callable[..., Any], None)
 FRONTEND_URL = ""
-TZ = ZoneInfo("Europe/Amsterdam")
+TZ = ZoneInfo("Europe/Berlin")
 
 
 def init(
@@ -188,7 +188,7 @@ TOOLS = [
     ),
     _tool(
         "create_slots",
-        "Neue freie Rückruf-Zeitfenster anlegen. slots = Liste ISO-Zeitpunkte Europe/Amsterdam, z. B. ['2026-06-05T14:30']. duration_min Standard 30.",
+        "Neue freie Rückruf-Zeitfenster anlegen. slots = Liste ISO-Zeitpunkte Europe/Berlin, z. B. ['2026-06-05T14:30']. duration_min Standard 30.",
         {"slots": {"type": "array", "items": S}, "duration_min": N},
         ["slots"],
     ),
@@ -200,7 +200,7 @@ TOOLS = [
     ),
     _tool(
         "schedule_task",
-        "Zeitgesteuerten Folge-Task für dich selbst planen. run_at = ISO-Zeitpunkt (Europe/Amsterdam). instruction = präzise, in sich geschlossene Anweisung inkl. aller IDs/E-Mail-Adressen.",
+        "Zeitgesteuerten Folge-Task für dich selbst planen. run_at = ISO-Zeitpunkt (Europe/Berlin). instruction = präzise, in sich geschlossene Anweisung inkl. aller IDs/E-Mail-Adressen.",
         {"run_at": S, "title": S, "instruction": S},
         ["run_at", "title", "instruction"],
     ),
@@ -622,7 +622,7 @@ async def run_agent(
     max_rounds: int = 8,
 ):
     now = datetime.now(TZ).strftime("%A, %d.%m.%Y %H:%M")
-    system = AGENT_SYSTEM + f"\n\nAKTUELLES DATUM/UHRZEIT (Europe/Amsterdam): {now}"
+    system = AGENT_SYSTEM + f"\n\nAKTUELLES DATUM/UHRZEIT (Europe/Berlin): {now}"
     if autonomous:
         system += AUTONOMOUS_NOTE
     history = await _load_history() if persist else []
