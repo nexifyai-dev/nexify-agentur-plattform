@@ -2,7 +2,7 @@
   "_meta": {
     "file": "config/webui/hermes-preview-module-registry.json",
     "nir": "31.07.2026 12:20",
-    "updated": "31.07.2026 12:20",
+    "updated": "31.07.2026 12:27",
     "what": "Hermes Preview module registry — wires native preview panels without Prod WebUI patch",
     "why": "WebUI-Zentrale: Dashboard→WebUI native; Preview-only consumers",
     "status": "PREVIEW — do not mount into Prod Hermes :8787 without Smoke+Endabnahme",
@@ -31,9 +31,18 @@
     {
       "id": "monitoring",
       "nav_label": "Monitoring",
-      "preview_entry": null,
+      "preview_entry": "apps/webui-preview/monitoring-panel/index.html",
+      "local_preview_port": 8793,
       "source_module_id": "monitoring-grafana",
-      "hermes_integration": "Pointer only — see MONITORING-WEBUI-NATIVE-POINTER"
+      "hermes_integration": "Native Grafana health stub; CF DNS blocked"
+    },
+    {
+      "id": "openapi-openmcp",
+      "nav_label": "OpenAPI / OpenMCP",
+      "preview_entry": "apps/webui-preview/openapi-openmcp-panel/index.html",
+      "local_preview_port": 8794,
+      "source_module_id": "backend-openapi",
+      "hermes_integration": "ICD + Allowlist status; 1Backend adapter-only pointer"
     }
   ]
 }
