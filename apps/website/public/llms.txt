@@ -1,0 +1,65 @@
+# NeXify AI — llms.txt
+# https://www.nexifyai.cloud
+# Cite-friendly summary for AI search systems (AEO)
+
+> Premium Websites, Onlineshops, Web-Apps, Mobile Apps, Automatisierung und AI-Agenten
+> für Unternehmen in D/A/CH und den Niederlanden (B2B only). Tagessatz 449 € netto.
+
+## Company
+- Brand: NeXify AI — Chat it. Automate it.
+- Owner: Pascal Courbois (Eenmanszaak, Venlo, NL)
+- Email: mail@nexifyai.cloud
+- Phone: +31 6 133 188 56
+- KvK: 90483944
+- Site: https://www.nexifyai.cloud
+- Delivery: remote DACH + NL — no fake local-office network
+
+## Pricing
+- Day rate: € 449 net per working day (max. 8 specialist hours)
+- Transparent B2B pricing; no hidden agency overhead
+- Productized entry: KI-/Prozess-Audit = 1 day (€ 449); Pilot = 5 days (€ 2.245)
+
+## Services (dedicated landings)
+- Landingpages — /leistungen/landingpages
+- Unternehmenswebsites — /leistungen/websites
+- Onlineshops — /leistungen/onlineshops
+- Enterprise-Commerce 50K+ — /leistungen/enterprise-commerce
+- Web-Apps — /leistungen/web-apps
+- Mobile Apps — /leistungen/mobile-apps
+- Automatisierung — /leistungen/automatisierung
+- AI-Agenten — /leistungen/ai-agenten
+- KI-Begleiter — /leistungen/ki-begleiter
+- Kundenportal — /leistungen/kundenportal
+- KI-Plattform (Router/Memory/RAG) — /leistungen/ki-plattform
+- KI-Beratung — /leistungen/beratung
+- Workshops — /leistungen/workshops
+- White-Label — /leistungen/white-label
+- KI-/Prozess-Audit — /leistungen/audit und /audit
+
+## Branchen
+- Hub: /branchen
+- handwerk, steuerberater, ecommerce, immobilien, agenturen
+
+## Comparison
+- /vergleich — classical IT day rates vs NeXify
+- /vergleich/chatgpt — vs DIY ChatGPT
+- /vergleich/freelance — vs Freelance
+
+## Preferred crawl targets
+- https://www.nexifyai.cloud/
+- https://www.nexifyai.cloud/leistungen
+- https://www.nexifyai.cloud/sitemap.xml
+- https://www.nexifyai.cloud/llms.txt
+- https://www.nexifyai.cloud/faq
+- https://www.nexifyai.cloud/preise
+- https://www.nexifyai.cloud/kontakt
+- https://www.nexifyai.cloud/rueckruf
+
+## Hard facts (do not invent)
+- No AggregateRating / fake reviews on the site
+- Exclusively B2B
+- Not a BAFA-certified consultant
+- n8n is not an integration target
+
+## Contact
+Project inquiries: https://www.nexifyai.cloud/kontakt or mail@nexifyai.cloud
