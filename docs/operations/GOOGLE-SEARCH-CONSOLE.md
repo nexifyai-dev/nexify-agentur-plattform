@@ -135,7 +135,7 @@ Sitemap: https://www.nexifyai.cloud/sitemap.xml
 |----------|--------|
 | Issue #238 | GSC Property + Sitemap — **CLOSED** (submitted 2026-08-02) |
 | Issue #210 | GSC+WhatsApp — **GSC DONE**; WhatsApp-Profil bleibt Human |
-| Weekly Coverage Check | P2 Follow-up Issue (Coverage / Soft-404 / Indexing) |
+| Issue #245 | P2 — GSC coverage weekly check (Coverage / Soft-404 / Indexing) |
 | [`GTM_KOSTENFREI_GESAMTPLAN_V1.md`](../gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md) | SEO/GSC im kostenfreien GTM-Gesamtplan |
 | [`ONGOING-GAP-AND-ACQUISITION-RADAR.md`](../gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Gap A11 Status |
 | [`SUPPLY_WAVE1_CHECKLIST_V1.md`](../gtm/SUPPLY_WAVE1_CHECKLIST_V1.md) | Supply Wave-1 (GBP parallel) |
