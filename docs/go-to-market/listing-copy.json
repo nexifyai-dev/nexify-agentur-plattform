@@ -1,0 +1,37 @@
+{
+  "nir": "01.08.2026 19:10",
+  "what": "Fertige Listing-Texte DE/NL/EN zum 1:1 Einfügen",
+  "tagline": "Chat it. Automate it.",
+  "short_de": "NeXify AI ist eine B2B-Agentur aus Venlo (NL) für Websites, Shops, Apps und kontrollierte AI-Automatisierung. Ein fester Tagessatz: 449 € netto. Ein Ansprechpartner. AI-gestützt, nicht AI-abgegeben.",
+  "short_nl": "NeXify AI is een B2B-bureau in Venlo voor websites, shops, apps en gecontroleerde AI-automatisering. Vast dagtarief: €449 netto. Eén aanspreekpunt. AI-ondersteund, niet AI-uitbesteed.",
+  "short_en": "NeXify AI is a B2B agency in Venlo (NL) for websites, shops, apps and controlled AI automation. Fixed day rate: €449 net. One owner-operator. AI-assisted, not AI-outsourced.",
+  "long_de": "NeXify AI by NeXify liefert digitale Produkte und AI-gestützte Betriebsautomationen ausschließlich für Unternehmen in DACH und den Niederlanden. Acht klar definierte Leistungsbausteine: Landingpages (1 Tag), Unternehmenswebsites (2–3 Tage), Onlineshops, Enterprise-Commerce ab 50.000 Artikeln, Web-Apps, Mobile Apps, Prozessautomatisierung und AI-Agenten mit Rollen, Freigaben und Evidence. Preismodell: 449 € netto pro Arbeitstag, transparente Aufwandsspanne vor Start, kein Lock-in. Sitz: Venlo, KvK 90483944, Inhaber Pascal Courbois. Website: https://www.nexifyai.cloud",
+  "long_nl": "NeXify AI by NeXify levert digitale producten en AI-ondersteunde procesautomatisering uitsluitend voor bedrijven in DACH en Nederland. Acht duidelijke bouwstenen: landingspagina’s (1 dag), bedrijfswebsites (2–3 dagen), webshops, enterprise-commerce vanaf 50.000 artikelen, web-apps, mobile apps, automatisering en AI-agenten met rollen, goedkeuringen en evidence. Prijsmodel: €449 netto per werkdag, heldere scope vóór start, geen lock-in. Vestiging: Venlo, KvK 90483944, eigenaar Pascal Courbois. Website: https://www.nexifyai.cloud",
+  "long_en": "NeXify AI by NeXify builds digital products and controlled AI automation exclusively for businesses in DACH and the Netherlands. Eight defined service blocks: landing pages (1 day), company websites (2–3 days), online shops, enterprise commerce for 50k+ SKUs, web apps, mobile apps, process automation and AI agents with roles, approvals and evidence. Pricing: €449 net per workday, clear scope before start, no lock-in. Based in Venlo, KvK 90483944, owner Pascal Courbois. Website: https://www.nexifyai.cloud",
+  "categories_suggested": [
+    "Artificial Intelligence",
+    "Web Development",
+    "Custom Software Development",
+    "E-Commerce Development",
+    "Business Automation",
+    "Mobile App Development"
+  ],
+  "usps": [
+    "Fester Tagessatz 449 € netto — keine undurchsichtigen Pakete",
+    "Website in 2–3 Arbeitstagen mit Designsystem + SEO-Grundlage",
+    "AI-Agenten mit Freigaben, Evidence und Monitoring statt Demo-Chatbots",
+    "Ein Inhaber führt Konzeption, Architektur, Umsetzung und QA",
+    "DE + NL, ausschließlich B2B, Reverse-Charge möglich"
+  ],
+  "ideal_buyer": [
+    "Mittelstand DACH/NL mit klarer Prozess- oder Website-Nachfrage",
+    "Händler mit wachsendem Sortiment (Shop / 50K+)",
+    "Teams, die AI wollen, aber Kontrolle/Freigaben brauchen",
+    "Partneragenturen ohne eigene AI-/Delivery-Kapazität"
+  ],
+  "do_not_claim": [
+    "Keine SaaS-Workstation als fertiges Produkt bewerben vor Freigabe",
+    "Keine Preise für Endverbraucher / B2C",
+    "Keine Garantie auf Clutch/GoodFirms Ranking ohne Reviews"
+  ]
+}
