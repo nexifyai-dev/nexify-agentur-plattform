@@ -1,417 +1,139 @@
-# NeXify Agentur-Plattform
+# NeXify AI by NeXify — chat it. Automate it.
 
-**Enterprise AI Agent Infrastructure for de-DE/nl-NL Markets**
+Öffentliche Agentur-Website und Plattform-Monorepo für **NeXify AI**.
 
-> Vollintegrierte SaaS-Plattform für autonome KI-Agenten mit proprietärem Brain (AgentMemory + LightRAG), dediziertem Router (9Router), GitLab-basierter CI/CD und produktionsreifer Observability.
+| | |
+|---|---|
+| **Live** | [https://www.nexifyai.cloud](https://www.nexifyai.cloud) |
+| **API** | [https://api.nexifyai.cloud](https://api.nexifyai.cloud) |
+| **Vercel** | [https://nexify-agentur-plattform.vercel.app](https://nexify-agentur-plattform.vercel.app) |
+| **GitHub (SoT)** | [nexifyai-dev/nexify-agentur-plattform](https://github.com/nexifyai-dev/nexify-agentur-plattform) |
+| **GitLab (Mirror)** | `gitlab.nexifyai.cloud/nexifyai_group/nexifyai` |
+
+Dieses Repo enthält die **öffentliche Website** (`apps/website`), ein **FastAPI-Backend** (`backend/`) und Agenten-/Ops-Artefakte. Brain-Dienste (AgentMemory, LightRAG, 9Router, Hermes Runtime) laufen **extern auf dem VPS** — ihr Quellcode liegt nicht hier.
 
 ---
 
-## 🚀 Quick Start
+## Was ist drin
+
+| Bereich | Pfad | Rolle |
+|---------|------|--------|
+| Website | `apps/website/` | Next.js 16 · React 19 · Tailwind v4 · DE/NL — primäres, lokal lauffähiges Produkt |
+| Backend | `backend/` | FastAPI (Ops, CRM, Angebote, Health) — lokal degradiert ohne Postgres/IMAP |
+| Hermes App | `apps/hermes/` | Hermes-Agent-WebUI (Workstation-Basis, Cutover nur nach Freigabe) |
+| Paperclip | `apps/paperclip/` | Factory / Skills-Quelle (Port 3100 auf dem VPS) |
+| Preview | `apps/webui-preview/` | Native Panel-Stubs (kein Iframe-Zielprodukt) |
+| Governance | `docs/governance/` | Verbindliche Regeln & SOPs (Primärquelle) |
+| Design | `design_guidelines.json` | Dark/Luxury · Outfit/Manrope · `#0A0A0A` |
+| Deploy | `deploy/` | Dockerfiles, MCP, Cursor/SSH-Hilfen — **kein** `deploy/docker-compose.yml` |
+| Root Compose | `docker-compose.yml` | Harness/CI-Infra, **nicht** der Produkt-Stack |
+
+**Sprachen-Mix (ungefähre Repo-Realität):** TypeScript/TSX (Website), Python (Backend/Agentik), Markdown (Governance), YAML (CI/Deploy).
+
+**Packages (GHCR):** `ghcr.io/nexifyai-dev/nexify-agentur-plattform` mit Tags `website-*`, `backend-*`, `hermes-*` (siehe `.github/workflows/build.yml`). npm-Paketname Website: `nexifyai-agency-website` (privat).
+
+---
+
+## Quickstart
 
 ### Voraussetzungen
-- Docker 24+ & docker-compose 2.0+
-- Node.js 20+ (apps)
-- Python 3.10+ (backend)
-- Git SSH-Key in GitHub hinterlegt
 
-### Lokal starten (Development)
+- Node.js 20+ und **pnpm** ≥ 9
+- Optional: Python 3.12 + venv (Backend)
+- Docker nur, wenn du die Root-Harness-Compose brauchst (nicht nötig für Website-Dev)
+
+### Website (empfohlen)
 
 ```bash
 git clone git@github.com:nexifyai-dev/nexify-agentur-plattform.git
 cd nexify-agentur-plattform
 
-# Backend + Services
-docker-compose up -d
-
-# Website (Next.js)
-pnpm --dir apps/website install && pnpm --dir apps/website dev
-
-# Hermes Web UI (Python)
-# Hinweis: Das Backend benötigt private/externe Abhängigkeiten und ist lokal ohne
-# zusätzliche Konfiguration (siehe backend/.env.example) ggf. nicht vollständig lauffähig.
-cd apps/hermes && pip install pyyaml && python server.py
-
-# Zugriff
-# - Website:        http://localhost:3000
-# - Hermes WebUI:   http://localhost:8788
-# - LightRAG:       http://localhost:9622
-# - 9Router (LLM):  http://localhost:20128/v1
-# - AgentMemory:    http://localhost:3111
-# - CircuitBreaker: http://localhost:8912
+pnpm --dir apps/website install
+pnpm --dir apps/website dev
+# → http://localhost:3000
+# Health: GET /api/health → {"status":"ok"}
+# / → 307 Redirect nach /de
 ```
 
-### Auf VPS deployen
+Weitere Befehle (lint / typecheck / test / build): `.cursor/skills/website-dev/SKILL.md` bzw. `apps/website/README.md`.
+
+Ohne Backend liefert `/api/planner/plan` eine lokale Schätzung; `/api/contact` und `/api/offers/request` antworten bewusst mit Fehler, bis `BACKEND_ORIGIN` und/oder `RESEND_API_KEY` gesetzt sind.
+
+### Backend (optional, degradiert lokal)
 
 ```bash
-# Via GitLab CI/CD (recommended)
-git push origin main  # triggers .gitlab-ci.yml
-
-# Oder manuell
-./deploy/deploy-vps.sh
+# einmalig: python3.12-venv, venv außerhalb des Repos
+# Demo-Pfad für StaticFiles (sonst Boot-Crash):
+#   sudo mkdir -p /opt/nexifyai/repos/lead-pipeline/demos
+cd backend
+uvicorn server:app --host 0.0.0.0 --port 8000
+# Health: GET /api/health → status ok, db oft "unavailable"
 ```
+
+Details und Stolpersteine: `AGENTS.md` (Abschnitt „Cursor Cloud specific instructions“).
 
 ---
 
-## 📁 Projektstruktur
+## Dual-VCS & Deploy
 
 ```
-nexify-agentur-plattform/
-├── apps/                    # Applications
-│   ├── website/            # Marketing & Agency website (Next.js) → :3000
-│   ├── hermes/             # Hermes Agent Web UI → :8788
-│   └── paperclip/          # Paperclip Factory (planned, Port 3100)
-├── backend/                # FastAPI Backend (ops agent, CRM, email, offers)
-│   ├── server.py
-│   ├── portal/
-│   ├── flowsearch/
-│   └── tests/
-├── deploy/                 # Infrastructure-as-Code
-│   ├── docker-compose.yml  # Development stack
-│   ├── kubernetes/         # K8s manifests (production)
-│   └── deploy-vps.sh       # VPS deployment script
-├── infra/                  # Infrastructure configs
-│   ├── traefik/           # Reverse proxy
-│   ├── prometheus/        # Monitoring
-│   └── scripts/           # Admin scripts
-├── docs/                   # Documentation
-│   ├── architecture/      # System design
-│   ├── governance/        # Rules & processes (5 levels)
-│   └── api/               # API reference
-├── memory/                # Brain snapshots
-├── fabrik/                # Factory patterns & templates
-├── .github/workflows/     # GitHub Actions (CI/CD backup)
-├── .gitlab-ci.yml         # GitLab CI/CD (primary)
-└── docker-compose.yml     # Root compose (development)
+GitHub (Source of Truth)  →  PR, Actions CI, Vercel Deploy
+        │
+        │  .github/workflows/mirror-to-gitlab.yml
+        ▼
+GitLab OSS (Mirror)       →  CI, VPS-Deploy-Pfad
 ```
+
+- **Website Production:** Vercel (`deploy-vercel.yml` auf `main`) + Live unter `www.nexifyai.cloud`
+- **API:** `api.nexifyai.cloud` (Backend auf VPS)
+- **Sync-Doku:** `docs/operations/REPO-SYNC-STRATEGY.md`
+
+Branch-Konvention: `main` (stable) · `feature/*` / `cursor/<task>-7dd5` (Entwicklung). Commits: Conventional Commits (`feat`, `fix`, `docs`, …).
 
 ---
 
-## 🔧 Konfiguration
+## Design & Governance
 
-### Environment Variables
-
-Kopiere `.env.example` → `.env`:
-
-```bash
-cp .env.example .env
-# Edit: DEEPSEEK_API_KEY, DATABASE_URL, GITHUB_TOKEN, GITLAB_TOKEN, etc.
-```
-
-**Kritische Variablen:**
-- `9ROUTER_BASE_URL`: http://127.0.0.1:20128/v1 (LLM Router — Upstage-first)
-- `LIGHTRAG_URL`: http://127.0.0.1:9622 (RAG Engine, solar-pro3)
-- `AGENTMEMORY_URL`: http://127.0.0.1:3111 (Brain — REST API)
-- `AGENTMEMORY_SECRET`: Bearer-Token aus Env (nie loggen)
-- `GITLAB_TOKEN`: Project Access Token für CI/CD
-- `GITHUB_TOKEN`: PAT für GitHub Actions
-
-### Secrets Management
-
-Alle Secrets in `/opt/nexifyai/security/keys/`:
-
-```bash
-ls -la /opt/nexifyai/security/keys/
-# - gitlab-token.txt
-# - github-token.txt
-# - deepseek-api-key.txt
-# - etc.
-```
-
-NIE in `.env` committen. Nutze GitLab CI/CD Secrets.
+- **Brand:** NeXify AI by NeXify — *chat it. Automate it.*
+- **Design SoT:** `design_guidelines.json` (Dark/Luxury). Nicht die ältere „Graphite Premium“-Linie aus Legacy-Docs unter `nexify/`.
+- **Governance-Hierarchie:** `docs/governance/` > `CHARTA.md` > `.cursor/rules/` > `AGENTS.md`
+- **Agenten-Einstieg:** `AGENTS.md`, `CLAUDE.md`, `bash scripts/agentic-bootstrap.sh`
 
 ---
 
-## 🔄 CI/CD Pipeline
+## Was nicht in diesem Repo liegt
 
-### GitHub Actions → GitLab Sync
-
-**File:** `.github/workflows/mirror-to-gitlab.yml`
-
-Automatisch synchronisiert:
-- Commits (main, develop)
-- Tags (releases)
-- Branches und Tags aus GitHub (ohne GitHub-interne Pull-Refs)
-- GitLab CI startet auf den gespiegelten Branch-Updates
-
-**Manuell triggern:**
-```bash
-git push origin main  # Beide Repos updated
-```
-
-### GitLab CI/CD (Redundanz)
-
-**File:** `.gitlab-ci.yml`
-
-**Stages:**
-1. `build` — Docker images bauen (nexifyai-dev Docker Registry)
-2. `test` — Jest, pytest, E2E Tests
-3. `deploy-staging` — Staging VPS
-4. `deploy-production` — Production (manuell approved)
-
-**Logs ansehen:**
-```bash
-# Local
-gitlab-runner verify
-gitlab-runner run-single ...
-
-# Via GitLab WebUI
-# https://gitlab.nexifyai.cloud/nexifyai_group/nexifyai/-/pipelines
-```
-
-### Deploy auf VPS
-
-**VPS Details:**
-- Host: `localhost` / CF-Tunnel (keine Public-IP-Binds)
-- User: `root` (via SSH-Key)
-- Deployment Path: `/opt/nexifyai/repos/nexify-agentur-plattform/`
-- Tunnel: `*.nexifyai.cloud` via Cloudflare
-
-**Deploy Script:**
-```bash
-./deploy/deploy-vps.sh [staging|production]
-```
-
-**Status prüfen:**
-```bash
-ssh root@localhost "docker ps | grep nexify"
-```
+- AgentMemory, LightRAG, 9Router, Circuit Breaker, Hermes-Gateway/Headroom — **externe Runtime** auf dem VPS
+- Produktives Cutover an Hermes ohne explizite Endabnahme
+- `n8n` (abgeschafft) und Fremdprojekte wie `0xNyk/awesome-hermes-agent`
 
 ---
 
-## 📚 Dokumentation
+## Dokumentation
 
-| Dokument | Pfad | Zweck |
-|----------|------|-------|
-| **Architektur** | `docs/architecture/` | System-Design, Components |
-| **Governance** | `docs/governance/` | Rules, SOPs, Change Management |
-| **API Reference** | `docs/api/` | Endpoint-Dokumentation |
-| **Deployment** | `deploy/` | Infrastructure-as-Code |
-| **Brain** | `memory/` | AgentMemory + LightRAG Snapshots |
-| **Agent Factory** | `fabrik/` | Skill Templates, Agent Patterns |
-
-**Wiki aktualisieren:** Docs ändern → `git push` → Automatisch in GitLab Wiki synced.
+| Dokument | Zweck |
+|----------|--------|
+| [`docs/README.md`](docs/README.md) | Docs-Index |
+| [`docs/governance/`](docs/governance/) | Regeln, SOPs, Register |
+| [`docs/operations/`](docs/operations/) | Sync, agentic Mode, Ops |
+| [`docs/architecture/`](docs/architecture/) | Architektur & Integrationspläne |
+| [`AGENTS.md`](AGENTS.md) | Cursor-/Cloud-Agent-Hinweise |
+| [`apps/website/README.md`](apps/website/README.md) | Website-Dev |
 
 ---
 
-## 🧠 Brain Integration
+## Security
 
-**AgentMemory** (NeXifyAI proprietary):
-```
-POST /api/save
-{
-  "entity": "platform-config",
-  "data": {...},
-  "review_due": "2026-08-01"
-}
-```
-
-**LightRAG** (Knowledge Graph, Port 9622):
-```
-POST http://127.0.0.1:9622/query
-{
-  "mode": "local",
-  "query": "deployment status"
-}
-```
-
-**Dual-Write:** Jeder Agent speichert erkenntnisse in beiden Systemen.
+- Secrets nur über Env / CI Secrets — niemals committen
+- Secret-Scan: `.github/workflows/secret-scan.yml`
+- Keine Public-IP-Binds für Brain-Dienste; Reachability über Tunnel/Proxy
 
 ---
 
-## 🤖 GitHub Worker Integration
+## License
 
-**GitHub Actions können direkt deployen (als Backup zu GitLab CI).**
-
-```yaml
-# .github/workflows/deploy-vps.yml
-name: Deploy VPS
-on:
-  push:
-    branches: [main, develop]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy
-        env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh -o StrictHostKeyChecking=no root@localhost "cd /opt/nexifyai/deployment/nexify-agentur-plattform && git pull && docker-compose up -d"
-```
-
-**Setup:**
-1. GitHub Settings → Secrets → `VPS_SSH_KEY` (privater SSH-Key)
-2. Trigger: `git push origin main`
+Proprietary — NeXify AI / NeXify, 2026
 
 ---
 
-## 🔍 Monitoring & Debugging
-
-### Logs
-
-```bash
-# Docker logs
-docker logs nexify-backend
-docker logs nexify-website
-docker logs lightrag
-
-# Via docker-compose
-docker-compose logs -f backend
-
-# VPS (SSH)
-ssh root@localhost "tail -f /var/log/nexify/*.log"
-```
-
-### Health Checks
-
-```bash
-# Hermes WebUI
-curl http://localhost:8788
-
-# LightRAG
-curl http://localhost:9622/health
-
-# 9Router (LLM)
-curl http://localhost:20128/v1/models
-
-# AgentMemory
-curl http://localhost:3111/agentmemory/health -H "Authorization: Bearer $AGENTMEMORY_SECRET"
-
-# CircuitBreaker
-curl http://localhost:8912/status
-```
-
-### Performance
-
-```bash
-# Prometheus: http://localhost:9090
-# Grafana: http://localhost:3030
-# cAdvisor: http://localhost:8080
-```
-
----
-
-## 🛠 Development Workflow
-
-### 1. Feature Branch
-
-```bash
-git checkout -b feature/my-feature
-# Make changes
-git add .
-git commit -m "feat: description"
-git push origin feature/my-feature
-```
-
-### 2. Pull Request
-
-- GitHub: Create PR
-- GitHub: Source of Truth für PR und Merge
-- GitLab: vollständiger Repository-Mirror und redundanter CI/CD-Pfad
-
-### 3. Deploy
-
-```bash
-git push origin main
-# → GitLab CI/CD pipeline auto-starts
-# → Staging deploy (automatic)
-# → Production deploy (manual approval)
-```
-
-### 4. Rollback
-
-```bash
-git revert <commit-hash>
-git push origin main
-# Pipeline re-runs with previous version
-```
-
----
-
-## 🚨 Troubleshooting
-
-### Deploy fehlgeschlagen
-
-```bash
-# Check logs
-gitlab-runner logs
-
-# Manual deploy
-./deploy/deploy-vps.sh staging
-
-# VPS debugging
-ssh root@localhost "docker-compose logs backend"
-```
-
-### Performance Issues
-
-1. **Check resource usage:** `docker stats`
-2. **Check LightRAG:** `curl http://localhost:9622/health`
-3. **Check 9Router:** `curl http://localhost:20128/v1/models`
-4. **Scale:** `docker-compose up -d --scale backend=3`
-
-### Brain (AgentMemory/LightRAG) offline
-
-```bash
-# Restart
-docker restart lightrag
-docker restart agentmemory
-
-# Sync
-curl -X POST http://127.0.0.1:9622/query -d '{"mode":"local","query":"reset"}'
-```
-
----
-
-## 📦 Release Process
-
-1. **Tag erstellen:** `git tag v1.0.0`
-2. **Push:** `git push origin v1.0.0`
-3. **GitHub Release:** Auto-generiert
-4. **GitLab Release:** Auto-synced
-5. **Docker Images:** Tagged in Registry
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-# → Workflows triggern auto-release
-```
-
----
-
-## 🔐 Security
-
-- **Secrets:** `.env` NIE committen (`.env` in `.gitignore`)
-- **SSH Keys:** `/opt/nexifyai/security/keys/` nur für root lesbar
-- **Scanning:** GitLab CI Secret Scan + GitHub Advanced Security
-- **Compliance:** DIN ISO 27001 Standards (siehe `docs/governance/06_sicherheit_policies/`)
-
----
-
-## 📞 Support
-
-- **Issues:** GitHub Issues (synced zu GitLab)
-- **Docs:** `/docs/` (Markdown)
-- **Brain:** AgentMemory `query` API
-- **Team:** [Slack/Discord Link]
-
----
-
-## 📄 License
-
-Proprietary — NeXifyAI 2026
-
----
-
-**Generated:** 2026-07-27 12:30 CEST  
-**Sync Status:** GitHub ↔ GitLab ✓ (nexifyai_group/nexifyai)  
-**SOLL-Ref:** `/opt/nexifyai/docs/architecture/SOLL-GESAMTKONZEPT.md`  
-**Next Review:** 2026-08-01
-
-## Legacy endpoint (deprecated)
-curl http://localhost:9622/health  # OLD LightRAG port
+**Aktualisiert:** 2026-08-02 · Öffentliche Docs & GitHub About an IST angeglichen

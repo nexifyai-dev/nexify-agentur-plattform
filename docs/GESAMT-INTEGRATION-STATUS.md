@@ -1,6 +1,9 @@
 # NeXifyAI Gesamt-Integration — Live-Status 28.07.2026
 
-> Generiert: 14:35 UTC. Health: 0/13 failures. Alle Services in Produktion.
+> **Hinweis (2026-08-02):** Historischer VPS-Snapshot. Keine aktuelle Produktionsgarantie.
+> Aktuelle öffentliche Produktwahrheit: Root-`README.md`, Live https://www.nexifyai.cloud, API https://api.nexifyai.cloud.
+>
+> Generiert: 14:35 UTC (28.07.2026). Damaliger Health-Lauf: 0/13 failures — nicht als Dauer-IST lesen.
 
 ## Service-Matrix (Port, API, Integration)
 

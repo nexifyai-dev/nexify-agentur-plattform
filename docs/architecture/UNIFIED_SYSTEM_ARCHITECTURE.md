@@ -1,8 +1,9 @@
 # Unified NeXify System Architecture — Masterplan v1.0
 
-> **Datum:** 2026-06-20
-> **Design Authority:** Hermes WebUI Graphite (Premium Enhanced)
-> **Status:** KONZEPTION
+> **Datum:** 2026-06-20  
+> **Status:** HISTORISCHES KONZEPT (nicht aktuelle Design-SoT)  
+> **Hinweis (2026-08-02):** Verbindliches Design = Root-`design_guidelines.json` (Dark/Luxury).
+> „Graphite Premium“ unten ist Legacy. Brand: **NeXify AI by NeXify — chat it. Automate it.**
 
 ---
 

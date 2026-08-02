@@ -1,7 +1,7 @@
 # Repo-Sync-Strategie: GitHub ↔ VPS GitLab ↔ Workspace
 
-**Stand:** 2026-07-24T12:33+0200 (DE/Berlin)
-**Repos:** GitHub `nexifyai-dev/nexify-agentur-plattform` ←→ VPS GitLab (lokal)
+**Stand:** 2026-07-24T12:33+0200 (DE/Berlin) · Branding-Hinweis 2026-08-02: Produkt **NeXify AI by NeXify — chat it. Automate it.** · Live https://www.nexifyai.cloud · API https://api.nexifyai.cloud · Vercel https://nexify-agentur-plattform.vercel.app
+**Repos:** GitHub `nexifyai-dev/nexify-agentur-plattform` (SoT) ←→ VPS GitLab `gitlab.nexifyai.cloud/nexifyai_group/nexifyai` (Mirror)
 
 ## Architektur
 

@@ -4,7 +4,8 @@
 **NAME:** NeXifyAI DevOps Team  
 **WHAT:** Complete GitHub-GitLab dual-CI setup for nexify-agentur-plattform  
 **WHY:** Redundancy, local control (GitLab), cloud speed (GitHub)  
-**DEPENDS:** Secrets configured, SSH keys deployed, Docker registry access
+**DEPENDS:** Secrets configured, SSH keys deployed, Docker registry access  
+**Hinweis (2026-08-02):** Produkt **NeXify AI by NeXify — chat it. Automate it.** · Website-Deploy zusätzlich via `deploy-vercel.yml` · Live https://www.nexifyai.cloud · GHCR-Image-Basis `nexify-agentur-plattform` (Tags website/backend/hermes), nicht „vitrine/konsole“.
 
 ---
 

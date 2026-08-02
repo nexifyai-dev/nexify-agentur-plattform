@@ -1,7 +1,7 @@
 {
   "name": "nexify-agentur-plattform",
   "version": "1.0.0",
-  "description": "NeXify Agentur Plattform — Monorepo",
+  "description": "NeXify AI by NeXify — chat it. Automate it. Website + FastAPI monorepo",
   "private": true,
   "engines": {
     "pnpm": ">=9.0.0"
