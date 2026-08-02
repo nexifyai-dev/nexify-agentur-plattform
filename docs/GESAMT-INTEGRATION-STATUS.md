@@ -4,6 +4,10 @@
 > Aktuelle öffentliche Produktwahrheit: Root-`README.md`, Live https://www.nexifyai.cloud, API https://api.nexifyai.cloud.
 >
 > Generiert: 14:35 UTC (28.07.2026). Damaliger Health-Lauf: 0/13 failures — nicht als Dauer-IST lesen.
+>
+> **Korrektur Embedding/Dual-Write (02.08.2026):** LightRAG Embedding IST = Upstage
+> `embedding-passage` (`api.upstage.ai`), nicht „nur Ollama bge-m3“. Dual-Write post-commit
+> ist **optional** (`scripts/brain-dual-write.sh`) — nicht als systemweit aktiv lesen.
 
 ## Service-Matrix (Port, API, Integration)
 
@@ -11,7 +15,7 @@
 |---------|------|-----|-------------|
 | 9Router | :20128 | /v1/models, /v1/chat/completions | → LightRAG, → AgentMemory, → Hermes |
 | AgentMemory | :3111/:3113 | /health, /memory/* (268 funcs) | ← MCP-Proxy, ← Monorepo-Hook, ↔ LightRAG |
-| LightRAG | :9622 | /health, /documents/* | ← 9Router LLM, ← Ollama Embed, ↔ AgentMemory |
+| LightRAG | :9622 | /health, /documents/* | ← Upstage LLM+Embed (IST), Ollama Legacy, ↔ AgentMemory |
 | MCP-Proxy | :8650 | /api/mcp/servers, /api/mcp/tools | → 9 Server, 263 Tools |
 | WebUI | :8787 | /api/health, /api/files | CF-blocked (public) |
 | Dashboard | :4001 | /api/health, /api/memory | → AgentMemory :3111 |
@@ -21,22 +25,24 @@
 | Grafana | :3000 | /api/health | ← Prometheus Metrics |
 | GitLab OSS | :8922 | /api/v4/* | Primär-Repo, ← Monorepo |
 | Supabase | :3001 | /rest/v1/* | Daten-Persistenz |
-| Ollama | :11434 | /api/tags, /api/embeddings | → LightRAG Embedding (bge-m3) |
+| Ollama | :11434 | /api/tags, /api/embeddings | Legacy/optional — LightRAG Embed IST = Upstage |
 | Redis | :6379 | — | Cache/Queue |
 
 ## Wissens-Pipeline
 
 ```
-Monorepo (GitLab :8922)
-  ↓ post-commit Hook
-  ├→ AgentMemory (:3111) — memory_save
-  └→ LightRAG (:9622) — insert_text
-       ↓ 9Router (:20128) — solar-pro3 LLM
-       ↓ Ollama (:11434) — bge-m3 Embedding
+Monorepo (GitHub SoT → GitLab Mirror)
+  ↓ optional: scripts/brain-dual-write.sh
+     (.githooks/post-commit-dual-write — No-op ohne Env)
+  ├→ AgentMemory (:3111) — /agentmemory/remember
+  └→ LightRAG (:9622) — /documents/text
+       ↓ Upstage — solar-pro3 LLM (IST)
+       ↓ Upstage — embedding-passage (IST; nicht Ollama bge-m3)
        ↓
-    VPS-weite .md-Indexierung
-    (Symlinks: /workspace, /root/.hermes, Monorepo)
+    Indexierung (MCP insert / Seed-Skript / VPS-Sync)
 ```
+
+Siehe `docs/operations/BRAIN-DUAL-WRITE.md`.
 
 ## AgentMemory 4-Tier-Consolidation
 
