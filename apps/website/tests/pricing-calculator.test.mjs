@@ -8,9 +8,9 @@ test('PricingCalculator Component - calculates correct prices', () => {
   const net = days * dayRate;
   const vat = net * vatRate;
   const gross = net + vat;
-  assert.equal(net, 2997);
-  assert.ok(Math.abs(vat - 629.37) < 0.01);
-  assert.ok(Math.abs(gross - 3626.37) < 0.01);
+  assert.equal(net, 1347); // 3 × 449
+  assert.ok(Math.abs(vat - 282.87) < 0.01);
+  assert.ok(Math.abs(gross - 1629.87) < 0.01);
 });
 
 test('PricingCalculator Component - has correct day range', () => {
