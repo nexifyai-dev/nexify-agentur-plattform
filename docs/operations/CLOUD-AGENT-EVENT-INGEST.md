@@ -1,8 +1,9 @@
 # Cloud Agent Event-Ingest + Auto Push/PR/Merge
 
 **Stand:** 2026-08-02  
-**Branch:** `cursor/cloud-agent-event-ingest-7dd5`  
-**Mandat:** Alle Meldungen → Cursor; Auto-Push; Draft-PR; CI→Merge; auch Laptop aus.
+**Branch:** `cursor/no-confirmation-agent-ops-7dd5`  
+**Mandat:** Alle Meldungen → Cursor; Auto-Push; Draft-PR; CI→ready→Merge; auch Laptop aus.  
+**Policy:** NO_CONFIRMATION (`.cursor/rules/40-no-confirmation.mdc`) — Agents fragen nicht nach Commit/Push/PR.
 
 ## Fix-Loop (automatisch)
 
@@ -12,9 +13,9 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
   → Circuit Breaker + AgentMemory Action
   → Cursor Cloud Agent (PC-off)
   → Commit auf cursor/*
-  → Hook auto-push (kein Diff-Tab)
+  → Hook auto-push + Draft-PR-Fallback (kein Diff-Tab)
   → Workflow agent-branch-autopilot → Draft-PR + label automerge
-  → CI green → pr-auto-merge.yml → squash merge (Guards)
+  → CI green → pr-auto-merge.yml: draft→ready + squash auto-merge (Fix #135)
   → mirror-to-gitlab (Sync only)
 ```
 
@@ -32,8 +33,8 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Schritt | Mechanismus |
 |---------|-------------|
 | Auto-Push nach Commit | `.cursor/hooks/auto-push-agent-branch.sh` (`afterShellExecution` + `stop`) |
-| Draft-PR wenn Branch gepusht | `.github/workflows/agent-branch-autopilot.yml` |
-| CI → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (kein force main; `do-not-merge` blockt) |
+| Draft-PR wenn Branch gepusht | Hook-Fallback `gh pr create --draft` + `.github/workflows/agent-branch-autopilot.yml` |
+| CI → ready → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (Draft→ready wenn green; kein force main; `do-not-merge` blockt) |
 | CI fail / Issue / Dispatch → Cloud Agent | `.github/workflows/event-to-cloud-agent.yml` |
 | Linear-ID auf PR | `.github/workflows/linear-pr-sync.yml` |
 | VPS Alerts → Agent | `deploy/autopilot/jobs/event-ingest-to-cloud-agent.sh` + webhook stub |
@@ -49,9 +50,10 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Linear | MCP auth ok (Desktop) | Issue→Agent | Cursor Automation + webhook `/ingest/linear` |
 | Slack | MCP auth ok (Desktop) | Msg→Agent | Automation + `/ingest/slack` |
 | Sentry/Vercel/CF/Resend | — | Webhook→Agent | `/ingest/{source}` + Shared Secret |
-| Auto-Push | manuell Diff-Tab | Hook | nach Merge dieses PRs in Agent-Sessions |
-| Auto Draft-PR | manuell | Workflow | nach Push `cursor/**` |
-| Auto-Merge | — | label+checks | Repo Allow auto-merge + Branch Protection |
+| Auto-Push | Hook | Hook | aktiv (kein Diff-Tab) |
+| Auto Draft-PR | Hook+Workflow | Hook+Workflow | aktiv nach Push `cursor/**` |
+| Draft→ready | fehlte (#135) | pr-auto-merge | aktiv wenn automerge + checks green |
+| Auto-Merge | label+checks | label+checks | Repo Allow auto-merge + Branch Protection |
 | GitLab | Mirror | Sync only | unverändert |
 
 ## Secrets (Namen only)
@@ -74,14 +76,15 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 Siehe [`ISSUES-AUTOMATION.md`](./ISSUES-AUTOMATION.md) — Auto-Label, Triage, Stale, Human-gate.
 `event-to-cloud-agent` launched Issues nur noch bei Labels `agent-fix|cursor-fix|autonomous|P0` und **nie** bei `human-gate|blocked`.
 
-## Guards
+## Guards / HARD STOPs (NO_CONFIRMATION Ausnahmen)
 
 - Kein Force-Push auf `main`/`develop`
-- Draft-PR zuerst; Merge nur squash + green checks
+- Draft-PR zuerst; Merge nur squash + green checks (Draft→ready automatisch)
 - `do-not-merge` deaktiviert Auto-Merge
 - Circuit Breaker vor Cloud-Launch / MCP
-- Keine Secrets in Chat/Commits
-- Kein Hermes Prod-Cutover
+- Keine Secrets in Chat/Commits (keine erfundenen Secret-Werte)
+- Kein Hermes Prod-Cutover ohne Endabnahme
+- Kunden-/Regelwerk-Logik nur mit Governance-Protokoll
 
 ## Test
 

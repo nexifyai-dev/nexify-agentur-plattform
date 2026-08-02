@@ -42,6 +42,21 @@ Mandat — beide sagen dasselbe: **Cutover/Live-Änderungen an Hermes selbst
 erst nach expliziter Endabnahme.** Entwicklung in Isolation läuft ohne
 Rückfrage.
 
+## NO_CONFIRMATION (Cursor Agent Ops)
+
+Agents arbeiten **confirmation-free**: kein „soll ich committen/pushen/PR
+öffnen/mergen?“ — ausführen und Ergebnis melden. Diff-Tab ist kein Gate.
+
+**HARD STOPs (bleiben):**
+1. Hermes-Produktions-Cutover ohne Endabnahme
+2. Echte Secret-Werte in Chat/Issues/Commits erfinden oder einfügen
+3. Force-Push auf `main` / geschützte Branches
+4. Kunden-/Regelwerk-Logik ohne Governance-Protokoll
+
+Alles andere: auto (Hooks + `agent-branch-autopilot` + `pr-auto-merge`
+inkl. Draft→ready wenn `automerge` + CI green). Rule:
+`.cursor/rules/40-no-confirmation.mdc`.
+
 ## Branding
 „NeXify AI by NeXify — chat it. Automate it." — durchgängig.
 
