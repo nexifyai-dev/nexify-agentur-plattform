@@ -1,6 +1,6 @@
 # FILE: .github/workflows/event-to-cloud-agent.yml
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:30
+# UPDATED: 02.08.2026 08:58
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: GitHub-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
@@ -88,12 +88,13 @@ jobs:
               fi
               ;;
             issues)
-              if echo ",${ISSUE_LABELS}," | grep -Eq ',(agent-fix|cursor-fix|autonomous),'; then
+              # human-gate / blocked: never auto-launch (secrets, Hermes cutover)
+              if echo ",${ISSUE_LABELS}," | grep -Eqi ',(human-gate|blocked),'; then
+                launch=0
+                reason="issue_human_gate_skip"
+              elif echo ",${ISSUE_LABELS}," | grep -Eqi ',(agent-fix|cursor-fix|autonomous|P0),'; then
                 launch=1
                 reason="issue_label"
-              elif [ "${ACTION:-}" = "opened" ] || [ "${ACTION:-}" = "reopened" ]; then
-                launch=1
-                reason="issue_opened_triage"
               fi
               ;;
             pull_request)
