@@ -193,18 +193,19 @@ Live OK (2026-08-02): www 200 · api/health 200 · SPF+DKIM+DMARC · AVV/KI-Hinw
 | L02 | Berufshaftpflicht Trust-Hinweis | P2 |
 | D03 | Lead-SLA Messung (1 Werktag Promise) | P1 |
 
-## Issues (nach gh create eintragen)
+## Issues (Session unconsidered-gaps-scan)
 
 | Datum | Gap | Issue | Priority |
 |-------|-----|-------|----------|
 | 2026-08-02 | Soft-404 + security.txt + /danke | (dieser PR) | P1 shipped |
-| 2026-08-02 | Trust-Seiten Status/Security/A11y/SLA | TBD | P1 |
-| 2026-08-02 | Referral + LinkedIn + IHK | TBD | P1 |
-| 2026-08-02 | ChatGPT/Make/Zapier + Pricing Objections | TBD | P1 |
-| 2026-08-02 | CODEOWNERS + Branch Protection + Sentry | TBD | P1 |
-| 2026-08-02 | Booking slots/capacity + abandoned recovery | TBD | P1 |
-| 2026-08-02 | Incident/Backup Runbook + DMARC rua | TBD | P2 |
-| 2026-08-02 | Jobs/Karriere + Public API Docs | TBD | P2 |
+| 2026-08-02 | Trust-Seiten Status/Security/A11y/SLA | #217 | P1 |
+| 2026-08-02 | Referral + LinkedIn + IHK | #219 | P1 |
+| 2026-08-02 | ChatGPT/Make/Zapier + Pricing Objections | #221 | P1 |
+| 2026-08-02 | CODEOWNERS + Branch Protection + Sentry | #224 | P1 |
+| 2026-08-02 | Booking slots/capacity + abandoned recovery | #226 | P1 |
+| 2026-08-02 | Incident/Backup Runbook + DMARC rua | #228 | P2 human |
+| 2026-08-02 | Jobs/Karriere + Public API Docs | #230 | P2 |
+| 2026-08-02 | Lead-SLA Messung (1 Werktag) | #215 | P1 |
 
 ## Session-Learn
 >>>>>>> 7fb8a8cd (fix(website): soft-404, security.txt, /danke + gap radar)
