@@ -28,6 +28,9 @@ aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
   gegen NousResearch abgrenzen, bevor irgendetwas integriert wird.
 - **n8n** — laut bestehender Entscheidung abgeschafft. Nicht aufnehmen,
   sofern nicht ausdrücklich widerrufen.
+- **OpenAI Codex** (CLI / ChatGPT Codex / `@openai/codex` / `.codex/`) —
+  abgeschaltet 2026-08-02. Primäragent ist **Cursor Agent / Cloud Agent**.
+  Details: `docs/operations/CODEX-REMOVED-2026-08-02.md`.
 
 ## Arbeitsweise (§13/§14 in CHARTA.md — hier nur der Kurzhinweis)
 - Unbekannte Tools/Repos/Behauptungen: verifizieren, nicht übernehmen,
@@ -60,6 +63,12 @@ inkl. Draft→ready wenn `automerge` + CI green). Rule:
 ## Branding
 „NeXify AI by NeXify — chat it. Automate it." — durchgängig.
 
+## Sprache / Locale (verbindlich)
+- **Standard:** Deutsch (`de` / `de-DE`) für Agent-Kommunikation, Produkt-UI und owned Copy.
+- **NL:** Firmensitz (Venlo) — **kein** Default für Acquisition oder Apps.
+- **EN:** nur Identifier / Upstream-UIs; Liste: `docs/operations/LOCALE-DE-STANDARD.md`.
+- Cursor-Rule: `.cursor/rules/40-locale-de-standard.mdc`.
+
 ## Ziel
 Eine einzige WebUI (Basis: Hermes Agent WebUI) vereint alle Workstation-
 Features, 9Router, AgentMemory, LightRAG und die Docker-Container-Liste
@@ -85,7 +94,9 @@ Mandat.
   mit eigenem `pnpm-lock.yaml`). Standardbefehle (lint/typecheck/test/build/dev):
   siehe `website-dev`-Skill.
 - Dev-Server: `pnpm dev` → http://localhost:3000. Healthcheck: `GET /api/health`
-  (JSON `{"status":"ok"}`). `/` antwortet mit 307-Redirect nach `/de`.
+  (JSON `{"status":"ok"}`). `/` ist unprefixed DE-Default (`lang="de"`, Cookie
+  `NEXT_LOCALE=de`); Legacy `/{locale}/…` wird auf unprefixed umgeleitet.
+  Default-Locale ist immer **de** — kein Accept-Language-Redirect nach NL.
 - Next.js warnt beim Start über „multiple lockfiles / inferred workspace root"
   (Repo-Root-`pnpm-workspace.yaml` vs. `apps/website/…`) — **harmlos**, ignorieren.
 - Ohne Backend: `/api/planner/plan` liefert eine deterministische lokale

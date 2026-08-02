@@ -10,7 +10,7 @@ Use this workflow when working on **ecc-bundle-integration** in `nexify-agentur-
 
 ## Goal
 
-Integrate a new ECC bundle for a skill/agent, including metadata, agent configs, skills, instincts, and documentation across .claude, .codex, and .agents directories.
+Integrate a new ECC bundle for a skill/agent, including metadata, agent configs, skills, instincts, and documentation across `.claude`, `.agents`, and `.cursor` directories. OpenAI Codex (`.codex/`) is retired — do not recreate it.
 
 ## Common Files
 
@@ -19,7 +19,8 @@ Integrate a new ECC bundle for a skill/agent, including metadata, agent configs,
 - `.claude/skills/*/SKILL.md`
 - `.claude/homunculus/instincts/inherited/*.yaml`
 - `.claude/commands/project-snapshot-or-cleanup.md`
-- `.codex/config.toml`
+- `.agents/skills/*/SKILL.md`
+- `.cursor/rules/` / `.cursor/mcp.json.example`
 
 ## Suggested Sequence
 
