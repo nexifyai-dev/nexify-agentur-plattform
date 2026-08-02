@@ -3,7 +3,7 @@
 
 /* ─────────────────────────────────────────────────────────────
    NeXify Premium — Design System
-   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Inter Tight
+   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Outfit / Manrope
    ───────────────────────────────────────────────────────────── */
 
 /* ══════════════════════════════════════════════════════════════
@@ -316,7 +316,7 @@ input.field:focus, textarea.field:focus, select.field:focus {
 
 /* ─────────────────────────────────────────────────────────────
    NeXify Premium — Design System
-   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Inter Tight
+   Spacing: 8px grid · Backgrounds: 3-tier hierarchy · Typography: Outfit / Manrope
    ───────────────────────────────────────────────────────────── */
 
 /* ══════════════════════════════════════════════════════════════
@@ -349,8 +349,8 @@ input.field:focus, textarea.field:focus, select.field:focus {
   --blue:   #60A5FA;
 
   /* ── Fonts ── */
-  --font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Outfit Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    "Manrope Variable", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
   /* ── Spacing (8px grid) ── */

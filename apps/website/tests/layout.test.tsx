@@ -29,11 +29,11 @@ test('Layout Component - has correct JSON-LD structured data', () => {
   assert.ok(jsonLd.areaServed.includes("DE"));
 });
 
-test('Layout Component - loads Inter and Space Grotesk fonts', () => {
+test('Layout Component - loads Outfit and Manrope brand fonts', () => {
   const fonts = {
-    body: "Inter",
-    display: "Space Grotesk",
+    body: "Manrope",
+    display: "Outfit",
   };
-  assert.equal(fonts.body, "Inter");
-  assert.equal(fonts.display, "Space Grotesk");
+  assert.equal(fonts.body, "Manrope");
+  assert.equal(fonts.display, "Outfit");
 });
