@@ -14,7 +14,7 @@
 # Ongoing Gap & Acquisition Radar
 
 **Rule:** `.cursor/rules/60-proactive-acquisition-gaps.mdc` (alwaysApply)  
-**Agents:** Nach jedem Task dieses Dokument pflegen (Checkboxen / „Neu“-Zeilen).  
+**Agents:** Nach jedem Task dieses Dokument pflegen (Checkboxen / „Neu"-Zeilen).  
 **HARD:** Keine Fake-Reviews · kein Hermes-Cutover · keine Secrets · kein Paid-Ads-Spend.
 
 ## Koordination (nicht duplizieren)
@@ -27,9 +27,20 @@
 | Revolut payments | #205 `cursor/revolut-replace-stripe-7dd5` | open |
 | FAQ expand | #199 | open |
 | Continuous learning | #203 | open |
+| Legal pages | #202 | open |
 | Website Gesamtkonzept | Agent `5ccd455e` | coordinate |
+| Website Gesamtkonzept / Portal | #214 | open |
+| Acquisition radar + vergleich/checkliste | #213 | open |
+| Soft-404 + security.txt + /danke | #222 | shipped |
 | Legal data human | #201 | human-gate |
 | Actions secrets/runner | #123 | human-gate P0 |
+| GTM backlog | #206–#212 | open — **nicht neu öffnen** |
+
+## Bereits abgedeckt (nicht als „neu" wiederholen)
+
+#213/#214 · #205 Revolut · #199 FAQ · #202 Legal · #203 Learning · #200 Locale · #204 Throttle · Hermes BLEIBEN (#141) · #123 · #201 · #210 GSC/WhatsApp · #206–#212 · kein Stripe/n8n/Nous-awesome-hermes/Codex/Hermes-Cutover.
+
+Live OK (2026-08-02): www 200 · api/health 200 · SPF+DKIM+DMARC · AVV/KI-Hinweise · Cookie-Banner · OG `/og-image.png` · hreflang unprefixed · Follow-up-Worker im Backend.
 
 ---
 
@@ -50,7 +61,14 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | A09 | Exit-Intent / Sticky CTA Verbesserungen | **shipped** | Sticky + Exit-Intent Modal (#208) |
 | A10 | Trust: Testimonials/Logos/SLA | pipeline | #211 Permission-Pipeline; Widget erst nach ≥1 Erlaubnis |
 | A11 | GSC Verification Meta/Property | **done** | DNS Domain + Sitemap submitted 2026-08-02 — `docs/operations/GOOGLE-SEARCH-CONSOLE.md`; next: Coverage + Money-Page Indexing |
-| A12 | Comparison: „KI Agentur vs Freelance“ Subpages | open | Follow-up Content nach `/vergleich` |
+| A12 | Comparison: „KI Agentur vs Freelance" Subpages | open | Follow-up Content nach `/vergleich` |
+| A13 | LinkedIn Organic Playbook | open | P1 — #219 |
+| A14 | IHK / Kammern / lokale DACH-Netzwerke | open | P1 — #219 |
+| A15 | Referral-Programm (Warm Intro) | open | P1 — #219 |
+| A16 | Vergleich ChatGPT / Make / Zapier | open | P1 — #221 |
+| A17 | Pricing-Objection Landing | open | P1 — #221 |
+| A18 | Webinar / Demo-Recording evergreen | open | P2 |
+| A19 | Domain Brand Protection Watch | open | P2 |
 
 ---
 
@@ -63,6 +81,23 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | C03 | Chat → `/rueckruf` already | ok |
 | C04 | Soft-404 / OG (SEO PRs) | coordinate #160 |
 | C05 | Lead-Magnet Download-Asset (echtes PDF) | **shipped** | `/docs/nexify-website-ki-checkliste.pdf` |
+| P01 | Soft-404 `/[locale]` | **shipped** #222 |
+| P02 | `/.well-known/security.txt` | **shipped** #222 |
+| P03 | Thank-you `/danke` | **shipped** #222 |
+| P04 | Alias-Redirects hilfe/docs/cookies/ki/dpa | **shipped** #222 |
+| P05 | Status-Page + status.nexifyai.cloud DNS | open | P1 — #217 |
+| P06 | Security Trust Page | open | P1 — #217 |
+| P07 | Barrierefreiheitserklärung (BFSG) | open | P1 — #217 |
+| P08 | Changelog / Public Roadmap | open | P2 — #230 |
+| P09 | Jobs / Karriere | open | P2 — #230 |
+| P10 | Partner-/Empfehlungsseite | open | P1 (mit A15) |
+| P11 | SLA / Uptime Promise Page | open | P1 — #217 |
+| P12 | AVV Download-PDF | open | P2 |
+| P13 | Public API Docs Page | open | P2 — #230 |
+| P14 | Kunden Knowledge-Base | open | P2 (#214) |
+| P15 | Abandoned Booking Recovery | open | P1 — #226 |
+| P16 | Per-Page OG / CWV Monitoring | open | P2 |
+| P17 | NL Deep-Quality Audit | open | P2 |
 
 ---
 
@@ -79,6 +114,29 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | Google Search Console | Ownership + Sitemap **DONE** 2026-08-02 | Next: Coverage weekly + URL-Inspection Money-Pages |
 | #123 secrets+runner | open P0 human-gate | wait |
 | #201 legal Stammdaten | open human-gate | wait |
+
+### Ops / CI Gaps
+
+| ID | Gap | Priority |
+|----|-----|----------|
+| O01 | CODEOWNERS fehlt | P1 — #224 |
+| O02 | Branch Protection main fehlt (API 404) | P1 human — #224 |
+| O03 | Sentry / Error-Monitoring fehlt | P1 — #224 |
+| O04 | Incident + Backup/Restore Runbook | P2 — #228 |
+| O05 | Dependabot backlog + Draft #197 | P2 |
+| O06 | Grafana/Prometheus/OpenDesign RUNTIME-DOWN | P2 |
+| O08 | Booking slots live 500 (DB) | P1 — #226 |
+| O09 | Circuit Breaker nicht in PR-CI | P2 |
+| O10 | DMARC rua → privates Gmail | P2 human — #228 |
+
+### Stack / Sales / Legal delta
+
+| ID | Gap | Priority |
+|----|-----|----------|
+| S05 | WhatsApp inbound Webhook ungenutzt (wa.me ok) | P2 |
+| S07 | Booking Calendar Capacity Prozess | P1 (#226) |
+| L02 | Berufshaftpflicht Trust-Hinweis | P2 |
+| D03 | Lead-SLA Messung (1 Werktag Promise) | P1 — #215 |
 
 ---
 
@@ -97,6 +155,15 @@ Agents: neue Zeilen hier + Issue-Nummer nach `gh issue create`.
 | 2026-08-02 | GSC coverage weekly check | #245 | P2 — recurring Coverage / Soft-404 / Indexing |
 | 2026-08-02 | Echte Testimonial-Pipeline (Permission-first) | #211 | **closing** (pipeline) |
 | 2026-08-02 | Lead-Magnet PDF Asset + Thank-you mail | #212 | **closing** |
+| 2026-08-02 | Soft-404 + security.txt + /danke | #222 | P1 shipped |
+| 2026-08-02 | Trust-Seiten Status/Security/A11y/SLA | #217 | P1 |
+| 2026-08-02 | Referral + LinkedIn + IHK | #219 | P1 |
+| 2026-08-02 | ChatGPT/Make/Zapier + Pricing Objections | #221 | P1 |
+| 2026-08-02 | CODEOWNERS + Branch Protection + Sentry | #224 | P1 |
+| 2026-08-02 | Booking slots/capacity + abandoned recovery | #226 | P1 |
+| 2026-08-02 | Incident/Backup Runbook + DMARC rua | #228 | P2 human |
+| 2026-08-02 | Jobs/Karriere + Public API Docs | #230 | P2 |
+| 2026-08-02 | Lead-SLA Messung (1 Werktag) | #215 | P1 |
 
 ---
 
