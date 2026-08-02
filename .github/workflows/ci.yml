@@ -14,6 +14,8 @@ jobs:
   # === BACKEND: Python lint + test ===
   backend:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     defaults:
       run:
         working-directory: backend
@@ -43,6 +45,8 @@ jobs:
   # === FRONTEND: Next.js build validation ===
   website:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - uses: actions/checkout@v4
 
@@ -70,6 +74,8 @@ jobs:
   # === HERMES: Python app lint + test ===
   hermes:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     defaults:
       run:
         working-directory: apps/hermes
@@ -97,6 +103,8 @@ jobs:
   # === SECURITY: Secret scanning ===
   secret-scan:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     permissions:
       contents: read
       security-events: write
@@ -114,6 +122,8 @@ jobs:
   # === AGENTIC: SOLL deviation + knowledge mandate ===
   agentic-governance:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - uses: actions/checkout@v4
 

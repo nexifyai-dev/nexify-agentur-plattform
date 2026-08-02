@@ -32,6 +32,8 @@ permissions:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     name: Lint (JavaScript, Python, YAML)
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +70,8 @@ jobs:
 
   unit-test:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     name: Unit Tests (Backend + Frontend)
     steps:
       - uses: actions/checkout@v4
@@ -106,6 +110,8 @@ jobs:
 
   docker-build-test:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     name: Docker Build (Verify Dockerfiles)
     steps:
       - uses: actions/checkout@v4

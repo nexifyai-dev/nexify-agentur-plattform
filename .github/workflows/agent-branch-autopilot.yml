@@ -33,6 +33,8 @@ jobs:
   ensure-draft-pr:
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform' && github.ref_name != 'main'
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - name: Create or update draft PR
         env:

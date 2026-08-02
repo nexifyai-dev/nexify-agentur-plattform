@@ -7,7 +7,8 @@
 **PITFALL:** Keine Secret-**Werte** hier oder in Issues/Chat. Nur Namen + Klickpfade.  
 **Issue:** [#123](https://github.com/nexifyai-dev/nexify-agentur-plattform/issues/123) · Registry: [`GITHUB-ACTIONS-SECRET-REGISTRY.md`](./GITHUB-ACTIONS-SECRET-REGISTRY.md)
 
-> Reality check: True 100% laptop-off **requires** these human steps once. After that, Autopilot → PR → Ready → Automerge → Mirror läuft ohne Desktop.
+> Reality check: True 100% laptop-off **requires** these human steps once. After that, Autopilot → PR → Ready → Automerge → Mirror läuft ohne Desktop.  
+> Runtime-TZ: **Europe/Berlin** — SoT [`TIMEZONE-EUROPE-BERLIN.md`](./TIMEZONE-EUROPE-BERLIN.md).
 
 ---
 
