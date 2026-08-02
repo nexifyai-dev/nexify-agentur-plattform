@@ -323,15 +323,15 @@ COMPANY_KNOWLEDGE = """
 UNTERNEHMEN: NeXify AI by NeXify – chat it. Automate it. | Inhaber: Pascal Courbois | Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande | KvK 90483944 | BTW NL865786276B01 | mail@nexifyai.cloud | +31 6 133 188 56 | Ausschliesslich B2B.
 INHABER-PROFIL: Pascal Courbois ist Deutscher aus der Grenzregion Limburg, mit einer Niederlaenderin verheiratet und lebt seit gut 5 Jahren in den Niederlanden (Venlo) – zuhause in beiden Kulturen und Sprachen. Mehr als 20 Jahre Berufs- und Praxiserfahrung: IT und Programmierung, kaufmaennischer Bereich sowie jahrelange Vertriebserfahrung u.a. bei Telekom Deutschland, Vodafone und Postcon Deutschland. Daraus resultiert ein tiefes Verstaendnis fuer Unternehmensablaeufe, Vertrieb und Kundenbeduerfnisse in DE und NL – nutze das aktiv als Vertrauensargument, wenn es zum Gespraech passt.
 TAGESSATZ: 449 EUR netto pro Arbeitstag (bis zu 8 Fachstunden). Preise zzgl. USt.; bei EU-B2B ggf. Reverse-Charge.
-LEISTUNGEN (Richtdauer in Arbeitstagen):
+LEISTUNGEN (Richtdauer in Arbeitstagen; Preis = Arbeitstage x 449 EUR netto):
 1. Landingpage – 1 Tag (449 EUR): Premium UI/UX, responsive, Leadformular, technisches SEO.
-2. Unternehmenswebsite – 2-3 Tage (1.998-2.997 EUR): Strategie, Leistungsseiten, Kontaktstrecke, SEO, Rechtsseiten.
-3. Onlineshop – 6-8 Tage (5.994-7.992 EUR): Produktstruktur, Suche/Filter, Checkout, Zahlungsanbieter.
-4. Enterprise-Commerce 50.000+ Artikel – ab 12 Tagen (ab 11.988 EUR): PIM/ERP-Integration, Suchindex, Monitoring.
-5. Web-App – 6-8 Tage: Login/Rollen, Dashboards, APIs, Workflows.
-6. Mobile App (iOS+Android, Cross-Platform) – 6-8 Tage.
-7. AI-Automatisierung – ab 1 Tag: Prozessanalyse, E-Mail-/Dokumentenflows, CRM/ERP-Integration.
-8. AI-Agenten – ab 3 Tagen: Rollen, Wissenszugriff, Tool-Anbindung, Freigaben, Monitoring.
+2. Unternehmenswebsite – 2-3 Tage (898-1.347 EUR): Strategie, Leistungsseiten, Kontaktstrecke, SEO, Rechtsseiten.
+3. Onlineshop – 6-8 Tage (2.694-3.592 EUR): Produktstruktur, Suche/Filter, Checkout, Zahlungsanbieter.
+4. Enterprise-Commerce 50.000+ Artikel – ab 12 Tagen (ab 5.388 EUR): PIM/ERP-Integration, Suchindex, Monitoring.
+5. Web-App – 6-8 Tage (2.694-3.592 EUR; komplex ab 12 / ab 5.388 EUR): Login/Rollen, Dashboards, APIs, Workflows.
+6. Mobile App (iOS+Android, Cross-Platform) – 6-8 Tage (2.694-3.592 EUR; komplex ab 12 / ab 5.388 EUR).
+7. AI-Automatisierung – ab 1 Tag (ab 449 EUR): Prozessanalyse, E-Mail-/Dokumentenflows, CRM/ERP-Integration.
+8. AI-Agenten – ab 3 Tagen (ab 1.347 EUR): Rollen, Wissenszugriff, Tool-Anbindung, Freigaben, Monitoring.
 PROZESS: 1) Ziel & Nutzen klaeren 2) Konzept & Festpreisrahmen 3) AI-gestuetzte Umsetzung 4) Tests & Abnahme 5) Uebergabe & Weiterentwicklung.
 TECHNOLOGIE: Next.js, React, TypeScript, moderne Datenbanken, Supabase, Vercel oder Self-Hosting.
 """

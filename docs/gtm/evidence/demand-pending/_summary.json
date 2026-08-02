@@ -1,0 +1,11 @@
+{
+  "created_at": "2026-08-02T05:43:37Z",
+  "total_hits": 2,
+  "pending_legal_gate": 1,
+  "below_threshold": 1,
+  "files": [
+    "docs/gtm/evidence/demand-pending/2026-08-02_D01_websites_01.json"
+  ],
+  "demo": true,
+  "note": "Synthetic demo hits from --demo; replace with real scans."
+}

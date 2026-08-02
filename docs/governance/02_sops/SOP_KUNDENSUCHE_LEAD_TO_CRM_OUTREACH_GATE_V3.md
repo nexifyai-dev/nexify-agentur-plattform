@@ -8,3 +8,10 @@ Produkt/Leistung auswählen → Zielgruppe bewerten → rechtliche Grenzen prüf
 
 ## Verbot
 Keine Massenmails ohne Freigabe, kein Speichern sensibler Daten ohne Rechtsgrundlage, kein Scraping ohne Policy/Legal Gate, kein automatischer Versand in Stage 1.
+
+## GTM-Anbindung (kostenfreie Kanäle)
+Kanalregister, Offer-Snippets, Demand-Queries und Conversion-Loop:
+`docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md` · `docs/gtm/CHANNEL_REGISTER_V1.md` ·
+`docs/gtm/CONVERSION_LOOP_V1.md`.
+Demand-Treffer als CRM-Pending vorbereiten (kein Versand):
+`python3 scripts/gtm/demand_scan_prepare.py --input hits.json`.
