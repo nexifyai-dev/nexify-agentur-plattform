@@ -18,14 +18,12 @@ import { resendConfigured, sendOfferRequestNotification } from "@/lib/mail";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  // Align with backend OfferRequestIn (server.py) — extras must not be forwarded upstream.
   let body: {
     name?: string;
     email?: string;
     company?: string | null;
     phone?: string | null;
-    type?: string;
-    description?: string;
-    features?: string[];
     language?: string;
     session_id?: string;
   };
@@ -42,16 +40,20 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!body.session_id || !body.name) {
+    return NextResponse.json(
+      { error: "session_id und name sind erforderlich (Backend OfferRequestIn)." },
+      { status: 400 },
+    );
+  }
+
   const payload = {
+    session_id: body.session_id,
     name: body.name,
     email: body.email,
-    company: body.company,
-    phone: body.phone,
-    type: body.type,
-    description: body.description,
-    features: body.features,
-    language: body.language,
-    session_id: body.session_id,
+    company: body.company ?? null,
+    phone: body.phone ?? null,
+    language: body.language || "de",
   };
 
   try {

@@ -1,0 +1,22 @@
+# FILE: .github/codeql/codeql-config.yml
+# NIR: 02.08.2026 09:45
+# UPDATED: 02.08.2026 09:45
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: CodeQL path filters — exclude vendored Hermes WebUI noise.
+# WHY: Security Overview CodeQL warnings dominated by apps/hermes upstream.
+# BEST-PRACTICE: paths-ignore for third-party trees; keep product paths scanned.
+# PITFALL: V-SEC-03: Do not ignore backend/ or apps/website.
+# DEPENDS: .github/workflows/codeql.yml
+# DOCS-REF: https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning
+# SESSION: security-policy-7dd5
+
+name: NeXify CodeQL config
+
+paths-ignore:
+  - apps/hermes/**
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/.venv/**"
+  - "**/dist/**"
+  - "**/.next/**"
