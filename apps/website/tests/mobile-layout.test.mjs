@@ -38,6 +38,9 @@ test("mobile: header uses larger tap targets and scrollable menu", () => {
   assert.match(header, /size-11/);
   assert.match(header, /max-h-\[min\(80vh/);
   assert.match(header, /\/rueckruf/);
+  // Burger through tablet/lg; desktop nav only from xl — prevents logo/Leistungen overlap
+  assert.match(header, /xl:hidden/);
+  assert.match(header, /header-logo-link"[^>]*shrink-0/);
 });
 
 test("mobile: cookie banner offsets above chat on small screens", () => {
