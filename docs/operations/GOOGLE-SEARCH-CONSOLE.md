@@ -1,6 +1,6 @@
 # FILE: docs/operations/GOOGLE-SEARCH-CONSOLE.md
 # NIR: 02.08.2026 10:55
-# UPDATED: 02.08.2026 11:05
+# UPDATED: 02.08.2026 11:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps / GTM
 # WHAT: SoT — Google Search Console Domain-Ownership + Sitemap für nexifyai.cloud
@@ -86,14 +86,37 @@ In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (Rate-
 | P0 Home | `https://www.nexifyai.cloud/` |
 | P0 Preise | `https://www.nexifyai.cloud/preise` |
 | P0 Vergleich | `https://www.nexifyai.cloud/vergleich` |
-| P0 Leistungen | `https://www.nexifyai.cloud/leistungen` (+ `/leistungen/*`) |
-| P1 Branchen | `https://www.nexifyai.cloud/branchen` (+ `/branchen/*` wenn in Sitemap) |
+| P0 Leistungen Hub | `https://www.nexifyai.cloud/leistungen` |
+| P0 Landingpages | `https://www.nexifyai.cloud/leistungen/landingpages` |
+| P0 Websites | `https://www.nexifyai.cloud/leistungen/websites` |
+| P0 Onlineshops | `https://www.nexifyai.cloud/leistungen/onlineshops` |
+| P0 Enterprise-Commerce | `https://www.nexifyai.cloud/leistungen/enterprise-commerce` |
+| P0 Web-Apps | `https://www.nexifyai.cloud/leistungen/web-apps` |
+| P0 Mobile Apps | `https://www.nexifyai.cloud/leistungen/mobile-apps` |
+| P0 Automatisierung | `https://www.nexifyai.cloud/leistungen/automatisierung` |
+| P0 AI-Agenten | `https://www.nexifyai.cloud/leistungen/ai-agenten` |
+| P0 KI-Begleiter | `https://www.nexifyai.cloud/leistungen/ki-begleiter` |
+| P0 Kundenportal | `https://www.nexifyai.cloud/leistungen/kundenportal` |
+| P0 KI-Plattform | `https://www.nexifyai.cloud/leistungen/ki-plattform` |
+| P0 KI-Beratung | `https://www.nexifyai.cloud/leistungen/beratung` |
+| P0 Workshops | `https://www.nexifyai.cloud/leistungen/workshops` |
+| P0 White-Label | `https://www.nexifyai.cloud/leistungen/white-label` |
+| P0 KI-/Prozess-Audit | `https://www.nexifyai.cloud/leistungen/audit` |
+| P0 Audit (Alias) | `https://www.nexifyai.cloud/audit` |
+| P1 Branchen Hub | `https://www.nexifyai.cloud/branchen` |
+| P1 Handwerk | `https://www.nexifyai.cloud/branchen/handwerk` |
+| P1 Steuerberater | `https://www.nexifyai.cloud/branchen/steuerberater` |
+| P1 E-Commerce | `https://www.nexifyai.cloud/branchen/ecommerce` |
+| P1 Immobilien | `https://www.nexifyai.cloud/branchen/immobilien` |
+| P1 Agenturen | `https://www.nexifyai.cloud/branchen/agenturen` |
 | P1 Checkliste | `https://www.nexifyai.cloud/checkliste` |
 | P1 Plattform | `https://www.nexifyai.cloud/plattform` |
 | P1 Rückruf | `https://www.nexifyai.cloud/rueckruf` |
 | P1 Kontakt | `https://www.nexifyai.cloud/kontakt` |
 
-**3 empfohlene Human-Clicks zuerst:** Home → Preise → Vergleich (URL-Inspection).
+**Quelle der 15× `/leistungen/[slug]` + Branchen:** PR #252 / `docs/gtm/PAGE1-KEYWORD-MAP.md` (nach Deploy live prüfen).
+
+**3 empfohlene Human-Clicks zuerst:** Home → Preise → Vergleich (URL-Inspection); danach die 15 Leistungs-Landings in Batches (GSC Rate-Limit).
 
 ## Empfohlene sekundäre Verify-Methoden (optional)
 
