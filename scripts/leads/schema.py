@@ -1,14 +1,14 @@
 # FILE: /scripts/leads/schema.py
 # NIR: 02.08.2026 10:40
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
-# WHAT: Lead queue schema + status machine + normalization
+# WHAT: Lead queue schema + status machine + normalization (UWG consent fields)
 # WHY: Shared CSV/JSON queue for discover → research → contact → reply → won/lost
-# BEST-PRACTICE: Explicit legal_basis + source_url on every record
-# PITFALL: V-LEAD-02: Refuse purchased_list / consumer personal emails
+# BEST-PRACTICE: Explicit consent + source_url; never treat LI as email-send basis
+# PITFALL: V-LEAD-02/UWG-01: Refuse purchased_list; seeds ≠ consent (§7 UWG)
 # DEPENDS: stdlib only
-# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md
+# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # SESSION: zero-cost-leads-mailing-7dd5
 
 from __future__ import annotations
@@ -100,6 +100,23 @@ FREEMAIL = frozenset(
     }
 )
 
+# Own-domain self-test may send without external opt-in (SMTP smoke only).
+SELF_TEST_DOMAINS = frozenset({"nexifyai.cloud", "nexifyai.nl", "nexifyai.de"})
+
+OPTIN_SOURCE_TYPES = frozenset(
+    {
+        "optin",
+        "opt_in",
+        "consent",
+        "form",
+        "checkliste",
+        "kontakt",
+        "newsletter",
+        "booking",
+        "self_test",
+    }
+)
+
 FIELDNAMES = [
     "id",
     "company",
@@ -113,6 +130,8 @@ FIELDNAMES = [
     "service_slug",
     "contact_reason",
     "legal_basis",
+    "consent",
+    "consent_recorded_at",
     "status",
     "send_allowed",
     "do_not_mail",
@@ -141,6 +160,24 @@ def is_business_email(email: str) -> bool:
     return True
 
 
+def email_domain(email: str) -> str:
+    return (email or "").strip().lower().partition("@")[2]
+
+
+def is_self_test_email(email: str) -> bool:
+    """Own-domain addresses only — SMTP self-test, not external cold mail."""
+    return email_domain(email) in SELF_TEST_DOMAINS
+
+
+def has_send_consent(lead: dict[str, Any]) -> bool:
+    """§7 UWG: explicit consent, or self-test to own domain."""
+    if lead.get("consent") is True:
+        return True
+    if is_self_test_email(lead.get("email") or ""):
+        return True
+    return False
+
+
 def normalize_lead(raw: dict[str, Any]) -> dict[str, Any]:
     email = (raw.get("email") or raw.get("contact_email") or "").strip().lower()
     company = (raw.get("company") or raw.get("name") or "").strip()
@@ -153,6 +190,13 @@ def normalize_lead(raw: dict[str, Any]) -> dict[str, Any]:
     if status not in STATUSES:
         status = "new"
     now = utc_now()
+    consent = raw.get("consent") is True
+    # Seeds / scrape never imply consent — only explicit true or self-test domain.
+    if is_self_test_email(email) and raw.get("source_type") == "self_test":
+        consent = True
+    legal = (raw.get("legal_basis") or "").strip()
+    if not legal:
+        legal = "consent" if consent else "opt_in_required"
     return {
         "id": raw.get("id") or lead_id(company, website, email),
         "company": company,
@@ -167,7 +211,9 @@ def normalize_lead(raw: dict[str, Any]) -> dict[str, Any]:
         "region": (raw.get("region") or "DACH").strip(),
         "service_slug": (raw.get("service_slug") or "ai-agenten").strip(),
         "contact_reason": (raw.get("contact_reason") or raw.get("enrichment_summary") or "").strip(),
-        "legal_basis": (raw.get("legal_basis") or "legitimate_interest_b2b_uwg").strip(),
+        "legal_basis": legal,
+        "consent": consent,
+        "consent_recorded_at": raw.get("consent_recorded_at"),
         "status": status,
         "send_allowed": bool(raw.get("send_allowed", False)),
         "do_not_mail": bool(raw.get("do_not_mail", False)),
@@ -269,6 +315,7 @@ def export_csv(path: Path, leads: Iterable[dict[str, Any]]) -> None:
             row = dict(row)
             row["send_allowed"] = "true" if row.get("send_allowed") else "false"
             row["do_not_mail"] = "true" if row.get("do_not_mail") else "false"
+            row["consent"] = "true" if row.get("consent") else "false"
             w.writerow({k: row.get(k, "") for k in FIELDNAMES})
 
 
@@ -287,6 +334,7 @@ def set_status(lead: dict[str, Any], status: str, **extra: Any) -> dict[str, Any
 
 
 def to_outreach_record(lead: dict[str, Any]) -> dict[str, Any]:
+    consent = has_send_consent(lead)
     return {
         "id": lead.get("id"),
         "company": lead.get("company"),
@@ -297,9 +345,12 @@ def to_outreach_record(lead: dict[str, Any]) -> dict[str, Any]:
         "source_type": lead.get("source_type") or "public_website",
         "service_slug": lead.get("service_slug") or "ai-agenten",
         "contact_reason": lead.get("contact_reason"),
-        "legal_basis": lead.get("legal_basis") or "legitimate_interest_b2b_uwg",
+        "legal_basis": lead.get("legal_basis") or ("consent" if consent else "opt_in_required"),
+        "consent": consent,
+        "consent_recorded_at": lead.get("consent_recorded_at"),
         "region": lead.get("region") or "DACH",
         "status": OUTREACH_STATUS_MAP.get(lead.get("status") or "new", "scraped"),
-        "send_allowed": bool(lead.get("send_allowed")),
+        # Never promote scrape seeds as send_allowed unless consent/self-test.
+        "send_allowed": bool(lead.get("send_allowed")) and consent,
         "role_hypothesis": lead.get("role_hypothesis"),
     }

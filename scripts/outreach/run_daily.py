@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # FILE: /scripts/outreach/run_daily.py
 # NIR: 02.08.2026 09:20
-# UPDATED: 02.08.2026 09:20
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
-# WHAT: CLI entry — daily lead outreach job (Hostinger SMTP drip)
+# WHAT: CLI entry — daily lead outreach job (Hostinger SMTP drip, opt-in only)
 # WHY: Cron / GitHub Actions / Cursor Agent invoke one command
 # BEST-PRACTICE: Exit 2 = human-gate (missing SMTP); 0 = ok; 1 = soft errors
-# PITFALL: V-OUT-06: Never print passwords; load /etc/nexifyai/secrets.env if present
+# PITFALL: V-OUT-06/UWG-01: Never print passwords; --live requires consent=true leads
 # DEPENDS: scripts/outreach/*
-# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
-# SESSION: lead-outreach-automation-7dd5
+# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
+# SESSION: zero-cost-leads-mailing-7dd5
 
 from __future__ import annotations
 
@@ -54,11 +54,13 @@ def _load_secrets_file(path: str) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="NeXify AI daily lead outreach")
+    parser = argparse.ArgumentParser(
+        description="NeXify AI daily lead outreach (opt-in / §7 UWG)"
+    )
     parser.add_argument(
         "--live",
         action="store_true",
-        help="Actually send (also set OUTREACH_LIVE=1)",
+        help="Actually send (OUTREACH_LIVE=1); leads MUST have consent=true",
     )
     parser.add_argument(
         "--dry-run",
@@ -81,6 +83,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.live:
         os.environ["OUTREACH_LIVE"] = "1"
+        logger.warning(
+            "UWG-WARN (§7): --live only for opt-in leads with consent=true. "
+            "Cold email without consent is illegal in DE (also B2B)."
+        )
     if args.dry_run:
         os.environ["OUTREACH_LIVE"] = "0"
 

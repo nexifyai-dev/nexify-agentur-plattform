@@ -94,7 +94,7 @@ def build_html_body(
       text-decoration:none;padding:10px 18px;border-radius:999px;font-weight:600;">Rückruf buchen</a>
   </p>
   <p style="margin-top:24px;font-size:12px;color:#888;">
-    B2B-Kontakt · berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO / UWG B2B) · Quelle: {src}.
+    B2B-Kontakt · Opt-in / bestehende Anfrage · Quelle: {src}.
     <a href="{escape(unsubscribe_url)}" style="color:#aaa;">Abmelden</a> ·
     <a href="{SITE}/datenschutz" style="color:#aaa;">Datenschutz</a>
   </p>

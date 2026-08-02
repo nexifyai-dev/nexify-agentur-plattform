@@ -1,14 +1,14 @@
 # FILE: /scripts/leads/mail_batch.py
 # NIR: 02.08.2026 10:40
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
-# WHAT: Rate-limited Hostinger SMTP batch — dry-run default, --send for live
+# WHAT: Rate-limited Hostinger SMTP batch — dry-run default; --send needs consent
 # WHY: Activate first compliant B2B mails without Resend cold-quota burn
-# BEST-PRACTICE: Cap small (≤10 first batch); require send_allowed + business email
-# PITFALL: V-LEAD-05: Never print passwords; load mail-nexifyai.env quietly
+# BEST-PRACTICE: Cap small; require send_allowed + consent=true (§7 UWG) or self-test
+# PITFALL: V-LEAD-05/UWG-01: Never print passwords; seeds ≠ consent; no cold DE mail
 # DEPENDS: schema, templates_ai_begleiter, scripts/outreach/smtp_hostinger
-# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md
+# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # SESSION: zero-cost-leads-mailing-7dd5
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from leads.schema import (
+    has_send_consent,
     is_business_email,
     load_queue,
     queue_path,
@@ -104,11 +105,18 @@ def _unsubscribe_url(email: str) -> str:
     return f"{base}?email={quote(email)}&token={unsub_token(email)}"
 
 
-def eligible(lead: dict[str, Any], *, require_send_allowed: bool = True) -> str | None:
+def eligible(
+    lead: dict[str, Any],
+    *,
+    require_send_allowed: bool = True,
+    require_consent: bool = True,
+) -> str | None:
     if lead.get("do_not_mail"):
         return "do_not_mail"
     if require_send_allowed and not lead.get("send_allowed"):
         return "send_allowed=false"
+    if require_consent and not has_send_consent(lead):
+        return "missing_consent"
     if lead.get("status") not in {"researched", "new"}:
         return f"status={lead.get('status')}"
     if not lead.get("email") or not is_business_email(lead["email"]):
@@ -132,9 +140,16 @@ def run_batch(
     result = BatchResult()
     creds = _smtp_creds()
     booking = booking_url or os.environ.get("OUTREACH_BOOKING_URL") or tpl.BOOKING_DEFAULT
+    # Live send always requires §7 UWG consent (or self-test domain).
+    # Dry-run may preview researched+send_allowed without consent.
+    require_consent = bool(send)
     candidates = []
     for lead in leads:
-        why = eligible(lead, require_send_allowed=require_send_allowed)
+        why = eligible(
+            lead,
+            require_send_allowed=require_send_allowed,
+            require_consent=require_consent,
+        )
         if why:
             result.skipped += 1
             result.details.append({"id": lead.get("id"), "company": lead.get("company"), "skip": why})
@@ -155,6 +170,14 @@ def run_batch(
         if not send:
             result.dry_run += 1
             detail["mode"] = "dry-run"
+            if not has_send_consent(lead):
+                detail["uwg_note"] = "dry-run_ok_but_live_blocked_without_consent"
+            result.details.append(detail)
+            continue
+        # Defense in depth: never SMTP without consent gate
+        if not has_send_consent(lead):
+            result.skipped += 1
+            detail["skip"] = "missing_consent"
             result.details.append(detail)
             continue
         if not creds["password"] or not creds["user"]:

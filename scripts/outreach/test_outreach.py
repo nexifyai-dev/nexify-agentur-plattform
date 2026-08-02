@@ -49,12 +49,30 @@ class StoreGateTests(unittest.TestCase):
                 "source": "purchased_list",
                 "source_type": "purchased_list",
                 "send_allowed": True,
+                "consent": True,
                 "status": "outreach_pending",
             }
         )
         self.assertEqual(
             store.validate_for_send(lead, require_send_allowed=True),
             "forbidden_source",
+        )
+
+    def test_requires_consent(self):
+        lead = store.normalize_lead(
+            {
+                "email": "info@acme.test",
+                "company": "Acme",
+                "source": "D01",
+                "source_url": "https://example.com",
+                "status": "outreach_pending",
+                "send_allowed": True,
+                "consent": False,
+            }
+        )
+        self.assertEqual(
+            store.validate_for_send(lead, require_send_allowed=True),
+            "missing_consent",
         )
 
     def test_requires_send_allowed(self):
@@ -66,6 +84,7 @@ class StoreGateTests(unittest.TestCase):
                 "source_url": "https://example.com",
                 "status": "outreach_pending",
                 "send_allowed": False,
+                "consent": True,
             }
         )
         self.assertEqual(
@@ -78,13 +97,16 @@ class StoreGateTests(unittest.TestCase):
             {
                 "email": "info@acme.test",
                 "company": "Acme",
-                "source": "D01",
+                "source": "checkliste",
                 "source_url": "https://example.com",
                 "status": "outreach_pending",
                 "send_allowed": True,
+                "consent": True,
             }
         )
         self.assertIsNone(store.validate_for_send(lead, require_send_allowed=True))
+        self.assertTrue(lead["consent"])
+        self.assertEqual(lead["legal_basis"], "opt_in_required")  # default until promote
 
 
 class TemplateTests(unittest.TestCase):
@@ -118,11 +140,13 @@ class RunnerDryRunTests(unittest.TestCase):
             lead = {
                 "email": "ceo@example-b2b.test",
                 "company": "Example B2B",
-                "source": "public_web",
+                "source": "checkliste",
                 "source_url": "https://example-b2b.test",
                 "status": "outreach_pending",
                 "send_allowed": True,
-                "contact_reason": "Website ohne klare CTA",
+                "consent": True,
+                "legal_basis": "consent",
+                "contact_reason": "Opt-in Checkliste",
             }
             (queue / "batch.jsonl").write_text(
                 json.dumps(lead) + "\n", encoding="utf-8"

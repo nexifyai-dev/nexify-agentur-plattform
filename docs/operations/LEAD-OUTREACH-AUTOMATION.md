@@ -1,15 +1,15 @@
 # FILE: /docs/operations/LEAD-OUTREACH-AUTOMATION.md
 # NIR: 02.08.2026 09:20
-# UPDATED: 02.08.2026 09:20
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Hostinger+Resend split, daily cap, GDPR, enablement for lead outreach
-# WHY: Cursor-Agent pattern for scraped-lead mailings without spam/Resend burn
-# BEST-PRACTICE: Cold = Hostinger SMTP; transactional = Resend; ≤800/day hard cap
-# PITFALL: V-OUT-01/05: Never raise cap above 800; never cold-mail via Resend
+# WHAT: Hostinger+Resend split, daily cap, GDPR + §7 UWG opt-in for lead outreach
+# WHY: Cursor-Agent pattern for lead mailings without spam/Resend burn / illegal cold
+# BEST-PRACTICE: Cold = Hostinger SMTP + consent=true; transactional = Resend; ≤800/day
+# PITFALL: V-OUT-01/05/UWG-01: Never raise cap above 800; never cold without consent
 # DEPENDS: scripts/outreach/*, .github/workflows/lead-outreach-daily.yml
-# DOCS-REF: docs/governance/02_sops/SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.md
-# SESSION: lead-outreach-automation-7dd5
+# DOCS-REF: docs/gtm/UWG-EMAIL-OPTIN-ONLY.md, docs/governance/02_sops/SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.md
+# SESSION: zero-cost-leads-mailing-7dd5
 
 # Lead Outreach Automation
 
@@ -32,19 +32,21 @@ Backend `send_email()` still falls back SMTP→Resend for transactional paths. *
 |-------|-------|-----|
 | Daily send cap | **≤ 800** (`HARD_DAILY_CAP`) | `OUTREACH_DAILY_CAP` (clamped ≤800) |
 | Pacing | 30–60s jitter between mails | `OUTREACH_PACE_MIN_SEC` / `OUTREACH_PACE_MAX_SEC` |
-| Live send | Off unless `OUTREACH_LIVE=1` | Schedule defaults dry-run |
+| Live send | Off unless `OUTREACH_LIVE=1` **and** `consent=true` | CI workflow **forced dry-run** |
 | Source ban | No `purchased_list` / spam lists | `source_type` gate |
+| Consent | `consent=true` required for send | §7 UWG (also B2B) |
 
-## GDPR / EU
+## GDPR / UWG (DE)
 
-- Store **source** + **legal_basis** (default `legitimate_interest_b2b`) on every lead.
+- Store **source** + **consent** + **legal_basis** on every lead.
+- Default legal basis for scrapes: `opt_in_required` — **not** legitimate interest as send gate.
 - Every mail includes **unsubscribe** link + Impressum/Datenschutz.
-- `send_allowed` must be true (or `OUTREACH_REQUIRE_SEND_ALLOWED=0` for controlled tests).
-- No consumer spam lists; B2B professional tone (DE templates).
-- Aligns with SOP gate: promote with `--allow-send` only after policy review for a batch.
+- `send_allowed` must be true **and** `consent=true` for live send.
+- Seeds / public Impressum harvest ≠ consent (see issue #247).
+- Aligns with SOP gate: promote with `--allow-send` only when `consent=true`.
+- Daily Actions workflow never sets `OUTREACH_LIVE=1`.
 
 Unsubscribe API: `GET/POST https://www.nexifyai.cloud/api/outreach/unsubscribe?email=&token=`
-
 ## Firecrawl (local OSS)
 
 | From | URL |

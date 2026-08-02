@@ -1,14 +1,14 @@
 # FILE: /docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md
 # NIR: 02.08.2026 10:45
-# UPDATED: 02.08.2026 10:45
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
-# WHAT: Weekly zero-cost lead discovery + compliant mailing + free-channel cadence
+# WHAT: Weekly zero-cost lead discovery + UWG-safe mailing + free-channel cadence
 # WHY: Activate customer acquisition without paid ads or new SaaS
-# BEST-PRACTICE: Discover → allow gate → dry-run → small send; Hostinger cold / Resend transactional
-# PITFALL: V-GTM-ZC-01: No spam lists; no WhatsApp LLM cron; coordinate open GTM PRs
+# BEST-PRACTICE: Discover → allow (preview) → dry-run → consent → small send; Hostinger cold / Resend transactional
+# PITFALL: V-GTM-ZC-01/UWG-01: Seeds ≠ consent; no cold DE mail; no WhatsApp LLM cron
 # DEPENDS: scripts/leads/*, scripts/outreach/*, docs/gtm/FREE-ACQUISITION-PLAYBOOK-DACH.md (#175)
-# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
+# DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # SESSION: zero-cost-leads-mailing-7dd5
 
 # Zero-Cost Acquisition Playbook (aktiv)
@@ -41,13 +41,19 @@
 
 Dieses Playbook **aktiviert** Demand (Leads + Mail). Supply bleibt Eigentum von #175.
 
-## Legal (DACH) — Hard Rules
+## Legal (DACH) — Hard Rules (§7 UWG)
 
-1. Nur **geschäftliche** Adressen (Firmen-Domain `info@`/`kontakt@`/…) oder öffentliche Kontaktformulare.
-2. Quelle + `legal_basis=legitimate_interest_b2b_uwg` speichern; kein Leak-/Kauf-Listen-Import.
-3. Jede Mail: Identität NeXifyAI, KvK, Abmelde-Link, keine Fake-Metriken.
-4. Kammern/Verbände (IHK/HWK/Bitkom) = **Quellen**, nicht Cold-Sales-Ziele.
-5. Resend = transactional (Kontaktformular). Cold = **Hostinger** (`/etc/nexifyai/mail-nexifyai.env`).
+> Vollständig: [`docs/gtm/UWG-EMAIL-OPTIN-ONLY.md`](./UWG-EMAIL-OPTIN-ONLY.md)
+
+1. **Keine Cold-E-Mail ohne Einwilligung** — gilt **auch B2B** (§7 UWG).
+2. Nur **geschäftliche** Adressen oder öffentliche Kontaktformulare (Discovery).
+3. Quelle speichern; Default `legal_basis=opt_in_required` — **nicht** `legitimate_interest` als Send-Gate.
+4. Live-Send braucht `consent=true` (Formular/Checkliste/Kontakt) **oder** Self-Test `@nexifyai.*`.
+5. **Seeds ≠ Consent.** `allow` setzt nur `send_allowed` für Dry-Run-Preview — kein Opt-in.
+6. Jede Mail: Identität NeXifyAI, KvK, Abmelde-Link, keine Fake-Metriken.
+7. Kammern/Verbände (IHK/HWK/Bitkom) = **Quellen**, nicht Cold-Sales-Ziele.
+8. Resend = transactional. Cold = **Hostinger** — aber CI-Workflow `lead-outreach-daily.yml` ist **forced dry-run**.
+9. Kein Leak-/Kauf-Listen-Import.
 
 ## Wöchentlicher Agent-Cadence (Pflicht bei GTM-Arbeit)
 
@@ -55,29 +61,32 @@ Dieses Playbook **aktiviert** Demand (Leads + Mail). Supply bleibt Eigentum von 
 # 0) Env laden (Keys existieren lokal — nie committen)
 #    /etc/nexifyai/mail-nexifyai.env  + optional secrets.env
 
-# 1) Discover öffentliche Kontaktseiten
+# 1) Discover öffentliche Kontaktseiten (≠ Consent!)
 python3 scripts/leads/run_pipeline.py discover \
   --seed data/leads/seeds/dach_smb_agencies.json --limit 20
 
 # 2) Queue prüfen
 python3 scripts/leads/run_pipeline.py status
 
-# 3) Policy-Gate (nur klare B2B-Treffer)
+# 3) Policy-Gate für Dry-Run-Preview (setzt KEIN consent)
 python3 scripts/leads/run_pipeline.py allow --limit 8
 
-# 4) Dry-run (immer zuerst)
+# 4) Dry-run (immer zuerst; default)
 python3 scripts/leads/run_pipeline.py mail --limit 8
 
-# 5) Kleiner Live-Batch (nur wenn Dry-run + SMTP OK)
-python3 scripts/leads/run_pipeline.py mail --send --limit 8
+# 5) Consent NUR nach echtem Opt-in (nie aus Seeds)
+# python3 scripts/leads/run_pipeline.py consent --email … --source-type checkliste
 
-# 6) Optional: in Outreach-Drip (#173) überführen
+# 6) Live nur mit consent=true ODER Self-Test @nexifyai.*
+# python3 scripts/leads/run_pipeline.py mail --send --limit 1
+
+# 7) Optional: in Outreach-Drip überführen (send_allowed nur bei consent)
 python3 scripts/leads/run_pipeline.py promote --allow-send
 python3 scripts/outreach/run_daily.py --dry-run
 ```
 
-**Cursor-Regel:** Bei GTM-Tasks Queue vorrücken (discover/status/allow/mail dry-run) — siehe `.cursor/rules/60-proactive-acquisition-gaps.mdc`.
-
+**Cursor-Regel:** Bei GTM-Tasks Queue vorrücken (discover/status/allow/mail dry-run) — siehe `.cursor/rules/60-proactive-acquisition-gaps.mdc`.  
+**Verboten:** täglicher Live-Cold-Send aus Actions bis Consent-Queue existiert.
 ## Freie Kanäle jenseits Mail (diese Woche)
 
 | Tag | Aktion | Owner |
@@ -124,8 +133,8 @@ OUTREACH_BOOKING_URL=https://www.nexifyai.cloud/rueckruf
 
 ## Erwartete 7-Tage-Actions (kostenfrei)
 
-1. 2× Discover-Läufe (≥20 neue Firmen-URLs in Queue).
-2. ≥1 Dry-run + 1 kleiner Send-Batch (5–10) **oder** Human-Command dokumentiert.
+1. 2× Discover-Läufe (≥20 neue Firmen-URLs in Queue) — **ohne** Live-Send.
+2. ≥1 Dry-run Mail; Live nur Self-Test `@nexifyai.*` oder echte `consent=true` Opt-ins.
 3. 3 LinkedIn-Posts (manuell) aus Drafts.
 4. 2 Verzeichnis-Submits (Human klickt).
 5. 5 Warm-Intros (Partner/Steuerberater/SEO-Freelancer).
@@ -149,6 +158,10 @@ with smtplib.SMTP_SSL(os.environ['SMTP_HOST'], int(os.environ.get('SMTP_PORT','4
 print('SMTP_OK')
 PY
 
+# Dry-run only — seeds/allow ≠ consent (§7 UWG)
 python3 scripts/leads/run_pipeline.py allow --limit 8
-python3 scripts/leads/run_pipeline.py mail --send --limit 8
+python3 scripts/leads/run_pipeline.py mail --limit 8
+
+# Self-test to own domain OK (not external cold):
+# python3 scripts/leads/run_pipeline.py mail --send --limit 1
 ```

@@ -1,14 +1,14 @@
 # FILE: /scripts/leads/test_leads.py
 # NIR: 02.08.2026 10:40
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
-# WHAT: Unit tests for lead schema + dry-run mail eligibility
+# WHAT: Unit tests for lead schema + dry-run mail + UWG consent gates
 # WHY: CI-safe coverage without live SMTP
 # BEST-PRACTICE: No network in default tests
-# PITFALL: V-LEAD-07: Do not assert on real third-party inboxes
+# PITFALL: V-LEAD-07/UWG-01: Do not assert on real third-party inboxes; seeds ≠ consent
 # DEPENDS: schema, templates_ai_begleiter, mail_batch
-# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md
+# DOCS-REF: docs/gtm/ZERO-COST-ACQUISITION-PLAYBOOK.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # SESSION: zero-cost-leads-mailing-7dd5
 
 from __future__ import annotations
@@ -19,8 +19,8 @@ from pathlib import Path
 
 from leads.mail_batch import eligible, run_batch
 from leads.schema import (
-    append_leads, export_csv, is_business_email, load_queue,
-    normalize_lead, queue_path, to_outreach_record, validate_for_queue,
+    append_leads, export_csv, has_send_consent, is_business_email, is_self_test_email,
+    load_queue, normalize_lead, queue_path, to_outreach_record, validate_for_queue,
 )
 from leads import templates_ai_begleiter as tpl
 
@@ -47,8 +47,33 @@ class SchemaTests(unittest.TestCase):
 
     def test_outreach_map(self):
         lead = normalize_lead({"company": "A", "email": "info@a.example",
-                               "website": "https://a.example", "status": "researched", "send_allowed": True})
+                               "website": "https://a.example", "status": "researched",
+                               "send_allowed": True, "consent": True})
         self.assertEqual(to_outreach_record(lead)["status"], "outreach_pending")
+        self.assertTrue(to_outreach_record(lead)["consent"])
+
+    def test_seeds_not_consent(self):
+        lead = normalize_lead({
+            "company": "Seed GmbH",
+            "email": "info@seed.example",
+            "website": "https://seed.example",
+            "source_type": "public_website",
+            "send_allowed": True,
+        })
+        self.assertFalse(lead["consent"])
+        self.assertEqual(lead["legal_basis"], "opt_in_required")
+        self.assertFalse(has_send_consent(lead))
+
+    def test_self_test_domain(self):
+        self.assertTrue(is_self_test_email("mail@nexifyai.cloud"))
+        lead = normalize_lead({
+            "company": "NeXify",
+            "email": "mail@nexifyai.cloud",
+            "website": "https://www.nexifyai.cloud",
+            "source_type": "self_test",
+            "send_allowed": True,
+        })
+        self.assertTrue(has_send_consent(lead))
 
 
 class TemplateTests(unittest.TestCase):
@@ -63,14 +88,34 @@ class TemplateTests(unittest.TestCase):
 
 
 class MailBatchTests(unittest.TestCase):
-    def test_dry_run(self):
+    def test_dry_run_without_consent(self):
         leads = [normalize_lead({"company": "Ok GmbH", "email": "info@ok.example",
                                  "website": "https://ok.example", "status": "researched",
                                  "send_allowed": True})]
-        self.assertIsNone(eligible(leads[0]))
+        self.assertIsNone(eligible(leads[0], require_consent=False))
+        self.assertEqual(eligible(leads[0], require_consent=True), "missing_consent")
         result = run_batch(leads, send=False, limit=5)
         self.assertEqual(result.dry_run, 1)
         self.assertEqual(result.sent, 0)
+
+    def test_send_blocked_without_consent(self):
+        leads = [normalize_lead({"company": "Ok GmbH", "email": "info@ok.example",
+                                 "website": "https://ok.example", "status": "researched",
+                                 "send_allowed": True})]
+        result = run_batch(leads, send=True, limit=5)
+        self.assertEqual(result.sent, 0)
+        self.assertGreaterEqual(result.skipped, 1)
+        self.assertTrue(any(d.get("skip") == "missing_consent" for d in result.details))
+
+    def test_send_eligible_with_consent(self):
+        leads = [normalize_lead({"company": "Ok GmbH", "email": "info@ok.example",
+                                 "website": "https://ok.example", "status": "researched",
+                                 "send_allowed": True, "consent": True,
+                                 "legal_basis": "consent"})]
+        self.assertIsNone(eligible(leads[0], require_consent=True))
+        # dry-run path (no SMTP) with consent still ok
+        result = run_batch(leads, send=False, limit=5)
+        self.assertEqual(result.dry_run, 1)
 
 
 if __name__ == "__main__":
