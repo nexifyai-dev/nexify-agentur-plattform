@@ -16,6 +16,9 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/** Hard-404 unknown first segments (e.g. /branchen before page ships) — prevents soft-404 homepage clones in GSC. */
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};

@@ -49,7 +49,7 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | A08 | Retargeting nur organisch (kein Ad-Spend) | open | LinkedIn organic + remarketing-free only |
 | A09 | Exit-Intent / Sticky CTA Verbesserungen | **shipped** | Sticky + Exit-Intent Modal (#208) |
 | A10 | Trust: Testimonials/Logos/SLA | pipeline | #211 Permission-Pipeline; Widget erst nach ≥1 Erlaubnis |
-| A11 | GSC Verification Meta/Property | open | Human — Search Console Verify |
+| A11 | GSC Verification Meta/Property | **done** (DNS+Sitemap 2026-08-02) | Owner `nexify.login@gmail.com`; next: URL-Inspection #243 + weekly #245 · SoT `docs/operations/GOOGLE-SEARCH-CONSOLE.md` |
 | A12 | Comparison: „KI Agentur vs Freelance“ Subpages | open | Follow-up Content nach `/vergleich` |
 
 ---
@@ -76,7 +76,7 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | Spaether public DNS | NXDOMAIN | Decision: deprecate public until use-case (#209) |
 | Paperclip :3100 | intentional down | KEEP Factory SoT; no auto-revive (#209) |
 | Grafana/Prometheus/OpenDesign | RUNTIME-DOWN (bootstrap WARN) | Ops — CF-Tunnel |
-| Google Search Console | unverifiziert? | Human Issue |
+| Google Search Console | Owner verified + Sitemap submitted | #243 Inspection/Prefs · #245 weekly coverage |
 | #123 secrets+runner | open P0 human-gate | wait |
 | #201 legal Stammdaten | open human-gate | wait |
 
@@ -107,5 +107,3 @@ python3 scripts/learning/note-acquisition-gaps.py --summary "…"
 ```
 
 Oder manuell: 1–3 Acquisition-Opportunities in AgentMemory speichern + Radar updaten.
-
-| 2026-08-02 | SEO/AEO full-service landings + PAGE1 keyword map | cursor/seo-page1-all-services-7dd5 | **shipping** |
