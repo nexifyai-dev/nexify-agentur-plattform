@@ -71,11 +71,26 @@ const nextConfig: NextConfig = {
     { source: "/demo-call", destination: "https://calendly.com/pascal-courbois/30min", permanent: false },
   ],
   rewrites: async () => {
-    const rewrites = [
+    // Prefer explicit app/api/* route handlers (contact, offers, planner, chat,
+    // catch-all auth proxy). A blanket rewrite to an empty/invalid
+    // BACKEND_ORIGIN produced Vercel DNS_HOSTNAME_EMPTY 502s for /api/auth/*
+    // and /api/chat/* in production. Only rewrite when the origin parses to a
+    // real http(s) hostname — and never shadow local handlers for known paths.
+    const rewrites: { source: string; destination: string }[] = [
       { source: "/docs/vollbetrieb", destination: "/docs/vollbetrieb.md" },
     ];
-    if (process.env.BACKEND_ORIGIN) {
-      rewrites.push({ source: "/api/:path*", destination: `${process.env.BACKEND_ORIGIN}/api/:path*` });
+    const origin = (process.env.BACKEND_ORIGIN || "").trim().replace(/\/$/, "");
+    let usable = false;
+    try {
+      const u = new URL(origin);
+      usable = (u.protocol === "http:" || u.protocol === "https:") && Boolean(u.hostname);
+    } catch {
+      usable = false;
+    }
+    if (usable) {
+      // Paths without dedicated Next handlers still reach FastAPI via rewrite.
+      // Handlers that exist under app/api/* take filesystem precedence in Next.
+      rewrites.push({ source: "/api/:path*", destination: `${origin}/api/:path*` });
     }
     return rewrites;
   },

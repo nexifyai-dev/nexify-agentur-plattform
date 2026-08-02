@@ -115,7 +115,9 @@ export function SiteHeader() {
           <button
             className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 text-white lg:hidden"
             onClick={() => setOpen(!open)}
-            aria-label="Menü"
+            aria-label={open ? "Menü schließen" : "Menü öffnen"}
+            aria-expanded={open}
+            aria-controls="mobile-nav-menu"
             data-testid="mobile-menu-toggle"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -124,8 +126,8 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden" data-testid="mobile-menu">
-          <nav className="site-container flex flex-col gap-1 py-4">
+        <div id="mobile-nav-menu" className="border-t border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden" data-testid="mobile-menu" role="dialog" aria-label="Navigation">
+          <nav className="site-container flex flex-col gap-1 py-4" aria-label="Mobile">
             {NAV[lang].map((item) => (
               <Link
                 key={item.href}

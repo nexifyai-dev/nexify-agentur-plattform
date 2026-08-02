@@ -18,35 +18,39 @@ export function apiErr(detail: unknown): string {
   return String(detail);
 }
 
-export const API_FALLBACK = "https://admin.nexifyai.cloud";  // fallback when same-origin rewrite is not deployed
+export const API_FALLBACK = "https://admin.nexifyai.cloud"; // legacy reference only — not used for credentialed auth
 
-export async function api(path: string, options: RequestInit = {}) {
-  // Try same-origin first (works when BACKEND_ORIGIN rewrite is active)
-  let res = await fetch(`${API_BASE}${path}`, {
+export async function api<T = any>(path: string, options: RequestInit = {}): Promise<T> {
+  // Same-origin first (local app/api handlers + catch-all proxy).
+  // Do NOT rely on cross-origin API_FALLBACK for credentialed auth — cookies
+  // would not stick on www.nexifyai.cloud, and admin DNS may be unresolved.
+  const res = await fetch(`${API_BASE}${path}`, {
     credentials: "include",
     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
     ...options,
   });
 
-  // If same-origin fails and we have a fallback, try the admin domain
-  if (!res.ok && API_FALLBACK && !API_BASE) {
-    try {
-      const fallbackRes = await fetch(`${API_FALLBACK}${path}`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-        ...options,
-      });
-      if (fallbackRes.ok) {
-        res = fallbackRes;
-      }
-    } catch {
-      // fallback failed, use original response
-    }
+  const raw = await res.text();
+  let data: { detail?: unknown; message?: string } & Record<string, unknown> = {};
+  try {
+    data = raw ? (JSON.parse(raw) as { detail?: unknown; message?: string } & Record<string, unknown>) : {};
+  } catch {
+    data = {};
   }
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(apiErr((data as { detail?: unknown })?.detail));
-  return data;
+  if (!res.ok) {
+    // Vercel HTML 502 (DNS_HOSTNAME_EMPTY) previously surfaced as a useless generic error
+    if (res.status === 502 || /DNS_HOSTNAME_EMPTY/i.test(raw)) {
+      throw new Error(
+        "Anmeldung derzeit nicht möglich: API-Backend nicht erreichbar. Bitte später erneut versuchen oder mail@nexifyai.cloud kontaktieren.",
+      );
+    }
+    if (res.status === 503) {
+      throw new Error(apiErr(data.detail) || "API-Backend ist nicht konfiguriert.");
+    }
+    throw new Error(apiErr(data.detail ?? data.message));
+  }
+  return data as T;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

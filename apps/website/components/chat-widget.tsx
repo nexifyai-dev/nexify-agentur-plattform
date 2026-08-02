@@ -116,9 +116,11 @@ export function ChatWidget() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ language: lang }),
     });
+    if (!res.ok) throw new Error("session");
     const data = await res.json();
+    if (!data?.session_id) throw new Error("session");
     setSessionId(data.session_id);
-    return data.session_id;
+    return data.session_id as string;
   };
 
   const send = async () => {
@@ -199,27 +201,34 @@ export function ChatWidget() {
   return (
     <>
       {!open && (
-        <button className="chat-launcher" onClick={openChat} aria-label="Chat öffnen" data-testid="chat-launcher">
+        <button
+          type="button"
+          className="chat-launcher"
+          onClick={openChat}
+          aria-label="Chat öffnen"
+          aria-haspopup="dialog"
+          data-testid="chat-launcher"
+        >
           <Sparkles size={24} className="text-zinc-200" />
         </button>
       )}
 
       {open && (
-        <div className="chat-panel" data-testid="chat-panel">
+        <div className="chat-panel" data-testid="chat-panel" role="dialog" aria-modal="true" aria-label={t.title}>
           <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="pulse-dot flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500">
+              <div className="pulse-dot flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500" aria-hidden="true">
                 <Sparkles size={16} className="text-black" />
               </div>
               <div>
-                <div className="text-sm font-bold text-white">{t.title}</div>
+                <div className="text-sm font-bold text-white" id="chat-panel-title">{t.title}</div>
                 <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
-                  <span className="inline-block size-1.5 rounded-full bg-emerald-400" />
+                  <span className="inline-block size-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
                   {t.status}
                 </div>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="text-zinc-500 transition-colors hover:text-white" aria-label="Schließen" data-testid="chat-close">
+            <button type="button" onClick={() => setOpen(false)} className="text-zinc-500 transition-colors hover:text-white" aria-label="Schließen" data-testid="chat-close">
               <X size={18} />
             </button>
           </div>
