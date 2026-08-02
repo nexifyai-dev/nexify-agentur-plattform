@@ -33,7 +33,7 @@ Mindestens zu bewerten:
 10. Cloud Sync, falls nutzbar und policy-konform.
 11. Custom Combos.
 12. Deploy Anywhere: localhost, VPS, Docker, Cloudflare Workers.
-13. Unterstützte CLI-Tools: Claude Code, Codex, Cursor, Cline, OpenCode, Kilo Code usw.
+13. Unterstützte CLI-Tools: Cursor Agent (NeXify-Primär), Claude Code, Cline, OpenCode, Kilo Code usw. — OpenAI Codex abgeschaltet (2026-08-02).
 14. Unterstützte Provider einschließlich DeepSeek, MiniMax, GLM, Kimi, Anthropic/OpenAI-kompatible Endpunkte.
 
 ## NeXify-Zielkonfiguration

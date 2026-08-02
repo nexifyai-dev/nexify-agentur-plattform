@@ -10,7 +10,8 @@
    §1  TOKENS
    ══════════════════════════════════════════════════════════════ */
 :root {
-  --bg: #09090b;
+  /* SoT design_guidelines.json background #0A0A0A (#133 token alignment) */
+  --bg: #0A0A0A;
   --bg-2: #0e0e11;
   --panel: rgba(255, 255, 255, 0.03);
   --panel-2: rgba(255, 255, 255, 0.05);
