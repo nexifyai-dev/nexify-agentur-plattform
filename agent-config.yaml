@@ -35,8 +35,8 @@ mcp_servers:
   agentmemory:
     command: npx
     args: ["-y", "@agentmemory/mcp"]
-    # ist: eingebunden in 7 Agenten (cursor, codex, claude-code, copilot-cli,
-    #      gemini-cli, opencode, openclaw) via `agentmemory connect --all`
+    # ist: eingebunden in Cursor Agent (+ ggf. Claude Code / Copilot CLI /
+    #      Gemini CLI / OpenCode / OpenClaw). OpenAI Codex: abgeschaltet 2026-08-02.
   context7:
     url: "https://mcp.context7.com/mcp"
     role: "aktuelle Bibliotheks-/API-Dokumentation zur Verifikation nach §13"
