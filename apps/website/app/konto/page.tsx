@@ -126,7 +126,7 @@ function OfferCard({ offer, t, onChanged }: { offer: Offer; t: (typeof T)["de"];
           <div>
             <div className="text-[15px] font-semibold text-white">{offer.offer?.title ?? "Angebot"}</div>
             <div className="mt-0.5 text-xs text-zinc-500">
-              {new Date(offer.created_at).toLocaleDateString("de-DE")} · {t.total}: € {offer.price_total?.toLocaleString("de-DE")}
+              {new Date(offer.created_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })} · {t.total}: € {offer.price_total?.toLocaleString("de-DE")}
             </div>
           </div>
         </div>

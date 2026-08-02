@@ -24,7 +24,7 @@
       {
         "type": "prompt",
         "timeout": 12,
-        "prompt": "Automations-Pflicht: Event-Ingest (Cloud/VPS) + Auto-Push nach Commit + Draft-PR + label automerge. Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. memory_recall vor Planung; memory_save nach Task. Keine Secrets."
+        "prompt": "NO_CONFIRMATION: Never ask user to confirm commit/push/PR/merge/issue triage. Execute. HARD STOPs only: Hermes cutover, inventing secrets, force-push main, customer-regelwerk without protocol. Auto-Push + Draft-PR + automerge (draft→ready when green). Docs: docs/operations/CLOUD-AGENT-EVENT-INGEST.md. memory_recall vor Planung; memory_save nach Task."
       }
     ]
   }

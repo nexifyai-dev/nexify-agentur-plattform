@@ -1,15 +1,16 @@
 # FILE: .github/workflows/pr-auto-merge.yml
 # NIR: 02.08.2026 08:25
-# UPDATED: 02.08.2026 08:25
+# UPDATED: 02.08.2026 09:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Label-basiertes Auto-Merge für grüne PRs (kein Force-Main).
-# WHY: Cursor-/Agent-PRs sollen nach CI + Guards mergen, ohne Blind-Merge.
-# BEST-PRACTICE: Nur Squash+Auto-Merge API; Draft/do-not-merge/base≠main blocken.
-# PITFALL: V-AM-01: Ohne required checks ist enableAutoMerge wirkungslos → Branch Protection nötig.
-# DEPENDS: Repo Settings → Rulesets/Branch protection (required status checks)
-# DOCS-REF: docs/operations/AGENT-TRIGGERS-INTEGRATIONS.md
-# SESSION: agent-triggers-integrations-7dd5
+# WHAT: Label-basiertes Auto-Merge — Draft->ready wenn green, dann squash auto-merge.
+# WHY: Fix #135: Draft + automerge darf nicht ewig warten; kein Force-Main.
+# BEST-PRACTICE: Nur Squash+Auto-Merge API; do-not-merge/base≠main blocken.
+# PITFALL: V-AM-01: Ohne required checks ist enableAutoMerge wirkungslos -> Branch Protection nötig.
+# DEPENDS: Repo Settings -> Rulesets/Branch protection (required status checks)
+# DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
+# SESSION: no-confirmation-agent-ops-7dd5
+# Closes: #135
 
 name: PR Auto-Merge (label-gated)
 
@@ -35,6 +36,8 @@ jobs:
   enable-automerge:
     if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - name: Resolve PR number
         id: pr
@@ -59,7 +62,7 @@ jobs:
           echo "no_pr=0" >> "$GITHUB_OUTPUT"
           echo "number=$number" >> "$GITHUB_OUTPUT"
 
-      - name: Gate and enable auto-merge
+      - name: Gate, ready draft, enable auto-merge
         if: steps.pr.outputs.no_pr == '0'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -80,10 +83,6 @@ jobs:
             echo "skip: PR not open"
             exit 0
           fi
-          if [ "$is_draft" = "true" ]; then
-            echo "skip: draft PR"
-            exit 0
-          fi
           if [ "$base" != "main" ]; then
             echo "skip: base branch '$base' not allowlisted"
             exit 0
@@ -98,7 +97,7 @@ jobs:
             exit 0
           fi
 
-          # Fail closed on known failing required-ish checks when rollup present
+          # Fail closed on known failing checks when rollup present
           failing="$(echo "$meta" | jq -r '
             [.statusCheckRollup[]?
               | select(.conclusion != null and .conclusion != "SUCCESS" and .conclusion != "NEUTRAL" and .conclusion != "SKIPPED")
@@ -108,10 +107,26 @@ jobs:
             exit 0
           fi
 
+          # Pending/incomplete checks: wait
+          pending="$(echo "$meta" | jq -r '
+            [.statusCheckRollup[]?
+              | select(.conclusion == null or .status == "IN_PROGRESS" or .status == "QUEUED" or .status == "PENDING")
+              | .name] | unique | join(", ")')"
+          if [ -n "$pending" ]; then
+            echo "skip: checks still pending: $pending"
+            exit 0
+          fi
+
+          # Fix #135: draft + automerge + green -> mark ready (no human)
+          if [ "$is_draft" = "true" ]; then
+            echo "draft->ready for #$PR (automerge + checks green)"
+            gh pr ready "$PR" --repo "$REPO"
+          fi
+
           # Enable GitHub native auto-merge (squash). Requires repo auto-merge + branch protection.
           if gh pr merge "$PR" --repo "$REPO" --auto --squash; then
             echo "auto-merge enabled for #$PR"
           else
-            echo "::warning::Could not enable auto-merge (check: Settings → General → Allow auto-merge + branch protection required checks)"
+            echo "::warning::Could not enable auto-merge (check: Settings -> General -> Allow auto-merge + branch protection required checks)"
             exit 0
           fi

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 test('AnimatedCounter - uses ease-out-quart easing', () => {
-  const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+  const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
   assert.equal(easeOutQuart(0), 0);
   assert.equal(easeOutQuart(1), 1);
   assert.ok(easeOutQuart(0.5) > 0.5); // ease-out is faster at start

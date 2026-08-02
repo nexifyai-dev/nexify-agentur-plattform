@@ -53,7 +53,7 @@ function TicketRow({ t, labels }: { t: Ticket; labels: (typeof T)["de"] }) {
       <button className="flex w-full items-center justify-between gap-3 p-4 text-left" onClick={() => setOpen(!open)} data-testid="ticket-toggle">
         <div className="min-w-0">
           <div className="truncate text-[14px] font-semibold text-white">{t.subject}</div>
-          <div className="text-xs text-zinc-500">{new Date(t.created_at).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</div>
+          <div className="text-xs text-zinc-500">{new Date(t.created_at).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Berlin" })}</div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${t.status === "answered" ? "border-emerald-400/40 text-emerald-300" : "border-white/20 text-zinc-400"}`}>

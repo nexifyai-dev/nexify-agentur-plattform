@@ -61,6 +61,7 @@ services:
       # Expose agent source so the WebUI can install dependencies from it
       - hermes-agent-src:/opt/hermes
     environment:
+      - TZ=Europe/Berlin
       - HERMES_HOME=/home/hermes/.hermes
       # Align UID/GID across containers sharing the hermes-home volume.
       # Defaults to 1000 to match WANTED_UID/WANTED_GID in the webui service.
@@ -100,6 +101,7 @@ services:
       # Override with: HERMES_WORKSPACE=/your/path docker compose up
       - ${HERMES_WORKSPACE:-~/workspace}:/workspace
     environment:
+      - TZ=Europe/Berlin
       - HERMES_WEBUI_HOST=0.0.0.0
       - HERMES_WEBUI_PORT=8787
       - HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui

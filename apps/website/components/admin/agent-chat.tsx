@@ -8,7 +8,7 @@ import { ChatMarkdown } from "@/components/chat-markdown";
 type Msg = { id: string; role: string; content: string; created_at: string };
 type Task = { id: string; title: string; instruction: string; run_at: string; status: string; result: string | null };
 
-const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" });
+const fmt = (s: string) => new Date(s).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Berlin" });
 
 function ActionChip({ content }: { content: string }) {
   let a: { tool?: string; ok?: boolean; summary?: string } | null = null;
