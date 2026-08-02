@@ -40,8 +40,16 @@ data/outreach/unsub/
 data/outreach/queue/*.jsonl
 !data/outreach/queue/.gitkeep
 
-# Zero-cost lead queue runtime
-data/leads/**
+# Lead outreach runtime state
+data/outreach/state/
+data/outreach/unsub/
+data/outreach/queue/*.jsonl
+!data/outreach/queue/.gitkeep
+
+# Zero-cost lead queue runtime (keep seeds + README)
+data/leads/*
 !data/leads/.gitkeep
 !data/leads/README.md
+!data/leads/seeds/
 !data/leads/seeds/**
+
