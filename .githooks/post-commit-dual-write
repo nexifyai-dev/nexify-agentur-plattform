@@ -1,12 +1,28 @@
 #!/usr/bin/env bash
 # FILE: .githooks/post-commit-dual-write
 # NIR: 31.07.2026 10:55
-# UPDATED: 02.08.2026 09:05
-# WHAT: Alias/Compat — leitet auf .githooks/post-commit weiter
-# WHY: Historischer Name aus #98; Git führt nur `post-commit` aus
+# UPDATED: 02.08.2026 09:22
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Architecture
+# WHAT: Compat-Alias — delegiert an .githooks/post-commit / brain-dual-write.sh
+# WHY: Früher einziger Hook-Name; Git führt ihn NICHT aus — nur Dokumentation/Compat
+# BEST-PRACTICE: Echter Entry = post-commit; dieses File bleibt für alte Docs
+# PITFALL: V-DW-02: hooksPath ohne post-commit = toter Dual-Write
+# DEPENDS: .githooks/post-commit, scripts/brain-dual-write.sh
 # DOCS-REF: docs/operations/BRAIN-DUAL-WRITE.md
+# SESSION: gesamziel-correction-7dd5
 
 set -euo pipefail
+
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 [[ -z "$ROOT" ]] && exit 0
-exec bash "$ROOT/.githooks/post-commit"
+
+if [[ -x "$ROOT/.githooks/post-commit" ]]; then
+  exec bash "$ROOT/.githooks/post-commit"
+fi
+
+HELPER="$ROOT/scripts/brain-dual-write.sh"
+if [[ -f "$HELPER" ]]; then
+  bash "$HELPER" commit >/dev/null 2>&1 || true
+fi
+exit 0
