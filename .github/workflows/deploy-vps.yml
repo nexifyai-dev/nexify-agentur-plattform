@@ -28,6 +28,7 @@ permissions:
   contents: read   # Checkout; kein GITHUB_TOKEN für Deploys nötig — Runner läuft lokal
 
 env:
+  TZ: Europe/Berlin
   REPO_PATH: /opt/nexifyai/repos/nexify-agentur-plattform
   DOCKER_COMPOSE_FILE: docker-compose.yml
 

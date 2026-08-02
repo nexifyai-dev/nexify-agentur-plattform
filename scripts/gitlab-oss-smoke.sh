@@ -6,6 +6,9 @@
 # DOCS-REF: deploy/mcp/gitlab-oss/README.md
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 API_URL="${GITLAB_API_URL:-https://gitlab.nexifyai.cloud/api/v4}"
 BASE="${API_URL%/api/v4}"
 PROJECT_PATH="${GITLAB_PROJECT_PATH:-nexifyai_group/nexifyai}"

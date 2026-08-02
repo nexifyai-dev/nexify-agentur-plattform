@@ -3,6 +3,7 @@ Description=NeXifyAI Watchdog Reactivate Hermes Orchestration
 After=network-online.target
 
 [Service]
+Environment=TZ=Europe/Berlin
 Type=oneshot
 ExecStart=/opt/nexifyai/scripts/autopilot/watchdog-reactivate.sh
 User=root

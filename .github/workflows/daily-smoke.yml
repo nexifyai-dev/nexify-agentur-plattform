@@ -1,0 +1,89 @@
+# FILE: .github/workflows/daily-smoke.yml
+# NIR: 02.08.2026 09:05
+# UPDATED: 02.08.2026 09:05
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Daily hosted curl smoke + status dashboard refresh (ubuntu-latest).
+# WHY: Health signal without self-hosted VPS runner (#123 gap).
+# BEST-PRACTICE: Public edge probes only; commit dashboard only on schedule success path.
+# PITFALL: V-SM-01: Never require VPS-local ports from GitHub-hosted runners.
+# DEPENDS: scripts/daily-smoke-hosted.sh; optional repo vars SMOKE_*
+# DOCS-REF: docs/operations/STATUS-DASHBOARD.md · docs/operations/HUMAN-GATE-5MIN.md
+# SESSION: full-auto-config-close-7dd5
+
+name: Daily Smoke (hosted)
+
+on:
+  schedule:
+    # 05:15 UTC daily (= 07:15 Europe/Berlin CEST) — before VPS worker; GHA schedule cron is UTC-only
+    - cron: "15 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: daily-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run hosted smoke
+        id: smoke
+        env:
+          SMOKE_BASE_URL: ${{ vars.SMOKE_BASE_URL || 'https://www.nexifyai.cloud' }}
+          SMOKE_AI_ROUTER_URL: ${{ vars.SMOKE_AI_ROUTER_URL || 'https://ai-router.nexifyai.cloud/api/health' }}
+          SMOKE_AGENTMEMORY_URL: ${{ vars.SMOKE_AGENTMEMORY_URL || 'https://agentmemory.nexifyai.cloud' }}
+          SMOKE_API_HEALTH_URL: ${{ vars.SMOKE_API_HEALTH_URL || '' }}
+          SMOKE_RESULTS_FILE: ${{ runner.temp }}/nexify-daily-smoke.tsv
+        run: |
+          set -euo pipefail
+          chmod +x scripts/daily-smoke-hosted.sh scripts/refresh-status-dashboard.sh
+          bash scripts/daily-smoke-hosted.sh
+
+      - name: Refresh status dashboard doc
+        if: always()
+        env:
+          SMOKE_RESULTS_FILE: ${{ runner.temp }}/nexify-daily-smoke.tsv
+        run: |
+          set -euo pipefail
+          bash scripts/refresh-status-dashboard.sh || true
+          {
+            echo "## Daily smoke"
+            echo ""
+            echo '```'
+            cat "${SMOKE_RESULTS_FILE:-/dev/null}" 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload smoke TSV artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/nexify-daily-smoke.tsv
+          if-no-files-found: ignore
+
+      - name: Commit dashboard update (main only)
+        if: success() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/operations/STATUS-DASHBOARD.md; then
+            echo "dashboard_unchanged=1"
+            exit 0
+          fi
+          git config user.name "nexifyai-ops-bot"
+          git config user.email "ops-bot@users.noreply.github.com"
+          git add docs/operations/STATUS-DASHBOARD.md
+          git commit -m "chore(ops): refresh status dashboard from daily smoke"
+          git push origin HEAD:main || echo "::warning::dashboard commit push blocked by ruleset — artifact+summary still available"

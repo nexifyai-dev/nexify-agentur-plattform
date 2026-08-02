@@ -14,6 +14,8 @@ jobs:
   # === BACKEND: Python lint + test ===
   backend:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     defaults:
       run:
         working-directory: backend
@@ -36,13 +38,18 @@ jobs:
       - name: Syntax check server
         run: python -c "import ast; ast.parse(open('server.py').read())"
 
-      - name: Run tests
-        run: python -m pytest tests/ -x --tb=short
-        continue-on-error: true  # Tests benötigen DB/Env — validieren aber zumindest Import+Struktur
+      - name: Unit tests (offline, fail-hard)
+        run: python -m pytest tests/unit -m unit --tb=short
+
+      - name: Integration tests (remote env, gated)
+        run: python -m pytest tests/ --ignore=tests/unit -x --tb=short
+        continue-on-error: true  # Needs REACT_APP_BACKEND_URL / live DB — see issue #167
 
   # === FRONTEND: Next.js build validation ===
   website:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - uses: actions/checkout@v4
 
@@ -64,12 +71,17 @@ jobs:
       - name: Lint
         run: pnpm --dir apps/website lint
 
+      - name: Unit tests (*.test.mjs contracts incl. former *.test.tsx)
+        run: pnpm --dir apps/website test
+
       - name: Build Next.js
         run: pnpm --dir apps/website build
 
   # === HERMES: Python app lint + test ===
   hermes:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     defaults:
       run:
         working-directory: apps/hermes
@@ -97,6 +109,8 @@ jobs:
   # === SECURITY: Secret scanning ===
   secret-scan:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     permissions:
       contents: read
       security-events: write
@@ -114,6 +128,8 @@ jobs:
   # === AGENTIC: SOLL deviation + knowledge mandate ===
   agentic-governance:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
     steps:
       - uses: actions/checkout@v4
 
