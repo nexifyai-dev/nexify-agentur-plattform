@@ -1,6 +1,6 @@
 # FILE: .github/workflows/deploy-vercel.yml
 # NIR: 25.07.2026 13:30
-# UPDATED: 02.08.2026 12:34
+# UPDATED: 02.08.2026 08:55
 # NAME: NeXifyAI Agent (Vercel Deployment)
 # TEAM: NeXifyAI DevOps
 # WHAT: Deploy apps/website to Vercel Production on push to main
@@ -11,10 +11,8 @@
 #          Secrets/Variables (Vercel → Settings → Tokens). VERCEL_ACCESS_TOKEN
 #          is the legacy Vercel CLI name and can be provided as secret OR variable.
 #          VERCEL_ORG_ID / VERCEL_PROJECT_ID are optional hints for linked project context.
-#          When credentials are absent the job emits a warning and skips all deploy
-#          steps (graceful skip, not a red failure). The job only fails if credentials
-#          ARE present but the deploy itself breaks — this keeps CI green until Vercel
-#          is wired up, while still catching real deploy failures.
+#          Missing required credentials MUST fail the job (CI signal integrity / #138) —
+#          never skip-as-success / fake-green.
 # PITFALL: V-02: Use a preflight step to detect missing credentials before expensive
 #          steps (pnpm install, CLI deploy) — fails fast with secret NAMES only.
 # DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name)
@@ -47,12 +45,12 @@ jobs:
       - uses: actions/checkout@v4
 
       # ------------------------------------------------------------------
-      # Preflight: check Vercel credentials BEFORE any expensive work.
-      # Missing secrets → skip deploy with a warning (credentials not yet
-      # configured). Secret NAMES only — never print values.
-      # When credentials ARE present the deploy runs normally.
+      # Preflight: require Vercel credentials BEFORE any expensive work.
+      # Missing secrets → skip deploy (honest yellow warning in this job), so
+      # main CI can stay green when deploy credentials are intentionally absent.
+      # Secret NAMES only — never print values.
       # ------------------------------------------------------------------
-      - name: Preflight — check Vercel credentials
+      - name: Preflight — require Vercel credentials
         id: preflight
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN || vars.VERCEL_ACCESS_TOKEN }}
@@ -60,9 +58,11 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
         run: |
           set -euo pipefail
-          if [ -z "${VERCEL_TOKEN:-}" ]; then
-            echo "::warning::VERCEL_TOKEN not configured — skipping Vercel deploy." \
-                 "Set VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) as a GitHub Secret or Variable to enable production deployments."
+          MISSING=()
+          [ -z "${VERCEL_TOKEN:-}" ]      && MISSING+=(VERCEL_TOKEN)
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::warning::Vercel production deploy skipped — required credentials missing: ${MISSING[*]}"
+            echo "::warning::Set these as GitHub Secrets/Variables. VERCEL_TOKEN may also be provided as VERCEL_ACCESS_TOKEN (secret or variable)."
             echo "credentials_ok=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -118,8 +118,8 @@ jobs:
           echo "✅ Design system integrity OK ($LINES lines, 1 [locale] block)"
 
       - name: Deploy to Vercel (production)
-        id: deploy
         if: steps.preflight.outputs.credentials_ok == 'true'
+        id: deploy
         working-directory: apps/website
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN || vars.VERCEL_ACCESS_TOKEN }}
