@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-08-02):** Design-SoT ist `design_guidelines.json` (Dark/Luxury, Outfit/Manrope, `#0A0A0A`). „Graphite Premium“ hier ist **Legacy** — Agents dürfen es nicht als aktive Brand übernehmen. Siehe `docs/operations/GESAMTZIEL-CORRECTION-2026-08-02.md`.
+
 # NeXify AI — Gesamtzielbild V3: Vollständiges Agentur-Betriebssystem
 
 **Stand:** 2026-06-12 | **Status:** VERBINDLICH | **Version:** 3.0.0

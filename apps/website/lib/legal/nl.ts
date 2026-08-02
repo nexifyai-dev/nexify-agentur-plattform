@@ -20,7 +20,15 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "impressum",
     title: "Colofon",
     intro: "Aanbiedersidentificatie en contactgegevens van NeXify AI by NeXify – Chat it. Automate it.",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Algemene voorwaarden", href: "/agb" },
+      { label: "Verwerkersovereenkomst", href: "/avv" },
+      { label: "Herroeping", href: "/widerruf" },
+      { label: "Cookiebeleid", href: "/cookie-richtlinie" },
+      { label: "AI-verklaring", href: "/ki-hinweise" },
+    ],
     sections: [
       { heading: "Bedrijfsgegevens", paragraphs: [C.legalName, `Eenmanszaak naar Nederlands recht, eigenaar: ${C.owner}`, C.address] },
       { heading: "Contact", paragraphs: [`E-mail: ${C.email}`, `Telefoon: ${C.phone}`, "Web: nexifyai.cloud"] },
@@ -69,6 +77,21 @@ export const legalPagesNl: Record<string, LegalPageData> = {
         ],
       },
       {
+        heading: "Aanbiedersidentificatie (§§ 5, 6 DDG) en toepasselijk recht",
+        paragraphs: [
+          "Als in Nederland gevestigde eenmanszaak valt NeXify AI onder Nederlands handelsrecht (KvK). Voor zover het aanbod zich op Duitsland richt (Duitse taal, DACH-focus), worden de informatieplichten van §§ 5, 6 DDG vrijwillig volledig nagekomen.",
+          "Voor privacyzaken is de Autoriteit Persoonsgegevens (Den Haag) de leidende toezichthouder.",
+        ],
+      },
+      {
+        heading: "Beroepsaansprakelijkheid / verzekering",
+        paragraphs: [
+          "[BITTE ERGÄNZEN: Berufshaftpflichtversicherung – Versicherer, Police-Nr., Deckungssumme]",
+          "Op verzoek van zakelijke partners wordt een bestaande dekking in redelijke mate aangetoond.",
+        ],
+      },
+
+      {
         heading: "Onlinegeschillenbeslechting",
         paragraphs: [
           "Aangezien NeXify AI uitsluitend B2B-diensten aanbiedt, bestaat er geen verplichting tot en geen deelname aan consumentengeschillenprocedures. Vragen over overeenkomsten of diensten kunnen rechtstreeks aan het bovengenoemde e-mailadres worden gericht.",
@@ -80,7 +103,13 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "datenschutz",
     title: "Privacyverklaring",
     intro: "Uitgebreide informatie over de verwerking van persoonsgegevens op deze website, in de AI-chat en bij zakelijke aanvragen conform de AVG.",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Colofon", href: "/impressum" },
+      { label: "Cookiebeleid", href: "/cookie-richtlinie" },
+      { label: "Verwerkersovereenkomst", href: "/avv" },
+      { label: "AI-verklaring", href: "/ki-hinweise" },
+    ],
     sections: [
       {
         heading: "1. Verwerkingsverantwoordelijke",
@@ -181,7 +210,13 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "agb",
     title: "Algemene voorwaarden (B2B)",
     intro: "Contractuele basis voor advies-, ontwikkelings-, design-, automatiserings- en beheerdiensten van NeXify AI.",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Colofon", href: "/impressum" },
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Verwerkersovereenkomst", href: "/avv" },
+      { label: "Herroeping", href: "/widerruf" },
+    ],
     sections: [
       {
         heading: "1. Toepassingsgebied en ondernemersstatus",
@@ -294,7 +329,12 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "ki-hinweise",
     title: "AI-verklaring",
     intro: "Hoe NeXify AI moderne AI-tools inzet – transparant uitgelegd, inclusief de NeXify AI adviseur op deze website.",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Algemene voorwaarden", href: "/agb" },
+      { label: "Verwerkersovereenkomst", href: "/avv" },
+    ],
     sections: [
       {
         heading: "AI-ondersteund in plaats van AI-uitbesteed",
@@ -335,7 +375,15 @@ export const legalPagesNl: Record<string, LegalPageData> = {
           "Bij klantprojecten met AI-componenten adviseren wij over risicoclassificatie en de telkens geldende verplichtingen.",
         ],
       },
+      
       {
+        heading: "EU AI Act – transparantie",
+        paragraphs: [
+          "De AI-adviseur is een AI-systeem. Gebruikers worden geïnformeerd dat zij met AI communiceren (Art. 50 lid 1 AI-verordening (EU) 2024/1689; toepasselijk vanaf 2 augustus 2026).",
+          "Er vinden geen uitsluitend geautomatiseerde besluiten met rechtsgevolgen plaats (Art. 22 AVG).",
+        ],
+      },
+{
         heading: "Grenzen",
         paragraphs: [
           "AI-systemen kunnen onvolledige, verouderde of onjuiste resultaten genereren. NeXify AI beperkt dit risico door bronnencontrole, tests, review, beperkte rechten en navolgbare werkstanden. Absolute foutloosheid kan niet worden gegarandeerd.",
@@ -347,7 +395,11 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "cookie-richtlinie",
     title: "Cookie- en opslagbeleid",
     intro: "Deze website is ingericht op datazuinig gebruik zonder standaard marketing-tracking.",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Colofon", href: "/impressum" },
+    ],
     sections: [
       {
         heading: "Noodzakelijke opslagtechnieken",
@@ -385,7 +437,15 @@ export const legalPagesNl: Record<string, LegalPageData> = {
           "Voor de levering van de website kunnen CDN- en beschermingsdiensten (bijv. Cloudflare) technisch noodzakelijke cookies plaatsen die uitsluitend de veiligheid en lastverdeling dienen.",
         ],
       },
+      
       {
+        heading: "Toestemmingscategorieën (banner)",
+        paragraphs: [
+          "De cookiebanner onderscheidt: Noodzakelijk (altijd actief), Statistiek (opt-in) en Marketing (opt-in) — gelijk aan components/cookie-consent.tsx.",
+          "Rechtsgrond: § 25 TDDDG / AVG. Statistiek en Marketing zijn momenteel niet actief.",
+        ],
+      },
+{
         heading: "Browserinstellingen",
         paragraphs: [
           "U kunt cookies en lokale opslag via uw browser inzien, verwijderen of blokkeren. Bij technisch noodzakelijke opslag kunnen afzonderlijke functies (bijv. de taalkeuze) daardoor beperkt zijn.",
@@ -397,7 +457,12 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "avv",
     title: "Verwerkersovereenkomst",
     intro: "Uitgangspunten voor projecten waarin NeXify AI persoonsgegevens in opdracht van een klant verwerkt (art. 28 AVG).",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Privacyverklaring", href: "/datenschutz" },
+      { label: "Algemene voorwaarden", href: "/agb" },
+      { label: "AI-verklaring", href: "/ki-hinweise" },
+    ],
     sections: [
       {
         heading: "Wanneer een verwerkersovereenkomst vereist is",
@@ -438,7 +503,28 @@ export const legalPagesNl: Record<string, LegalPageData> = {
           "Dataminimalisatie en pseudonimisering waar mogelijk",
         ],
       },
+      
       {
+        heading: "Verplichte inhoud Art. 28 lid 3 AVG",
+        bullets: [
+          "Voorwerp en duur van de verwerking",
+          "Aard en doel van de verwerking",
+          "Soort persoonsgegevens en categorieën betrokkenen",
+          "Instructiegebondenheid, vertrouwelijkheid, TOM (Art. 32)",
+          "Subverwerkers, rechten van betrokkenen, incidenten, verwijdering/teruggave, audits",
+        ],
+      },
+      {
+        heading: "Modules / bijlagen",
+        bullets: [
+          "Bijlage A: verwerkingsbeschrijving",
+          "Bijlage B: TOM",
+          "Bijlage C: subverwerkers",
+          "Bijlage D: contactpunten",
+          "[BITTE ERGÄNZEN: Master-Liste Unterauftragsverarbeiter mit Rechtsname/Sitzland/SCC-Status]",
+        ],
+      },
+{
         heading: "Projectgebonden versie",
         paragraphs: [
           "Aangezien datatypen, systemen, hosting, subverwerkers en risico's per project verschillen, wordt de verwerkersovereenkomst projectgebonden opgesteld of aangevuld. Een actueel sjabloon en de bijbehorende technische en organisatorische maatregelen worden bij de opdracht ter beschikking gesteld.",
@@ -450,7 +536,11 @@ export const legalPagesNl: Record<string, LegalPageData> = {
     slug: "widerruf",
     title: "Informatie over herroepingsrecht",
     intro: "NeXify AI biedt diensten uitsluitend aan in het zakelijke verkeer (B2B).",
-    updated: "Juni 2026",
+    updated: "2 augustus 2026",
+    related: [
+      { label: "Algemene voorwaarden", href: "/agb" },
+      { label: "Colofon", href: "/impressum" },
+    ],
     sections: [
       {
         heading: "Geen consumentenovereenkomst",

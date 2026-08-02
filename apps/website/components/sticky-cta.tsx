@@ -23,14 +23,21 @@ export function StickyCta() {
       data-testid="sticky-cta"
     >
       {/* Leave clear space on the right for the chat launcher (60px + margin). */}
-      <div className="pointer-events-auto mx-auto flex max-w-lg pr-[4.75rem]">
+      <div className="pointer-events-auto mx-auto flex max-w-lg gap-2 pr-[4.75rem]">
         <Link
-          href="/kontakt"
-          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black shadow-[0_8px_32px_rgba(0,0,0,.5)]"
+          href="/rueckruf"
+          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-medium text-black shadow-[0_8px_32px_rgba(0,0,0,.5)]"
           data-testid="sticky-cta-link"
         >
-          {lang === "en" ? "Free consultation" : lang === "nl" ? "Gratis advies" : "Kostenlose Beratung"}{" "}
+          {lang === "en" ? "Book call" : lang === "nl" ? "Gesprek boeken" : "Termin buchen"}{" "}
           <ArrowRight className="size-4 shrink-0" />
+        </Link>
+        <Link
+          href="/kontakt"
+          className="flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-black/70 px-4 py-3 text-sm font-medium text-white backdrop-blur-md"
+          data-testid="sticky-cta-contact"
+        >
+          {lang === "en" ? "Ask" : lang === "nl" ? "Vragen" : "Anfragen"}
         </Link>
       </div>
     </div>

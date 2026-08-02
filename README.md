@@ -52,7 +52,7 @@ pnpm --dir apps/website install
 pnpm --dir apps/website dev
 # → http://localhost:3000
 # Health: GET /api/health → {"status":"ok"}
-# / → 307 Redirect nach /de
+# / bleibt unprefixed; Legacy /de|/en|/nl → 308 zurück auf unprefixed Route
 ```
 
 Weitere Befehle (lint / typecheck / test / build): `.cursor/skills/website-dev/SKILL.md` bzw. `apps/website/README.md`.
