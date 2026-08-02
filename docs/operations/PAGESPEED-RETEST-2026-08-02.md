@@ -1,21 +1,25 @@
 # FILE: docs/operations/PAGESPEED-RETEST-2026-08-02.md
 # NIR: 02.08.2026 11:10
-# UPDATED: 02.08.2026 11:10
+# UPDATED: 02.08.2026 11:20
 # WHAT: Retest notes after CLS/LCP/llms.txt PageSpeed fixes
 
-## Baseline (mobile PSI, 2026-08-02, Lighthouse 13)
+## Baseline (live www, 2026-08-02 — before this PR deploy)
 
 URL: https://www.nexifyai.cloud/
 
-| Category | Before |
-|----------|--------|
-| Performance | 77 |
-| Accessibility | 96 |
-| Best Practices | 96 |
-| SEO | 100 |
-| Agentic Browsing | 1/3 (llms.txt fail) |
-| LCP | 2.9s |
-| CLS | 0.353 |
+| | Mobile (10:56) | Desktop (z0gp526tcr / ~11:00) |
+|--|----------------|-------------------------------|
+| Performance | **77** | **77** |
+| Accessibility | 96 | — |
+| Best Practices | 96 | — |
+| SEO | 100 | — |
+| Agentic Browsing | **1/3** (llms.txt fail) | fail (no H1/links — HTML 404) |
+| FCP | 0.9s | 0.3s |
+| LCP | **2.9s** | **0.5s** (excellent) |
+| CLS | **0.353** (footer 0.352) | **0.482** (footer 0.481) |
+| TBT | 10ms | — |
+
+PSI API retest blocked: Google `pagespeedonline` daily quota exhausted (429).
 
 ## Changes shipped
 
