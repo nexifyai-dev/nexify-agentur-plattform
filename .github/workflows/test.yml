@@ -1,10 +1,10 @@
 # FILE: .github/workflows/test.yml
 # NIR: 24.07.2026 13:00
-# UPDATED: 27.07.2026 09:40
+# UPDATED: 02.08.2026 08:55
 # NAME: NeXifyAI Agent (CI/CD Automation)
 # TEAM: NeXifyAI DevOps
-# WHAT: Erweiterte Test-Suite — Lint, Unit-Tests, Docker-Build-Verify (develop + feature branches)
-# WHY: Ergänzt ci.yml (main-only): deckt develop/feature-Branches ab + Docker-Build-Validierung
+# WHAT: Erweiterte Test-Suite — Lint, Unit-Tests, Docker-Build-Verify (feature branches + PRs)
+# WHY: Ergänzt ci.yml (main-only): deckt feature-Branches/PRs ab + Docker-Build-Validierung
 # BEST-PRACTICE: setup-python@v5; explizite permissions; pnpm per Konvention
 # PITFALL: V-01: setup-python@v4 veraltet → schlägt mit 0 Jobs fehl (kein permissions-Block)
 #          V-02: docker/build-push-action braucht setup-buildx; cache-from: type=gha optional
@@ -17,9 +17,9 @@ on:
   schedule:
     - cron: '0 6 * * 1'  # §11 Mo 06:00 Charta-Monitoring
   push:
-    branches: [ develop, 'feature/**' ]
+    branches: [ 'feature/**' ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
