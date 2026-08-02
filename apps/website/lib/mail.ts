@@ -93,10 +93,12 @@ export async function sendOfferRequestNotification(input: {
   email: string;
   company?: string | null;
   phone?: string | null;
+  language?: string;
+  session_id?: string;
+  /** @deprecated not in backend OfferRequestIn — ignored if present */
   type?: string;
   description?: string;
   features?: string[];
-  language?: string;
 }): Promise<boolean> {
   const name = input.name?.trim() || "Ohne Name";
   const features = (input.features || []).map(esc).join(", ") || "—";
@@ -106,8 +108,9 @@ export async function sendOfferRequestNotification(input: {
     <p><strong>E-Mail:</strong> ${esc(input.email)}</p>
     <p><strong>Firma:</strong> ${esc(input.company || "—")}</p>
     <p><strong>Telefon:</strong> ${esc(input.phone || "—")}</p>
-    <p><strong>Typ:</strong> ${esc(input.type || "—")}</p>
-    <p><strong>Features:</strong> ${features}</p>
+    <p><strong>Session:</strong> ${esc(input.session_id || "—")}</p>
+    <p><strong>Typ (legacy):</strong> ${esc(input.type || "—")}</p>
+    <p><strong>Features (legacy):</strong> ${features}</p>
     <p><strong>Sprache:</strong> ${esc(input.language || "de")}</p>
     <hr/>
     <pre style="white-space:pre-wrap;font-family:sans-serif">${esc(input.description || "")}</pre>
