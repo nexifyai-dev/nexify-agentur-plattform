@@ -50,7 +50,7 @@ Legende: `N` = nativ vorhanden · `P` = Path/Proxy (Übergang) · `G` = Gap · `
 | Approval Queue | N | TEIL | G | Native View |
 | Evidence Panel | N | TEIL | G | Native View |
 | AgentMemory | N | P/N | P (`/agentmemory` Traefik) | Native Module (11 Views) — größter Posten |
-| LightRAG | N | P | G | Native Query UI + Dual-Write (PR `#98` MERGED hooks) |
+| LightRAG | N | P | G | Native Query UI; Dual-Write optional (`BRAIN-DUAL-WRITE.md`); Embed IST Upstage |
 | 9Router | N | P | G | Status/Allowlist View; Keys blocked |
 | OpenAPI / Backend | N | P | G | ICD via `:8901/openapi.json` |
 | OpenMCP Tools | N | G | G | Phase B Stub `#100`; Runtime Preview only |
