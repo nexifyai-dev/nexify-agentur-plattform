@@ -695,9 +695,11 @@ class PortalHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(e.read())
         except json.JSONDecodeError as je:
-            self._send_json({"error": f"JSON error: {str(je)}", "preview": raw[:300] if raw else ""}, 502)
+            log.warning("_proxy_chat JSON decode failed: %s", je, exc_info=True)
+            self._send_json({"error": "upstream_json_error"}, 502)
         except Exception as ex:
-            self._send_json({"error": str(ex)}, 502)
+            log.warning("_proxy_chat failed: %s", ex, exc_info=True)
+            self._send_json({"error": "upstream_error"}, 502)
 
     def _send_json(self, data, status=200):
         self.send_response(status)
@@ -728,7 +730,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
             self.wfile.write(e.read() or b"{}")
         except Exception as ex:
             log.warning("_proxy_get failed for %s: %s", url, ex, exc_info=True)
-            self._send_json({"error": str(ex)}, 502)
+            self._send_json({"error": "proxy_error"}, 502)
 
     def _proxy_factory(self, path):
         """Proxy /factory/* → Paperclip Vite dev server on :3100, stripping /factory prefix."""
@@ -757,7 +759,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
                 log.warning("_proxy_factory error-body write failed for %s: %s", target_url, e2)
         except Exception as ex:
             log.warning("_proxy_factory failed for %s: %s", target_url, ex, exc_info=True)
-            self._send_json({"error": str(ex)}, 502)
+            self._send_json({"error": "factory_proxy_error"}, 502)
 
     def _serve_demo(self, lead_id):
         """Fetch lead demo_config from Spaether and render as HTML."""
