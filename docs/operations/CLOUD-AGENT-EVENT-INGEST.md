@@ -35,7 +35,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Auto-Push nach Commit | `.cursor/hooks/auto-push-agent-branch.sh` (`afterShellExecution` + `stop`) |
 | Draft-PR wenn Branch gepusht | Hook-Fallback `gh pr create --draft` + `.github/workflows/agent-branch-autopilot.yml` |
 | CI → ready → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (Draft→ready wenn green; kein force main; `do-not-merge` blockt) |
-| CI fail / Issue / Dispatch → Cloud Agent | `.github/workflows/event-to-cloud-agent.yml` |
+| CI fail / PR / Issue / Review / Discussion / Dispatch → Cloud Agent | `.github/workflows/event-to-cloud-agent.yml` |
 | Linear-ID auf PR | `.github/workflows/linear-pr-sync.yml` |
 | VPS Alerts → Agent | `deploy/autopilot/jobs/event-ingest-to-cloud-agent.sh` + webhook stub |
 | MCP Cost Gate | `.cursor/hooks/circuit-breaker-mcp.sh` |
@@ -45,7 +45,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Integration | IST (PC aus) | Soll | Fix / User |
 |-------------|--------------|------|------------|
 | GitHub CI fail | CI only | Cloud Agent | Secret `CURSOR_API_KEY` |
-| Issues/PR `agent-fix` | — | Agent | Labels anlegen |
+| PRs / Issues / Reviews / Kommentare / Discussions | Teilabdeckung | Agent | jetzt via `event-to-cloud-agent.yml` |
 | GitHub Plugin MCP | fehlt oft | Dashboard MCP | User: Settings → MCP → GitHub |
 | Linear | MCP auth ok (Desktop) | Issue→Agent | Cursor Automation + webhook `/ingest/linear` |
 | Slack | MCP auth ok (Desktop) | Msg→Agent | Automation + `/ingest/slack` |
@@ -71,10 +71,25 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 6. GitHub Repo: Allow auto-merge; required checks; Labels `automerge`, `do-not-merge`, `agent-fix`
 7. VPS: `bash deploy/autopilot/install-event-ingest.sh` + Ingest-URL hinter Traefik/CF
 
+## GitHub-Event-Abdeckung
+
+`event-to-cloud-agent.yml` startet den Cloud Agent jetzt für:
+
+- `issues`: `opened`, `edited`, `reopened`, `labeled`
+- `issue_comment`: neue Kommentare (PR-Kommentare direkt; Issue-Slash-Commands weiter über `issues-lifecycle`)
+- `pull_request`: `opened`, `edited`, `reopened`, `synchronize`, `ready_for_review`, agentische Labels
+- `pull_request_review`: eingereichte/bearbeitete Reviews mit Text oder `changes_requested`
+- `pull_request_review_comment`: Inline-Review-Kommentare
+- `discussion`, `discussion_comment`: GitHub Discussions inkl. Antworten
+- `repository_dispatch`: Alerts/Webhooks inkl. generischem `gitlab-event`
+- `workflow_run`: fehlgeschlagene CI-Läufe
+
+Guards bleiben aktiv: `human-gate`/`blocked`, Circuit Breaker, Repo-Scoped, kein Force-Push auf `main`.
+
 ## Issues Lifecycle
 
 Siehe [`ISSUES-AUTOMATION.md`](./ISSUES-AUTOMATION.md) — Auto-Label, Triage, Stale, Human-gate.
-`event-to-cloud-agent` launched Issues nur noch bei Labels `agent-fix|cursor-fix|autonomous|P0` und **nie** bei `human-gate|blocked`.
+`issues-lifecycle` kümmert sich weiter um Labels, Triage-Kommentar und Slash-Commands; eigentliche Agent-Launches laufen zentral über `event-to-cloud-agent`.
 
 ## Guards / HARD STOPs (NO_CONFIRMATION Ausnahmen)
 
