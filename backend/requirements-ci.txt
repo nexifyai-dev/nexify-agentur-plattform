@@ -70,7 +70,7 @@ mypy==2.3.0
 mypy_extensions==1.1.0
 numpy==2.5.1
 oauthlib==3.3.1
-openai==2.20.0
+openai==2.50.0
 packaging==26.2
 pandas==3.0.5
 passlib==1.7.4
@@ -82,7 +82,7 @@ portalocker==3.2.0
 posthog==7.34.0
 propcache==0.5.2
 proto-plus==1.28.2
-protobuf==5.29.6
+protobuf==7.35.1
 pyasn1==0.6.4
 pyasn1_modules==0.4.2
 pycodestyle==2.14.0
