@@ -33,7 +33,7 @@
 | productivity:linear | Mittel | Task-Tracking |
 | productivity:atlassian | Mittel | Jira/Confluence |
 | productivity:asana | Niedrig | Task-Tracking |
-| small-business:stripe | Mittel | Payment-Integration |
+| small-business:revolut-merchant | Mittel | Payment-Integration (Revolut Merchant; kein Stripe) |
 | small-business:hubspot | Mittel | CRM |
 | small-business:quickbooks | Niedrig | Buchhaltung |
 | small-business:paypal | Niedrig | Payment |

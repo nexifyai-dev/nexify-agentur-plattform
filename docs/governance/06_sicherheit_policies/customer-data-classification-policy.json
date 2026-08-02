@@ -36,7 +36,7 @@
         { "type": "Deployment-Domain", "classification": "INTERNAL", "storage": "Workspace-Register", "brain": true },
         { "type": "Affiliate-Daten", "classification": "CONFIDENTIAL", "storage": "NUR Kunden-Repo", "brain": "metadata_only" },
         { "type": "Nutzerdaten", "classification": "RESTRICTED", "storage": "NUR Kunden-Repo", "brain": false },
-        { "type": "Zahlungsdaten", "classification": "RESTRICTED", "storage": "NUR Stripe", "brain": false },
+        { "type": "Zahlungsdaten", "classification": "RESTRICTED", "storage": "NUR Revolut Merchant", "brain": false },
         { "type": "API-Keys / Secrets", "classification": "RESTRICTED", "storage": "NUR Kunden-.env", "brain": false }
       ]
     }
