@@ -79,3 +79,17 @@ test('booking slots returns empty array fallback without inventing appointments'
 test('auth register route exists for /registrieren', () => {
   assert.match(read('../app/api/auth/register/route.ts'), /\/api\/auth\/register/);
 });
+
+test('proxyRequest buffers non-SSE bodies (auth/me empty-body regression)', () => {
+  const src = read('../lib/backend.ts');
+  assert.match(src, /text\/event-stream/);
+  assert.match(src, /arrayBuffer\(\)/);
+  assert.match(src, /accept-encoding/);
+  assert.match(src, /content-encoding/);
+});
+
+test('AuthProvider rejects empty {} session payloads', () => {
+  const src = read('../lib/auth.tsx');
+  assert.match(src, /empty session/);
+  assert.match(src, /typeof me\.id === "string"/);
+});
