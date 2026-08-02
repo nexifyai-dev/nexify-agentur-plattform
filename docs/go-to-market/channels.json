@@ -1,0 +1,278 @@
+{
+  "nir": "01.08.2026 19:25",
+  "what": "Kostenfreie B2B-Inserier- und Demand-Kanäle für NeXify AI",
+  "why": "Käufer suchen aktiv auf Verzeichnissen und Matching-Plattformen; Free-Tiers reichen für Startsichtbarkeit und AI-Zitationen",
+  "company": {
+    "brand": "NeXify AI",
+    "legal": "NeXify AI by NeXify – Chat it. Automate it.",
+    "owner": "Pascal Courbois",
+    "email": "mail@nexifyai.cloud",
+    "phone": "+31 6 133 188 56",
+    "website": "https://www.nexifyai.cloud",
+    "address": "Graaf van Loonstraat 1E, 5921 JA Venlo, Nederland",
+    "kvk": "90483944",
+    "vat": "NL865786276B01",
+    "day_rate_net_eur": 449,
+    "markets": [
+      "DE",
+      "AT",
+      "CH",
+      "NL"
+    ],
+    "b2b_only": true
+  },
+  "products_live": [
+    {
+      "slug": "landingpages",
+      "name": "Landingpage",
+      "min_days": 1,
+      "from_eur": 449,
+      "demand": "high"
+    },
+    {
+      "slug": "websites",
+      "name": "Unternehmenswebsite",
+      "min_days": 2,
+      "from_eur": 898,
+      "demand": "very_high"
+    },
+    {
+      "slug": "onlineshops",
+      "name": "Onlineshop",
+      "min_days": 6,
+      "from_eur": 2694,
+      "demand": "high"
+    },
+    {
+      "slug": "enterprise-commerce",
+      "name": "Commerce 50K+",
+      "min_days": 12,
+      "from_eur": 5388,
+      "demand": "medium"
+    },
+    {
+      "slug": "web-apps",
+      "name": "Web-App",
+      "min_days": 6,
+      "from_eur": 2694,
+      "demand": "high"
+    },
+    {
+      "slug": "mobile-apps",
+      "name": "Mobile App",
+      "min_days": 6,
+      "from_eur": 2694,
+      "demand": "medium"
+    },
+    {
+      "slug": "automatisierung",
+      "name": "Automatisierung",
+      "min_days": 1,
+      "from_eur": 449,
+      "demand": "very_high"
+    },
+    {
+      "slug": "ai-agenten",
+      "name": "AI-Agenten",
+      "min_days": 3,
+      "from_eur": 1347,
+      "demand": "very_high"
+    }
+  ],
+  "products_pipeline": [
+    {
+      "name": "NeXify AI Workstation",
+      "status": "internal",
+      "note": "Nicht als SaaS verkaufen vor Cutover-Freigabe; als Delivery-Beweis in Listings nutzen"
+    },
+    {
+      "name": "AgentMemory + LightRAG Pack",
+      "status": "runtime_ready",
+      "note": "Firmenwissen / Brain als Projektbaustein"
+    },
+    {
+      "name": "9Router LLM-Gateway",
+      "status": "internal",
+      "note": "Kostenkontrolle Multi-Model"
+    },
+    {
+      "name": "Wartungs-Retainer",
+      "status": "packagable",
+      "note": "Monatliche Weiterentwicklung"
+    },
+    {
+      "name": "AI-Workshop / Audit",
+      "status": "packagable",
+      "note": "0.5–1 Tag Einstieg"
+    },
+    {
+      "name": "White-Label Partner Delivery",
+      "status": "packagable",
+      "note": "Umsetzung hinter Partner-Marke"
+    }
+  ],
+  "channels": [
+    {
+      "id": "google-business",
+      "name": "Google Business Profile",
+      "url": "https://business.google.com/",
+      "cost": "free",
+      "priority": "P0",
+      "autonomy": "needs_pascal_google",
+      "fit": [
+        "local",
+        "websites",
+        "ai"
+      ],
+      "status": "pending_human_sso",
+      "note": "Google Account Pascal erforderlich"
+    },
+    {
+      "id": "profis-ai",
+      "name": "profis.ai",
+      "url": "https://profis.ai/",
+      "cost": "free",
+      "priority": "P0",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "ai-agenten",
+        "automatisierung"
+      ],
+      "categories": [
+        "Automationen mit KI",
+        "KI / GenAI Beratung & Implementation B2B",
+        "Softwareentwicklung • AI-Engineering"
+      ],
+      "status": "blocked_recaptcha_password",
+      "note": "Formular vorausgefüllt (nexifyai / mail@nexifyai.cloud / KI-Profi). Submit braucht Passwort + reCAPTCHA."
+    },
+    {
+      "id": "goodfirms",
+      "name": "GoodFirms",
+      "url": "https://www.goodfirms.co/get-listed",
+      "cost": "free",
+      "priority": "P0",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "all"
+      ],
+      "acceptance_note": "~23% acceptance free tier",
+      "status": "blocked_cloudflare_password",
+      "note": "Register-Form vorhanden inkl. Turnstile. Resend API vom VPS 403/1010. SMTP nicht konfiguriert."
+    },
+    {
+      "id": "clutch",
+      "name": "Clutch Free Profile",
+      "url": "https://clutch.co/tools",
+      "cost": "free",
+      "priority": "P0",
+      "autonomy": "needs_google_or_linkedin",
+      "fit": [
+        "websites",
+        "web-apps",
+        "ai"
+      ],
+      "status": "pending_human_sso",
+      "note": "Google/LinkedIn Login erforderlich"
+    },
+    {
+      "id": "sortlist",
+      "name": "Sortlist NL/DE",
+      "url": "https://www.sortlist.nl/s/artificial-intelligence/nederland-nl",
+      "cost": "free_profile",
+      "priority": "P0",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "ai",
+        "digital_agency"
+      ],
+      "status": "blocked_cloudflare",
+      "note": "agency/register Cloudflare Bot-Check"
+    },
+    {
+      "id": "agenturen-app",
+      "name": "agenturen.app",
+      "url": "https://agenturen.app/",
+      "cost": "free_base",
+      "priority": "P0",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "websites",
+        "shops",
+        "apps"
+      ],
+      "status": "submitted_awaiting_email_verify",
+      "submitted_at": "2026-08-01T17:20:00Z",
+      "evidence": "Form success: Vielen Dank! Verifizierungslink an mail@nexifyai.cloud",
+      "next": "Pascal: E-Mail von agenturen.app öffnen und Link bestätigen, dann Profil vervollständigen"
+    },
+    {
+      "id": "zukko",
+      "name": "Zukko.nl",
+      "url": "https://zukko.nl/bedrijf-aanmelden/",
+      "cost": "first_year_free",
+      "priority": "P1",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "local_nl"
+      ],
+      "status": "submitted_awaiting_profile",
+      "submitted_at": "2026-08-01T17:21:00Z",
+      "evidence": "Form success: Bedankt voor je aanmelding! Profil-Link binnen 24u",
+      "next": "Profil-Link aus Zukko-Mail annehmen und Fotos/Texte nachpflegen"
+    },
+    {
+      "id": "ai-rolodex",
+      "name": "The AI Rolodex",
+      "url": "https://theairolodex.com/",
+      "cost": "free_claim_or_add",
+      "priority": "P1",
+      "autonomy": "needs_work_email",
+      "fit": [
+        "ai-agenten",
+        "automatisierung"
+      ],
+      "status": "blocked_cloudflare_or_missing_form",
+      "note": "/add und /agencies/new = 404; Homepage hinter Cloudflare Challenge"
+    },
+    {
+      "id": "agenturmarkt",
+      "name": "Agenturmarkt.de KI",
+      "url": "https://www.agenturmarkt.de/agenturen/ki-agentur",
+      "cost": "freemium",
+      "priority": "P1",
+      "autonomy": "needs_email_otp",
+      "fit": [
+        "ai"
+      ],
+      "status": "pending_human"
+    },
+    {
+      "id": "demand-scan",
+      "name": "Repo Demand Scanner",
+      "url": "scripts/gtm-demand-scan.py",
+      "cost": "free",
+      "priority": "P0",
+      "autonomy": "fully_autonomous",
+      "fit": [
+        "all"
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "aiagencysearch",
+      "name": "AI Agency Search",
+      "url": "https://aiagencysearch.com/submit",
+      "cost": "free",
+      "priority": "P1",
+      "autonomy": "needs_working_form",
+      "fit": [
+        "ai-agenten",
+        "automatisierung"
+      ],
+      "status": "blocked_form_unavailable",
+      "note": "/submit zeigt nur Pricing; Signup-URLs 404. Listing-Mail draft vorhanden."
+    }
+  ],
+  "last_submission_run": "2026-08-01T17:20:52.259736+00:00"
+}
