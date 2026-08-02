@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
+import { branchenSlugs } from "@/lib/content/branchen";
 import { wissenArticleSlugs } from "@/lib/content/wissen-articles";
 import { siteOrigin } from "@/lib/seo";
 
 const routes = [
   "",
   "/leistungen",
+  "/branchen",
+  ...branchenSlugs().map((slug) => `/branchen/${slug}`),
   "/preise",
   "/prozess",
   "/vergleich",

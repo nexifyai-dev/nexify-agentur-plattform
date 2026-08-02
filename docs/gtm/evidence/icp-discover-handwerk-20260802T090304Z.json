@@ -1,0 +1,112 @@
+{
+  "icp": "handwerk",
+  "generated_at": "2026-08-02T09:03:04.742044+00:00",
+  "mode": "demo",
+  "query_pack": {
+    "icp": "handwerk",
+    "label": "Handwerk / Bau-KMU",
+    "rank": 1,
+    "landing": "/branchen/handwerk",
+    "keywords": [
+      "Handwerksbetrieb",
+      "SHK",
+      "Elektroinstallateur",
+      "Malerbetrieb",
+      "Tischlerei",
+      "Sanitär Heizung",
+      "Dachdecker"
+    ],
+    "exclude": [
+      "Großkonzern",
+      "Zeitarbeit",
+      "Franchise-Zentrale only"
+    ],
+    "directory_seeds": [
+      "https://www.handwerkskammer.de/",
+      "https://www.zdh.de/",
+      "https://www.gelbe-seiten.de/branchenbuch/handwerk"
+    ],
+    "searches": [
+      {
+        "query": "Handwerksbetrieb Impressum Kontakt email Deutschland",
+        "url": "https://www.google.com/search?q=Handwerksbetrieb+Impressum+Kontakt+email+Deutschland"
+      },
+      {
+        "query": "SHK Betrieb Website Angebot online NRW",
+        "url": "https://www.google.com/search?q=SHK+Betrieb+Website+Angebot+online+NRW"
+      },
+      {
+        "query": "Elektroinstallateur KMU Digitalisierung",
+        "url": "https://www.google.com/search?q=Elektroinstallateur+KMU+Digitalisierung"
+      },
+      {
+        "query": "site:hwk.de Mitgliederverzeichnis",
+        "url": "https://www.google.com/search?q=site%3Ahwk.de+Mitgliederverzeichnis"
+      },
+      {
+        "query": "Handwerk Betriebsseite Kontaktformular",
+        "url": "https://www.google.com/search?q=Handwerk+Betriebsseite+Kontaktformular"
+      }
+    ]
+  },
+  "pending_count": 2,
+  "skipped_count": 1,
+  "pending": [
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 100,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+20 Budget/Rahmen angedeutet",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "automatisierung",
+      "source": {
+        "id": "demo-handwerk-01",
+        "title": "Handwerk / Bau-KMU — Beispielbetrieb Nord",
+        "url": "https://example.invalid/handwerk/nord",
+        "company": "Demo Handwerk / Bau-KMU Nord GmbH",
+        "region": "NRW"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-handwerk-01: Handwerk / Bau-KMU — Beispielbetrieb Nord. Zusammenfassung: KMU Handwerksbetrieb mit öffentlichem Impressum; Admin-Pain erkennbar.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-handwerk-01&utm_medium=outbound&utm_campaign=automatisierung"
+    },
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 80,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "automatisierung",
+      "source": {
+        "id": "demo-handwerk-02",
+        "title": "Handwerk / Bau-KMU — Beispiel Süd",
+        "url": "https://example.invalid/handwerk/sued",
+        "company": "Demo Handwerk / Bau-KMU Süd UG",
+        "region": "BY"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-handwerk-02: Handwerk / Bau-KMU — Beispiel Süd. Zusammenfassung: Website + Kontaktseite; Digitalisierung erwähnt.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-handwerk-02&utm_medium=outbound&utm_campaign=automatisierung"
+    }
+  ],
+  "note": "Demo-Hits sind ungültige example.invalid-Adressen — kein Versand."
+}

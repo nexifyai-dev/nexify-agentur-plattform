@@ -1,0 +1,109 @@
+{
+  "icp": "agenturen",
+  "generated_at": "2026-08-02T09:03:04.742646+00:00",
+  "mode": "demo",
+  "query_pack": {
+    "icp": "agenturen",
+    "label": "Marketing-/Digital-Agenturen",
+    "rank": 3,
+    "landing": "/branchen/agenturen",
+    "keywords": [
+      "Digitalagentur",
+      "Online-Marketing Agentur",
+      "Webdesign Agentur",
+      "Performance Marketing",
+      "Creative Agency DACH"
+    ],
+    "exclude": [
+      "Pure Media Buying ohne Delivery",
+      "Personalvermittlung"
+    ],
+    "directory_seeds": [
+      "https://www.agenturmatching.de/",
+      "https://www.sortlist.de/",
+      "https://www.gelbe-seiten.de/branchenbuch/werbeagentur"
+    ],
+    "searches": [
+      {
+        "query": "Digitalagentur Impressum Deutschland",
+        "url": "https://www.google.com/search?q=Digitalagentur+Impressum+Deutschland"
+      },
+      {
+        "query": "Online Marketing Agentur Partner KI",
+        "url": "https://www.google.com/search?q=Online+Marketing+Agentur+Partner+KI"
+      },
+      {
+        "query": "Webagentur White Label Entwicklung",
+        "url": "https://www.google.com/search?q=Webagentur+White+Label+Entwicklung"
+      },
+      {
+        "query": "Performance Agentur Kontakt",
+        "url": "https://www.google.com/search?q=Performance+Agentur+Kontakt"
+      },
+      {
+        "query": "Creative Agency DACH Overflow Delivery",
+        "url": "https://www.google.com/search?q=Creative+Agency+DACH+Overflow+Delivery"
+      }
+    ]
+  },
+  "pending_count": 2,
+  "skipped_count": 1,
+  "pending": [
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 100,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+20 Budget/Rahmen angedeutet",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "ai-agenten",
+      "source": {
+        "id": "demo-agenturen-01",
+        "title": "Marketing-/Digital-Agenturen — Beispielbetrieb Nord",
+        "url": "https://example.invalid/agenturen/nord",
+        "company": "Demo Marketing-/Digital-Agenturen Nord GmbH",
+        "region": "NRW"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-agenturen-01: Marketing-/Digital-Agenturen — Beispielbetrieb Nord. Zusammenfassung: KMU Digitalagentur mit öffentlichem Impressum; Admin-Pain erkennbar.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-agenturen-01&utm_medium=outbound&utm_campaign=ai-agenten"
+    },
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 80,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "ai-agenten",
+      "source": {
+        "id": "demo-agenturen-02",
+        "title": "Marketing-/Digital-Agenturen — Beispiel Süd",
+        "url": "https://example.invalid/agenturen/sued",
+        "company": "Demo Marketing-/Digital-Agenturen Süd UG",
+        "region": "BY"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-agenturen-02: Marketing-/Digital-Agenturen — Beispiel Süd. Zusammenfassung: Website + Kontaktseite; Digitalisierung erwähnt.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-agenturen-02&utm_medium=outbound&utm_campaign=ai-agenten"
+    }
+  ],
+  "note": "Demo-Hits sind ungültige example.invalid-Adressen — kein Versand."
+}
