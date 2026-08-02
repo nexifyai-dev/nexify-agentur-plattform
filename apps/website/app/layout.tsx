@@ -3,8 +3,6 @@ import "@fontsource-variable/manrope";
 import "@fontsource-variable/outfit";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { CookieConsent } from "@/components/cookie-consent";
-import { StickyCta } from "@/components/sticky-cta";
 import { DeferredWidgets } from "@/components/deferred-widgets";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
@@ -107,11 +105,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             Zum Inhalt springen
           </a>
           <SiteHeader />
-          <div id="main-content">{children}</div>
+          {/* min-h keeps footer below the fold during Suspense/hydration — primary CLS fix */}
+          <div id="main-content" className="min-h-[100svh]">
+            {children}
+          </div>
           <SiteFooter />
-          <StickyCta />
           <DeferredWidgets />
-          <CookieConsent />
           <PwaRegister />
           </AuthProvider>
         </LanguageProvider>

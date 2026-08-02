@@ -22,18 +22,26 @@ URL: https://www.nexifyai.cloud/
 1. Removed non-composited `.text-silver` `background-position` shimmer → solid `#e4e4e7`
 2. Hero LCP content no longer wrapped in `.reveal` (opacity 0 until JS)
 3. Font size-adjust fallbacks (`Outfit Fallback` / `Manrope Fallback`)
-4. Chat + ExitIntent idle-deferred via `DeferredWidgets`
-5. Added `/llms.txt` + `/.well-known/llms.txt` (spec-shaped Markdown)
-6. Contrast bumps (`zinc-500` → `zinc-400` on key muted copy)
+4. All fixed overlays idle-deferred via `DeferredWidgets` (chat, exit-intent, sticky CTA, cookie)
+5. **Footer CLS:** `#main-content` + Suspense `loading` use `min-h: 100svh` so `site-footer` starts below the fold; `content-visibility` on footer
+6. Added `/llms.txt` + `/.well-known/llms.txt` (`# NeXify AI` + markdown links)
+7. Anonymous `/api/auth/me` → 200 `{}` (no 401 console noise); skip refresh when empty
+8. Contrast bumps (`zinc-500` → `zinc-400` on key muted copy)
+
+## CLS strategy (footer 0.48 → ~0)
+
+PSI attributes nearly all CLS to `data-testid="site-footer"` because **main grows after Suspense/hydration** and pushes the footer while it is still in (or entering) the viewport. Overlays were already `position:fixed` and not the root cause.
+
+Fix: reserve a full viewport for main on first paint (`min-h-[100svh]` on `#main-content` and `app/loading.tsx`). Footer starts off-screen; subsequent growth does not score as visible footer shift. Overlays stay fixed and deferred.
 
 ## Expected impact
 
 | Metric | Target |
 |--------|--------|
-| CLS | < 0.1 (primary) |
-| LCP | ≤ 2.5s |
-| Performance | ≥ 90 aspirational; ≥ 85 realistic |
-| Agentic llms.txt | pass |
+| CLS | < 0.1 (footer contribution ≈ 0; was 0.48 desktop / 0.35 mobile) |
+| LCP | ≤ 2.5s (desktop already excellent) |
+| Performance | ≥ 85 realistic |
+| Agentic llms.txt | pass (H1 + markdown links) |
 
 ## Retest
 

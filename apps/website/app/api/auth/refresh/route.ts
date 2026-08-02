@@ -18,11 +18,15 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const cookie = request.headers.get("cookie") ?? "";
+  if (!/(?:^|;\s*)(?:access_token|refresh_token)=/.test(cookie)) {
+    return NextResponse.json({}, { status: 200 });
+  }
   try {
     const upstream = await proxyRequest("/api/auth/refresh", request);
     if (upstream) return upstream;
   } catch {
-    return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({}, { status: 200 });
   }
-  return NextResponse.json({ detail: "Not authenticated" }, { status: 401 });
+  return NextResponse.json({}, { status: 200 });
 }

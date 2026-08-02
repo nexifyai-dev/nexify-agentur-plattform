@@ -95,4 +95,12 @@ test('AuthProvider rejects empty {} session payloads', () => {
   const src = read('../lib/auth.tsx');
   assert.match(src, /empty session/);
   assert.match(src, /typeof me\.id === "string"/);
+  assert.match(src, /do not call \/auth\/refresh/);
+});
+
+test('auth/me returns 200 for anonymous (no 401 console noise)', () => {
+  const src = read('../app/api/auth/me/route.ts');
+  assert.match(src, /hasSessionCookie/);
+  assert.match(src, /status: 200/);
+  assert.doesNotMatch(src, /status: 401/);
 });
