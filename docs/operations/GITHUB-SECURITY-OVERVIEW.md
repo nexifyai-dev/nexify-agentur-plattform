@@ -30,7 +30,7 @@
 
 ## CodeQL
 
-- Advanced Setup: Matrix `javascript-typescript` + `python`
+- Advanced Setup: Matrix `javascript-typescript` + `python` (`github/codeql-action@v4`)
 - `apps/hermes/**` (vendored Upstream) ist per `paths-ignore` aus der Analyse ausgeschlossen — Findings dort werden nicht als Produkt-Alerts geführt
 - Backend-/Website-Findings: Fixes über Security-Triage-PRs (z. B. Dependabot-Close)
 
