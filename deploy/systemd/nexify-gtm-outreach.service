@@ -1,0 +1,13 @@
+[Unit]
+Description=NeXify AI GTM outreach (dry-run safe)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/nexifyai/repos/nexify-agentur-plattform
+Environment=SECRETS_FILE=/etc/nexifyai/mail-nexifyai.env
+Environment=OUTREACH_DAILY_CAP=15
+ExecStart=/bin/bash /opt/nexifyai/repos/nexify-agentur-plattform/scripts/gtm/run-daily.sh --dry-run
+
+[Install]
+WantedBy=multi-user.target
