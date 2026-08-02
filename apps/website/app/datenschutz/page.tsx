@@ -1,12 +1,31 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, breadcrumbListJsonLd, webPageJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
   title: "Datenschutzerklärung / Privacyverklaring",
-  description: "Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO/AVG – Website, KI-Chat NOVA und B2B-Anfragen.",
+  description: "Informationspflichten nach Art. 12–14 DSGVO für Website, KI-Chat und B2B-Anfragen.",
   path: "/datenschutz",
 });
 
+const breadcrumbJsonLd = breadcrumbListJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Datenschutzerklärung", path: "/datenschutz" },
+]);
+
+const pageJsonLd = webPageJsonLd({
+  title: "Datenschutzerklärung",
+  description: "Informationspflichten nach Art. 12–14 DSGVO für Website, KI-Chat und B2B-Anfragen.",
+  path: "/datenschutz",
+  dateModified: "2026-08-02",
+});
+
 export default function Page() {
-  return <LegalPageView slug="datenschutz" />;
+  return (
+    <>
+      <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={pageJsonLd} />
+      <LegalPageView slug="datenschutz" />
+    </>
+  );
 }
