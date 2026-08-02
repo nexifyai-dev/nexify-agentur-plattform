@@ -9,7 +9,7 @@
 # PITFALL: V-OUT-01/05: Never raise cap above 800; never cold-mail via Resend
 # DEPENDS: scripts/outreach/*, .github/workflows/lead-outreach-daily.yml
 # DOCS-REF: docs/governance/02_sops/SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.md
-# SESSION: lead-outreach-automation-7dd5
+# SESSION: uwg-optin-only-7dd5
 
 # Lead Outreach Automation
 
@@ -35,13 +35,16 @@ Backend `send_email()` still falls back SMTP→Resend for transactional paths. *
 | Live send | Off unless `OUTREACH_LIVE=1` | Schedule defaults dry-run |
 | Source ban | No `purchased_list` / spam lists | `source_type` gate |
 
-## GDPR / EU
+## GDPR / EU + UWG §7 (DE)
 
-- Store **source** + **legal_basis** (default `legitimate_interest_b2b`) on every lead.
+> **Hard stop:** Cold-E-Mail ohne Einwilligung ist in DE **auch B2B** unzulässig (§7 UWG).
+> Siehe `docs/gtm/UWG-EMAIL-OPTIN-ONLY.md`. `legitimate_interest_b2b` ist **kein** Send-Gate.
+
+- Store **source** + **`consent=true`** (opt-in) + `legal_basis=consent` for any sendable lead.
 - Every mail includes **unsubscribe** link + Impressum/Datenschutz.
-- `send_allowed` must be true (or `OUTREACH_REQUIRE_SEND_ALLOWED=0` for controlled tests).
+- `validate_for_send` requires **`consent=true`** AND `send_allowed` (unless tests disable the latter).
 - No consumer spam lists; B2B professional tone (DE templates).
-- Aligns with SOP gate: promote with `--allow-send` only after policy review for a batch.
+- Promote: `--allow-send` only sets `send_allowed` when the lead already has `consent=true`.
 
 Unsubscribe API: `GET/POST https://www.nexifyai.cloud/api/outreach/unsubscribe?email=&token=`
 
