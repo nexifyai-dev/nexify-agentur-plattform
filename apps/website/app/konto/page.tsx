@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { CheckCircle2, ChevronDown, CreditCard, Download, FileText, LogOut, MessageSquare, Send, User as UserIcon, XCircle } from "lucide-react";
@@ -325,13 +326,13 @@ export default function PortalPage() {
               {t.statusHelpTitle}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-zinc-400">{t.statusHelp}</p>
-            <a
+            <Link
               href="/rueckruf"
               className="mt-4 inline-flex text-sm font-semibold text-zinc-200 transition-colors hover:text-white"
               data-testid="portal-book-call"
             >
               {t.bookCall} →
-            </a>
+            </Link>
           </div>
           <div className="glass h-fit p-6" data-testid="portal-profile">
             <h2 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
