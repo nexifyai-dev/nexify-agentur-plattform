@@ -171,7 +171,7 @@ export function CallbackPage() {
                           key={s.id}
                           onClick={() => setSelected(s)}
                           data-testid={`booking-slot-${s.id}`}
-                          className={`rounded-full border px-4 py-2 text-[13px] font-semibold transition-all ${selected?.id === s.id ? "border-white/70 bg-white text-black" : "border-white/15 text-zinc-300 hover:border-white/40 hover:text-white"}`}
+                          className={`min-h-11 rounded-full border px-4 py-2.5 text-[13px] font-semibold transition-all ${selected?.id === s.id ? "border-white/70 bg-white text-black" : "border-white/15 text-zinc-300 hover:border-white/40 hover:text-white"}`}
                         >
                           {timeOf(s)} · {s.duration_min} {t.minutes}
                         </button>
@@ -184,7 +184,7 @@ export function CallbackPage() {
           </Reveal>
 
           <Reveal delay={120}>
-            <div className="glass space-y-3 p-6">
+            <div className="glass space-y-3 p-5 sm:p-6">
               <h2 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
                 <PhoneCall size={13} /> {t.details}
               </h2>
@@ -194,7 +194,7 @@ export function CallbackPage() {
               <input className="field" placeholder={t.company} value={f.company} onChange={(e) => setF((x) => ({ ...x, company: e.target.value }))} />
               <textarea className="field min-h-20" placeholder={t.topic} value={f.topic} onChange={(e) => setF((x) => ({ ...x, topic: e.target.value }))} />
               <label className="flex items-start gap-2.5 text-[12px] leading-relaxed text-zinc-500">
-                <input type="checkbox" className="mt-0.5 accent-white" checked={f.privacy} onChange={(e) => setF((x) => ({ ...x, privacy: e.target.checked }))} data-testid="booking-privacy" />
+                <input type="checkbox" className="mt-0.5 size-4 shrink-0 accent-white" checked={f.privacy} onChange={(e) => setF((x) => ({ ...x, privacy: e.target.checked }))} data-testid="booking-privacy" />
                 <span>
                   {t.privacy} <Link href="/datenschutz" className="underline hover:text-white">Datenschutz</Link>
                 </span>

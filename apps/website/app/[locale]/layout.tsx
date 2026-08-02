@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CustomCursor } from "@/components/custom-cursor";
 import { ScrollProgress } from "@/components/scroll-progress";
-import { StickyCta } from "@/components/sticky-cta";
 import { company } from "@/lib/site-data";
 import { getTranslations, isValidLocale, type Locale, locales } from "@/lib/i18n";
 
@@ -76,7 +75,6 @@ export default async function LocaleLayout({
     <>
       <CustomCursor />
       <ScrollProgress />
-      <StickyCta />
       {children}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>

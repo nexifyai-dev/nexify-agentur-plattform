@@ -63,8 +63,8 @@ export function SiteHeader() {
       }`}
       data-testid="site-header"
     >
-      <div className="site-container flex h-[74px] items-center justify-between gap-4">
-        <Link href="/" aria-label="NeXify AI – Startseite" data-testid="header-logo-link">
+      <div className="site-container flex h-[64px] items-center justify-between gap-2 sm:h-[74px] sm:gap-4">
+        <Link href="/" aria-label="NeXify AI – Startseite" data-testid="header-logo-link" className="min-w-0 shrink">
           <Logo />
         </Link>
 
@@ -83,14 +83,14 @@ export function SiteHeader() {
           ))}
           </nav>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center rounded-full border border-white/12 p-1" data-testid="lang-switcher">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+          <div className="flex items-center rounded-full border border-white/12 p-0.5 sm:p-1" data-testid="lang-switcher">
             {(["de", "en", "nl"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
                 data-testid={`lang-switcher-${l}`}
-                className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+                className={`min-h-9 min-w-9 rounded-full px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all sm:min-h-0 sm:min-w-0 sm:px-3 ${
                   lang === l ? "bg-white text-black shadow-[0_0_14px_rgba(255,255,255,0.25)]" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -101,7 +101,7 @@ export function SiteHeader() {
 
           <Link
             href={user && typeof user === "object" ? (user.role === "admin" ? "/admin" : "/konto") : "/login"}
-            className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+            className="inline-flex size-11 items-center justify-center rounded-full border border-white/12 text-zinc-300 transition-colors hover:border-white/30 hover:text-white sm:size-10"
             aria-label={lang === "de" ? "Konto" : "Account"}
             data-testid="header-account-link"
           >
@@ -113,7 +113,7 @@ export function SiteHeader() {
           </Link>
 
           <button
-            className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 text-white lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-full border border-white/12 text-white sm:size-10 lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Menü schließen" : "Menü öffnen"}
             aria-expanded={open}
@@ -126,19 +126,22 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div id="mobile-nav-menu" className="border-t border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden" data-testid="mobile-menu" role="dialog" aria-label="Navigation">
+        <div id="mobile-nav-menu" className="max-h-[min(80vh,calc(100dvh-64px))] overflow-y-auto border-t border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden" data-testid="mobile-menu" role="dialog" aria-label="Navigation">
           <nav className="site-container flex flex-col gap-1 py-4" aria-label="Mobile">
             {NAV[lang].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-xl px-4 py-3 text-sm font-medium ${pathname === item.href ? "bg-white/5 text-white" : "text-zinc-400"}`}
+                className={`rounded-xl px-4 py-3.5 text-base font-medium ${pathname === item.href ? "bg-white/5 text-white" : "text-zinc-400"}`}
               >
                 {item.label}
               </Link>
             ))}
-            <Link href="/kontakt" className="btn-primary mt-2 justify-center">
+            <Link href="/kontakt" className="btn-primary mt-2 min-h-12 justify-center">
               {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
+            </Link>
+            <Link href="/rueckruf" className="btn-ghost mt-1 min-h-12 justify-center !text-sm">
+              {lang === "en" ? "Book callback" : lang === "nl" ? "Terugbelafspraak" : "Rückruf buchen"}
             </Link>
           </nav>
         </div>

@@ -6,8 +6,8 @@ test('StickyCta - shows after scroll threshold', () => {
   assert.equal(threshold, 600);
 });
 
-test('StickyCta - has correct position', () => {
-  const position = { bottom: '24px', left: '50%', transform: 'translateX(-50%)' };
-  assert.equal(position.bottom, '24px');
-  assert.equal(position.left, '50%');
+test('StickyCta - clears chat launcher on mobile', () => {
+  const position = { insetX: true, chatClearance: '4.75rem', lgHidden: true };
+  assert.equal(position.chatClearance, '4.75rem');
+  assert.equal(position.lgHidden, true);
 });
