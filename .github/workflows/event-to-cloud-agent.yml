@@ -1,6 +1,6 @@
 # FILE: .github/workflows/event-to-cloud-agent.yml
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:30
+# UPDATED: 02.08.2026 08:58
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: GitHub-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
@@ -57,11 +57,26 @@ permissions:
 
 concurrency:
   group: cloud-agent-${{ github.event_name }}-${{ github.event.issue.number || github.event.pull_request.number || github.event.client_payload.dedupe_key || github.run_id }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   dispatch-cloud-agent:
-    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    # Skip unlabeled noise early — unlabeled issue opens were flooding the Actions queue.
+    if: |
+      github.repository == 'nexifyai-dev/nexify-agentur-plattform' && (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'repository_dispatch' ||
+        github.event_name == 'workflow_run' ||
+        (github.event_name == 'issues' && (
+          contains(join(github.event.issue.labels.*.name, ','), 'agent-fix') ||
+          contains(join(github.event.issue.labels.*.name, ','), 'cursor-fix') ||
+          contains(join(github.event.issue.labels.*.name, ','), 'autonomous')
+        )) ||
+        (github.event_name == 'pull_request' && (
+          contains(join(github.event.pull_request.labels.*.name, ','), 'agent-fix') ||
+          contains(join(github.event.pull_request.labels.*.name, ','), 'cursor-fix')
+        ))
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -88,12 +103,13 @@ jobs:
               fi
               ;;
             issues)
-              if echo ",${ISSUE_LABELS}," | grep -Eq ',(agent-fix|cursor-fix|autonomous),'; then
+              # human-gate / blocked: never auto-launch (secrets, Hermes cutover)
+              if echo ",${ISSUE_LABELS}," | grep -Eqi ',(human-gate|blocked),'; then
+                launch=0
+                reason="issue_human_gate_skip"
+              elif echo ",${ISSUE_LABELS}," | grep -Eqi ',(agent-fix|cursor-fix|autonomous|P0),'; then
                 launch=1
                 reason="issue_label"
-              elif [ "${ACTION:-}" = "opened" ] || [ "${ACTION:-}" = "reopened" ]; then
-                launch=1
-                reason="issue_opened_triage"
               fi
               ;;
             pull_request)

@@ -1,0 +1,47 @@
+# FILE: .github/ISSUE_TEMPLATE/ops-human-gate.yml
+# NIR: 02.08.2026 08:55
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI DevOps
+# WHAT: Human-gate ops template — never auto-closed / never auto-agent.
+# DOCS-REF: docs/operations/ISSUES-AUTOMATION.md
+
+name: Ops / Human-gate
+description: Secrets, Cutover, Freigaben — nur Mensch
+title: "[ops] "
+labels: ["ops", "human-gate", "blocked", "P0"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Human-gate:** Cursor Agent startet **nicht** automatisch.
+        Stale-Bot schließt dieses Issue **nicht**.
+        Secret-**Namen** ok — Secret-**Werte** verboten.
+  - type: dropdown
+    id: gate_type
+    attributes:
+      label: Gate-Typ
+      options:
+        - Actions secrets / credentials
+        - Hermes production cutover
+        - VPS runner / infra Freigabe
+        - Budget / Circuit Breaker
+        - Andere menschliche Freigabe
+    validations:
+      required: true
+  - type: textarea
+    id: needed
+    attributes:
+      label: Was muss ein Mensch tun?
+      placeholder: z.B. CURSOR_API_KEY in Actions Secrets setzen (Wert nicht hier)
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      value: |
+        - [ ] Secret-Namen konfiguriert (Werte nur in Settings)
+        - [ ] Agent-Launch wieder möglich
+        - [ ] Kein Prod-Cutover ohne Endabnahme
+    validations:
+      required: true
