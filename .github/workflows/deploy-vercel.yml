@@ -7,15 +7,17 @@
 # WHY: Automated Vercel deploy ensures design-system fixes in main reach production
 #      without manual intervention. Fixes broken design caused by PRs #15-#18.
 # BEST-PRACTICE: Vercel CLI via pnpm dlx — no global install needed, always latest
-# PITFALL: V-01: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) / VERCEL_ORG_ID /
-#          VERCEL_PROJECT_ID must be set in GitHub Secrets (Vercel → Settings → Tokens).
-#          VERCEL_ACCESS_TOKEN is the legacy Vercel CLI secret name; both are supported.
+# PITFALL: V-01: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN) must be set in GitHub
+#          Secrets/Variables (Vercel → Settings → Tokens). VERCEL_ACCESS_TOKEN
+#          is the legacy Vercel CLI name and can be provided as secret OR variable.
+#          VERCEL_ORG_ID / VERCEL_PROJECT_ID are optional hints for linked project context.
 #          Missing required credentials MUST fail the job (CI signal integrity / #138) —
 #          never skip-as-success / fake-green.
 # PITFALL: V-02: Use a preflight step to detect missing credentials before expensive
 #          steps (pnpm install, CLI deploy) — fails fast with secret NAMES only.
-# DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name), VERCEL_ORG_ID,
-#          VERCEL_PROJECT_ID — set as GitHub Secrets or repository variables
+# DEPENDS: VERCEL_TOKEN (or VERCEL_ACCESS_TOKEN as alternative name)
+#          required; VERCEL_ORG_ID + VERCEL_PROJECT_ID optional — set as GitHub
+#          Secrets or repository variables
 # DOCS-REF: https://vercel.com/docs/cli
 
 name: Deploy to Vercel (main → production)
@@ -50,20 +52,21 @@ jobs:
       - name: Preflight — require Vercel credentials
         id: preflight
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN || vars.VERCEL_ACCESS_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
         run: |
           set -euo pipefail
           MISSING=()
           [ -z "${VERCEL_TOKEN:-}" ]      && MISSING+=(VERCEL_TOKEN)
-          [ -z "${VERCEL_ORG_ID:-}" ]     && MISSING+=(VERCEL_ORG_ID)
-          [ -z "${VERCEL_PROJECT_ID:-}" ] && MISSING+=(VERCEL_PROJECT_ID)
           if [ ${#MISSING[@]} -gt 0 ]; then
             echo "::error::Vercel production deploy aborted — required credentials missing: ${MISSING[*]}"
-            echo "::error::Set these as GitHub Secrets (or repository variables). VERCEL_TOKEN may also be provided as VERCEL_ACCESS_TOKEN. Do not invent values."
+            echo "::error::Set these as GitHub Secrets/Variables. VERCEL_TOKEN may also be provided as VERCEL_ACCESS_TOKEN (secret or variable). Do not invent values."
             echo "::error::Refusing skip-as-success (CI signal integrity / issue #138)."
             exit 1
+          fi
+          if [ -z "${VERCEL_ORG_ID:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
+            echo "::warning::VERCEL_ORG_ID and/or VERCEL_PROJECT_ID missing. Continuing with token-only deploy context."
           fi
           echo "credentials_ok=true" >> "$GITHUB_OUTPUT"
           echo "Vercel credentials present (names checked only)."
@@ -113,7 +116,7 @@ jobs:
         id: deploy
         working-directory: apps/website
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || secrets.VERCEL_ACCESS_TOKEN || vars.VERCEL_TOKEN || vars.VERCEL_ACCESS_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
         run: |
