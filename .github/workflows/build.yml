@@ -29,6 +29,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  TZ: Europe/Berlin
   REGISTRY: ghcr.io
   IMAGE_BASE: ${{ github.repository_owner }}/nexify-agentur-plattform
 

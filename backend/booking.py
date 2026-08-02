@@ -20,7 +20,7 @@ _DB = cast(Callable[[], Awaitable[Any]], None)
 _SEND_EMAIL = cast(Callable[..., Any], None)
 _CI_EMAIL = cast(Callable[..., Any], None)
 FRONTEND_URL = ""
-TZ = ZoneInfo("Europe/Amsterdam")
+TZ = ZoneInfo("Europe/Berlin")
 
 WEEKDAYS = {
     "de": [
