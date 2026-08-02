@@ -6,6 +6,7 @@ import { Reveal } from "@/components/reveal";
 import { ICONS } from "@/components/icon-map";
 import { LogoMark } from "@/components/logo";
 import { HeroVisual } from "@/components/hero-visual";
+import { GithubSocialProof } from "@/components/github-social-proof";
 import { useContent } from "@/lib/content";
 
 export function HomePage() {
@@ -183,6 +184,12 @@ export function HomePage() {
         </div>
       </section>
 
+      <section className="py-12 md:py-16">
+        <div className="site-container">
+          <GithubSocialProof />
+        </div>
+      </section>
+
       {/* CTA BAND */}
       <section className="py-16 md:py-28">
         <div className="site-container">
@@ -196,6 +203,9 @@ export function HomePage() {
                 <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
                   <Link href="/kontakt" className="btn-primary" data-testid="cta-band-btn">
                     {t.home.ctaBandBtn} <ArrowRight size={16} />
+                  </Link>
+                  <Link href="/wissen" className="btn-ghost !py-2.5 text-sm" data-testid="cta-band-wissen">
+                    {t.home.ctaBandWissen}
                   </Link>
                 </div>
               </div>

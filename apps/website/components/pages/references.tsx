@@ -1,7 +1,9 @@
 "use client";
 
-import { Quote, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Quote, TrendingUp } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { GithubSocialProof } from "@/components/github-social-proof";
 import { useContent } from "@/lib/content";
 
 export function ReferencesPage() {
@@ -46,6 +48,24 @@ export function ReferencesPage() {
             </Reveal>
           ))}
         </div>
+
+        <div className="mt-16">
+          <GithubSocialProof />
+        </div>
+
+        <Reveal>
+          <div className="glass mt-8 overflow-hidden p-8 text-center sm:p-12" data-testid="references-cta">
+            <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light text-white sm:text-3xl">
+              {t.home.ctaBandTitle}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-zinc-400">{t.home.ctaBandText}</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link href="/kontakt" className="btn-primary" data-testid="references-cta-kontakt">
+                {t.home.ctaBandBtn} <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </main>
   );

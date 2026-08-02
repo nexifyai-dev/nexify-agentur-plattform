@@ -74,7 +74,22 @@ export const de = {
       "Beschreiben Sie Ihr Vorhaben – in der Regel erhalten Sie innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Preisrahmen. Oder fragen Sie NeXify AI, unseren AI-Berater, direkt im Chat.",
     ctaBandBtn: "Jetzt Anfrage senden",
     ctaBandBtn2: "Mit NeXify AI chatten",
+    ctaBandWissen: "Wissen & Einblicke",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI-Agenten", "Automatisierung", "E-Commerce", "Web-Apps", "Mobile Apps", "SEO", "Cloud-Infrastruktur", "API-Integration"],
+    githubProof: {
+      eyebrow: "Open Source & Transparenz",
+      title: "Technik, die Sie nachvollziehen können",
+      text:
+        "Unsere Agentur-Plattform und Website sind öffentlich auf GitHub dokumentiert — Next.js, FastAPI, TypeScript. Keine Blackbox: Stack, Topics und Lieferversprechen sind einsehbar. Projektergebnisse bleiben anonymisiert (siehe Referenzen).",
+      repoCta: "GitHub-Repository",
+      casesCta: "Anonymisierte Fälle ansehen",
+      items: [
+        { value: "Next.js", label: "Agentur-Website & Delivery-Stack" },
+        { value: "FastAPI", label: "Backend & Integrationsschicht" },
+        { value: "449 €", label: "netto / Tag — öffentlich kalkuliert" },
+        { value: "DACH+NL", label: "B2B-Fokus, Sitz Venlo" },
+      ],
+    },
   },
   services: [
     {
@@ -346,6 +361,12 @@ export const de = {
     intro: "Praxisnahes Wissen zu Websites, Commerce, Automatisierung und AI-Agenten – ohne Marketing-Nebel, dafür mit klaren Empfehlungen.",
     readMore: "Weiterlesen",
     readLess: "Einklappen",
+    cta: {
+      title: "Vom Wissen zum konkreten Projekt?",
+      text: "Kostenlose Erstberatung — Aufwandsspanne und Preisrahmen in der Regel innerhalb eines Werktags. Tagessatz 449 € netto, persönlich verantwortet.",
+      primary: "Projekt anfragen",
+      secondary: "Leistungen & Preise",
+    },
     articles: [
       {
         tag: "Strategie",

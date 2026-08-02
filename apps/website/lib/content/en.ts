@@ -57,7 +57,22 @@ export const en = {
       "Describe your project – you will typically receive an honest assessment with effort range and price bracket within one working day. Or ask NeXify AI, our AI advisor, directly in the chat.",
     ctaBandBtn: "Send enquiry now",
     ctaBandBtn2: "Chat with NeXify AI",
+    ctaBandWissen: "Knowledge & insights",
     marquee: ["Next.js", "React", "TypeScript", "Supabase", "AI agents", "Automation", "E-commerce", "Web apps", "Mobile apps", "SEO", "Cloud infrastructure", "API integration"],
+    githubProof: {
+      eyebrow: "Open source & transparency",
+      title: "Engineering you can inspect",
+      text:
+        "Our agency platform and website are documented publicly on GitHub — Next.js, FastAPI, TypeScript. No black box: stack, topics and delivery promises are visible. Project outcomes stay anonymised (see references).",
+      repoCta: "GitHub repository",
+      casesCta: "View anonymised cases",
+      items: [
+        { value: "Next.js", label: "Agency site & delivery stack" },
+        { value: "FastAPI", label: "Backend & integrations" },
+        { value: "€ 449", label: "net / day — publicly priced" },
+        { value: "DACH+NL", label: "B2B focus, based in Venlo" },
+      ],
+    },
   },
   services: [
     {
@@ -329,6 +344,12 @@ export const en = {
     intro: "Practical knowledge on websites, commerce, automation and AI agents – no marketing fog, just clear recommendations.",
     readMore: "Read more",
     readLess: "Collapse",
+    cta: {
+      title: "From insight to a concrete project?",
+      text: "Free initial consultation — effort range and price bracket typically within one working day. Daily rate € 449 net, personally accountable.",
+      primary: "Request a project",
+      secondary: "Services & pricing",
+    },
     articles: [
       {
         tag: "Strategy",

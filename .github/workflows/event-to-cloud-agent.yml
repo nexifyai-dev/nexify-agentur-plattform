@@ -1,6 +1,6 @@
 # FILE: .github/workflows/event-to-cloud-agent.yml
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:58
+# UPDATED: 02.08.2026 09:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: GitHub-Events → Cursor Cloud Agent (PC-aus-fähig) via REST API.
@@ -33,6 +33,8 @@ on:
       - cloudflare-alert
       - resend-bounce
       - website-error
+      - free-gtm-dach
+      - lead-outreach-run
   workflow_dispatch:
     inputs:
       prompt:
