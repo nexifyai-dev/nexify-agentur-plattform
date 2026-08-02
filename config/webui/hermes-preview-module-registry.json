@@ -2,7 +2,7 @@
   "_meta": {
     "file": "config/webui/hermes-preview-module-registry.json",
     "nir": "31.07.2026 12:20",
-    "updated": "31.07.2026 12:27",
+    "updated": "02.08.2026 09:50",
     "what": "Hermes Preview module registry — wires native preview panels without Prod WebUI patch",
     "why": "WebUI-Zentrale: Dashboard→WebUI native; Preview-only consumers",
     "status": "PREVIEW — do not mount into Prod Hermes :8787 without Smoke+Endabnahme",
@@ -44,5 +44,7 @@
       "source_module_id": "backend-openapi",
       "hermes_integration": "ICD + Allowlist status; 1Backend adapter-only pointer"
     }
-  ]
+  ],
+  "default_locale": "de",
+  "locale_note": "Preview DE-first; Prod Hermes i18n Fallback en until cutover — see docs/operations/LOCALE-DE-STANDARD.md"
 }
