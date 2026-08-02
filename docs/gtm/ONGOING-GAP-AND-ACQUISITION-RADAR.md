@@ -49,7 +49,7 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | A08 | Retargeting nur organisch (kein Ad-Spend) | open | LinkedIn organic + remarketing-free only |
 | A09 | Exit-Intent / Sticky CTA Verbesserungen | **shipped** | Sticky + Exit-Intent Modal (#208) |
 | A10 | Trust: Testimonials/Logos/SLA | pipeline | #211 Permission-Pipeline; Widget erst nach ≥1 Erlaubnis |
-| A11 | GSC Verification Meta/Property | open | Human — Search Console Verify |
+| A11 | GSC Verification Meta/Property | **done** | DNS Domain + Sitemap submitted 2026-08-02 — `docs/operations/GOOGLE-SEARCH-CONSOLE.md`; next: Coverage + Indexing #243 |
 | A12 | Comparison: „KI Agentur vs Freelance“ Subpages | open | Follow-up Content nach `/vergleich` |
 
 ---
@@ -76,7 +76,7 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | Spaether public DNS | NXDOMAIN | Decision: deprecate public until use-case (#209) |
 | Paperclip :3100 | intentional down | KEEP Factory SoT; no auto-revive (#209) |
 | Grafana/Prometheus/OpenDesign | RUNTIME-DOWN (bootstrap WARN) | Ops — CF-Tunnel |
-| Google Search Console | unverifiziert? | Human Issue |
+| Google Search Console | Ownership + Sitemap **DONE** 2026-08-02 | Next: Coverage + URL-Inspection (#243) |
 | #123 secrets+runner | open P0 human-gate | wait |
 | #201 legal Stammdaten | open human-gate | wait |
 
@@ -92,7 +92,9 @@ Agents: neue Zeilen hier + Issue-Nummer nach `gh issue create`.
 | 2026-08-02 | Podcast + Gastbeitrag Pitch-Kit DE | #207 | **closing** |
 | 2026-08-02 | Exit-Intent Modal (zero cost, DE) | #208 | **closing** |
 | 2026-08-02 | OpenMCP/Spaether/Paperclip utilization decision | #209 | **closing** |
-| 2026-08-02 | GSC verify + WhatsApp Business Profile (Human) | #210 | P1 |
+| 2026-08-02 | GSC verify + WhatsApp Business Profile (Human) | #210 | P1 — GSC Ownership+Sitemap DONE; WhatsApp offen |
+| 2026-08-02 | GSC Property + Sitemap submit (Human) | #238 | **closed** — submitted 2026-08-02 |
+| 2026-08-02 | GSC Indexierung + E-Mail-Prefs (Human ~5 Min) | #243 | human-gate |
 | 2026-08-02 | Echte Testimonial-Pipeline (Permission-first) | #211 | **closing** (pipeline) |
 | 2026-08-02 | Lead-Magnet PDF Asset + Thank-you mail | #212 | **closing** |
 
