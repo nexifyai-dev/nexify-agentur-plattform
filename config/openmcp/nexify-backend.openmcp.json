@@ -1,5 +1,5 @@
 {
-  "$schema_comment": "getdatanaut/openmcp openmcp.json — operationId allowlist only; no secrets",
+  "$schema_comment": "getdatanaut/openmcp openmcp.json \u2014 operationId allowlist only; no secrets",
   "configs": {
     "nexify-backend": {}
   },
@@ -14,8 +14,10 @@
         "health_api_health_get",
         "health_llm_api_health_llm_get",
         "health_full_api_health_full_get",
-        "metrics_api_metrics_get"
-      ]
+        "metrics_api_metrics_get",
+        "public_slots_api_booking_slots_get"
+      ],
+      "notes": "Mutating auth/admin/payment tools excluded. Expanded slightly with public booking slots GET."
     }
   }
 }
