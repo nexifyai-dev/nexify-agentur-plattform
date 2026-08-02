@@ -27,20 +27,17 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
 | [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar |
 
-<<<<<<< HEAD
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
 `python3 scripts/gtm/prepare_directory_drafts.py --limit 3`  
 `python3 scripts/gtm/discover_and_optin_mail.py --discover-demo --mail-list docs/gtm/evidence/optin-leads.sample.json --dry-run`  
+`python3 scripts/gtm/icp_competitor_outreach.py --discover-demo`  
 
-Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py`  
+**UWG §7:** nur Opt-in-Mails — siehe `docs/gtm/UWG-EMAIL-OPTIN-ONLY.md` (`consent=true` + `OUTREACH_LIVE=1`).
+
+Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_prepare_directory_drafts.py` · `python3 scripts/gtm/test_discover_and_optin_mail.py` · `python3 scripts/gtm/test_competitor_angle_templates.py`  
 
 Automation: `.cursor/automations/free-gtm-dach-to-agent.md` · `.github/workflows/free-gtm-weekly.yml`
-=======
-Script: `python3 scripts/gtm/demand_scan_prepare.py --demo`  
-ICP/Competitor outreach: `python3 scripts/gtm/icp_competitor_outreach.py --discover-demo`  
-Tests: `python3 scripts/gtm/test_demand_scan_prepare.py` · `python3 scripts/gtm/test_competitor_angle_templates.py`
->>>>>>> 7141e134 (feat(gtm): strongest competitors tactics — audit, branchen, outreach)
 
 ## Issue closures (2026-08-02)
 

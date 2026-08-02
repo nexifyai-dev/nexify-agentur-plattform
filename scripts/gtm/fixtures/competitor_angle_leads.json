@@ -5,7 +5,7 @@
     "contact_name": "Max Mustermann",
     "icp": "handwerk",
     "consent": true,
-    "source": "demo-optin",
+    "source": "optin",
     "unsubscribed": false
   },
   {
@@ -13,7 +13,7 @@
     "company": "Demo Steuerberatung",
     "icp": "steuerberater",
     "consent": true,
-    "source": "demo-optin",
+    "source": "optin",
     "unsubscribed": false
   },
   {
@@ -21,7 +21,7 @@
     "company": "Demo Shop UG",
     "icp": "ecommerce",
     "consent": true,
-    "source": "demo-optin",
+    "source": "optin",
     "unsubscribed": false
   }
 ]

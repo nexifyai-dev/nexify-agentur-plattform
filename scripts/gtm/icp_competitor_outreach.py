@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 # FILE: /scripts/gtm/icp_competitor_outreach.py
 # NIR: 02.08.2026 10:50
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 02.08.2026 11:00
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: ICP-segmented lead discover (demo) + competitor-angle mail dry-run/send
 # WHY: Run pain→audit→pilot outreach without paid tools; default dry-run
-# BEST-PRACTICE: --dry-run default; consent gate for --send; tiny batch cap
-# PITFALL: V-GTM-OUT-02: No bought lists; refuse send without consent=true
+# BEST-PRACTICE: Default dry-run; consent=true + ALLOWED_SOURCES; OUTREACH_LIVE=1 for --send
+# PITFALL: V-GTM-OUT-02 / V-CAC-01: No cold mail; §7 UWG — refuse without opt-in
 # DEPENDS: competitor_angle_templates_de.py, demand_scan_prepare.py
-# DOCS-REF: docs/gtm/STRONGEST-COMPETITORS-2026.md
+# DOCS-REF: docs/gtm/STRONGEST-COMPETITORS-2026.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
 # SESSION: strongest-competitors-tactics-7dd5
 
-"""ICP discover + competitor-angle outreach.
+"""ICP discover + competitor-angle outreach (§7 UWG — opt-in only).
 
 Usage:
   python3 scripts/gtm/icp_competitor_outreach.py --discover-demo
   python3 scripts/gtm/icp_competitor_outreach.py --mail-list leads.json --dry-run
-  python3 scripts/gtm/icp_competitor_outreach.py --mail-list leads.json --send --limit 3
+  OUTREACH_LIVE=1 python3 scripts/gtm/icp_competitor_outreach.py --mail-list leads.json --send --limit 3
+
+leads.json: {email, consent: true, source ∈ ALLOWED_SOURCES, unsubscribed?: false, ...}
+Cold / scraped / bought lists without consent=true are refused.
 """
 
 from __future__ import annotations
@@ -46,6 +49,24 @@ from demand_scan_prepare import build_pending  # noqa: E402
 BOOKING = "https://www.nexifyai.cloud/rueckruf?utm_source=outreach&utm_campaign=competitor_angle"
 UNSUB = "https://www.nexifyai.cloud/kontakt?utm_source=outreach&utm_campaign=unsubscribe"
 AUDIT = "https://www.nexifyai.cloud/audit"
+
+# Align with discover_and_optin_mail.py / docs/gtm/UWG-EMAIL-OPTIN-ONLY.md (§7 UWG)
+ALLOWED_SOURCES = {
+    "checkliste",
+    "kontakt",
+    "planner",
+    "partner",
+    "botschafter",
+    "sprechstunde",
+    "optin",
+    "audit",
+}
+
+UWG_SEND_WARN = (
+    "UWG-WARN (§7): --send only for opt-in leads with consent=true "
+    "and source in ALLOWED_SOURCES. Cold email without consent is illegal "
+    "in DE (also B2B). legitimate_interest is not a send gate."
+)
 
 ICP_DEMO_HITS: list[dict[str, Any]] = [
     {
@@ -108,13 +129,18 @@ def load_leads(path: Path) -> list[dict[str, Any]]:
 
 
 def validate_lead(lead: dict[str, Any]) -> str | None:
+    """Refuse non-opt-in leads (§7 UWG). consent=true is mandatory; LI ≠ consent."""
     if lead.get("consent") is not True:
-        return "missing consent=true"
+        # legitimate_interest / scraped lists are never enough without opt-in
+        return "missing consent=true (§7 UWG — no cold mail; LI not a send gate)"
     if lead.get("unsubscribed"):
         return "unsubscribed"
     email = (lead.get("email") or "").strip()
     if "@" not in email:
         return "invalid email"
+    source = (lead.get("source") or "").strip().lower()
+    if source not in ALLOWED_SOURCES:
+        return f"source not allowed: {source!r}"
     return None
 
 
@@ -169,8 +195,12 @@ def main() -> int:
     ap.add_argument("--discover-demo", action="store_true")
     ap.add_argument("--out", type=Path, default=ROOT / "docs/gtm/evidence/demand-pending")
     ap.add_argument("--mail-list", type=Path)
-    ap.add_argument("--dry-run", action="store_true", default=False)
-    ap.add_argument("--send", action="store_true")
+    ap.add_argument("--dry-run", action="store_true", default=False, help="Print mails only")
+    ap.add_argument(
+        "--send",
+        action="store_true",
+        help="Actually send (requires OUTREACH_LIVE=1 + consent=true per lead; §7 UWG)",
+    )
     ap.add_argument("--limit", type=int, default=5)
     args = ap.parse_args()
 
@@ -178,11 +208,22 @@ def main() -> int:
         discover_demo(args.out)
 
     if args.mail_list:
+        if args.send and args.dry_run:
+            print("refusing: --send and --dry-run together", file=sys.stderr)
+            return 2
         dry = not args.send
         if args.dry_run:
             dry = True
+        if args.send and not dry:
+            print(UWG_SEND_WARN, file=sys.stderr)
+            if os.environ.get("OUTREACH_LIVE") != "1":
+                print(
+                    "refusing live send: set OUTREACH_LIVE=1 explicitly (§7 UWG safety gate)",
+                    file=sys.stderr,
+                )
+                return 2
         leads = load_leads(args.mail_list)
-        stats = run_mail(leads, dry_run=dry, limit=args.limit)
+        stats = run_mail(leads, dry_run=dry, limit=max(1, args.limit))
         print("STATS", stats)
         return 0 if stats["errors"] == 0 else 1
 
