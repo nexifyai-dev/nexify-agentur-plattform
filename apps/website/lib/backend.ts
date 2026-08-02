@@ -1,15 +1,17 @@
 // FILE: /opt/nexifyai/repos/nexify-agentur-plattform/apps/website/lib/backend.ts
 // NIR: 02.08.2026 06:45
-// UPDATED: 02.08.2026 06:45
+// UPDATED: 02.08.2026 08:15
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
 // WHAT: Server-side backend URL resolution and request proxy helpers
 // WHY: Vercel rewrites with empty/invalid BACKEND_ORIGIN caused DNS_HOSTNAME_EMPTY (502) for auth/chat
 // BEST-PRACTICE: Validate URL hostname before any rewrite/proxy; forward cookies for auth; stream SSE
-// PITFALL: V-XX: truthy-but-empty BACKEND_ORIGIN (e.g. "https://") must be rejected
+// PITFALL: V-XX: truthy-but-empty BACKEND_ORIGIN (e.g. "https://") must be rejected;
+//          re-streaming upstream.body for JSON through Next/Vercel can yield HTTP 200 with empty body
+//          for /api/auth/me and /api/auth/refresh — buffer non-SSE responses instead
 // DEPENDS: BACKEND_ORIGIN, NEXT_PUBLIC_BACKEND_URL
 // DOCS-REF: apps/website/.env.example
-// SESSION: website-nav-chat-login-fix
+// SESSION: fix-auth-me-empty-body
 
 // Server-side proxy helper for the API routes.
 //
@@ -81,6 +83,23 @@ const HOP_BY_HOP = new Set([
   "upgrade",
   "host",
   "content-length",
+  // Let undici negotiate/decompress; re-forwarding accept-encoding can yield
+  // content-encoding mismatches when we re-emit the body through Next/Vercel.
+  "accept-encoding",
+]);
+
+const RESPONSE_STRIP = new Set([
+  "connection",
+  "keep-alive",
+  "proxy-authenticate",
+  "proxy-authorization",
+  "te",
+  "trailers",
+  "transfer-encoding",
+  "upgrade",
+  "content-encoding",
+  "content-length",
+  "set-cookie",
 ]);
 
 /**
@@ -113,7 +132,7 @@ export async function proxyRequest(pathWithQuery: string, request: Request): Pro
   const outHeaders = new Headers();
   upstream.headers.forEach((value, key) => {
     const lower = key.toLowerCase();
-    if (HOP_BY_HOP.has(lower) || lower === "set-cookie") return;
+    if (RESPONSE_STRIP.has(lower)) return;
     outHeaders.set(key, value);
   });
   // Node/undici exposes multiple Set-Cookie via getSetCookie().
@@ -129,7 +148,22 @@ export async function proxyRequest(pathWithQuery: string, request: Request): Pro
     if (single) outHeaders.append("set-cookie", rewriteCookie(single));
   }
 
-  return new Response(upstream.body, {
+  const contentType = (upstream.headers.get("content-type") || "").toLowerCase();
+  const isEventStream = contentType.includes("text/event-stream");
+
+  // SSE must stay streamed; JSON/auth responses are buffered so Next/Vercel
+  // never emit HTTP 200 with an empty body (observed live on /api/auth/me).
+  if (isEventStream) {
+    return new Response(upstream.body, {
+      status: upstream.status,
+      statusText: upstream.statusText,
+      headers: outHeaders,
+    });
+  }
+
+  const buf = await upstream.arrayBuffer();
+  outHeaders.set("content-length", String(buf.byteLength));
+  return new Response(buf, {
     status: upstream.status,
     statusText: upstream.statusText,
     headers: outHeaders,

@@ -59,12 +59,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | false>(null);
 
   const refresh = useCallback(async () => {
+    const asUser = (me: User): User | null =>
+      me && typeof me === "object" && typeof me.id === "string" && me.id.length > 0 ? me : null;
+
     try {
-      const me = await api("/api/auth/me");
+      const me = asUser(await api<User>("/api/auth/me"));
+      if (!me) throw new Error("empty session");
       setUser(me);
     } catch {
       try {
-        const me = await api("/api/auth/refresh", { method: "POST" });
+        const me = asUser(await api<User>("/api/auth/refresh", { method: "POST" }));
+        if (!me) throw new Error("empty session");
         setUser(me);
       } catch {
         setUser(false);
