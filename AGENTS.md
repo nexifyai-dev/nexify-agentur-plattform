@@ -28,6 +28,9 @@ aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
   gegen NousResearch abgrenzen, bevor irgendetwas integriert wird.
 - **n8n** — laut bestehender Entscheidung abgeschafft. Nicht aufnehmen,
   sofern nicht ausdrücklich widerrufen.
+- **OpenAI Codex** (CLI / ChatGPT Codex / `@openai/codex` / `.codex/`) —
+  abgeschaltet 2026-08-02. Primäragent ist **Cursor Agent / Cloud Agent**.
+  Details: `docs/operations/CODEX-REMOVED-2026-08-02.md`.
 
 ## Arbeitsweise (§13/§14 in CHARTA.md — hier nur der Kurzhinweis)
 - Unbekannte Tools/Repos/Behauptungen: verifizieren, nicht übernehmen,

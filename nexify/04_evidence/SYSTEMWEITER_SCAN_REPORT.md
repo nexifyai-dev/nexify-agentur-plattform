@@ -78,7 +78,7 @@
 | Projekte | 04_projects | Projektübersicht |
 | Skills | 05_skills | 4 Skills (data-engineer, goose, nexify-knowledge-data-engineer, template) |
 | MCP | 06_mcp | MCP-Kapabilitäten |
-| Tools/CLI | 07_tools_cli | 17 Tools (9router, 9remote, autopilot, caveman, chatgpt_mcp, claude_code, cloudflare_dns, compression, crush, goose, hermes, kilo, noninteractive, openai_codex, openai_tunnel_client, rtk, supermemory) |
+| Tools/CLI | 07_tools_cli | 17 Tools (…); **openai_codex retired 2026-08-02** — Cursor Agent only |
 | UI/CI | 07_ui_ci | UI + CI/CD |
 | Kanban | 08_kanban_tasks | Task-Registry |
 | Dispatcher | 09_dispatcher | 9 Subsysteme (automation_controller, chat_operator, connection_recovery, goose_auto_chat + scripts) |
