@@ -1,0 +1,109 @@
+{
+  "icp": "steuerberater",
+  "generated_at": "2026-08-02T09:03:04.742422+00:00",
+  "mode": "demo",
+  "query_pack": {
+    "icp": "steuerberater",
+    "label": "Steuerberater / Kanzleien",
+    "rank": 2,
+    "landing": "/branchen/steuerberater",
+    "keywords": [
+      "Steuerberater",
+      "Steuerberatung",
+      "Wirtschaftsprüfung KMU",
+      "Buchhaltungsbüro",
+      "Lohnbuchhaltung Kanzlei"
+    ],
+    "exclude": [
+      "Big4 Enterprise-only RFP",
+      "Verbraucher-Steuer-App"
+    ],
+    "directory_seeds": [
+      "https://www.dstv.de/",
+      "https://www.steuerberater.de/",
+      "https://www.gelbe-seiten.de/branchenbuch/steuerberater"
+    ],
+    "searches": [
+      {
+        "query": "Steuerberater Kanzlei Impressum email",
+        "url": "https://www.google.com/search?q=Steuerberater+Kanzlei+Impressum+email"
+      },
+      {
+        "query": "Steuerberatung Digitalisierung Belege",
+        "url": "https://www.google.com/search?q=Steuerberatung+Digitalisierung+Belege"
+      },
+      {
+        "query": "Steuerberater KMU DATEV Automation",
+        "url": "https://www.google.com/search?q=Steuerberater+KMU+DATEV+Automation"
+      },
+      {
+        "query": "site:dstv.de",
+        "url": "https://www.google.com/search?q=site%3Adstv.de"
+      },
+      {
+        "query": "Buchhaltungsbüro Kontakt B2B",
+        "url": "https://www.google.com/search?q=Buchhaltungsb%C3%BCro+Kontakt+B2B"
+      }
+    ]
+  },
+  "pending_count": 2,
+  "skipped_count": 1,
+  "pending": [
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 100,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+20 Budget/Rahmen angedeutet",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "automatisierung",
+      "source": {
+        "id": "demo-steuerberater-01",
+        "title": "Steuerberater / Kanzleien — Beispielbetrieb Nord",
+        "url": "https://example.invalid/steuerberater/nord",
+        "company": "Demo Steuerberater / Kanzleien Nord GmbH",
+        "region": "NRW"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-steuerberater-01: Steuerberater / Kanzleien — Beispielbetrieb Nord. Zusammenfassung: KMU Steuerberater mit öffentlichem Impressum; Admin-Pain erkennbar.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-steuerberater-01&utm_medium=outbound&utm_campaign=automatisierung"
+    },
+    {
+      "schema": "nexify.gtm.crm_pending.v1",
+      "created_at": "2026-08-02T09:03:04Z",
+      "status": "pending_legal_gate",
+      "score": 80,
+      "score_reasons": [
+        "+25 passende Leistung",
+        "+15 Entscheider/Firmenkontext",
+        "+15 DACH/NL/Remote",
+        "+15 Deadline < 60 Tage",
+        "+10 kein reiner Zwischenhändler"
+      ],
+      "day_rate_eur": 449,
+      "service_slug": "automatisierung",
+      "source": {
+        "id": "demo-steuerberater-02",
+        "title": "Steuerberater / Kanzleien — Beispiel Süd",
+        "url": "https://example.invalid/steuerberater/sued",
+        "company": "Demo Steuerberater / Kanzleien Süd UG",
+        "region": "BY"
+      },
+      "contact_reason": "Öffentlicher Demand-Treffer auf demo-steuerberater-02: Steuerberater / Kanzleien — Beispiel Süd. Zusammenfassung: Website + Kontaktseite; Digitalisierung erwähnt.",
+      "outreach_draft_allowed": false,
+      "send_allowed": false,
+      "notes": "Kein Auto-Versand. Nach Legal/Policy Gate Outreach-Entwurf erzeugen gemäß SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.",
+      "utm_hint": "utm_source=demo-steuerberater-02&utm_medium=outbound&utm_campaign=automatisierung"
+    }
+  ],
+  "note": "Demo-Hits sind ungültige example.invalid-Adressen — kein Versand."
+}

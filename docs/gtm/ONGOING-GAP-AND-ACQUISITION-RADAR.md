@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
 # NIR: 02.08.2026 10:10
-# UPDATED: 02.08.2026 10:40
+# UPDATED: 02.08.2026 11:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Living checklist — acquisition, conversion, ops gaps for Cursor agents
@@ -21,6 +21,7 @@
 
 | Track | PR / Artefakt | Status |
 |-------|---------------|--------|
+| ICP demand + competitor copy | `cursor/icp-demand-competitor-copy-7dd5` | this PR |
 | Free GTM Playbook | #175 `cursor/free-acquisition-dach-7dd5` | open |
 | Blog DACH SEO | #190 `cursor/website-blog-dach-gtm-7dd5` | open |
 | Outreach drip | #173 `cursor/lead-outreach-automation-7dd5` | open |
@@ -50,6 +51,9 @@ Beyond Blog / FAQ / Verzeichnisse / Outreach / GBP (bereits in Playbook #175):
 | A09 | Exit-Intent / Sticky CTA Verbesserungen | **shipped** | Sticky + Exit-Intent Modal (#208) |
 | A10 | Trust: Testimonials/Logos/SLA | pipeline | #211 Permission-Pipeline; Widget erst nach ≥1 Erlaubnis |
 | A11 | GSC Verification Meta/Property | open | Human — Search Console Verify |
+| A13 | ICP Branchen-Landings `/branchen` Top-5 | **shipped** | ICP-HIGH-DEMAND-2026 |
+| A14 | Segmented ICP discover + mail | **shipped** | `scripts/gtm/icp_*` |
+| A15 | GBP categories per ICP | open | Human Issue |
 | A12 | Comparison: „KI Agentur vs Freelance“ Subpages | open | Follow-up Content nach `/vergleich` |
 
 ---

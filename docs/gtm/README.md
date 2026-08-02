@@ -26,3 +26,8 @@ Tests: `python3 scripts/gtm/test_demand_scan_prepare.py`
 - `TESTIMONIAL-PERMISSION-PIPELINE_V1.md` (#211)
 - Lead-Magnet PDF (#212)
 - Ops decision `docs/operations/OPENMCP-SPAETHER-PAPERCLIP-DECISION-2026-08-02.md` (#209)
+
+## ICP Demand 2026
+- `ICP-HIGH-DEMAND-2026.md`, `COMPETITOR-PLAYBOOK-COPY.md`, `ICP-MAIL-TEMPLATES-DE.md`, `ICP-7-DAY-ATTACK.md`
+- Scripts: `scripts/gtm/icp_lead_discover.py`, `icp_mail_send.py`
+- Website: `/branchen`
