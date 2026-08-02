@@ -11,7 +11,6 @@ import { useLang } from "@/lib/lang-context";
 import { ChatMarkdown } from "@/components/chat-markdown";
 import { PortalTour } from "@/components/portal-tour";
 import { SupportTickets } from "@/components/support-tickets";
-import Link from "next/link";
 
 type Offer = {
   id: string; name: string; email: string; company: string | null; language: string;
