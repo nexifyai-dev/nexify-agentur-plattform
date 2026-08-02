@@ -21,10 +21,11 @@ test("portal project panel exposes timeline and invoices", () => {
   assert.ok(src.includes("/api/portal/offers/"));
 });
 
-test("konto wires PortalProjectPanel", () => {
+test("konto exposes portal status and payment flows", () => {
   const src = read("../app/konto/page.tsx");
-  assert.ok(src.includes("PortalProjectPanel"));
-  assert.ok(src.includes("Anfrage") || src.includes("phaseHint") || src.includes("Status"));
+  assert.ok(src.includes("statusHelpTitle"));
+  assert.ok(src.includes("/api/portal/offers/"));
+  assert.ok(src.includes("offer-status-badge"));
 });
 
 test("process page has transparency and QA sections", () => {
