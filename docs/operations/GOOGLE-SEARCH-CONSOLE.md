@@ -1,6 +1,6 @@
 # FILE: docs/operations/GOOGLE-SEARCH-CONSOLE.md
 # NIR: 02.08.2026 10:55
-# UPDATED: 02.08.2026 11:15
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps / GTM
 # WHAT: SoT — Google Search Console Owner-Fähigkeiten maxen (DONE vs TODO)
@@ -28,7 +28,7 @@
 | 2 | Sitemap submit `…/sitemap.xml` | **DONE** | Human 2026-08-02 | #238 closed |
 | 3 | Owner bestätigt „volle Möglichkeiten“ | **DONE** | Pascal | dieses Playbook |
 | 4 | robots.txt Allow + Sitemap + Googlebot | **DONE** (Repo) | Agent | `apps/website/app/robots.ts` |
-| 5 | Sitemap Money-Pages (existierende Routen) | **DONE** (Repo) | Agent | Pending-Landings: PR #252 |
+| 5 | Sitemap Money-Pages (existierende Routen) | **DONE** (Repo) | Agent | inkl. 15× `/leistungen/*` + `/branchen/*` (#252 merged) |
 | 6 | `llms.txt` (+ `.well-known`) | **DONE** (Repo) | Agent | Spec: H1 + Links |
 | 7 | Soft-404 `[locale]` catch-all | **DONE** (Repo) | Agent | `dynamicParams = false` |
 | 8 | IndexNow key file (Bing/Yandex free) | **DONE** (Repo) | Agent | Key public; Bing UI einmalig |
@@ -78,17 +78,54 @@ Domain-Property + DNS deckt Apex + `www`. HTML-Meta würde Token duplizieren. Op
 
 Nach Deploy mit erweiterter Sitemap: in GSC „Sitemap erneut abrufen“ oder warten (periodisch).
 
-**In Sitemap (main):** `/partner`, `/botschafter`, `/sprechstunde`, `/alternativen`.
+**In Sitemap (main, nach #252):** Hub `/leistungen`, **15×** `/leistungen/{slug}`, Hub `/branchen` + Branchen-Slugs, `/audit`, plus Money-Pages (`/partner`, `/botschafter`, `/sprechstunde`, `/alternativen`, …).
 
-**Noch nicht in Sitemap (fehlen page.tsx):** `/branchen*`, `/leistungen/{slug}`, `/audit`, `/ki-agentur`, `/vergleich/chatgpt`, `/vergleich/freelance` — nach Live-200 nachziehen.
+**Noch nicht in Sitemap (fehlen page.tsx / Soft-404):** `/ki-agentur`, `/vergleich/chatgpt`, `/vergleich/freelance` — nach Live-200 nachziehen.
 
 ---
 
 ## URL-Inspection (Human) — #243
 
-Geordnete Liste: [`scripts/gtm/gsc-url-inspection-batch.md`](../../scripts/gtm/gsc-url-inspection-batch.md)
+Geordnete Top-20 + Copy-Paste: [`scripts/gtm/gsc-url-inspection-batch.md`](../../scripts/gtm/gsc-url-inspection-batch.md)
 
-Kurz: GSC → **URL-Prüfung** → URL einfügen → **Indexierung beantragen** (Rate-Limit; Top 20 commercial).
+Kurz: GSC → **URL-Prüfung** → URL einfügen → **Indexierung beantragen** (Rate-Limit beachten).
+
+| Priorität | URL |
+|-----------|-----|
+| P0 Home | `https://www.nexifyai.cloud/` |
+| P0 Preise | `https://www.nexifyai.cloud/preise` |
+| P0 Vergleich | `https://www.nexifyai.cloud/vergleich` |
+| P0 Leistungen Hub | `https://www.nexifyai.cloud/leistungen` |
+| P0 Landingpages | `https://www.nexifyai.cloud/leistungen/landingpages` |
+| P0 Websites | `https://www.nexifyai.cloud/leistungen/websites` |
+| P0 Onlineshops | `https://www.nexifyai.cloud/leistungen/onlineshops` |
+| P0 Enterprise-Commerce | `https://www.nexifyai.cloud/leistungen/enterprise-commerce` |
+| P0 Web-Apps | `https://www.nexifyai.cloud/leistungen/web-apps` |
+| P0 Mobile Apps | `https://www.nexifyai.cloud/leistungen/mobile-apps` |
+| P0 Automatisierung | `https://www.nexifyai.cloud/leistungen/automatisierung` |
+| P0 AI-Agenten | `https://www.nexifyai.cloud/leistungen/ai-agenten` |
+| P0 KI-Begleiter | `https://www.nexifyai.cloud/leistungen/ki-begleiter` |
+| P0 Kundenportal | `https://www.nexifyai.cloud/leistungen/kundenportal` |
+| P0 KI-Plattform | `https://www.nexifyai.cloud/leistungen/ki-plattform` |
+| P0 KI-Beratung | `https://www.nexifyai.cloud/leistungen/beratung` |
+| P0 Workshops | `https://www.nexifyai.cloud/leistungen/workshops` |
+| P0 White-Label | `https://www.nexifyai.cloud/leistungen/white-label` |
+| P0 KI-/Prozess-Audit | `https://www.nexifyai.cloud/leistungen/audit` |
+| P0 Audit (Alias) | `https://www.nexifyai.cloud/audit` |
+| P1 Branchen Hub | `https://www.nexifyai.cloud/branchen` |
+| P1 Handwerk | `https://www.nexifyai.cloud/branchen/handwerk` |
+| P1 Steuerberater | `https://www.nexifyai.cloud/branchen/steuerberater` |
+| P1 E-Commerce | `https://www.nexifyai.cloud/branchen/ecommerce` |
+| P1 Immobilien | `https://www.nexifyai.cloud/branchen/immobilien` |
+| P1 Agenturen | `https://www.nexifyai.cloud/branchen/agenturen` |
+| P1 Checkliste | `https://www.nexifyai.cloud/checkliste` |
+| P1 Plattform | `https://www.nexifyai.cloud/plattform` |
+| P1 Rückruf | `https://www.nexifyai.cloud/rueckruf` |
+| P1 Kontakt | `https://www.nexifyai.cloud/kontakt` |
+
+**Quelle der 15× `/leistungen/[slug]` + Branchen:** PR #252 / `docs/gtm/PAGE1-KEYWORD-MAP.md` (live prüfen).
+
+**Empfohlene Reihenfolge:** Home → Preise → Vergleich → Leistungen-Hub → die 15 Leistungs-Landings in Batches (GSC Rate-Limit) → Branchen/CTAs.
 
 ---
 

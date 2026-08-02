@@ -97,7 +97,7 @@ Detail: `docs/live/CODESPACE-UBIQUITOUS-SPACE-PANCAKE-2026-07-31.md`.
 
 | ID | Titel | Status |
 |----|-------|--------|
-| GSC | Property www.nexifyai.cloud verifizieren | pending (SEO, Ops) |
+| GSC | Domain `nexifyai.cloud` Ownership + Sitemap via CF DNS / GSC UI | **done** 2026-08-02; Index/Prefs #243 — `docs/operations/GOOGLE-SEARCH-CONSOLE.md` |
 | POOLSIDE_API_KEY | Env fehlt | blocked |
 | Paperclip revive | no app tree / Factory absent | **blocked** |
 | CF DNS grafana/html/opendesign | Zone OK; DNS API **403** | **blocked** |

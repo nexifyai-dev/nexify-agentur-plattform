@@ -1,9 +1,9 @@
 # FILE: scripts/gtm/gsc-url-inspection-batch.md
 # NIR: 02.08.2026 11:15
-# UPDATED: 02.08.2026 11:15
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM / SEO
-# WHAT: Geordnete Top-20-URLs für GSC „Indexierung beantragen“
+# WHAT: Geordnete URLs für GSC „Indexierung beantragen“ inkl. 15 Leistungen (#252)
 # WHY: Rate-Limits + kommerzielle Priorität — Human klickt; Agents halten Liste aktuell
 # BEST-PRACTICE: Nur Live-200 + in Sitemap; Soft-404s auslassen
 # PITFALL: V-GSC-02: Locale-Pfade / 404-Landings beantragen = Coverage-Müll
@@ -11,10 +11,11 @@
 # DOCS-REF: https://search.google.com/search-console
 # SESSION: gsc-max-owner-capabilities-7dd5
 
-# GSC URL-Inspection Batch — Top 20 commercial
+# GSC URL-Inspection Batch — Money + 15 Leistungen
 
 **Owner:** Pascal Courbois (`nexify.login@gmail.com`)  
-**Portal:** https://search.google.com/search-console → Property `nexifyai.cloud` → **URL-Prüfung**
+**Portal:** https://search.google.com/search-console → Property `nexifyai.cloud` → **URL-Prüfung**  
+**Live seit:** PR #252 (15× `/leistungen/*`)
 
 ## Ablauf (pro URL)
 
@@ -25,7 +26,7 @@
 
 Quota: Google limitiert Anträge/Tag — bei Block Stopp, morgen fortsetzen.
 
-## Reihenfolge (1–20)
+## Batch A — Core Money (1–4)
 
 | # | URL | Warum |
 |---|-----|--------|
@@ -33,55 +34,75 @@ Quota: Google limitiert Anträge/Tag — bei Block Stopp, morgen fortsetzen.
 | 2 | https://www.nexifyai.cloud/preise | Money — Tagessatz |
 | 3 | https://www.nexifyai.cloud/leistungen | Money — Katalog |
 | 4 | https://www.nexifyai.cloud/vergleich | Commercial intent |
-| 5 | https://www.nexifyai.cloud/kontakt | Conversion |
-| 6 | https://www.nexifyai.cloud/rueckruf | Conversion / Booking |
-| 7 | https://www.nexifyai.cloud/prozess | Trust / How |
-| 8 | https://www.nexifyai.cloud/plattform | Product |
-| 9 | https://www.nexifyai.cloud/checkliste | Lead magnet |
-| 10 | https://www.nexifyai.cloud/faq | SERP FAQ |
-| 11 | https://www.nexifyai.cloud/referenzen | Trust |
-| 12 | https://www.nexifyai.cloud/ueber-mich | E-E-A-T |
-| 13 | https://www.nexifyai.cloud/venlo | Local SEO |
-| 14 | https://www.nexifyai.cloud/wissen | Content hub |
-| 15 | https://www.nexifyai.cloud/wissen/ai-automatisierung-kmu | Content |
-| 16 | https://www.nexifyai.cloud/wissen/was-kostet-web-app-2026 | Content / Cost intent |
-| 17 | https://www.nexifyai.cloud/partner | Partner / White-Label |
-| 18 | https://www.nexifyai.cloud/alternativen | Commercial comparison |
-| 19 | https://www.nexifyai.cloud/botschafter | Referral program |
-| 20 | https://www.nexifyai.cloud/sprechstunde | Conversion / booking-adjacent |
+
+## Batch B — 15 Leistungs-Landings (P0, #252)
+
+| # | URL | Warum |
+|---|-----|--------|
+| 5 | https://www.nexifyai.cloud/leistungen/landingpages | P0 — Landingpages |
+| 6 | https://www.nexifyai.cloud/leistungen/websites | P0 — Websites |
+| 7 | https://www.nexifyai.cloud/leistungen/onlineshops | P0 — Onlineshops |
+| 8 | https://www.nexifyai.cloud/leistungen/enterprise-commerce | P0 — Enterprise-Commerce |
+| 9 | https://www.nexifyai.cloud/leistungen/web-apps | P0 — Web-Apps |
+| 10 | https://www.nexifyai.cloud/leistungen/mobile-apps | P0 — Mobile Apps |
+| 11 | https://www.nexifyai.cloud/leistungen/automatisierung | P0 — Automatisierung |
+| 12 | https://www.nexifyai.cloud/leistungen/ai-agenten | P0 — AI-Agenten |
+| 13 | https://www.nexifyai.cloud/leistungen/ki-begleiter | P0 — KI-Begleiter |
+| 14 | https://www.nexifyai.cloud/leistungen/kundenportal | P0 — Kundenportal |
+| 15 | https://www.nexifyai.cloud/leistungen/ki-plattform | P0 — KI-Plattform |
+| 16 | https://www.nexifyai.cloud/leistungen/beratung | P0 — KI-Beratung |
+| 17 | https://www.nexifyai.cloud/leistungen/workshops | P0 — Workshops |
+| 18 | https://www.nexifyai.cloud/leistungen/white-label | P0 — White-Label |
+| 19 | https://www.nexifyai.cloud/leistungen/audit | P0 — KI-/Prozess-Audit |
+
+## Batch C — Branchen + CTAs (danach / Tag 2)
+
+| # | URL | Warum |
+|---|-----|--------|
+| 20 | https://www.nexifyai.cloud/audit | Alias Audit-Landing |
+| 21 | https://www.nexifyai.cloud/branchen | Branchen Hub |
+| 22 | https://www.nexifyai.cloud/branchen/handwerk | P1 — Handwerk |
+| 23 | https://www.nexifyai.cloud/branchen/steuerberater | P1 — Steuerberater |
+| 24 | https://www.nexifyai.cloud/branchen/ecommerce | P1 — E-Commerce |
+| 25 | https://www.nexifyai.cloud/branchen/immobilien | P1 — Immobilien |
+| 26 | https://www.nexifyai.cloud/branchen/agenturen | P1 — Agenturen |
+| 27 | https://www.nexifyai.cloud/kontakt | Conversion |
+| 28 | https://www.nexifyai.cloud/rueckruf | Conversion / Booking |
+| 29 | https://www.nexifyai.cloud/plattform | Product |
+| 30 | https://www.nexifyai.cloud/checkliste | Lead magnet |
 
 ## Später nachziehen (wenn Live-200 + Sitemap)
 
 Nicht beantragen solange Soft-404 / 404:
 
-- `/branchen`, `/branchen/*`
-- `/leistungen/{slug}` (landingpages, websites, …)
-- `/audit`, `/ki-agentur`
+- `/ki-agentur`
 - `/vergleich/chatgpt`, `/vergleich/freelance`
 
-Quelle: PR #252 / SEO-Page1 — nach Merge + Deploy hier ergänzen.
+## Copy-Paste Batch B (15 Leistungen)
 
-## Copy-Paste (eine Zeile pro Request)
+```
+https://www.nexifyai.cloud/leistungen/landingpages
+https://www.nexifyai.cloud/leistungen/websites
+https://www.nexifyai.cloud/leistungen/onlineshops
+https://www.nexifyai.cloud/leistungen/enterprise-commerce
+https://www.nexifyai.cloud/leistungen/web-apps
+https://www.nexifyai.cloud/leistungen/mobile-apps
+https://www.nexifyai.cloud/leistungen/automatisierung
+https://www.nexifyai.cloud/leistungen/ai-agenten
+https://www.nexifyai.cloud/leistungen/ki-begleiter
+https://www.nexifyai.cloud/leistungen/kundenportal
+https://www.nexifyai.cloud/leistungen/ki-plattform
+https://www.nexifyai.cloud/leistungen/beratung
+https://www.nexifyai.cloud/leistungen/workshops
+https://www.nexifyai.cloud/leistungen/white-label
+https://www.nexifyai.cloud/leistungen/audit
+```
+
+## Copy-Paste Batch A (Core)
 
 ```
 https://www.nexifyai.cloud/
 https://www.nexifyai.cloud/preise
 https://www.nexifyai.cloud/leistungen
 https://www.nexifyai.cloud/vergleich
-https://www.nexifyai.cloud/kontakt
-https://www.nexifyai.cloud/rueckruf
-https://www.nexifyai.cloud/prozess
-https://www.nexifyai.cloud/plattform
-https://www.nexifyai.cloud/checkliste
-https://www.nexifyai.cloud/faq
-https://www.nexifyai.cloud/referenzen
-https://www.nexifyai.cloud/ueber-mich
-https://www.nexifyai.cloud/venlo
-https://www.nexifyai.cloud/wissen
-https://www.nexifyai.cloud/wissen/ai-automatisierung-kmu
-https://www.nexifyai.cloud/wissen/was-kostet-web-app-2026
-https://www.nexifyai.cloud/partner
-https://www.nexifyai.cloud/alternativen
-https://www.nexifyai.cloud/botschafter
-https://www.nexifyai.cloud/sprechstunde
 ```
