@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarCheck2, CheckCircle2, PhoneCall } from "lucide-react";
+import { CalendarCheck2, PhoneCall } from "lucide-react";
+import { DelightSuccess } from "@/components/delight-success";
+import { InboundSpeedPromise } from "@/components/inbound-speed-promise";
 import { Reveal } from "@/components/reveal";
 import { api } from "@/lib/auth";
 import { useLang } from "@/lib/lang-context";
@@ -123,16 +125,14 @@ export function CallbackPage() {
   if (booked) {
     return (
       <main className="pb-16 pt-28 md:pb-24 md:pt-40" data-testid="callback-page">
-        <div className="site-container max-w-xl text-center">
+        <div className="site-container max-w-2xl">
           <Reveal>
-            <div className="glass p-12" data-testid="booking-success">
-              <CheckCircle2 size={44} className="mx-auto text-emerald-400" />
-              <h1 className="mt-6 font-[family-name:var(--font-heading)] text-3xl font-light text-white">{t.successTitle}</h1>
-              <p className="mt-4 text-zinc-400">{t.successText}</p>
-              <p className="mt-6 text-sm uppercase tracking-[0.2em] text-zinc-500">{t.successWhen}</p>
-              <p className="mt-2 text-xl font-semibold text-white">{booked}</p>
-              <Link href="/" className="btn-ghost mt-8 !py-2.5 text-sm">{t.back}</Link>
-            </div>
+            <DelightSuccess
+              lang={lang}
+              variant="booking"
+              highlight={booked}
+              testId="booking-success"
+            />
           </Reveal>
         </div>
       </main>
@@ -188,6 +188,7 @@ export function CallbackPage() {
               <h2 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
                 <PhoneCall size={13} /> {t.details}
               </h2>
+              <InboundSpeedPromise lang={lang} testId="booking-speed-promise" />
               <input className="field" placeholder={t.name} value={f.name} onChange={(e) => setF((x) => ({ ...x, name: e.target.value }))} data-testid="booking-name" />
               <input className="field" type="email" placeholder={t.email} value={f.email} onChange={(e) => setF((x) => ({ ...x, email: e.target.value }))} data-testid="booking-email" />
               <input className="field" type="tel" placeholder={t.phone} value={f.phone} onChange={(e) => setF((x) => ({ ...x, phone: e.target.value }))} data-testid="booking-phone" />
