@@ -23,7 +23,8 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [drafts/](drafts/) | LinkedIn/PR/Community/Gutefrage Drafts |
 | [PARTNER-REVSHARE-LATER.md](PARTNER-REVSHARE-LATER.md) | Rev-Share deferred |
 | [NEUKUNDEN-BEGEISTERUNG.md](NEUKUNDEN-BEGEISTERUNG.md) | P0 Delight nach First Touch · Koordination Zero-Cost-Leads |
-| [ONBOARDING-EMAIL-TEMPLATES.md](ONBOARDING-EMAIL-TEMPLATES.md) | Inbound-Mail-Templates + Versand-Hook || [evidence/](evidence/) | Listing- und Demand-Evidence |
+| [ONBOARDING-EMAIL-TEMPLATES.md](ONBOARDING-EMAIL-TEMPLATES.md) | Inbound-Mail-Templates + Versand-Hook |
+| [evidence/](evidence/) | Listing- und Demand-Evidence |
 
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
