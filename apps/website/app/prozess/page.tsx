@@ -3,11 +3,11 @@ import { JsonLd } from "@/components/json-ld";
 import { ProcessPage } from "@/components/pages/process";
 
 export const metadata = pageMetadata({
-  title: "Prozess — Fünf Schritte von der Idee zum Betrieb",
-  description: "Standardisierter Ablauf: Zielklärung, Festpreisrahmen, AI-gestützte Umsetzung, Tests und Übergabe. Projekte in Tagen statt Monaten – ohne Überraschungen.",
+  title: "Prozess — Transparenz, QA & Kundenportal von Anfrage bis Rechnung",
+  description: "Arbeitsweise mit AI-Begleiter: Scope-Klarheit, GitHub/GitLab-Delivery, Qualitätssicherung und Status-Transparenz im Kundenportal — in Tagen statt Monaten.",
   path: "/prozess",
-  ogTitle: "Prozess — Von der Idee zum Betrieb in Tagen | NeXify AI",
-  ogDescription: "Fünf klare Schritte: Zielklärung, Rahmen, Umsetzung, Tests, Übergabe. AI-gestützt, persönlich verantwortet.",
+  ogTitle: "Prozess — Transparenz von Idee bis Rechnung | NeXify AI",
+  ogDescription: "Fünf Schritte plus Portal-Status, Evidence und QA. AI-gestützt, persönlich verantwortet.",
 });
 
 const breadcrumbJsonLd = breadcrumbListJsonLd([

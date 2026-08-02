@@ -243,8 +243,20 @@ export const nl: Dict = {
     promises: [
       { title: "Antwoord binnen 24 uur", text: "Elke aanvraag krijgt binnen één werkdag een persoonlijk, gekwalificeerd antwoord." },
       { title: "Schriftelijke scope-duidelijkheid", text: "Geen project start zonder gedocumenteerde omvang, aannames en prijsindicatie." },
-      { title: "Dagelijkse zichtbaarheid", text: "Bij meerdaagse projecten ziet u de voortgang – niet pas aan het einde." },
+      { title: "Portaaltransparantie", text: "Aanvraag → offerte → vrijgave → uitvoering → acceptatie → factuur — live in uw account." },
       { title: "Nette overdracht", text: "Code, toegangen, documentatie en beheerinstructies zijn van u. Geen vendor lock-in." },
+    ],
+    transparencyTitle: "Transparantie & status",
+    transparencyText:
+      "Na opdracht ziet u in het klantportaal fase-status, deliverables/evidence, volgende acties en facturen — zonder statusmails na te jagen.",
+    qaTitle: "Kwaliteitsborging",
+    qaText:
+      "Kwaliteit door navolgbare checks: code review, tests, mobile QA, performance en gedocumenteerde acceptatie. AI versnelt — de vakman keurt goed.",
+    qaPoints: [
+      "GitHub/GitLab als bron van waarheid",
+      "Acceptatiecriteria schriftelijk vóór bouw",
+      "Evidence-lijst in het portaal",
+      "Geen verzonnen case-ROI — alleen bewijsbare delivery",
     ],
   },
   platform: {
@@ -293,19 +305,19 @@ export const nl: Dict = {
         tag: "B2B-website",
         title: "Adviesbureau, DACH",
         text: "Complete bedrijfswebsite met dienstenarchitectuur, SEO-basis en contactflow – bedacht en live in drie werkdagen.",
-        results: ["3 werkdagen tot livegang", "+68 % organische aanvragen in 90 dagen", "Laadtijd onder 1 seconde"],
+        results: ["Duidelijk afgebakende scope voor start", "Eén contact end-to-end", "Overdracht met code & docs"],
       },
       {
         tag: "E-commerce",
         title: "Onderdelenhandel, Nederland",
         text: "Commerce-platform met 60.000+ artikelen, gefacetteerd zoeken, ERP-koppeling en geautomatiseerde delta-imports.",
-        results: ["60.000+ artikelen performant", "Zoekresultaten onder 150 ms", "Importrun volautomatisch, dagelijks"],
+        results: ["Data- en importarchitectuur eerst", "Zoek- & catalogusperformance centraal", "Bedrijfshints bij overdracht"],
       },
       {
         tag: "AI-automatisering",
         title: "Mkb-dienstverlener",
         text: "Geautomatiseerde offerte- en e-mailflow met AI-voorkwalificatie van binnenkomende aanvragen en CRM-integratie.",
-        results: ["–70 % handmatige verwerkingstijd", "Reactietijd van 2 dagen naar 2 uur", "Volledig gelogde workflow"],
+        results: ["Minder handmatige routine", "Gelogde workflow", "Goedkeuringen blijven bij mensen"],
       },
     ],
     quotes: [

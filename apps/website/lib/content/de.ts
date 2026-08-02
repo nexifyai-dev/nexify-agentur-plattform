@@ -30,21 +30,21 @@ export const de = {
     allServices: "Alle Leistungen",
   },
   home: {
-    badge: "AI-gestützte Entwicklung · Deutsch & Nederlands · Für Unternehmen",
-    titleA: "Digitale Exzellenz.",
-    titleB: "In Tagen statt Monaten.",
+    badge: "AI als Begleiter · 449 € statt 1.000–1.500 € · DACH",
+    titleA: "Ihr AI-Begleiter.",
+    titleB: "Qualität in Rekordzeit.",
     subtitle:
-      "NeXify AI entwickelt Premium-Websites, Onlineshops, Web-Apps und AI-Automatisierungen – persönlich verantwortet von einem Fachmann, beschleunigt durch passende AI-Werkzeuge, transparent zum festen Tagessatz von 449 € netto.",
+      "Klassische IT-Tagessätze liegen oft bei 1.000–1.500 €. NeXify AI liefert dasselbe Anspruchsniveau zum festen Tagessatz von 449 € netto — persönlich verantwortet, beschleunigt durch AI-Werkzeuge, abgesichert über GitHub, GitLab und modernes Tooling.",
     ctaPrimary: "Kostenlose Erstberatung",
-    ctaSecondary: "Leistungen entdecken",
+    ctaSecondary: "449 € vs. klassische IT",
     stats: [
-      { value: "449 €", label: "netto pro Arbeitstag – transparent kalkuliert" },
-      { value: "1–3", label: "Richtwert für klar abgegrenzte Websites" },
-      { value: "1", label: "verantwortlicher Ansprechpartner von Konzept bis Übergabe" },
-      { value: "Chat", label: "AI-Berater für eine erste Einordnung" },
+      { value: "449 €", label: "netto / Arbeitstag — statt typisch 1.000–1.500 €" },
+      { value: "AI", label: "als Begleiter: Tempo ohne Qualitätsverlust" },
+      { value: "Git", label: "GitHub & GitLab — nachvollziehbare Delivery" },
+      { value: "Portal", label: "Status, Evidence & Rechnungen self-serve" },
     ],
     pillarsEyebrow: "Warum NeXify AI",
-    pillarsTitle: "Ein Fachmann. Moderne AI. Messbare Ergebnisse.",
+    pillarsTitle: "AI-Begleiter statt Agentur-Overhead.",
     pillars: [
       {
         icon: "Code2",
@@ -53,13 +53,13 @@ export const de = {
       },
       {
         icon: "Bot",
-        title: "AI-gestützt, nicht AI-abgegeben",
-        text: "Moderne AI-Werkzeuge beschleunigen Recherche, Umsetzung und Prüfung. Die fachlichen Entscheidungen trifft weiterhin ein erfahrener Entwickler – mit voller Verantwortung.",
+        title: "AI-Begleiter, nicht AI-Blackbox",
+        text: "Moderne AI-Werkzeuge beschleunigen Recherche, Umsetzung und Prüfung. Die fachlichen Entscheidungen trifft weiterhin ein erfahrener Entwickler – mit voller Verantwortung und Human-in-the-Loop.",
       },
       {
         icon: "ChartNoAxesCombined",
-        title: "Transparenz pro Arbeitstag",
-        text: "449 € netto pro Arbeitstag. Umfang, Annahmen und Mehrbedarf werden vor der Umsetzung sichtbar gemacht – Sie behalten jederzeit die volle Kostenkontrolle.",
+        title: "449 € statt 1.000–1.500 €",
+        text: "Der Tagessatz bleibt fest und ehrlich. Umfang, Annahmen und Mehrbedarf werden vor der Umsetzung sichtbar — Sie behalten jederzeit die volle Kostenkontrolle.",
       },
     ],
     servicesEyebrow: "Leistungen",
@@ -217,9 +217,9 @@ export const de = {
   },
   pricing: {
     eyebrow: "Preise",
-    title: "Ein Satz. Volle Transparenz.",
+    title: "449 € statt 1.000–1.500 €.",
     intro:
-      "449 € netto pro Arbeitstag – dieser Satz gilt für jede Leistung, jedes Projekt, jeden Tag. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden für Konzeption, Design, Entwicklung, Tests und Dokumentation.",
+      "449 € netto pro Arbeitstag – dieser Satz gilt für jede Leistung. Während klassische IT-Tagessätze oft bei 1.000–1.500 € liegen, bleibt NeXify AI klar: AI als Begleiter senkt Overhead — ohne Qualitätskompromiss. Ein Arbeitstag umfasst bis zu acht planbare Fachstunden.",
     dayRateTitle: "Der Tagessatz",
     dayRateText:
       "Vor Projektbeginn erhalten Sie eine belastbare Aufwandsspanne in Arbeitstagen. Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen. Mehrbedarf wird immer vor Ausführung angezeigt – nie danach.",
@@ -260,8 +260,20 @@ export const de = {
     promises: [
       { title: "Antwort in 24h", text: "Jede Anfrage erhält innerhalb eines Werktags eine persönliche, qualifizierte Antwort." },
       { title: "Schriftliche Scope-Klarheit", text: "Kein Projekt startet ohne dokumentierten Umfang, Annahmen und Preisrahmen." },
-      { title: "Tägliche Sichtbarkeit", text: "Bei mehrtägigen Projekten sehen Sie den Fortschritt – nicht erst am Ende." },
+      { title: "Portal-Transparenz", text: "Anfrage → Angebot → Freigabe → Umsetzung → Abnahme → Rechnung — live im Kundenbereich." },
       { title: "Saubere Übergabe", text: "Code, Zugänge, Dokumentation und Betriebshinweise gehören Ihnen. Kein Vendor-Lock-in." },
+    ],
+    transparencyTitle: "Transparenz & Status",
+    transparencyText:
+      "Nach Auftrag sehen Sie im Kundenportal den Phasenstand, Liefergegenstände/Evidence, nächste Aktionen und Rechnungen — ohne Status-Mails. Self-Serve statt Ticket-Pingpong.",
+    qaTitle: "Qualitätssicherung",
+    qaText:
+      "Qualität durch nachvollziehbare Checks: Code-Review, Tests, Mobile-QA, Performance und dokumentierte Abnahme. AI beschleunigt — der Fachmann freigibt.",
+    qaPoints: [
+      "GitHub/GitLab als Source of Truth",
+      "Abnahmekriterien vor Umsetzung schriftlich",
+      "Evidence-Liste im Portal",
+      "Kein erfundener Case-ROI — nur belegbare Delivery",
     ],
   },
   platform: {
@@ -310,19 +322,19 @@ export const de = {
         tag: "B2B-Website",
         title: "Beratungsunternehmen, DACH",
         text: "Vollständige Unternehmenswebsite mit Leistungsarchitektur, SEO-Grundlage und Kontaktstrecke – konzipiert und live in drei Arbeitstagen.",
-        results: ["3 Arbeitstage bis Go-Live", "+68 % organische Anfragen in 90 Tagen", "Ladezeit unter 1 Sekunde"],
+        results: ["Klar abgegrenzter Scope vor Start", "Ein Ansprechpartner end-to-end", "Übergabe mit Code & Dokumentation"],
       },
       {
         tag: "E-Commerce",
         title: "Ersatzteilhandel, Niederlande",
         text: "Commerce-Plattform mit 60.000+ Artikeln, facettierter Suche, ERP-Anbindung und automatisierten Delta-Importen.",
-        results: ["60.000+ Artikel performant", "Suchantworten unter 150 ms", "Importlauf vollautomatisch, täglich"],
+        results: ["Daten- und Import-Architektur zuerst", "Such- und Katalog-Performance im Fokus", "Betriebshinweise bei Übergabe"],
       },
       {
         tag: "AI-Automatisierung",
         title: "Mittelständischer Dienstleister",
         text: "Automatisierte Angebots- und E-Mail-Strecke mit AI-Vorqualifizierung eingehender Anfragen und CRM-Integration.",
-        results: ["–70 % manuelle Bearbeitungszeit", "Antwortzeit von 2 Tagen auf 2 Stunden", "Vollständig protokollierter Workflow"],
+        results: ["Weniger manuelle Routinearbeit", "Protokollierter Workflow", "Freigaben bleiben beim Menschen"],
       },
     ],
     quotes: [
@@ -460,6 +472,14 @@ export const de = {
     {
       q: "Wie läuft die Zusammenarbeit nach dem Go-Live weiter?",
       a: "Sie erhalten Code, Dokumentation und Betriebshinweise vollständig übergeben. Auf Wunsch übernehmen wir Weiterentwicklung, Wartung und Monitoring zum selben transparenten Tagessatz – ohne Bindung, ohne Mindestlaufzeit.",
+    },
+    {
+      q: "Warum 449 Euro statt typischer IT-Tagessätze von 1.000–1.500 Euro?",
+      a: "Weil AI als Begleiter Recherche, Umsetzung und Prüfung beschleunigt und weil kein Agentur-Overhead mit mehreren Übergaben mitbezahlt wird. Vergleich: /vergleich.",
+    },
+    {
+      q: "Wie sehe ich nach Auftrag den Status und meine Rechnungen?",
+      a: "Im Kundenportal (/konto): Phasen von Anfrage bis Rechnung, Evidence und Rechnungs-Download (u. a. Revolut-Anzahlung).",
     },
   ],
   about: {

@@ -40,7 +40,7 @@ export function HomePage() {
               <Link href="/kontakt" className="btn-primary" data-testid="hero-cta">
                 {t.home.ctaPrimary} <ArrowRight size={16} />
               </Link>
-              <Link href="/leistungen" className="btn-ghost" data-testid="hero-cta-secondary">
+              <Link href="/vergleich" className="btn-ghost" data-testid="hero-cta-secondary">
                 {t.home.ctaSecondary}
               </Link>
             </div>

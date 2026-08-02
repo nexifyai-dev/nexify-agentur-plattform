@@ -243,8 +243,20 @@ export const en = {
     promises: [
       { title: "Response within 24h", text: "Every enquiry receives a personal, qualified response within one working day." },
       { title: "Written scope clarity", text: "No project starts without documented scope, assumptions and price bracket." },
-      { title: "Daily visibility", text: "On multi-day projects, you see progress – not just at the end." },
+      { title: "Portal transparency", text: "Enquiry → offer → approval → delivery → acceptance → invoice — live in your account." },
       { title: "Clean handover", text: "Code, access credentials, documentation and operational notes belong to you. No vendor lock-in." },
+    ],
+    transparencyTitle: "Transparency & status",
+    transparencyText:
+      "After ordering, your portal shows phase status, deliverables/evidence, next actions and invoices — without chasing status emails.",
+    qaTitle: "Quality assurance",
+    qaText:
+      "Quality through verifiable checks: code review, tests, mobile QA, performance and documented acceptance. AI accelerates — the professional approves.",
+    qaPoints: [
+      "GitHub/GitLab as source of truth",
+      "Acceptance criteria in writing before build",
+      "Evidence list in the portal",
+      "No invented case ROI — only verifiable delivery",
     ],
   },
   platform: {
@@ -293,19 +305,19 @@ export const en = {
         tag: "B2B website",
         title: "Consultancy firm, DACH",
         text: "Complete business website with service architecture, SEO foundation and contact funnel – conceived and live in three working days.",
-        results: ["3 working days to go-live", "+68% organic enquiries in 90 days", "Load time under 1 second"],
+        results: ["Clearly scoped before start", "One contact end-to-end", "Handover with code & docs"],
       },
       {
         tag: "E-commerce",
         title: "Spare parts retailer, Netherlands",
         text: "Commerce platform with 60,000+ products, faceted search, ERP integration and automated delta imports.",
-        results: ["60,000+ products at high performance", "Search responses under 150 ms", "Import process fully automated, daily"],
+        results: ["Data and import architecture first", "Search & catalogue performance focus", "Ops notes at handover"],
       },
       {
         tag: "AI automation",
         title: "Mid-sized service provider",
         text: "Automated quotation and email pipeline with AI pre-qualification of incoming enquiries and CRM integration.",
-        results: ["–70% manual processing time", "Response time from 2 days to 2 hours", "Fully logged workflow"],
+        results: ["Less manual routine work", "Logged workflow", "Approvals stay with humans"],
       },
     ],
     quotes: [
