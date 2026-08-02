@@ -1,12 +1,12 @@
 # FILE: /scripts/outreach/config.py
 # NIR: 02.08.2026 09:20
-# UPDATED: 02.08.2026 09:20
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Outreach env config — hard caps, Hostinger/Resend split, paths
 # WHY: Anti-spam pacing + GDPR defaults must not be overridable beyond safety bounds
 # BEST-PRACTICE: Env names only; secrets never logged
-# PITFALL: V-OUT-01: HARD_DAILY_CAP is absolute ceiling
+# PITFALL: V-OUT-01/UWG-01: HARD_DAILY_CAP; --live alone never sends
 # DEPENDS: SMTP_*, IMAP_*, FIRECRAWL_URL, OUTREACH_*
 # DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
 # SESSION: lead-outreach-automation-7dd5
@@ -24,6 +24,12 @@ DEFAULT_PACE_MAX_SEC = 60
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_DIR = REPO_ROOT / "data" / "outreach"
+
+UWG_WARNING = (
+    "§7 UWG (DE): E-Mail-Werbung ohne vorherige ausdrückliche Einwilligung "
+    "ist auch B2B unzulässig. Cold live-send ist deaktiviert. Live nur mit "
+    "--allow-opt-in-send UND consent=true (+consent_recorded_at) je Lead."
+)
 
 
 def _int_env(name: str, default: int) -> int:
@@ -60,6 +66,12 @@ class OutreachConfig:
     live: bool
     enrich: bool
     require_send_allowed: bool
+    allow_opt_in_send: bool
+
+    @property
+    def effective_live(self) -> bool:
+        """True only when live AND explicit opt-in-send flag is set (§7 UWG)."""
+        return bool(self.live and self.allow_opt_in_send)
 
     @property
     def smtp_ready(self) -> bool:
@@ -116,6 +128,12 @@ def load_config() -> OutreachConfig:
         "yes",
         "on",
     )
+    allow_opt_in = os.environ.get("OUTREACH_ALLOW_OPT_IN_SEND", "").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
 
     return OutreachConfig(
         daily_cap=daily_cap,
@@ -148,4 +166,5 @@ def load_config() -> OutreachConfig:
             "OUTREACH_REQUIRE_SEND_ALLOWED", "1"
         ).strip().lower()
         not in ("0", "false", "no", "off"),
+        allow_opt_in_send=allow_opt_in,
     )
