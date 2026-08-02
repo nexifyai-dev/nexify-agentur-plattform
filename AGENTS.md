@@ -21,6 +21,12 @@ den VPS selbst — verbunden via Cursor Remote-SSH direkt auf den Server.
 Siehe `.cursor/rules/10-hermes-consolidation.mdc` für den vollständigen,
 aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
 
+## Proaktive Acquisition- & Gap-Scans (Pflicht)
+Jeder Task: Acquisition/Lead/Conversion/Ops-Lücken scannen und fixen oder
+Issue (`gtm` + `agent-fix` + `P1`). Rule:
+`.cursor/rules/60-proactive-acquisition-gaps.mdc` · Radar:
+`docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md`.
+
 ## Ausdrücklich ausgeschlossen (bereits geprüft, nicht erneut prüfen)
 - **`0xNyk/awesome-hermes-agent`** — NousResearchs eigenes, unabhängiges
   „Hermes Agent"-Projekt. NICHTS von dort übernehmen. Dritte
@@ -28,6 +34,9 @@ aktuellen Auftragstext. Wird dort gepflegt, nicht hier dupliziert.
   gegen NousResearch abgrenzen, bevor irgendetwas integriert wird.
 - **n8n** — laut bestehender Entscheidung abgeschafft. Nicht aufnehmen,
   sofern nicht ausdrücklich widerrufen.
+- **OpenAI Codex** (CLI / ChatGPT Codex / `@openai/codex` / `.codex/`) —
+  abgeschaltet 2026-08-02. Primäragent ist **Cursor Agent / Cloud Agent**.
+  Details: `docs/operations/CODEX-REMOVED-2026-08-02.md`.
 
 ## Arbeitsweise (§13/§14 in CHARTA.md — hier nur der Kurzhinweis)
 - Unbekannte Tools/Repos/Behauptungen: verifizieren, nicht übernehmen,
