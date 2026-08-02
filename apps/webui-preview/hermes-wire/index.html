@@ -20,6 +20,12 @@
     .warn{margin-top:1.5rem;font-size:.85rem;color:var(--muted)}
     code{color:#d4d4d8}
   </style>
+  <script>
+    // Preview-only: NeXify default locale DE (no Prod Hermes patch)
+    try {
+      if (!localStorage.getItem('hermes-lang')) localStorage.setItem('hermes-lang', 'de');
+    } catch (_) {}
+  </script>
 </head>
 <body>
   <main class="shell" data-testid="hermes-preview-hub">
@@ -42,7 +48,7 @@
       </article>
       <article class="card" data-testid="hermes-wire-monitoring">
         <h2>Monitoring</h2>
-        <p>Native Grafana health stub — CF DNS still blocked.</p>
+        <p>Native Grafana-Health-Stub — CF-DNS weiterhin blockiert.</p>
         <a class="btn" href="http://127.0.0.1:8793/" data-testid="hermes-wire-monitoring-open">Panel :8793</a>
       </article>
       <article class="card" data-testid="hermes-wire-openapi">
