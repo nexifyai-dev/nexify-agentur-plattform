@@ -49,5 +49,10 @@ EOF
 
 chmod +x "$HOOK_DIR/post-merge" "$HOOK_DIR/post-checkout" "$HOOK_DIR/pre-push"
 
+# Dual-write AgentMemory + LightRAG (idempotent)
+if [[ -x "$ROOT/scripts/install-dual-write-hook.sh" ]]; then
+  bash "$ROOT/scripts/install-dual-write-hook.sh" || true
+fi
+
 echo "hooks_installed=$HOOK_DIR"
 echo "strict_pre_push=$STRICT_PRE_PUSH"
