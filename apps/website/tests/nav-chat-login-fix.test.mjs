@@ -52,7 +52,9 @@ test('service worker never caches HTML navigations or /api', () => {
 test('pageMetadata exposes hreflang language alternates', () => {
   const src = read('../lib/seo.ts');
   assert.match(src, /languages:\s*\{/);
+  assert.match(src, /\bde:/);
   assert.match(src, /"x-default"/);
+  assert.match(src, /de \+ x-default are primary/);
 });
 
 test('login and register layouts are noindex', () => {
@@ -73,6 +75,7 @@ test('booking slots returns empty array fallback without inventing appointments'
   const slots = read('../app/api/booking/slots/route.ts');
   const book = read('../app/api/booking/book/route.ts');
   assert.match(slots, /NextResponse\.json\(\[\]\)/);
+  assert.match(slots, /upstream\.ok/);
   assert.match(book, /status: 503/);
 });
 

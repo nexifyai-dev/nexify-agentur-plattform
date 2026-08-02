@@ -51,7 +51,8 @@ export function pageMetadata({
     title,
     description,
     // Unprefixed routes + cookie/localStorage locale (de/en/nl) share one URL.
-    // hreflang points at the same path so crawlers know DE/EN/NL are available.
+    // hreflang: de + x-default are primary (DE content); en/nl are alternates.
+    // See docs/operations/LOCALE-DE-STANDARD.md
     alternates: {
       canonical: canonicalPath,
       languages: {
@@ -92,6 +93,31 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
       name: item.name,
       item: absoluteUrl(item.path),
     })),
+  };
+}
+
+type WebPageJsonLdInput = {
+  title: string;
+  description: string;
+  path: string;
+  dateModified?: string;
+};
+
+/** schema.org WebPage — legal/info pages (indexable). */
+export function webPageJsonLd({ title, description, path, dateModified }: WebPageJsonLdInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: absoluteUrl(path),
+    inLanguage: ["de", "nl", "en"],
+    isPartOf: {
+      "@type": "WebSite",
+      name: company.brand,
+      url: siteOrigin(),
+    },
+    ...(dateModified ? { dateModified } : {}),
   };
 }
 
@@ -196,7 +222,7 @@ export function servicesOfferCatalogJsonLd(
     "@type": "OfferCatalog",
     name: `Leistungen — ${company.brand}`,
     description:
-      "Acht Leistungsbausteine zum festen Tagessatz: Websites, Shops, Apps und AI-Automatisierung.",
+      "Leistungsbausteine zum festen Tagessatz: Websites, Shops, Apps, KI und Automatisierung.",
     url: absoluteUrl(path),
     numberOfItems: items.length,
     itemListElement: items.map((s, index) => {
@@ -214,13 +240,13 @@ export function servicesOfferCatalogJsonLd(
         "@type": "Offer",
         position: index + 1,
         name: s.name,
-        url: absoluteUrl(`${path}#${s.slug}`),
+        url: absoluteUrl(`${path}/${s.slug}`),
         description: `${daysLabel} à ${company.dayRate} € netto`,
         itemOffered: {
           "@type": "Service",
           name: s.name,
           description: s.description,
-          url: absoluteUrl(`${path}#${s.slug}`),
+          url: absoluteUrl(`${path}/${s.slug}`),
           provider: {
             "@type": "Organization",
             name: company.legalName,

@@ -96,13 +96,13 @@ export function CallbackPage() {
   const grouped = useMemo(() => {
     const g: Record<string, Slot[]> = {};
     for (const s of slots) {
-      const day = new Date(s.start_at).toLocaleDateString(locale, { weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Amsterdam" });
+      const day = new Date(s.start_at).toLocaleDateString(locale, { weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "Europe/Berlin" });
       (g[day] ??= []).push(s);
     }
     return g;
   }, [slots, locale]);
 
-  const timeOf = (s: Slot) => new Date(s.start_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" });
+  const timeOf = (s: Slot) => new Date(s.start_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Berlin" });
 
   const submit = async () => {
     if (!selected) return;
@@ -209,7 +209,7 @@ export function CallbackPage() {
               </button>
               {selected && (
                 <p className="text-center text-[12px] text-zinc-500">
-                  {new Date(selected.start_at).toLocaleString(locale, { weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" })}
+                  {new Date(selected.start_at).toLocaleString(locale, { weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Berlin" })}
                 </p>
               )}
               {state && state !== "sending" && <p className="text-sm text-red-400" data-testid="booking-error">{state}</p>}

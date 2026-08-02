@@ -14,6 +14,9 @@
 
 set -euo pipefail
 
+# Timezone mandate — Europe/Berlin (docs/operations/TIMEZONE-EUROPE-BERLIN.md)
+export TZ=Europe/Berlin
+
 WWW_HEALTH="${WWW_HEALTH_URL:-https://www.nexifyai.cloud/api/health}"
 AM_LIVEZ="${AM_LIVEZ_URL:-http://127.0.0.1:3111/agentmemory/livez}"
 LR_HEALTH="${LR_HEALTH_URL:-http://127.0.0.1:9622/health}"

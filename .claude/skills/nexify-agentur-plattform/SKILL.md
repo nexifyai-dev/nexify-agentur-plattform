@@ -53,11 +53,9 @@ This skill introduces the core development patterns and workflows used in the `n
 3. Add or update `.claude/skills/[skill-name]/SKILL.md` with skill documentation.
 4. Add or update `.claude/homunculus/instincts/inherited/[skill-name]-instincts.yaml` for inherited instincts.
 5. Add or update `.claude/commands/project-snapshot-or-cleanup.md` for project management commands.
-6. Add or update `.codex/config.toml` for codex configuration.
-7. Add or update `.codex/AGENTS.md` to register the new agent.
-8. Add or update `.codex/agents/[agent].toml` for agent-specific config.
-9. Add or update `.agents/skills/[skill-name]/SKILL.md` for agent skill documentation.
-10. Add or update `.agents/skills/[skill-name]/agents/openai.yaml` for OpenAI agent configuration.
+6. Add or update `.agents/skills/[skill-name]/SKILL.md` for Cursor Agent / shared agent skill documentation.
+7. Add or update `.agents/skills/[skill-name]/agents/openai.yaml` for skill-interface metadata (Agents Skills format; not OpenAI Codex).
+8. Do **not** add `.codex/` — OpenAI Codex is retired at NeXify (2026-08-02); Cursor Agent only.
 
 **Example Directory Structure:**
 ```
@@ -71,17 +69,15 @@ This skill introduces the core development patterns and workflows used in the `n
     instincts/
       inherited/
         my_skill-instincts.yaml
-.codex/
-  config.toml
-  AGENTS.md
-  agents/
-    my_agent.toml
 .agents/
   skills/
     my_skill/
       SKILL.md
       agents/
         openai.yaml
+.cursor/
+  rules/
+  mcp.json.example
 ```
 
 ---

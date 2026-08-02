@@ -15,6 +15,8 @@
 """Emit buyer-intent search queries and free channel checklist for NeXify AI GTM."""
 
 from __future__ import annotations
+import os
+os.environ.setdefault("TZ", "Europe/Berlin")
 
 import argparse
 import json

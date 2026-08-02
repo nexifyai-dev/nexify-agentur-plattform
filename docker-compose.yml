@@ -1,3 +1,10 @@
+# Product UI language default is German (de). OS locale stays C.UTF-8 for portable containers.
+# TZ=Europe/Berlin is owned by docs/operations/TIMEZONE-EUROPE-BERLIN.md (separate PR).
+x-nexify-locale: &nexify_locale
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+  LANGUAGE: de:en
+
 services:
 
   # ── Harness Open Source — Git-Hosting, CI/CD, Code Review ─────────────────
@@ -15,6 +22,8 @@ services:
       - POSTGRES_DB=${HARNESS_DB_NAME:-harnessdb}
       - POSTGRES_USER=${HARNESS_DB_USER:-harness}
       - POSTGRES_PASSWORD=${HARNESS_DB_PASSWORD:-changeme_harness_db}
+      - TZ=Europe/Berlin
+      - PGTZ=Europe/Berlin
     volumes:
       - harness-pgdata:/var/lib/postgresql/data
     ports:
@@ -51,6 +60,7 @@ services:
       - GITNESS_PRINCIPAL_ADMIN_PASSWORD=${HARNESS_ADMIN_PASSWORD:-changeme_harness_admin}
       # Data path
       - GITNESS_ROOT_PATH=/data
+      - TZ=Europe/Berlin
     volumes:
       - harness-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -87,6 +97,7 @@ services:
       - RUNNER_LABELS=self-hosted,vps,nexifyai,linux,x64
       - RUNNER_WORKDIR=/home/runner/actions-runner/_work
       - RUNNER_ALLOW_RUNASROOT=1
+      - TZ=Europe/Berlin
     volumes:
       # Docker-Socket-Mount: Runner kann docker-Befehle direkt ausführen
       - /var/run/docker.sock:/var/run/docker.sock
@@ -115,6 +126,7 @@ services:
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0
+      - TZ=Europe/Berlin
     ports:
       - "127.0.0.1:3000:3000"
     healthcheck:
