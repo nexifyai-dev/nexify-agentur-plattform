@@ -75,7 +75,7 @@ jobs:
       - name: Lint
         run: pnpm --dir apps/website lint
 
-      - name: Unit tests (*.test.mjs contracts incl. former *.test.tsx)
+      - name: Unit tests (*.test.mjs contract runner)
         run: pnpm --dir apps/website test
 
       - name: Build Next.js

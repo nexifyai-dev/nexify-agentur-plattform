@@ -40,7 +40,7 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 - **Primary Repo:** GitHub (`git@github.com:nexifyai-dev/nexify-agentur-plattform.git`)
 - **Mirror:** GitLab (`gitlab.nexifyai.cloud/nexifyai_group/nexifyai`)
 - **Sync:** Automatisch via `.github/workflows/mirror-to-gitlab.yml`
-- **Branch Pattern:** `main` (stable) | `develop` (staging) | `feature/*` (development)
+- **Branch Pattern:** `main` (stable/default) | `cursor/*-7dd5` / `feature/*` (PR → main) — **kein** aktives `develop`-Staging
 - **Governance Primärquelle:** `docs/governance/` (nicht Chat-Charta). Auszug: `docs/governance/CHARTA.md`
 - **Pre-Task Gates:** BRAIN_FIRST, DOCS_FIRST, SHARED_STATE, PRE_TASK_CHECKLIST, SECRET_SCAN, TENANT_ISOLATION (+ FLOWSEARCH_KNOWLEDGE bei Workflows)
 - **Design verbindlich:** `design_guidelines.json` — Dark/Luxury, Outfit/Manrope, `#0A0A0A`
@@ -69,11 +69,12 @@ OpenReview AFlow `z5uVAKwmjf` (Spiegel: arXiv/GitHub/Synthesis) — **verbindlic
 
 **Branch-Namenkonvention:**
 ```
-main           # Production (blocked, nur Merge via MR)
-develop        # Staging (CI/CD → staging VPS)
-feature/*      # Development (PR → MR review)
-bugfix/*       # Hotfix (priority merge)
-release/v*     # Release candidates
+main              # Default/Production (Merge nur via PR)
+cursor/<task>-7dd5 # Cursor-Agent-Branches → Draft-PR → main
+feature/*         # Development (PR → main)
+bugfix/*          # Hotfix (priority merge)
+release/v*        # Release candidates
+# develop         # HISTORISCH — nicht mehr Staging-Pfad (CI-Trigger entfernt)
 ```
 
 **Commit-Nachrichten:**
@@ -112,16 +113,13 @@ Vor JEDEM Commit:
 ### 6. Deployment-Workflow
 
 ```
-1. Feature Branch:          feature/xyz
-2. Push + PR:              git push origin feature/xyz
-3. GitHub Actions (CI):     Tests + Lint + Build
-4. GitLab Mirror:          Alle Git-Refs via mirror-to-gitlab.yml
-5. Code Review:            Minimum 1 approval
-6. Merge zu develop:       MR → Merge
-7. GitLab CI/CD:           Build + Test + Deploy staging
-8. Test auf Staging:       https://staging.nexifyai.cloud
-9. Release PR:             feature → main (nach staging test)
-10. Merge zu main:         Production auto-deploy
+1. Branch: cursor/<task>-7dd5 oder feature/xyz (von main)
+2. Push + Draft-PR → GitHub
+3. GitHub Actions (CI): Tests + Lint + Build
+4. GitLab Mirror: mirror-to-gitlab.yml nach Merge/Push
+5. Review / Automerges laut Policy wenn CI grün
+6. Merge zu main (kein develop-Staging-Pfad)
+7. GitLab CI/CD: Build/Test; Deploy laut Policy
 ```
 
 ### 7. Brain Integration
@@ -265,5 +263,8 @@ Rotate credentials in /opt/nexifyai/security/keys/
 
 
 ---
-## NeXifyAI Integration (28.07.2026)
-GitLab CI/CD Pipeline aktiv. LightRAG+AgentMemory Dual-Write via post-commit Hook.
+## NeXifyAI Integration (28.07.2026 · korrigiert 02.08.2026)
+GitLab CI/CD Pipeline aktiv (Mirror von GitHub).
+**Dual-Write AgentMemory+LightRAG:** optional via `scripts/brain-dual-write.sh` +
+`.githooks/post-commit-dual-write` — **nicht** automatisch überall aktiv (No-op ohne Env /
+ohne `core.hooksPath=.githooks`). Ops: `docs/operations/BRAIN-DUAL-WRITE.md`.
