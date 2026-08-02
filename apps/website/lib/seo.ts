@@ -51,7 +51,8 @@ export function pageMetadata({
     title,
     description,
     // Unprefixed routes + cookie/localStorage locale (de/en/nl) share one URL.
-    // hreflang points at the same path so crawlers know DE/EN/NL are available.
+    // hreflang: de + x-default are primary (DE content); en/nl are alternates.
+    // See docs/operations/LOCALE-DE-STANDARD.md
     alternates: {
       canonical: canonicalPath,
       languages: {
