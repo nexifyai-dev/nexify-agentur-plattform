@@ -14,7 +14,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
   → Commit auf cursor/*
   → Hook auto-push (kein Diff-Tab)
   → Workflow agent-branch-autopilot → Draft-PR + label automerge
-  → CI green → pr-auto-merge.yml → squash merge (Guards)
+  → CI green → pr-auto-merge.yml → draft→ready → squash auto-merge (Guards)
   → mirror-to-gitlab (Sync only)
 ```
 
@@ -33,7 +33,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 |---------|-------------|
 | Auto-Push nach Commit | `.cursor/hooks/auto-push-agent-branch.sh` (`afterShellExecution` + `stop`) |
 | Draft-PR wenn Branch gepusht | `.github/workflows/agent-branch-autopilot.yml` |
-| CI → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (kein force main; `do-not-merge` blockt) |
+| CI → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml`: bei Draft + grünen Checks zuerst `gh pr ready`, dann squash auto-merge (kein force main; `do-not-merge` blockt) |
 | CI fail / Issue / Dispatch → Cloud Agent | `.github/workflows/event-to-cloud-agent.yml` |
 | Linear-ID auf PR | `.github/workflows/linear-pr-sync.yml` |
 | VPS Alerts → Agent | `deploy/autopilot/jobs/event-ingest-to-cloud-agent.sh` + webhook stub |
@@ -51,7 +51,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Sentry/Vercel/CF/Resend | — | Webhook→Agent | `/ingest/{source}` + Shared Secret |
 | Auto-Push | manuell Diff-Tab | Hook | nach Merge dieses PRs in Agent-Sessions |
 | Auto Draft-PR | manuell | Workflow | nach Push `cursor/**` |
-| Auto-Merge | — | label+checks | Repo Allow auto-merge + Branch Protection |
+| Auto-Merge | Draft blieb Draft (#135) | label+checks+ready | `pr-auto-merge.yml` markiert ready wenn automerge + green; Allow auto-merge + Rulesets |
 | GitLab | Mirror | Sync only | unverändert |
 
 ## Secrets (Namen only)
@@ -69,11 +69,16 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 6. GitHub Repo: Allow auto-merge; required checks; Labels `automerge`, `do-not-merge`, `agent-fix`
 7. VPS: `bash deploy/autopilot/install-event-ingest.sh` + Ingest-URL hinter Traefik/CF
 
+## Issues Lifecycle
+
+Siehe [`ISSUES-AUTOMATION.md`](./ISSUES-AUTOMATION.md) — Auto-Label, Triage, Stale, Human-gate.
+`event-to-cloud-agent` launched Issues nur noch bei Labels `agent-fix|cursor-fix|autonomous|P0` und **nie** bei `human-gate|blocked`.
+
 ## Guards
 
 - Kein Force-Push auf `main`/`develop`
-- Draft-PR zuerst; Merge nur squash + green checks
-- `do-not-merge` deaktiviert Auto-Merge
+- Draft-PR zuerst (Autopilot); Merge nur nach draft→ready + squash + green checks
+- `do-not-merge` deaktiviert Auto-Merge (inkl. disable-auto)
 - Circuit Breaker vor Cloud-Launch / MCP
 - Keine Secrets in Chat/Commits
 - Kein Hermes Prod-Cutover
@@ -88,3 +93,14 @@ python3 scripts/event-ingest/dispatch_cloud_agent.py \
 
 gh workflow run "Event → Cursor Cloud Agent" -f prompt="Smoke triage" -f source=manual
 ```
+
+## Draft→Ready Loop (P0 #135)
+
+Autopilot öffnet bewusst **Draft**-PRs. `pr-auto-merge.yml` überspringt Drafts nicht mehr blind:
+
+1. Guards: open, base `main`/`develop`, Label `automerge`/`auto-merge`, kein `do-not-merge`
+2. Keine failing Checks im `statusCheckRollup`
+3. Wenn noch Draft → `gh pr ready`
+4. Dann `gh pr merge --auto --squash` (Ruleset required checks bleiben bindend)
+
+Kein Force-Merge; kein Hermes-Cutover.
