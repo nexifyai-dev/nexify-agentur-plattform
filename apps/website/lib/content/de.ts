@@ -509,11 +509,11 @@ export const de = {
     messagePlaceholder: "Was möchten Sie umsetzen? Website, Shop, App, Automatisierung … Je konkreter, desto präziser die Einschätzung.",
     submit: "Anfrage senden",
     sending: "Wird gesendet …",
-    success: "Vielen Dank! Ihre Anfrage ist eingegangen – Sie erhalten in Kürze eine Bestätigung per E-Mail und innerhalb eines Werktags eine persönliche Antwort.",
+    success: "Vielen Dank! Ihre Anfrage ist eingegangen – Sie erhalten in Kürze eine Bestätigung per E-Mail und in der Regel innerhalb eines Werktags eine persönliche Antwort von Pascal.",
     error: "Senden fehlgeschlagen. Bitte versuchen Sie es erneut oder schreiben Sie direkt an",
     directTitle: "Direkter Draht",
     responseTitle: "Reaktionszeit",
-    responseText: "Innerhalb eines Werktags – meist deutlich schneller.",
+    responseText: "Ziel: persönliche Rückmeldung innerhalb eines Werktags — oft schneller. Ehrliches Ziel, kein Fake-SLA.",
     b2bNote: "Ausschließlich B2B: Angebote richten sich an Unternehmen, Selbstständige und Organisationen.",
   },
 };

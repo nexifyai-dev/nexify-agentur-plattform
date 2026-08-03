@@ -60,7 +60,7 @@ Pfad: `https://github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 | `VPS_PORT` | Deploy SSH Port |
 | `DEPLOY_KEY_VPS` | Private Key für Deploy |
 
-Legacy-Alias: `VERCEL_ACCESS_TOKEN` wird von Deploy-Workflow akzeptiert, wenn `VERCEL_TOKEN` fehlt — **nicht beide nötig**.
+Legacy-Alias: `VERCEL_ACCESS_TOKEN` wird von Deploy-Workflow akzeptiert, wenn `VERCEL_TOKEN` fehlt (als Secret **oder** Variable) — **nicht beide nötig**.
 
 Vollständige Matrix: [`GITHUB-ACTIONS-SECRET-REGISTRY.md`](./GITHUB-ACTIONS-SECRET-REGISTRY.md).
 
