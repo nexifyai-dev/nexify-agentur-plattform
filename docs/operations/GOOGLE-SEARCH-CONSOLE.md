@@ -1,6 +1,6 @@
 # FILE: docs/operations/GOOGLE-SEARCH-CONSOLE.md
 # NIR: 02.08.2026 10:55
-# UPDATED: 02.08.2026 11:10
+# UPDATED: 03.08.2026 06:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps / GTM
 # WHAT: SoT — Google Search Console Domain-Ownership + Sitemap für nexifyai.cloud
@@ -9,7 +9,7 @@
 # PITFALL: V-GSC-01: TXT entfernen = Ownership verloren; Token nicht in Code duplizieren (DNS reicht)
 # DEPENDS: Cloudflare DNS Zone nexifyai.cloud; Live www.nexifyai.cloud
 # DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md, docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
-# SESSION: gsc-ownership-confirmed-7dd5
+# SESSION: gsc-ownership-confirmed-7dd5 + gsc-sitemap-submitted-7dd5
 
 # Google Search Console — nexifyai.cloud
 
@@ -21,7 +21,7 @@
 |---------|--------|-------|
 | Ownership (DNS Domain) | **DONE** | 2026-08-02 |
 | Sitemap `https://www.nexifyai.cloud/sitemap.xml` submitted | **DONE** (#238) | 2026-08-02 |
-| Coverage monitoring / Soft-404s | **next** (Human + weekly) | — |
+| Coverage monitoring / Soft-404s | **next** (Human + weekly #245) | — |
 | URL-Inspection Indexing (Money-Pages) | **next** (#243) | — |
 | E-Mail-Prefs | **next** (#243) | — |
 
@@ -79,7 +79,7 @@ Wiederholen nur bei neuer Sitemap-URL oder Property-Wechsel — nicht bei jedem 
 
 ## Next: Indexierung anfordern (Human ~3 Min — URL-Prüfung) — #243
 
-In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (Rate-Limit beachten):
+In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (nach Sitemap-Submit; Rate-Limit beachten):
 
 | Priorität | URL |
 |-----------|-----|
@@ -113,6 +113,11 @@ In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (Rate-
 | P1 Plattform | `https://www.nexifyai.cloud/plattform` |
 | P1 Rückruf | `https://www.nexifyai.cloud/rueckruf` |
 | P1 Kontakt | `https://www.nexifyai.cloud/kontakt` |
+| P2 Wissen | `https://www.nexifyai.cloud/wissen` |
+| P2 Artikel | `https://www.nexifyai.cloud/wissen/ai-automatisierung-kmu` |
+| P2 Artikel | `https://www.nexifyai.cloud/wissen/was-kostet-web-app-2026` |
+
+Optional (sobald live in Sitemap / Routes shipped): `/alternativen`, `/sprechstunde`, `/partner`, `/botschafter`, `/branchen`, `/leistungen/*`.
 
 **Quelle der 15× `/leistungen/[slug]` + Branchen:** PR #252 / `docs/gtm/PAGE1-KEYWORD-MAP.md` (nach Deploy live prüfen).
 
@@ -120,7 +125,7 @@ In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (Rate-
 
 ## Empfohlene sekundäre Verify-Methoden (optional)
 
-In GSC → **Einstellungen → Eigentumsbestätigung** zusätzlich aktivieren:
+In GSC → **Einstellungen → Eigentumsbestätigung** zusätzlich aktivieren (Reihenfolge egal):
 
 1. HTML-Tag (nur wenn Meta bewusst gewünscht — sonst weglassen)
 2. Google Analytics (wenn GA4 Property verknüpft)
@@ -156,6 +161,7 @@ Sitemap: https://www.nexifyai.cloud/sitemap.xml
 | Issue #238 | GSC Property + Sitemap — **CLOSED** (submitted 2026-08-02) |
 | Issue #210 | GSC+WhatsApp — **GSC DONE**; WhatsApp-Profil bleibt Human |
 | Issue [#243](https://github.com/nexifyai-dev/nexify-agentur-plattform/issues/243) | Indexierung Money-Pages + E-Mail-Prefs (+ Coverage) |
+| Issue #245 | P2 — GSC coverage weekly check (Coverage / Soft-404 / Indexing) |
 | [`GTM_KOSTENFREI_GESAMTPLAN_V1.md`](../gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md) | SEO/GSC im kostenfreien GTM-Gesamtplan |
 | [`ONGOING-GAP-AND-ACQUISITION-RADAR.md`](../gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Gap A11 Status |
 | [`SUPPLY_WAVE1_CHECKLIST_V1.md`](../gtm/SUPPLY_WAVE1_CHECKLIST_V1.md) | Supply Wave-1 (GBP parallel) |
