@@ -40,6 +40,18 @@ test("seo.ts exports pageMetadata and www canonical origin", () => {
   assert.match(src, /CANONICAL_ORIGIN = "https:\/\/www\.nexifyai\.cloud"/);
   assert.match(src, /alternates:\s*\{\s*canonical:/);
   assert.match(src, /openGraph:[\s\S]*url/);
+  assert.match(src, /openGraph:[\s\S]*images:\s*ogImages/);
+  assert.match(src, /twitter:[\s\S]*card:\s*"summary_large_image"/);
+  assert.match(src, /twitter:[\s\S]*images:\s*\["\/og-image\.png"\]/);
+});
+
+test("server not-found pages export noindex robots (avoid soft-404 indexing)", () => {
+  for (const rel of ["app/not-found.tsx", "app/[locale]/not-found.tsx"]) {
+    const src = read(rel);
+    assert.doesNotMatch(src, /["']use client["']/);
+    assert.match(src, /export const metadata/);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
 });
 
 test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
@@ -47,6 +59,31 @@ test("faq page has FAQPage and BreadcrumbList JSON-LD", () => {
   assert.match(page, /FAQPage/);
   assert.match(page, /breadcrumbListJsonLd/);
   assert.match(page, /path:\s*"\/faq"/);
+  assert.match(page, /flattenFaqItems/);
+  assert.match(page, /faqCategories/);
+});
+
+test("faq categories are expansive with H2 sections in UI", () => {
+  const cats = read("lib/content/faq-categories.ts");
+  assert.match(cats, /export const faqCategoriesDe/);
+  assert.match(cats, /flattenFaqItems/);
+  const deBlock = cats.split("export const faqCategoriesDe")[1].split("export const faqCategoriesNl")[0];
+  const qCount = (deBlock.match(/\bq:/g) || []).length;
+  assert.ok(qCount >= 40, `expected >=40 DE FAQ items, got ${qCount}`);
+  assert.ok((deBlock.match(/id: "/g) || []).length >= 8, "expected >=8 categories");
+
+  const ui = read("components/pages/faq.tsx");
+  assert.match(ui, /faqCategories\.map/);
+  assert.match(ui, /<h2[\s\S]*cat\.title/);
+  assert.match(ui, /<h3[\s\S]*f\.q/);
+  assert.match(ui, /data-testid="faq-page"/);
+  assert.match(ui, /data-testid=\{`faq-section-\$\{cat\.id\}`\}/);
+  assert.match(ui, /href="\/leistungen"/);
+  assert.match(ui, /href="\/preise"/);
+  assert.match(ui, /href="\/kontakt"/);
+  assert.match(ui, /href="\/wissen"/);
+  assert.match(ui, /preise#planner/);
+  assert.doesNotMatch(cats, /999/);
 });
 
 test("leistungen and preise pages expose BreadcrumbList JSON-LD", () => {
@@ -119,6 +156,18 @@ test("llm.txt is present for AI crawlers", () => {
   const llm = read("public/llm.txt");
   assert.match(llm, /449/);
   assert.match(llm, /www\.nexifyai\.cloud/);
+});
+
+test("admin and konto layouts export noindex robots (client pages cannot)", () => {
+  for (const rel of ["app/admin/layout.tsx", "app/konto/layout.tsx"]) {
+    const src = read(rel);
+    assert.match(src, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
+  }
+  const robots = read("app/robots.ts");
+  assert.match(robots, /\/admin/);
+  assert.match(robots, /\/konto/);
+  assert.match(robots, /\/login/);
+  assert.match(robots, /\/registrieren/);
 });
 
 test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
