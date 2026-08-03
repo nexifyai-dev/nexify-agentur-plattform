@@ -172,6 +172,7 @@ class RunnerDryRunTests(unittest.TestCase):
                 live=False,
                 enrich=False,
                 require_send_allowed=True,
+                allow_opt_in_send=False,
             )
             result = runner.run_daily(c, sleep_fn=lambda _s: None)
             self.assertEqual(result.sent, 0)
@@ -202,10 +203,44 @@ class RunnerDryRunTests(unittest.TestCase):
                 live=True,
                 enrich=False,
                 require_send_allowed=True,
+                allow_opt_in_send=True,
             )
             result = runner.run_daily(c, sleep_fn=lambda _s: None)
             self.assertIsNotNone(result.blocked)
             self.assertIn("missing_smtp", result.blocked or "")
+
+
+    def test_live_without_opt_in_flag_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            c = cfg_mod.OutreachConfig(
+                daily_cap=10,
+                pace_min_sec=0,
+                pace_max_sec=0,
+                smtp_host="smtp.hostinger.com",
+                smtp_port=465,
+                smtp_user="mail@nexifyai.cloud",
+                smtp_password="x",
+                sender_email="mail@nexifyai.cloud",
+                sender_name="NeXify AI",
+                reply_to="mail@nexifyai.cloud",
+                firecrawl_url="http://127.0.0.1:3003",
+                firecrawl_api_key="",
+                queue_dir=root / "queue",
+                state_dir=root / "state",
+                unsub_dir=root / "unsub",
+                unsubscribe_base_url="https://www.nexifyai.cloud/api/outreach/unsubscribe",
+                booking_url="https://www.nexifyai.cloud/de/kontakt",
+                live=True,
+                enrich=False,
+                require_send_allowed=True,
+                allow_opt_in_send=False,
+            )
+            result = runner.run_daily(c, sleep_fn=lambda _s: None)
+            self.assertIsNotNone(result.blocked)
+            self.assertIn("uwg_opt_in", result.blocked or "")
+            self.assertEqual(result.sent, 0)
+
 
 
 if __name__ == "__main__":
