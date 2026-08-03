@@ -461,11 +461,11 @@ export const nl: Dict = {
     messagePlaceholder: "Wat wilt u realiseren? Website, shop, app, automatisering … Hoe concreter, hoe preciezer de inschatting.",
     submit: "Aanvraag versturen",
     sending: "Wordt verzonden …",
-    success: "Hartelijk dank! Uw aanvraag is ontvangen – u krijgt zo een bevestiging per e-mail en binnen één werkdag een persoonlijk antwoord.",
+    success: "Hartelijk dank! Uw aanvraag is ontvangen – u krijgt zo een bevestiging per e-mail en meestal binnen één werkdag een persoonlijk antwoord van Pascal.",
     error: "Verzenden mislukt. Probeer het opnieuw of mail direct naar",
     directTitle: "Directe lijn",
     responseTitle: "Reactietijd",
-    responseText: "Binnen één werkdag – meestal aanzienlijk sneller.",
+    responseText: "Doel: persoonlijke reactie binnen één werkdag — vaak sneller. Eerlijk doel, geen nep-SLA.",
     b2bNote: "Uitsluitend B2B: aanbiedingen richten zich op bedrijven, zelfstandigen en organisaties.",
   },
 };
