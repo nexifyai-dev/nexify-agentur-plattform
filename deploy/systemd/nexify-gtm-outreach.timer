@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer for NeXify AI GTM outreach dry-run
+
+[Timer]
+OnCalendar=Mon-Fri *-*-* 09:15:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
