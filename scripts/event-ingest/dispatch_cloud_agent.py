@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # FILE: scripts/event-ingest/dispatch_cloud_agent.py
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 08:35
+# UPDATED: 02.08.2026 11:20
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Launch Cursor Cloud Agent from CI/webhook events (PC-off path).
@@ -36,6 +36,23 @@ except ImportError:  # pragma: no cover
 
 def _env(name: str, default: str = "") -> str:
     return (os.environ.get(name) or default).strip()
+
+
+def _event_payload() -> dict[str, Any]:
+    path = _env("GITHUB_EVENT_PATH")
+    if not path:
+        return {}
+    try:
+        raw = Path(path).read_text(encoding="utf-8")
+        data = json.loads(raw or "{}")
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _snippet(value: Any, limit: int = 4000) -> str:
+    text = str(value or "").strip()
+    return text[:limit]
 
 
 def circuit_check(tool: str, cost: float, state_hash: str) -> bool:
@@ -119,6 +136,7 @@ def build_prompt(args: argparse.Namespace) -> tuple[str, str, bool]:
     event = args.event_name
     reason = args.reason
     auto_pr = True
+    payload = _event_payload()
 
     if event == "workflow_dispatch":
         prompt = (
@@ -191,31 +209,168 @@ Investigate, fix on a branch, push, open/update PR, explain root cause.
         return (prompt, dedupe, True)
 
     if event == "issues":
-        num = _env("ISSUE_NUMBER")
-        title = _env("ISSUE_TITLE")
-        body = _env("ISSUE_BODY")[:6000]
-        prompt = f"""GitHub Issue #{num}: {title}
+        issue = payload.get("issue") if isinstance(payload.get("issue"), dict) else {}
+        num = _env("ISSUE_NUMBER") or str(issue.get("number") or "")
+        title = _env("ISSUE_TITLE") or str(issue.get("title") or "")
+        body = _snippet(_env("ISSUE_BODY") or issue.get("body"), 6000)
+        action = _env("ACTION") or str(payload.get("action") or "opened")
+        label_name = _env("LABEL_NAME") or str(
+            (payload.get("label") or {}).get("name") if isinstance(payload.get("label"), dict) else ""
+        )
+        prompt = f"""GitHub Issue #{num} ({action}): {title}
 
 {body}
+
+Context:
+- Labels: {_env("ISSUE_LABELS")}
+- Trigger label: {label_name or '-'}
 
 Triage and fix if actionable. Push branch + draft PR referencing #{num}.
 """
-        auto_pr = "issue_label" in reason or "agent-fix" in reason
-        dedupe = f"issue:{num}:{reason}"
+        auto_pr = True
+        dedupe = f"issue:{num}:{action}"
         return (prompt, dedupe, auto_pr)
 
+    if event == "issue_comment":
+        issue = payload.get("issue") if isinstance(payload.get("issue"), dict) else {}
+        comment = (
+            payload.get("comment") if isinstance(payload.get("comment"), dict) else {}
+        )
+        num = str(issue.get("number") or _env("ISSUE_NUMBER"))
+        title = str(issue.get("title") or _env("ISSUE_TITLE"))
+        issue_body = _snippet(issue.get("body") or _env("ISSUE_BODY"), 3500)
+        comment_body = _snippet(comment.get("body") or _env("COMMENT_BODY"), 3500)
+        is_pr = bool(issue.get("pull_request")) or _env("ISSUE_IS_PR").lower() == "true"
+        if is_pr:
+            prompt = f"""PR conversation comment on #{num}: {title}
+
+PR body:
+{issue_body}
+
+Comment:
+{comment_body}
+
+Inspect the PR context, address actionable feedback on the PR branch, and keep scope minimal.
+"""
+            return (prompt, f"pr-comment:{num}:{reason}", False)
+
+        prompt = f"""GitHub Issue comment on #{num}: {title}
+
+Issue body:
+{issue_body}
+
+Comment:
+{comment_body}
+
+Triage the request, fix if actionable, and open a draft PR referencing #{num}.
+"""
+        return (prompt, f"issue-comment:{num}:{reason}", True)
+
     if event == "pull_request":
-        num = _env("PR_NUMBER")
-        title = _env("PR_TITLE")
-        body = _env("PR_BODY")[:4000]
-        prompt = f"""PR #{num} labeled for agent fix: {title}
+        pr = payload.get("pull_request") if isinstance(payload.get("pull_request"), dict) else {}
+        num = _env("PR_NUMBER") or str(pr.get("number") or "")
+        title = _env("PR_TITLE") or str(pr.get("title") or "")
+        body = _snippet(_env("PR_BODY") or pr.get("body"), 4000)
+        action = _env("ACTION") or str(payload.get("action") or "opened")
+        label_name = _env("LABEL_NAME") or str(
+            (payload.get("label") or {}).get("name") if isinstance(payload.get("label"), dict) else ""
+        )
+        prompt = f"""GitHub PR #{num} ({action}): {title}
 
 {body}
 
+Context:
+- Labels: {_env("PR_LABELS")}
+- Trigger label: {label_name or '-'}
+
 Inspect CI/diff, push fixes to the PR branch, keep scope minimal.
 """
-        dedupe = f"pr:{num}:{reason}"
+        dedupe = f"pr:{num}:{action}"
         return (prompt, dedupe, False)
+
+    if event == "pull_request_review":
+        review = payload.get("review") if isinstance(payload.get("review"), dict) else {}
+        pr = payload.get("pull_request") if isinstance(payload.get("pull_request"), dict) else {}
+        num = str(pr.get("number") or _env("PR_NUMBER"))
+        title = str(pr.get("title") or _env("PR_TITLE"))
+        body = _snippet(pr.get("body") or _env("PR_BODY"), 3000)
+        review_body = _snippet(review.get("body") or _env("REVIEW_BODY"), 3500)
+        review_state = str(review.get("state") or _env("REVIEW_STATE") or "commented")
+        prompt = f"""Review feedback on PR #{num}: {title}
+
+PR body:
+{body}
+
+Review state: {review_state}
+Review body:
+{review_body}
+
+Apply actionable fixes on the PR branch and summarize what changed.
+"""
+        return (prompt, f"pr-review:{num}:{review_state}", False)
+
+    if event == "pull_request_review_comment":
+        comment = (
+            payload.get("comment") if isinstance(payload.get("comment"), dict) else {}
+        )
+        pr = payload.get("pull_request") if isinstance(payload.get("pull_request"), dict) else {}
+        num = str(pr.get("number") or _env("PR_NUMBER"))
+        title = str(pr.get("title") or _env("PR_TITLE"))
+        path = str(comment.get("path") or "")
+        diff_hunk = _snippet(comment.get("diff_hunk"), 1200)
+        comment_body = _snippet(comment.get("body") or _env("COMMENT_BODY"), 3500)
+        prompt = f"""Inline review comment on PR #{num}: {title}
+
+File: {path or '-'}
+Comment:
+{comment_body}
+
+Diff context:
+{diff_hunk}
+
+Inspect the referenced code, apply any valid fix on the PR branch, and keep scope minimal.
+"""
+        return (prompt, f"pr-review-comment:{num}:{path or 'general'}", False)
+
+    if event == "discussion":
+        discussion = (
+            payload.get("discussion") if isinstance(payload.get("discussion"), dict) else {}
+        )
+        num = str(discussion.get("number") or "")
+        title = str(discussion.get("title") or _env("DISCUSSION_TITLE"))
+        body = _snippet(discussion.get("body") or _env("DISCUSSION_BODY"), 5000)
+        action = _env("ACTION") or str(payload.get("action") or "created")
+        prompt = f"""GitHub Discussion #{num} ({action}): {title}
+
+{body}
+
+Respond by implementing any repo change that is clearly actionable, then open a draft PR if code changes are needed.
+"""
+        return (prompt, f"discussion:{num}:{action}", True)
+
+    if event == "discussion_comment":
+        discussion = (
+            payload.get("discussion") if isinstance(payload.get("discussion"), dict) else {}
+        )
+        comment = (
+            payload.get("comment") if isinstance(payload.get("comment"), dict) else {}
+        )
+        num = str(discussion.get("number") or "")
+        title = str(discussion.get("title") or _env("DISCUSSION_TITLE"))
+        body = _snippet(discussion.get("body") or _env("DISCUSSION_BODY"), 2500)
+        comment_body = _snippet(comment.get("body") or _env("COMMENT_BODY"), 3500)
+        action = _env("ACTION") or str(payload.get("action") or "created")
+        prompt = f"""Comment on GitHub Discussion #{num} ({action}): {title}
+
+Discussion body:
+{body}
+
+Comment:
+{comment_body}
+
+If the request implies a repo change, implement it on a branch and open a draft PR.
+"""
+        return (prompt, f"discussion-comment:{num}:{action}", True)
 
     prompt = f"Unhandled event={event} reason={reason}. Inspect repo health and report."
     return (prompt, f"other:{args.run_id}", True)

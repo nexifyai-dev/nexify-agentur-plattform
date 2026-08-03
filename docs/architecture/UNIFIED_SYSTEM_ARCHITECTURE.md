@@ -1,15 +1,24 @@
 # Unified NeXify System Architecture — Masterplan v1.0
 
 > **Datum:** 2026-06-20  
-> **Status:** HISTORISCHES KONZEPT (nicht aktuelle Design-SoT)  
-> **Hinweis (2026-08-02):** Verbindliches Design = Root-`design_guidelines.json` (Dark/Luxury).
-> „Graphite Premium“ unten ist Legacy. Brand: **NeXify AI by NeXify — chat it. Automate it.**
+> **Status:** ⚠️ HISTORISCH — nicht aktuelle Design-SoT, nicht aktuelle Architektur-SoT  
+> **Hinweis (2026-08-02):** Verbindliches Design = Root-`design_guidelines.json` (Dark/Luxury,
+> Outfit/Manrope, `#0A0A0A`). Brand: **NeXify AI by NeXify — chat it. Automate it.**
+>
+> **Lesen als Archiv:** Abschnitte zu „Graphite Premium“, Pre-Login-Pages und CSS-Overrides
+> unten beschreiben ein **Legacy-Konzept (Juni 2026)**. Sie dürfen nicht als Live-Anweisung
+> für Website (`apps/website`) oder Hermes-Workstation gelesen werden. Für Parity/Workstation
+> siehe `docs/architecture/WEBUI-FEATURE-PARITY-CHECKLIST-2026-07-31.md` und
+> `.cursor/rules/10-hermes-consolidation.mdc`.
 
 ---
 
 ## 1. Philosophie
 
 **Ein Hub — Ein Design — Viele Mandanten.**
+
+> HISTORISCH: Zielbild „Hermes als OS“ bleibt strategisch relevant; Design-Tokens und
+> Branding folgen **nicht** Graphite Premium, sondern `design_guidelines.json`.
 
 Die Hermes WebUI wird zum zentralen NeXify-Betriebssystem. Alles ist darin integriert:
 Agent-Interface, Paperclip Multi-Agent-Management, System-Health, MCP-Manager,
@@ -62,6 +71,9 @@ eigenständig.
 ---
 
 ## 3. Graphite Premium — Design-Philosophie
+
+> ⚠️ **HISTORISCH / NICHT SoT.** Dieses Kapitel beschreibt Legacy „Graphite Premium“.
+> Aktuell verbindlich: `design_guidelines.json` (Dark/Luxury). Nicht übernehmen.
 
 Das Graphite-Theme wird zur **Licht-und-Schatten-Maschine**. Inspiration:
 
