@@ -79,7 +79,7 @@ jobs:
     env:
       TZ: Europe/Berlin
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v11
         with:
           days-before-issue-stale: 14
           days-before-issue-close: 7
