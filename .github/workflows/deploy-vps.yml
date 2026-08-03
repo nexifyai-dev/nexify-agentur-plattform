@@ -1,15 +1,17 @@
 # FILE: .github/workflows/deploy-vps.yml
 # NIR: 26.07.2026 13:30
-# UPDATED: 26.07.2026 13:30
+# UPDATED: 03.08.2026 21:10
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Deployment zu VPS — Self-Hosted Runner (primär) mit SSH-Fallback
 # WHY: Self-Hosted Runner läuft direkt auf dem VPS → kein SSH-Tunnel, kein PAT,
 #      voller Docker-Socket-Zugang, interner Dienst-Zugang, schnelleres Deploy.
 #      SSH-Fallback bleibt für den Fall dass der Runner offline ist.
-# BEST-PRACTICE: Self-Hosted Runner primär, SSH nur als Fallback; Health-Gate nach Deploy.
+# BEST-PRACTICE: Self-Hosted Runner primär, SSH als Fallback; Health-Gate nach Deploy.
 # PITFALL: V-01: Self-Hosted Job läuft nur wenn Runner online ist — Fallback stellt sicher.
 #          V-02: docker-compose vs. docker compose — v2 bevorzugen.
+#          V-04 (fix 03.08): Fallback per needs+if an self-hosted koppeln (immer()+result),
+#            statt beider Jobs parallel — verhindert Doppel-Deploy; Secret-Gate hart.
 # DEPENDS: Self-Hosted Runner (nexifyai-vps-runner-*), optional SSH-Fallback-Secrets
 # DOCS-REF: docs/architecture/GITHUB-RUNNER-VPS.md
 
@@ -149,27 +151,31 @@ jobs:
           echo "Zeit:    $(date)"
           echo "============================="
 
-  # ── SSH-Fallback: läuft wenn Self-Hosted Runner offline ist ───────────────
-  # Dieser Job greift NUR, wenn deploy-self-hosted übersprungen wurde.
-  # Dazu benötigt er: VPS_HOST, VPS_USER, VPS_PORT, DEPLOY_KEY_VPS als Secrets.
+  # ── SSH-Fallback: läuft NUR wenn Self-Hosted Runner offline/skipped ────────
+  # V-04 fix: needs + always()-Gate serialisieren sauber (kein Doppel-Deploy),
+  # Secret-Gate hart — kein stiller Erfolg bei fehlenden Secrets.
   deploy-ssh-fallback:
     runs-on: ubuntu-latest
     name: Deploy → VPS (SSH-Fallback)
-    needs: []   # kein needs — läuft parallel; result wird nach Completion geprüft
-    # SSH-Fallback ist deaktiviert solange Self-Hosted Runner aktiv ist.
-    # Aktivieren: 'false' durch folgende Bedingung ersetzen:
-    # (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-    #  github.event_name == 'workflow_dispatch'
-    #
-    # PITFALL V-03 (behoben): `if:` als `|`-Block-Scalar mit Kommentarzeilen
-    # DARIN macht den gesamten String Teil des Ausdrucks — GitHub Actions
-    # kennt kein `#`-Kommentar innerhalb einer Expression. Das machte die
-    # gesamte Workflow-Datei ungültig → JEDER Run (inkl. deploy-self-hosted!)
-    # schlug seit Einführung sofort mit 0 Jobs fehl. Kommentare gehören als
-    # normale YAML-Zeilen VOR den Key, `if:` bleibt ein einzeiliger Wert.
-    if: false
+    needs: deploy-self-hosted
+    if: ${{ always() && (needs.deploy-self-hosted.result == 'skipped' || needs.deploy-self-hosted.result == 'failure') }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Secret-Gate
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          DEPLOY_KEY_VPS: ${{ secrets.DEPLOY_KEY_VPS }}
+        run: |
+          set -euo pipefail
+          for v in VPS_HOST VPS_USER VPS_PORT DEPLOY_KEY_VPS; do
+            if [ -z "${!v:-}" ]; then
+              echo "::error::$v secret is required for SSH-Fallback-Deploy"
+              exit 1
+            fi
+          done
 
       - name: Deploy via SSH (Fallback)
         uses: appleboy/ssh-action@v1.2.5
@@ -191,4 +197,3 @@ jobs:
             curl -sf http://127.0.0.1:3000/api/health && echo "✅ Website OK" || echo "⚠️  Website nicht ready"
             bash infra/scripts/health-check.sh || true
             echo "✅ SSH-Fallback-Deploy abgeschlossen: $(date)"
-        continue-on-error: true
