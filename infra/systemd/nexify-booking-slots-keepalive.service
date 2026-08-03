@@ -1,0 +1,15 @@
+# FILE: infra/systemd/nexify-booking-slots-keepalive.service
+# NIR: 02.08.2026 09:20
+# WHAT: Oneshot — reseed booking slots when public list empty
+
+[Unit]
+Description=NeXify Booking Slots Keepalive
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/nexifyai/secrets.env
+ExecStart=/opt/nexifyai/repos/nexify-agentur-plattform/scripts/booking-slots-keepalive.sh
+User=root
+TimeoutStartSec=120
+NoNewPrivileges=true
