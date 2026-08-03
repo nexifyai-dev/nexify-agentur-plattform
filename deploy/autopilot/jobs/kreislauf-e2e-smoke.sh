@@ -3,9 +3,9 @@
 # NIR: 29.07.2026 11:30
 # NAME: NeXifyAI ComplianceEngine
 # TEAM: NeXifyAI Core
-# WHAT: (auto-dokumentiert)
-# WHY: (auto-dokumentiert — fehlte NIR-Header)
-# DEPENDS: (auto-dokumentiert)
+# WHAT: E2E-Smoke über alle Brain-Dienste (Health-Probes) plus realer LightRAG→AgentMemory-Sync-Beweis (Marker-Doc, track_status, smart-search), nicht nur HTTP-200-Checks
+# WHY: Regressionsschutz der Kern-Kreisläufe; Sync-Beweis statt Blindvertrauen auf Health-Endpoints; erkennt Auth-/Key-Regressionen (X-API-Key) früh
+# DEPENDS: AgentMemory (127.0.0.1:3111), Hermes Gateway (8644), Hermes Dashboard (9119), LightRAG (9622), OTel (4317/4318), 9Router (20128), Docker; LIGHTRAG_API_KEY aus /etc/nexifyai/hermes.env
 
 PASS=0
 FAIL=0
