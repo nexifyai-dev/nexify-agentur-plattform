@@ -16,7 +16,7 @@ const NAV = {
     { label: "Vergleich", href: "/vergleich" },
     { label: "Referenzen", href: "/referenzen" },
     { label: "Wissen", href: "/wissen" },
-    { label: "Über mich", href: "/ueber-mich" },
+    { label: "Über", href: "/ueber-mich" },
   ],
   en: [
     { label: "Services", href: "/leistungen" },
@@ -71,7 +71,7 @@ export function SiteHeader() {
           <Logo />
         </Link>
 
-        <nav className="hidden min-w-0 items-center gap-4 xl:flex 2xl:gap-6" data-testid="header-nav">
+        <nav className="hidden flex-1 min-w-0 items-center justify-center overflow-hidden gap-4 xl:flex 2xl:gap-6" data-testid="header-nav">
           {NAV[lang].map((item) => (
             <Link
               key={item.href}
