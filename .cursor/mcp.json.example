@@ -2,7 +2,10 @@
   "mcpServers": {
     "agentmemory": {
       "command": "npx",
-      "args": ["-y", "@agentmemory/mcp"],
+      "args": [
+        "-y",
+        "@agentmemory/mcp"
+      ],
       "env": {
         "AGENTMEMORY_URL": "http://127.0.0.1:3111",
         "AGENTMEMORY_SECRET": "${AGENTMEMORY_SECRET}",
@@ -17,7 +20,9 @@
     },
     "lightrag": {
       "command": "python3",
-      "args": ["/opt/nexifyai/mcp-servers/lightrag-mcp.py"],
+      "args": [
+        "/opt/nexifyai/mcp-servers/lightrag-mcp.py"
+      ],
       "env": {
         "LIGHTRAG_URL": "http://127.0.0.1:9622"
       },
@@ -25,13 +30,37 @@
     },
     "gitlab-oss": {
       "command": "npx",
-      "args": ["-y", "@zereight/mcp-gitlab"],
+      "args": [
+        "-y",
+        "@zereight/mcp-gitlab"
+      ],
       "env": {
         "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_PERSONAL_ACCESS_TOKEN}",
         "GITLAB_API_URL": "https://gitlab.nexifyai.cloud/api/v4",
         "GITLAB_READ_ONLY_MODE": "false"
       },
       "description": "Self-hosted GitLab OSS (VPS). Nicht built-in Gitlab-SaaS-MCP verwenden."
+    },
+    "hostinger-domains": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-domains-mcp"
+      ],
+      "description": "Hostinger Domains MCP — token via /etc/nexifyai/hostinger-api.env (wrapper)."
+    },
+    "hostinger-dns": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-dns-mcp"
+      ],
+      "description": "Hostinger DNS MCP — token via env file; never commit secrets."
+    },
+    "hostinger-vps": {
+      "command": "/opt/nexifyai/scripts/hostinger-mcp-wrapper.sh",
+      "args": [
+        "hostinger-vps-mcp"
+      ],
+      "description": "Hostinger VPS MCP — read-first; no destructive deletes without approval."
     }
   },
   "_comments": {
