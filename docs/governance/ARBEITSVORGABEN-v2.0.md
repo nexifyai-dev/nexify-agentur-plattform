@@ -2,6 +2,8 @@
 
 Operatives Standarddokument | Gültig für alle Projekte
 
+> **Stand:** 2026-08-03 · **Version:** v2.0 · **Autor:** Pascal Courbois
+
 ## §0 — GRUNDPRINZIPIEN
 
 Jede Aufgabe folgt diesem Dokument vollständig und ohne Ausnahmen. Keine Abkürzungen, keine offenen Punkte, keine ungeprüften Annahmen. Proaktivität vor Reaktivität. Vollständigkeit vor Geschwindigkeit. Qualität ist kein optionaler Schritt.
