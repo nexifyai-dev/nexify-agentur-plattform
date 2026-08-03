@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # FILE: /scripts/outreach/run_daily.py
 # NIR: 02.08.2026 09:20
-# UPDATED: 02.08.2026 11:05
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
-# WHAT: CLI entry — daily lead outreach job (Hostinger SMTP drip, opt-in only)
+# WHAT: CLI entry — daily lead outreach (Hostinger, UWG-gated opt-in only)
 # WHY: Cron / GitHub Actions / Cursor Agent invoke one command
-# BEST-PRACTICE: Exit 2 = human-gate (missing SMTP); 0 = ok; 1 = soft errors
-# PITFALL: V-OUT-06/UWG-01: Never print passwords; --live requires consent=true leads
+# BEST-PRACTICE: Exit 2 = human-gate (missing SMTP / UWG); 0 = ok; 1 = soft errors
+# PITFALL: V-OUT-06/UWG-01: Never print passwords; --live alone never cold-sends
 # DEPENDS: scripts/outreach/*
 # DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md, docs/gtm/UWG-EMAIL-OPTIN-ONLY.md
-# SESSION: zero-cost-leads-mailing-7dd5
+# SESSION: uwg-cold-email-pause-7dd5
 
 from __future__ import annotations
 
@@ -21,12 +21,11 @@ import os
 import sys
 from pathlib import Path
 
-# Allow `python3 scripts/outreach/run_daily.py` without PYTHONPATH
 _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from outreach.config import load_config  # noqa: E402
+from outreach.config import UWG_WARNING, load_config  # noqa: E402
 from outreach.runner import run_daily  # noqa: E402
 
 logging.basicConfig(
@@ -55,12 +54,24 @@ def _load_secrets_file(path: str) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="NeXify AI daily lead outreach (opt-in / §7 UWG)"
+        description="NeXify AI daily lead outreach (opt-in / §7 UWG)",
+        epilog=UWG_WARNING,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--live",
         action="store_true",
-        help="Actually send (OUTREACH_LIVE=1); leads MUST have consent=true",
+        help=(
+            "Request live mode (OUTREACH_LIVE=1). Alone does NOT send — also need "
+            "--allow-opt-in-send and consent=true on each lead (§7 UWG)."
+        ),
+    )
+    parser.add_argument(
+        "--allow-opt-in-send",
+        action="store_true",
+        help=(
+            "REQUIRED with --live to send. Only leads with consent=true are mailed."
+        ),
     )
     parser.add_argument(
         "--dry-run",
@@ -83,12 +94,17 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.live:
         os.environ["OUTREACH_LIVE"] = "1"
-        logger.warning(
-            "UWG-WARN (§7): --live only for opt-in leads with consent=true. "
-            "Cold email without consent is illegal in DE (also B2B)."
-        )
     if args.dry_run:
         os.environ["OUTREACH_LIVE"] = "0"
+        os.environ.pop("OUTREACH_ALLOW_OPT_IN_SEND", None)
+    if args.allow_opt_in_send:
+        os.environ["OUTREACH_ALLOW_OPT_IN_SEND"] = "1"
+
+    if args.live and not args.allow_opt_in_send and not args.dry_run:
+        logger.error("%s", UWG_WARNING)
+        logger.error(
+            "Refusing cold live-send: pass --allow-opt-in-send only for verified opt-in leads."
+        )
 
     cfg = load_config()
     result = run_daily(cfg)
@@ -96,10 +112,13 @@ def main(argv: list[str] | None = None) -> int:
     payload = {
         "ok": result.blocked is None and result.errors == 0,
         "live": cfg.live,
+        "allow_opt_in_send": cfg.allow_opt_in_send,
+        "effective_live": cfg.effective_live,
         "daily_cap": cfg.daily_cap,
         "firecrawl_url": cfg.firecrawl_url,
         "smtp_ready": cfg.smtp_ready,
         "queue_dir": str(cfg.queue_dir),
+        "uwg_warning": UWG_WARNING if cfg.live and not cfg.allow_opt_in_send else None,
         **result.as_dict(),
     }
 
@@ -108,6 +127,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         logger.info("result=%s", json.dumps(payload, ensure_ascii=False))
 
+    if result.blocked and "uwg_opt_in" in (result.blocked or ""):
+        logger.error("UWG-GATE: cold email blocked — %s", result.blocked)
+        return 2
     if result.blocked and "missing_smtp" in (result.blocked or ""):
         logger.error(
             "HUMAN-GATE: SMTP credentials missing — see docs/operations/"
