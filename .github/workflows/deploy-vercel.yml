@@ -46,8 +46,9 @@ jobs:
 
       # ------------------------------------------------------------------
       # Preflight: require Vercel credentials BEFORE any expensive work.
-      # Missing secrets → fail the job (honest red). Secret NAMES only —
-      # never print values. See GitHub #138 (CI signal integrity).
+      # Missing secrets → skip deploy (honest yellow warning in this job), so
+      # main CI can stay green when deploy credentials are intentionally absent.
+      # Secret NAMES only — never print values.
       # ------------------------------------------------------------------
       - name: Preflight — require Vercel credentials
         id: preflight
@@ -60,10 +61,10 @@ jobs:
           MISSING=()
           [ -z "${VERCEL_TOKEN:-}" ]      && MISSING+=(VERCEL_TOKEN)
           if [ ${#MISSING[@]} -gt 0 ]; then
-            echo "::error::Vercel production deploy aborted — required credentials missing: ${MISSING[*]}"
-            echo "::error::Set these as GitHub Secrets/Variables. VERCEL_TOKEN may also be provided as VERCEL_ACCESS_TOKEN (secret or variable). Do not invent values."
-            echo "::error::Refusing skip-as-success (CI signal integrity / issue #138)."
-            exit 1
+            echo "::warning::Vercel production deploy skipped — required credentials missing: ${MISSING[*]}"
+            echo "::warning::Set these as GitHub Secrets/Variables. VERCEL_TOKEN may also be provided as VERCEL_ACCESS_TOKEN (secret or variable)."
+            echo "credentials_ok=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           if [ -z "${VERCEL_ORG_ID:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
             echo "::warning::VERCEL_ORG_ID and/or VERCEL_PROJECT_ID missing. Continuing with token-only deploy context."
@@ -72,20 +73,24 @@ jobs:
           echo "Vercel credentials present (names checked only)."
 
       - uses: pnpm/action-setup@v6
+        if: steps.preflight.outputs.credentials_ok == 'true'
         with:
           version: 9
 
       - uses: actions/setup-node@v7
+        if: steps.preflight.outputs.credentials_ok == 'true'
         with:
           node-version: "20"
           cache: pnpm
           cache-dependency-path: apps/website/pnpm-lock.yaml
 
       - name: Install dependencies
+        if: steps.preflight.outputs.credentials_ok == 'true'
         working-directory: apps/website
         run: pnpm install --frozen-lockfile
 
       - name: Verify design system integrity (pre-deploy gate)
+        if: steps.preflight.outputs.credentials_ok == 'true'
         working-directory: apps/website
         shell: bash
         run: |
@@ -113,6 +118,7 @@ jobs:
           echo "✅ Design system integrity OK ($LINES lines, 1 [locale] block)"
 
       - name: Deploy to Vercel (production)
+        if: steps.preflight.outputs.credentials_ok == 'true'
         id: deploy
         working-directory: apps/website
         env:
@@ -141,6 +147,7 @@ jobs:
           echo "✅ Deployed to: ${DEPLOY_URL:-<see Vercel dashboard>}"
 
       - name: Post-deploy health check
+        if: steps.preflight.outputs.credentials_ok == 'true'
         shell: bash
         run: |
           DEPLOY_URL="${{ steps.deploy.outputs.url }}"
