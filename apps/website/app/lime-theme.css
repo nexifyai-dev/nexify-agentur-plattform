@@ -1,0 +1,50 @@
+/* ══════════════════════════════════════════════════════════════
+   NeXify Lime Redesign (2026-08) — Theme-Override
+   SOLL: design_guidelines.json + gelieferte Redesign-Referenz (Lime #C8FF00)
+   Geladen NACH globals.css → gewinnt im Cascade (gleiche Spezifität).
+   Revertierbar: Datei löschen + Import in layout.tsx entfernen.
+   Inhalte/Preise bleiben unangetastet (SoT: lib/company.ts dayRate 449).
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --silver: #C8FF00;
+  --silver-2: #a8d400;
+  --grad-silver: linear-gradient(120deg, #C8FF00 0%, #f4ffcf 30%, #8fce00 55%, #C8FF00 100%);
+  --grad-btn: linear-gradient(120deg, #C8FF00, #eaffb0 50%, #C8FF00);
+}
+
+::selection { background: rgba(200, 255, 0, 0.25); }
+
+.eyebrow::before { background: linear-gradient(90deg, transparent, #C8FF00); }
+
+.btn-primary {
+  box-shadow: 0 0 24px rgba(200, 255, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.btn-primary:hover {
+  box-shadow: 0 0 40px rgba(200, 255, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.pulse-dot::after { border-color: rgba(200, 255, 0, 0.5); }
+
+.chat-launcher {
+  border-color: rgba(200, 255, 0, 0.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(200, 255, 0, 0.15);
+}
+.chat-launcher:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(200, 255, 0, 0.3);
+}
+.chat-launcher::before { border-color: rgba(200, 255, 0, 0.35); }
+
+.range-silver {
+  background: linear-gradient(90deg, #C8FF00 var(--fill, 50%), #27272a var(--fill, 50%));
+}
+.range-silver::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #eaffb0, #C8FF00);
+  border-color: rgba(200, 255, 0, 0.6);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 12px rgba(200, 255, 0, 0.35);
+}
+
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgba(200, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 255, 0, 0.03) 1px, transparent 1px);
+}
