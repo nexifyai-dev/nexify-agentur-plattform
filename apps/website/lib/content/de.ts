@@ -1,3 +1,5 @@
+import { faqCategoriesDe } from "./faq-categories";
+
 export type Service = {
   slug: string;
   icon: string;
@@ -418,50 +420,18 @@ export const de = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Häufige Fragen, ehrliche Antworten",
-    intro: "Alles Wichtige zu Arbeitsweise, Preisen, AI-Einsatz und Zusammenarbeit – kompakt beantwortet. Ihre Frage fehlt? Der NeXify AI Chat oder das Kontaktformular helfen sofort.",
+    intro:
+      "Umfassende Antworten zu NeXify AI, Leistungen, Preisen, KI-Agenten, Datenschutz, Onboarding und Standort Venlo — für Entscheider im DACH-Raum. Ihre Frage fehlt? Chat, Kontaktformular oder Projekt-Planer helfen sofort.",
+    ctaTitle: "Noch offen? Lassen Sie uns konkret werden.",
+    ctaText:
+      "Persönliche Einschätzung innerhalb eines Werktags — oder sofort Orientierung im Chat und über den Projekt-Planer.",
+    ctaContact: "Kontakt aufnehmen",
+    ctaPlanner: "Projekt planen",
+    ctaServices: "Leistungen",
+    ctaPricing: "Preise",
+    ctaKnowledge: "Wissen",
   },
-  faqs: [
-    {
-      q: "Wie kann eine vollständige Website in zwei bis drei Tagen entstehen?",
-      a: "Nicht durch Weglassen von Qualität, sondern durch einen standardisierten Ablauf, wiederverwendbare technische Grundlagen, ein konsistentes Designsystem und AI-gestützte Analyse-, Entwicklungs- und Prüfprozesse. Pascal Courbois führt Konzeption, Architektur, Umsetzung und Qualitätskontrolle persönlich zusammen.",
-    },
-    {
-      q: "Welche Rolle spielt AI in der Entwicklung?",
-      a: "NeXify arbeitet AI-gestützt. Moderne Werkzeuge unterstützen Recherche, Strukturierung, Codeerstellung, Tests und Dokumentation. Fachliche Entscheidungen, Verantwortung, Prüfung und Freigabe bleiben beim erfahrenen Entwickler.",
-    },
-    {
-      q: "Sind 449 Euro pro Arbeitstag ein Festpreis?",
-      a: "Der Tagessatz ist fest. Vor Beginn erhalten Sie eine belastbare Aufwandsspanne. Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen.",
-    },
-    {
-      q: "Was ist in einem Arbeitstag enthalten?",
-      a: "Bis zu acht planbare Fachstunden für Konzeption, Designsystem, Entwicklung, Integration, Tests und Dokumentation. Fremdkosten wie Hosting, Domains, Zahlungsanbieter, Lizenzen, Inhalte oder Stockmaterial sind nicht enthalten, sofern nicht ausdrücklich vereinbart.",
-    },
-    {
-      q: "Warum ist der Gesamtpreis trotz Fachmann-Niveau so niedrig?",
-      a: "Weil nicht mehrere Abteilungen, Übergaben und lange Agenturketten bezahlt werden. Ein erfahrener Ansprechpartner steuert den gesamten Prozess und nutzt hochmoderne AI-gestützte Werkzeuge, Automatisierung und geprüfte Open-Source-Bausteine, um die Durchlaufzeit stark zu verkürzen.",
-    },
-    {
-      q: "Gilt immer 21 Prozent BTW?",
-      a: "Die Website zeigt den niederländischen Standardsatz von 21 Prozent als transparente Vergleichsrechnung. Bei grenzüberschreitenden B2B-Leistungen innerhalb der EU kann bei gültiger Umsatzsteuer-ID das Reverse-Charge-Verfahren gelten. Maßgeblich sind Rechnungsempfänger, Leistungsort und steuerliche Voraussetzungen.",
-    },
-    {
-      q: "Arbeitet NeXify ausschließlich für Unternehmen?",
-      a: "Ja. Angebote und Verträge richten sich ausschließlich an Unternehmer, juristische Personen und vergleichbare beruflich handelnde Organisationen.",
-    },
-    {
-      q: "Welche Technologien werden eingesetzt?",
-      a: "Je nach Ziel unter anderem Next.js, React, TypeScript, Supabase/PostgreSQL, moderne APIs, Vercel oder geeignete Self-Hosting-Infrastruktur. Technologie folgt dem Betrieb – nicht umgekehrt.",
-    },
-    {
-      q: "Was kann der NeXify AI Berater?",
-      a: "NeXify AI ist der AI-Vertriebsagent dieser Website. Er berät auf Deutsch und Niederländisch, qualifiziert Anfragen, erstellt strukturierte unverbindliche Angebote und sendet sie per E-Mail – inklusive automatischem Nachfassen. Dieselbe Technologie bauen wir auch für Ihr Unternehmen.",
-    },
-    {
-      q: "Wie läuft die Zusammenarbeit nach dem Go-Live weiter?",
-      a: "Sie erhalten Code, Dokumentation und Betriebshinweise vollständig übergeben. Auf Wunsch übernehmen wir Weiterentwicklung, Wartung und Monitoring zum selben transparenten Tagessatz – ohne Bindung, ohne Mindestlaufzeit.",
-    },
-  ],
+  faqCategories: faqCategoriesDe,
   about: {
     eyebrow: "Über mich",
     title: "Pascal Courbois – Fachmann hinter NeXify AI",

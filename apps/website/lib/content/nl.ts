@@ -1,4 +1,5 @@
 import type { Dict, Service } from "./de";
+import { faqCategoriesNl } from "./faq-categories";
 
 export const nl: Dict = {
   // @NEXIFYAI-MARKER: prelogin-content-trust-20260713
@@ -401,50 +402,18 @@ export const nl: Dict = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Veelgestelde vragen, eerlijke antwoorden",
-    intro: "Alles over werkwijze, prijzen, AI-inzet en samenwerking – compact beantwoord. Mist u een vraag? De NeXify AI-chat of het contactformulier helpen direct.",
+    intro:
+      "Uitgebreide antwoorden over NeXify AI, diensten, prijzen, AI-agenten, privacy, onboarding en vestiging Venlo — voor beslissers in DACH. Mist u een vraag? Chat, contactformulier of projectplanner helpen direct.",
+    ctaTitle: "Nog openstaand? Laten we concreet worden.",
+    ctaText:
+      "Persoonlijke inschatting binnen één werkdag — of direct oriëntatie via chat en de projectplanner.",
+    ctaContact: "Contact opnemen",
+    ctaPlanner: "Project plannen",
+    ctaServices: "Diensten",
+    ctaPricing: "Prijzen",
+    ctaKnowledge: "Kennis",
   },
-  faqs: [
-    {
-      q: "Hoe kan een complete website in twee tot drie dagen ontstaan?",
-      a: "Niet door kwaliteit weg te laten, maar door een gestandaardiseerd proces, herbruikbare technische fundamenten, een consistent designsysteem en AI-ondersteunde analyse-, ontwikkel- en controleprocessen. Pascal Courbois verenigt concept, architectuur, uitvoering en kwaliteitscontrole persoonlijk.",
-    },
-    {
-      q: "Welke rol speelt AI in de ontwikkeling?",
-      a: "NeXify werkt AI-ondersteund. Moderne tools ondersteunen onderzoek, structurering, codecreatie, tests en documentatie. Vakinhoudelijke beslissingen, verantwoordelijkheid, controle en goedkeuring blijven bij de ervaren ontwikkelaar.",
-    },
-    {
-      q: "Is € 449 per werkdag een vaste prijs?",
-      a: "Het dagtarief staat vast. Vóór de start ontvangt u een betrouwbare urenraming. Een bindende totaalprijs is mogelijk zodra omvang, content, integraties en acceptatiecriteria eenduidig vaststaan.",
-    },
-    {
-      q: "Wat is inbegrepen in een werkdag?",
-      a: "Maximaal acht planbare vakuren voor concept, designsysteem, ontwikkeling, integratie, tests en documentatie. Externe kosten zoals hosting, domeinen, betaalproviders, licenties, content of stockmateriaal zijn niet inbegrepen, tenzij uitdrukkelijk overeengekomen.",
-    },
-    {
-      q: "Waarom is de totaalprijs ondanks vakman-niveau zo laag?",
-      a: "Omdat er niet meerdere afdelingen, overdrachten en lange bureauketens worden betaald. Eén ervaren aanspreekpunt stuurt het hele proces en gebruikt hypermoderne AI-tools, automatisering en beproefde open-source componenten om de doorlooptijd sterk te verkorten.",
-    },
-    {
-      q: "Geldt altijd 21 procent btw?",
-      a: "De website toont het Nederlandse standaardtarief van 21 procent als transparante vergelijking. Bij grensoverschrijdende B2B-diensten binnen de EU kan met een geldig btw-nummer de verleggingsregeling gelden. Bepalend zijn factuurontvanger, plaats van dienst en fiscale voorwaarden.",
-    },
-    {
-      q: "Werkt NeXify uitsluitend voor bedrijven?",
-      a: "Ja. Aanbiedingen en contracten richten zich uitsluitend op ondernemers, rechtspersonen en vergelijkbare beroepsmatig handelende organisaties.",
-    },
-    {
-      q: "Welke technologieën worden ingezet?",
-      a: "Afhankelijk van het doel onder andere Next.js, React, TypeScript, Supabase/PostgreSQL, moderne API's, Vercel of passende self-hosting infrastructuur. Technologie volgt het bedrijf – niet andersom.",
-    },
-    {
-      q: "Wat kan de NeXify AI adviseur?",
-      a: "NeXify AI is de AI-salesagent van deze website. Hij adviseert in het Duits en Nederlands, kwalificeert aanvragen, stelt gestructureerde vrijblijvende offertes op en verstuurt ze per e-mail – inclusief automatische opvolging. Dezelfde technologie bouwen wij ook voor uw bedrijf.",
-    },
-    {
-      q: "Hoe gaat de samenwerking na de livegang verder?",
-      a: "U ontvangt code, documentatie en beheerinstructies volledig overgedragen. Op verzoek verzorgen wij doorontwikkeling, onderhoud en monitoring tegen hetzelfde transparante dagtarief – zonder binding, zonder minimale looptijd.",
-    },
-  ],
+  faqCategories: faqCategoriesNl,
   about: {
     eyebrow: "Over mij",
     title: "Pascal Courbois – de vakman achter NeXify AI",
