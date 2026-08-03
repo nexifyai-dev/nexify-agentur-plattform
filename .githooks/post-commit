@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 # FILE: .githooks/post-commit
-# NIR: 02.08.2026 09:05
+# NIR: 02.08.2026 09:20
+# UPDATED: 02.08.2026 09:20
+# NAME: NeXifyAI Agent
+# TEAM: NeXifyAI Architecture
 # WHAT: Git post-commit entrypoint → optional Dual-Write Helper
-# WHY: Git führt nur Dateien namens `post-commit` aus (nicht *-dual-write)
+# WHY: Git führt NUR Dateien namens `post-commit` aus (nicht *-dual-write) — kritischer Gap
+# BEST-PRACTICE: Failures nie Git blockieren; Kill-Switch respektieren
+# PITFALL: V-DW-02: core.hooksPath=.githooks ohne post-commit = toter Dual-Write
 # DEPENDS: scripts/brain-dual-write.sh; Env AGENTMEMORY_* / LIGHTRAG_*
-# DOCS-REF: docs/operations/BRAIN-DUAL-WRITE.md
+# DOCS-REF: docs/operations/BRAIN-DUAL-WRITE.md, docs/operations/GESAMTZIEL-CORRECTION-2026-08-02.md
+# SESSION: gesamziel-correction-7dd5
 
 set -euo pipefail
 
