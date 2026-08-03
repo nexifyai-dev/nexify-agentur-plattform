@@ -1,0 +1,15 @@
+# FILE: infra/systemd/nexify-gateway-spend-guard.timer
+# NIR: 02.08.2026 09:20
+# WHAT: Every 5 minutes — keep Gateway up under spend guard
+
+[Unit]
+Description=Timer — NeXify Gateway Spend Guard
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Unit=nexify-gateway-spend-guard.service
+
+[Install]
+WantedBy=timers.target
