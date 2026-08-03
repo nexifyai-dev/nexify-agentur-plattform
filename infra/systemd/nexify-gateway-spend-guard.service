@@ -1,0 +1,15 @@
+# FILE: infra/systemd/nexify-gateway-spend-guard.service
+# NIR: 02.08.2026 09:20
+# WHAT: Oneshot — Gateway liveness + Circuit-Breaker spend probe
+# DOCS-REF: docs/operations/GESAMTZIEL-CORRECTION-2026-08-02.md
+
+[Unit]
+Description=NeXify Gateway Spend Guard (liveness + CB)
+After=network-online.target hermes-gateway.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/nexifyai/repos/nexify-agentur-plattform/scripts/gateway-spend-guard.sh
+User=root
+TimeoutStartSec=60
+NoNewPrivileges=true
