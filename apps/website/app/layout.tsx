@@ -13,6 +13,7 @@ import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import { siteOrigin } from "@/lib/seo";
 import "./globals.css";
+import "./lime-theme.css";
 
 const origin = siteOrigin();
 

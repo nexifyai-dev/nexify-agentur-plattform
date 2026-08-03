@@ -21,7 +21,7 @@ export function HomePage() {
           <div>
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400" data-testid="hero-badge">
-              <span className="inline-block size-1.5 rounded-full bg-emerald-400" />
+              <span className="inline-block size-1.5 rounded-full bg-[#C8FF00] shadow-[0_0_8px_rgba(200,255,0,0.8)]" />
               {t.home.badge}
             </span>
           </Reveal>
