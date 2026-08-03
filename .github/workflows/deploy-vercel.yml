@@ -72,7 +72,7 @@ jobs:
           echo "credentials_ok=true" >> "$GITHUB_OUTPUT"
           echo "Vercel credentials present (names checked only)."
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         if: steps.preflight.outputs.credentials_ok == 'true'
         with:
           version: 9
