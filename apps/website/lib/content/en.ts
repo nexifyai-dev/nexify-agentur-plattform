@@ -1,4 +1,5 @@
 import type { Service } from "./de";
+import { faqCategoriesEn } from "./faq-categories";
 
 export const en = {
   // @NEXIFYAI-MARKER: prelogin-content-trust-20260713
@@ -422,50 +423,18 @@ export const en = {
   faqPage: {
     eyebrow: "FAQ",
     title: "Frequent questions, honest answers",
-    intro: "Everything important about approach, pricing, AI usage and collaboration – answered concisely. Is your question missing? The NeXify AI chat or the contact form will help immediately.",
+    intro:
+      "Comprehensive answers on NeXify AI, services, pricing, AI agents, privacy, onboarding and the Venlo office — for decision-makers in DACH. Missing a question? Chat, contact form or project planner help immediately.",
+    ctaTitle: "Still open? Let's get concrete.",
+    ctaText:
+      "Personal assessment within one working day — or immediate orientation via chat and the project planner.",
+    ctaContact: "Contact us",
+    ctaPlanner: "Plan a project",
+    ctaServices: "Services",
+    ctaPricing: "Pricing",
+    ctaKnowledge: "Knowledge",
   },
-  faqs: [
-    {
-      q: "How can a complete website be created in two to three days?",
-      a: "Not by omitting quality, but through a standardised process, reusable technical foundations, a consistent design system and AI-assisted analysis, development and testing processes. Pascal Courbois personally brings together concept, architecture, implementation and quality control.",
-    },
-    {
-      q: "What role does AI play in development?",
-      a: "NeXify works in an AI-assisted way. Modern tools support research, structuring, code creation, testing and documentation. Technical decisions, accountability, review and approval remain with the experienced developer.",
-    },
-    {
-      q: "Is € 449 per working day a fixed price?",
-      a: "The daily rate is fixed. Before starting, you receive a reliable effort range. A binding fixed total price is possible once scope, content, integrations and acceptance criteria are clearly defined.",
-    },
-    {
-      q: "What is included in a working day?",
-      a: "Up to eight plannable specialist hours for concept, design system, development, integration, testing and documentation. External costs such as hosting, domains, payment providers, licences, content or stock material are not included unless expressly agreed.",
-    },
-    {
-      q: "Why is the total price so low despite specialist-level quality?",
-      a: "Because you are not paying for multiple departments, handovers and long agency chains. One experienced point of contact steers the entire process and uses state-of-the-art AI-assisted tools, automation and proven open-source components to dramatically shorten throughput time.",
-    },
-    {
-      q: "Does 21% VAT always apply?",
-      a: "The website displays the Dutch standard rate of 21% as a transparent comparison calculation. For cross-border B2B services within the EU, the reverse charge procedure may apply with a valid VAT ID. The decisive factors are the invoice recipient, place of supply and tax prerequisites.",
-    },
-    {
-      q: "Does NeXify work exclusively for businesses?",
-      a: "Yes. Quotations and contracts are directed exclusively at entrepreneurs, legal entities and comparable professionally acting organisations.",
-    },
-    {
-      q: "Which technologies are used?",
-      a: "Depending on the goal, these include Next.js, React, TypeScript, Supabase/PostgreSQL, modern APIs, Vercel or suitable self-hosting infrastructure. Technology follows operations – not the other way round.",
-    },
-    {
-      q: "What can the NeXify AI advisor do?",
-      a: "NeXify AI is the AI sales agent of this website. It advises in German and Dutch, qualifies enquiries, creates structured non-binding quotations and sends them by email – including automatic follow-up. We build the same technology for your business.",
-    },
-    {
-      q: "How does the collaboration continue after go-live?",
-      a: "You receive code, documentation and operational notes fully handed over. On request, we take on further development, maintenance and monitoring at the same transparent daily rate – no commitment, no minimum term.",
-    },
-  ],
+  faqCategories: faqCategoriesEn,
   about: {
     eyebrow: "About me",
     title: "Pascal Courbois – the professional behind NeXify AI",
