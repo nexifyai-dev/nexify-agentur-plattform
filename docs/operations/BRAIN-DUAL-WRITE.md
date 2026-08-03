@@ -14,7 +14,8 @@
 |----------|--------|
 | `scripts/brain-dual-write.sh` | ✅ Repo-Helper (Safe, No-op ohne Env) |
 | `.githooks/post-commit-dual-write` | ✅ tracked Hook → ruft Helper auf |
-| `core.hooksPath=.githooks` lokal | ⚠ optional — muss aktiviert werden |
+| `core.hooksPath=.githooks` + `.githooks/post-commit` | ✅ Pflicht-Entry (nicht nur `*-dual-write`) |
+| `core.hooksPath` aktiv | ⚠ lokal/VPS muss gesetzt sein |
 | Secrets in Git | ❌ verboten — nur Env |
 
 **Nicht** behaupten: „Dual-Write ist überall aktiv.“ Ohne Env und Hook-Installation bleibt es ein No-op.
