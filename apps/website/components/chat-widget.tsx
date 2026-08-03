@@ -186,3 +186,6 @@ export default function ChatWidget() {
     </>
   );
 }
+
+// Backward compatibility: also export as named export for layout.tsx
+export { ChatWidget };
