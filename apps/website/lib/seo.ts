@@ -47,6 +47,17 @@ export function pageMetadata({
   const ogT = ogTitle ?? title;
   const ogD = ogDescription ?? description;
 
+  // Nested openGraph/twitter replace parent shallowly — re-declare images + card
+  // so pageMetadata does not drop root OG/Twitter share images (soft SEO regression).
+  const ogImages = [
+    {
+      url: "/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "NeXify AI — Chat it. Automate it.",
+    },
+  ];
+
   return {
     title,
     description,
@@ -67,10 +78,13 @@ export function pageMetadata({
       description: ogD,
       url,
       type: "website",
+      images: ogImages,
     },
     twitter: {
+      card: "summary_large_image",
       title: ogT,
       description: ogD,
+      images: ["/og-image.png"],
     },
     ...(noIndex ? { robots: { index: false, follow: false } } : {}),
   };
