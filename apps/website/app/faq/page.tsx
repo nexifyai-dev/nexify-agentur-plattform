@@ -2,20 +2,24 @@ import { pageMetadata, breadcrumbListJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/json-ld";
 import { FaqPage } from "@/components/pages/faq";
 import { de } from "@/lib/content/de";
+import { flattenFaqItems } from "@/lib/content/faq-categories";
 
 export const metadata = pageMetadata({
-  title: "FAQ — Häufige Fragen zu Arbeitsweise, Preisen & AI",
+  title: "FAQ — Häufige Fragen zu NeXify AI, Preisen, KI & DSGVO",
   description:
-    "Antworten auf die wichtigsten Fragen: Wie entstehen Websites in 2–3 Tagen? Was kostet ein Arbeitstag (449 € netto)? Welche Rolle spielt AI? Was kann der KI-Berater NOVA?",
+    "Umfassende FAQ für DACH-KMU: Was ist NeXify AI? Tagessatz 449 € netto, Leistungen, KI-Agenten, Datenschutz/DSGVO, Onboarding, Venlo-Sitz und warum nicht nur ChatGPT.",
   path: "/faq",
-  ogTitle: "FAQ — Preise, Prozess & AI | NeXify AI",
-  ogDescription: "Häufige Fragen zu Tagessatz 449 €, Arbeitsweise und AI-Unterstützung bei NeXify AI.",
+  ogTitle: "FAQ — Preise, KI, DSGVO & Arbeitsweise | NeXify AI",
+  ogDescription:
+    "50+ Antworten zu Leistungen, Tagessatz 449 €, Automatisierung, Datenschutz und Zusammenarbeit mit NeXify AI.",
 });
+
+const faqItems = flattenFaqItems(de.faqCategories);
 
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: de.faqs.map((f) => ({
+  mainEntity: faqItems.map((f) => ({
     "@type": "Question",
     name: f.q,
     acceptedAnswer: { "@type": "Answer", text: f.a },
