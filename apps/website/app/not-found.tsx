@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+/** Server 404 — HTTP status from notFound()/unmatched routes; explicit noindex. */
+export const metadata: Metadata = {
+  title: "Seite nicht gefunden",
+  description: "Die angeforderte Seite existiert nicht (mehr).",
+  robots: { index: false, follow: false },
+};
 
 /**
  * Server 404 — no client lang hook (avoids hydration/fallback quirks on soft-404 paths).
