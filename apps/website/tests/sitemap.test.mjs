@@ -1,27 +1,34 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const sitemapSrc = readFileSync(join(root, 'app/sitemap.ts'), 'utf8');
 
 test('Sitemap - homepage has highest priority', () => {
-  const priority = 1.0;
-  assert.equal(priority, 1.0);
+  assert.match(sitemapSrc, /priority:\s*1/);
 });
 
-test('Sitemap - service pages have high priority', () => {
-  const priority = 0.8;
-  assert.ok(priority >= 0.7);
+test('Sitemap - money pages present', () => {
+  for (const path of ['/leistungen', '/preise', '/vergleich', '/kontakt', '/rueckruf', '/checkliste', '/partner', '/alternativen', '/branchen', '/audit']) {
+    assert.ok(sitemapSrc.includes(`"${path}"`) || sitemapSrc.includes(`'${path}'`), path);
+  }
 });
 
-test('Sitemap - legal pages have low priority', () => {
-  const priority = 0.3;
-  assert.ok(priority <= 0.5);
+test('Sitemap - single vergleich money path entry (no soft-404 children)', () => {
+  const pathEntries = [...sitemapSrc.matchAll(/path:\s*"(\/vergleich[^"]*)"/g)].map((m) => m[1]);
+  assert.deepEqual(pathEntries, ['/vergleich']);
+  assert.doesNotMatch(sitemapSrc, /ki-agentur/);
 });
 
-test('Sitemap - supports 3 locales', () => {
-  const locales = ['de', 'en', 'nl'];
-  assert.equal(locales.length, 3);
+test('Sitemap - leistungen/branchen/wissen via helpers', () => {
+  assert.match(sitemapSrc, /leistungSeoSlugs/);
+  assert.match(sitemapSrc, /branchenSlugs/);
+  assert.match(sitemapSrc, /wissenArticleSlugs/);
 });
 
-test('Sitemap - has correct base URL', () => {
-  const baseUrl = 'https://www.nexifyai.cloud';
-  assert.ok(baseUrl.includes('nexify'));
+test('Sitemap - has www base via siteOrigin', () => {
+  assert.match(sitemapSrc, /siteOrigin/);
 });

@@ -1,6 +1,6 @@
-# NeXify AI — llm.txt
+# NeXify AI — llm.txt (legacy short card)
+# Canonical AI summary: https://www.nexifyai.cloud/llms.txt
 # https://www.nexifyai.cloud
-# Cite-friendly summary for AI search systems (AEO)
 
 > Premium Websites, Onlineshops, Web-Apps, Mobile Apps, Automatisierung und AI-Agenten
 > für Unternehmen in D/A/CH und den Niederlanden (B2B only). Tagessatz 449 € netto.
@@ -42,16 +42,14 @@
 
 ## Comparison
 - /vergleich — classical IT day rates vs NeXify
-- /vergleich/chatgpt — vs DIY ChatGPT
-- /vergleich/freelance — vs Freelance
 
 ## Preferred crawl targets
 - https://www.nexifyai.cloud/
 - https://www.nexifyai.cloud/leistungen
+- https://www.nexifyai.cloud/preise
 - https://www.nexifyai.cloud/sitemap.xml
 - https://www.nexifyai.cloud/llms.txt
 - https://www.nexifyai.cloud/faq
-- https://www.nexifyai.cloud/preise
 - https://www.nexifyai.cloud/kontakt
 - https://www.nexifyai.cloud/rueckruf
 

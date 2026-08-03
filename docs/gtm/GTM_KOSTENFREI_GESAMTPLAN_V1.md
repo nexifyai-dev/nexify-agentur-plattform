@@ -61,6 +61,7 @@ Quellen der Wahrheit:
 | Scale Gates | [SCALE_GATES_V1.md](SCALE_GATES_V1.md) |
 | Supply Checklist | [SUPPLY_WAVE1_CHECKLIST_V1.md](SUPPLY_WAVE1_CHECKLIST_V1.md) |
 | Scan-Script | [scripts/gtm/demand_scan_prepare.py](../../scripts/gtm/demand_scan_prepare.py) |
+| Google Search Console | [GOOGLE-SEARCH-CONSOLE.md](../operations/GOOGLE-SEARCH-CONSOLE.md) |
 | Lead-SOP | [SOP_KUNDENSUCHE…](../governance/02_sops/SOP_KUNDENSUCHE_LEAD_TO_CRM_OUTREACH_GATE_V3.md) |
 | Angebots-SOP | [SOP_KI_BERATER…](../governance/02_sops/SOP_KI_BERATER_ANGEBOTSGENERATOR_RESEND_V3.md) |
 
@@ -70,7 +71,9 @@ Quellen der Wahrheit:
 |--------|-----------|------|
 | Snippets, NAP, Channel-Register, Queries pflegen | Voll | Secret Scan |
 | Verzeichnisse vorbereiten / Free-Formulare | Hoch | Owner-Credentials |
-| Google/LinkedIn/Xing Verify | Blockiert | Owner physisch |
+| Google Business / LinkedIn / Xing Verify | Blockiert | Owner physisch |
+| GSC Domain-Ownership + Sitemap | **DONE** 2026-08-02 | TXT nie löschen — `docs/operations/GOOGLE-SEARCH-CONSOLE.md` |
+| GSC Indexierung + E-Mail-Prefs | Blockiert | Owner ~5 Min (#243) |
 | Demand-Scan → Score → CRM Pending JSON | Hoch | SOP Kundensuche |
 | Outreach-Entwurf | Hoch | Legal/Policy Gate |
 | E-Mail/DM senden | Niedrig | Explizite Freigabe |
@@ -91,6 +94,7 @@ Circuit Breaker vor kostenrelevanten LLM/API-Calls (`POST http://127.0.0.1:8912/
 - Ablauf: [SUPPLY_WAVE1_CHECKLIST_V1.md](SUPPLY_WAVE1_CHECKLIST_V1.md)
 - Evidence: `docs/gtm/evidence/supply-wave1/`
 - Owner-Gates: Google Business, LinkedIn Company, Xing Verify
+- SEO: GSC Ownership+Sitemap bestätigt; Index/Prefs — [GOOGLE-SEARCH-CONSOLE.md](../operations/GOOGLE-SEARCH-CONSOLE.md) · #243
 
 ### Phase 2 — Demand Engine
 

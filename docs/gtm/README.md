@@ -27,7 +27,6 @@ Operative Artefakte für Angebotsinsertion und Kundensuche ohne Paid Ads.
 | [NEUKUNDEN-BEGEISTERUNG.md](NEUKUNDEN-BEGEISTERUNG.md) | P0 Delight nach First Touch · Koordination Zero-Cost-Leads |
 | [ONBOARDING-EMAIL-TEMPLATES.md](ONBOARDING-EMAIL-TEMPLATES.md) | Inbound-Mail-Templates + Versand-Hook |
 | [evidence/](evidence/) | Listing- und Demand-Evidence |
-| [ONGOING-GAP-AND-ACQUISITION-RADAR.md](ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Living Gap-/Acquisition-Radar |
 
 Scripts:  
 `python3 scripts/gtm/demand_scan_prepare.py --demo`  
@@ -51,5 +50,5 @@ Tests: `python3 scripts/gtm/test_send_onboarding_email.py`
 - `TESTIMONIAL-PERMISSION-PIPELINE_V1.md` (#211)
 - Lead-Magnet PDF (#212)
 - Ops decision `docs/operations/OPENMCP-SPAETHER-PAPERCLIP-DECISION-2026-08-02.md` (#209)
-
-| [ZERO-COST-ACQUISITION-PLAYBOOK.md](ZERO-COST-ACQUISITION-PLAYBOOK.md) | Wöchentliche Lead-Discovery + Mail-Cadence |
+- [ZERO-COST-ACQUISITION-PLAYBOOK.md](ZERO-COST-ACQUISITION-PLAYBOOK.md) — Wöchentliche Lead-Discovery + Mail-Cadence
+- [GOOGLE-SEARCH-CONSOLE.md](../operations/GOOGLE-SEARCH-CONSOLE.md) — free GSC/Bing owner capabilities

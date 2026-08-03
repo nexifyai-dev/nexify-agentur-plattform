@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/SUPPLY_WAVE1_CHECKLIST_V1.md
 # NIR: 02.08.2026 07:40
-# UPDATED: 02.08.2026 07:40
+# UPDATED: 02.08.2026 11:05
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Ausführ-Checkliste Supply Wave 1 (≥15 Free-Listings)
@@ -8,8 +8,8 @@
 # BEST-PRACTICE: Evidence-Datei vor Status live ausfüllen
 # PITFALL: V-GTM-03: Keine Abo-Upgrades ohne Mandat
 # DEPENDS: NAP_MASTER_V1.md, CHANNEL_REGISTER_V1.md, OFFER_SNIPPETS_*.md
-# DOCS-REF: docs/gtm/evidence/supply-wave1/
-# SESSION: gtm-kostenfrei-angebote-c6e3
+# DOCS-REF: docs/gtm/evidence/supply-wave1/, docs/operations/GOOGLE-SEARCH-CONSOLE.md
+# SESSION: gsc-ownership-confirmed-7dd5
 
 # Supply Wave 1 — Checkliste
 
@@ -20,11 +20,13 @@
 - [x] Channel-Register mit IDs S01–S20
 - [x] Evidence-Stubs je Wave-1-Kanal angelegt
 - [x] Preis-Audit 449 € in Backend-Prompt + Gesamtkonzept
+- [x] GSC Domain-Ownership + Sitemap submit — SoT `docs/operations/GOOGLE-SEARCH-CONSOLE.md`
 
 ## Owner-Gates (blockiert ohne Pascal)
 
 | Schritt | Kanal | Aktion Owner |
 |---------|-------|--------------|
+| 0 | S00 GSC | Ownership+Sitemap **DONE**. Noch: URL-Inspection Money-Pages + E-Mail-Prefs (#243) ~5 Min |
 | 1 | S01 Google | Profil anlegen/beanspruchen, Video-/Post-Verify, Service Area DACH+NL, Posts mit Snippets |
 | 2 | S02 LinkedIn Company | Seite anlegen/claimen, Featured + About aus Bio |
 | 3 | S03 LinkedIn Personal | Headline/About, Featured Link mit UTM, wöchentlicher Post |
