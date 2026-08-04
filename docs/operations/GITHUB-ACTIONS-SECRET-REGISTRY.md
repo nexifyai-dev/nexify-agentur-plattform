@@ -63,6 +63,13 @@
 
 Cursor hook: `.cursor/hooks/circuit-breaker-mcp.sh` (soft-allow if unreachable).
 
+## Event→Agent ingest confirmation
+
+| Concern | Canonical name | Human-owned location | Notes |
+|---|---|---|---|
+| Cloud agent API auth | `CURSOR_API_KEY` | Cursor Dashboard → Cloud Agents → API Key → GitHub Repo Secret | Required for `.github/workflows/event-to-cloud-agent.yml` |
+| VPS webhook signing/shared secret | `EVENT_INGEST_SHARED_SECRET` | VPS `/opt/nexifyai/config/cursor-cloud.env` | Used by `scripts/event-ingest/webhook_receiver_stub.py` via `X-Nexify-Ingest-Secret` / `X-Webhook-Secret` |
+
 ## Verification (no values printed)
 
 ```bash

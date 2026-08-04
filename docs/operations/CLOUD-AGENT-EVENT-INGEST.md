@@ -56,10 +56,34 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | Auto-Merge | label+checks | label+checks | Repo Allow auto-merge + Branch Protection |
 | GitLab | Mirror | Sync only | unverändert |
 
-## Secrets (Namen only)
+## Secrets / Webhook-Signing (Namen only)
 
-**GitHub:** `CURSOR_API_KEY`, `AGENTMEMORY_SECRET`, `AGENTMEMORY_URL`, `LINEAR_API_KEY` (opt), `CIRCUIT_BREAKER_URL` (opt)  
-**VPS** `/opt/nexifyai/config/cursor-cloud.env`: `CURSOR_API_KEY`, `EVENT_INGEST_SHARED_SECRET`, `GH_PAT`, `AGENTMEMORY_SECRET`
+**GitHub Repo Secrets** (`Settings → Secrets and variables → Actions`)
+
+- `CURSOR_API_KEY` — Pflicht für `.github/workflows/event-to-cloud-agent.yml`
+- `AGENTMEMORY_SECRET` — empfohlen für Action-Queue / Remember
+- `AGENTMEMORY_URL` — empfohlen für hosted runners
+- `LINEAR_API_KEY` — optional
+- `CIRCUIT_BREAKER_URL` — optional
+
+**Cursor Cloud (human-owned, nicht im Repo)**
+
+- Cursor Dashboard → Cloud Agents → API Key → als GitHub Secret `CURSOR_API_KEY` ablegen
+- Repo `nexifyai-dev/nexify-agentur-plattform` im Cursor Cloud Agent Dashboard verknüpfen
+
+**VPS webhook ingest** `/opt/nexifyai/config/cursor-cloud.env`
+
+- `CURSOR_API_KEY`
+- `EVENT_INGEST_SHARED_SECRET`
+- `GH_PAT`
+- `AGENTMEMORY_SECRET`
+
+**Signing-Modell aktuell (SoT):**
+
+- GitHub → Cursor Cloud Agent nutzt **`CURSOR_API_KEY`** (kein zusätzlicher HMAC im Workflow)
+- VPS `/ingest/{source}` nutzt **Shared-Secret Header** `X-Nexify-Ingest-Secret` oder `X-Webhook-Secret`
+- Kanonischer Secret-Name für den VPS-Pfad ist **`EVENT_INGEST_SHARED_SECRET`**
+- Secret-**Werte** bleiben human-only; nie in Repo, Issue, PR oder Chat einfügen
 
 ## User-Klicks (Cursor Cloud)
 
@@ -111,3 +135,12 @@ python3 scripts/event-ingest/dispatch_cloud_agent.py \
 
 gh workflow run "Event → Cursor Cloud Agent" -f prompt="Smoke triage" -f source=manual
 ```
+
+## Human-owned secret locations
+
+| Secret / Setting | Human-owned location |
+|---|---|
+| `CURSOR_API_KEY` | Cursor Dashboard → Cloud Agents → API Key; danach GitHub Repo Secret |
+| `AGENTMEMORY_SECRET` / `AGENTMEMORY_URL` | GitHub Repo Secrets |
+| `EVENT_INGEST_SHARED_SECRET` | VPS: `/opt/nexifyai/config/cursor-cloud.env` |
+| Repo-Link für Cloud Agents | Cursor Dashboard → Cloud Agents |
