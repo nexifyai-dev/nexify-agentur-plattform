@@ -242,6 +242,46 @@ class RunnerDryRunTests(unittest.TestCase):
             self.assertEqual(result.sent, 0)
 
 
+class SmtpConsentGateTests(unittest.TestCase):
+    """smtp_hostinger.send_hostinger must refuse without consent_verified=True (§7 UWG)."""
+
+    def _base_kwargs(self) -> dict:
+        return dict(
+            host="smtp.example.com",
+            port=465,
+            user="u",
+            password="test",
+            sender_email="mail@nexifyai.cloud",
+            sender_name="NeXify AI",
+            reply_to="mail@nexifyai.cloud",
+            to_email="lead@example-b2b.test",
+            subject="Test",
+            text_body="Hallo",
+            html_body="<p>Hallo</p>",
+        )
+
+    def test_raises_without_consent_verified(self):
+        from outreach import smtp_hostinger
+        with self.assertRaises(smtp_hostinger.UWGConsentError):
+            smtp_hostinger.send_hostinger(**self._base_kwargs())
+
+    def test_raises_with_consent_verified_false(self):
+        from outreach import smtp_hostinger
+        with self.assertRaises(smtp_hostinger.UWGConsentError):
+            smtp_hostinger.send_hostinger(**self._base_kwargs(), consent_verified=False)
+
+    def test_proceeds_when_consent_verified_true(self):
+        """With consent_verified=True the function reaches SMTP (mocked here)."""
+        from outreach import smtp_hostinger
+        with mock.patch("smtplib.SMTP_SSL") as mock_ssl:
+            mock_smtp = mock.MagicMock()
+            mock_ssl.return_value.__enter__.return_value = mock_smtp
+            result = smtp_hostinger.send_hostinger(
+                **self._base_kwargs(), consent_verified=True
+            )
+        self.assertTrue(result["ok"])
+        mock_smtp.send_message.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()

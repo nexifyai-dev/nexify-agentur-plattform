@@ -161,6 +161,9 @@ def run_daily(cfg: OutreachConfig, *, sleep_fn=time.sleep) -> RunResult:
                     subject=subject,
                     text_body=text_body,
                     html_body=html_body,
+                    # consent_verified: lead passed validate_for_send (consent=True required)
+                    # and cfg.allow_opt_in_send is True (--allow-opt-in-send flag) (§7 UWG)
+                    consent_verified=lead.get("consent") is True and cfg.allow_opt_in_send,
                 )
                 result.sent += 1
                 store.record_sent(
