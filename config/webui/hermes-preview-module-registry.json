@@ -2,7 +2,7 @@
   "_meta": {
     "file": "config/webui/hermes-preview-module-registry.json",
     "nir": "31.07.2026 12:20",
-    "updated": "02.08.2026 09:50",
+    "updated": "04.08.2026 09:35",
     "what": "Hermes Preview module registry — wires native preview panels without Prod WebUI patch",
     "why": "WebUI-Zentrale: Dashboard→WebUI native; Preview-only consumers",
     "status": "PREVIEW — do not mount into Prod Hermes :8787 without Smoke+Endabnahme",
@@ -24,15 +24,43 @@
       "id": "agentmemory",
       "nav_label": "AgentMemory",
       "preview_entry": "apps/webui-preview/agentmemory-panel/index.html",
+      "serve_py": "apps/webui-preview/agentmemory-panel/serve.py",
       "local_preview_port": 8792,
+      "upstream_port": 3111,
+      "upstream_env_var": "AGENTMEMORY_URL",
+      "proxy_prefix": "/agentmemory/",
       "source_module_id": "agentmemory",
-      "hermes_integration": "Native Brain panel stub — replaces iframe to :3113 Viewer über Zeit"
+      "hermes_integration": "Native Brain panel — replaces iframe to :3113 Viewer; REST livez/smart-search/remember/sessions"
+    },
+    {
+      "id": "lightrag",
+      "nav_label": "LightRAG",
+      "preview_entry": "apps/webui-preview/lightrag-panel/index.html",
+      "serve_py": "apps/webui-preview/lightrag-panel/serve.py",
+      "local_preview_port": 8793,
+      "upstream_port": 9622,
+      "upstream_env_var": "LIGHTRAG_URL",
+      "proxy_prefix": "/lightrag/",
+      "source_module_id": "lightrag",
+      "hermes_integration": "Native LightRAG panel — Health / Query / Documents / Pipeline / Graph / Insert"
+    },
+    {
+      "id": "ninerouter",
+      "nav_label": "9Router",
+      "preview_entry": "apps/webui-preview/ninerouter-panel/index.html",
+      "serve_py": "apps/webui-preview/ninerouter-panel/serve.py",
+      "local_preview_port": 8794,
+      "upstream_port": 20128,
+      "upstream_env_var": "NINEROUTER_URL",
+      "proxy_prefix": "/router/",
+      "source_module_id": "ninerouter",
+      "hermes_integration": "Native 9Router panel — Health / Models / Chat Completions Probe"
     },
     {
       "id": "monitoring",
       "nav_label": "Monitoring",
       "preview_entry": "apps/webui-preview/monitoring-panel/index.html",
-      "local_preview_port": 8793,
+      "local_preview_port": 8795,
       "source_module_id": "monitoring-grafana",
       "hermes_integration": "Native Grafana health stub; CF DNS blocked"
     },
@@ -40,7 +68,7 @@
       "id": "openapi-openmcp",
       "nav_label": "OpenAPI / OpenMCP",
       "preview_entry": "apps/webui-preview/openapi-openmcp-panel/index.html",
-      "local_preview_port": 8794,
+      "local_preview_port": 8796,
       "source_module_id": "backend-openapi",
       "hermes_integration": "ICD + Allowlist status; 1Backend adapter-only pointer"
     }

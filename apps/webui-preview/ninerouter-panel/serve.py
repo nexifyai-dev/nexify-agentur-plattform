@@ -89,8 +89,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(payload)
         except (urllib.error.URLError, TimeoutError, http.client.HTTPException) as err:
-            msg = (
-                '{"error":"upstream_unreachable","detail":%r}' % (str(err),)
+            import json as _json
+            msg = _json.dumps(
+                {"error": "upstream_unreachable", "detail": str(err)}
             ).encode()
             self.send_response(502)
             self.send_header("Content-Type", "application/json")

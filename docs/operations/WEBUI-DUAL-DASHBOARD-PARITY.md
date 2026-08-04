@@ -1,6 +1,6 @@
 # FILE: docs/operations/WEBUI-DUAL-DASHBOARD-PARITY.md
 # NIR: 02.08.2026 09:25
-# UPDATED: 02.08.2026 09:25
+# UPDATED: 04.08.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Parity checklist — Hermes WebUI bleiben vs Preview panels (no kill :4001)
