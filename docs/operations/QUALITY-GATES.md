@@ -1,6 +1,6 @@
 # FILE: docs/operations/QUALITY-GATES.md
 # NIR: 02.08.2026 09:15
-# UPDATED: 02.08.2026 11:24
+# UPDATED: 04.08.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Quality
 # WHAT: Inventory of tests, CI jobs, and L1/L2/L3 verification levels for absolute error-freedom.
@@ -41,7 +41,20 @@
 
 ## VPS-local L1 (self-hosted)
 
-- Requires self-hosted runner labels `[self-hosted, vps, nexifyai]` — blocked on #123 / #168 until runner count > 0
+Two paths to enable AM/Gateway/LightRAG L1 probes:
+
+**Path A — Self-hosted runner** (preferred for full localhost access):
+- Register a runner with labels `[self-hosted, vps, nexifyai]` — see #123.
+- `vps-local-smoke` job in `quality-smoke.yml` runs with `QUALITY_SMOKE_LOCAL=1` automatically.
+- `continue-on-error: true` so CI does not block when runner count=0.
+
+**Path B — Authenticated public URLs / tunnel** (no runner required):
+- Set repository **variables** (or secrets for sensitive URLs) in GitHub Settings → Secrets and variables:
+  - `QUALITY_SMOKE_AM_URL` — AgentMemory health endpoint (e.g. `https://agentmemory.nexifyai.cloud/agentmemory/livez`)
+  - `QUALITY_SMOKE_GATEWAY_URL` — Hermes Gateway health URL (authenticated tunnel or public endpoint)
+  - `QUALITY_SMOKE_LIGHTRAG_URL` — LightRAG health URL (authenticated tunnel or public endpoint)
+- When a non-default URL is set, `public-smoke` job probes it on `ubuntu-latest` — no secrets logged.
+- Blocked on #123 / #168 until runner count > 0 (Path A) or URLs configured (Path B).
 
 ## Verification levels (mandatory)
 
@@ -104,9 +117,9 @@ Never claim “done” on L1 alone (AGENTS.md).
 | API health (optional) | `SMOKE_API_HEALTH_URL` / `https://api.nexifyai.cloud/api/health` | soft | soft |
 | AI Router | `https://ai-router.nexifyai.cloud/api/health` | soft (edge) | soft |
 | AgentMemory public | `https://agentmemory.nexifyai.cloud` | soft | soft |
-| AgentMemory REST | `http://127.0.0.1:3111/...` | **SKIP** (note in log) | L1+L2 when live |
-| Hermes Gateway | `http://127.0.0.1:8644/...` | **SKIP** | L1 when live |
-| LightRAG | `http://127.0.0.1:9622/health` | **SKIP** | L1 when live |
+| AgentMemory REST | `http://127.0.0.1:3111/...` | **SKIP** unless `QUALITY_SMOKE_AM_URL` set | L1+L2 when live |
+| Hermes Gateway | `http://127.0.0.1:8644/...` | **SKIP** unless `QUALITY_SMOKE_GATEWAY_URL` set | L1 when live |
+| LightRAG | `http://127.0.0.1:9622/health` | **SKIP** unless `QUALITY_SMOKE_LIGHTRAG_URL` set | L1 when live |
 
 ---
 
@@ -116,7 +129,7 @@ Never claim “done” on L1 alone (AGENTS.md).
 |----------|---------|------|
 | `ci.yml` | push/PR → `main` | backend lint, website typecheck/lint/build/**test**, hermes structure, secrets, agentic-governance |
 | `test.yml` | PR → `main`, `feature/**`, Mon schedule | lint, website unit, docker verify |
-| `quality-smoke.yml` | PR → `main`, schedule, dispatch | public curl smoke + Playwright critical path |
+| `quality-smoke.yml` | PR → `main`, schedule, dispatch | public curl smoke + Playwright critical path + VPS-local L1 (self-hosted) |
 | `quality-audit.yml` | PR → `main`, schedule, dispatch | SOLL + knowledge + doc-gap artifacts |
 | `design-system-guard.yml` | CSS path changes | L2 CSS marker |
 | `secret-scan.yml` | (standalone) | secrets |
