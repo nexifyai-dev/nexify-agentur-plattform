@@ -48,7 +48,7 @@
 
 ## Stack reactivation (runtime, not cutover)
 
-See [`UTILIZATION-GAPS-2026-08-02.md`](./UTILIZATION-GAPS-2026-08-02.md): Gateway `:8644` up; Paperclip revive **disabled**; Hermes WebUI cutover = HARD STOP.
+See [`UTILIZATION-GAPS-2026-08-02.md`](./UTILIZATION-GAPS-2026-08-02.md): Gateway `:8644` up; `whatsapp-support` cron intentionally **paused** until model pin; Paperclip revive **disabled**; Hermes WebUI cutover = HARD STOP; remaining utilization gaps deprioritized off the critical product path.
 
 ## Quick commands
 
