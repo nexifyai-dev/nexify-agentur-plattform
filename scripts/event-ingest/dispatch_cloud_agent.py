@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # FILE: scripts/event-ingest/dispatch_cloud_agent.py
 # NIR: 02.08.2026 08:30
-# UPDATED: 02.08.2026 11:20
+# UPDATED: 04.08.2026 09:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Launch Cursor Cloud Agent from CI/webhook events (PC-off path).
@@ -130,6 +130,35 @@ def remember_action(
         except Exception as exc:  # noqa: BLE001
             print(f"agentmemory_soft_fail path={path} err={type(exc).__name__}")
     return None
+
+
+def lightrag_dual_write(title: str, description: str, tags: list[str]) -> None:
+    """Mirror the same content to LightRAG when LIGHTRAG_API_KEY is configured."""
+    key = _env("LIGHTRAG_API_KEY")
+    if not key:
+        print("lightrag_skip: LIGHTRAG_API_KEY missing")
+        return
+    base = _env("LIGHTRAG_URL", "http://127.0.0.1:9622").rstrip("/")
+    text = f"ACTION: {title}\n{description}\ntags: {', '.join(tags)}"
+    payload = {
+        "text": text,
+        "file_source": f"event-ingest/{title[:80]}",
+    }
+    try:
+        req = urllib.request.Request(
+            f"{base}/documents/text",
+            data=json.dumps(payload).encode(),
+            headers={
+                "X-API-Key": key,
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            resp.read()
+        print("lightrag_ok")
+    except Exception as exc:  # noqa: BLE001
+        print(f"lightrag_soft_fail err={type(exc).__name__}")
 
 
 def build_prompt(args: argparse.Namespace) -> tuple[str, str, bool]:
@@ -409,6 +438,11 @@ def main() -> int:
     prompt, dedupe, auto_pr = build_prompt(args)
     title = f"[event-ingest] {args.event_name}:{args.reason} ({dedupe})"
     remember_action(
+        title=title,
+        description=prompt[:4000],
+        tags=["event-ingest", "cloud-agent", args.event_name, "pending"],
+    )
+    lightrag_dual_write(
         title=title,
         description=prompt[:4000],
         tags=["event-ingest", "cloud-agent", args.event_name, "pending"],
