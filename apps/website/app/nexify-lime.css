@@ -80,3 +80,8 @@
 .contact-card.subtle strong {
   color: #C8FF00 !important;
 }
+
+/* ── Tailwind Emerald-Checks (pricing.tsx etc.): Lime ── */
+.text-emerald-400\/80 {
+  color: rgba(200, 255, 0, 0.85) !important;
+}
