@@ -34,4 +34,16 @@ test.describe('critical path', () => {
     await expect(page.locator('#main-content, form').first()).toBeVisible();
     await expect(page.locator('footer').first()).toBeVisible();
   });
+
+  test('vergleich and rueckruf surface diy comparison and objection handling', async ({ page }) => {
+    await page.goto('/vergleich', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByTestId('vergleich-diy-tools')).toBeVisible();
+    await expect(page.getByTestId('vergleich-diy-link-chatgpt')).toBeVisible();
+    await expect(page.getByTestId('vergleich-diy-link-make')).toBeVisible();
+    await expect(page.getByTestId('vergleich-diy-link-zapier')).toBeVisible();
+
+    await page.goto('/rueckruf', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByTestId('callback-objection-faq')).toBeVisible();
+    await expect(page.getByTestId('callback-objection-vergleich')).toBeVisible();
+  });
 });
