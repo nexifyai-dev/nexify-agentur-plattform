@@ -1,13 +1,13 @@
 # FILE: .github/workflows/pr-auto-merge.yml
 # NIR: 02.08.2026 08:25
-# UPDATED: 03.08.2026 21:10
+# UPDATED: 04.08.2026 07:55
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Label-basiertes Auto-Merge — Draft->ready wenn green, dann squash auto-merge.
 # WHY: Fix #135: Draft + automerge darf nicht ewig warten; kein Force-Main.
 # BEST-PRACTICE: Nur Squash+Auto-Merge API; do-not-merge/base≠main blocken.
 # PITFALL: V-AM-01: Ohne required checks ist enableAutoMerge wirkungslos -> Branch Protection nötig.
-# PITFALL: V-AM-02 (fix 03.08): mergeableState=BEHIND blockiert Auto-Merge endlos, wenn
+# PITFALL: V-AM-02 (fix 03.08): mergeStateStatus=BEHIND blockiert Auto-Merge endlos, wenn
 #   Branch Protection "Require branches up to date" aktiv — Branch-Update muss explizit getriggert
 #   werden (POST /pulls/{n}/update-branch), sonst bleibt der PR ewig offen.
 # DEPENDS: Repo Settings -> Rulesets/Branch protection (required status checks)
@@ -74,14 +74,14 @@ jobs:
         run: |
           set -euo pipefail
 
-          meta="$(gh pr view "$PR" --repo "$REPO" --json number,isDraft,baseRefName,labels,title,state,mergeable,mergeableState,statusCheckRollup)"
-          echo "$meta" | jq '{number,isDraft,baseRefName,state,mergeable,mergeableState,labels:[.labels[].name]}'
+          meta="$(gh pr view "$PR" --repo "$REPO" --json number,isDraft,baseRefName,labels,title,state,mergeable,mergeStateStatus,statusCheckRollup)"
+          echo "$meta" | jq '{number,isDraft,baseRefName,state,mergeable,mergeStateStatus,labels:[.labels[].name]}'
 
           state="$(echo "$meta" | jq -r .state)"
           is_draft="$(echo "$meta" | jq -r .isDraft)"
           base="$(echo "$meta" | jq -r .baseRefName)"
           labels="$(echo "$meta" | jq -r '[.labels[].name] | join(",")')"
-          mergeable_state="$(echo "$meta" | jq -r .mergeableState)"
+          mergeable_state="$(echo "$meta" | jq -r .mergeStateStatus)"
 
           if [ "$state" != "OPEN" ]; then
             echo "skip: PR not open"
@@ -138,7 +138,7 @@ jobs:
           fi
 
           if [ "$mergeable_state" = "BLOCKED" ]; then
-            echo "skip: merge blocked (mergeableState=BLOCKED)"
+            echo "skip: merge blocked (mergeStateStatus=BLOCKED)"
             exit 0
           fi
 
