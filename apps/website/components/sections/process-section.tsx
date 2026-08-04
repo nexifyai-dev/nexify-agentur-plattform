@@ -1,7 +1,5 @@
 'use client';
 
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { useContent } from "@/lib/content";
 

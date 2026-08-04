@@ -13,7 +13,7 @@ export function Hero3D() {
 
   useEffect(() => {
     let raf = 0;
-    let renderer: any;
+    let renderer: { dispose: () => void; domElement: HTMLCanvasElement } | undefined;
     let resizeObserver: ResizeObserver | undefined;
     let pointerHandler: ((e: PointerEvent) => void) | undefined;
 
@@ -64,7 +64,7 @@ export function Hero3D() {
       const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
       const nodeMat = new THREE.MeshBasicMaterial({ color: 0xc8ff00 });
       const seenVerts = new Set<string>();
-      const posAttr = (wireGeo as any).attributes.position;
+      const posAttr = wireGeo.attributes.position as THREE.BufferAttribute;
       for (let i = 0; i < posAttr.count; i++) {
         const x = posAttr.getX(i);
         const y = posAttr.getY(i);
