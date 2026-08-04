@@ -274,5 +274,12 @@
       "note": "/submit zeigt nur Pricing; Signup-URLs 404. Listing-Mail draft vorhanden."
     }
   ],
-  "last_submission_run": "2026-08-01T17:20:52.259736+00:00"
+  "last_submission_run": "2026-08-01T17:20:52.259736+00:00",
+  "updated_at": "2026-08-04T09:35:00Z",
+  "open_human_gates": {
+    "email_verify_immediate": ["agenturen-app", "zukko"],
+    "p0_sso": ["google-business", "clutch"],
+    "p0_captcha_password": ["profis-ai", "goodfirms", "sortlist"],
+    "p1_followup": ["agenturmarkt", "ai-rolodex", "aiagencysearch"]
+  }
 }
