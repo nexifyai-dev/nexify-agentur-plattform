@@ -1,0 +1,29 @@
+/* ============================================================
+   Anhang-Design (PR47 Luxury Dark / Lime) — "NeXify Homepage.dc.html"
+   Keyframes + Breakpoints, 1:1 aus dem Anhang.
+   ============================================================ */
+
+@keyframes nx-shimmer { to { background-position: 200% center; } }
+@keyframes nx-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes nx-pulsering { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(2.1); opacity: 0; } }
+@keyframes nx-marquee { to { transform: translateX(-50%); } }
+@keyframes nx-fadeup { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes nx-typing { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+@keyframes nx-bubblein { from { opacity: 0; transform: translateY(12px) scale(0.9); } to { opacity: 1; transform: none; } }
+
+/* Anhang-Basis: Scrollbar, Selection */
+html { scroll-behavior: smooth; }
+::selection { background: rgba(200,255,0,0.25); color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0A0A0A; }
+::-webkit-scrollbar-thumb { background: #26261a; border-radius: 8px; border: 2px solid #0A0A0A; }
+
+.nx-mobile-toggle { display: none; }
+
+@media (max-width: 1080px) {
+  .nx-desktop-nav { display: none !important; }
+  .nx-mobile-toggle { display: flex !important; }
+  .nx-hero-grid, .nx-pricing-grid, .nx-about-grid { grid-template-columns: 1fr !important; }
+  .nx-3col, .nx-services-grid { grid-template-columns: 1fr 1fr !important; }
+  .nx-process-grid, .nx-stats-grid { grid-template-columns: 1fr 1fr !important; }
+}

@@ -1,322 +1,268 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { Sparkles, X, Send, FileText, CheckCircle2 } from "lucide-react";
-import { API_BASE } from "@/lib/company";
-import { useLang } from "@/lib/lang-context";
-import { ChatMarkdown } from "@/components/chat-markdown";
+import { useEffect, useRef, useState } from 'react';
 
-type Msg = { role: "user" | "assistant"; content: string };
+/**
+ * Proaktiver KI-Chat exakt nach Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark).
+ * VERBOTEN laut design_guidelines.json: lucide-icons, Emojis, Quick-Replies, "Online"-Statuszeile, Sparkles.
+ * Launcher = 9px Lime-Punkt + Puls-Ring, Send = "→" (Text, kein Icon).
+ */
 
-const T = {
-  de: {
-    title: "NeXify AI – Ihr AI-Berater",
-    status: "Online · antwortet sofort",
-    greeting:
-      "Guten Tag! Ich bin NeXify AI – Ihr persönlicher AI-Berater. Damit ich Sie wirklich individuell beraten und Ihnen ein maßgeschneidertes Angebot erstellen kann, erzählen Sie mir gern kurz: Was macht Ihr Unternehmen – und woran denken Sie gerade? Eine Website, ein Shop, eine App oder eine Automatisierung?",
-    placeholder: "Ihre Nachricht …",
-    offerBtn: "Angebot per E-Mail erhalten",
-    offerTitle: "Ihr individuelles Angebot anfordern",
-    offerText: "NeXify AI erstellt aus unserer Bedarfsanalyse ein Angebot mit Aufwandsspanne – und sendet es per E-Mail. Persönliche Rückmeldung: Ziel ≤ 1 Werktag.",
-    name: "Ihr Name *",
-    email: "Ihre E-Mail *",
-    companyField: "Firma (optional)",
-    phoneField: "Telefon (optional, für persönliche Rückfragen)",
-    sendOffer: "Individuelles Angebot jetzt senden",
-    sending: "Ihr Angebot wird individuell erstellt …",
-    offerSent: "Angebot unterwegs! Postfach prüfen — Pascal meldet sich persönlich (Ziel ≤ 1 Werktag). Termin: /rueckruf · Übersicht: /danke?variant=offer",
-    offerGenerated: "Angebot erstellt. E-Mail folgt kurzfristig — persönliche Rückmeldung Ziel ≤ 1 Werktag. /rueckruf oder /danke?variant=offer",
-    error: "Verbindung unterbrochen – bitte erneut versuchen.",
-    cancel: "Zurück zum Chat",
-  },
-  en: {
-    title: "NeXify AI – Your AI Advisor",
-    status: "Online · responds instantly",
-    greeting:
-      "Hello! I am NeXify AI – your personal AI advisor. So that I can advise you truly individually and create a tailor-made offer for you, tell me briefly: What does your company do – and what are you thinking about? A website, a shop, an app or automation?",
-    placeholder: "Your message …",
-    offerBtn: "Receive offer via email",
-    offerTitle: "Request Your Individual Offer",
-    offerText: "Based on our needs analysis, NeXify AI creates an offer exclusively tailored to you – including PDF – and sends it to you immediately via email.",
-    name: "Your name *",
-    email: "Your email *",
-    companyField: "Company (optional)",
-    phoneField: "Phone (optional, for personal inquiries)",
-    sendOffer: "Send individual offer now",
-    sending: "Your offer is being individually created …",
-    offerSent: "Your individual offer is on its way! Check your inbox – Pascal Courbois will also contact you personally. Prefer to speak directly? Book a fixed phone appointment at /rueckruf.",
-    offerGenerated: "Your offer has been created. The email dispatch will follow shortly – we will contact you personally.",
-    error: "Connection interrupted – please try again.",
-    cancel: "Back to Chat",
-  },
-  nl: {
-    title: "NeXify AI – Uw AI-adviseur",
-    status: "Online · antwoordt direct",
-    greeting:
-      "Goedendag! Ik ben NeXify AI – uw persoonlijke AI-adviseur. Zodat ik u echt individueel kan adviseren en een offerte op maat kan opstellen: vertel mij kort wat uw bedrijf doet – en waar denkt u aan? Een website, een webshop, een app of automatisering?",
-    placeholder: "Uw bericht …",
-    offerBtn: "Offerte per e-mail ontvangen",
-    offerTitle: "Uw individuele offerte aanvragen",
-    offerText: "NeXify AI stelt op basis van onze behoefteanalyse een exclusief op u toegesneden offerte op – inclusief PDF – en stuurt deze direct per e-mail.",
-    name: "Uw naam *",
-    email: "Uw e-mail *",
-    companyField: "Bedrijf (optioneel)",
-    phoneField: "Telefoon (optioneel, voor persoonlijk contact)",
-    sendOffer: "Individuele offerte nu versturen",
-    sending: "Uw offerte wordt op maat opgesteld …",
-    offerSent: "Uw individuele offerte is onderweg! Controleer uw inbox – Pascal Courbois neemt bovendien persoonlijk contact op. Liever direct spreken? Via /rueckruf boekt u een vaste telefonische afspraak.",
-    offerGenerated: "Uw offerte is opgesteld. De e-mail volgt spoedig – wij nemen persoonlijk contact op.",
-    error: "Verbinding onderbroken – probeer het opnieuw.",
-    cancel: "Terug naar de chat",
-  },
+interface ChatMessage {
+  text: string;
+  align: 'flex-start' | 'flex-end';
+  bg: string;
+  color: string;
+}
+
+const ANHANG_GREETING: ChatMessage = {
+  text: 'Hallo! Ich sehe, Sie schauen sich unsere Leistungen an, soll ich Ihnen direkt eine erste Einschätzung für Ihr Projekt erstellen?',
+  align: 'flex-start',
+  bg: 'rgba(255,255,255,0.06)',
+  color: '#e5e5e5',
 };
 
-export function ChatWidget() {
-  const pathname = usePathname() || "";
-  const { lang } = useLang();
-  const t = T[lang];
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
-  const [streaming, setStreaming] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [showOffer, setShowOffer] = useState(false);
-  const [offerReady, setOfferReady] = useState(false);
-  const [offerState, setOfferState] = useState<"idle" | "sending" | "sent" | "generated">("idle");
-  const [form, setForm] = useState({ name: "", email: "", company: "", phone: "" });
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const openedOnce = useRef(false);
-  const openChat = useCallback(() => {
-    openedOnce.current = true;
-    setOpen(true);
-    setMessages((current) => (
-      current.length === 0 ? [{ role: "assistant", content: t.greeting }] : current
-    ));
-  }, [t.greeting]);
+const ANHANG_REPLY =
+  'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag.';
+
+const KEYFRAMES = `
+  @keyframes nx-pulsering { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(2.1); opacity: 0; } }
+  @keyframes nx-bubblein { from { opacity: 0; transform: translateY(12px) scale(0.9); } to { opacity: 1; transform: none; } }
+  @keyframes nx-typing { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+`;
+
+export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([ANHANG_GREETING]);
+  const [typing, setTyping] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!openedOnce.current && !window.localStorage.getItem("nova-greeted")) {
-        window.localStorage.setItem("nova-greeted", "1");
-        openChat();
-      }
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, [openChat]);
+    const style = document.createElement('style');
+    style.textContent = KEYFRAMES;
+    document.head.appendChild(style);
+    return () => {
+      style.remove();
+    };
+  }, []);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, streaming, showOffer, offerState]);
-
-  const ensureSession = async (): Promise<string> => {
-    if (sessionId) return sessionId;
-    const res = await fetch(`${API_BASE}/api/chat/session`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ language: lang }),
-    });
-    if (!res.ok) throw new Error("session");
-    const data = await res.json();
-    if (!data?.session_id) throw new Error("session");
-    setSessionId(data.session_id);
-    return data.session_id as string;
-  };
-
-  const send = async () => {
-    const text = input.trim();
-    if (!text || streaming) return;
-    setInput("");
-    setMessages((m) => [...m, { role: "user", content: text }]);
-    setStreaming(true);
-    try {
-      const sid = await ensureSession();
-      const res = await fetch(`${API_BASE}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sid, message: text, language: lang }),
-      });
-      if (!res.body) throw new Error("no stream");
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let acc = "";
-      setMessages((m) => [...m, { role: "assistant", content: "" }]);
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n\n");
-        buffer = lines.pop() ?? "";
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          const ev = JSON.parse(line.slice(6));
-          if (ev.type === "delta") {
-            acc += ev.content;
-            setMessages((m) => {
-              const copy = [...m];
-              copy[copy.length - 1] = { role: "assistant", content: acc };
-              return copy;
-            });
-          }
-          if (ev.type === "offer_ready" && ev.ready) setOfferReady(true);
-        }
-      }
-      if (!acc) throw new Error("empty");
-    } catch {
-      setMessages((m) => {
-        const copy = m[m.length - 1]?.role === "assistant" && !m[m.length - 1].content ? m.slice(0, -1) : [...m];
-        return [...copy, { role: "assistant", content: t.error }];
-      });
-    } finally {
-      setStreaming(false);
+    if (chatAutoOpen !== false) {
+      const timer = setTimeout(() => setChatOpen(true), 4200);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [chatAutoOpen]);
 
-  const requestOffer = async () => {
-    if (!form.name || !form.email) return;
-    setOfferState("sending");
-    try {
-      const sid = await ensureSession();
-      const res = await fetch(`${API_BASE}/api/offers/request`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sid, name: form.name, email: form.email, company: form.company || null, phone: form.phone || null, language: lang }),
-      });
-      if (!res.ok) throw new Error("failed");
-      const data = await res.json();
-      setOfferState(data.email_sent ? "sent" : "generated");
-      setShowOffer(false);
-      setMessages((m) => [...m, { role: "assistant", content: data.email_sent ? t.offerSent : t.offerGenerated }]);
-    } catch {
-      setOfferState("idle");
-      setMessages((m) => [...m, { role: "assistant", content: t.error }]);
-      setShowOffer(false);
-    }
-  };
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, typing]);
 
-  // Chat-Widget nur auf öffentlichen Kundenseiten – nicht in Admin/Konto (geschlossene Bereiche)
-  if (pathname.startsWith("/admin") || pathname.startsWith("/konto")) return null;
+  const sendChatMessage = () => {
+    const text = chatInput.trim();
+    if (!text) return;
+    const userMsg: ChatMessage = {
+      text,
+      align: 'flex-end',
+      bg: 'linear-gradient(120deg,#C8FF00,#eaffb0)',
+      color: '#0A0A0A',
+    };
+    setMessages((s) => [...s, userMsg]);
+    setChatInput('');
+    setTyping(true);
+    setTimeout(() => {
+      setTyping(false);
+      setMessages((s) => [
+        ...s,
+        { text: ANHANG_REPLY, align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
+      ]);
+    }, 1300);
+  };
 
   return (
     <>
-      {!open && (
-        <button
-          type="button"
-          className="chat-launcher"
-          onClick={openChat}
-          aria-label="Chat öffnen"
-          aria-haspopup="dialog"
-          data-testid="chat-launcher"
-        >
-          <Sparkles size={24} className="text-zinc-200" />
-        </button>
-      )}
+      {/* Launcher: exakt Anhang — 60px rund, Lime-Punkt + Puls-Ring, KEIN Icon */}
+      <div
+        onClick={() => setChatOpen((s) => !s)}
+        data-testid="chat-launcher"
+        role="button"
+        aria-label="Chat öffnen"
+        style={{
+          position: 'fixed',
+          right: 24,
+          bottom: 24,
+          zIndex: 60,
+          width: 60,
+          height: 60,
+          borderRadius: 999,
+          border: '1px solid rgba(200,255,0,0.3)',
+          background: 'linear-gradient(135deg,#1c1c20,#101013)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.6), 0 0 24px rgba(200,255,0,0.12)',
+        }}
+      >
+        <span
+          style={{
+            position: 'absolute',
+            inset: -5,
+            borderRadius: 999,
+            border: '1px solid rgba(200,255,0,0.35)',
+            animation: 'nx-pulsering 2.6s cubic-bezier(0.22,1,0.36,1) infinite',
+          }}
+        />
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            borderRadius: 999,
+            background: '#C8FF00',
+            boxShadow: '0 0 10px rgba(200,255,0,0.8)',
+          }}
+        />
+      </div>
 
-      {open && (
-        <div className="chat-panel" data-testid="chat-panel" role="dialog" aria-modal="true" aria-label={t.title}>
-          <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-4">
-            <div className="flex items-center gap-3">
-              <div className="pulse-dot flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500" aria-hidden="true">
-                <Sparkles size={16} className="text-black" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-white" id="chat-panel-title">{t.title}</div>
-                <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
-                  <span className="inline-block size-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-                  {t.status}
-                </div>
-              </div>
+      {/* Panel: exakt Anhang */}
+      {chatOpen && (
+        <div
+          data-testid="chat-panel"
+          style={{
+            position: 'fixed',
+            right: 24,
+            bottom: 96,
+            zIndex: 60,
+            width: 'min(380px, calc(100vw - 32px))',
+            height: 'min(520px, calc(100vh - 140px))',
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 22,
+            border: '1px solid rgba(200,255,0,0.15)',
+            background: 'rgba(14,14,17,0.94)',
+            backdropFilter: 'blur(28px)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.7)',
+            overflow: 'hidden',
+            animation: 'nx-bubblein 0.3s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          {/* Header: 8px Punkt + "NeXify KI Berater", Close × */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '18px 20px',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 999,
+                  background: '#C8FF00',
+                  boxShadow: '0 0 8px rgba(200,255,0,0.8)',
+                }}
+              />
+              <span style={{ fontSize: 13, fontWeight: 700 }}>NeXify KI Berater</span>
             </div>
-            <button type="button" onClick={() => setOpen(false)} className="inline-flex size-11 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-white/5 hover:text-white" aria-label="Schließen" data-testid="chat-close">
-              <X size={18} />
-            </button>
+            <span
+              onClick={() => setChatOpen(false)}
+              style={{ cursor: 'pointer', color: '#71717a', fontSize: 18, lineHeight: 1 }}
+            >
+              ×
+            </span>
           </div>
 
-          <div ref={scrollRef} className="chat-scroll flex-1 space-y-3 overflow-y-auto px-4 py-4">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div
-                  data-testid={`chat-msg-${m.role}`}
-                  className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[13.5px] leading-relaxed ${
-                    m.role === "user"
-                      ? "whitespace-pre-wrap rounded-br-md bg-gradient-to-br from-zinc-100 to-zinc-300 text-black"
-                      : "rounded-bl-md border border-white/10 bg-white/[0.05] text-zinc-200"
-                  }`}
-                >
-                  {m.content ? (
-                    m.role === "assistant" ? <ChatMarkdown content={m.content} /> : m.content
-                  ) : (
-                    <span className="flex gap-1 py-1">
-                      <span className="typing-dot" />
-                      <span className="typing-dot" />
-                      <span className="typing-dot" />
-                    </span>
-                  )}
-                </div>
+          {/* Nachrichten */}
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 14,
+            }}
+          >
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  alignSelf: msg.align,
+                  maxWidth: '82%',
+                  padding: '12px 15px',
+                  borderRadius: 14,
+                  fontSize: 13.5,
+                  lineHeight: 1.55,
+                  background: msg.bg,
+                  color: msg.color,
+                }}
+              >
+                {msg.text}
               </div>
             ))}
-
-            {showOffer && (
-              <div className="rounded-2xl border border-white/15 bg-white/[0.04] p-4" data-testid="offer-form">
-                <div className="flex items-center gap-2 text-sm font-bold text-white">
-                  <FileText size={15} /> {t.offerTitle}
-                </div>
-                <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">{t.offerText}</p>
-                <div className="mt-3 space-y-2">
-                  <input className="field !py-2.5 !text-[13px]" placeholder={t.name} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} data-testid="offer-name-input" />
-                  <input className="field !py-2.5 !text-[13px]" type="email" placeholder={t.email} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} data-testid="offer-email-input" />
-                  <input className="field !py-2.5 !text-[13px]" placeholder={t.companyField} value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} data-testid="offer-company-input" />
-                  <input className="field !py-2.5 !text-[13px]" type="tel" placeholder={t.phoneField} value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} data-testid="offer-phone-input" />
-                  <button className="btn-primary w-full !py-2.5 !text-[13px]" onClick={requestOffer} disabled={offerState === "sending" || !form.name || !form.email} data-testid="offer-submit-btn">
-                    {offerState === "sending" ? t.sending : t.sendOffer}
-                  </button>
-                  <button className="w-full py-1 text-xs text-zinc-500 transition-colors hover:text-white" onClick={() => setShowOffer(false)}>
-                    {t.cancel}
-                  </button>
-                </div>
+            {typing && (
+              <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '12px 15px' }}>
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.15s' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.3s' }} />
               </div>
             )}
-
-            {(offerState === "sent" || offerState === "generated") && !showOffer && (
-              <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/5 px-3 py-2 text-xs text-emerald-300" data-testid="offer-success">
-                <CheckCircle2 size={14} /> {offerState === "sent" ? t.offerSent : t.offerGenerated}
-              </div>
-            )}
+            <div ref={messagesEndRef} />
           </div>
 
-          <div className="border-t border-white/10 px-4 py-3">
-            {!showOffer && offerState !== "sent" && offerState !== "generated" && (offerReady || messages.filter((m) => m.role === "user").length >= 3) && (
-              <button
-                className="mb-2.5 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] py-2 text-xs font-semibold text-zinc-300 transition-all hover:border-white/30 hover:text-white"
-                onClick={() => setShowOffer(true)}
-                data-testid="offer-open-btn"
-              >
-                <FileText size={13} /> {t.offerBtn}
-              </button>
-            )}
-            <div className="flex items-center gap-2">
-              <input
-                className="field !rounded-full !py-2.5 !text-[13.5px]"
-                placeholder={t.placeholder}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && send()}
-                data-testid="chat-input"
-              />
-              <button
-                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-100 to-zinc-400 text-black transition-transform hover:scale-105 disabled:opacity-40"
-                onClick={send}
-                disabled={streaming || !input.trim()}
-                aria-label="Senden"
-                data-testid="chat-send-btn"
-              >
-                <Send size={16} />
-              </button>
-            </div>
+          {/* Input + Send "→" */}
+          <div style={{ display: 'flex', gap: 10, padding: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <input
+              type="text"
+              placeholder="Ihre Nachricht..."
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') sendChatMessage();
+              }}
+              data-testid="chat-input"
+              style={{
+                flex: 1,
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 12,
+                background: 'rgba(255,255,255,0.03)',
+                color: '#fff',
+                padding: '11px 14px',
+                fontSize: 13,
+                outline: 'none',
+              }}
+            />
+            <span
+              onClick={sendChatMessage}
+              data-testid="chat-send"
+              role="button"
+              aria-label="Nachricht senden"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 42,
+                height: 42,
+                borderRadius: 12,
+                background: '#C8FF00',
+                color: '#0A0A0A',
+                fontWeight: 700,
+                cursor: 'pointer',
+                flex: 'none',
+              }}
+            >
+              →
+            </span>
           </div>
         </div>
       )}
     </>
   );
 }
+
+// Backward compatibility: named export für layout.tsx
+export { ChatWidget };

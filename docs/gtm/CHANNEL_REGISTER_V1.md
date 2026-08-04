@@ -20,6 +20,7 @@
 
 | ID | Kanal | URL | Prio | Free? | Owner-Gate | utm_source | Status | Evidence |
 |----|-------|-----|------|-------|------------|------------|--------|----------|
+| S00 | Google Search Console | https://search.google.com/search-console | A1 | ja | Ownership+Sitemap DONE; Index/Prefs #243 | gsc | live_ownership | [Ops](../operations/GOOGLE-SEARCH-CONSOLE.md) |
 | S01 | Google Unternehmensprofil | https://business.google.com/ | A1 | ja | Verify (Video/Post) | google_business | pending_owner | [S01](evidence/supply-wave1/S01-google-business.md) |
 | S02 | LinkedIn Company | https://www.linkedin.com/company/ | A1 | ja | Owner Login | linkedin_company | pending_owner | [S02](evidence/supply-wave1/S02-linkedin-company.md) |
 | S03 | LinkedIn Personal (Pascal) | https://www.linkedin.com/ | A1 | ja | Owner Login | linkedin_personal | pending_owner | [S03](evidence/supply-wave1/S03-linkedin-personal.md) |
@@ -62,7 +63,7 @@
 
 ### Wave-1-Minimum (15 Einträge)
 
-S01–S15 bilden das Ziel ≥15. S16–S19 sind Wave-1-Plus. S20 ist bereits live (eigene Site).
+S00 = GSC (Ownership DONE). S01–S15 bilden das Ziel ≥15 Listings. S16–S19 Wave-1-Plus. S20 bereits live (eigene Site).
 
 ### wont_do
 

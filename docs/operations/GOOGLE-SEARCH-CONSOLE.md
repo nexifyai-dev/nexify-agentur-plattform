@@ -1,151 +1,269 @@
 # FILE: docs/operations/GOOGLE-SEARCH-CONSOLE.md
 # NIR: 02.08.2026 10:55
-# UPDATED: 02.08.2026 11:00
+# UPDATED: 02.08.2026 11:30
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps / GTM
-# WHAT: SoT — Google Search Console Domain-Ownership + Sitemap für nexifyai.cloud
-# WHY: Indexierung, Coverage, Money-Page-Indexing — Owner-Verify ist Human; DNS-Record bleibt permanent
-# BEST-PRACTICE: Domain-Property via DNS TXT; Sitemap einmalig submitten; Coverage wöchentlich prüfen
-# PITFALL: V-GSC-01: TXT entfernen = Ownership verloren; Token nicht in Code duplizieren (DNS reicht)
-# DEPENDS: Cloudflare DNS Zone nexifyai.cloud; Live www.nexifyai.cloud
-# DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md, docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
-# SESSION: gsc-sitemap-submitted-7dd5
+# WHAT: SoT — Google Search Console Owner-Fähigkeiten maxen (DONE vs TODO)
+# WHY: Indexierung, Coverage, Rich Results, Bing/IndexNow — Owner bestätigt; Agents dokumentieren + Code; UI-Clicks bleiben Human
+# BEST-PRACTICE: Domain-Property via DNS TXT; eine Sitemap; Money-Page URL-Inspection; wöchentliche Coverage
+# PITFALL: V-GSC-01: TXT entfernen = Ownership verloren; Soft-404s nicht in Sitemap; keine Secrets in Git
+# DEPENDS: Cloudflare DNS Zone nexifyai.cloud; Live www.nexifyai.cloud; Owner-Login GSC
+# DOCS-REF: docs/gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md, scripts/gtm/gsc-url-inspection-batch.md
+# SESSION: gsc-max-owner-capabilities-7dd5
 
-# Google Search Console — nexifyai.cloud
+# Google Search Console — nexifyai.cloud (max free Owner capabilities)
 
 **Portal:** https://search.google.com/search-console  
-**Property-Typ:** Domain (`nexifyai.cloud`) — deckt Apex, `www` und alle Subdomains ab.  
-**Status (2026-08-02):**
+**Property-Typ:** Domain (`nexifyai.cloud`) — Apex, `www`, Subdomains.  
+**Verified Owner (Human):** Pascal Courbois — `nexify.login@gmail.com` (Kontakt für GSC; **kein Secret**).  
+**Live:** https://www.nexifyai.cloud
 
-| Schritt | Status | Datum |
-|---------|--------|-------|
-| Ownership (DNS Domain) | **DONE** | 2026-08-02 |
-| Sitemap `https://www.nexifyai.cloud/sitemap.xml` submitted | **DONE** | 2026-08-02 |
-| Coverage monitoring / Soft-404s | **next** (Human + Issue weekly check) | — |
-| URL-Inspection Indexing (Money-Pages) | **next** (Human ~3 Min) | — |
+---
 
-## Verification (SoT = DNS, nicht HTML-Meta)
+## Capability checklist — DONE vs TODO
+
+| # | Fähigkeit | Status | Wer | Hinweis |
+|---|-----------|--------|-----|---------|
+| 1 | Domain-Ownership (DNS TXT) | **DONE** | Human 2026-08-02 | TXT **nie löschen** |
+| 2 | Sitemap submit `…/sitemap.xml` | **DONE** | Human 2026-08-02 | #238 closed |
+| 3 | Owner bestätigt „volle Möglichkeiten“ | **DONE** | Pascal | dieses Playbook |
+| 4 | robots.txt Allow + Sitemap + Googlebot | **DONE** (Repo) | Agent | `apps/website/app/robots.ts` |
+| 5 | Sitemap Money-Pages (existierende Routen) | **DONE** (Repo) | Agent | inkl. 15× `/leistungen/*` + `/branchen/*` (#252 merged) |
+| 6 | `llms.txt` (+ `.well-known`) | **DONE** (Repo) | Agent | Spec: H1 + Links |
+| 7 | Soft-404 `[locale]` catch-all | **DONE** (Repo) | Agent | `dynamicParams = false` |
+| 8 | IndexNow key file (Bing/Yandex free) | **DONE** (Repo) | Agent | Key public; Bing UI einmalig |
+| 9 | Structured-Data Seite→Test-Liste | **DONE** (Docs) | Agent | Abschnitt unten |
+| 10 | URL-Inspection Batch (Top 20) | **TODO** | Human | `scripts/gtm/gsc-url-inspection-batch.md` |
+| 11 | E-Mail-Notifications alle Issue-Typen | **TODO** | Human | GSC Einstellungen |
+| 12 | Secondary owner / Backup-Verify | **TODO** | Human | optional GA/GTM/HTML |
+| 13 | International targeting DE | **TODO** | Human | Domain-Property: UI prüfen |
+| 14 | Performance-Report Cadence | **TODO** | Human | wöchentlich (#245) |
+| 15 | Core Web Vitals Report | **TODO** | Human | nach PSI-Fixes |
+| 16 | Links-Report Awareness | **TODO** | Human | einmalig + monatlich |
+| 17 | Experience / HTTPS | **TODO** | Human | GSC Experience prüfen |
+| 18 | Removals / Crawl-Stats Awareness | **TODO** | Human | nur bei Bedarf Removals |
+| 19 | Bing Webmaster (DNS/gleiche Verify) | **TODO** | Human | siehe Bing-Abschnitt |
+| 20 | GBP ↔ Website Cross-Link | **TODO** | Human | #237 |
+| 21 | Search Console API (list/submit) | **BLOCKED** | Pascal OAuth | keine Creds auf VPS |
+
+---
+
+## Verification (SoT = DNS)
 
 | Feld | Wert |
 |------|------|
 | Methode | DNS TXT am **Apex** `nexifyai.cloud` |
-| Proxy | **DNS only** (grau / nicht proxied) |
+| Proxy | **DNS only** (grau) |
 | Record | `google-site-verification=CUuPNu4YG11dub8jLYqsigXpbDihohp1uByCF7yGupo` |
 | Provider | Cloudflare → Zone `nexifyai.cloud` → DNS |
+| Owner-Contact | `nexify.login@gmail.com` |
 
 ### HARD RULE — TXT niemals löschen
 
-Google bestätigt Ownership über diesen TXT-Record. **Nicht entfernen**, nicht rotieren ohne vorher neue Verify-Methode in GSC zu aktivieren. Andere Apex-TXT (SPF, Microsoft `MS=…`) sind unabhängig — nur den `google-site-verification=…`-Eintrag schützen.
+Ownership hängt an diesem TXT. Nicht entfernen / rotieren ohne vorher Backup-Verify in GSC.
 
 ### Warum kein Meta-Tag im Website-Code
 
-- Domain-Property + DNS reicht für Apex **und** `www` / Subdomains.
-- HTML-Meta würde denselben Token in `apps/website` duplizieren (Drift-Risiko).
-- Optional (Redundanz): in GSC unter **Einstellungen → Ownership verification** eine zweite Methode aktivieren — HTML-Tag, Google Analytics oder Google Tag Manager — **nur wenn gewünscht**; Repo bleibt DNS-SoT.
+Domain-Property + DNS deckt Apex + `www`. HTML-Meta würde Token duplizieren. Optional Backup: GA / GTM / HTML-Tag in GSC UI.
 
-Live-Check (Agent, 2026-08-02):
+---
 
-```text
-dig +short TXT nexifyai.cloud @1.1.1.1
-→ enthält google-site-verification=CUuPNu4YG11dub8jLYqsigXpbDihohp1uByCF7yGupo
-
-curl -sS https://www.nexifyai.cloud/ | kein google-site-verification Meta (erwartbar)
-```
-
-## Sitemaps — submitted 2026-08-02
-
-Human-Confirm: Sitemap in GSC für Property `nexifyai.cloud` / `www.nexifyai.cloud` eingereicht. Google verarbeitet periodisch.
+## Sitemaps
 
 | URL | Status |
 |-----|--------|
-| `https://www.nexifyai.cloud/sitemap.xml` | **submitted** 2026-08-02 — HTTP 200, `application/xml` |
-| Locale-Pfade `/de/sitemap.xml`, `/nl/sitemap.xml` | **nicht** vorhanden (404) — DE ist unprefixed Default; nicht einreichen |
-| `https://www.nexifyai.cloud/sitemap-0.xml` | HTML (kein Sitemap) — **nicht** einreichen |
+| `https://www.nexifyai.cloud/sitemap.xml` | **submitted** 2026-08-02 |
+| `/de/sitemap.xml`, `/nl/sitemap.xml` | **nicht** einreichen (404) |
+| `sitemap-0.xml` | HTML — **nicht** einreichen |
 
-`robots.txt` verweist bereits auf die Primär-Sitemap:
+Nach Deploy mit erweiterter Sitemap: in GSC „Sitemap erneut abrufen“ oder warten (periodisch).
 
-```text
-Sitemap: https://www.nexifyai.cloud/sitemap.xml
-```
+**In Sitemap (main, nach #252):** Hub `/leistungen`, **15×** `/leistungen/{slug}`, Hub `/branchen` + Branchen-Slugs, `/audit`, plus Money-Pages (`/partner`, `/botschafter`, `/sprechstunde`, `/alternativen`, …).
 
-Wiederholen nur bei neuer Sitemap-URL oder Property-Wechsel — nicht bei jedem Deploy nötig.
+**Noch nicht in Sitemap (fehlen page.tsx / Soft-404):** `/ki-agentur`, `/vergleich/chatgpt`, `/vergleich/freelance` — nach Live-200 nachziehen.
 
-## Next: Coverage + Soft-404s (Human / weekly)
+---
 
-1. GSC → **Indexierung → Seiten** (Coverage): Errors / Soft-404 / Redirects prüfen.
-2. Soft-404s gegen Live-URLs und PR #222 / Issue soft-404 koordinieren.
-3. Sitemap-Status in GSC: „Erfolgreich“ / discovered URLs vs. indexed.
+## URL-Inspection (Human) — #243
 
-## Next: Indexierung anfordern (Human ~3 Min — URL-Prüfung)
+Geordnete Top-20 + Copy-Paste: [`scripts/gtm/gsc-url-inspection-batch.md`](../../scripts/gtm/gsc-url-inspection-batch.md)
 
-In GSC **URL-Prüfung** → „Indexierung beantragen“ für Money-Pages (nach Sitemap-Submit; Rate-Limit beachten):
+Kurz: GSC → **URL-Prüfung** → URL einfügen → **Indexierung beantragen** (Rate-Limit beachten).
 
 | Priorität | URL |
 |-----------|-----|
 | P0 Home | `https://www.nexifyai.cloud/` |
 | P0 Preise | `https://www.nexifyai.cloud/preise` |
 | P0 Vergleich | `https://www.nexifyai.cloud/vergleich` |
-| P0 Leistungen | `https://www.nexifyai.cloud/leistungen` |
+| P0 Leistungen Hub | `https://www.nexifyai.cloud/leistungen` |
+| P0 Landingpages | `https://www.nexifyai.cloud/leistungen/landingpages` |
+| P0 Websites | `https://www.nexifyai.cloud/leistungen/websites` |
+| P0 Onlineshops | `https://www.nexifyai.cloud/leistungen/onlineshops` |
+| P0 Enterprise-Commerce | `https://www.nexifyai.cloud/leistungen/enterprise-commerce` |
+| P0 Web-Apps | `https://www.nexifyai.cloud/leistungen/web-apps` |
+| P0 Mobile Apps | `https://www.nexifyai.cloud/leistungen/mobile-apps` |
+| P0 Automatisierung | `https://www.nexifyai.cloud/leistungen/automatisierung` |
+| P0 AI-Agenten | `https://www.nexifyai.cloud/leistungen/ai-agenten` |
+| P0 KI-Begleiter | `https://www.nexifyai.cloud/leistungen/ki-begleiter` |
+| P0 Kundenportal | `https://www.nexifyai.cloud/leistungen/kundenportal` |
+| P0 KI-Plattform | `https://www.nexifyai.cloud/leistungen/ki-plattform` |
+| P0 KI-Beratung | `https://www.nexifyai.cloud/leistungen/beratung` |
+| P0 Workshops | `https://www.nexifyai.cloud/leistungen/workshops` |
+| P0 White-Label | `https://www.nexifyai.cloud/leistungen/white-label` |
+| P0 KI-/Prozess-Audit | `https://www.nexifyai.cloud/leistungen/audit` |
+| P0 Audit (Alias) | `https://www.nexifyai.cloud/audit` |
+| P1 Branchen Hub | `https://www.nexifyai.cloud/branchen` |
+| P1 Handwerk | `https://www.nexifyai.cloud/branchen/handwerk` |
+| P1 Steuerberater | `https://www.nexifyai.cloud/branchen/steuerberater` |
+| P1 E-Commerce | `https://www.nexifyai.cloud/branchen/ecommerce` |
+| P1 Immobilien | `https://www.nexifyai.cloud/branchen/immobilien` |
+| P1 Agenturen | `https://www.nexifyai.cloud/branchen/agenturen` |
 | P1 Checkliste | `https://www.nexifyai.cloud/checkliste` |
 | P1 Plattform | `https://www.nexifyai.cloud/plattform` |
 | P1 Rückruf | `https://www.nexifyai.cloud/rueckruf` |
 | P1 Kontakt | `https://www.nexifyai.cloud/kontakt` |
-| P2 Wissen | `https://www.nexifyai.cloud/wissen` |
-| P2 Artikel | `https://www.nexifyai.cloud/wissen/ai-automatisierung-kmu` |
-| P2 Artikel | `https://www.nexifyai.cloud/wissen/was-kostet-web-app-2026` |
 
-Optional (sobald live in Sitemap / Routes shipped): `/alternativen`, `/sprechstunde`, `/partner`, `/botschafter`, `/branchen`, `/leistungen/*`.
+**Quelle der 15× `/leistungen/[slug]` + Branchen:** PR #252 / `docs/gtm/PAGE1-KEYWORD-MAP.md` (live prüfen).
 
-**3 empfohlene Human-Clicks zuerst:** Home → Preise → Vergleich (URL-Inspection).
+**Empfohlene Reihenfolge:** Home → Preise → Vergleich → Leistungen-Hub → die 15 Leistungs-Landings in Batches (GSC Rate-Limit) → Branchen/CTAs.
 
-## Empfohlene sekundäre Verify-Methoden (optional)
+---
 
-In GSC → **Einstellungen → Eigentumsbestätigung** zusätzlich aktivieren (Reihenfolge egal):
+## Performance / Coverage Cadence — #245
 
-1. HTML-Tag (nur wenn Meta bewusst gewünscht — sonst weglassen)
-2. Google Analytics (wenn GA4 Property verknüpft)
-3. Google Tag Manager (wenn GTM-Container live)
+**Wöchentlich (≈10 Min):**
 
-Mind. **eine** Backup-Methode schützt vor versehentlichem TXT-Löschen.
+1. Indexierung → Seiten: Errors / Soft-404 / Redirects  
+2. Sitemaps: discovered vs. indexed  
+3. Leistung (Performance): Top Queries / Pages / CTR — DE Fokus  
+4. Soft-404s gegen Live-URLs / SEO-PRs abgleichen  
 
-## E-Mail-Einstellungen (Human ~30 s)
+**Monatlich:** Links-Report, Experience/HTTPS, Core Web Vitals (nach PSI).
 
-GSC → **Einstellungen → Nutzer und Berechtigungen / E-Mail-Einstellungen**:
+---
 
-- [ ] Wichtige Mitteilungen (Coverage, Security, Manual Actions) aktiv
-- [ ] Empfänger = Owner-Mailbox (nicht nur Alias ohne Inbox)
+## Core Web Vitals / Experience
 
-## robots.txt / Crawler (verifiziert 2026-08-02)
+- GSC → **Experience** → Core Web Vitals (URL-Gruppen)  
+- PSI: https://pagespeed.web.dev/analysis?url=https://www.nexifyai.cloud/  
+- Repo-PSI-Fixes: Branch/PR Pagespeed (`llms.txt`/CLS/LCP) — nach Merge CWV erneut in GSC prüfen  
 
-```text
-User-Agent: *
-Allow: /
-Disallow: /admin /konto /login /registrieren /api/
-Host: www.nexifyai.cloud
-Sitemap: https://www.nexifyai.cloud/sitemap.xml
-```
+---
 
-- Googlebot Homepage: HTTP 200  
-- Kein globales `Disallow: /` — Indexierung erlaubt  
-- Private Bereiche (`/admin`, Auth, `/api/`) korrekt gesperrt
+## International targeting (DE)
 
-## Verwandte Issues / Playbooks
+Domain-Property hat kein klassisches „Land targeting“ wie URL-Prefix-Properties. Praktisch:
 
-| Artefakt | Rolle |
-|----------|--------|
-| Issue #238 | GSC Property + Sitemap — **CLOSED** (submitted 2026-08-02) |
-| Issue #210 | GSC+WhatsApp — **GSC DONE**; WhatsApp-Profil bleibt Human |
-| Issue #245 | P2 — GSC coverage weekly check (Coverage / Soft-404 / Indexing) |
-| [`GTM_KOSTENFREI_GESAMTPLAN_V1.md`](../gtm/GTM_KOSTENFREI_GESAMTPLAN_V1.md) | SEO/GSC im kostenfreien GTM-Gesamtplan |
-| [`ONGOING-GAP-AND-ACQUISITION-RADAR.md`](../gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md) | Gap A11 Status |
-| [`SUPPLY_WAVE1_CHECKLIST_V1.md`](../gtm/SUPPLY_WAVE1_CHECKLIST_V1.md) | Supply Wave-1 (GBP parallel) |
-| [`CHANNEL_REGISTER_V1.md`](../gtm/CHANNEL_REGISTER_V1.md) | Kanalregister |
+- Unprefixed DE-Default (`LOCALE-DE-STANDARD`)  
+- hreflang / canonical auf www  
+- In GSC Performance-Filter: Land = Deutschland prüfen  
 
-## Agent-Checkliste (kein Login nötig)
+---
+
+## E-Mail-Notifications (Human)
+
+GSC → Einstellungen → **E-Mail-Einstellungen** (Owner `nexify.login@gmail.com`):
+
+- [ ] Alle wichtigen Issue-Typen (Coverage, Security, Manual Actions, CWV, …)  
+- [ ] Empfänger = Owner-Inbox (nicht nur Alias ohne Postfach)  
+
+---
+
+## Secondary owners / Verify
+
+Einstellungen → Nutzer und Berechtigungen / Eigentumsbestätigung:
+
+1. Optional: zweite Person als Owner/Full  
+2. Backup-Verify: GA4 / GTM / HTML-Tag (DNS bleibt SoT)  
+
+---
+
+## Bing Webmaster + IndexNow (kostenlos)
+
+### Bing Webmaster Tools
+
+1. https://www.bing.com/webmasters → Site hinzufügen `https://www.nexifyai.cloud`  
+2. Verify: **DNS CNAME/TXT** oder „Import from Google Search Console“ (gleiche Google-Owner-Session)  
+3. Sitemap: `https://www.nexifyai.cloud/sitemap.xml`  
+
+### IndexNow (Repo bereit)
+
+- Public key file: `https://www.nexifyai.cloud/a56f374489e943c9a2b9066f5d1fca66.txt`  
+- Key = Basename der `.txt`-Datei unter `apps/website/public/` (öffentlich by design / IndexNow, kein Secret)  
+- Nach Deploy: in Bing Webmaster IndexNow aktivieren / API ping optional  
+- Kein neues Paid-SaaS  
+
+---
+
+## Search Console API (OAuth — Pascal, einmalig)
+
+**Stand 2026-08-02:** Keine GSC OAuth-Creds unter `/etc/nexifyai/` / gcloud auf dem VPS. Agenten können Sitemap **nicht** via API listen/submitten.
+
+**Einmalig (Pascal):**
+
+1. Google Cloud Console → Projekt (oder neu) → Enable **Search Console API**  
+2. OAuth Client (Desktop oder Web) — Client-ID/Secret nur in Secret-Store (`/etc/nexifyai/…`), **nie Git**  
+3. Scope: `https://www.googleapis.com/auth/webmasters` (readonly reicht für Reports; write für Sitemap submit)  
+4. Token lokal speichern; Agent-Skript später: `sitemaps.list` / `sitemaps.submit`  
+
+Bis dahin: Human UI für Inspection + Prefs.
+
+---
+
+## Structured data — Rich Results Test (Seitenliste)
+
+Tool: https://search.google.com/test/rich-results  
+
+| URL | Erwartete Typen |
+|-----|-----------------|
+| `/` | ProfessionalService / LocalBusiness |
+| `/leistungen` | BreadcrumbList + OfferCatalog (Service/Offer) |
+| `/preise` | BreadcrumbList |
+| `/faq` | FAQPage + BreadcrumbList |
+| `/wissen/{slug}` | Article + BreadcrumbList |
+| `/venlo` | LocalBusiness / Place (wenn vorhanden) |
+| Legal (`/impressum`, …) | WebPage + BreadcrumbList |
+| `/prozess`, `/vergleich`, `/referenzen`, … | BreadcrumbList |
+
+Nach großen Schema-PRs: Home + Leistungen + FAQ + 1 Wissen-Artikel testen.
+
+---
+
+## Google Business Profile (#237)
+
+Cross-Link: GBP Website-URL = `https://www.nexifyai.cloud/?utm_source=google&utm_medium=organic&utm_campaign=gbp` (NAP exakt aus `docs/gtm/NAP_MASTER_V1.md`). Verifizieren + Posts: Issue #237 / `docs/gtm/GBP-OPS-CHECKLIST.md`.
+
+---
+
+## Removals / Crawl stats
+
+- **Removals:** nur bei echten Leak-/Rechts-URLs — nicht für Soft-404-Kosmetik  
+- **Crawl-Statistiken:** bei Indexierungs-Drops prüfen (Host-Last, 5xx)  
+
+---
+
+## Verwandte Issues
+
+| Issue | Rolle |
+|-------|--------|
+| #238 | Sitemap submitted — **CLOSED** |
+| #243 | URL-Inspection + E-Mail-Prefs — Human clicks |
+| #245 | Weekly coverage — recurring |
+| #210 | WhatsApp bleibt offen; GSC DONE |
+| #237 | GBP verify + posts |
+| #249 | Docs Ownership PR (parallel) |
+
+---
+
+## Agent-Checkliste (kein Login)
 
 ```bash
 dig +short TXT nexifyai.cloud @1.1.1.1 | grep google-site-verification
 curl -sS -o /dev/null -w "%{http_code} %{content_type}\n" https://www.nexifyai.cloud/sitemap.xml
 curl -sS https://www.nexifyai.cloud/robots.txt
 curl -sS -A 'Googlebot' -o /dev/null -w "%{http_code}\n" https://www.nexifyai.cloud/
+curl -sS -o /dev/null -w "%{http_code} %{content_type}\n" https://www.nexifyai.cloud/llms.txt
+curl -sS https://www.nexifyai.cloud/a56f374489e943c9a2b9066f5d1fca66.txt
+# Soft-404 smoke (sollte 404 sein nach Deploy, nicht 200+Homepage):
+curl -sS -o /dev/null -w "%{http_code}\n" https://www.nexifyai.cloud/branchen
 ```

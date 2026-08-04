@@ -3,102 +3,96 @@
   "archetype": "5 (Luxury)",
   "mood": "Mega elegant, extreme high-quality, modern, impressive (WoW effect)",
   "brand_name": "NeXify AI",
+  "source_of_truth": "Anhang: NeXify Homepage.dc.html (Nexify Agentur Plattform Redesign_707) — dc.html ist verbindlich, dieses File ist dessen maschinenlesbare Extraktion",
   "typography": {
     "headings": {
       "fontFamily": "Outfit, sans-serif",
-      "weights": ["300", "500", "700"],
-      "classes": "tracking-tight text-white",
-      "h1": "text-4xl sm:text-5xl lg:text-6xl font-light",
-      "h2": "text-2xl sm:text-3xl lg:text-4xl font-medium",
-      "h3": "text-xl sm:text-2xl font-medium"
+      "weights": ["300", "500", "600", "700"],
+      "h1": "font-light, letter-spacing:-0.02em, line-height:1.06, clamp(2.4rem,5vw,4.6rem)",
+      "h2": "font-light, letter-spacing:-0.02em, clamp(1.7rem,3vw,2.4rem)",
+      "h3": "font-medium, 16-19px"
     },
     "body": {
       "fontFamily": "Manrope, sans-serif",
-      "classes": "text-zinc-400 leading-relaxed",
-      "base": "text-base md:text-lg",
-      "small": "text-sm text-zinc-500 uppercase tracking-[0.2em]"
+      "base": "17px, line-height:1.7, font-weight:300, color:#a1a1aa",
+      "small": "11px, uppercase, letter-spacing:0.28em, color:#9E9E9E"
     }
   },
   "colors": {
     "background": "#0A0A0A",
     "surface": "rgba(255, 255, 255, 0.03)",
-    "surface_border": "rgba(255, 255, 255, 0.1)",
-    "accent_primary": "#E0E0E0",
-    "accent_secondary": "#9E9E9E",
+    "surface_cell": "#0c0c0f",
+    "surface_border": "rgba(255, 255, 255, 0.08)",
+    "accent_primary": "#C8FF00",
+    "accent_secondary": "#e9ff8a",
+    "accent_gradient": "linear-gradient(120deg,#C8FF00,#eaffb0 50%,#C8FF00)",
+    "accent_shimmer": "linear-gradient(120deg,#C8FF00 0%,#f4ffcf 30%,#8fce00 55%,#C8FF00 100%)",
+    "accent_glow": "rgba(200,255,0,0.05)",
+    "accent_border": "rgba(200,255,0,0.25)",
     "text_primary": "#FFFFFF",
-    "text_secondary": "#A1A1AA"
+    "text_secondary": "#A1A1AA",
+    "text_muted": "#71717a",
+    "text_faint": "#585858",
+    "selection": "rgba(200,255,0,0.25)",
+    "scrollbar_thumb": "#26261a"
   },
   "layout": {
-    "spacing_scale": "p-4, p-8, p-12, p-24, p-32",
-    "container_padding": "px-6 lg:px-12",
-    "grid_strategy": "Bento Grid (Mode A) for marketing sections. Asymmetrical spans, gap-8 to gap-12."
+    "container": "width:min(1280px, calc(100% - 48px)); margin-inline:auto",
+    "section_padding": "24px 0 96px (top=24px bei Anker-Sektionen, 96px unten)",
+    "grid_gap_cells": "gap:1px; background:rgba(255,255,255,0.1) (Stats/Prozess)",
+    "breakpoint": "1080px — Hero/Preise/Über uns → 1col; 3col/Services/Prozess/Stats → 2col; Desktop-Nav aus, Mobile-Toggle an"
   },
   "surface_styles": {
-    "cards": "bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:-translate-y-1 hover:border-white/20 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
-    "header": "fixed top-0 w-full z-50 bg-black/60 backdrop-blur-2xl border-b border-white/10",
-    "buttons_primary": "bg-gradient-to-r from-gray-200 via-white to-gray-200 text-black font-semibold rounded-full px-8 py-3 hover:scale-105 transition-transform flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+    "cards": "background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:26-32px",
+    "cards_grid_cell": "background:#0c0c0f; border-radius:0 (durch Container radius 20px)",
+    "header": "position:fixed; background:rgba(10,10,10,0.72); backdrop-filter:blur(20px) saturate(160%); border-bottom:1px solid rgba(255,255,255,0.08); height:76px",
+    "buttons_primary": "border-radius:999px; background:linear-gradient(120deg,#C8FF00,#eaffb0 50%,#C8FF00); color:#0A0A0A; font-weight:700; box-shadow:0 0 22-28px rgba(200,255,0,0.25-0.28)",
+    "buttons_secondary": "border-radius:999px; border:1px solid rgba(255,255,255,0.18); color:#fff; font-weight:600",
+    "glass_panel": "background:rgba(0,0,0,0.6); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.15); border-radius:16px",
+    "input": "border:1px solid rgba(255,255,255,0.1); border-radius:12px; background:rgba(255,255,255,0.03); color:#fff; padding:11px 14px"
+  },
+  "animations": {
+    "nx-shimmer": "to { background-position: 200% center; } 8s linear infinite (Headline)",
+    "nx-float": "translateY(0→-14px→0) 6s ease-in-out infinite (Floating Cards, delay 0/1.5s)",
+    "nx-pulsering": "scale(0.85→2.1), opacity(1→0) 2.6s cubic-bezier(0.22,1,0.36,1) infinite (Chat-Launcher)",
+    "nx-marquee": "translateX(0→-50%) 34s linear infinite",
+    "nx-fadeup": "opacity 0→1, translateY(26px→0)",
+    "nx-typing": "opacity 0.25→1, translateY(0→-3px) 1.2s infinite (dots 0/0.15s/0.3s)",
+    "nx-bubblein": "opacity 0→1, translateY(12px→0) scale(0.9→1) 0.3s cubic-bezier(0.22,1,0.36,1) (Chat-Panel)"
   },
   "components": {
-    "proactive_ai_chat": "Floating crystal glassmorphism widget (bottom right). Uses Shadcn Popover/Dialog. Incorporate a silver pulse effect. Must simulate proactively offering and creating proposals for clients.",
-    "language_switcher": "Shadcn DropdownMenu in the header. Toggle between DE and NL. State must reflect globally across all text.",
-    "pricing_calculator": "Shadcn Slider and Input components inside a technical, high-end Bento grid card. Real-time updates for cost savings/ROI.",
-    "legal_pages": "Dense, clean text layouts. Left-aligned, readable max-w-3xl containers with generous line-height."
+    "proactive_ai_chat": "EXAKT Anhang. Launcher: fixed right:24px bottom:24px, 60x60px rund, border:1px solid rgba(200,255,0,0.3), background:linear-gradient(135deg,#1c1c20,#101013), KEIN Icon — 9px Lime-Punkt + Puls-Ring (nx-pulsering, inset:-5px, border rgba(200,255,0,0.35)). Panel: fixed right:24px bottom:96px, width:min(380px, calc(100vw-32px)), height:min(520px, calc(100vh-140px)), border-radius:22px, border:1px solid rgba(200,255,0,0.15), background:rgba(14,14,17,0.94), backdrop-filter:blur(28px), animation:nx-bubblein. Header: 8px Lime-Punkt + 'NeXify KI Berater', Close '×'. Nachrichten: max-width:82%, radius:14px, Bot background:rgba(255,255,255,0.06) color:#e5e5e5, User background:linear-gradient(120deg,#C8FF00,#eaffb0) color:#0A0A0A. Typing: 3 Dots (6px, #a1a1aa, nx-typing). Input: placeholder 'Ihre Nachricht...', radius 12. Send: 42x42px radius 12, bg #C8FF00, Text '→' (KEIN Icon). Auto-Open: 4200ms (chatAutoOpen, default true). Begrüßung: 'Hallo! Ich sehe, Sie schauen sich unsere Leistungen an, soll ich Ihnen direkt eine erste Einschätzung für Ihr Projekt erstellen?'. Sim-Antwort nach 1300ms: 'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag.'. VERBOTEN: lucide-icons, Emojis, Quick-Replies, 'Online'-Statuszeile, Sparkles.",
+    "language_switcher": "Header-Sprachumschalter DE/NL (bestehende [locale]-Struktur beibehalten)",
+    "pricing_calculator": "Slider 1-20 Tage (default 5), Tagessatz 449, Betreuung 249/Monat (Checkbox, default an), Total = days*449 de-DE formatiert, Fill: linear-gradient(90deg,#C8FF00 fillPct, #27272a fillPct). CTA 'Angebot anfragen'. data-testids: pricing-slider, maintenance-toggle, pricing-total, pricing-cta",
+    "legal_pages": "Dense, clean text layouts. Left-aligned, readable max-w-3xl containers with generous line-height (bestehende Struktur, Theme übernehmen)"
   },
-  "media": {
-    "hero_backgrounds": [
-      {
-        "url": "https://images.unsplash.com/photo-1709377058964-929af7f2d02f",
-        "description": "Dark Silver Wavy Lines for main hero section background",
-        "category": "hero"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1517241034903-9a4c3ab12f00",
-        "description": "Black and white wavy shapes for secondary sections",
-        "category": "background"
-      }
-    ],
-    "tech_visuals": [
-      {
-        "url": "https://images.unsplash.com/photo-1716436329836-208bea5a55e6",
-        "description": "AI chip, good for platform overview",
-        "category": "platform"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1716436330152-a58390897652",
-        "description": "AI node close up for process/services",
-        "category": "services"
-      }
-    ],
-    "corporate_office": [
-      {
-        "url": "https://images.unsplash.com/photo-1610900347586-df4a2de5331d",
-        "description": "Modern dark corporate office architecture for 'About Us' section",
-        "category": "about"
-      }
-    ]
-  },
+  "logo": "SVG-Mark 34x34px: 2 senkrechte Rechtecke (4.4x22px, rx1) + Polygon (6,6 11.5,6 28,28 22.5,28), Gradient #d4d4d8→#fafafa, auf Container radius:10px bg:linear-gradient(155deg,#18181c,#0a0a0c) border rgba(255,255,255,0.1). Lime-Punkt 9px oben-rechts (top:-3px right:-3px, box-shadow 0 0 8px + 0 0 0 3px #0A0A0A). Wortmarke: 'NeXify' Outfit 600 17px + 'AI' 300 #9E9E9E",
   "pages_structure": [
-    "Hero/Homepage (WOW effect, immersive silver dark theme, dynamic text)",
-    "Services / Leistungen (Extensive details, bento layout cards)",
-    "Pricing & Calculator / Preise (Interactive sliders to calculate ROI/Costs)",
-    "Platform / Plattformübersicht (Visual tech breakdown)",
-    "Process / Prozess (Step-by-step timeline execution)",
-    "References / Referenzen (Testimonials in crystal glass cards)",
-    "Knowledge/Blog / Wissen (Grid of articles with silver hover effects)",
-    "FAQ (Shadcn Accordion)",
-    "About / Über uns (Agency background, mission, corporate imagery)",
-    "Contact / Kontakt (Shadcn Forms, dark elegant inputs)",
-    "Legal Pages (Impressum, AGB, Datenschutz, AVV, Widerruf, Cookie-Richtlinie, KI-Hinweise)"
+    "Header (fixed, Logo+NX, Nav: Leistungen/Preise/Prozess/Referenzen/Über uns/FAQ, CTA 'Gespräch buchen', Mobile-Burger)",
+    "Hero #top (Grid-BG 72px, Badge 'KI Automatisierung, Live Betrieb', H1 'Ihr Unternehmen. Auf Autopilot.' mit Shimmer, Subtext, Dual-CTA 'Kostenloses Erstgespräch'/'Leistungen ansehen', 3D-Visual: Icosahedron-Wireframe 1.58 #C8FF00 + Core 1.55 + Lime-Nodes + PointLight #C8FF00, Floating Cards 'KI Berater aktiv DE & NL' + 'Richtwert: 1 bis 3 Tage · € 449/Umsetzungstag')",
+    "Stats-Bar (4: 340+, 1 bis 3 Tage, 24/7, DE / NL — grid gap:1px Zellen #0c0c0f)",
+    "Marquee-Band (8 Items, nx-marquee 34s, uppercase 0.24em #52525b: KI Agenten, Prozessautomatisierung, Terminbuchung, Angebotserstellung, E Mail Triage, Leadqualifizierung, Reporting, Wissensdatenbank)",
+    "Pillars 'Warum NeXify' (3: Messbar statt Marketing, Betrieb statt Prototyp, Transparent statt Blackbox)",
+    "Services 'Leistungen' (8 Bausteine, 4-col mit span: Chat Agent span2, Terminbuchung, E Mail Triage, Angebots Generator, CRM span2, Wissensdatenbank, Reporting, Monitoring; Days-Chips exakt Anhang)",
+    "Prozess (5 Schritte 01-05: Erstgespräch, Konzept, Umsetzung, Go Live, Betrieb; Nummern #585858, Lime-Linie 22x2px)",
+    "Preise (Slider 1-20, Betreuung 249, Total days*449, CTA 'Angebot anfragen')",
+    "Referenzen (3 Testimonials, exakte Zitate)",
+    "Über uns (NX-Badge 96px, 'Gebaut von Praktikern, nicht von Buzzwords.')",
+    "FAQ (5 Fragen, details/summary Accordion, exakte Q/A)",
+    "CTA-Band #kontakt ('Lassen Sie uns Ihren ersten Agenten bauen.', Button 'Termin anfragen', Glow-Ellipse blur 100px)",
+    "Footer (4 Spalten: Brand 'chat it. automate it. KI-Automatisierung für Betriebe im DACH- und NL-Raum.' / Unternehmen / Produkt / Recht; © 2026 NeXify AI)",
+    "Chat-Widget (fixed rechts unten, exakt Anhang)"
   ],
+  "pricing": { "day_rate": 449, "maintenance_monthly": 249, "slider_min": 1, "slider_max": 20, "slider_default": 5, "currency": "EUR", "format": "de-DE" },
+  "data_testids": ["logo", "header-cta", "mobile-nav-toggle", "mobile-nav-menu", "hero-badge", "hero-cta", "hero-cta-secondary", "hero-visual", "hero-stats", "pricing-slider", "maintenance-toggle", "pricing-total", "pricing-cta", "cta-band", "cta-band-btn", "chat-launcher", "chat-panel", "chat-input", "chat-send"],
   "instructions_to_main_agent": [
-    "Implement a 'mega edles Darkdesign' (mega luxury dark design) using Archetype 5 (Luxury) principles.",
-    "Rebrand as 'NeXify AI'. Create a purely typographic, high-end logo in the header using the 'Outfit' font with a subtle silver gradient.",
-    "Ensure full bilingual structure (DE/NL) using a context provider or i18n library. The language switcher must work seamlessly.",
-    "Build an interactive pricing calculator using Shadcn UI components. Ensure sliding values dynamically update the final price.",
-    "Build the proactive AI live chat widget. It must feel 'alive'—perhaps popping up after a few seconds with a personalized offer generation hook.",
-    "Use generous padding (py-24, py-32) for sections to allow the dark luxury theme to breathe. Never cram content.",
-    "Use 'lenis' for smooth scrolling to give the site a premium momentum feel.",
-    "All interactive elements MUST include a 'data-testid' attribute (e.g., data-testid='lang-switcher-de', data-testid='hero-cta').",
-    "Avoid standard Shadcn Vercel-like borders. Override them with 'border-white/10' and 'bg-white/5' for true glassmorphism."
+    "Design-Übernahme EXAKT aus Anhang 'NeXify Homepage.dc.html' — keine eigenen Ideen, keine neuen Icons, keine neuen Farben.",
+    "Implement 'mega edles Darkdesign' (Archetype 5 Luxury): #0A0A0A Background, #C8FF00 Neon-Lime Akzent, Outfit (Headings) + Manrope (Body).",
+    "Chat-Widget: KEINE lucide-react Icons, KEINE Emojis, KEINE Quick-Reply-Chips, KEINE 'Online'-Statuszeile. Launcher = Punkt + Puls-Ring, Send = '→'.",
+    "Alle interaktiven Elemente MÜSSEN data-testid aus der data_testids-Liste tragen.",
+    "Inhalte (Stats, Services, Prozess, Referenzen, FAQ, Preise 449/249) 1:1 aus Anhang übernehmen — keine Texterfindung.",
+    "3D-Hero: Three.js Icosahedron-Wireframe (#C8FF00, opacity 0.85), Core #0d0d10 metallic, Nodes 0.05, PointLight #C8FF00 intensity 5.5+sin(t*2), Pointermove-Interaktion, ResizeObserver.",
+    "Responsive: Breakpoint 1080px exakt nach Anhang (Grid-Umbrüche + Mobile-Nav).",
+    "Verbotene Icon-Bibliotheken im Chat: lucide-react. Gesamtseite: nur SVG-Geometrie wie im Anhang."
   ]
 }
