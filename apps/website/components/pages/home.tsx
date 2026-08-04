@@ -1,7 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Hero3D } from '@/components/hero-3d';
+import dynamic from 'next/dynamic';
+
+// Three.js ist browser-only (WebGL) → kein SSR, vermeidet Hydration-Mismatch
+const Hero3D = dynamic(() => import('@/components/hero-3d').then((m) => m.Hero3D), { ssr: false });
 
 /* ============================================================
  * Daten — 1:1 aus Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark)
