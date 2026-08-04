@@ -29,10 +29,6 @@ const nextConfig: NextConfig = {
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         { key: "X-XSS-Protection", value: "1; mode=block" },
         {
-          // Pragmatic CSP: keeps Next.js' inline bootstrap and the inline JSON-LD
-          // working (no nonce infra yet, so 'unsafe-inline' is required), while
-          // locking down the high-value directives. Tighten script-src to a nonce
-          // once a CSP nonce is wired through middleware.
           key: "Content-Security-Policy",
           value: [
             "default-src 'self'",
@@ -52,22 +48,39 @@ const nextConfig: NextConfig = {
     },
     {
       source: "/fonts/(.*)",
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    },
+    {
+      source: "/llms.txt",
       headers: [
-        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
+    {
+      source: "/.well-known/llms.txt",
+      headers: [
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
+    {
+      source: "/llm.txt",
+      headers: [
+        { key: "Content-Type", value: "text/plain; charset=utf-8" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
       ],
     },
   ],
   redirects: async () => [
-    // PR47 / Emergent SoT: marketing pages are UNPREFIXED (`/preise`, …).
-    // Prior permanent redirects to `/de/*` forced the alternate `[locale]` tree
-    // and suppressed the Emergent HomePage (Digitale Exzellenz / HeroVisual).
-    // Locale-prefixed URLs are stripped in middleware → unprefixed destinations.
+    // Locale-prefixed → unprefixed (Seiten existieren direkt, nicht in [locale])
     { source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false },
-    // Legacy aliases → Emergent unprefixed paths (not /de/*)
+    // EN/NL main pages redirect to direct DE versions (keine locale-Varianten)
+    { source: "/:locale(en|nl)/:page(wissen|status|security|barrierefreiheit|sla|botschafter|branchen|checkliste|ki-agentur|partner|sprechstunde|venlo|alternativen|audit|danke)", destination: "/:page", permanent: false },
+    // Legacy aliases → Emergent unprefixed paths
     { source: "/arbeitsweise", destination: "/prozess", permanent: true },
     { source: "/ueber-pascal", destination: "/ueber-mich", permanent: true },
     { source: "/projekte", destination: "/referenzen", permanent: true },
-    // Soft-404 aliases → real pages (were homepage soft-404 via /[locale])
     { source: "/hilfe", destination: "/faq", permanent: true },
     { source: "/help", destination: "/faq", permanent: true },
     { source: "/docs", destination: "/wissen", permanent: true },
@@ -76,15 +89,9 @@ const nextConfig: NextConfig = {
     { source: "/dpa", destination: "/avv", permanent: true },
     { source: "/thank-you", destination: "/danke", permanent: true },
     { source: "/thanks", destination: "/danke", permanent: true },
-    // Calendly proxy — keeps link domain nexifyai.cloud, avoids spam-filter mismatch
     { source: "/demo-call", destination: "https://calendly.com/pascal-courbois/30min", permanent: false },
   ],
   rewrites: async () => {
-    // Prefer explicit app/api/* route handlers (contact, offers, planner, chat,
-    // catch-all auth proxy). A blanket rewrite to an empty/invalid
-    // BACKEND_ORIGIN produced Vercel DNS_HOSTNAME_EMPTY 502s for /api/auth/*
-    // and /api/chat/* in production. Only rewrite when the origin parses to a
-    // real http(s) hostname — and never shadow local handlers for known paths.
     const rewrites: { source: string; destination: string }[] = [
       { source: "/docs/vollbetrieb", destination: "/docs/vollbetrieb.md" },
     ];
@@ -97,8 +104,6 @@ const nextConfig: NextConfig = {
       usable = false;
     }
     if (usable) {
-      // Paths without dedicated Next handlers still reach FastAPI via rewrite.
-      // Handlers that exist under app/api/* take filesystem precedence in Next.
       rewrites.push({ source: "/api/:path*", destination: `${origin}/api/:path*` });
     }
     return rewrites;
