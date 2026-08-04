@@ -26,7 +26,8 @@ export function StickyCta() {
       <div className="pointer-events-auto mx-auto flex max-w-lg gap-2 pr-[4.75rem]">
         <Link
           href="/rueckruf"
-          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-[#C8FF00] px-4 py-3 text-sm font-medium text-[#0A0A0A] shadow-[0_8px_32px_rgba(200,255,0,.35)]"
+          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-[#C8FF00] px-4 py-3 text-sm font-medium shadow-[0_8px_32px_rgba(200,255,0,.35)]"
+          style={{ color: '#0A0A0A' }}
           data-testid="sticky-cta-link"
         >
           {lang === "en" ? "Book call" : lang === "nl" ? "Gesprek boeken" : "Termin buchen"}{" "}
