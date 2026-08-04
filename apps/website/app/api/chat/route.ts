@@ -1,5 +1,6 @@
-// /api/chat — Live Chat via 9Router (DeepSeek-Reasoner)
+// /api/chat — Live Chat via 9Router (DeepSeek-Reasoner + Think-Max)
 // i18n: language-Parameter steuert System-Prompt + Antwort-Sprache
+// Env: NINEROUTER_ENDPOINT, NINEROUTER_API_KEY
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
