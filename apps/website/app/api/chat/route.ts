@@ -1,4 +1,5 @@
 // /api/chat — Live AI Chat via 9Router (DeepSeek-Reasoner + Think-Max)
+// Env: NINEROUTER_ENDPOINT, NINEROUTER_API_KEY
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,10 @@ const SYSTEM_PROMPT = `Du bist der KI-Berater von NeXify AI — Premium-Agentur 
 Deine Rolle: Beantworte Fragen präzise und ehrlich. Biete bei ernsthaftem Interesse einen Rückruf an: https://www.nexifyai.cloud/rueckruf. Maximal 3-4 Sätze. Kein Marketing. Keine erfundenen Referenzen.`;
 
 export async function POST(request: Request) {
+  if (!AI_API_KEY) {
+    return Response.json({ reply: "Unser KI-Berater ist in Kürze für Sie da. Buchen Sie direkt einen Rückruf: https://www.nexifyai.cloud/rueckruf" });
+  }
+
   try {
     const { message } = await request.json();
     if (!message?.trim()) return Response.json({ reply: "Bitte stellen Sie eine Frage." });
