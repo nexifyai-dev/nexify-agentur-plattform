@@ -1,6 +1,154 @@
-# FILE: .github/workflows/pr-auto-merge.yml
+﻿# FILE: .github/workflows/pr-auto-merge.yml
 # NIR: 02.08.2026 08:25
 # UPDATED: 04.08.2026 07:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
-# WHAT: Label-basiertes Auto-Merge — Draft->ready wenn green, dann squash au...[truncated]
+# WHAT: Label-basiertes Auto-Merge - Draft->ready wenn green, dann squash auto-merge.
+# WHY: Fix #135: Draft + automerge darf nicht ewig warten; kein Force-Main.
+# BEST-PRACTICE: Nur Squash+Auto-Merge API; do-not-merge/base!=main blocken.
+# PITFALL: V-AM-01: Ohne required checks ist enableAutoMerge wirkungslos -> Branch Protection noetig.
+# PITFALL: V-AM-02 (fix 03.08): mergeStateStatus=BEHIND blockiert Auto-Merge endlos, wenn
+#   Branch Protection "Require branches up to date" aktiv - Branch-Update muss explizit getriggert
+#   werden (POST /pulls/{n}/update-branch), sonst bleibt der PR ewig offen.
+# PITFALL: V-AM-03 (fix 04.08): `gh pr view --json mergeableState` ist KEIN gueltiges Feld der
+#   gh-CLI-JSON-API (korrekt: mergeStateStatus). Mit `set -euo pipefail` brach der Schritt sofort
+#   ab, Auto-Merge lief NIE - workflow_run laedt IMMER main, PR-Branch-Fixes wirkten nie.
+# DEPENDS: Repo Settings -> Rulesets/Branch protection (required status checks)
+# DOCS-REF: docs/operations/CLOUD-AGENT-EVENT-INGEST.md
+# SESSION: no-confirmation-agent-ops-7dd5
+# Closes: #135
+
+name: PR Auto-Merge (label-gated)
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, synchronize, opened, reopened, ready_for_review]
+  check_suite:
+    types: [completed]
+  workflow_run:
+    workflows: ["CI — Test & Lint"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+concurrency:
+  group: pr-auto-merge-${{ github.event.pull_request.number || github.event.workflow_run.pull_requests[0].number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  enable-automerge:
+    if: github.repository == 'nexifyai-dev/nexify-agentur-plattform'
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Berlin
+    steps:
+      - name: Resolve PR number
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          WR_PRS: ${{ toJson(github.event.workflow_run.pull_requests) }}
+        run: |
+          set -euo pipefail
+          number=""
+          if [ -n "${PR_NUMBER:-}" ]; then
+            number="$PR_NUMBER"
+          elif [ "$EVENT_NAME" = "workflow_run" ]; then
+            number="$(printf '%s' "$WR_PRS" | jq -r '.[0].number // empty')"
+          fi
+          if [ -z "$number" ]; then
+            echo "no_pr=1" >> "$GITHUB_OUTPUT"
+            echo "No PR context — skip"
+            exit 0
+          fi
+          echo "no_pr=0" >> "$GITHUB_OUTPUT"
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Gate, ready draft, update branch, enable auto-merge
+        if: steps.pr.outputs.no_pr == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.pr.outputs.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          meta="$(gh pr view "$PR" --repo "$REPO" --json number,isDraft,baseRefName,labels,title,state,mergeable,mergeStateStatus,statusCheckRollup)"
+          echo "$meta" | jq '{number,isDraft,baseRefName,state,mergeable,mergeStateStatus,labels:[.labels[].name]}'
+
+          state="$(echo "$meta" | jq -r .state)"
+          is_draft="$(echo "$meta" | jq -r .isDraft)"
+          base="$(echo "$meta" | jq -r .baseRefName)"
+          labels="$(echo "$meta" | jq -r '[.labels[].name] | join(",")')"
+          mergeable_state="$(echo "$meta" | jq -r .mergeStateStatus)"
+
+          if [ "$state" != "OPEN" ]; then
+            echo "skip: PR not open"
+            exit 0
+          fi
+          if [ "$base" != "main" ]; then
+            echo "skip: base branch '$base' not allowlisted"
+            exit 0
+          fi
+          if echo "$labels" | tr ',' '\n' | grep -qx 'do-not-merge'; then
+            echo "skip: do-not-merge label"
+            gh pr merge "$PR" --repo "$REPO" --disable-auto || true
+            exit 0
+          fi
+          if ! echo "$labels" | tr ',' '\n' | grep -Eqx 'automerge|auto-merge'; then
+            echo "skip: missing automerge/auto-merge label"
+            exit 0
+          fi
+
+          # Fail closed on known failing checks when rollup present
+          failing="$(echo "$meta" | jq -r '
+            [.statusCheckRollup[]?
+              | select(.conclusion != null and .conclusion != "SUCCESS" and .conclusion != "NEUTRAL" and .conclusion != "SKIPPED")
+              | .name] | unique | join(", ")')"
+          if [ -n "$failing" ]; then
+            echo "skip: failing checks: $failing"
+            exit 0
+          fi
+
+          # Pending/incomplete checks: wait
+          pending="$(echo "$meta" | jq -r '
+            [.statusCheckRollup[]?
+              | select(.conclusion == null or .status == "IN_PROGRESS" or .status == "QUEUED" or .status == "PENDING")
+              | .name] | unique | join(", ")')"
+          if [ -n "$pending" ]; then
+            echo "skip: checks still pending: $pending"
+            exit 0
+          fi
+
+          # Fix #135: draft + automerge + green -> mark ready (no human)
+          if [ "$is_draft" = "true" ]; then
+            echo "draft->ready for #$PR (automerge + checks green)"
+            gh pr ready "$PR" --repo "$REPO"
+          fi
+
+          # V-AM-02 fix: branch behind main blocks auto-merge under
+          # "Require branches up to date". Trigger an explicit branch update
+          # (POST /pulls/{n}/update-branch). The resulting `synchronize` event
+          # re-runs this workflow once CI completes.
+          if [ "$mergeable_state" = "BEHIND" ]; then
+            echo "behind: triggering branch update for #$PR"
+            gh api --method PUT "repos/$REPO/pulls/$PR/update-branch" -f update_method=merge --jq '.message // "updated"' || true
+            exit 0
+          fi
+
+          if [ "$mergeable_state" = "BLOCKED" ]; then
+            echo "skip: merge blocked (mergeStateStatus=BLOCKED)"
+            exit 0
+          fi
+
+          # Enable GitHub native auto-merge (squash). Requires repo auto-merge + branch protection.
+          if gh pr merge "$PR" --repo "$REPO" --auto --squash; then
+            echo "auto-merge enabled for #$PR"
+          else
+            echo "::warning::Could not enable auto-merge (check: Settings -> General -> Allow auto-merge + branch protection required checks)"
+            exit 0
+          fi
