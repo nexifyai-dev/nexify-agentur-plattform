@@ -86,7 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "@type": "Offer",
       price: String(company.dayRate),
       priceCurrency: "EUR",
-      description: "Tagessatz netto pro Umsetzungstag — 449 Euro netto — € 449 / Arbeitstag netto",
+      description: "Tagessatz netto pro Umsetzungstag",
       unitText: "DAY",
     },
   };
