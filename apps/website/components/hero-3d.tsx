@@ -119,8 +119,8 @@ export function Hero3D() {
       camera.position.set(0, 0, 6.2);
 
       const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      r.setSize(width, height, false);
+      r.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 2));
+      r.setSize?.(width, height, false);
       renderer = r;
 
       const group = new THREE.Group();
@@ -180,7 +180,7 @@ export function Hero3D() {
         group.rotation.y = t * 0.22 + pointer.x * 0.4;
         group.rotation.x = Math.sin(t * 0.3) * 0.15 + pointer.y * 0.3;
         limeLight.intensity = 5.5 + Math.sin(t * 2) * 1.2;
-        r.render(scene, camera);
+        r.render?.(scene, camera);
         raf = requestAnimationFrame(animate);
       };
       animate();
@@ -190,8 +190,8 @@ export function Hero3D() {
         const h = canvas.clientHeight;
         if (!w || !h) return;
         camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        r.setSize(w, h, false);
+        camera.updateProjectionMatrix?.();
+        r.setSize?.(w, h, false);
       });
       resizeObserver.observe(canvas);
     })();
