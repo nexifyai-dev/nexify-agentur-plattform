@@ -35,7 +35,7 @@
   background: linear-gradient(90deg, transparent, #C8FF00) !important;
 }
 
-/* ── Range-Slider (Alt .range-silver): Lime-Fill + Thumb ── */
+/* ── Range-Slider (Alt .range-silver): Lime-Fill + Thumb (WebKit + Firefox) ── */
 .range-silver {
   background: linear-gradient(90deg, #C8FF00 var(--fill, 50%), #27272a var(--fill, 50%)) !important;
 }
@@ -43,6 +43,17 @@
   background: linear-gradient(135deg, #eaffb0, #C8FF00) !important;
   border-color: rgba(200, 255, 0, 0.8) !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 14px rgba(200, 255, 0, 0.45) !important;
+}
+.range-silver::-moz-range-track {
+  background: linear-gradient(90deg, #C8FF00 var(--fill, 50%), #27272a var(--fill, 50%)) !important;
+}
+.range-silver::-moz-range-thumb {
+  background: linear-gradient(135deg, #eaffb0, #C8FF00) !important;
+  border-color: rgba(200, 255, 0, 0.8) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 14px rgba(200, 255, 0, 0.45) !important;
+}
+.range-silver::-moz-range-progress {
+  background: #C8FF00 !important;
 }
 
 /* ── Glass-Hover: Lime-Border statt weiß ── */
