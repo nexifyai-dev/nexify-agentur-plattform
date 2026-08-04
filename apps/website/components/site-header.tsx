@@ -196,7 +196,7 @@ export function SiteHeader() {
               height: 38,
               borderRadius: 999,
               border: '1px solid rgba(255,255,255,0.15)',
-              color: '#a1a1aa',
+              color: '#e5e5e5',
             }}
           >
             <UserRound size={15} />
@@ -228,7 +228,6 @@ export function SiteHeader() {
             onClick={() => setOpen((s) => !s)}
             data-testid="mobile-nav-toggle"
             style={{
-              display: 'none',
               alignItems: 'center',
               justifyContent: 'center',
               width: 40,
