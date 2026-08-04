@@ -15,6 +15,7 @@ const T = {
     companyLinks: [
       { label: 'Über uns', href: '/ueber-mich' },
       { label: 'Referenzen', href: '/referenzen' },
+      { label: 'Karriere', href: '/karriere' },
       { label: 'Kontakt', href: '/kontakt' },
     ],
     productLinks: [
@@ -24,6 +25,7 @@ const T = {
       { label: 'FAQ', href: '/faq' },
       { label: 'Wissen', href: '/wissen' },
       { label: 'Plattform', href: '/plattform' },
+      { label: 'API Docs', href: 'https://api.nexifyai.cloud/docs', external: true },
     ],
     legalLinks: [
       { label: 'Impressum', href: '/impressum' },
@@ -48,6 +50,7 @@ const T = {
     companyLinks: [
       { label: 'About', href: '/ueber-mich' },
       { label: 'References', href: '/referenzen' },
+      { label: 'Careers', href: '/karriere' },
       { label: 'Contact', href: '/kontakt' },
     ],
     productLinks: [
@@ -57,6 +60,7 @@ const T = {
       { label: 'FAQ', href: '/faq' },
       { label: 'Knowledge', href: '/wissen' },
       { label: 'Platform', href: '/plattform' },
+      { label: 'API Docs', href: 'https://api.nexifyai.cloud/docs', external: true },
     ],
     legalLinks: [
       { label: 'Imprint', href: '/impressum' },
@@ -81,6 +85,7 @@ const T = {
     companyLinks: [
       { label: 'Over ons', href: '/ueber-mich' },
       { label: 'Referenties', href: '/referenzen' },
+      { label: 'Vacatures', href: '/karriere' },
       { label: 'Contact', href: '/kontakt' },
     ],
     productLinks: [
@@ -90,6 +95,7 @@ const T = {
       { label: 'FAQ', href: '/faq' },
       { label: 'Kennis', href: '/wissen' },
       { label: 'Platform', href: '/plattform' },
+      { label: 'API Docs', href: 'https://api.nexifyai.cloud/docs', external: true },
     ],
     legalLinks: [
       { label: 'Colofon', href: '/impressum' },
@@ -158,7 +164,12 @@ export function SiteFooter() {
           <div style={footerColLabel}>{t.product}</div>
           <div style={{ marginTop: 16, display: 'grid', gap: 11 }}>
             {t.productLinks.map((l) => (
-              <Link key={l.label} href={href(l.href)} style={{ fontSize: 13, color: '#71717a' }}>
+              <Link
+                key={l.label}
+                href={'external' in l && l.external ? l.href : href(l.href)}
+                style={{ fontSize: 13, color: '#71717a' }}
+                {...('external' in l && l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
                 {l.label}
               </Link>
             ))}
