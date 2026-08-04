@@ -1,6 +1,6 @@
 ﻿# FILE: .github/workflows/pr-auto-merge.yml
 # NIR: 02.08.2026 08:25
-# UPDATED: 04.08.2026 07:50
+# UPDATED: 04.08.2026 08:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Label-basiertes Auto-Merge - Draft->ready wenn green, dann squash auto-merge.
@@ -13,7 +13,7 @@
 # PITFALL: V-AM-03 (fix 04.08): `gh pr view --json mergeableState` ist KEIN gueltiges Feld der
 #   gh-CLI-JSON-API (korrekt: mergeStateStatus). Mit `set -euo pipefail` brach der Schritt sofort
 #   ab, Auto-Merge lief NIE - workflow_run laedt IMMER main, PR-Branch-Fixes wirkten nie.
-# PITFALL: V-AM-04 (fix 04.08): Bootstrap-Deadlock beim eigenen Fix-PR: labeled/unlabeled-Doppel-
+# PITFALL: V-AM-04 (fix 04.08): Bootstrap-Deadlock beim eigenen Fix-PR — labeled/unlabeled-Doppel-
 #   Trigger kollidierten mit concurrency.cancel-in-progress und annullierten sich gegenseitig.
 #   Sauberer synchronize-Trigger (echter Commit) statt Label-Toggle noetig.
 # DEPENDS: Repo Settings -> Rulesets/Branch protection (required status checks)
