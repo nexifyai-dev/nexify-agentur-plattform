@@ -1,7 +1,7 @@
 /**
  * FILE: apps/website/tests/e2e/critical-path.spec.ts
  * NIR: 02.08.2026 09:15
- * UPDATED: 02.08.2026 09:20
+ * UPDATED: 04.08.2026 (Anhang-Design: #main-content statt main)
  * NAME: NeXifyAI Agent
  * TEAM: NeXifyAI Quality
  * WHAT: One critical L3 path — health API + home hero + kontakt.
@@ -24,13 +24,14 @@ test.describe('critical path', () => {
 
   test('home renders brand hero', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('main').first()).toBeVisible();
+    await expect(page.locator('#main-content').first()).toBeVisible();
     await expect(page.locator('h1').first()).toBeVisible();
+    await expect(page.locator('[data-testid="hero-badge"]').first()).toBeVisible();
   });
 
   test('kontakt page is reachable', async ({ page }) => {
     await page.goto('/kontakt', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('main, form').first()).toBeVisible();
+    await expect(page.locator('#main-content, form').first()).toBeVisible();
     await expect(page.locator('footer').first()).toBeVisible();
   });
 });
