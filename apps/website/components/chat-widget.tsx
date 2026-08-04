@@ -6,9 +6,9 @@ import { useLang } from '@/lib/lang-context';
 interface ChatMessage { text: string; align: 'flex-start' | 'flex-end'; bg: string; color: string; buttons?: { label: string; href: string }[]; }
 
 const GREETINGS: Record<string, ChatMessage> = {
-  de: { text: 'Hallo! Ich bin Pascal\'s KI-Berater. Wie kann ich Ihnen helfen?\n\nSoll ich Ihnen unsere Leistungen zeigen, eine Preisspanne einschätzen oder direkt einen Rückruf vereinbaren?', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'Leistungen ansehen', href: '/leistungen' }, { label: 'Preise & Ablauf', href: '/preise' }, { label: 'Rückruf vereinbaren', href: '/rueckruf' }] },
-  en: { text: "Hello! I'm Pascal's AI advisor. How can I help you today?\n\nWould you like to see our services, get a price estimate, or book a callback?", align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'View Services', href: '/leistungen' }, { label: 'Pricing', href: '/preise' }, { label: 'Book a Call', href: '/rueckruf' }] },
-  nl: { text: 'Hallo! Ik ben Pascal\'s AI-adviseur. Hoe kan ik u helpen?\n\nWilt u onze diensten zien, een prijsindicatie krijgen of direct een afspraak maken?', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'Diensten bekijken', href: '/leistungen' }, { label: 'Prijzen', href: '/preise' }, { label: 'Afspraak maken', href: '/rueckruf' }] },
+  de: { text: 'Hallo! Ich bin NeXify AI, die Unternehmens-KI von NeXify. Chat it. Automate it.\n\nSoll ich Ihnen unsere Leistungen zeigen, eine Preisspanne einschätzen oder direkt einen Rückruf vereinbaren?', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'Leistungen ansehen', href: '/leistungen' }, { label: 'Preise & Ablauf', href: '/preise' }, { label: 'Rückruf vereinbaren', href: '/rueckruf' }] },
+  en: { text: "Hello! I'm NeXify AI, the corporate AI of NeXify. Chat it. Automate it.\n\nWould you like to see our services, get a price estimate, or book a callback?", align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'View Services', href: '/leistungen' }, { label: 'Pricing', href: '/preise' }, { label: 'Book a Call', href: '/rueckruf' }] },
+  nl: { text: 'Hallo! Ik ben NeXify AI, de bedrijfs-AI van NeXify. Chat it. Automate it.\n\nWilt u onze diensten zien, een prijsindicatie krijgen of direct een afspraak maken?', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: 'Diensten bekijken', href: '/leistungen' }, { label: 'Prijzen', href: '/preise' }, { label: 'Afspraak maken', href: '/rueckruf' }] },
 };
 
 const KEYFRAMES = `@keyframes nx-pulsering{0%{transform:scale(.85);opacity:1}100%{transform:scale(2.1);opacity:0}}@keyframes nx-bubblein{from{opacity:0;transform:translateY(12px) scale(.9)}to{opacity:1;transform:none}}@keyframes nx-typing{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}`;
@@ -40,7 +40,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
       const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text, language: lang }) });
       const data = await res.json(); setTyping(false);
       setMessages(s => [...s, { text: data.reply, align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: data.buttons || undefined }]);
-    } catch { setTyping(false); setMessages(s => [...s, { text: lang === 'en' ? 'One moment — connecting you with Pascal...' : lang === 'nl' ? 'Een moment — ik verbind u met Pascal...' : 'Einen Moment — ich verbinde Sie mit Pascal...', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: lang === 'en' ? 'Book a Call' : lang === 'nl' ? 'Afspraak maken' : 'Rückruf buchen', href: '/rueckruf' }] }]); }
+    } catch { setTyping(false); setMessages(s => [...s, { text: lang === 'en' ? 'One moment — connecting you with NeXify AI...' : lang === 'nl' ? 'Een moment — ik verbind u met NeXify AI...' : 'Einen Moment — ich verbinde Sie mit NeXify AI...', align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5', buttons: [{ label: lang === 'en' ? 'Book a Call' : lang === 'nl' ? 'Afspraak maken' : 'Rückruf buchen', href: '/rueckruf' }] }]); }
   };
 
   const handleBtn = (href: string) => { href.startsWith('http') ? window.open(href, '_blank', 'noopener') : (window.location.href = href); };
@@ -54,7 +54,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <span style={{width:8,height:8,borderRadius:999,background:'#C8FF00',boxShadow:'0 0 8px rgba(200,255,0,0.8)'}}/>
-          <div><span style={{fontSize:13,fontWeight:700}}>{lang === 'en' ? "Pascal's AI Advisor" : lang === 'nl' ? "Pascal's AI-Adviseur" : "Pascal's KI-Berater"}</span><span style={{display:'block',fontSize:10,color:'#71717a',marginTop:1}}>{lang === 'en' ? 'Real-time answers to your questions' : lang === 'nl' ? 'Antwoorden op uw vragen in realtime' : 'Beantwortet Ihre Fragen in Echtzeit'}</span></div>
+          <div><span style={{fontSize:13,fontWeight:700}}>{lang === 'en' ? 'NeXify AI' : lang === 'nl' ? 'NeXify AI' : 'NeXify AI'}</span><span style={{display:'block',fontSize:10,color:'#71717a',marginTop:1}}>{lang === 'en' ? 'Real-time answers to your questions' : lang === 'nl' ? 'Antwoorden op uw vragen in realtime' : 'Beantwortet Ihre Fragen in Echtzeit'}</span></div>
         </div>
         <span onClick={() => setChatOpen(false)} style={{cursor:'pointer',color:'#71717a',fontSize:20,lineHeight:1,padding:'0 4px'}}>×</span>
       </div>

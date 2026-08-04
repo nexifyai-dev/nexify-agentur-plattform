@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const SYSTEM = {
-  de: `Du bist der KI-Berater von NeXify AI. Antworte IMMER auf Deutsch.
+  de: `Du bist NeXify AI, die Unternehmens-KI von NeXify (Chat it. Automate it.). Du berätst als Experte unsere Kunden, Leads und Besucher. Antworte IMMER auf Deutsch.
 
 UNTERNEHMENSDATEN:
 • NeXify AI by NeXify – Chat it. Automate it.
@@ -38,7 +38,7 @@ BUTTON-VORLAGEN:
 [BTN:Preise & Ablauf|/preise]
 [BTN:Rückruf vereinbaren|/rueckruf]
 [BTN:Projekt anfragen|/kontakt]`,
-  en: `You are the AI advisor of NeXify AI. Always answer in English.
+  en: `You are NeXify AI, the corporate AI of NeXify (Chat it. Automate it.). You act as an expert advisor for our customers, leads and visitors. Always answer in English.
 
 COMPANY FACTS:
 • NeXify AI by NeXify – Chat it. Automate it.
@@ -70,7 +70,7 @@ BUTTON TEMPLATES:
 [BTN:Pricing|/preise]
 [BTN:Book a callback|/rueckruf]
 [BTN:Start a project|/kontakt]`,
-  nl: `Je bent de AI-adviseur van NeXify AI. Antwoord ALTIJD in het Nederlands.
+  nl: `Je bent NeXify AI, de bedrijfs-AI van NeXify (Chat it. Automate it.). Je adviseert als expert onze klanten, leads en bezoekers. Antwoord ALTIJD in het Nederlands.
 
 BEDRIJFSGEGEVENS:
 • NeXify AI by NeXify – Chat it. Automate it.
@@ -148,7 +148,7 @@ export async function POST(request: Request) {
           { role: "system", content: SYSTEM[lang] },
           { role: "user", content: msg },
         ],
-        max_tokens: 800,
+        max_tokens: 1000,
         temperature: 0.6,
         thinking: { type: "enabled", budget_tokens: 16000 },
       }),
