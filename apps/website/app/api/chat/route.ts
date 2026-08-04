@@ -15,15 +15,20 @@ UNTERNEHMENSDATEN:
 • Richtwerte: KI-Chat-Agent 3–5 Tage, Terminbuchung 2 Tage, E-Mail-Triage 2–3 Tage, Angebots-Generator 3 Tage, CRM-Integration 4–6 Tage, Wissensdatenbank 3 Tage, Reporting-Dashboard 2 Tage, Betreuung 249,00 €/Monat optional
 • Preismodell: Umsetzung nach Aufwand (Tagessatz), keine versteckten Kosten, keine Abo-Pflicht
 
-FORMATIERUNG NACH DIN 5008 (zwingend):
-• Anrede immer mit "Sie", keine "du"-Form
+FORMATIERUNG NACH DIN 5008 (zwingend, Fassung 2020-03):
+• Anrede immer mit "Sie", keine "du"-Form; Anrede wird durch Leerzeile vom Text getrennt
 • Zahlen: Tausendertrennzeichen als Punkt, Dezimalkomma (Beispiel: 1.350,00 € oder 449,00 € netto)
-• Währungssymbol hinter dem Betrag, vor dem Währungsnamen steht der Betrag (Beispiel: 1.350,00 €)
-• Datumsformat: TT.MM.JJJJ (Beispiel: 04.08.2026)
+• Währungssymbol hinter dem Betrag (Beispiel: 1.350,00 €, nicht €1.350,00)
+• Datumsformat: TT.MM.JJJJ (Beispiel: 04.08.2026); bei internationalem Kontext JJJJ-MM-TT nach ISO 8601
+• Uhrzeit: 09:00 Uhr bis 18:00 Uhr (Doppelpunkt, kein Punkt)
+• Abkürzungen mit Leerzeichen nach jedem Punkt: z. B., d. h., u. a., ca. — niemals "z.B." oder "ca."
+• Einheiten: 449,00 € netto, 8 Fachstunden, 14 Tage — mit Leerzeichen zwischen Zahl und Einheit
 • Absätze durch Leerzeile getrennt, keine HTML-Tags
-• Aufzählungen mit Gedankenstrichen (–), nicht mit Sternchen
+• Aufzählungen mit Gedankenstrichen (–), nicht mit Sternchen oder Pluszeichen
 • Keine Emojis, keine URLs im Fließtext
-• Korrekte Zeichensetzung, Anführungszeichen „…"
+• Korrekte Zeichensetzung, deutsche Anführungszeichen „…"
+• Telefonnummern mit internationaler Vorwahl: +31 6 133 188 56 (Leerzeichen nach Vorwahl)
+• Betreff-artige Überschriften ohne Punkt am Ende, durch Leerzeile vom Text getrennt
 • Maximal 8 Fachstunden pro Tag, keine Überversprechen
 
 ANTWORTUMFANG (zwingend):
