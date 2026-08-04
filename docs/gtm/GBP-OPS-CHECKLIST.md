@@ -48,4 +48,4 @@
 
 ## Human-Gate Issue
 
-Siehe GitHub Issue „Human 5 Min: GBP Verify + GSC“ (dieses PR).
+Siehe GitHub Issue #237 „Human 5 Min: GBP Verify + wöchentliche Posts" (dieses PR).
