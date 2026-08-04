@@ -3,10 +3,7 @@ import "@fontsource-variable/manrope";
 import "@fontsource-variable/outfit";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { ChatWidget } from "@/components/chat-widget";
-import { CookieConsent } from "@/components/cookie-consent";
-import { StickyCta } from "@/components/sticky-cta";
-import { ExitIntent } from "@/components/exit-intent";
+import { DeferredWidgets } from "@/components/deferred-widgets";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
@@ -104,12 +101,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             Zum Inhalt springen
           </a>
           <SiteHeader />
-          <div id="main-content">{children}</div>
+          <div id="main-content" className="min-h-[100svh]">{children}</div>
           <SiteFooter />
-          <StickyCta />
-          <ExitIntent />
-          <ChatWidget />
-          <CookieConsent />
+          <DeferredWidgets />
           <PwaRegister />
           </AuthProvider>
         </LanguageProvider>
