@@ -1,7 +1,7 @@
 # Ops Status Dashboard (auto-refreshed)
 
 **NIR:** 02.08.2026 09:05  
-**UPDATED:** 2026-08-02 07:07:20 UTC
+**UPDATED:** 2026-08-04 06:10:18 UTC
 **WHAT:** Single ops glance — automation %, human gate, smoke, sibling PRs.  
 **WHY:** Laptop-off needs a living status doc, not chat archaeology.  
 **Refresh:** `.github/workflows/daily-smoke.yml` + `scripts/refresh-status-dashboard.sh`  
@@ -32,9 +32,9 @@
 
 | Probe | Last result | Checked at (UTC) |
 |-------|-------------|------------------|
-| `SITE_HEALTH` | **PASS** HTTP 200 | 2026-08-02T07:07:20Z |
-| `AI_ROUTER_HEALTH` | **PASS** HTTP 200 | 2026-08-02T07:07:20Z |
-| `AGENTMEMORY_PUBLIC` | **PASS** HTTP 200 | 2026-08-02T07:07:20Z |
+| `SITE_HEALTH` | **PASS** HTTP 200 | 2026-08-04T06:10:18Z |
+| `AI_ROUTER_HEALTH` | **PASS** HTTP 200 | 2026-08-04T06:10:18Z |
+| `AGENTMEMORY_PUBLIC` | **PASS** HTTP 200 | 2026-08-04T06:10:18Z |
 
 ## Sibling automation PRs (do not duplicate)
 
