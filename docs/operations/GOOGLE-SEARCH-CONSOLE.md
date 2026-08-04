@@ -1,6 +1,6 @@
 # FILE: docs/operations/GOOGLE-SEARCH-CONSOLE.md
 # NIR: 02.08.2026 10:55
-# UPDATED: 02.08.2026 11:30
+# UPDATED: 04.08.2026 09:40
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps / GTM
 # WHAT: SoT — Google Search Console Owner-Fähigkeiten maxen (DONE vs TODO)
@@ -37,7 +37,7 @@
 | 11 | E-Mail-Notifications alle Issue-Typen | **TODO** | Human | GSC Einstellungen |
 | 12 | Secondary owner / Backup-Verify | **TODO** | Human | optional GA/GTM/HTML |
 | 13 | International targeting DE | **TODO** | Human | Domain-Property: UI prüfen |
-| 14 | Performance-Report Cadence | **TODO** | Human | wöchentlich (#245) |
+| 14 | Performance-Report Cadence | **DONE** (Docs #245) | Human | wöchentlich — SoT „Performance / Coverage Cadence" unten |
 | 15 | Core Web Vitals Report | **TODO** | Human | nach PSI-Fixes |
 | 16 | Links-Report Awareness | **TODO** | Human | einmalig + monatlich |
 | 17 | Experience / HTTPS | **TODO** | Human | GSC Experience prüfen |
@@ -131,14 +131,17 @@ Kurz: GSC → **URL-Prüfung** → URL einfügen → **Indexierung beantragen** 
 
 ## Performance / Coverage Cadence — #245
 
-**Wöchentlich (≈10 Min):**
+**Wöchentlich (≈10 Min, Owner `nexify.login@gmail.com`):**
 
-1. Indexierung → Seiten: Errors / Soft-404 / Redirects  
-2. Sitemaps: discovered vs. indexed  
-3. Leistung (Performance): Top Queries / Pages / CTR — DE Fokus  
-4. Soft-404s gegen Live-URLs / SEO-PRs abgleichen  
+1. Indexierung → Seiten: Errors / Soft-404 / Redirects
+2. Sitemaps: discovered vs. indexed (Sitemap-Status)
+3. Leistung (Performance): Top Queries / Pages / CTR — Filter Land = Deutschland
+4. Soft-404s gegen Live-URLs / SEO-PRs abgleichen
+5. Bei Bedarf Money-Pages nach-inspizieren → `scripts/gtm/gsc-url-inspection-batch.md`
 
 **Monatlich:** Links-Report, Experience/HTTPS, Core Web Vitals (nach PSI).
+
+**Hinweis:** Nach Deploy mit erweiterter Sitemap (PR #259) Coverage-Check wiederholen.
 
 ---
 
