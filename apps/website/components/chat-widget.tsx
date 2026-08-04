@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useLang } from '@/lib/lang-context';
 
 /**
  * Proaktiver KI-Chat exakt nach Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark).
  * VERBOTEN laut design_guidelines.json: lucide-icons, Emojis, Quick-Replies, "Online"-Statuszeile, Sparkles.
- * Launcher = 9px Lime-Punkt + Puls-Ring, Send = "→" (Text, kein Icon).
+ * Backend: POST /api/chat (SSE: delta / offer_ready / done) — Fallback: lokale Anhang-Antwort.
  */
 
 interface ChatMessage {
@@ -15,15 +16,17 @@ interface ChatMessage {
   color: string;
 }
 
-const ANHANG_GREETING: ChatMessage = {
-  text: 'Hallo! Ich sehe, Sie schauen sich unsere Leistungen an, soll ich Ihnen direkt eine erste Einschätzung für Ihr Projekt erstellen?',
-  align: 'flex-start',
-  bg: 'rgba(255,255,255,0.06)',
-  color: '#e5e5e5',
-};
+const GREETINGS = {
+  de: 'Hallo! Ich sehe, Sie schauen sich unsere Leistungen an, soll ich Ihnen direkt eine erste Einschätzung für Ihr Projekt erstellen?',
+  en: 'Hello! I see you are looking at our services — shall I give you a first assessment for your project right away?',
+  nl: 'Hallo! Ik zie dat u naar onze diensten kijkt — zal ik direct een eerste inschatting voor uw project maken?',
+} as const;
 
-const ANHANG_REPLY =
-  'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag.';
+const FALLBACK_REPLIES = {
+  de: 'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag.',
+  en: 'Thank you! An advisor will get back to you within one business day with a concrete assessment and a meeting proposal.',
+  nl: 'Dank u! Een adviseur neemt binnen één werkdag contact op met een concrete inschatting en een voorstel voor een afspraak.',
+} as const;
 
 const KEYFRAMES = `
   @keyframes nx-pulsering { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(2.1); opacity: 0; } }
@@ -32,11 +35,24 @@ const KEYFRAMES = `
 `;
 
 export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
+  const { lang } = useLang();
   const [chatOpen, setChatOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([ANHANG_GREETING]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [typing, setTyping] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Begrüßung je Sprache (initial einmal, danach bleibt die Konversation bestehen)
+  useEffect(() => {
+    setMessages([
+      {
+        text: GREETINGS[lang],
+        align: 'flex-start',
+        bg: 'rgba(255,255,255,0.06)',
+        color: '#e5e5e5',
+      },
+    ]);
+  }, [lang]);
 
   useEffect(() => {
     const style = document.createElement('style');
@@ -58,9 +74,9 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, typing]);
 
-  const sendChatMessage = () => {
+  const sendChatMessage = async () => {
     const text = chatInput.trim();
-    if (!text) return;
+    if (!text || typing) return;
     const userMsg: ChatMessage = {
       text,
       align: 'flex-end',
@@ -70,13 +86,42 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
     setMessages((s) => [...s, userMsg]);
     setChatInput('');
     setTyping(true);
-    setTimeout(() => {
+
+    try {
+      // Backend /api/chat (SSE) — wie im Bestand; language aus i18n
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, language: lang }),
+      });
+      if (!res.ok || !res.body) throw new Error('chat failed');
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let botText = '';
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = JSON.parse(line.slice(6));
+          if (payload.type === 'delta') botText += payload.content;
+          if (payload.type === 'done') break;
+        }
+      }
       setTyping(false);
       setMessages((s) => [
         ...s,
-        { text: ANHANG_REPLY, align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
+        { text: botText || FALLBACK_REPLIES[lang], align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
       ]);
-    }, 1300);
+    } catch {
+      setTyping(false);
+      setMessages((s) => [
+        ...s,
+        { text: FALLBACK_REPLIES[lang], align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
+      ]);
+    }
   };
 
   return (
@@ -141,6 +186,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
             border: '1px solid rgba(200,255,0,0.15)',
             background: 'rgba(14,14,17,0.94)',
             backdropFilter: 'blur(28px)',
+            WebkitBackdropFilter: 'blur(28px)',
             boxShadow: '0 32px 80px rgba(0,0,0,0.7)',
             overflow: 'hidden',
             animation: 'nx-bubblein 0.3s cubic-bezier(0.22,1,0.36,1)',
