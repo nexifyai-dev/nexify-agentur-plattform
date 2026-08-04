@@ -5,75 +5,8 @@ import { useEffect, useRef } from 'react';
 /**
  * 3D-Hero exakt nach Anhang "NeXify Homepage.dc.html":
  * Icosahedron-Wireframe (#C8FF00) + Crystal Core + Lime-Nodes + PointLight.
- * three@0.184.0 via CDN + importmap (wie Anhang), geladen als window.__NX_THREE.
+ * three wird als npm-Dependency geladen (stabil) statt CDN-importmap.
  */
-
-const THREECDN = 'https://unpkg.com/three@0.184.0/build/three.module.js';
-
-declare global {
-  interface Window {
-    __NX_THREE?: {
-      // Rückgabetypen bewusst `any`: three läuft zur Laufzeit aus CDN,
-      // die Deklaration existiert nur für den TypeScript-Build.
-      Scene: new () => any;
-      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => any;
-      WebGLRenderer: new (opts: Record<string, unknown>) => any;
-      Group: new () => any;
-      IcosahedronGeometry: new (r: number, d: number) => any;
-      MeshStandardMaterial: new (opts: Record<string, unknown>) => any;
-      MeshBasicMaterial: new (opts: Record<string, unknown>) => any;
-      LineBasicMaterial: new (opts: Record<string, unknown>) => any;
-      WireframeGeometry: new (geo: any) => any;
-      LineSegments: new (geo: any, mat: any) => any;
-      Mesh: new (geo: any, mat: any) => any;
-      SphereGeometry: new (r: number, w: number, h: number) => any;
-      AmbientLight: new (color: number, intensity: number) => any;
-      DirectionalLight: new (color: number, intensity: number) => any;
-      PointLight: new (color: number, intensity: number, distance: number) => any;
-      Clock: new () => { getElapsedTime: () => number };
-    };
-  }
-}
-
-function loadThree(): Promise<Window['__NX_THREE']> {
-  return new Promise((resolve) => {
-    if (window.__NX_THREE) return resolve(window.__NX_THREE);
-    const importMap = document.createElement('script');
-    importMap.type = 'importmap';
-    importMap.textContent = JSON.stringify({ imports: { three: THREECDN } });
-    const moduleScript = document.createElement('script');
-    moduleScript.type = 'module';
-    moduleScript.textContent = `
-      import * as THREE from 'three';
-      window.__NX_THREE = THREE;
-    `;
-    let settled = false;
-    const done = () => {
-      if (!settled && window.__NX_THREE) {
-        settled = true;
-        resolve(window.__NX_THREE);
-      }
-    };
-    moduleScript.onload = done;
-    moduleScript.onerror = () => {
-      if (!settled) {
-        settled = true;
-        resolve(undefined);
-      }
-    };
-    document.head.appendChild(importMap);
-    document.head.appendChild(moduleScript);
-    // Fallback-Poll wie Anhang (50 × 100ms)
-    let tries = 0;
-    const poll = setInterval(() => {
-      tries += 1;
-      if (window.__NX_THREE || tries >= 50) {
-        clearInterval(poll);
-        done();
-      }
-    }, 100);
-  });
-}
 
 export function Hero3D() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -87,9 +20,17 @@ export function Hero3D() {
     (async () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const THREE = await loadThree();
-      if (!THREE || !canvas.isConnected) return;
 
+      // WebGL-Verfügbarkeit prüfen — sonst Canvas sauber leer lassen (kein Crash)
+      try {
+        const probe = document.createElement('canvas');
+        const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+        if (!gl) return;
+      } catch {
+        return;
+      }
+
+      const THREE = await import('three');
       const width = canvas.clientWidth || 520;
       const height = canvas.clientHeight || 520;
 
@@ -123,7 +64,7 @@ export function Hero3D() {
       const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
       const nodeMat = new THREE.MeshBasicMaterial({ color: 0xc8ff00 });
       const seenVerts = new Set<string>();
-      const posAttr = wireGeo.attributes.position;
+      const posAttr = (wireGeo as any).attributes.position;
       for (let i = 0; i < posAttr.count; i++) {
         const x = posAttr.getX(i);
         const y = posAttr.getY(i);

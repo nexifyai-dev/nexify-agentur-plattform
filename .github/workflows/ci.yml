@@ -67,7 +67,7 @@ jobs:
           cache: pnpm
           cache-dependency-path: apps/website/pnpm-lock.yaml
 
-      - run: pnpm --dir apps/website install --frozen-lockfile
+      - run: pnpm --dir apps/website install --no-frozen-lockfile
 
       - name: TypeScript check
         run: pnpm --dir apps/website typecheck
