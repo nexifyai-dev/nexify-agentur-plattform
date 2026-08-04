@@ -26,6 +26,7 @@ const staticRoutes: {
   { path: "/checkliste", priority: 0.85, changeFrequency: "monthly" },
   { path: "/alternativen", priority: 0.85, changeFrequency: "monthly" },
   { path: "/partner", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/karriere", priority: 0.6, changeFrequency: "monthly" },
   { path: "/botschafter", priority: 0.8, changeFrequency: "monthly" },
   { path: "/sprechstunde", priority: 0.8, changeFrequency: "monthly" },
   { path: "/referenzen", priority: 0.8, changeFrequency: "monthly" },
