@@ -13,21 +13,23 @@ const THREECDN = 'https://unpkg.com/three@0.184.0/build/three.module.js';
 declare global {
   interface Window {
     __NX_THREE?: {
-      Scene: new () => unknown;
-      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => unknown;
-      WebGLRenderer: new (opts: Record<string, unknown>) => Record<string, unknown>;
-      Group: new () => unknown;
-      IcosahedronGeometry: new (r: number, d: number) => unknown;
-      MeshStandardMaterial: new (opts: Record<string, unknown>) => unknown;
-      MeshBasicMaterial: new (opts: Record<string, unknown>) => unknown;
-      LineBasicMaterial: new (opts: Record<string, unknown>) => unknown;
-      WireframeGeometry: new (geo: unknown) => unknown;
-      LineSegments: new (geo: unknown, mat: unknown) => unknown;
-      Mesh: new (geo: unknown, mat: unknown) => Record<string, unknown>;
-      SphereGeometry: new (r: number, w: number, h: number) => unknown;
-      AmbientLight: new (color: number, intensity: number) => unknown;
-      DirectionalLight: new (color: number, intensity: number) => unknown;
-      PointLight: new (color: number, intensity: number, distance: number) => unknown;
+      // Rückgabetypen bewusst `any`: three läuft zur Laufzeit aus CDN,
+      // die Deklaration existiert nur für den TypeScript-Build.
+      Scene: new () => any;
+      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => any;
+      WebGLRenderer: new (opts: Record<string, unknown>) => any;
+      Group: new () => any;
+      IcosahedronGeometry: new (r: number, d: number) => any;
+      MeshStandardMaterial: new (opts: Record<string, unknown>) => any;
+      MeshBasicMaterial: new (opts: Record<string, unknown>) => any;
+      LineBasicMaterial: new (opts: Record<string, unknown>) => any;
+      WireframeGeometry: new (geo: any) => any;
+      LineSegments: new (geo: any, mat: any) => any;
+      Mesh: new (geo: any, mat: any) => any;
+      SphereGeometry: new (r: number, w: number, h: number) => any;
+      AmbientLight: new (color: number, intensity: number) => any;
+      DirectionalLight: new (color: number, intensity: number) => any;
+      PointLight: new (color: number, intensity: number, distance: number) => any;
       Clock: new () => { getElapsedTime: () => number };
     };
   }
@@ -78,7 +80,7 @@ export function Hero3D() {
 
   useEffect(() => {
     let raf = 0;
-    let renderer: Record<string, unknown> | undefined;
+    let renderer: any;
     let resizeObserver: ResizeObserver | undefined;
     let pointerHandler: ((e: PointerEvent) => void) | undefined;
 
@@ -121,7 +123,7 @@ export function Hero3D() {
       const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
       const nodeMat = new THREE.MeshBasicMaterial({ color: 0xc8ff00 });
       const seenVerts = new Set<string>();
-      const posAttr = (wireGeo as { attributes: { position: { count: number; getX: (i: number) => number; getY: (i: number) => number; getZ: (i: number) => number } } }).attributes.position;
+      const posAttr = wireGeo.attributes.position;
       for (let i = 0; i < posAttr.count; i++) {
         const x = posAttr.getX(i);
         const y = posAttr.getY(i);
