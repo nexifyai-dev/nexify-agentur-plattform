@@ -1,7 +1,7 @@
 # GitHub Actions — Secret Name Registry
 
 **NIR:** 02.08.2026 09:05  
-**UPDATED:** 02.08.2026 09:05  
+**UPDATED:** 04.08.2026 09:50  
 **WHAT:** Kanonische Liste aller Secret-/Variable-**Namen** für dieses Repo.  
 **WHY:** Agents und Humans brauchen eine SoT ohne Werte.  
 **PITFALL:** Niemals Werte committen oder in Issues pasten.  
@@ -20,9 +20,9 @@
 | `VERCEL_PROJECT_ID` | P0 | `deploy-vercel.yml` | Also accepted as repo **variable** |
 | `LINEAR_API_KEY` | recommended | `linear-pr-sync.yml` | Skip sync if unset |
 | `CIRCUIT_BREAKER_URL` | optional | `event-to-cloud-agent.yml` | Default soft-allow if missing |
-| `VPS_GITLAB_TOKEN` | P1 mirror | `mirror-to-gitlab.yml` | GitLab OSS PAT |
-| `VPS_GITLAB_URL` | P1 mirror | `mirror-to-gitlab.yml` | e.g. `https://gitlab.nexifyai.cloud` |
-| `VPS_GITLAB_USERNAME` | P1 mirror | `mirror-to-gitlab.yml` | Mirror push user |
+| `VPS_GITLAB_TOKEN` | P1 mirror (skip-on-missing) | `mirror-to-gitlab.yml` | GitLab OSS PAT; absent → warning+skip |
+| `VPS_GITLAB_URL` | P1 mirror (skip-on-missing) | `mirror-to-gitlab.yml` | e.g. `https://gitlab.nexifyai.cloud`; absent → skip |
+| `VPS_GITLAB_USERNAME` | P1 mirror (skip-on-missing) | `mirror-to-gitlab.yml` | Mirror push user; absent → skip |
 | `VPS_HOST` | SSH fallback only | `deploy-vps.yml` | Prefer self-hosted runner |
 | `VPS_USER` | SSH fallback | `deploy-vps.yml` | |
 | `VPS_PORT` | SSH fallback | `deploy-vps.yml` | |
