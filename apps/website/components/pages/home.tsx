@@ -471,7 +471,7 @@ function Process({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
 }
 
 function Pricing({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
-  const [days, setDays] = useState(PRICING.sliderDefault);
+  const [days, setDays] = useState<number>(PRICING.sliderDefault);
   const [maintenance, setMaintenance] = useState(true);
   const implementationTotal = (days * PRICING.dayRate).toLocaleString('de-DE');
   const maintenanceCost = maintenance ? PRICING.maintenanceRate.toLocaleString('de-DE') : '0';
