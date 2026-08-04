@@ -10,26 +10,47 @@ import { useEffect, useRef } from 'react';
 
 const THREECDN = 'https://unpkg.com/three@0.184.0/build/three.module.js';
 
+type NxThreeObject = {
+  add: (...args: NxThreeObject[]) => void;
+  position: { set: (x: number, y: number, z: number) => void };
+  rotation: { x: number; y: number };
+  aspect: number;
+  intensity: number;
+  dispose?: () => void;
+  isConnected?: boolean;
+  updateProjectionMatrix?: () => void;
+  render?: (scene: NxThreeObject, camera: NxThreeObject) => void;
+  setPixelRatio?: (r: number) => void;
+  setSize?: (w: number, h: number, updateStyle: boolean) => void;
+  attributes: { position: NxThreePosAttr };
+  getElapsedTime: () => number;
+};
+
+type NxThreePosAttr = {
+  count: number;
+  getX: (i: number) => number;
+  getY: (i: number) => number;
+  getZ: (i: number) => number;
+};
+
 declare global {
   interface Window {
     __NX_THREE?: {
-      // Rückgabetypen bewusst `any`: three läuft zur Laufzeit aus CDN,
-      // die Deklaration existiert nur für den TypeScript-Build.
-      Scene: new () => any;
-      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => any;
-      WebGLRenderer: new (opts: Record<string, unknown>) => any;
-      Group: new () => any;
-      IcosahedronGeometry: new (r: number, d: number) => any;
-      MeshStandardMaterial: new (opts: Record<string, unknown>) => any;
-      MeshBasicMaterial: new (opts: Record<string, unknown>) => any;
-      LineBasicMaterial: new (opts: Record<string, unknown>) => any;
-      WireframeGeometry: new (geo: any) => any;
-      LineSegments: new (geo: any, mat: any) => any;
-      Mesh: new (geo: any, mat: any) => any;
-      SphereGeometry: new (r: number, w: number, h: number) => any;
-      AmbientLight: new (color: number, intensity: number) => any;
-      DirectionalLight: new (color: number, intensity: number) => any;
-      PointLight: new (color: number, intensity: number, distance: number) => any;
+      Scene: new () => NxThreeObject;
+      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => NxThreeObject;
+      WebGLRenderer: new (opts: Record<string, unknown>) => NxThreeObject;
+      Group: new () => NxThreeObject;
+      IcosahedronGeometry: new (r: number, d: number) => NxThreeObject;
+      MeshStandardMaterial: new (opts: Record<string, unknown>) => NxThreeObject;
+      MeshBasicMaterial: new (opts: Record<string, unknown>) => NxThreeObject;
+      LineBasicMaterial: new (opts: Record<string, unknown>) => NxThreeObject;
+      WireframeGeometry: new (geo: NxThreeObject) => NxThreeObject;
+      LineSegments: new (geo: NxThreeObject, mat: NxThreeObject) => NxThreeObject;
+      Mesh: new (geo: NxThreeObject, mat: NxThreeObject) => NxThreeObject;
+      SphereGeometry: new (r: number, w: number, h: number) => NxThreeObject;
+      AmbientLight: new (color: number, intensity: number) => NxThreeObject;
+      DirectionalLight: new (color: number, intensity: number) => NxThreeObject;
+      PointLight: new (color: number, intensity: number, distance: number) => NxThreeObject;
       Clock: new () => { getElapsedTime: () => number };
     };
   }
@@ -80,7 +101,7 @@ export function Hero3D() {
 
   useEffect(() => {
     let raf = 0;
-    let renderer: any;
+    let renderer: NxThreeObject | undefined;
     let resizeObserver: ResizeObserver | undefined;
     let pointerHandler: ((e: PointerEvent) => void) | undefined;
 
