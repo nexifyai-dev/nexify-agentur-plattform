@@ -1,0 +1,98 @@
+/* ============================================================
+   NeXify Lime-Overrides — Unterseiten (G9/G10, Issue #290)
+   Overlay auf Alt-Design-Klassen: alle Unterseiten erben den
+   Anhang-Akzent #C8FF00, ohne 11 Komponenten umzuschreiben.
+   Basis: design_guidelines.json (Lime-Tokens, SoT Anhang).
+   ============================================================ */
+
+/* ── Primary Button: Silver → Lime (Anhang buttons_primary) ── */
+.btn-primary {
+  background: linear-gradient(120deg, #C8FF00, #eaffb0 50%, #C8FF00) !important;
+  color: #0A0A0A !important;
+  box-shadow: 0 0 28px rgba(200, 255, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 40px rgba(200, 255, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+/* ── Ghost Button Hover: dezenter Lime-Border ── */
+.btn-ghost:hover {
+  border-color: rgba(200, 255, 0, 0.45) !important;
+  background-color: rgba(200, 255, 0, 0.06) !important;
+}
+
+/* ── Text-Shimmer: Silver → Lime (accent_shimmer) ── */
+.text-silver {
+  background: linear-gradient(120deg, #C8FF00 0%, #f4ffcf 30%, #8fce00 55%, #C8FF00 100%) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ── Eyebrow-Linie: → Lime ── */
+.eyebrow::before {
+  background: linear-gradient(90deg, transparent, #C8FF00) !important;
+}
+
+/* ── Range-Slider (Alt .range-silver): Lime-Fill + Thumb (WebKit + Firefox) ── */
+.range-silver {
+  background: linear-gradient(90deg, #C8FF00 var(--fill, 50%), #27272a var(--fill, 50%)) !important;
+}
+.range-silver::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #eaffb0, #C8FF00) !important;
+  border-color: rgba(200, 255, 0, 0.8) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 14px rgba(200, 255, 0, 0.45) !important;
+}
+.range-silver::-moz-range-track {
+  background: linear-gradient(90deg, #C8FF00 var(--fill, 50%), #27272a var(--fill, 50%)) !important;
+}
+.range-silver::-moz-range-thumb {
+  background: linear-gradient(135deg, #eaffb0, #C8FF00) !important;
+  border-color: rgba(200, 255, 0, 0.8) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 14px rgba(200, 255, 0, 0.45) !important;
+}
+.range-silver::-moz-range-progress {
+  background: #C8FF00 !important;
+}
+
+/* ── Glass-Hover: Lime-Border statt weiß ── */
+.glass:hover {
+  border-color: rgba(200, 255, 0, 0.28) !important;
+}
+
+/* ── Puls-Dot (Alt-Komponenten): Lime-Ring ── */
+.pulse-dot::after {
+  border-color: rgba(200, 255, 0, 0.5) !important;
+}
+
+/* ── System-Chip-Statuspunkt: Lime ── */
+.system-chip i {
+  background: #C8FF00 !important;
+  box-shadow: 0 0 8px rgba(200, 255, 0, 0.5) !important;
+}
+
+/* ── Form-Success: Lime statt Emerald ── */
+.form-success {
+  color: #C8FF00 !important;
+  background: rgba(200, 255, 0, 0.07) !important;
+}
+
+/* ── Operator/Metric Highlights: Lime statt Green ── */
+.operator-head b, .operator-value > span {
+  color: #C8FF00 !important;
+  border-color: rgba(200, 255, 0, 0.2) !important;
+}
+.operator-tasks i {
+  background: #C8FF00 !important;
+}
+
+/* ── Contact-Feature strong (subtle): Lime ── */
+.contact-card.subtle strong {
+  color: #C8FF00 !important;
+}
+
+/* ── Tailwind Emerald-Checks (pricing.tsx etc.): Lime ── */
+.text-emerald-400\/80 {
+  color: rgba(200, 255, 0, 0.85) !important;
+}
