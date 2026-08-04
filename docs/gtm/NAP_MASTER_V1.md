@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/NAP_MASTER_V1.md
 # NIR: 02.08.2026 07:40
-# UPDATED: 02.08.2026 07:40
+# UPDATED: 04.08.2026 09:37
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Kanonische NAP- und Firmendaten für alle Free-Listings
@@ -47,8 +47,11 @@ NeXify AI ontwikkelt premium websites, webshops, web-apps en AI-automatiseringen
 
 ## Kategorien (bei Verzeichnissen wählen)
 
-Primär: Webdesign / Webentwicklung / Digitalagentur / IT-Dienstleistungen  
-Sekundär: E-Commerce, Softwareentwicklung, KI / Automatisierung, App-Entwicklung
+Primär: **Softwareunternehmen** (bevorzugt) / IT-Dienstleister / Webentwicklung  
+Sekundär: Unternehmensberatung · Digitalagentur · Webdesigner · E-Commerce · KI / Automatisierung
+
+> **ICP-Hinweis:** Kategorien beschreiben NeXify AI, nicht die Zielkunden-Branche.
+> Details und Human-Gate-Checkliste: [GBP-OPS-CHECKLIST.md](GBP-OPS-CHECKLIST.md#gbp-kategorien-je-top-icp-nexify-ai--stand-04082026)
 
 ## UTM-Schema
 

@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/GBP-OPS-CHECKLIST.md
 # NIR: 02.08.2026 10:50
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 04.08.2026 09:37
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Operative Google Business Profile Checkliste (Human 5 Min + laufend)
@@ -24,8 +24,8 @@
 - [ ] Adresse: Graaf van Loonstraat 1E, 5921 JA Venlo
 - [ ] Telefon: +31 6 133 188 56
 - [ ] Website: `https://www.nexifyai.cloud/?utm_source=google_business&utm_medium=listing&utm_campaign=brand`
-- [ ] Primärkategorie: möglichst präzise (z. B. Webdesigner / IT-Dienstleister — aus NAP-Kategorien)
-- [ ] 2–3 Sekundärkategorien (E-Commerce, Software, KI nur wenn passend)
+- [ ] Primärkategorie: **Softwareunternehmen** (DE: „Softwareunternehmen" / alternativ „IT-Dienstleister") — siehe Abschnitt „GBP-Kategorien je Top-ICP" unten
+- [ ] 2–3 Sekundärkategorien aus Liste unten wählen (max. 9 gesamt, min. sinnvoll)
 - [ ] Service Area: DE, AT, CH, NL (Remote/Hybrid) — kein falscher Storefront-Anspruch
 - [ ] Beschreibung ≤750 Zeichen aus NAP-Kurzbeschreibung DE
 - [ ] Leistungen mit Kurztext (Landingpage, Website, Shop, Automatisierung, AI-Agenten)
@@ -49,3 +49,59 @@
 ## Human-Gate Issue
 
 Siehe GitHub Issue „Human 5 Min: GBP Verify + GSC“ (dieses PR).
+
+---
+
+## GBP-Kategorien je Top-ICP (NeXify AI — Stand 04.08.2026)
+
+> **Grundregel:** GBP-Kategorien beschreiben **unser** Unternehmen (NeXify AI),
+> nicht die Zielkunden-Branche. „Handwerksbetrieb" oder „Zahnarztpraxis"
+> sind für NeXify AI **falsch** und verboten — auch wenn Handwerk ein Top-ICP ist.
+> SEO-Branchenpages (z. B. `/handwerk`) übernehmen das Keyword-Targeting.
+
+### Empfohlene Kategorie-Konfiguration (human-geprüft einzustellen)
+
+| ICP / Fokus | Primärkategorie (DE) | Sekundärkategorien | Hinweis |
+|-------------|----------------------|--------------------|---------|
+| **Handwerk** (Anbieter-Seite NeXify) | Softwareunternehmen | IT-Dienstleister · Unternehmensberatung | Kategorie = was wir sind, nicht was der Kunde ist |
+| **Steuerberater**-Targeting | Softwareunternehmen | IT-Dienstleister | Keine Steuerberater-Kategorie für NeXify AI |
+| **Agenturen** | Softwareunternehmen | Digitalagentur · IT-Dienstleister | „Werbeagentur" nur wenn nachweisbar treffend |
+| **E-Commerce** | Softwareunternehmen | IT-Dienstleister · Webdesigner | Landings übernehmen SEO-Targeting |
+| **Immobilien** | Softwareunternehmen | IT-Dienstleister | Unverändert IT/Software; Landings SEO |
+
+### Aktuelle GBP-Kategorien (zu verifizieren / human-einzutragen)
+
+| Feld | Aktuell (vor Prüfung) | Soll |
+|------|-----------------------|------|
+| Primärkategorie | *(bitte manuell prüfen)* | **Softwareunternehmen** |
+| Sekundär 1 | *(bitte manuell prüfen)* | IT-Dienstleister |
+| Sekundär 2 | *(bitte manuell prüfen)* | Unternehmensberatung |
+| Sekundär 3 | *(optional)* | Webdesigner |
+
+### Checkliste GBP-Kategorien (Human-Gate — Issue #254)
+
+- [ ] In GBP Admin einloggen: https://business.google.com/
+- [ ] Aktuelle Primärkategorie notieren und in Tabelle „Aktuell" oben eintragen
+- [ ] Primärkategorie auf **Softwareunternehmen** setzen (DE: „Software company")
+- [ ] Sekundärkategorien prüfen: keine Branchenkategorie der Zielkunden vorhanden
+- [ ] Keine Kategorie wie „Handwerksbetrieb", „Zahnarztpraxis", „Steuerberater" gesetzt
+- [ ] Maximal sinnvolle Sekundärkategorien aus Tabelle oben ergänzen
+- [ ] Änderung speichern und Google-Bestätigung abwarten (ggf. 1–3 Tage)
+- [ ] Screenshot der finalen Kategorien als Nachweis in `evidence/supply-wave1/S01-google-business.md` ergänzen
+
+### Verbotene Kategorien für NeXify AI
+
+Diese Kategorien beschreiben Zielkunden, **nicht** NeXify AI — niemals setzen:
+
+- Handwerksbetrieb / Handwerker
+- Steuerberater / Steuerbüro
+- Zahnarzt / Zahnarztpraxis
+- Immobilienmakler / Immobilienbüro
+- Werbeagentur (nur wenn NeXify AI nachweislich Werbung produziert)
+
+### Referenz
+
+- NAP-Kategorien: [NAP_MASTER_V1.md](NAP_MASTER_V1.md#kategorien-bei-verzeichnissen-wählen)
+- ICP-Seiten: `apps/website/app/[locale]/branchen/`
+- Issue: nexifyai-dev/nexify-agentur-plattform#254
+
