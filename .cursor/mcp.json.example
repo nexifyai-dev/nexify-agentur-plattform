@@ -61,12 +61,24 @@
         "hostinger-vps-mcp"
       ],
       "description": "Hostinger VPS MCP — read-first; no destructive deletes without approval."
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "description": "Offizieller GitHub MCP Server (plugin-github-github). Ermöglicht laptop-off Cursor-Autonomie: Issues/PRs/Actions ohne gh-CLI. Scopes: repo, workflow, read:org — Details: docs/operations/GITHUB-MCP-SETUP.md. Token NUR aus Env — nie committen."
     }
   },
   "_comments": {
     "agentmemory_single": "Prefer EINEN agentmemory-Eintrag mit AGENTMEMORY_TOOLS=all. Nicht zusätzlich einen zweiten 'user-agentmemory' mit Teil-Toolset parallel aktiv halten, wenn beide denselben :3111 treffen — doppelte Recall/Save und Cursor zeigt project-0-* vs user-* Duplikate.",
     "project_vs_user_duplicate": "Cursor kann Project-MCP (.cursor/mcp.json) UND User-MCP (~/.cursor/mcp.json) laden. Bei Duplikat-Servern (agentmemory, lightrag, context7, gitlab-oss): Project-Example ist kanonisch für dieses Repo; User-Kopie deaktivieren oder identisch halten, sonst Tool-Noise und Circuit-Breaker-Wiederholungen.",
-    "secrets": "Nie echte Secrets in mcp.json committen — nur ${ENV}-Platzhalter. Lokal: cp .cursor/mcp.json.example .cursor/mcp.json",
+    "secrets": "Nie echte Secrets in mcp.json committen — nur ${ENV}-Platzhalter. Lokal: cp .cursor/mcp.json.example .cursor/mcp.json && export GITHUB_PERSONAL_ACCESS_TOKEN=<dein-token>",
+    "github_mcp": "GitHub MCP (plugin-github-github): GITHUB_PERSONAL_ACCESS_TOKEN mit Scopes repo, workflow, read:org setzen. Setup-Anleitung: docs/operations/GITHUB-MCP-SETUP.md. Issue #126.",
     "dual_write": "Optionaler Commit-Dual-Write: docs/operations/BRAIN-DUAL-WRITE.md — nicht Teil von MCP."
   }
 }
