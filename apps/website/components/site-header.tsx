@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLang } from '@/lib/lang-context';
+import { useAuth } from '@/lib/auth';
+import { UserRound } from 'lucide-react';
 
 /** Anhang-Logo (SVG NX-Mark + Lime-Punkt + Wortmarke), exakt nach "NeXify Homepage.dc.html". */
 export function NxLogoMark() {
@@ -48,20 +50,51 @@ export function NxLogoMark() {
   );
 }
 
-const NAV = [
-  { label: 'Leistungen', href: '#leistungen' },
-  { label: 'Preise', href: '#preise' },
-  { label: 'Prozess', href: '#prozess' },
-  { label: 'Referenzen', href: '#referenzen' },
-  { label: 'Über uns', href: '#ueberuns' },
-  { label: 'FAQ', href: '#faq' },
-];
+/** Nav auf echte Routen (Unterseiten existieren unter app/[locale]/…) mit Locale-Prefix. */
+const NAV = {
+  de: [
+    { label: 'Leistungen', href: '/leistungen' },
+    { label: 'Preise', href: '/preise' },
+    { label: 'Prozess', href: '/prozess' },
+    { label: 'Referenzen', href: '/referenzen' },
+    { label: 'Über uns', href: '/ueber-mich' },
+    { label: 'FAQ', href: '/faq' },
+  ],
+  en: [
+    { label: 'Services', href: '/leistungen' },
+    { label: 'Pricing', href: '/preise' },
+    { label: 'Process', href: '/prozess' },
+    { label: 'References', href: '/referenzen' },
+    { label: 'About', href: '/ueber-mich' },
+    { label: 'FAQ', href: '/faq' },
+  ],
+  nl: [
+    { label: 'Diensten', href: '/leistungen' },
+    { label: 'Prijzen', href: '/preise' },
+    { label: 'Proces', href: '/prozess' },
+    { label: 'Referenties', href: '/referenzen' },
+    { label: 'Over ons', href: '/ueber-mich' },
+    { label: 'FAQ', href: '/faq' },
+  ],
+} as const;
+
+const CTA = {
+  de: { book: 'Gespräch buchen', account: 'Konto', login: 'Anmelden' },
+  en: { book: 'Book a call', account: 'Account', login: 'Log in' },
+  nl: { book: 'Gesprek boeken', account: 'Account', login: 'Inloggen' },
+} as const;
 
 export function SiteHeader() {
   const { lang, setLang } = useLang();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const anchor = (h: string) => `/${lang}${h}`;
+  const t = CTA[lang];
+  const prefix = lang === 'de' ? '' : `/${lang}`;
+  const href = (h: string) => `${prefix}${h}`;
+  const nav = NAV[lang];
+
+  const accountHref = user && typeof user === 'object' ? (user.role === 'admin' ? '/admin' : '/konto') : '/login';
 
   return (
     <header
@@ -89,7 +122,7 @@ export function SiteHeader() {
           flexWrap: 'nowrap',
         }}
       >
-        <Link href={anchor('#top')} style={{ display: 'flex', alignItems: 'center', gap: 11, flex: 'none' }} data-testid="logo">
+        <Link href={href('/')} style={{ display: 'flex', alignItems: 'center', gap: 11, flex: 'none' }} data-testid="logo">
           <NxLogoMark />
           <span
             style={{
@@ -105,10 +138,10 @@ export function SiteHeader() {
         </Link>
 
         <nav className="nx-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 22, whiteSpace: 'nowrap' }}>
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <Link
               key={item.href}
-              href={anchor(item.href)}
+              href={href(item.href)}
               style={{ fontSize: 13, color: '#a1a1aa', fontWeight: 500 }}
               data-testid={`nav-${item.href.slice(1)}`}
             >
@@ -129,7 +162,7 @@ export function SiteHeader() {
             }}
             data-testid="lang-switcher"
           >
-            {(['de', 'nl'] as const).map((l) => (
+            {(['de', 'en', 'nl'] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
@@ -152,7 +185,25 @@ export function SiteHeader() {
           </div>
 
           <Link
-            href={anchor('#kontakt')}
+            href={accountHref}
+            aria-label={t.account}
+            data-testid="header-account-link"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 38,
+              height: 38,
+              borderRadius: 999,
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#a1a1aa',
+            }}
+          >
+            <UserRound size={15} />
+          </Link>
+
+          <Link
+            href={href('/kontakt')}
             data-testid="header-cta"
             style={{
               display: 'inline-flex',
@@ -169,7 +220,7 @@ export function SiteHeader() {
               flex: 'none',
             }}
           >
-            Gespräch buchen
+            {t.book}
           </Link>
 
           <span
@@ -214,10 +265,10 @@ export function SiteHeader() {
             padding: '12px 24px 20px',
           }}
         >
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <Link
               key={item.href}
-              href={anchor(item.href)}
+              href={href(item.href)}
               onClick={() => setOpen(false)}
               style={{
                 padding: '14px 0',
@@ -230,6 +281,13 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <Link
+            href={accountHref}
+            onClick={() => setOpen(false)}
+            style={{ padding: '14px 0', fontSize: 15, color: '#e5e5e5', fontWeight: 500 }}
+          >
+            {t.login}
+          </Link>
         </div>
       )}
     </header>
