@@ -19,9 +19,9 @@ const origin = siteOrigin();
 
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
-  title: { default: "NeXify AI — Premium Websites, Apps & AI-Automatisierung", template: "%s | NeXify AI" },
+  title: { default: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.", template: "%s | NeXify AI" },
   description:
-    "KI-Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren. Transparent zum Tagessatz von 449 €. Deutsch & Nederlands.",
+    "NeXify AI plant, baut und betreibt KI-Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren. 449 €/Umsetzungstag. Deutsch & Nederlands. Chat it. Automate it.",
   keywords: [
     "KI Agenten", "Automatisierung", "Chatbot", "Terminbuchung", "KI Agentur", "NeXify AI",
     "Prozessautomatisierung", "E-Mail Triage", "Leadqualifizierung", "Wissensdatenbank",
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
     locale: "de_DE",
     alternateLocale: ["nl_NL"],
     siteName: company.brand,
-    title: "NeXify AI — Chat it. Automate it.",
-    description: "KI-Automatisierung für Betriebe. 449 € / Umsetzungstag. Deutsch & Nederlands.",
+    title: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.",
+    description: "KI-Agenten für Betriebe. 449 € / Umsetzungstag. Deutsch & Nederlands. Chat it. Automate it.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI — Chat it. Automate it." }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NeXify AI — Chat it. Automate it.",
+    title: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.",
     description: "KI-Agenten für Betriebe. 449 € / Umsetzungstag netto.",
     images: ["/og-image.png"],
   },
