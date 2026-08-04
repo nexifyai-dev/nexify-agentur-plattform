@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # FILE: /opt/nexifyai/repos/nexify-agentur-plattform/scripts/gtm-demand-scan.py
 # NIR: 01.08.2026 19:15
-# UPDATED: 01.08.2026 19:15
+# UPDATED: 04.08.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Dev
 # WHAT: Kostenfreier Demand-/Listing-Scan für NeXify AI Go-to-Market
@@ -122,16 +122,55 @@ def main() -> int:
             state, code = check_url(url)
             health.append({"name": name, "url": url, "state": state, "code": code})
 
-    pending = [
+    # All statuses that require a human action (email verify, SSO, CAPTCHA, OTP)
+    HUMAN_GATE_STATUSES = {
+        "pending_human",
+        "pending_human_sso",
+        "submitted_awaiting_email_verify",
+        "submitted_awaiting_profile",
+        "blocked_recaptcha_password",
+        "blocked_cloudflare_password",
+        "blocked_cloudflare",
+        "blocked_cloudflare_or_missing_form",
+        "blocked_form_unavailable",
+    }
+
+    all_channels = channels.get("channels", [])
+
+    # P0 channels still needing human action (not yet live/done)
+    p0_human = [
         c
-        for c in channels.get("channels", [])
-        if c.get("status") == "pending_human" and c.get("priority") == "P0"
+        for c in all_channels
+        if c.get("priority") == "P0"
+        and c.get("status") in HUMAN_GATE_STATUSES
+        and c.get("autonomy") != "fully_autonomous"
+    ]
+
+    # P1 channels still needing human action
+    p1_human = [
+        c
+        for c in all_channels
+        if c.get("priority") == "P1"
+        and c.get("status") in HUMAN_GATE_STATUSES
+        and c.get("autonomy") != "fully_autonomous"
+    ]
+
+    # Channels awaiting email verify (immediate action — Pascal inbox)
+    email_verify = [
+        c
+        for c in all_channels
+        if c.get("status") in {
+            "submitted_awaiting_email_verify",
+            "submitted_awaiting_profile",
+        }
     ]
 
     report = {
         "generated_at": now,
         "intent_queries": INTENT_QUERIES,
-        "p0_pending_human": pending,
+        "p0_pending_human": p0_human,
+        "p1_pending_human": p1_human,
+        "email_verify_immediate": email_verify,
         "channel_health": health,
         "notes": [
             "Reddit JSON API often 403 from this VPS — use web search queries instead.",
@@ -153,9 +192,27 @@ def main() -> int:
         for q in block["queries"]:
             print(f"  - {q}")
 
-    print("\n## P0 Listings — Human OTP needed")
-    for c in pending:
-        print(f"  - [{c.get('priority')}] {c.get('name')}: {c.get('url')}")
+    print("\n## ✅ Sofort: E-Mail-Verify (Pascal Posteingang)")
+    if email_verify:
+        for c in email_verify:
+            nxt = c.get("next", c.get("note", "—"))
+            print(f"  - [{c.get('priority')}] {c.get('name')}: {nxt}")
+    else:
+        print("  (keine ausstehend)")
+
+    print("\n## 🔑 P0 Human-Gate Listings")
+    if p0_human:
+        for c in p0_human:
+            note = c.get("note", "")
+            suffix = f" — {note}" if note else ""
+            print(f"  - [{c.get('priority')}] {c.get('name')} ({c.get('status')}){suffix}")
+    else:
+        print("  (alle P0 erledigt ✓)")
+
+    if p1_human:
+        print("\n## P1 Human-Gate Listings (Folgewelle)")
+        for c in p1_human:
+            print(f"  - [{c.get('priority')}] {c.get('name')} ({c.get('status')}): {c.get('url')}")
 
     if health:
         print("\n## Channel reachability")
@@ -164,9 +221,12 @@ def main() -> int:
             print(f"  - {h['name']}: {h['state']} ({code_display})")
 
     print("\n## Next")
-    print("  1. Paste docs/go-to-market/listing-copy.json into P0 directories")
-    print("  2. Collect first client reviews for Clutch/GoodFirms")
-    print("  3. Re-run: python3 scripts/gtm-demand-scan.py --json")
+    print("  1. Pascal: E-Mail-Verify für agenturen.app + Zukko.nl prüfen (Posteingang mail@nexifyai.cloud)")
+    print("  2. Pascal: Google Business Profile (business.google.com) + Clutch via Google/LinkedIn anlegen")
+    print("  3. Pascal: profis.ai / GoodFirms / Sortlist — Passwort + CAPTCHA manuell im Browser")
+    print("  4. Paste docs/go-to-market/listing-copy.json in P0 directories sobald Accounts aktiv")
+    print("  5. Collect first client reviews for Clutch/GoodFirms")
+    print("  6. Re-run: python3 scripts/gtm-demand-scan.py --json")
     return 0
 
 
