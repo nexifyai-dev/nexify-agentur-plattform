@@ -54,7 +54,9 @@ export async function POST(request: Request) {
     });
 
     if (response.ok) {
-      const data = await response.json();
+      const raw = await response.text();
+      // 9Router hängt gelegentlich Content nach dem JSON an → bis zum letzten } parsen
+      const data = JSON.parse(raw.slice(0, raw.lastIndexOf("}") + 1));
       const text = data?.choices?.[0]?.message?.content?.trim();
       if (text) {
         const out = withButtons(text);
