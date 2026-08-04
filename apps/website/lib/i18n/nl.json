@@ -1,103 +1,103 @@
 {
   "meta": {
-    "title": "NeXify AI — Websites & Software van de vakman · €449/dag",
-    "description": "Persoonlijke B2B-webontwikkeling: websites, shops, apps en automatisering tegen een transparant dagtarief."
+    "title": "NeXify AI — KI-agents voor uw bedrijf · Op automatische piloot.",
+    "description": "NeXify AI plant, bouwt en beheert KI-agents die vragen beantwoorden, afspraken boeken en processen automatiseren. €449/implementatiedag. Duits & Nederlands."
   },
   "nav": {
     "leistungen": "Diensten",
     "preise": "Prijzen",
-    "arbeitsweise": "Werkwijze",
+    "arbeitsweise": "Proces",
     "ueber": "Over ons",
     "kontakt": "Contact"
   },
   "header": {
-    "chip": "Persoonlijk beheerd",
-    "cta": "Project aanvragen"
+    "chip": "KI-automatisering, live in bedrijf",
+    "cta": "Gesprek boeken"
   },
   "hero": {
-    "badge": "Ervaring ontmoet AI-ondersteunde snelheid",
-    "headline": "Websites en software van de vakman.",
-    "highlight": "In dagen, niet maanden.",
-    "description": "Pascal Courbois combineert persoonlijke ervaring, duidelijke verantwoordelijkheid en moderne AI-ondersteunde ontwikkeling. Zo ontstaan hoogwaardige websites, shops, webapps, mobiele apps en automatiseringen tegen een transparante prijs.",
-    "cta": "Project bespreken",
-    "ctaSecondary": "Bekijk prijzen",
-    "trust1": "Persoonlijk beheerd",
-    "trust2": "€449 netto / werkdag",
-    "trust3": "Exclusief B2B"
+    "badge": "KI-automatisering, live in bedrijf",
+    "headline": "Uw bedrijf.",
+    "highlight": "Op automatische piloot.",
+    "description": "NeXify AI plant, bouwt en beheert KI-agents die vragen beantwoorden, afspraken boeken en processen automatiseren — meetbaar sneller dan elk team.",
+    "cta": "Gratis eerste gesprek",
+    "ctaSecondary": "Bekijk diensten",
+    "trust1": "340+ processen in live bedrijf",
+    "trust2": "€449 / implementatiedag",
+    "trust3": "DE & NL inbegrepen"
   },
   "proof": {
-    "price": "netto per werkdag",
-    "landing": "voor een landingspagina",
-    "website": "voor een website",
-    "shop": "voor een shop of app-MVP"
+    "price": "netto per implementatiedag",
+    "landing": "Richtwaarde 1–3 dagen",
+    "website": "voor een KI-chatagent",
+    "shop": "voor CRM-integratie"
   },
   "services": {
     "kicker": "Diensten",
-    "title": "Alles wat een digitaal product echt nodig heeft.",
-    "subtitle": "Strategie, ontwerp, ontwikkeling, integraties, tests en oplevering uit één verantwoordelijke hand. Geen anonieme productieketen.",
+    "title": "Acht bouwstenen voor geautomatiseerde bedrijfsvoering.",
+    "subtitle": "KI-chatagent, afspraakboeking, e-mailtriage, offertegenerator, CRM-integratie, kennisbank, reporting, monitoring.",
     "details": "Bekijk details"
   },
   "why": {
-    "kicker": "Waarom deze prijs mogelijk is",
-    "title": "Ervaring bespaart omwegen. AI bespaart doorlooptijd.",
-    "subtitle": "De prijs is niet lager door minder verantwoordelijkheid, maar door minder wrijving: geen opgeblazen teams, geen overdrachtsloops, geen maandenlange productie."
+    "kicker": "Waarom NeXify",
+    "title": "Drie principes waar we nooit aan voorbijgaan.",
+    "subtitle": "Meetbaar in plaats van marketing. Bedrijf in plaats van prototype. Transparant in plaats van black box."
   },
   "process": {
-    "kicker": "Werkwijze",
-    "title": "Een duidelijk pad van doel naar getoetst resultaat.",
-    "subtitle": "De omvang wordt vooraf in werkdagen gepland. Elke fase produceert zichtbare besluiten, resultaten en controles."
+    "kicker": "Proces",
+    "title": "Vijf stappen van eerste gesprek tot live bedrijf.",
+    "subtitle": "Eerste gesprek, concept, implementatie, go live, bedrijf."
   },
   "calculator": {
-    "kicker": "Projectcalculator",
-    "title": "Transparantie in plaats van pakketnevel.",
-    "description": "Kies de geplande werkdagen. De werkelijke omvang wordt vóór projectstart vastgesteld op basis van functies, inhoud, integraties en acceptatiecriteria.",
-    "days": "werkdagen",
-    "day": "werkdag",
+    "kicker": "Prijzen",
+    "title": "Transparant berekend. Geen kleine lettertjes.",
+    "description": "Vaste prijs per dag, geen abonnementsdwang, DE & NL inbegrepen. Optionele doorlopende begeleiding voor €249/maand.",
+    "days": "Implementatiedagen",
+    "day": "Implementatiedag",
     "netto": "Netto",
-    "vat": "21% btw",
-    "gross": "Bruto incl. 21% btw",
-    "note": "Bij grensoverschrijdende B2B-diensten binnen de EU kan de verleggingsregeling gelden bij een geldig btw-identificatienummer."
+    "vat": "excl. btw",
+    "gross": "Bruto",
+    "note": "Aanbiedingen zijn uitsluitend gericht op ondernemingen (B2B)."
   },
   "cta": {
-    "kicker": "Start met een duidelijke kostenraming",
-    "title": "Beschrijf het doel. U ontvangt scope, werkdagen en een prijsbereik.",
-    "description": "Geen vrijblijvende verkooppresentatie, maar een eerste vakmatige beoordeling: wat is nodig, wat kan wachten en hoe is het kosteneffectief te realiseren?",
-    "button": "Project aanvragen",
-    "response": "Reactie op gekwalificeerde aanvragen doorgaans binnen één werkdag",
+    "kicker": "Eerste agent",
+    "title": "Laat ons uw eerste agent bouwen.",
+    "description": "Gratis eerste gesprek, vrijblijvende inschatting, start deze week mogelijk.",
+    "button": "Afspraak aanvragen",
+    "response": "Antwoord op gekwalificeerde vragen meestal binnen één werkdag",
     "confidential": "Vertrouwelijke B2B-communicatie"
   },
   "faq": {
-    "kicker": "Veelgestelde vragen",
-    "title": "Duidelijke antwoorden vóór de projectstart.",
-    "subtitle": "De belangrijkste punten over prijs, omvang en samenwerking.",
+    "kicker": "FAQ",
+    "title": "Veelgestelde vragen.",
+    "subtitle": "Antwoorden over snelheid, kosten, talen en gegevensbeveiliging.",
     "allQuestions": "Bekijk alle vragen"
   },
   "testimonials": {
-    "q1": "In drie dagen een complete website — en het resultaat ziet eruit als van een groot bureau. Pascal begreep meteen wat we nodig hadden.",
-    "a1": "Directeur",
-    "i1": "IT-consultancy",
-    "q2": "Eindelijk een ontwikkelaar die eerlijk zegt wat zinvol is en wat niet. Geen technologiegezwets, maar duidelijke aanbevelingen.",
-    "a2": "Eigenaresse",
-    "i2": "Handel",
-    "q3": "De prijs was transparant, de communicatie direct, het resultaat op tijd. Zo zou samenwerking altijd moeten verlopen.",
-    "a3": "CTO",
-    "i3": "Technologie"
+    "q1": "De agent beantwoordt nu meer vragen dan ons hele team voorheen — dag en nacht.",
+    "a1": "Directie",
+    "i1": "Ambachtelijk bedrijf",
+    "q2": "Vaste dagtarieven in plaats van licentiecHaos, eindelijk voorspelbare KI-kosten.",
+    "a2": "Leiding administratie",
+    "i2": "Dienstverlener",
+    "q3": "Van idee tot live bedrijf duurde precies drie dagen.",
+    "a3": "Eigenaar",
+    "i3": "Retail"
   },
   "footer": {
-    "description": "AI-ondersteunde websites, shops, apps en automatiseringen — persoonlijk bedacht, ontwikkeld en getest.",
-    "b2b": "Exclusief B2B",
-    "navigation": "Navigatie",
-    "services": "Diensten",
+    "description": "chat it. automate it. AI-automatisering voor bedrijven in DACH en NL.",
+    "b2b": "Aanbiedingen zijn uitsluitend gericht op ondernemingen (B2B)",
+    "navigation": "Bedrijf",
+    "services": "Product",
     "contact": "Contact",
-    "ready": "Klaar om uw project te starten?",
-    "readySub": "Gratis intakegesprek · Reactie binnen 24u",
-    "cta": "Project aanvragen"
+    "ready": "Laat ons uw eerste agent bouwen.",
+    "readySub": "Gratis eerste gesprek · start deze week mogelijk",
+    "cta": "Afspraak aanvragen"
   },
   "notFound": {
     "code": "404",
     "title": "Pagina niet gevonden.",
     "description": "De link is mogelijk verouderd of de URL bevat een typfout.",
-    "back": "Terug naar homepage"
+    "back": "Terug naar home"
   },
   "loading": "Laden …",
   "backToTop": "Boven"
