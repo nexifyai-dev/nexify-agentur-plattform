@@ -52,7 +52,7 @@ export const legalDe: Record<string, LegalPageData> = {
           "NeXify AI by NeXify – Chat it. Automate it.",
           "Eenmanszaak (Einzelunternehmen nach niederländischem Recht), Inhaber: Pascal Courbois.",
           "Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande.",
-          "Das Unternehmen ist unter dem Markennamen „NeXify AI“ bzw. „NeXify AI by NeXify – Chat it. Automate it.“ tätig.",
+          'Das Unternehmen ist unter dem Markennamen "NeXify AI" bzw. "NeXify AI by NeXify – Chat it. Automate it." tätig.',
         ],
       },
       {
@@ -219,7 +219,7 @@ export const legalDe: Record<string, LegalPageData> = {
       },
       {
         id: "ki-chat",
-        heading: "7. KI-Berater „NeXify AI“ (Live-Chat)",
+        heading: "7. KI-Berater „NeXify AI\" (Live-Chat)",
         paragraphs: [
           "Chat-Nachrichten und Sitzungskennung werden verarbeitet, um den Verlauf bereitzustellen und Anfragen zu qualifizieren.",
           "Inhalte können an ein LLM eines spezialisierten Anbieters übermittelt werden. Keine besonderen Kategorien (Art. 9) und keine Geheimnisse im Chat.",
@@ -310,7 +310,7 @@ export const legalDe: Record<string, LegalPageData> = {
         id: "avv-hinweis",
         heading: "15. Auftragsverarbeitung für Kundenprojekte",
         paragraphs: [
-          "Weisungsgebundene Verarbeitung für Kunden: AVV nach Art. 28 – siehe Seite „AVV“.",
+          "Weisungsgebundene Verarbeitung für Kunden: AVV nach Art. 28 – siehe Seite „AVV\".",
         ],
       },
       {
@@ -478,7 +478,7 @@ export const legalDe: Record<string, LegalPageData> = {
         id: "transparenz",
         heading: "1. Sie interagieren mit einem KI-System",
         paragraphs: [
-          "Der Berater „NeXify AI“ ist ein KI-System. Interaktion mit Automatisierung, nicht mit einem Menschen – außer bei ausdrücklicher menschlicher Übernahme.",
+          "Der Berater „NeXify AI\" ist ein KI-System. Interaktion mit Automatisierung, nicht mit einem Menschen – außer bei ausdrücklicher menschlicher Übernahme.",
           "Transparenz gemäß Art. 50 Abs. 1 VO (EU) 2024/1689 (AI Act); Pflichten ab 2. August 2026 – Hinweise bereits jetzt umgesetzt.",
         ],
       },
@@ -998,7 +998,7 @@ export const legalDe: Record<string, LegalPageData> = {
         id: "kontakt",
         heading: "6. SLA-Kontakt",
         paragraphs: [
-          "SLA-Eskalationen an mail@nexifyai.cloud mit dem Betreff „SLA-Vorfall – [Datum]".",
+          `SLA-Eskalationen an mail@nexifyai.cloud mit dem Betreff "SLA-Vorfall – [Datum]".`,
         ],
       },
     ],
