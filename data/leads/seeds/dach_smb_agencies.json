@@ -2,7 +2,10 @@
   "meta": {
     "name": "dach_smb_agencies_public",
     "note": "Public company websites only. do_not_mail=true for directories/associations used as sources.",
-    "legal": "B2B UWG legitimate interest for comparable digital/AI services."
+    "legal": "SEEDS ARE DISCOVERY MATERIAL ONLY — NOT A SEND-GATE. §7 UWG requires explicit opt-in (consent=true) before any outbound email. Cold-email seed expansion blocked per issue #256. See docs/gtm/UWG-EMAIL-OPTIN-ONLY.md.",
+    "expansion_status": "BLOCKED",
+    "expansion_blocked_by": "issue #256 (legal: pause cold email; opt-in only)",
+    "expansion_blocked_ref": "docs/gtm/UWG-EMAIL-OPTIN-ONLY.md"
   },
   "targets": [
     {
