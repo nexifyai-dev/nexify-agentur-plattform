@@ -1,185 +1,262 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useEffect, useRef, useState } from 'react';
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
+/**
+ * Proaktiver KI-Chat exakt nach Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark).
+ * VERBOTEN laut design_guidelines.json: lucide-icons, Emojis, Quick-Replies, "Online"-Statuszeile, Sparkles.
+ * Launcher = 9px Lime-Punkt + Puls-Ring, Send = "→" (Text, kein Icon).
+ */
+
+interface ChatMessage {
+  text: string;
+  align: 'flex-start' | 'flex-end';
+  bg: string;
+  color: string;
 }
 
-const PROACTIVE_MESSAGES: Message[] = [
-  {
-    role: 'assistant',
-    content: '👋 Hey! Ich bin NeXify AI – dein KI-Agent. Soll ich dir ein unverbindliches Angebot für dein nächstes Webprojekt erstellen?',
-  },
-];
+const ANHANG_GREETING: ChatMessage = {
+  text: 'Hallo! Ich sehe, Sie schauen sich unsere Leistungen an, soll ich Ihnen direkt eine erste Einschätzung für Ihr Projekt erstellen?',
+  align: 'flex-start',
+  bg: 'rgba(255,255,255,0.06)',
+  color: '#e5e5e5',
+};
 
-const QUICK_REPLIES = [
-  '💡 Was kostet eine Website?',
-  '🤖 Was macht NeXify AI?',
-  '📋 Angebot anfordern',
-  '🚀 Wie startet man?',
-];
+const ANHANG_REPLY =
+  'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag.';
 
-export default function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(PROACTIVE_MESSAGES);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showInitial, setShowInitial] = useState(true);
+const KEYFRAMES = `
+  @keyframes nx-pulsering { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(2.1); opacity: 0; } }
+  @keyframes nx-bubblein { from { opacity: 0; transform: translateY(12px) scale(0.9); } to { opacity: 1; transform: none; } }
+  @keyframes nx-typing { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+`;
+
+export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([ANHANG_GREETING]);
+  const [typing, setTyping] = useState(false);
+  const [chatInput, setChatInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Proactive pop-up after 4 seconds
-    const timer = setTimeout(() => {
-      setShowInitial(false);
-      setOpen(true);
-    }, 4000);
-    return () => clearTimeout(timer);
+    const style = document.createElement('style');
+    style.textContent = KEYFRAMES;
+    document.head.appendChild(style);
+    return () => {
+      style.remove();
+    };
   }, []);
 
   useEffect(() => {
+    if (chatAutoOpen !== false) {
+      const timer = setTimeout(() => setChatOpen(true), 4200);
+      return () => clearTimeout(timer);
+    }
+  }, [chatAutoOpen]);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, typing]);
 
-  const handleSend = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg: Message = { role: 'user', content: input };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setLoading(true);
-
-    // Simulated AI response (placeholder until AgentMemory/9Router integration)
+  const sendChatMessage = () => {
+    const text = chatInput.trim();
+    if (!text) return;
+    const userMsg: ChatMessage = {
+      text,
+      align: 'flex-end',
+      bg: 'linear-gradient(120deg,#C8FF00,#eaffb0)',
+      color: '#0A0A0A',
+    };
+    setMessages((s) => [...s, userMsg]);
+    setChatInput('');
+    setTyping(true);
     setTimeout(() => {
-      const ai: Message = {
-        role: 'assistant',
-        content:
-          'Danke für deine Nachricht! 🎉 Ich leite das an unser Team weiter. In der Zwischenzeit: Eine moderne Business-Website mit KI-Integration startet bei uns ab **449 €/Tag**. Soll ich dir ein detailliertes Angebot per E-Mail schicken?',
-      };
-      setMessages((prev) => [...prev, ai]);
-      setLoading(false);
-    }, 1500);
+      setTyping(false);
+      setMessages((s) => [
+        ...s,
+        { text: ANHANG_REPLY, align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
+      ]);
+    }, 1300);
   };
 
   return (
     <>
-      {/* Floating trigger button */}
-      <button
-        onClick={() => setOpen(!open)}
-        data-testid="chat-widget-trigger"
-        className={
-          'fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full ' +
-          'bg-gradient-to-br from-lime-400 to-lime-500 text-black shadow-[0_0_25px_rgba(200,255,0,0.4)] ' +
-          'hover:scale-110 transition-transform duration-300 ' +
-          (showInitial ? 'animate-pulse' : '')
-        }
+      {/* Launcher: exakt Anhang — 60px rund, Lime-Punkt + Puls-Ring, KEIN Icon */}
+      <div
+        onClick={() => setChatOpen((s) => !s)}
+        data-testid="chat-launcher"
+        role="button"
         aria-label="Chat öffnen"
+        style={{
+          position: 'fixed',
+          right: 24,
+          bottom: 24,
+          zIndex: 60,
+          width: 60,
+          height: 60,
+          borderRadius: 999,
+          border: '1px solid rgba(200,255,0,0.3)',
+          background: 'linear-gradient(135deg,#1c1c20,#101013)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.6), 0 0 24px rgba(200,255,0,0.12)',
+        }}
       >
-        {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-      </button>
+        <span
+          style={{
+            position: 'absolute',
+            inset: -5,
+            borderRadius: 999,
+            border: '1px solid rgba(200,255,0,0.35)',
+            animation: 'nx-pulsering 2.6s cubic-bezier(0.22,1,0.36,1) infinite',
+          }}
+        />
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            borderRadius: 999,
+            background: '#C8FF00',
+            boxShadow: '0 0 10px rgba(200,255,0,0.8)',
+          }}
+        />
+      </div>
 
-      {/* Chat panel */}
-      {open && (
+      {/* Panel: exakt Anhang */}
+      {chatOpen && (
         <div
-          data-testid="chat-widget-panel"
-          className={
-            'fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] ' +
-            'rounded-2xl border border-white/10 bg-[#0A0A0A]/90 backdrop-blur-2xl ' +
-            'shadow-[0_25px_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden ' +
-            'animate-in slide-in-from-bottom-4 duration-300'
-          }
+          data-testid="chat-panel"
+          style={{
+            position: 'fixed',
+            right: 24,
+            bottom: 96,
+            zIndex: 60,
+            width: 'min(380px, calc(100vw - 32px))',
+            height: 'min(520px, calc(100vh - 140px))',
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 22,
+            border: '1px solid rgba(200,255,0,0.15)',
+            background: 'rgba(14,14,17,0.94)',
+            backdropFilter: 'blur(28px)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.7)',
+            overflow: 'hidden',
+            animation: 'nx-bubblein 0.3s cubic-bezier(0.22,1,0.36,1)',
+          }}
         >
-          {/* Header */}
-          <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-lime-400/20">
-              <Sparkles className="h-5 w-5 text-lime-400" />
+          {/* Header: 8px Punkt + "NeXify KI Berater", Close × */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '18px 20px',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 999,
+                  background: '#C8FF00',
+                  boxShadow: '0 0 8px rgba(200,255,0,0.8)',
+                }}
+              />
+              <span style={{ fontSize: 13, fontWeight: 700 }}>NeXify KI Berater</span>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-white">NeXify AI Agent</p>
-              <p className="text-xs text-lime-400">Online • antwortet sofort</p>
-            </div>
+            <span
+              onClick={() => setChatOpen(false)}
+              style={{ cursor: 'pointer', color: '#71717a', fontSize: 18, lineHeight: 1 }}
+            >
+              ×
+            </span>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 max-h-[400px]">
+          {/* Nachrichten */}
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 14,
+            }}
+          >
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={
-                  'flex ' + (msg.role === 'user' ? 'justify-end' : 'justify-start')
-                }
+                style={{
+                  alignSelf: msg.align,
+                  maxWidth: '82%',
+                  padding: '12px 15px',
+                  borderRadius: 14,
+                  fontSize: 13.5,
+                  lineHeight: 1.55,
+                  background: msg.bg,
+                  color: msg.color,
+                }}
               >
-                <div
-                  className={
-                    'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ' +
-                    (msg.role === 'user'
-                      ? 'bg-lime-400 text-black rounded-br-md'
-                      : 'bg-white/5 text-zinc-200 border border-white/10 rounded-bl-md')
-                  }
-                >
-                  {msg.content}
-                </div>
+                {msg.text}
               </div>
             ))}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="flex gap-1 rounded-2xl bg-white/5 border border-white/10 px-4 py-3">
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400 [animation-delay:0ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400 [animation-delay:150ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-lime-400 [animation-delay:300ms]" />
-                </div>
+            {typing && (
+              <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '12px 15px' }}>
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.15s' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.3s' }} />
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick replies */}
-          {messages.length <= 1 && (
-            <div className="flex flex-wrap gap-2 px-4 pb-3">
-              {QUICK_REPLIES.map((reply) => (
-                <button
-                  key={reply}
-                  onClick={() => {
-                    setInput(reply);
-                  }}
-                  data-testid={`chat-quick-reply-${reply.slice(0, 2)}`}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:border-lime-400/50 hover:bg-lime-400/10 transition-colors"
-                >
-                  {reply}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Input */}
-          <div className="border-t border-white/10 px-4 py-3">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
+          {/* Input + Send "→" */}
+          <div style={{ display: 'flex', gap: 10, padding: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <input
+              type="text"
+              placeholder="Ihre Nachricht..."
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') sendChatMessage();
               }}
-              className="flex gap-2"
+              data-testid="chat-input"
+              style={{
+                flex: 1,
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 12,
+                background: 'rgba(255,255,255,0.03)',
+                color: '#fff',
+                padding: '11px 14px',
+                fontSize: 13,
+                outline: 'none',
+              }}
+            />
+            <span
+              onClick={sendChatMessage}
+              data-testid="chat-send"
+              role="button"
+              aria-label="Nachricht senden"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 42,
+                height: 42,
+                borderRadius: 12,
+                background: '#C8FF00',
+                color: '#0A0A0A',
+                fontWeight: 700,
+                cursor: 'pointer',
+                flex: 'none',
+              }}
             >
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Schreib eine Nachricht..."
-                data-testid="chat-widget-input"
-                className="flex-1 rounded-xl border-white/10 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:ring-lime-400"
-              />
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!input.trim() || loading}
-                data-testid="chat-widget-send"
-                className="rounded-xl bg-lime-400 text-black hover:bg-lime-300 disabled:opacity-40"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
-            </form>
+              →
+            </span>
           </div>
         </div>
       )}
@@ -187,5 +264,5 @@ export default function ChatWidget() {
   );
 }
 
-// Backward compatibility: also export as named export for layout.tsx
+// Backward compatibility: named export für layout.tsx
 export { ChatWidget };
