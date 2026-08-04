@@ -2,108 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import { Hero3D } from '@/components/hero-3d';
+import { useLang } from '@/lib/lang-context';
+import { HOME_CONTENT, PRICING } from '@/lib/home-content';
 
-/* ============================================================
- * Daten — 1:1 aus Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark)
+/**
+ * Homepage exakt nach Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark).
+ * Inhalte i18n DE/EN/NL aus lib/home-content.ts (DE = Anhang 1:1).
  * ChatWidget wird GLOBAL im Root-Layout gerendert — hier NICHT nochmal.
- * ============================================================ */
-
-const STATS = [
-  { value: '340+', label: 'Automatisierte Prozesse im Live Betrieb' },
-  { value: '1 bis 3 Tage', label: 'Richtwert bis zur ersten Agenten Version' },
-  { value: '24/7', label: 'Verfügbarkeit der Agenten' },
-  { value: 'DE / NL', label: 'Zweisprachiger Betrieb inklusive' },
-];
-
-const MARQUEE_ITEMS = [
-  'KI Agenten',
-  'Prozessautomatisierung',
-  'Terminbuchung',
-  'Angebotserstellung',
-  'E Mail Triage',
-  'Leadqualifizierung',
-  'Reporting',
-  'Wissensdatenbank',
-];
-
-const PILLARS = [
-  {
-    title: 'Messbar statt Marketing',
-    text: 'Jede Automatisierung bekommt eine Kennzahl, an der wir uns festhalten lassen.',
-  },
-  {
-    title: 'Betrieb statt Prototyp',
-    text: 'Wir liefern keine Demo. Wir übernehmen den laufenden Betrieb inklusive Wartung.',
-  },
-  {
-    title: 'Transparent statt Blackbox',
-    text: 'Feste Tagessätze, klare Reichweite, keine versteckten Lizenzmodelle.',
-  },
-];
-
-const SERVICES = [
-  {
-    title: 'KI Chat Agent für Website und WhatsApp',
-    text: 'Beantwortet Anfragen, qualifiziert Leads, übergibt nahtlos an Ihr Team.',
-    days: '3 bis 5 Tage',
-    span: 2,
-  },
-  { title: 'Terminbuchung Automatisierung', text: 'Kalender-Sync und automatische Bestätigungen.', days: '2 Tage', span: 1 },
-  { title: 'E Mail Triage Agent', text: 'Sortiert und beantwortet eingehende Anfragen.', days: '2 bis 3 Tage', span: 1 },
-  { title: 'Angebots Generator', text: 'Erstellt individuelle Angebote aus Ihren Konditionen.', days: '3 Tage', span: 1 },
-  {
-    title: 'CRM und Lead Pipeline Integration',
-    text: 'Verbindet Ihre Agenten direkt mit dem bestehenden CRM, ohne Systembruch.',
-    days: '4 bis 6 Tage',
-    span: 2,
-  },
-  { title: 'Wissensdatenbank Agent', text: 'Beantwortet interne Fragen aus Ihrer Dokumentation.', days: '3 Tage', span: 1 },
-  { title: 'Reporting Dashboard', text: 'Live Kennzahlen zu allen automatisierten Prozessen.', days: '2 Tage', span: 1 },
-  { title: 'Monitoring und Wartung', text: 'Laufende Pflege und Weiterentwicklung im Abo.', days: 'laufend', span: 1 },
-];
-
-const PROCESS_STEPS = [
-  { n: '01', title: 'Erstgespräch', text: 'Wir hören zu und skizzieren den ersten Anwendungsfall.' },
-  { n: '02', title: 'Konzept', text: 'Konkreter Umfang, Aufwand und Zeitplan in Tagen.' },
-  { n: '03', title: 'Umsetzung', text: 'Bau und Test des Agenten an echten Anfragen.' },
-  { n: '04', title: 'Go Live', text: 'Übergabe in den produktiven Betrieb.' },
-  { n: '05', title: 'Betrieb', text: 'Monitoring, Anpassungen, laufende Betreuung.' },
-];
-
-const TESTIMONIALS = [
-  {
-    quote: 'Der Agent beantwortet heute mehr Anfragen als unser gesamtes Team vorher, und das rund um die Uhr.',
-    author: 'Geschäftsführung, Handwerksbetrieb',
-  },
-  {
-    quote: 'Feste Tagessätze statt Lizenzchaos, endlich planbare Kosten für KI.',
-    author: 'Leitung Verwaltung, Dienstleister',
-  },
-  {
-    quote: 'Von der Idee bis zum Live Betrieb hat es genau drei Tage gedauert.',
-    author: 'Inhaber, Einzelhandel',
-  },
-];
-
-const FAQS = [
-  {
-    q: 'Wie schnell ist ein Agent einsatzbereit?',
-    a: 'Die meisten Anwendungsfälle sind innerhalb von 1 bis 5 Umsetzungstagen live, je nach Komplexität der Anbindung.',
-  },
-  {
-    q: 'Was kostet der laufende Betrieb?',
-    a: 'Umsetzung wird pro Tag abgerechnet, laufende Betreuung optional im Monatspreis, ohne Mindestlaufzeit.',
-  },
-  {
-    q: 'Funktioniert das auch auf Niederländisch?',
-    a: 'Ja, alle Agenten werden standardmäßig zweisprachig DE/NL ausgeliefert.',
-  },
-  { q: 'Brauchen wir eigene Entwickler?', a: 'Nein, wir übernehmen Bau, Anbindung und Wartung vollständig.' },
-  { q: 'Wie sicher sind unsere Daten?', a: 'Daten verbleiben in EU Infrastruktur, klare Auftragsverarbeitung nach AVV.' },
-];
-
-const DAY_RATE = 449;
-const MAINTENANCE_RATE = 249;
+ */
 
 /* ============================================================
  * Style-Konstanten (Anhang-Tokens)
@@ -158,7 +64,7 @@ const secondaryBtn: React.CSSProperties = {
  * Sektionen
  * ============================================================ */
 
-function Hero() {
+function Hero({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="top" style={{ position: 'relative', padding: '168px 0 72px', overflow: 'hidden' }}>
       <div
@@ -212,7 +118,7 @@ function Hero() {
                 boxShadow: '0 0 10px rgba(200,255,0,0.8)',
               }}
             />
-            KI Automatisierung, Live Betrieb
+            {t.heroBadge}
           </span>
           <h1
             style={{
@@ -226,7 +132,7 @@ function Hero() {
               maxWidth: 640,
             }}
           >
-            Ihr Unternehmen.
+            {t.heroTitleA}
             <br />
             <span
               style={{
@@ -240,19 +146,18 @@ function Hero() {
                 animation: 'nx-shimmer 8s linear infinite',
               }}
             >
-              Auf Autopilot.
+              {t.heroTitleB}
             </span>
           </h1>
           <p style={{ marginTop: 26, maxWidth: 520, fontSize: 17, lineHeight: 1.7, color: '#a1a1aa', fontWeight: 300 }}>
-            NeXify AI plant, baut und betreibt KI Agenten, die Anfragen beantworten, Termine buchen und Prozesse
-            automatisieren, messbar schneller als jedes Team.
+            {t.heroSubtitle}
           </p>
           <div style={{ marginTop: 34, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
             <a href="#kontakt" data-testid="hero-cta" style={primaryBtn}>
-              Kostenloses Erstgespräch
+              {t.heroCtaPrimary}
             </a>
             <a href="#leistungen" data-testid="hero-cta-secondary" style={secondaryBtn}>
-              Leistungen ansehen
+              {t.heroCtaSecondary}
             </a>
           </div>
         </div>
@@ -290,8 +195,8 @@ function Hero() {
               }}
             />
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>KI Berater aktiv</div>
-              <div style={{ fontSize: 10, color: '#71717a' }}>DE &amp; NL, im Chat</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>{t.floatCard1Title}</div>
+              <div style={{ fontSize: 10, color: '#71717a' }}>{t.floatCard1Sub}</div>
             </div>
           </div>
           <div
@@ -312,8 +217,8 @@ function Hero() {
             }}
           >
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Richtwert: 1 bis 3 Tage</div>
-              <div style={{ fontSize: 10, color: '#71717a' }}>€ 449 / Umsetzungstag</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>{t.floatCard2Title}</div>
+              <div style={{ fontSize: 10, color: '#71717a' }}>{t.floatCard2Sub}</div>
             </div>
           </div>
         </div>
@@ -333,7 +238,7 @@ function Hero() {
             background: 'rgba(255,255,255,0.1)',
           }}
         >
-          {STATS.map((s) => (
+          {t.stats.map((s) => (
             <div key={s.label} style={{ background: '#0c0c0f', padding: '22px 24px' }}>
               <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: 26, fontWeight: 600, color: '#e9ff8a' }}>
                 {s.value}
@@ -347,8 +252,8 @@ function Hero() {
   );
 }
 
-function Marquee() {
-  const doubled = useMemo(() => [...MARQUEE_ITEMS, ...MARQUEE_ITEMS], []);
+function Marquee({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
+  const doubled = useMemo(() => [...t.marquee, ...t.marquee], [t.marquee]);
   return (
     <section
       style={{
@@ -383,17 +288,17 @@ function Marquee() {
   );
 }
 
-function Pillars() {
+function Pillars({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section style={{ padding: '96px 0', position: 'relative', zIndex: 1 }}>
       <div style={container}>
         <span style={eyebrow}>
           <span style={eyebrowLine} />
-          Warum NeXify
+          {t.pillarsEyebrow}
         </span>
-        <h2 style={{ ...h2, maxWidth: 640 }}>Drei Prinzipien, an denen wir uns nie vorbeimogeln.</h2>
+        <h2 style={{ ...h2, maxWidth: 640 }}>{t.pillarsTitle}</h2>
         <div className="nx-3col" style={{ marginTop: 52, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 22 }}>
-          {PILLARS.map((p) => (
+          {t.pillars.map((p) => (
             <div
               key={p.title}
               style={{
@@ -436,7 +341,7 @@ function Pillars() {
   );
 }
 
-function Services() {
+function Services({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="leistungen" style={sectionWrap}>
       <div style={container}>
@@ -444,9 +349,9 @@ function Services() {
           <div>
             <span style={eyebrow}>
               <span style={eyebrowLine} />
-              Leistungen
+              {t.servicesEyebrow}
             </span>
-            <h2 style={{ ...h2, maxWidth: 600 }}>Acht Bausteine für den automatisierten Betrieb.</h2>
+            <h2 style={{ ...h2, maxWidth: 600 }}>{t.servicesTitle}</h2>
           </div>
           <a
             href="#kontakt"
@@ -462,11 +367,11 @@ function Services() {
               color: '#fff',
             }}
           >
-            Angebot anfragen
+            {t.servicesCta}
           </a>
         </div>
         <div className="nx-services-grid" style={{ marginTop: 48, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18 }}>
-          {SERVICES.map((svc) => (
+          {t.services.map((svc) => (
             <a
               key={svc.title}
               href="#kontakt"
@@ -519,15 +424,15 @@ function Services() {
   );
 }
 
-function Process() {
+function Process({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="prozess" style={sectionWrap}>
       <div style={container}>
         <span style={eyebrow}>
           <span style={eyebrowLine} />
-          Prozess
+          {t.processEyebrow}
         </span>
-        <h2 style={h2}>Fünf Schritte vom Erstgespräch zum Live-Betrieb.</h2>
+        <h2 style={h2}>{t.processTitle}</h2>
         <div
           className="nx-process-grid"
           style={{
@@ -541,7 +446,7 @@ function Process() {
             background: 'rgba(255,255,255,0.1)',
           }}
         >
-          {PROCESS_STEPS.map((ps) => (
+          {t.processSteps.map((ps) => (
             <div key={ps.n} style={{ background: '#0c0c0f', padding: '26px 22px', minHeight: 190, position: 'relative' }}>
               <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 600, color: '#585858' }}>{ps.n}</div>
               <div
@@ -565,33 +470,33 @@ function Process() {
   );
 }
 
-function Pricing() {
-  const [days, setDays] = useState(5);
+function Pricing({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
+  const [days, setDays] = useState(PRICING.sliderDefault);
   const [maintenance, setMaintenance] = useState(true);
-  const implementationTotal = (days * DAY_RATE).toLocaleString('de-DE');
-  const maintenanceCost = maintenance ? MAINTENANCE_RATE.toLocaleString('de-DE') : '0';
-  const daysFillPct = `${(((days - 1) / 19) * 100).toFixed(1)}%`;
+  const implementationTotal = (days * PRICING.dayRate).toLocaleString('de-DE');
+  const maintenanceCost = maintenance ? PRICING.maintenanceRate.toLocaleString('de-DE') : '0';
+  const daysFillPct = `${(((days - PRICING.sliderMin) / (PRICING.sliderMax - PRICING.sliderMin)) * 100).toFixed(1)}%`;
 
   return (
     <section id="preise" style={sectionWrap}>
       <div style={container}>
         <span style={eyebrow}>
           <span style={eyebrowLine} />
-          Preise
+          {t.pricingEyebrow}
         </span>
-        <h2 style={h2}>Transparent kalkuliert. Kein Kleingedrucktes.</h2>
+        <h2 style={h2}>{t.pricingTitle}</h2>
         <div className="nx-pricing-grid" style={{ marginTop: 48, display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 18, alignItems: 'stretch' }}>
           <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 24, padding: 40 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
               <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.16em', color: '#71717a', fontWeight: 600 }}>
-                Umsetzungstage
+                {t.pricingDaysLabel}
               </span>
               <span style={{ fontFamily: 'Outfit, sans-serif', fontSize: 34, fontWeight: 600, color: '#fff' }}>{days}</span>
             </div>
             <input
               type="range"
-              min={1}
-              max={20}
+              min={PRICING.sliderMin}
+              max={PRICING.sliderMax}
               step={1}
               value={days}
               onChange={(e) => setDays(parseInt(e.target.value, 10))}
@@ -618,8 +523,8 @@ function Pricing() {
               }}
             >
               <span>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>Laufende Betreuung</div>
-                <div style={{ marginTop: 4, fontSize: 12, color: '#71717a' }}>Monitoring, Anpassungen, Support</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>{t.pricingMaintenanceTitle}</div>
+                <div style={{ marginTop: 4, fontSize: 12, color: '#71717a' }}>{t.pricingMaintenanceSub}</div>
               </span>
               <input
                 type="checkbox"
@@ -630,9 +535,9 @@ function Pricing() {
               />
             </label>
             <div style={{ marginTop: 26, display: 'flex', flexWrap: 'wrap', gap: '8px 20px', color: '#585858', fontSize: 11, letterSpacing: '0.02em' }}>
-              <span>Festpreis pro Tag</span>
-              <span>Kein Abo Zwang</span>
-              <span>DE &amp; NL inklusive</span>
+              {t.pricingNotes.map((n) => (
+                <span key={n}>{n}</span>
+              ))}
             </div>
           </div>
 
@@ -649,11 +554,11 @@ function Pricing() {
           >
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#a1a1aa' }}>
-                <span>Umsetzung ({days} Tage à € 449)</span>
+                <span>{t.pricingLine1(days)}</span>
                 <strong style={{ color: '#fff', fontWeight: 500 }}>€ {implementationTotal}</strong>
               </div>
               <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#a1a1aa' }}>
-                <span>Laufende Betreuung / Monat</span>
+                <span>{t.pricingLine2}</span>
                 <strong style={{ color: '#fff', fontWeight: 500 }}>€ {maintenanceCost}</strong>
               </div>
               <div
@@ -667,7 +572,7 @@ function Pricing() {
                 }}
               >
                 <span style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.14em', color: '#71717a' }}>
-                  Gesamt einmalig
+                  {t.pricingTotalLabel}
                 </span>
                 <strong data-testid="pricing-total" style={{ fontFamily: 'Outfit, sans-serif', fontSize: 32, fontWeight: 600, color: '#e9ff8a' }}>
                   € {implementationTotal}
@@ -691,7 +596,7 @@ function Pricing() {
                 fontSize: 14,
               }}
             >
-              Angebot anfragen
+              {t.pricingCta}
             </a>
           </div>
         </div>
@@ -700,17 +605,17 @@ function Pricing() {
   );
 }
 
-function References() {
+function References({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="referenzen" style={sectionWrap}>
       <div style={container}>
         <span style={eyebrow}>
           <span style={eyebrowLine} />
-          Referenzen
+          {t.referencesEyebrow}
         </span>
-        <h2 style={h2}>Stimmen aus dem laufenden Betrieb.</h2>
+        <h2 style={h2}>{t.referencesTitle}</h2>
         <div className="nx-3col" style={{ marginTop: 48, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-          {TESTIMONIALS.map((q) => (
+          {t.testimonials.map((q) => (
             <figure
               key={q.author}
               style={{ margin: 0, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 30 }}
@@ -728,7 +633,7 @@ function References() {
   );
 }
 
-function About() {
+function About({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="ueberuns" style={sectionWrap}>
       <div
@@ -765,32 +670,28 @@ function About() {
           NX
         </span>
         <div>
-          <span style={eyebrow}>Über uns</span>
+          <span style={eyebrow}>{t.aboutEyebrow}</span>
           <h2 style={{ margin: '14px 0 0', fontFamily: 'Outfit, sans-serif', fontWeight: 300, fontSize: 'clamp(1.5rem,2.6vw,2.1rem)', color: '#fff', letterSpacing: '-0.02em' }}>
-            Gebaut von Praktikern, nicht von Buzzwords.
+            {t.aboutTitle}
           </h2>
-          <p style={{ marginTop: 14, maxWidth: 680, fontSize: 14.5, lineHeight: 1.75, color: '#a1a1aa', fontWeight: 300 }}>
-            NeXify AI entstand aus der täglichen Arbeit mit Betrieben, die ihre Prozesse automatisieren wollten, aber keine Zeit
-            für Experimente hatten. Wir bauen Agenten, testen sie an echten Fällen und übernehmen den laufenden Betrieb, nicht nur
-            die Einführung.
-          </p>
+          <p style={{ marginTop: 14, maxWidth: 680, fontSize: 14.5, lineHeight: 1.75, color: '#a1a1aa', fontWeight: 300 }}>{t.aboutText}</p>
         </div>
       </div>
     </section>
   );
 }
 
-function Faq() {
+function Faq({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="faq" style={sectionWrap}>
       <div style={{ ...container, width: 'min(880px, calc(100% - 48px))' }}>
         <span style={eyebrow}>
           <span style={eyebrowLine} />
-          FAQ
+          {t.faqEyebrow}
         </span>
-        <h2 style={h2}>Häufige Fragen.</h2>
+        <h2 style={h2}>{t.faqTitle}</h2>
         <div style={{ marginTop: 40, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          {FAQS.map((f) => (
+          {t.faqs.map((f) => (
             <details key={f.q} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <summary
                 style={{
@@ -821,7 +722,7 @@ function Faq() {
   );
 }
 
-function CtaBand() {
+function CtaBand({ t }: { t: (typeof HOME_CONTENT)['de'] }) {
   return (
     <section id="kontakt" style={sectionWrap}>
       <div style={container}>
@@ -867,14 +768,14 @@ function CtaBand() {
               <span style={{ position: 'absolute', inset: 19, borderRadius: 4, background: '#C8FF00', boxShadow: '0 0 16px rgba(200,255,0,0.7)' }} />
             </span>
             <h2 style={{ margin: '26px auto 0', maxWidth: 620, fontFamily: 'Outfit, sans-serif', fontWeight: 300, fontSize: 'clamp(1.8rem,3.6vw,2.8rem)', color: '#fff', letterSpacing: '-0.02em' }}>
-              Lassen Sie uns Ihren ersten Agenten bauen.
+              {t.ctaBandTitle}
             </h2>
             <p style={{ margin: '18px auto 0', maxWidth: 520, color: '#a1a1aa', fontSize: 15, lineHeight: 1.7, fontWeight: 300 }}>
-              Kostenloses Erstgespräch, unverbindliche Einschätzung, Start in dieser Woche möglich.
+              {t.ctaBandText}
             </p>
             <div style={{ marginTop: 34, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
               <a href="#top" data-testid="cta-band-btn" style={primaryBtn}>
-                Termin anfragen
+                {t.ctaBandBtn}
               </a>
             </div>
           </div>
@@ -889,18 +790,21 @@ function CtaBand() {
  * ============================================================ */
 
 export function HomePage() {
+  const { lang } = useLang();
+  const t = HOME_CONTENT[lang];
+
   return (
     <>
-      <Hero />
-      <Marquee />
-      <Pillars />
-      <Services />
-      <Process />
-      <Pricing />
-      <References />
-      <About />
-      <Faq />
-      <CtaBand />
+      <Hero t={t} />
+      <Marquee t={t} />
+      <Pillars t={t} />
+      <Services t={t} />
+      <Process t={t} />
+      <Pricing t={t} />
+      <References t={t} />
+      <About t={t} />
+      <Faq t={t} />
+      <CtaBand t={t} />
     </>
   );
 }
