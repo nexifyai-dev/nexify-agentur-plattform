@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * KI-Chat exakt nach Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark).
- * Live AI via /api/chat → 9Router (DeepSeek-V4). Kein lucide-icon, kein Emoji.
+ * KI-Berater Chat — DeepSeek-Reasoner via /api/chat
+ * Echte Buttons, keine Text-Links. Proaktiver, hilfsbereiter Ton.
  */
 
 interface ChatMessage {
@@ -12,13 +12,19 @@ interface ChatMessage {
   align: 'flex-start' | 'flex-end';
   bg: string;
   color: string;
+  buttons?: { label: string; href: string }[];
 }
 
 const GREETING: ChatMessage = {
-  text: 'Hallo! Ich bin der KI-Berater von NeXify AI — fragen Sie mich zu Leistungen, Preisen oder Ihrem Projekt.',
+  text: 'Hallo! Ich bin Pascal’s KI-Berater. Wie kann ich Ihnen heute helfen?\n\nSoll ich Ihnen unsere Leistungen zeigen, eine erste Preisspanne für Ihr Projekt einschätzen oder direkt einen Rückruf vereinbaren?',
   align: 'flex-start',
   bg: 'rgba(255,255,255,0.06)',
   color: '#e5e5e5',
+  buttons: [
+    { label: 'Leistungen ansehen', href: '/leistungen' },
+    { label: 'Preise & Ablauf', href: '/preise' },
+    { label: 'Rückruf vereinbaren', href: '/rueckruf' },
+  ],
 };
 
 const KEYFRAMES = `
@@ -26,6 +32,23 @@ const KEYFRAMES = `
   @keyframes nx-bubblein { from { opacity: 0; transform: translateY(12px) scale(0.9); } to { opacity: 1; transform: none; } }
   @keyframes nx-typing { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
 `;
+
+const btnStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 6,
+  padding: '8px 18px',
+  borderRadius: 999,
+  border: '1px solid rgba(200,255,0,0.45)',
+  background: 'rgba(200,255,0,0.08)',
+  color: '#C8FF00',
+  fontSize: 12.5,
+  fontWeight: 600,
+  cursor: 'pointer',
+  whiteSpace: 'nowrap',
+  transition: 'background 0.15s',
+  textDecoration: 'none',
+};
 
 export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
   const [chatOpen, setChatOpen] = useState(false);
@@ -43,7 +66,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
 
   useEffect(() => {
     if (chatAutoOpen !== false) {
-      const timer = setTimeout(() => setChatOpen(true), 4200);
+      const timer = setTimeout(() => setChatOpen(true), 3200);
       return () => clearTimeout(timer);
     }
   }, [chatAutoOpen]);
@@ -75,20 +98,43 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
       setTyping(false);
       setMessages((s) => [
         ...s,
-        { text: data.reply, align: 'flex-start', bg: 'rgba(255,255,255,0.06)', color: '#e5e5e5' },
+        {
+          text: data.reply,
+          align: 'flex-start',
+          bg: 'rgba(255,255,255,0.06)',
+          color: '#e5e5e5',
+          buttons: data.buttons || undefined,
+        },
       ]);
     } catch {
       setTyping(false);
       setMessages((s) => [
         ...s,
         {
-          text: 'Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung.',
+          text: 'Einen Moment bitte — ich verbinde Sie mit Pascal. Alternativ können Sie direkt einen Termin buchen:',
           align: 'flex-start',
           bg: 'rgba(255,255,255,0.06)',
           color: '#e5e5e5',
+          buttons: [{ label: 'Rückruf buchen', href: '/rueckruf' }],
         },
       ]);
     }
+  };
+
+  const handleButtonClick = (href: string) => {
+    if (href.startsWith('http')) {
+      window.open(href, '_blank', 'noopener');
+    } else {
+      window.location.href = href;
+    }
+  };
+
+  // Hover-Effekt für Buttons
+  const btnHover = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    (e.currentTarget as HTMLElement).style.background = 'rgba(200,255,0,0.18)';
+  };
+  const btnLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    (e.currentTarget as HTMLElement).style.background = 'rgba(200,255,0,0.08)';
   };
 
   return (
@@ -117,53 +163,111 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
           data-testid="chat-panel"
           style={{
             position: 'fixed', right: 24, bottom: 96, zIndex: 60,
-            width: 'min(380px, calc(100vw - 32px))',
-            height: 'min(520px, calc(100vh - 140px))',
+            width: 'min(400px, calc(100vw - 32px))',
+            height: 'min(560px, calc(100vh - 140px))',
             display: 'flex', flexDirection: 'column', borderRadius: 22,
             border: '1px solid rgba(200,255,0,0.15)',
-            background: 'rgba(14,14,17,0.94)', backdropFilter: 'blur(28px)',
+            background: 'rgba(14,14,17,0.96)', backdropFilter: 'blur(28px)',
             boxShadow: '0 32px 80px rgba(0,0,0,0.7)',
             overflow: 'hidden',
             animation: 'nx-bubblein 0.3s cubic-bezier(0.22,1,0.36,1)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ width: 8, height: 8, borderRadius: 999, background: '#C8FF00', boxShadow: '0 0 8px rgba(200,255,0,0.8)' }} />
-              <span style={{ fontSize: 13, fontWeight: 700 }}>NeXify KI Berater</span>
+              <div>
+                <span style={{ fontSize: 13, fontWeight: 700 }}>Pascal's KI-Berater</span>
+                <span style={{ display: 'block', fontSize: 10, color: '#71717a', marginTop: 1 }}>Beantwortet Ihre Fragen in Echtzeit</span>
+              </div>
             </div>
-            <span onClick={() => setChatOpen(false)} style={{ cursor: 'pointer', color: '#71717a', fontSize: 18, lineHeight: 1 }}>×</span>
+            <span onClick={() => setChatOpen(false)} style={{ cursor: 'pointer', color: '#71717a', fontSize: 20, lineHeight: 1, padding: '0 4px' }}>×</span>
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             {messages.map((msg, i) => (
-              <div key={i} style={{ alignSelf: msg.align, maxWidth: '82%', padding: '12px 15px', borderRadius: 14, fontSize: 13.5, lineHeight: 1.55, background: msg.bg, color: msg.color }}>
-                {msg.text}
+              <div key={i} style={{ alignSelf: msg.align, maxWidth: '90%' }}>
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: msg.align === 'flex-end' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                  fontSize: 13.5,
+                  lineHeight: 1.6,
+                  background: msg.bg,
+                  color: msg.color,
+                  whiteSpace: 'pre-wrap',
+                }}>
+                  {msg.text}
+                </div>
+                {msg.buttons && msg.buttons.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+                    {msg.buttons.map((btn, j) => (
+                      <a
+                        key={j}
+                        href={btn.href}
+                        onClick={(e) => { e.preventDefault(); handleButtonClick(btn.href); }}
+                        onMouseEnter={btnHover}
+                        onMouseLeave={btnLeave}
+                        style={btnStyle}
+                      >
+                        {btn.label} →
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             {typing && (
-              <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '12px 15px' }}>
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite' }} />
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.15s' }} />
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#a1a1aa', animation: 'nx-typing 1.2s infinite 0.3s' }} />
+              <div style={{ alignSelf: 'flex-start', display: 'flex', gap: 5, padding: '12px 16px' }}>
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#C8FF00', animation: 'nx-typing 1.2s infinite' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#C8FF00', animation: 'nx-typing 1.2s infinite 0.15s' }} />
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: '#C8FF00', animation: 'nx-typing 1.2s infinite 0.3s' }} />
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          <div style={{ display: 'flex', gap: 10, padding: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', gap: 8, padding: '14px 18px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             <input
-              type="text" placeholder="Ihre Nachricht..."
+              type="text"
+              placeholder="Schreiben Sie Ihre Frage..."
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') sendChatMessage(); }}
               data-testid="chat-input"
-              style={{ flex: 1, border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, background: 'rgba(255,255,255,0.03)', color: '#fff', padding: '11px 14px', fontSize: 13, outline: 'none' }}
+              style={{
+                flex: 1,
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 14,
+                background: 'rgba(255,255,255,0.04)',
+                color: '#fff',
+                padding: '12px 16px',
+                fontSize: 13.5,
+                outline: 'none',
+              }}
             />
-            <span onClick={sendChatMessage} data-testid="chat-send" role="button" aria-label="Nachricht senden"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 42, height: 42, borderRadius: 12, background: '#C8FF00', color: '#0A0A0A', fontWeight: 700, cursor: 'pointer', flex: 'none' }}>
-              →
-            </span>
+            <button
+              onClick={sendChatMessage}
+              data-testid="chat-send"
+              aria-label="Nachricht senden"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: 44,
+                height: 44,
+                borderRadius: 14,
+                border: 'none',
+                background: 'linear-gradient(135deg,#C8FF00,#9ecf00)',
+                color: '#0A0A0A',
+                fontWeight: 700,
+                fontSize: 16,
+                cursor: 'pointer',
+                flex: 'none',
+                padding: '0 16px',
+              }}
+            >
+              Senden →
+            </button>
           </div>
         </div>
       )}
