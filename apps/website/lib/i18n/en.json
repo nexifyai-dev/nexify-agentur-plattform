@@ -1,103 +1,103 @@
 {
   "meta": {
-    "title": "NeXify AI — Websites & Software by an Expert · €449/day",
-    "description": "Personal B2B web development: websites, shops, apps and automation at a transparent daily rate."
+    "title": "NeXify AI — AI agents for your business · On autopilot.",
+    "description": "NeXify AI plans, builds and operates AI agents that answer enquiries, book appointments and automate processes. €449/implementation day. German & Dutch."
   },
   "nav": {
     "leistungen": "Services",
     "preise": "Pricing",
     "arbeitsweise": "Process",
-    "ueber": "About",
+    "ueber": "About us",
     "kontakt": "Contact"
   },
   "header": {
-    "chip": "Personally managed",
-    "cta": "Request a project"
+    "chip": "AI automation, live in production",
+    "cta": "Book a call"
   },
   "hero": {
-    "badge": "Experience meets AI-powered speed",
-    "headline": "Websites and software by an expert.",
-    "highlight": "In days, not months.",
-    "description": "Pascal Courbois combines hands-on experience, clear accountability and cutting-edge AI-powered development. The result: high-quality websites, shops, web apps, mobile apps and automations at a transparent price.",
-    "cta": "Discuss your project",
-    "ctaSecondary": "View pricing",
-    "trust1": "Personally managed",
-    "trust2": "€449 net / working day",
-    "trust3": "B2B only"
+    "badge": "AI automation, live in production",
+    "headline": "Your business.",
+    "highlight": "On autopilot.",
+    "description": "NeXify AI plans, builds and operates AI agents that answer enquiries, book appointments and automate processes — measurably faster than any team.",
+    "cta": "Free first consultation",
+    "ctaSecondary": "View services",
+    "trust1": "340+ processes in live operation",
+    "trust2": "€449 / implementation day",
+    "trust3": "DE & NL included"
   },
   "proof": {
-    "price": "net per working day",
-    "landing": "for a landing page",
-    "website": "for a website",
-    "shop": "for a shop or app MVP"
+    "price": "net per implementation day",
+    "landing": "Guide 1–3 days",
+    "website": "for an AI chat agent",
+    "shop": "for CRM integration"
   },
   "services": {
     "kicker": "Services",
-    "title": "Everything a digital product truly needs.",
-    "subtitle": "Strategy, design, development, integrations, testing and handover from one responsible hand. No anonymous production chain.",
+    "title": "Eight building blocks for automated operation.",
+    "subtitle": "AI chat agent, appointment booking, email triage, proposal generator, CRM integration, knowledge base, reporting, monitoring.",
     "details": "View details"
   },
   "why": {
-    "kicker": "Why this price is possible",
-    "title": "Experience saves detours. AI saves lead time.",
-    "subtitle": "The price isn't lower because of less responsibility — it's lower because of less friction: no bloated teams, no handover loops, no months-long production cycles."
+    "kicker": "Why NeXify",
+    "title": "Three principles we never cut corners on.",
+    "subtitle": "Measurable instead of marketing. Operation instead of prototype. Transparent instead of black box."
   },
   "process": {
-    "kicker": "Workflow",
-    "title": "A clear path from goal to verified result.",
-    "subtitle": "Scope is planned in working days upfront. Each phase produces visible decisions, results and reviews."
+    "kicker": "Process",
+    "title": "Five steps from first conversation to live operation.",
+    "subtitle": "First conversation, concept, implementation, go live, operation."
   },
   "calculator": {
-    "kicker": "Project calculator",
-    "title": "Transparency, not package fog.",
-    "description": "Choose the planned working days. The actual scope is defined before project start based on features, content, integrations and acceptance criteria.",
-    "days": "working days",
-    "day": "working day",
+    "kicker": "Pricing",
+    "title": "Transparent calculation. No fine print.",
+    "description": "Fixed price per day, no subscription required, DE & NL included. Optional ongoing support at €249/month.",
+    "days": "Implementation days",
+    "day": "Implementation day",
     "netto": "Net",
-    "vat": "21% VAT",
-    "gross": "Gross incl. 21% VAT",
-    "note": "For cross-border B2B services within the EU, reverse charge may apply with a valid VAT ID."
+    "vat": "plus VAT",
+    "gross": "Gross",
+    "note": "Offers are exclusively directed at businesses (B2B)."
   },
   "cta": {
-    "kicker": "Start with a clear cost estimate",
-    "title": "Describe your goal. You'll receive scope, working days and a price range.",
-    "description": "No non-binding sales pitch — a professional initial assessment: what's needed, what can wait, and how to implement it cost-effectively.",
-    "button": "Request a project",
-    "response": "Response to qualified inquiries typically within one business day",
+    "kicker": "First agent",
+    "title": "Let us build your first agent.",
+    "description": "Free first consultation, non-binding assessment, start possible this week.",
+    "button": "Request an appointment",
+    "response": "Answers to qualified enquiries usually within one business day",
     "confidential": "Confidential B2B communication"
   },
   "faq": {
-    "kicker": "Frequently asked questions",
-    "title": "Clear answers before project start.",
-    "subtitle": "The most important points about pricing, scope and collaboration.",
+    "kicker": "FAQ",
+    "title": "Frequently asked questions.",
+    "subtitle": "Answers on speed, costs, languages and data security.",
     "allQuestions": "View all questions"
   },
   "testimonials": {
-    "q1": "A complete website in three days — and the result looks like it was built by a large agency. Pascal immediately understood what we needed.",
-    "a1": "Managing Director",
-    "i1": "IT Consulting",
-    "q2": "Finally a developer who honestly says what makes sense and what doesn't. No tech jargon, just clear recommendations.",
-    "a2": "Owner",
-    "i2": "Retail",
-    "q3": "The price was transparent, the communication direct, the result on time. This is how collaboration should always work.",
-    "a3": "CTO",
-    "i3": "Technology"
+    "q1": "The agent now answers more enquiries than our entire team before — around the clock.",
+    "a1": "Management",
+    "i1": "Trade business",
+    "q2": "Fixed day rates instead of license chaos, finally predictable AI costs.",
+    "a2": "Administration lead",
+    "i2": "Service provider",
+    "q3": "From idea to live operation took exactly three days.",
+    "a3": "Owner",
+    "i3": "Retail"
   },
   "footer": {
-    "description": "AI-powered websites, shops, apps and automations — personally designed, developed and tested.",
-    "b2b": "B2B only",
-    "navigation": "Navigation",
-    "services": "Services",
+    "description": "chat it. automate it. AI automation for businesses in DACH and the NL.",
+    "b2b": "Offers are exclusively directed at businesses (B2B)",
+    "navigation": "Company",
+    "services": "Product",
     "contact": "Contact",
-    "ready": "Ready to start your project?",
-    "readySub": "Free initial consultation · Response within 24h",
-    "cta": "Request a project"
+    "ready": "Let us build your first agent.",
+    "readySub": "Free first consultation · start possible this week",
+    "cta": "Request an appointment"
   },
   "notFound": {
     "code": "404",
     "title": "Page not found.",
     "description": "The link may be outdated or the URL contains a typo.",
-    "back": "Back to homepage"
+    "back": "Back to home"
   },
   "loading": "Loading …",
   "backToTop": "Top"
