@@ -778,5 +778,229 @@ export const legalDe: Record<string, LegalPageData> = {
         ],
       },
     ],
-  }
+  },
+
+  status: {
+    slug: "status",
+    title: "Systemstatus",
+    intro: "Aktueller Betriebsstatus der NeXify AI Plattform. Wir zeigen ausschließlich gemessene Realwerte – keine Fake-Uptime.",
+    updated: "2026-08-04",
+    related: [
+      { label: "SLA", href: "/sla" },
+      { label: "Security", href: "/security" },
+      { label: "Impressum", href: "/impressum" },
+    ],
+    sections: [
+      {
+        id: "aktuell",
+        heading: "1. Aktueller Status",
+        paragraphs: [
+          "Die NeXify AI Plattform befindet sich derzeit im strukturierten Aufbau. Eine dedizierte Statusseite unter status.nexifyai.cloud ist in Vorbereitung.",
+          "Bis zur Inbetriebnahme des Echtzeit-Monitors gilt: Bekannte Wartungsfenster werden mindestens 24 Stunden vorab per E-Mail an aktive Kunden kommuniziert.",
+        ],
+      },
+      {
+        id: "komponenten",
+        heading: "2. Komponenten",
+        bullets: [
+          "Website (nexifyai.cloud) – öffentlich erreichbar",
+          "KI-Agenten API – in Betrieb für aktive Projekte",
+          "Kundenportal – in Betrieb für angemeldete Nutzer",
+          "status.nexifyai.cloud – in Vorbereitung (DNS NXDOMAIN bis Go-live)",
+        ],
+      },
+      {
+        id: "vorfaelle",
+        heading: "3. Vergangene Vorfälle",
+        paragraphs: [
+          "Bisher keine dokumentierten schwerwiegenden Vorfälle seit Produktionsstart.",
+        ],
+      },
+      {
+        id: "meldung",
+        heading: "4. Störungsmeldung",
+        paragraphs: [
+          "Störungen bitte an mail@nexifyai.cloud melden. Wir reagieren innerhalb von 4 Stunden (Werktage 09–18 Uhr CET).",
+        ],
+      },
+    ],
+  },
+
+  security: {
+    slug: "security",
+    title: "Security & Vertrauen",
+    intro: "Transparenz über unsere Sicherheitsmaßnahmen, den verantwortungsvollen Umgang mit Schwachstellenmeldungen und die Ausrichtung an security.txt (RFC 9116).",
+    updated: "2026-08-04",
+    related: [
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "Status", href: "/status" },
+      { label: "Impressum", href: "/impressum" },
+    ],
+    sections: [
+      {
+        id: "kontakt",
+        heading: "1. Security-Kontakt",
+        paragraphs: [
+          "Sicherheitslücken bitte ausschließlich per E-Mail an security@nexifyai.cloud melden. PGP-Schlüssel auf Anfrage.",
+          "Wir bestätigen den Eingang innerhalb von 48 Stunden und informieren über den weiteren Verlauf.",
+        ],
+      },
+      {
+        id: "security-txt",
+        heading: "2. security.txt (RFC 9116)",
+        paragraphs: [
+          "Unsere Maschinenlesbare Sicherheitskontaktdatei ist unter /.well-known/security.txt abrufbar und folgt RFC 9116.",
+        ],
+      },
+      {
+        id: "massnahmen",
+        heading: "3. Technische Maßnahmen",
+        bullets: [
+          "TLS 1.2+ auf allen Endpunkten (kein HTTP)",
+          "HSTS mit langer max-age",
+          "Content-Security-Policy (CSP) aktiv",
+          "Eingabevalidierung serverseitig (FastAPI / Pydantic)",
+          "Keine Speicherung von Klartext-Passwörtern (bcrypt)",
+          "Dependency-Scanning via GitHub Advanced Security (Dependabot + CodeQL)",
+          "Secrets ausschließlich in Umgebungsvariablen, nie im Quellcode",
+        ],
+      },
+      {
+        id: "daten",
+        heading: "4. Datensicherheit",
+        paragraphs: [
+          "Kundendaten werden nur in europäischen Rechenzentren verarbeitet. Backups täglich, verschlüsselt.",
+          "Zugriff auf Produktionssysteme nur für autorisiertes Personal mit Zwei-Faktor-Authentifizierung.",
+        ],
+      },
+      {
+        id: "responsible-disclosure",
+        heading: "5. Responsible Disclosure",
+        paragraphs: [
+          "Wir begrüßen ethische Sicherheitsforschung. Bitte keine öffentliche Veröffentlichung vor koordinierter Behebung (Coordinated Vulnerability Disclosure). Wir verpflichten uns, gemeldete Schwachstellen innerhalb von 90 Tagen zu beheben.",
+        ],
+      },
+    ],
+  },
+
+  barrierefreiheit: {
+    slug: "barrierefreiheit",
+    title: "Barrierefreiheitserklärung",
+    intro: "Erklärung zur Barrierefreiheit gemäß § 12 Barrierefreiheitsstärkungsgesetz (BFSG) und WCAG 2.1 – ehrlicher Ist-Stand.",
+    updated: "2026-08-04",
+    related: [
+      { label: "Impressum", href: "/impressum" },
+      { label: "Datenschutz", href: "/datenschutz" },
+      { label: "Kontakt", href: "/kontakt" },
+    ],
+    sections: [
+      {
+        id: "stand",
+        heading: "1. Aktueller Stand",
+        paragraphs: [
+          "Die Website nexifyai.cloud befindet sich in der aktiven Entwicklung. Eine vollständige WCAG-2.1-AA-Konformität ist unser Ziel; der aktuelle Stand ist im Folgenden dokumentiert.",
+        ],
+      },
+      {
+        id: "umgesetzt",
+        heading: "2. Bereits umgesetzt",
+        bullets: [
+          "Semantisches HTML5 für Struktur und Navigation",
+          "ARIA-Labels an interaktiven Elementen",
+          "Ausreichende Farbkontrastverhältnisse (Ziel: WCAG AA 4.5:1 für Fließtext)",
+          "Tastaturbedienbarkeit der Hauptnavigation",
+          "Skip-Link zum Hauptinhalt",
+          "Responsive Design (320 px bis 4K)",
+          "Alternativtexte für informative Bilder",
+        ],
+      },
+      {
+        id: "bekannte-maengel",
+        heading: "3. Bekannte Mängel (in Bearbeitung)",
+        bullets: [
+          "Einige Diagramme und KI-generierte Inhalte ohne vollständige Textalternative",
+          "Live-Chat-Widget: eingeschränkte Screenreader-Unterstützung (in Überarbeitung)",
+          "Video-Inhalte: automatische Untertitel noch nicht verfügbar",
+        ],
+      },
+      {
+        id: "feedback",
+        heading: "4. Feedback und Kontakt",
+        paragraphs: [
+          "Wenn Sie Barrieren auf unserer Website feststellen, kontaktieren Sie uns bitte: mail@nexifyai.cloud oder +31 6 133 188 56.",
+          "Wir bemühen uns, Ihnen innerhalb von 5 Werktagen zu antworten.",
+        ],
+      },
+      {
+        id: "durchsetzung",
+        heading: "5. Durchsetzungsverfahren",
+        paragraphs: [
+          "Bei unbefriedigender Reaktion können Sie sich an die zuständige Aufsichtsbehörde wenden. In Deutschland: Beauftragter der Bundesregierung für die Belange von Menschen mit Behinderungen. In den Niederlanden: College voor de Rechten van de Mens.",
+        ],
+      },
+    ],
+  },
+
+  sla: {
+    slug: "sla",
+    title: "Service Level Agreement (SLA)",
+    intro: "Unsere Verfügbarkeits- und Reaktionszusagen – ausschließlich mit messbarer Realität. Keine Marketing-Versprechen.",
+    updated: "2026-08-04",
+    related: [
+      { label: "Status", href: "/status" },
+      { label: "AGB", href: "/agb" },
+      { label: "Impressum", href: "/impressum" },
+    ],
+    sections: [
+      {
+        id: "geltungsbereich",
+        heading: "1. Geltungsbereich",
+        paragraphs: [
+          "Dieses SLA gilt für aktive B2B-Verträge mit NeXify AI. Für Testphasen und Pilotprojekte gelten die im Angebot genannten abweichenden Bedingungen.",
+        ],
+      },
+      {
+        id: "verfuegbarkeit",
+        heading: "2. Verfügbarkeit",
+        paragraphs: [
+          "Ziel-Verfügbarkeit: 99 % im Monatsmittel (gemessen am API-Endpunkt). Wartungsfenster werden mindestens 24 Stunden vorab angekündigt und zählen nicht als Ausfallzeit.",
+          "Hinweis: Wir befinden uns im Aufbau. Historische Uptime-Daten werden ab Produktionsstart auf status.nexifyai.cloud veröffentlicht.",
+        ],
+      },
+      {
+        id: "reaktionszeiten",
+        heading: "3. Reaktionszeiten",
+        bullets: [
+          "Kritisch (Totalausfall): Erstreaktion innerhalb 4 Stunden (Werktage 09–18 Uhr CET)",
+          "Hoch (wesentliche Funktion eingeschränkt): Erstreaktion innerhalb 8 Stunden",
+          "Mittel (einzelne Funktion eingeschränkt): Erstreaktion innerhalb 1 Werktag",
+          "Niedrig (Frage / Verbesserung): Erstreaktion innerhalb 3 Werktage",
+        ],
+      },
+      {
+        id: "gutschriften",
+        heading: "4. Service-Gutschriften",
+        paragraphs: [
+          "Bei nachgewiesenem Unterschreiten der Ziel-Verfügbarkeit (< 99 % im Kalendermonat) erhalten aktive Kunden auf Anfrage eine anteilige Gutschrift gemäß der im Vertrag festgelegten Staffelung.",
+        ],
+      },
+      {
+        id: "ausschluss",
+        heading: "5. Ausschlüsse",
+        bullets: [
+          "Höhere Gewalt (DDoS-Angriffe, Naturkatastrophen, Netzausfall des ISP)",
+          "Wartungsfenster mit 24-Stunden-Ankündigung",
+          "Fehler durch Kundencode oder -konfiguration",
+          "Externe Drittdienste außerhalb unseres Einflussbereichs",
+        ],
+      },
+      {
+        id: "kontakt",
+        heading: "6. SLA-Kontakt",
+        paragraphs: [
+          "SLA-Eskalationen an mail@nexifyai.cloud mit dem Betreff „SLA-Vorfall – [Datum]".",
+        ],
+      },
+    ],
+  },
 };
