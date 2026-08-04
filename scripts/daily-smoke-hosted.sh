@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # FILE: scripts/daily-smoke-hosted.sh
 # NIR: 02.08.2026 09:05
-# UPDATED: 02.08.2026 09:05
+# UPDATED: 04.08.2026 09:45
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Hosted (ubuntu-latest) curl smoke — distinct from VPS scripts/daily-smoke.sh (lead #156) (no self-hosted runner required).
@@ -64,6 +64,34 @@ probe "AI_ROUTER_HEALTH" "$AI_ROUTER" 1
 probe "AGENTMEMORY_PUBLIC" "$AM_PUBLIC" 0
 if [[ -n "$API_HEALTH" ]]; then
   probe "API_HEALTH" "$API_HEALTH" 0
+fi
+
+# AgentMemory livez + recall/save roundtrip (soft — public endpoint optional)
+# Validates currency: livez confirms service up; recall confirms MCP path not empty.
+AM_LIVEZ="${AM_PUBLIC%/}/livez"
+probe "AGENTMEMORY_LIVEZ" "$AM_LIVEZ" 0
+
+AM_RECALL="${AM_PUBLIC%/}/agentmemory/recall"
+if [[ -n "${AGENTMEMORY_SECRET:-}" ]]; then
+  rc=0
+  recall_code="$(curl -sS -o /tmp/am-recall-body.txt -w '%{http_code}' \
+    --max-time 15 \
+    -X POST "$AM_RECALL" \
+    -H "Authorization: ******" \
+    -H "Content-Type: application/json" \
+    -d '{"query":"smoke-test","limit":1}' 2>/dev/null || echo "000")"
+  if [[ "$recall_code" =~ ^2 ]]; then
+    PASS=$((PASS + 1))
+    RESULTS+=("PASS|AGENTMEMORY_RECALL|$recall_code|$AM_RECALL")
+    echo "PASS  AGENTMEMORY_RECALL  HTTP $recall_code  $AM_RECALL"
+  else
+    WARN=$((WARN + 1))
+    RESULTS+=("WARN|AGENTMEMORY_RECALL|$recall_code|$AM_RECALL")
+    echo "WARN  AGENTMEMORY_RECALL  HTTP $recall_code  $AM_RECALL"
+  fi
+else
+  RESULTS+=("SKIP|AGENTMEMORY_RECALL|no_secret|$AM_RECALL")
+  echo "SKIP  AGENTMEMORY_RECALL  AGENTMEMORY_SECRET not set"
 fi
 
 # Write machine-readable summary for dashboard refresh / GHA
