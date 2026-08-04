@@ -71,6 +71,13 @@ test("impressum references DDG and known company facts only", () => {
   assert.match(src, /BITTE ERGÄNZEN/);
 });
 
+test("legal-page component renders placeholders with distinct styling", () => {
+  const src = readFileSync(legalPagePath, "utf8");
+  assert.match(src, /isPlaceholder/);
+  assert.match(src, /BITTE ERGÄNZEN/);
+  assert.match(src, /TextItem/);
+});
+
 test("flat legal routes exist and include JsonLd", () => {
   for (const slug of SLUGS) {
     const page = join(root, "app", slug, "page.tsx");
