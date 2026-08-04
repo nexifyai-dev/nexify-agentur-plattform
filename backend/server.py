@@ -262,6 +262,8 @@ alter table nexify_offers add column if not exists payment_order_id text;
 alter table nexify_offers add column if not exists payment_checkout_url text;
 alter table nexify_offers add column if not exists payment_status text;
 alter table nexify_offers add column if not exists payment_amount numeric;
+alter table nexify_leads add column if not exists first_human_response_at timestamptz;
+alter table nexify_leads add column if not exists sla_alert_sent boolean default false;
 create table if not exists nexify_tickets (
   id uuid primary key, user_id uuid, name text, email text, subject text,
   language text default 'de', status text default 'open', source text default 'portal',
@@ -1259,6 +1261,7 @@ async def metrics():
         "nexify_tickets_open": 0,
         "nexify_channel_events_total": 0,
         "nexify_agent_tasks_pending": 0,
+        "nexify_lead_sla_breached": 0,
     }
 
     try:
@@ -1301,6 +1304,14 @@ async def metrics():
                 errors,
                 "pending",
             )
+            metrics_values["nexify_lead_sla_breached"] = await _safe_fetchval(
+                con,
+                "select count(*) from nexify_leads "
+                "where first_human_response_at is null "
+                "and coalesce(sla_alert_sent, false) = true",
+                "metrics_nexify_lead_sla_breached",
+                errors,
+            )
     except Exception as e:
         logger.warning(f"metrics DB acquire failed: {e}")
 
@@ -1325,6 +1336,9 @@ async def metrics():
                 "# HELP nexify_agent_tasks_pending Pending agent tasks",
                 "# TYPE nexify_agent_tasks_pending gauge",
                 f"nexify_agent_tasks_pending {metrics_values['nexify_agent_tasks_pending']}",
+                "# HELP nexify_lead_sla_breached Leads that breached the 1-business-day first-response SLA",
+                "# TYPE nexify_lead_sla_breached gauge",
+                f"nexify_lead_sla_breached {metrics_values['nexify_lead_sla_breached']}",
             ]
         )
         + "\n"
@@ -1953,6 +1967,86 @@ async def followup_worker():
         await asyncio.sleep(900)
 
 
+def _is_business_hours_elapsed(created_at: datetime, now: datetime, hours: int = 8) -> bool:
+    """Return True when at least `hours` business hours have elapsed since created_at.
+
+    A business hour is any hour Mon–Fri 08:00–18:00 Europe/Berlin (UTC+1/+2).
+    For simplicity and to avoid a pytz dependency the check uses a conservative
+    wall-clock approximation: count calendar hours Mon–Fri only, ignoring public
+    holidays.
+    """
+    if created_at.tzinfo is None:
+        created_at = created_at.replace(tzinfo=timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+
+    elapsed_business_hours = 0.0
+    cursor = created_at
+    while cursor < now:
+        # step in 1-hour increments
+        step_end = min(cursor + timedelta(hours=1), now)
+        # weekday(): 0=Mon … 4=Fri
+        if cursor.weekday() < 5:
+            hour_utc = cursor.hour
+            # approximate CET/CEST as UTC+1; good enough for SLA alerting
+            hour_local = (hour_utc + 1) % 24
+            if 8 <= hour_local < 18:
+                elapsed_business_hours += (step_end - cursor).total_seconds() / 3600.0
+        cursor = step_end
+        if elapsed_business_hours >= hours:
+            return True
+    return elapsed_business_hours >= hours
+
+
+async def lead_sla_worker():
+    """Alert when a lead has not received a first human response within 1 business day (8 business hours)."""
+    while True:
+        try:
+            pool = await db()
+            if pool:
+                async with pool.acquire() as con:
+                    # Leads without a human response and without a prior SLA alert
+                    rows = await con.fetch(
+                        "select id, name, email, created_at, language from nexify_leads "
+                        "where first_human_response_at is null "
+                        "and coalesce(sla_alert_sent, false) = false "
+                        "and created_at > now() - interval '14 days' "
+                        "limit 50"
+                    )
+                    now = datetime.now(timezone.utc)
+                    breached_ids = []
+                    for row in rows:
+                        if _is_business_hours_elapsed(row["created_at"], now, hours=8):
+                            breached_ids.append(row)
+
+                    for row in breached_ids:
+                        # Send alert email to internal team
+                        if INTERNAL_NOTIFY_EMAIL:
+                            nl = row["language"] == "nl"
+                            subject = (
+                                f"⚠ SLA-overtreding: lead {row['name'] or row['email']} – geen reactie binnen 1 werkdag"
+                                if nl
+                                else f"⚠ SLA-Verletzung: Lead {row['name'] or row['email']} – keine Antwort innerhalb 1 Werktag"
+                            )
+                            body_html = ci_email(
+                                "SLA-Verletzung: Lead ohne Antwort",
+                                f"<p>Lead <strong>{row['name'] or '–'}</strong> ({row['email']}) "
+                                f"wurde am {row['created_at'].strftime('%d.%m.%Y %H:%M')} UTC angelegt "
+                                f"und hat noch keine erste menschliche Antwort erhalten.</p>"
+                                f"<p>Bitte innerhalb der naechsten Stunden antworten, um die Zusage "
+                                f"'Antwort innerhalb eines Werktags' einzuhalten.</p>",
+                            )
+                            await send_email(INTERNAL_NOTIFY_EMAIL, subject, body_html)
+                        await con.execute(
+                            "update nexify_leads set sla_alert_sent = true where id = $1",
+                            row["id"],
+                        )
+                        logger.warning(f"SLA breached for lead {row['id']} ({row['email']})")
+        except Exception as e:
+            logger.warning(f"lead_sla_worker error: {e}")
+        await asyncio.sleep(1800)  # check every 30 minutes
+
+
 @app.on_event("startup")
 async def startup():
     global DB_POOL
@@ -2011,6 +2105,7 @@ async def startup():
         frontend_url=os.environ.get("FRONTEND_URL", ""),
     )
     asyncio.create_task(followup_worker())
+    asyncio.create_task(lead_sla_worker())
     asyncio.create_task(agent_mod.task_worker())
     asyncio.create_task(agent_mod.seed_recurring_tasks())
     asyncio.create_task(email_agent.email_worker())
