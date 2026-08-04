@@ -1,6 +1,6 @@
 # FILE: /docs/gtm/ONGOING-GAP-AND-ACQUISITION-RADAR.md
 # NIR: 02.08.2026 10:10
-# UPDATED: 02.08.2026 10:45
+# UPDATED: 04.08.2026 09:41
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: Living checklist — acquisition, conversion, ops gaps for Cursor agents
@@ -113,9 +113,9 @@ Live OK (2026-08-02): www 200 · api/health 200 · SPF+DKIM+DMARC · AVV/KI-Hinw
 ### Acquisition / Conversion
 | ID | Gap | Priority |
 |----|-----|----------|
-| A13 | LinkedIn Organic Playbook | P1 |
-| A14 | IHK / Kammern / lokale DACH-Netzwerke | P1 |
-| A15 | Referral-Programm (Warm Intro) | P1 |
+| A13 | LinkedIn Organic Playbook | **done** | #219 → `LINKEDIN-ORGANIC-PLAYBOOK_V1.md` |
+| A14 | IHK / Kammern / lokale DACH-Netzwerke | **done** | #219 → `IHK-KAMMERN-DACH-PITCH-LISTE_V1.md` |
+| A15 | Referral-Programm (Warm Intro) | **done** | #219 → `REFERRAL-PROGRAMM-WARM-INTRO_V1.md` |
 | A16 | Vergleich ChatGPT / Make / Zapier | P1 |
 | A17 | Pricing-Objection Landing | P1 |
 | A18 | Webinar / Demo-Recording evergreen | P2 |
@@ -169,6 +169,7 @@ Live OK (2026-08-02): www 200 · api/health 200 · SPF+DKIM+DMARC · AVV/KI-Hinw
 |-------|-----|-------|----------|
 | 2026-08-02 | Soft-404 + security.txt + /danke | (dieser PR) | P1 shipped |
 | 2026-08-02 | Trust-Seiten Status/Security/A11y/SLA | #217 | P1 |
+| 2026-08-04 | Referral + LinkedIn Organic + IHK/Kammern DACH | #219 | **done** |
 | 2026-08-02 | Referral + LinkedIn + IHK | #219 | P1 |
 | 2026-08-02 | ChatGPT/Make/Zapier + Pricing Objections | #221 | P1 |
 | 2026-08-02 | CODEOWNERS + Branch Protection + Sentry | #224 | P1 |
