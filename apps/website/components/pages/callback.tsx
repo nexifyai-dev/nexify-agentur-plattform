@@ -80,6 +80,21 @@ const T = {
   },
 };
 
+const OBJECTION_FAQS = [
+  {
+    q: "Ich bin noch nicht sicher, ob sich ein Rückruf schon lohnt.",
+    a: "Genau dafür ist der Termin da: Wir klären kurz, ob ChatGPT/Make/Zapier für Ihren Fall reichen oder ob persönliche Umsetzung sinnvoll ist. Wenn nicht, sagen wir das offen.",
+  },
+  {
+    q: "Ist das direkt ein Verkaufsgespräch?",
+    a: "Nein. Der Rückruf ist ein ehrlicher Fit-Check zu Ziel, Budgetrahmen, DIY-Optionen und nächstem sinnvollen Schritt — auch wenn der Schritt nicht NeXify AI heißt.",
+  },
+  {
+    q: "Was passiert nach dem Rückruf?",
+    a: "Wenn es passt, folgt meist ein klarer nächster Schritt wie Audit oder Pilot. Wenn es nicht passt, behalten Sie einfach Orientierung und Empfehlungen ohne Verpflichtung.",
+  },
+];
+
 export function CallbackPage() {
   const { lang } = useLang();
   const t = T[lang];
@@ -217,6 +232,32 @@ export function CallbackPage() {
             </div>
           </Reveal>
         </div>
+
+        <section className="mt-14 max-w-3xl" data-testid="callback-objection-faq">
+          <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light tracking-tight text-white">
+            Noch unsicher wegen Preis, Timing oder DIY-Tools?
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+            Der Rückruf ist bewusst niedrigschwellig: keine Fake-Benchmarks, kein Druck, sondern eine
+            klare Einordnung Ihres Vorhabens.
+          </p>
+          <dl className="mt-6 space-y-6">
+            {OBJECTION_FAQS.map((faq) => (
+              <div key={faq.q}>
+                <dt className="text-zinc-200">{faq.q}</dt>
+                <dd className="mt-2 text-sm leading-relaxed text-zinc-400">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/vergleich" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="callback-objection-vergleich">
+              Vergleiche ansehen
+            </Link>
+            <Link href="/faq" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="callback-objection-faq-link">
+              Allgemeine FAQ
+            </Link>
+          </div>
+        </section>
       </div>
     </main>
   );

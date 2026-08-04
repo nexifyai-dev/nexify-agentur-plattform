@@ -60,6 +60,42 @@ const rows = [
   },
 ];
 
+const diyTools = [
+  {
+    slug: "chatgpt",
+    title: "ChatGPT",
+    summary: "Stark für Ideen, Texte und Sparring — nicht automatisch ein live geschaltetes System.",
+    bestFor: "Prompts, Copy, schnelle Konzepte",
+  },
+  {
+    slug: "make",
+    title: "Make",
+    summary: "Sehr gut für einfache bis mittlere Automationen, solange Komplexität und Ownership beherrschbar bleiben.",
+    bestFor: "Workflows zwischen SaaS-Tools",
+  },
+  {
+    slug: "zapier",
+    title: "Zapier",
+    summary: "Schneller Einstieg für Standard-Automationen, aber mit Grenzen bei individueller Logik und Kostenkontrolle.",
+    bestFor: "No-Code-Automationen mit Standards",
+  },
+];
+
+const comparisonFaqs = [
+  {
+    q: "Wann reicht ChatGPT, Make oder Zapier ohne Agentur?",
+    a: "Wenn Sie intern Zeit, Verantwortlichkeit und genug technisches Verständnis für Setup, Tests, Monitoring und Pflege haben. Für einmalige oder einfache DIY-Setups kann das sinnvoll sein.",
+  },
+  {
+    q: "Wann ist NeXify AI die bessere Wahl?",
+    a: "Wenn das Ergebnis live gehen, sauber dokumentiert, rechtlich anschlussfähig und für Ihr Team wartbar sein soll — inklusive Architektur, Umsetzung und persönlicher Verantwortung.",
+  },
+  {
+    q: "Ist das ein Anti-DIY-Vergleich?",
+    a: "Nein. Wir zeigen bewusst, wann DIY-Tools gut passen und wann Übergaben, Integrationen oder laufende Qualitätssicherung wichtiger werden.",
+  },
+];
+
 export default function VergleichPage() {
   return (
     <>
@@ -133,6 +169,41 @@ export default function VergleichPage() {
             </div>
           </section>
 
+          <section className="mt-14" data-testid="vergleich-diy-tools">
+            <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light text-white">
+              Ehrlicher DIY-Vergleich: ChatGPT, Make, Zapier
+            </h2>
+            <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-zinc-400">
+              Diese Tools sind nicht „schlecht“ — sie lösen nur andere Aufgaben. Deshalb vergleichen
+              wir nicht Agentur gegen Agentur, sondern DIY-Tool gegen lieferfertige Umsetzung.
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {diyTools.map((tool) => (
+                <article
+                  key={tool.slug}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+                  data-testid={`vergleich-diy-card-${tool.slug}`}
+                >
+                  <h3 className="font-[family-name:var(--font-heading)] text-xl text-white">
+                    {tool.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-400">{tool.summary}</p>
+                  <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+                    Gut wenn
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-300">{tool.bestFor}</p>
+                  <Link
+                    href={`/vergleich/${tool.slug}`}
+                    className="mt-5 inline-flex items-center gap-2 text-sm text-zinc-200 underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/60"
+                    data-testid={`vergleich-diy-link-${tool.slug}`}
+                  >
+                    Vergleich öffnen <ArrowRight className="size-4" />
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+
           <section className="mt-14 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-8 md:p-10" data-testid="vergleich-cta">
             <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light text-white">
               Passt das zu Ihrem Vorhaben?
@@ -150,6 +221,28 @@ export default function VergleichPage() {
               </Link>
               <Link href="/preise" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-pricing">
                 Pakete & Preise
+              </Link>
+            </div>
+          </section>
+
+          <section className="mt-14" data-testid="vergleich-faq">
+            <h2 className="font-[family-name:var(--font-heading)] text-2xl font-light text-white">
+              Häufige Einwände vor dem Erstgespräch
+            </h2>
+            <dl className="mt-6 space-y-6">
+              {comparisonFaqs.map((faq) => (
+                <div key={faq.q}>
+                  <dt className="text-zinc-200">{faq.q}</dt>
+                  <dd className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-400">{faq.a}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-faq-rueckruf">
+                Rückruf buchen
+              </Link>
+              <Link href="/faq" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-faq-link">
+                Allgemeine FAQ
               </Link>
             </div>
           </section>
