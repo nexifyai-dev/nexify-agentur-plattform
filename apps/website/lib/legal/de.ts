@@ -201,7 +201,7 @@ export const legalDe: Record<string, LegalPageData> = {
     sections: [
       { id: "geltung", heading: "§ 1 Geltungsbereich",
         paragraphs: [
-          "Diese AGB gelten für alle Verträge, Angebote und sonstigen Leistungen zwischen NeXify AI (nachfolgend „Auftragnehmer") und dem Auftraggeber.",
+          "Diese AGB gelten für alle Verträge, Angebote und sonstigen Leistungen zwischen NeXify AI (nachfolgend „Auftragnehmer“) und dem Auftraggeber.",
           "Abweichende oder entgegenstehende AGB des Auftraggebers werden nicht Vertragsbestandteil, es sei denn, der Auftragnehmer stimmt ihrer Geltung ausdrücklich schriftlich zu (§ 305 Abs. 3 BGB).",
         ] },
       { id: "vertragsschluss", heading: "§ 2 Vertragsschluss",
@@ -364,7 +364,7 @@ export const legalDe: Record<string, LegalPageData> = {
         paragraphs: [
           "Technisch notwendige Speicherungen: § 25 Abs. 2 TTDSG (keine Einwilligung erforderlich).",
           "Alle übrigen Speicherungen: § 25 Abs. 1 TTDSG i. V. m. Art. 6 Abs. 1 lit. a DSGVO (Einwilligung erforderlich).",
-          "Die Einwilligung wird über den Cookie-Banner („Cookie-Einstellungen") verwaltet und dokumentiert.",
+          "Die Einwilligung wird über den Cookie-Banner („Cookie-Einstellungen“) verwaltet und dokumentiert.",
         ] },
       { id: "eingesetzt", heading: "§ 2 Eingesetzte Speicherungen",
         paragraphs: ["Diese Website verwendet ausschließlich folgende Speicherungen:"],
@@ -382,7 +382,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "verwaltung", heading: "§ 4 Verwaltung und Widerruf",
         paragraphs: [
-          "Ihre Cookie-Einstellungen können Sie jederzeit über „Cookie-Einstellungen" im Footer anpassen oder widerrufen.",
+          "Ihre Cookie-Einstellungen können Sie jederzeit über „Cookie-Einstellungen“ im Footer anpassen oder widerrufen.",
           "Alternativ können Sie Speicherungen über die Einstellungen Ihres Browsers löschen oder blockieren.",
           "Der Widerruf einer Einwilligung berührt nicht die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung (Art. 7 Abs. 3 DSGVO).",
         ] },
