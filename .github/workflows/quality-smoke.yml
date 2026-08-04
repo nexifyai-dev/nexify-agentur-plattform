@@ -1,12 +1,17 @@
 # FILE: .github/workflows/quality-smoke.yml
 # NIR: 02.08.2026 09:15
-# UPDATED: 02.08.2026 09:15
+# UPDATED: 04.08.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Quality
 # WHAT: Schedule + PR curl smoke (public) and Playwright critical-path L3.
+#       Optional VPS-local L1 probes on self-hosted runner (AM/Gateway/LightRAG).
 # WHY: Quality System absolute coverage without VPS self-hosted runner dependency.
+#      Two paths: (A) self-hosted runner → QUALITY_SMOKE_LOCAL=1 localhost probes,
+#      (B) authenticated public URLs via secrets/vars → override AM/GW/LR endpoints.
 # BEST-PRACTICE: Public URLs only required on ubuntu-latest; localhost SKIP with note.
+#                vps-local-smoke job skips gracefully when runner count=0.
 # PITFALL: V-QG-01: Do not require :3111/:8644/:9622 from GitHub-hosted runners.
+#          V-QG-02: Never log secret values — URL overrides printed as masked.
 # DEPENDS: scripts/quality-smoke.sh; apps/website Playwright; pnpm 9
 # DOCS-REF: docs/operations/QUALITY-GATES.md
 # SESSION: quality-gates-absolute-7dd5
@@ -43,8 +48,15 @@ jobs:
           SMOKE_AI_ROUTER_URL: ${{ vars.SMOKE_AI_ROUTER_URL || 'https://ai-router.nexifyai.cloud/api/health' }}
           SMOKE_AGENTMEMORY_URL: ${{ vars.SMOKE_AGENTMEMORY_URL || 'https://agentmemory.nexifyai.cloud' }}
           SMOKE_API_HEALTH_URL: ${{ vars.SMOKE_API_HEALTH_URL || 'https://api.nexifyai.cloud/api/health' }}
+          # Optional authenticated public URL overrides for AM/Gateway/LightRAG.
+          # Set QUALITY_SMOKE_AM_URL / QUALITY_SMOKE_GATEWAY_URL / QUALITY_SMOKE_LIGHTRAG_URL
+          # as repository variables (or secrets) to enable L1 probes on ubuntu-latest via tunnel.
+          QUALITY_SMOKE_AM_URL: ${{ vars.QUALITY_SMOKE_AM_URL || secrets.QUALITY_SMOKE_AM_URL || '' }}
+          QUALITY_SMOKE_GATEWAY_URL: ${{ vars.QUALITY_SMOKE_GATEWAY_URL || secrets.QUALITY_SMOKE_GATEWAY_URL || '' }}
+          QUALITY_SMOKE_LIGHTRAG_URL: ${{ vars.QUALITY_SMOKE_LIGHTRAG_URL || secrets.QUALITY_SMOKE_LIGHTRAG_URL || '' }}
           QUALITY_SMOKE_RESULTS_FILE: ${{ runner.temp }}/nexify-quality-smoke.tsv
-          # Hosted runners: leave LOCAL unset → SKIP localhost AM/gateway/lightrag with clear note
+          # Hosted runners: leave LOCAL unset → SKIP localhost AM/gateway/lightrag with clear note.
+          # If authenticated tunnel URLs are set above, those probes will run instead of SKIP.
           QUALITY_SMOKE_LOCAL: "0"
         run: |
           set -euo pipefail
@@ -57,7 +69,7 @@ jobs:
             cat "${QUALITY_SMOKE_RESULTS_FILE}"
             echo '```'
             echo ""
-            echo "Note: AgentMemory/Gateway/LightRAG localhost probes are SKIP on ubuntu-latest (public URLs only)."
+            echo "Note: AgentMemory/Gateway/LightRAG localhost probes are SKIP on ubuntu-latest. Set QUALITY_SMOKE_AM_URL/QUALITY_SMOKE_GATEWAY_URL/QUALITY_SMOKE_LIGHTRAG_URL vars/secrets or use self-hosted runner (labels: self-hosted,vps,nexifyai) to enable L1 probes."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload smoke TSV
@@ -66,6 +78,40 @@ jobs:
         with:
           name: quality-smoke-${{ github.run_id }}
           path: ${{ runner.temp }}/nexify-quality-smoke.tsv
+          if-no-files-found: ignore
+
+  vps-local-smoke:
+    name: VPS-local L1 smoke (AM/Gateway/LightRAG)
+    # Runs only on the self-hosted VPS runner; gracefully skipped when runner count=0.
+    # To enable: register a runner with labels [self-hosted, vps, nexifyai] — see #123.
+    runs-on: [self-hosted, vps, nexifyai]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run quality smoke (VPS localhost L1 probes)
+        id: vps-smoke
+        env:
+          QUALITY_SMOKE_LOCAL: "1"
+          QUALITY_SMOKE_RESULTS_FILE: /tmp/nexify-quality-smoke-vps.tsv
+        run: |
+          set -euo pipefail
+          chmod +x scripts/quality-smoke.sh
+          bash scripts/quality-smoke.sh
+          {
+            echo "## VPS-local quality smoke (L1)"
+            echo ""
+            echo '```'
+            cat /tmp/nexify-quality-smoke-vps.tsv
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload VPS smoke TSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-smoke-vps-${{ github.run_id }}
+          path: /tmp/nexify-quality-smoke-vps.tsv
           if-no-files-found: ignore
 
   website-critical-e2e:

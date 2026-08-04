@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # FILE: scripts/quality-smoke.sh
 # NIR: 02.08.2026 09:15
-# UPDATED: 02.08.2026 09:15
+# UPDATED: 04.08.2026 09:35
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI Quality
 # WHAT: L1/L2 curl smoke for public edge + optional localhost runtime probes.
 # WHY: Absolute health signal on PR/schedule without requiring VPS self-hosted runners.
 # BEST-PRACTICE: Public URLs required on ubuntu-latest; localhost only when QUALITY_SMOKE_LOCAL=1 or port open.
+#                Authenticated tunnel/public URL overrides activate L1 probes on hosted runners too.
 # PITFALL: V-QG-01: Never fail CI for missing :3111/:8644/:9622 on hosted runners — SKIP with clear note.
+#          V-QG-02: Non-empty QUALITY_SMOKE_*_URL overrides always probe (tunnel/public endpoint path).
 # DEPENDS: curl; optional SMOKE_* / QUALITY_SMOKE_* URL overrides
 # DOCS-REF: docs/operations/QUALITY-GATES.md
 # SESSION: quality-gates-absolute-7dd5
@@ -23,6 +25,16 @@ API_HEALTH="${SMOKE_API_HEALTH_URL:-https://api.nexifyai.cloud/api/health}"
 AM_LOCAL="${QUALITY_SMOKE_AM_URL:-http://127.0.0.1:3111/agentmemory/livez}"
 GW_LOCAL="${QUALITY_SMOKE_GATEWAY_URL:-http://127.0.0.1:8644/health}"
 LR_LOCAL="${QUALITY_SMOKE_LIGHTRAG_URL:-http://127.0.0.1:9622/health}"
+
+# Returns true when the probe should run: LOCAL flag set, port open, or a custom (non-default) URL override provided.
+should_probe_local() {
+  local default_url="$1" actual_url="$2" host="$3" port="$4"
+  [[ "${QUALITY_SMOKE_LOCAL:-0}" == "1" ]] && return 0
+  port_open "$host" "$port" && return 0
+  # Non-empty override that differs from the default → authenticated tunnel or public endpoint
+  [[ -n "$actual_url" && "$actual_url" != "$default_url" ]] && return 0
+  return 1
+}
 
 PASS=0
 FAIL=0
@@ -85,22 +97,22 @@ probe "AI_ROUTER_HEALTH" "$AI_ROUTER" 0
 probe "AGENTMEMORY_PUBLIC" "$AM_PUBLIC" 0
 
 # --- Localhost runtime (VPS / Remote-SSH only) ---
-if [[ "${QUALITY_SMOKE_LOCAL:-0}" == "1" ]] || port_open 127.0.0.1 3111; then
+if should_probe_local "http://127.0.0.1:3111/agentmemory/livez" "$AM_LOCAL" 127.0.0.1 3111; then
   probe "AGENTMEMORY_LOCAL" "$AM_LOCAL" 0
 else
-  skip_local "AGENTMEMORY_LOCAL" "hosted runners: no localhost :3111 (set QUALITY_SMOKE_LOCAL=1 on VPS)"
+  skip_local "AGENTMEMORY_LOCAL" "hosted runners: no localhost :3111 (set QUALITY_SMOKE_LOCAL=1 on VPS or provide QUALITY_SMOKE_AM_URL)"
 fi
 
-if [[ "${QUALITY_SMOKE_LOCAL:-0}" == "1" ]] || port_open 127.0.0.1 8644; then
+if should_probe_local "http://127.0.0.1:8644/health" "$GW_LOCAL" 127.0.0.1 8644; then
   probe "HERMES_GATEWAY_LOCAL" "$GW_LOCAL" 0
 else
-  skip_local "HERMES_GATEWAY_LOCAL" "hosted runners: no localhost :8644 (public URLs only on ubuntu-latest)"
+  skip_local "HERMES_GATEWAY_LOCAL" "hosted runners: no localhost :8644 (set QUALITY_SMOKE_LOCAL=1 on VPS or provide QUALITY_SMOKE_GATEWAY_URL)"
 fi
 
-if [[ "${QUALITY_SMOKE_LOCAL:-0}" == "1" ]] || port_open 127.0.0.1 9622; then
+if should_probe_local "http://127.0.0.1:9622/health" "$LR_LOCAL" 127.0.0.1 9622; then
   probe "LIGHTRAG_LOCAL" "$LR_LOCAL" 0
 else
-  skip_local "LIGHTRAG_LOCAL" "hosted runners: no localhost :9622 (skip with note)"
+  skip_local "LIGHTRAG_LOCAL" "hosted runners: no localhost :9622 (set QUALITY_SMOKE_LOCAL=1 on VPS or provide QUALITY_SMOKE_LIGHTRAG_URL)"
 fi
 
 OUT="${QUALITY_SMOKE_RESULTS_FILE:-${SMOKE_RESULTS_FILE:-/tmp/nexify-quality-smoke.tsv}}"
