@@ -1,97 +1,97 @@
 {
   "meta": {
-    "title": "NeXify AI — Websites & Software vom Fachmann · 449 €/Tag",
-    "description": "Persönliche B2B-Webentwicklung: Websites, Shops, Apps und Automatisierung zum transparenten Tagessatz."
+    "title": "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.",
+    "description": "NeXify AI plant, baut und betreibt KI-Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren. 449 €/Umsetzungstag. Deutsch & Nederlands."
   },
   "nav": {
     "leistungen": "Leistungen",
     "preise": "Preise",
-    "arbeitsweise": "Arbeitsweise",
-    "ueber": "Über mich",
+    "arbeitsweise": "Prozess",
+    "ueber": "Über uns",
     "kontakt": "Kontakt"
   },
   "header": {
-    "chip": "Persönlich geführt",
-    "cta": "Projekt anfragen"
+    "chip": "KI Automatisierung, Live Betrieb",
+    "cta": "Gespräch buchen"
   },
   "hero": {
-    "badge": "Erfahrung trifft AI-gestützte Geschwindigkeit",
-    "headline": "Websites und Software vom Fachmann.",
-    "highlight": "In Tagen statt Monaten.",
-    "description": "Pascal Courbois verbindet persönliche Erfahrung, klare Verantwortung und hochmoderne AI-gestützte Entwicklung. So entstehen hochwertige Websites, Shops, Web-Apps, mobile Apps und Automatisierungen zu einem transparenten Preis.",
-    "cta": "Projekt besprechen",
-    "ctaSecondary": "Preise ansehen",
-    "trust1": "Persönlich geführt",
-    "trust2": "449 € netto / Arbeitstag",
-    "trust3": "Ausschließlich B2B"
+    "badge": "KI Automatisierung, Live Betrieb",
+    "headline": "Ihr Unternehmen.",
+    "highlight": "Auf Autopilot.",
+    "description": "NeXify AI plant, baut und betreibt KI Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren, messbar schneller als jedes Team.",
+    "cta": "Kostenloses Erstgespräch",
+    "ctaSecondary": "Leistungen ansehen",
+    "trust1": "340+ Prozesse im Live Betrieb",
+    "trust2": "449 € / Umsetzungstag",
+    "trust3": "DE & NL inklusive"
   },
   "proof": {
-    "price": "netto pro Arbeitstag",
-    "landing": "für eine Landingpage",
-    "website": "für eine Website",
-    "shop": "für Shop oder App-MVP"
+    "price": "netto pro Umsetzungstag",
+    "landing": "Richtwert 1–3 Tage",
+    "website": "für einen KI Chat Agent",
+    "shop": "für CRM-Integration"
   },
   "services": {
     "kicker": "Leistungen",
-    "title": "Alles, was ein digitales Produkt wirklich braucht.",
-    "subtitle": "Strategie, Design, Entwicklung, Integrationen, Tests und Übergabe aus einer verantwortlichen Hand. Keine anonyme Produktionskette.",
+    "title": "Acht Bausteine für den automatisierten Betrieb.",
+    "subtitle": "KI Chat Agent, Terminbuchung, E-Mail Triage, Angebots Generator, CRM-Integration, Wissensdatenbank, Reporting, Monitoring.",
     "details": "Details ansehen"
   },
   "why": {
-    "kicker": "Warum dieser Preis möglich ist",
-    "title": "Erfahrung spart Umwege. AI spart Durchlaufzeit.",
-    "subtitle": "Der Preis sinkt nicht durch weniger Verantwortung, sondern durch weniger Reibung: keine aufgeblähten Teams, keine Übergabeschleifen, keine monatelange Produktion."
+    "kicker": "Warum NeXify",
+    "title": "Drei Prinzipien, an denen wir uns nie vorbeimogeln.",
+    "subtitle": "Messbar statt Marketing. Betrieb statt Prototyp. Transparent statt Blackbox."
   },
   "process": {
-    "kicker": "Arbeitsweise",
-    "title": "Ein klarer Weg vom Ziel zum geprüften Ergebnis.",
-    "subtitle": "Der Umfang wird vorab in Arbeitstagen geplant. Jede Phase erzeugt sichtbare Entscheidungen, Ergebnisse und Prüfungen."
+    "kicker": "Prozess",
+    "title": "Fünf Schritte vom Erstgespräch zum Live-Betrieb.",
+    "subtitle": "Erstgespräch, Konzept, Umsetzung, Go Live, Betrieb."
   },
   "calculator": {
-    "kicker": "Projekt-Rechner",
-    "title": "Transparenz statt Paketnebel.",
-    "description": "Wählen Sie die geplanten Arbeitstage. Der tatsächliche Umfang wird vor Projektstart anhand von Funktionen, Inhalten, Integrationen und Abnahme definiert.",
-    "days": "Arbeitstage",
-    "day": "Arbeitstag",
+    "kicker": "Preise",
+    "title": "Transparent kalkuliert. Kein Kleingedrucktes.",
+    "description": "Festpreis pro Tag, kein Abo-Zwang, DE & NL inklusive. Laufende Betreuung optional mit 249 €/Monat.",
+    "days": "Umsetzungstage",
+    "day": "Umsetzungstag",
     "netto": "Netto",
-    "vat": "21 % BTW",
-    "gross": "Brutto bei 21 % BTW",
-    "note": "Bei grenzüberschreitenden B2B-Leistungen innerhalb der EU kann bei gültiger Umsatzsteuer-ID Reverse Charge gelten."
+    "vat": "zzgl. USt.",
+    "gross": "Brutto",
+    "note": "Angebote richten sich ausschließlich an Unternehmen (B2B)."
   },
   "cta": {
-    "kicker": "Start mit klarer Aufwandsspanne",
-    "title": "Beschreiben Sie das Ziel. Sie erhalten Scope, Arbeitstage und Preisrahmen.",
-    "description": "Keine unverbindliche Verkaufspräsentation, sondern eine erste fachliche Einordnung: Was ist nötig, was kann warten und wie lässt es sich wirtschaftlich umsetzen?",
-    "button": "Projekt anfragen",
-    "response": "Antwort auf qualifizierte Anfragen in der Regel innerhalb eines Arbeitstags",
+    "kicker": "Erster Agent",
+    "title": "Lassen Sie uns Ihren ersten Agenten bauen.",
+    "description": "Kostenloses Erstgespräch, unverbindliche Einschätzung, Start in dieser Woche möglich.",
+    "button": "Termin anfragen",
+    "response": "Antwort auf qualifizierte Anfragen in der Regel innerhalb eines Werktags",
     "confidential": "Vertrauliche B2B-Kommunikation"
   },
   "faq": {
-    "kicker": "Häufige Fragen",
-    "title": "Klare Antworten vor dem Projektstart.",
-    "subtitle": "Die wichtigsten Punkte zu Preis, Umfang und Zusammenarbeit.",
+    "kicker": "FAQ",
+    "title": "Häufige Fragen.",
+    "subtitle": "Antworten zu Schnelligkeit, Kosten, Sprachen und Datensicherheit.",
     "allQuestions": "Alle Fragen ansehen"
   },
   "testimonials": {
-    "q1": "In drei Tagen eine vollständige Website – und das Ergebnis sieht aus wie von einer großen Agentur. Pascal hat sofort verstanden, was wir brauchen.",
-    "a1": "Geschäftsführer",
-    "i1": "IT-Beratung",
-    "q2": "Endlich ein Entwickler, der ehrlich sagt, was sinnvoll ist und was nicht. Kein Technologie-Bla, sondern klare Empfehlungen.",
-    "a2": "Inhaberin",
-    "i2": "Handel",
-    "q3": "Der Preis war transparent, die Kommunikation direkt, das Ergebnis termingerecht. So sollte Zusammenarbeit immer laufen.",
-    "a3": "CTO",
-    "i3": "Technologie"
+    "q1": "Der Agent beantwortet heute mehr Anfragen als unser gesamtes Team vorher, und das rund um die Uhr.",
+    "a1": "Geschäftsführung",
+    "i1": "Handwerksbetrieb",
+    "q2": "Feste Tagessätze statt Lizenzchaos, endlich planbare Kosten für KI.",
+    "a2": "Leitung Verwaltung",
+    "i2": "Dienstleister",
+    "q3": "Von der Idee bis zum Live Betrieb hat es genau drei Tage gedauert.",
+    "a3": "Inhaber",
+    "i3": "Einzelhandel"
   },
   "footer": {
-    "description": "AI-gestützte Websites, Shops, Apps und Automatisierungen – persönlich konzipiert, entwickelt und geprüft.",
-    "b2b": "Ausschließlich B2B",
-    "navigation": "Navigation",
-    "services": "Leistungen",
+    "description": "chat it. automate it. KI-Automatisierung für Betriebe im DACH- und NL-Raum.",
+    "b2b": "Angebote richten sich ausschließlich an Unternehmen (B2B)",
+    "navigation": "Unternehmen",
+    "services": "Produkt",
     "contact": "Kontakt",
-    "ready": "Bereit, Ihr Projekt zu starten?",
-    "readySub": "Kostenlose Erstberatung · Antwort in 24h",
-    "cta": "Projekt anfragen"
+    "ready": "Lassen Sie uns Ihren ersten Agenten bauen.",
+    "readySub": "Kostenloses Erstgespräch · Start diese Woche möglich",
+    "cta": "Termin anfragen"
   },
   "notFound": {
     "code": "404",
