@@ -31,3 +31,13 @@ html { scroll-behavior: smooth; }
   .nx-3col, .nx-services-grid { grid-template-columns: 1fr 1fr !important; }
   .nx-process-grid, .nx-stats-grid { grid-template-columns: 1fr 1fr !important; }
 }
+
+/* Mobile-Header: Lang-Switcher + CTA kompakt, sonst Überlauf (Burger ragt aus Viewport) */
+@media (max-width: 520px) {
+  [data-testid="lang-switcher"] { display: none !important; }
+  [data-testid="header-cta"] { padding: 10px 14px !important; font-size: 11.5px !important; }
+}
+
+@media (max-width: 380px) {
+  [data-testid="header-cta"] { display: none !important; }
+}
