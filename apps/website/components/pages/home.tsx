@@ -1,13 +1,11 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import { Hero3D } from '@/components/hero-3d';
 
-const ChatWidget = dynamic(() => import('@/components/chat-widget'), { ssr: false });
-
 /* ============================================================
  * Daten — 1:1 aus Anhang "NeXify Homepage.dc.html" (PR47 Luxury Dark)
+ * ChatWidget wird GLOBAL im Root-Layout gerendert — hier NICHT nochmal.
  * ============================================================ */
 
 const STATS = [
@@ -903,7 +901,6 @@ export function HomePage() {
       <About />
       <Faq />
       <CtaBand />
-      <ChatWidget />
     </>
   );
 }
