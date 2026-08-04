@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 /**
  * Design-Audit PR47 Luxury Dark / Lime — exakt nach Anhang "NeXify Homepage.dc.html".
  * Testet: Anhang-data-testids, Lime-Tokens, Chat-Verbote (kein lucide-Icon, kein Emoji,
- * keine Quick-Replies), Responsive ohne Overflow, Kern-Routen.
+ * keine Quick-Replies), Responsive ohne Overflow, Kern-Routen, Navigation/Login/i18n.
  */
 
 const viewports = [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1480, 1920] as const;
@@ -13,6 +13,11 @@ const criticalRoutes = ['/', '/leistungen', '/preise', '/prozess', '/ueber-mich'
 const TESTIDS = [
   'logo',
   'header-cta',
+  'header-account-link',
+  'lang-switcher',
+  'lang-switcher-de',
+  'lang-switcher-en',
+  'lang-switcher-nl',
   'mobile-nav-toggle',
   'hero-badge',
   'hero-cta',
@@ -69,6 +74,30 @@ test.describe('Anhang data-testids', () => {
   }
 });
 
+test.describe('Navigation & Login (Bestandsintegration)', () => {
+  test('nav links point to real routes (not anchors)', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const links = await page.locator('header nav a').evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+    expect(links.length).toBeGreaterThanOrEqual(6);
+    for (const href of links) {
+      expect(href, `nav href ${href}`).toMatch(/^\/(de|en|nl)?\/?[a-z]/);
+      expect(href, `nav href ${href} must not be a pure anchor`).not.toBe('#');
+    }
+  });
+
+  test('account link exists (login/account/admin flow)', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const href = await page.locator('[data-testid="header-account-link"]').getAttribute('href');
+    expect(href).toBeTruthy();
+    expect(href).toMatch(/\/(login|konto|admin)/);
+  });
+
+  test('footer links to subpages work', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await expect(page.locator('footer a[href="/leistungen"], footer a[href="/en/leistungen"], footer a[href="/nl/leistungen"]').first()).toBeVisible();
+  });
+});
+
 test.describe('Lime-Tokens (Anhang)', () => {
   test('body background is #0A0A0A', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
@@ -82,7 +111,6 @@ test.describe('Lime-Tokens (Anhang)', () => {
       const el = document.querySelector('[data-testid="hero-badge"] span');
       return el ? getComputedStyle(el).backgroundColor : null;
     });
-    // Punkt im Badge: #C8FF00
     expect(color).toBe('rgb(200, 255, 0)');
   });
 });
@@ -92,10 +120,8 @@ test.describe('Chat-Widget: Anhang-Verbote', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const launcher = page.locator('[data-testid="chat-launcher"]');
     await expect(launcher).toBeVisible();
-    // Kein <svg> (lucide oder sonstiges Icon) im Launcher
     const svgCount = await launcher.locator('svg').count();
     expect(svgCount, 'Launcher darf KEIN Icon (svg) enthalten').toBe(0);
-    // Exakt 2 Spans: Puls-Ring + Lime-Punkt
     const spanCount = await launcher.locator('span').count();
     expect(spanCount).toBe(2);
   });
@@ -117,10 +143,8 @@ test.describe('Chat-Widget: Anhang-Verbote', () => {
     const panel = page.locator('[data-testid="chat-panel"]');
     await expect(panel).toBeVisible();
     const text = await panel.innerText();
-    // Keine Emojis (gängige aus PR #297: 👋💡🤖📋🚀🎉 + allgemeine Emoji-Ranges)
     const emojiRe = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/u;
     expect(emojiRe.test(text), `Emoji im Chat gefunden: ${text.slice(0, 120)}`).toBe(false);
-    // Keine Quick-Reply-Chips: nur 1 Input + 1 Send im Panel
     expect(await panel.locator('button, [role="button"]').count()).toBeLessThanOrEqual(2);
   });
 });
@@ -131,11 +155,9 @@ test.describe('Pricing (Anhang)', () => {
     const slider = page.locator('[data-testid="pricing-slider"]');
     await expect(slider).toHaveAttribute('min', '1');
     await expect(slider).toHaveAttribute('max', '20');
-    // Default 5 → 2.245
     await expect(page.locator('[data-testid="pricing-total"]')).toContainText('2.245');
     await slider.fill('10');
     await expect(page.locator('[data-testid="pricing-total"]')).toContainText('4.490');
-    // Betreuung aus → 0
     await page.locator('[data-testid="maintenance-toggle"]').uncheck();
     await expect(page.locator('[data-testid="pricing-total"]')).toContainText('4.490');
   });
