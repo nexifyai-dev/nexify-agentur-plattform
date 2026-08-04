@@ -341,6 +341,18 @@ export const de = {
         author: "Operations-Leitung, Dienstleister (DE)",
       },
     ],
+    videoCaseStudy: {
+      eyebrow: "Video Case Study",
+      title: "Echte Ergebnisse – von echten Kunden erzählt",
+      intro:
+        "Wir arbeiten gerade daran: kurze Videoformate (60–90 s), in denen Kunden in eigenen Worten über die Zusammenarbeit sprechen – ausschließlich mit freigegebenen Zahlen und Aussagen.",
+      comingSoonLabel: "In Vorbereitung",
+      comingSoonText:
+        "Für Video-Fallstudien brauchen wir Kunden-Permission, Dreh und Freigabe der Aussagen. Kein Stock-Material, keine erfundenen ROI-Zahlen – nur dokumentierte, freigegebene Ergebnisse.",
+      contactCta: "Interesse, Teil einer Case Study zu sein?",
+      contactLabel: "Jetzt melden",
+      contactHref: "/kontakt",
+    },
   },
   wissen: {
     eyebrow: "Wissen",

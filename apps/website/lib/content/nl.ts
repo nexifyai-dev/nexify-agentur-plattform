@@ -323,6 +323,18 @@ export const nl: Dict = {
         author: "Operations-manager, dienstverlener (DE)",
       },
     ],
+    videoCaseStudy: {
+      eyebrow: "Video Case Study",
+      title: "Echte resultaten – verteld door echte klanten",
+      intro:
+        "We zijn er mee bezig: korte videoformaten (60–90 s) waarin klanten in eigen woorden over de samenwerking vertellen – uitsluitend met vrijgegeven cijfers en uitspraken.",
+      comingSoonLabel: "In voorbereiding",
+      comingSoonText:
+        "Voor video-casestudies hebben we toestemming van de klant, een opname en goedkeuring van alle uitspraken nodig. Geen stockmateriaal, geen verzonnen ROI-cijfers – alleen gedocumenteerde, goedgekeurde resultaten.",
+      contactCta: "Interesse om deel te nemen aan een case study?",
+      contactLabel: "Neem contact op",
+      contactHref: "/kontakt",
+    },
   },
   wissen: {
     eyebrow: "Kennis",

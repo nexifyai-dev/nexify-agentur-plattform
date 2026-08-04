@@ -323,6 +323,18 @@ export const en = {
         author: "Head of Operations, Service Provider (DE)",
       },
     ],
+    videoCaseStudy: {
+      eyebrow: "Video Case Study",
+      title: "Real results – told by real clients",
+      intro:
+        "We are working on it: short video formats (60–90 s) in which clients describe the collaboration in their own words – exclusively with approved figures and statements.",
+      comingSoonLabel: "Coming soon",
+      comingSoonText:
+        "Video case studies require client permission, a shoot, and approval of all claims. No stock material, no fabricated ROI numbers – only documented, approved results.",
+      contactCta: "Interested in being part of a case study?",
+      contactLabel: "Get in touch",
+      contactHref: "/kontakt",
+    },
   },
   wissen: {
     eyebrow: "Knowledge",
