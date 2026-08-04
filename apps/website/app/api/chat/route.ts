@@ -1,6 +1,7 @@
 // /api/chat — Live Chat via 9Router
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 const SYSTEM = {
   de: `Du bist der KI-Berater von NeXify AI. Antworte IMMER auf Deutsch.
