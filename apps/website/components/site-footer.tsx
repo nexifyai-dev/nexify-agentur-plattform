@@ -5,16 +5,15 @@ import { NxLogoMark } from '@/components/site-header';
 import { company } from '@/lib/company';
 
 const COMPANY_LINKS = [
-  { label: 'Über uns', href: '/ueberuns' },
-  { label: 'Referenzen', href: '/referenzen' },
-  { label: 'Kontakt', href: '/kontakt' },
-  { label: 'Venlo', href: "/venlo" },
+  { label: 'Über uns', href: '#ueberuns' },
+  { label: 'Referenzen', href: '#referenzen' },
+  { label: 'Kontakt', href: '#kontakt' },
 ];
 
 const PRODUCT_LINKS = [
-  { label: 'Leistungen', href: '/leistungen' },
-  { label: 'Preise', href: '/preise' },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'Leistungen', href: '#leistungen' },
+  { label: 'Preise', href: '#preise' },
+  { label: 'FAQ', href: '#faq' },
 ];
 
 const LEGAL_LINKS = [
@@ -58,15 +57,6 @@ export function SiteFooter() {
           <p style={{ marginTop: 14, maxWidth: 280, fontSize: 13, lineHeight: 1.7, color: '#71717a', fontWeight: 300 }}>
             chat it. automate it. KI-Automatisierung für Betriebe im DACH- und NL-Raum.
           </p>
-          <a
-            href={`https://wa.me/${company.phone?.replace(/\D/g, '')}`}
-            data-testid="footer-whatsapp-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 14, fontSize: 12, color: '#71717a' }}
-          >
-            WhatsApp
-          </a>
         </div>
         <div>
           <div style={footerColLabel}>Unternehmen</div>
