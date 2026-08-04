@@ -6,6 +6,23 @@ import { legalNl } from "@/lib/legal/nl";
 import { useLang } from "@/lib/lang-context";
 import type { LegalPageData, LegalSection } from "@/lib/legal/de";
 
+/** Returns true for editorial placeholder strings that must be filled by the owner before publishing. */
+function isPlaceholder(text: string): boolean {
+  return text.startsWith("[BITTE ERGÄNZEN:");
+}
+
+/** Renders a single text item — placeholders get a distinct amber warning style. */
+function TextItem({ text, className }: { text: string; className: string }) {
+  if (isPlaceholder(text)) {
+    return (
+      <span className="inline-block rounded border border-amber-500/40 bg-amber-950/30 px-2 py-0.5 font-mono text-[13px] text-amber-400" aria-label="Platzhalter – bitte ergänzen">
+        {text}
+      </span>
+    );
+  }
+  return <span className={className}>{text}</span>;
+}
+
 const EYEBROW = { de: "Rechtliches", nl: "Juridisch", en: "Legal" };
 const UPDATED_LABEL = { de: "Stand", nl: "Laatst bijgewerkt", en: "Last updated" };
 const TOC_LABEL = { de: "Inhalt", nl: "Inhoud", en: "Contents" };
@@ -27,7 +44,7 @@ function SectionBlock({ s, index }: { s: LegalSection; index: number }) {
       <h2 className="font-[family-name:var(--font-heading)] text-xl font-medium text-white">{s.heading}</h2>
       {s.paragraphs?.map((p, j) => (
         <p key={j} className="mt-3 text-[15px] leading-[1.85] text-zinc-400">
-          {p}
+          <TextItem text={p} className="text-zinc-400" />
         </p>
       ))}
       {s.bullets && (
@@ -35,7 +52,7 @@ function SectionBlock({ s, index }: { s: LegalSection; index: number }) {
           {s.bullets.map((b, j) => (
             <li key={j} className="flex gap-3 text-[15px] leading-relaxed text-zinc-400">
               <span className="mt-[9px] block size-1 shrink-0 rounded-full bg-zinc-500" />
-              {b}
+              <TextItem text={b} className="text-zinc-400" />
             </li>
           ))}
         </ul>
@@ -45,7 +62,7 @@ function SectionBlock({ s, index }: { s: LegalSection; index: number }) {
           <h3 className="font-[family-name:var(--font-heading)] text-base font-medium text-zinc-200">{sub.heading}</h3>
           {sub.paragraphs?.map((p, j) => (
             <p key={j} className="mt-2 text-[15px] leading-[1.85] text-zinc-400">
-              {p}
+              <TextItem text={p} className="text-zinc-400" />
             </p>
           ))}
           {sub.bullets && (
@@ -53,7 +70,7 @@ function SectionBlock({ s, index }: { s: LegalSection; index: number }) {
               {sub.bullets.map((b, j) => (
                 <li key={j} className="flex gap-3 text-[15px] leading-relaxed text-zinc-400">
                   <span className="mt-[9px] block size-1 shrink-0 rounded-full bg-zinc-500" />
-                  {b}
+                  <TextItem text={b} className="text-zinc-400" />
                 </li>
               ))}
             </ul>

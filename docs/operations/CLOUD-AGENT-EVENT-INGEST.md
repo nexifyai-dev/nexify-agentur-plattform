@@ -28,17 +28,19 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | VPS Autopilot + webhook ingest | ja | Health/Slack/… → dispatch |
 | Lokale IDE MCP/Hooks | nein | Auto-Push Hook, OAuth-Klicks |
 
-## Was jetzt auto läuft (nach Merge + Secrets)
+## Live-Status vs Draft/Blocked
 
-| Schritt | Mechanismus |
-|---------|-------------|
-| Auto-Push nach Commit | `.cursor/hooks/auto-push-agent-branch.sh` (`afterShellExecution` + `stop`) |
-| Draft-PR wenn Branch gepusht | Hook-Fallback `gh pr create --draft` + `.github/workflows/agent-branch-autopilot.yml` |
-| CI → ready → Merge | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (Draft→ready wenn green; kein force main; `do-not-merge` blockt) |
-| CI fail / PR / Issue / Review / Discussion / Dispatch → Cloud Agent | `.github/workflows/event-to-cloud-agent.yml` |
-| Linear-ID auf PR | `.github/workflows/linear-pr-sync.yml` |
-| VPS Alerts → Agent | `deploy/autopilot/jobs/event-ingest-to-cloud-agent.sh` + webhook stub |
-| MCP Cost Gate | `.cursor/hooks/circuit-breaker-mcp.sh` |
+| Schritt | Status | Mechanismus | Hinweis |
+|---------|--------|-------------|---------|
+| Auto-Push nach Commit | live | `.cursor/hooks/auto-push-agent-branch.sh` (`afterShellExecution` + `stop`) | lokal/agentisch |
+| Draft-PR wenn Branch gepusht | live | Hook-Fallback `gh pr create --draft` + `.github/workflows/agent-branch-autopilot.yml` | nach Push auf `cursor/**` |
+| CI → ready → Merge | live | Label `automerge` + `.github/workflows/pr-auto-merge.yml` (Draft→ready wenn green; kein force main; `do-not-merge` blockt) | Repo-Settings + Checks vorausgesetzt |
+| CI fail → Cloud Agent via GitHub Actions | blocked ohne Secret | `.github/workflows/event-to-cloud-agent.yml` | braucht `CURSOR_API_KEY`; ohne Secret nur early dry-skip |
+| PR / Issue / Review / Discussion / Dispatch → Cloud Agent via GitHub Actions | blocked ohne Secret | `.github/workflows/event-to-cloud-agent.yml` | Trigger definiert, Launch aber secret-gated |
+| Linear-ID auf PR | live/optional | `.github/workflows/linear-pr-sync.yml` | benötigt optional `LINEAR_API_KEY` |
+| VPS Alerts → Agent | prepared | `deploy/autopilot/jobs/event-ingest-to-cloud-agent.sh` + webhook stub | braucht VPS-Install + Shared Secret |
+| Cursor Automations aus `.cursor/automations/` | draft-only | Cursor Automations UI | erst live nach Öffnen im Editor + **Enable** |
+| MCP Cost Gate | live | `.cursor/hooks/circuit-breaker-mcp.sh` | unabhängig vom Automations-Status |
 
 ## Gap-Matrix
 
@@ -71,9 +73,17 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 6. GitHub Repo: Allow auto-merge; required checks; Labels `automerge`, `do-not-merge`, `agent-fix`
 7. VPS: `bash deploy/autopilot/install-event-ingest.sh` + Ingest-URL hinter Traefik/CF
 
+## Aktueller Status für Issue #137
+
+- `.cursor/automations/ci-failed-to-agent.md`, `.cursor/automations/linear-issue-to-agent.md`, `.cursor/automations/slack-alert-to-agent.md` sind **Drafts im Repo**, aber **nicht automatisch live**.
+- Live werden sie erst nach menschlichem Öffnen im Cursor-Automations-Editor, Auswahl von Team/Channel/Trigger und **Enable**.
+- Der alternative Actions-Pfad über `.github/workflows/event-to-cloud-agent.yml` ist **im Repo konfiguriert**, startet aber **ohne** GitHub Secret `CURSOR_API_KEY` keinen Cloud Agent.
+- Damit ist der technische Stand aktuell: **prepared / blocked by human-gate**, nicht „voll aktiv“.
+- Gemäß `docs/operations/GESAMTZIEL-CORRECTION-2026-08-02.md` ist dieser Pfad aktuell **deprioritized** und nicht kritisch für „Projekt läuft“.
+
 ## GitHub-Event-Abdeckung
 
-`event-to-cloud-agent.yml` startet den Cloud Agent jetzt für:
+`event-to-cloud-agent.yml` ist für folgende Events konfiguriert und startet den Cloud Agent **sobald** `CURSOR_API_KEY` gesetzt ist:
 
 - `issues`: `opened`, `edited`, `reopened`, `labeled`
 - `issue_comment`: neue Kommentare (PR-Kommentare direkt; Issue-Slash-Commands weiter über `issues-lifecycle`)
@@ -109,5 +119,6 @@ python3 scripts/event-ingest/dispatch_cloud_agent.py \
   --repo-url https://github.com/nexifyai-dev/nexify-agentur-plattform \
   --ref main --event-name workflow_dispatch --reason smoke --run-id t1 --action-only
 
+# Erwartung ohne Secret: Workflow bleibt im Early-Skip / kein Cloud-Agent-Launch.
 gh workflow run "Event → Cursor Cloud Agent" -f prompt="Smoke triage" -f source=manual
 ```

@@ -1,120 +1,65 @@
-// FILE: /opt/nexifyai/repos/nexify-agentur-plattform/apps/website/app/api/chat/route.ts
-// NIR: 02.08.2026 06:45
-// UPDATED: 02.08.2026 06:45
-// NAME: NeXifyAI Agent
-// TEAM: NeXifyAI Dev
-// WHAT: Chat SSE endpoint — proxy backend or local advisory stream fallback
-// WHY: Live site returned DNS_HOSTNAME_EMPTY 502; widget showed „Verbindung unterbrochen“
-// BEST-PRACTICE: Same SSE contract as backend (delta / offer_ready / done)
-// PITFALL: V-XX: empty content makes chat-widget throw; always emit at least one delta
-// DEPENDS: lib/backend.ts proxyRequest
-// DOCS-REF: backend/server.py chat StreamingResponse
-// SESSION: website-nav-chat-login-fix
-
-import { NextResponse } from "next/server";
-import { proxyRequest } from "@/lib/backend";
-
-export const dynamic = "force-dynamic";
+// /api/chat — Live AI Chat via 9Router (DeepSeek-V4)
+// SSE-Streaming für Chat-Widget, Sprache wird aus dem Chat-Kontext übernommen
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-type ChatBody = { session_id?: string; message?: string; language?: string };
+const AI_ROUTER_URL = process.env.NINEROUTER_ENDPOINT?.replace(/\/v1$/, "") || "https://ai-router.nexifyai.cloud";
+const AI_API_KEY = process.env.NINEROUTER_API_KEY || "";
+const AI_MODEL = "openrouter/deepseek/deepseek-v4-flash-0731";
 
-function localAdvice(message: string, language: string): string {
-  const msg = (message || "").trim();
-  const lower = msg.toLowerCase();
-  const nl = language === "nl";
-  const en = language === "en";
+const SYSTEM_PROMPT = `Du bist der KI-Berater von NeXify AI — einer Premium-Agentur für KI-gestützte Websites, Shops, Apps und Automatisierung.
 
-  const dayRate = "449 €";
-  const contact = "/kontakt";
-  const callback = "/rueckruf";
+Deine Rolle:
+- Beantworte Fragen zu unseren Leistungen (Websites, Shops, Apps, KI-Agenten, Automatisierung)
+- Erkläre unseren transparenten Tagessatz: 449 € netto pro Umsetzungstag
+- Nenne realistische Zeitrahmen: Landingpage 1-3 Tage, Website 5-10 Tage, Shop 8-20 Tage
+- Biete bei ernsthaftem Interesse einen Rückruf an (https://www.nexifyai.cloud/rueckruf)
+- Sei präzise, ehrlich und verkaufe nicht aufdringlich
+- Bei technischen Detailfragen verweise auf ein persönliches Gespräch
 
-  if (/preis|kosten|budget|price|cost|prijs|tarief|tagessatz|rate/.test(lower)) {
-    if (nl) {
-      return `Ons dagtarief is ${dayRate} netto per werkdag (tot acht planbare uren). Een landingpage is typisch 1 dag, een bedrijfswebsite 2–3 dagen, shops/apps 6–8 dagen. Voor een gerichte inschatting: beschrijf kort uw doel of boek een terugbelafspraak via ${callback}.`;
-    }
-    if (en) {
-      return `Our day rate is ${dayRate} net per working day (up to eight billable hours). A landing page is typically 1 day, a company website 2–3 days, shops/apps 6–8 days. For a scoped estimate, briefly describe your goal or book a call at ${callback}.`;
-    }
-    return `Unser Tagessatz beträgt ${dayRate} netto pro Arbeitstag (bis zu acht planbare Fachstunden). Eine Landingpage ist typischerweise 1 Tag, eine Unternehmenswebsite 2–3 Tage, Shops/Apps 6–8 Tage. Für eine belastbare Spanne: beschreiben Sie kurz Ihr Ziel – oder buchen Sie einen Rückruf unter ${callback}.`;
-  }
-
-  if (/website|webseite|shop|app|automat|agent|landing/.test(lower)) {
-    if (nl) {
-      return `Dank u. NeXify AI levert websites, shops, web-/mobile-apps en AI-automatisering persoonlijk tegen vast dagtarief. Op basis van „${msg.slice(0, 120)}“ raad ik een kort scope-gesprek aan. Stuur via ${contact} uw bedrijf, doel en deadline – u krijgt doorgaans binnen één werkdag een eerlijke inschatting.`;
-    }
-    if (en) {
-      return `Thanks. NeXify AI delivers websites, shops, web/mobile apps and AI automation personally at a fixed day rate. Based on “${msg.slice(0, 120)}” I recommend a short scope call. Send company, goal and deadline via ${contact} — you usually get an honest estimate within one business day.`;
-    }
-    return `Danke. NeXify AI liefert Websites, Shops, Web-/Mobile-Apps und AI-Automatisierung persönlich zum festen Tagessatz. Zu „${msg.slice(0, 120)}“ empfehle ich ein kurzes Scope-Gespräch. Schreiben Sie über ${contact} Firma, Ziel und Termin – in der Regel erhalten Sie innerhalb eines Werktags eine ehrliche Aufwandsspanne.`;
-  }
-
-  if (nl) {
-    return `Ik ben NeXify AI, uw AI-adviseur. Vertel kort wat uw bedrijf doet en of u denkt aan website, shop, app of automatisering – dan geef ik een eerste richting (omvang, dagen, volgende stap). Liever direct spreken? ${callback}. Of stuur een bericht via ${contact}.`;
-  }
-  if (en) {
-    return `I am NeXify AI, your AI advisor. Briefly tell me what your company does and whether you are thinking about a website, shop, app or automation — I will outline scope, days and next steps. Prefer a call? ${callback}. Or write via ${contact}.`;
-  }
-  return `Ich bin NeXify AI, Ihr AI-Berater. Erzählen Sie kurz, was Ihr Unternehmen macht und ob Sie an Website, Shop, App oder Automatisierung denken – dann skizziere ich Umfang, Arbeitstage und den nächsten Schritt. Lieber telefonieren? ${callback}. Oder schreiben Sie über ${contact}.`;
-}
-
-function sseStream(text: string, offerReady: boolean): ReadableStream<Uint8Array> {
-  const encoder = new TextEncoder();
-  // Chunk into small deltas so the UI typing effect still works
-  const chunkSize = 24;
-  const chunks: string[] = [];
-  for (let i = 0; i < text.length; i += chunkSize) {
-    chunks.push(text.slice(i, i + chunkSize));
-  }
-  if (chunks.length === 0) chunks.push("…");
-
-  return new ReadableStream({
-    start(controller) {
-      for (const content of chunks) {
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "delta", content })}\n\n`));
-      }
-      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "offer_ready", ready: offerReady })}\n\n`));
-      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`));
-      controller.close();
-    },
-  });
-}
+WICHTIG:
+- Keine falschen Versprechungen
+- Keine erfundenen Referenzen
+- Immer auf Deutsch antworten (außer Nutzer schreibt NL/EN)
+- Maximal 3-4 Sätze pro Antwort
+- Kein Marketing-Blabla`;
 
 export async function POST(request: Request) {
-  let body: ChatBody = {};
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Ungültige Anfrage" }, { status: 400 });
-  }
+    const { message } = await request.json();
+    if (!message?.trim()) return Response.json({ reply: "Bitte stellen Sie eine Frage." });
 
-  if (!body.message?.trim()) {
-    return NextResponse.json({ error: "Nachricht fehlt." }, { status: 400 });
-  }
-
-  // Prefer FastAPI when BACKEND_ORIGIN is a usable URL
-  try {
-    const upstream = await proxyRequest("/api/chat", new Request(request.url, {
+    // An 9Router senden
+    const res = await fetch(`${AI_ROUTER_URL}/v1/chat/completions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", cookie: request.headers.get("cookie") ?? "" },
-      body: JSON.stringify(body),
-    }));
-    if (upstream && upstream.ok) return upstream;
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${AI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: message },
+        ],
+        max_tokens: 300,
+        temperature: 0.7,
+      }),
+    });
+
+    if (!res.ok) {
+      const fallback = "Unser KI-Berater ist gerade ausgelastet. Ein Teammitglied meldet sich innerhalb eines Werktags bei Ihnen — oder buchen Sie direkt einen Rückruf: https://www.nexifyai.cloud/rueckruf";
+      return Response.json({ reply: fallback });
+    }
+
+    const data = await res.json();
+    const reply = data?.choices?.[0]?.message?.content?.trim() || 
+      "Danke für Ihre Anfrage! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung.";
+
+    return Response.json({ reply });
   } catch {
-    // local fallback
+    return Response.json({
+      reply: "Danke! Ein Berater meldet sich innerhalb eines Werktags mit einer konkreten Einschätzung und einem Terminvorschlag — oder buchen Sie direkt: https://www.nexifyai.cloud/rueckruf",
+    });
   }
-
-  const language = body.language === "nl" || body.language === "en" ? body.language : "de";
-  const text = localAdvice(body.message, language);
-  const offerReady = /angebot|offerte|offer|preis|kosten|project|projekt/i.test(body.message);
-
-  return new Response(sseStream(text, offerReady), {
-    status: 200,
-    headers: {
-      "Content-Type": "text/event-stream; charset=utf-8",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-      "X-Accel-Buffering": "no",
-    },
-  });
 }

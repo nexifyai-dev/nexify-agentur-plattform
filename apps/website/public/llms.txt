@@ -8,20 +8,10 @@ NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accel
 
 - [Home](https://www.nexifyai.cloud/): Positioning, day rate, process overview
 - [Leistungen](https://www.nexifyai.cloud/leistungen): Service catalogue (landing pages, websites, shops, apps, automation, AI agents)
-- [Landingpages](https://www.nexifyai.cloud/leistungen/landingpages): Conversion landings in ~1 day
-- [Unternehmenswebsites](https://www.nexifyai.cloud/leistungen/websites): Company websites
-- [Onlineshops](https://www.nexifyai.cloud/leistungen/onlineshops): Commerce / shops
-- [Web-Apps](https://www.nexifyai.cloud/leistungen/web-apps): Custom web applications
-- [AI-Agenten](https://www.nexifyai.cloud/leistungen/ai-agenten): AI agents for SMEs
-- [KI-/Prozess-Audit](https://www.nexifyai.cloud/audit): Productized audit entry
 - [Preise](https://www.nexifyai.cloud/preise): €449 net / working day calculator and scope notes
 - [Prozess](https://www.nexifyai.cloud/prozess): How engagement works from first contact to delivery
 - [Vergleich](https://www.nexifyai.cloud/vergleich): How NeXify differs from typical agencies and chatbots
 - [FAQ](https://www.nexifyai.cloud/faq): Pricing, timelines, AI usage, collaboration
-
-## Branchen
-
-- [Branchen](https://www.nexifyai.cloud/branchen): Industry hubs (Handwerk, Steuerberater, E-Commerce, Immobilien, Agenturen)
 
 ## Company & contact
 
@@ -38,13 +28,6 @@ NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accel
 - [Wissen](https://www.nexifyai.cloud/wissen): Articles on AI automation, web-app cost, delivery for SMEs
 - [Sitemap](https://www.nexifyai.cloud/sitemap.xml): Machine-readable URL index
 - [llm.txt](https://www.nexifyai.cloud/llm.txt): Legacy short company card (kept for older crawlers)
-
-## Hard facts (do not invent)
-
-- No AggregateRating / fake reviews on the site
-- Exclusively B2B
-- Not a BAFA-certified consultant
-- n8n is not an integration target
 
 ## Optional
 

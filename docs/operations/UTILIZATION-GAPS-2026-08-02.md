@@ -1,9 +1,9 @@
 # Utilization Gaps — Reactivate Existing Stack (2026-08-02)
 
 **NIR:** 02.08.2026 08:56  
-**UPDATED:** 02.08.2026 09:00  
+**UPDATED:** 02.08.2026 12:30  
 **WHAT:** Ops truth after Nutzungs-Audit (~48% utilization) — runtime reactivation, no new products.  
-**WHY:** Close known DOWN gaps and stop wasted autopilot cycles against empty trees.  
+**WHY:** Close known DOWN gaps, stop wasted autopilot cycles against empty trees, and document the later pause/deprioritization decisions.  
 **Issues:** [#150](https://github.com/nexifyai-dev/nexify-agentur-plattform/issues/150) Paperclip · [#151](https://github.com/nexifyai-dev/nexify-agentur-plattform/issues/151) Utilization gaps  
 **Do NOT:** Hermes WebUI cutover / kill dashboard `:4001` without Endabnahme parity · invent secrets · n8n · force push.
 
@@ -59,9 +59,11 @@ curl -sS http://127.0.0.1:8644/health
 - CLI works while gateway running:
   - `hermes cron status` → Gateway running, ticker OK
   - `hermes cron list` → **1** job: `whatsapp-support` (`4b19751e5920`), schedule every 1m
-- That job **errors every tick**: unpinned model drift `ds/deepseek-v4-pro` → `solar-pro3` (spend guard). **Do not auto-create** new jobs until pin decision:
+- Spend-guard follow-up (2026-08-02): `hermes cron pause 4b19751e5920` executed via CLI. `hermes cron list --all` now shows `whatsapp-support` as **`[paused]`**.
+- Root cause remains the same: unpinned model drift `ds/deepseek-v4-pro` → `solar-pro3` (spend guard). **Do not auto-create** new jobs until pin decision; resume only after explicit provider/model pin:
   ```text
-  hermes cron edit …   # or cronjob action=update job_id=4b19751e5920 provider=<p> model=<m>
+  hermes cron resume 4b19751e5920
+  # or cronjob action=update job_id=4b19751e5920 provider=<p> model=<m>
   ```
 
 ### Proposed health jobs (docs only — create only after explicit pin + approval)
@@ -87,6 +89,13 @@ Prefer systemd timers / existing autopilot `health` job over Hermes LLM cron for
 | Cloud Agent secrets / Cursor Automations | Human gate (#123, #126, #127) |
 | Hermes production cutover | **HARD STOP** until Endabnahme |
 | Orchestrator PR merges | Peer `10f75d28` (this track owns runtime + docs truth only) |
+
+## 6. Triage / current posture
+
+- Live probe after the gateway fix raised rough stack utilization from the original **~48%** to **~55–60%**.
+- Remaining gaps stay **deprioritized** because they are not on the critical path for `www + api + booking + contact + chat + gateway`.
+- Paperclip revive stays intentionally disabled; Spaether and public CF DNS gaps remain parked until the product smoke path stays green.
+- This issue remains **open** as a runtime/utilization tracker; no new products, no Hermes dashboard cutover.
 
 ## Coordination
 
