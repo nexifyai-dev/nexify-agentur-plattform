@@ -10,26 +10,28 @@ import { useEffect, useRef } from 'react';
 
 const THREECDN = 'https://unpkg.com/three@0.184.0/build/three.module.js';
 
+// Opaque runtime type for three.js objects loaded via CDN
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ThreeObj = Record<string, any>;
+
 declare global {
   interface Window {
     __NX_THREE?: {
-      // Rückgabetypen bewusst `any`: three läuft zur Laufzeit aus CDN,
-      // die Deklaration existiert nur für den TypeScript-Build.
-      Scene: new () => any;
-      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => any;
-      WebGLRenderer: new (opts: Record<string, unknown>) => any;
-      Group: new () => any;
-      IcosahedronGeometry: new (r: number, d: number) => any;
-      MeshStandardMaterial: new (opts: Record<string, unknown>) => any;
-      MeshBasicMaterial: new (opts: Record<string, unknown>) => any;
-      LineBasicMaterial: new (opts: Record<string, unknown>) => any;
-      WireframeGeometry: new (geo: any) => any;
-      LineSegments: new (geo: any, mat: any) => any;
-      Mesh: new (geo: any, mat: any) => any;
-      SphereGeometry: new (r: number, w: number, h: number) => any;
-      AmbientLight: new (color: number, intensity: number) => any;
-      DirectionalLight: new (color: number, intensity: number) => any;
-      PointLight: new (color: number, intensity: number, distance: number) => any;
+      Scene: new () => ThreeObj;
+      PerspectiveCamera: new (fov: number, aspect: number, near: number, far: number) => ThreeObj;
+      WebGLRenderer: new (opts: Record<string, unknown>) => ThreeObj;
+      Group: new () => ThreeObj;
+      IcosahedronGeometry: new (r: number, d: number) => ThreeObj;
+      MeshStandardMaterial: new (opts: Record<string, unknown>) => ThreeObj;
+      MeshBasicMaterial: new (opts: Record<string, unknown>) => ThreeObj;
+      LineBasicMaterial: new (opts: Record<string, unknown>) => ThreeObj;
+      WireframeGeometry: new (geo: ThreeObj) => ThreeObj;
+      LineSegments: new (geo: ThreeObj, mat: ThreeObj) => ThreeObj;
+      Mesh: new (geo: ThreeObj, mat: ThreeObj) => ThreeObj;
+      SphereGeometry: new (r: number, w: number, h: number) => ThreeObj;
+      AmbientLight: new (color: number, intensity: number) => ThreeObj;
+      DirectionalLight: new (color: number, intensity: number) => ThreeObj;
+      PointLight: new (color: number, intensity: number, distance: number) => ThreeObj;
       Clock: new () => { getElapsedTime: () => number };
     };
   }
@@ -80,7 +82,7 @@ export function Hero3D() {
 
   useEffect(() => {
     let raf = 0;
-    let renderer: any;
+    let renderer: ThreeObj | undefined;
     let resizeObserver: ResizeObserver | undefined;
     let pointerHandler: ((e: PointerEvent) => void) | undefined;
 
