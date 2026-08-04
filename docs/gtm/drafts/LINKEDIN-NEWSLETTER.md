@@ -1,41 +1,71 @@
 # FILE: /docs/gtm/drafts/LINKEDIN-NEWSLETTER.md
 # NIR: 02.08.2026 10:50
-# UPDATED: 02.08.2026 10:50
+# UPDATED: 04.08.2026 09:40
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI GTM
 # WHAT: LinkedIn Newsletter-from-Blog drafts (organic, free)
 # WHY: Own the relationship off algorithm — blog → newsletter
-# BEST-PRACTICE: One idea per issue; soft CTA to /wissen or /sprechstunde
+# BEST-PRACTICE: One idea per issue; soft CTA to /checkliste or /sprechstunde
 # PITFALL: V-GTM-LI-01: No fake metrics; Human publishes
 # DEPENDS: /wissen articles, LINKEDIN-WEEK-1.md
 # DOCS-REF: docs/gtm/RESEARCH-FREE-CAC-2026.md
-# SESSION: research-free-cac-full-7dd5
+# SESSION: linkedin-posts-newsletter-7dd5
 
-# LinkedIn Newsletter ← Blog (Drafts)
+# LinkedIn Newsletter „NeXify AI — Klartext für KMU" (Drafts)
 
-**Setup (Human):** LinkedIn → Schreiben → Newsletter erstellen → Titel „NeXify AI — Klartext für KMU“  
-**Cadence:** 1× / Woche · Quelle: `/wissen` oder neuer Kurz-Insight
+**Setup (Human — einmalig):**
+1. LinkedIn-Login (Pascal) → Profil → „Schreiben" → „Newsletter erstellen"
+2. Titel: **NeXify AI — Klartext für KMU**
+3. Beschreibung: Praktische KI-Insights für KMU — kein Hype, kein Fachjargon.
+4. Logo: NeXify AI Logo (aus Brand-Assets)
+5. Cadence: 1× / Woche
 
-## Issue 01 — Tagessatz-Klarheit
+**Soft-CTA-Ziele:** `/sprechstunde` · `/checkliste`  
+**Keine Automation / kein Scraping.**
+
+---
+
+## Issue 01 — Tagessatz-Klarheit *(als erstes veröffentlichen)*
 
 **Betreffzeile:** Warum wir 449 € sagen — und was drin ist
 
-Body (kurz):
-Viele Angebote verschleiern Tagessätze hinter „Paketen“. Wir rechnen offen: 449 € netto/Arbeitstag, AI-beschleunigt, persönlich freigegeben.
+Liebe KMU-Community,
 
-Mehr: https://www.nexifyai.cloud/vergleich  
-Termin: https://www.nexifyai.cloud/sprechstunde
+viele Angebote verschleiern Tagessätze hinter „Paketen" oder „Projekten auf Anfrage". Wir rechnen offen: **449 € netto pro Arbeitstag**, AI-beschleunigt, persönlich freigegeben.
+
+Was das konkret bedeutet — und wie Sie Angebote vergleichen können:
+👉 https://www.nexifyai.cloud/vergleich
+
+Kostenlose Sprechstunde (15 Min):
+👉 https://www.nexifyai.cloud/sprechstunde
+
+Bis nächste Woche,  
+Pascal · NeXify AI
+
+---
 
 ## Issue 02 — Checkliste statt Sales-Call
 
-**Betreff:** 8 Fragen bevor Sie eine Agentur buchen
+**Betreffzeile:** 8 Fragen bevor Sie eine Agentur buchen
 
-Body: Die Checkliste ist kostenlos — ohne Newsletter-Zwang-Abo-Trick.  
-https://www.nexifyai.cloud/checkliste
+Liebe KMU-Community,
+
+bevor Sie eine KI-Agentur beauftragen: Diese 8 Fragen schützen Sie vor teuren Fehlentscheidungen.
+
+Die Checkliste ist kostenlos — ohne Newsletter-Zwang-Abo-Trick:
+👉 https://www.nexifyai.cloud/checkliste
+
+Fragen? Kurze Sprechstunde genügt:
+👉 https://www.nexifyai.cloud/sprechstunde
+
+---
 
 ## Issue 03 — Local Visibility
 
-**Betreff:** Google-Unternehmensprofil: die 10 Minuten, die Maps entscheidet
+**Betreffzeile:** Google-Unternehmensprofil: die 10 Minuten, die Maps entscheidet
 
-Body: NAP konsistent, Kategorie präzise, wöchentlicher Post. Mehr in unserem Wissen-Hub.  
-https://www.nexifyai.cloud/wissen
+NAP konsistent, Kategorie präzise, wöchentlicher Post. Mehr in unserem Wissen-Hub:
+👉 https://www.nexifyai.cloud/wissen
+
+Termin für Ihr Profil-Audit:
+👉 https://www.nexifyai.cloud/sprechstunde
