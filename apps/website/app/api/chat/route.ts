@@ -1,60 +1,72 @@
-// /api/chat — Live Chat via 9Router (DeepSeek-Reasoner + Think-Max)
-// i18n: language-Parameter steuert System-Prompt + Antwort-Sprache
-// Env: NINEROUTER_ENDPOINT, NINEROUTER_API_KEY
+// /api/chat — Live Chat via 9Router
+// Default-Model verifiziert: openrouter/deepseek/deepseek-v4-flash-0731
+// Env: NINEROUTER_API_KEY
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const AI_ROUTER_URL = process.env.NINEROUTER_ENDPOINT || "https://ai-router.nexifyai.cloud/v1";
-const AI_API_KEY = process.env.NINEROUTER_API_KEY || "";
-const AI_MODEL = "deepseek/deepseek-reasoner";
+const AI_URL = (process.env.NINEROUTER_ENDPOINT || "https://ai-router.nexifyai.cloud").replace(/\/v1\/?$/, "") + "/v1";
+const AI_KEY = process.env.NINEROUTER_API_KEY || "";
+const AI_MODEL = "openrouter/deepseek/deepseek-v4-flash-0731";
 
 const PROMPTS: Record<string, string> = {
-  de: `Du bist Pascal's KI-Berater bei NeXify AI — Premium-Agentur für Websites, Shops, Apps und KI-Automatisierung. Tagessatz: 449 € netto/Tag. Sitz in Venlo (NL). Sprich den Kunden mit "Sie" an. Freundlich, kompetent, kurz (2-3 Sätze). Biete Buttons an: [BTN:Label|/pfad]. Keine URLs im Text.`,
-  en: `You are Pascal's AI advisor at NeXify AI — a premium agency for websites, shops, apps and AI automation. Day rate: €449 net. Based in Venlo (NL). Be friendly, competent, concise (2-3 sentences). Offer buttons: [BTN:Label|/path]. No URLs in text.`,
-  nl: `Je bent Pascal's AI-adviseur bij NeXify AI — een premium bureau voor websites, shops, apps en AI-automatisering. Dagtarief: €449 netto. Gevestigd in Venlo (NL). Wees vriendelijk, competent, kort (2-3 zinnen). Bied knoppen aan: [BTN:Label|/pad]. Geen URLs in tekst.`,
+  de: `Du bist Pascal's KI-Berater bei NeXify AI. Tagessatz: 449 € netto/Tag. Freundlich, kurz (2-3 Sätze). Biete Buttons an: [BTN:Label|/pfad]`,
+  en: `You are Pascal's AI advisor at NeXify AI. Day rate: €449 net. Be friendly, concise (2-3 sentences). Offer buttons: [BTN:Label|/path]`,
+  nl: `Je bent Pascal's AI-adviseur bij NeXify AI. Dagtarief: €449 netto. Wees vriendelijk, kort (2-3 zinnen). Bied knoppen: [BTN:Label|/pad]`,
 };
 
 export async function POST(request: Request) {
-  if (!AI_API_KEY) {
-    return Response.json({
-      reply: "Noch einen Moment — unser Live-KI-Berater wird gerade aktiviert. Pascal ist jetzt für Sie erreichbar:",
-      buttons: [{ label: "Rückruf vereinbaren", href: "/rueckruf" }, { label: "Projekt anfragen", href: "/kontakt" }],
-    });
-  }
-
   try {
     const { message, language } = await request.json();
     const lang = (language === "en" || language === "nl") ? language : "de";
-    const prompt = PROMPTS[lang] || PROMPTS.de;
 
     if (!message?.trim()) {
-      const emptyReplies: Record<string, { reply: string; buttons: { label: string; href: string }[] }> = {
-        de: { reply: "Was kann ich für Sie tun?", buttons: [{label:"Leistungen ansehen",href:"/leistungen"},{label:"Preise & Ablauf",href:"/preise"},{label:"Rückruf vereinbaren",href:"/rueckruf"}] },
-        en: { reply: "How can I help you?", buttons: [{label:"View Services",href:"/leistungen"},{label:"Pricing",href:"/preise"},{label:"Book a Call",href:"/rueckruf"}] },
-        nl: { reply: "Wat kan ik voor u doen?", buttons: [{label:"Diensten bekijken",href:"/leistungen"},{label:"Prijzen",href:"/preise"},{label:"Afspraak maken",href:"/rueckruf"}] },
-      };
-      return Response.json(emptyReplies[lang] || emptyReplies.de);
+      return Response.json({
+        reply: lang === "en" ? "What can I help you with?" : lang === "nl" ? "Wat kan ik voor u doen?" : "Was kann ich für Sie tun?",
+        buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }, { label: lang === "en" ? "View Services" : lang === "nl" ? "Diensten bekijken" : "Leistungen ansehen", href: "/leistungen" }],
+      });
     }
 
-    const res = await fetch(`${AI_ROUTER_URL}/chat/completions`, {
+    // API-Key vorhanden? Sonst Fallback
+    if (!AI_KEY) {
+      return Response.json({
+        reply: lang === "en" ? "One moment — our live advisor is being activated." : lang === "nl" ? "Een moment — onze live adviseur wordt geactiveerd." : "Einen Moment — unser Live-Berater wird aktiviert. Sie können uns direkt erreichen:",
+        buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }, { label: lang === "en" ? "Contact" : lang === "nl" ? "Contact" : "Kontakt", href: "/kontakt" }],
+      });
+    }
+
+    const prompt = PROMPTS[lang] || PROMPTS.de;
+
+    const res = await fetch(`${AI_URL}/chat/completions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${AI_API_KEY}` },
-      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "system", content: prompt }, { role: "user", content: message }], max_tokens: 350, temperature: 0.7, thinking: { type: "enabled", budget_tokens: 16000 } }),
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${AI_KEY}` },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages: [
+          { role: "system", content: prompt },
+          { role: "user", content: message },
+        ],
+        max_tokens: 300,
+        temperature: 0.7,
+      }),
     });
 
     if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      console.error("9Router error:", res.status, errText.slice(0, 200));
       return Response.json({
-        reply: lang === "en" ? "I'm briefly unavailable. Pascal will get back to you — or book a call:" : lang === "nl" ? "Ik ben even niet beschikbaar. Pascal neemt contact met u op — of boek een afspraak:" : "Ich bin gerade kurz in einer Besprechung. Pascal meldet sich direkt bei Ihnen — oder buchen Sie einen Termin:",
-        buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf buchen", href: "/rueckruf" }],
+        reply: lang === "en" ? "I'll connect you directly with Pascal." : lang === "nl" ? "Ik verbind u direct met Pascal." : "Ich verbinde Sie direkt mit Pascal. Alternativ:",
+        buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf buchen", href: "/rueckruf" }, { label: lang === "en" ? "Send Message" : lang === "nl" ? "Stuur bericht" : "Nachricht senden", href: "/kontakt" }],
       });
     }
 
     const data = await res.json();
     const rawReply = data?.choices?.[0]?.message?.content?.trim();
+
     if (!rawReply) {
-      return Response.json({ reply: lang === "en" ? "Good question! Let's discuss this directly — Pascal can give you a realistic estimate." : lang === "nl" ? "Goede vraag! Laten we dit direct bespreken." : "Gute Frage! Am besten besprechen wir das direkt.", buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }] });
+      return Response.json({ reply: lang === "en" ? "Let me connect you with Pascal for a personal consultation." : lang === "nl" ? "Laat me u doorverbinden met Pascal voor persoonlijk advies." : "Lassen Sie mich Sie direkt mit Pascal verbinden für eine persönliche Beratung.", buttons: [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }] });
     }
 
+    // Buttons parsen
     const btnRegex = /\[BTN:([^\]|]+)\|([^\]]+)\]/g;
     const buttons: { label: string; href: string }[] = [];
     let match;
@@ -63,8 +75,12 @@ export async function POST(request: Request) {
     }
     const cleanReply = rawReply.replace(btnRegex, "").trim().replace(/\n{3,}/g, "\n\n");
 
-    return Response.json({ reply: cleanReply || rawReply, buttons: buttons.length > 0 ? buttons : [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }] });
-  } catch {
-    return Response.json({ reply: "Entschuldigung, ich hatte gerade einen kurzen Aussetzer.", buttons: [{ label: "Rückruf buchen", href: "/rueckruf" }] });
+    return Response.json({
+      reply: cleanReply || rawReply,
+      buttons: buttons.length > 0 ? buttons : [{ label: lang === "en" ? "Book a Call" : lang === "nl" ? "Afspraak maken" : "Rückruf vereinbaren", href: "/rueckruf" }, { label: lang === "en" ? "View Services" : lang === "nl" ? "Diensten bekijken" : "Leistungen ansehen", href: "/leistungen" }],
+    });
+  } catch (err) {
+    console.error("Chat error:", err);
+    return Response.json({ reply: "Entschuldigung — ein technischer Fehler. Bitte versuchen Sie es gleich noch einmal.", buttons: [{ label: "Rückruf buchen", href: "/rueckruf" }] });
   }
 }
