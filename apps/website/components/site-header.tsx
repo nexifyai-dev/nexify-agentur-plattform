@@ -8,17 +8,10 @@ import { useLang } from '@/lib/lang-context';
 export function NxLogoMark() {
   return (
     <span
+      className="relative flex items-center justify-center size-[34px] rounded-[10px] flex-none"
       style={{
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 34,
-        height: 34,
-        borderRadius: 10,
         background: 'linear-gradient(155deg,#18181c,#0a0a0c)',
         border: '1px solid rgba(255,255,255,0.1)',
-        flex: 'none',
       }}
     >
       <svg width="20" height="20" viewBox="0 0 34 34" fill="none">
@@ -33,13 +26,8 @@ export function NxLogoMark() {
         <polygon points="6,6 11.5,6 28,28 22.5,28" fill="url(#nxLogoGrad)" />
       </svg>
       <span
+        className="absolute -top-[3px] -right-[3px] size-[9px] rounded-full"
         style={{
-          position: 'absolute',
-          top: -3,
-          right: -3,
-          width: 9,
-          height: 9,
-          borderRadius: 999,
           background: '#C8FF00',
           boxShadow: '0 0 8px rgba(200,255,0,0.75), 0 0 0 3px #0A0A0A',
         }}
@@ -49,47 +37,34 @@ export function NxLogoMark() {
 }
 
 const NAV = [
-  { label: 'Leistungen', href: '#leistungen' },
-  { label: 'Preise', href: '#preise' },
-  { label: 'Prozess', href: '#prozess' },
-  { label: 'Referenzen', href: '#referenzen' },
-  { label: 'Über uns', href: '#ueberuns' },
-  { label: 'FAQ', href: '#faq' },
+  { label: "Leistungen", href: "/leistungen" },
+  { label: "Preise", href: "/preise" },
+  { label: "Prozess", href: "/prozess" },
+  { label: "Referenzen", href: "/referenzen" },
+  { label: "Über uns", href: "/ueberuns" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 export function SiteHeader() {
   const { lang, setLang } = useLang();
   const [open, setOpen] = useState(false);
 
-  const anchor = (h: string) => `/${lang}${h}`;
-
   return (
     <header
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
         background: 'rgba(10,10,10,0.72)',
         backdropFilter: 'blur(20px) saturate(160%)',
         WebkitBackdropFilter: 'blur(20px) saturate(160%)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      <div
-        style={{
-          width: 'min(1280px, calc(100% - 48px))',
-          marginInline: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 76,
-          gap: 16,
-          flexWrap: 'nowrap',
-        }}
-      >
-        <Link href={anchor('#top')} style={{ display: 'flex', alignItems: 'center', gap: 11, flex: 'none' }} data-testid="logo">
+      <div className="mx-auto flex items-center justify-between h-[64px] sm:h-[74px] gap-4 flex-nowrap px-6 max-w-[1280px]">
+        <Link
+          href="/"
+          data-testid="header-logo-link"
+          className="flex items-center gap-[11px] shrink-0 no-underline"
+        >
           <NxLogoMark />
           <span
             style={{
@@ -104,29 +79,26 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="nx-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 22, whiteSpace: 'nowrap' }}>
+        <nav
+          data-testid="header-nav"
+          className="hidden xl:flex items-center gap-[22px] whitespace-nowrap"
+        >
           {NAV.map((item) => (
             <Link
               key={item.href}
-              href={anchor(item.href)}
-              style={{ fontSize: 13, color: '#a1a1aa', fontWeight: 500 }}
-              data-testid={`nav-${item.href.slice(1)}`}
+              href={item.href}
+              className="text-[13px] text-[#a1a1aa] font-medium no-underline hover:text-white transition-colors"
+              data-testid={`nav-link-${item.href.slice(1)}`}
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 'none' }}>
+        <div className="flex items-center gap-[14px] flex-none">
           <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              borderRadius: 999,
-              border: '1px solid rgba(255,255,255,0.12)',
-              padding: 3,
-            }}
+            className="flex items-center gap-[2px] rounded-full p-[3px]"
+            style={{ border: '1px solid rgba(255,255,255,0.12)' }}
             data-testid="lang-switcher"
           >
             {(['de', 'nl'] as const).map((l) => (
@@ -134,16 +106,10 @@ export function SiteHeader() {
                 key={l}
                 onClick={() => setLang(l)}
                 data-testid={`lang-switcher-${l}`}
+                className="rounded-full px-[10px] py-[5px] text-[11px] font-bold uppercase cursor-pointer border-none"
                 style={{
-                  border: 'none',
                   background: lang === l ? 'rgba(200,255,0,0.15)' : 'transparent',
                   color: lang === l ? '#C8FF00' : '#71717a',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  borderRadius: 999,
-                  padding: '5px 10px',
-                  cursor: 'pointer',
                 }}
               >
                 {l}
@@ -152,86 +118,67 @@ export function SiteHeader() {
           </div>
 
           <Link
-            href={anchor('#kontakt')}
+            href="/rueckruf"
             data-testid="header-cta"
+            className="hidden xl:inline-flex items-center gap-2 rounded-full px-5 py-[11px] text-[12.5px] font-bold whitespace-nowrap flex-none no-underline"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              borderRadius: 999,
-              padding: '11px 20px',
               background: 'linear-gradient(120deg,#C8FF00,#e9ff8a 45%,#C8FF00)',
               color: '#0A0A0A',
-              fontWeight: 700,
-              fontSize: 12.5,
-              whiteSpace: 'nowrap',
               boxShadow: '0 0 22px rgba(200,255,0,0.25)',
-              flex: 'none',
             }}
           >
             Gespräch buchen
           </Link>
 
-          <span
-            className="nx-mobile-toggle"
+          <button
+            className="size-11 flex items-center justify-center rounded-[10px] cursor-pointer border border-white/15 bg-transparent flex-col gap-1 xl:hidden"
             onClick={() => setOpen((s) => !s)}
-            data-testid="mobile-nav-toggle"
-            style={{
-              display: 'none',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              border: '1px solid rgba(255,255,255,0.15)',
-              cursor: 'pointer',
-              flex: 'none',
-              gap: 4,
-              flexDirection: 'column',
-            }}
+            data-testid="mobile-menu-toggle"
+            aria-label="Menü öffnen"
+            aria-expanded={open}
           >
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-          </span>
+            <span className="sr-only">Menü öffnen</span>
+            <span className="block w-4 h-[1.5px] bg-[#e5e5e5]" />
+            <span className="block w-4 h-[1.5px] bg-[#e5e5e5]" />
+            <span className="block w-4 h-[1.5px] bg-[#e5e5e5]" />
+          </button>
         </div>
       </div>
 
-      {open && (
-        <div
-          data-testid="mobile-nav-menu"
+      <div
+        data-testid="mobile-menu"
+        className="overflow-y-auto max-h-[min(80vh,600px)] flex-col px-6 pb-5 pt-3 xl:hidden"
+        style={{
+          display: open ? 'flex' : 'none',
+          background: 'rgba(10,10,10,0.97)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+        }}
+      >
+        {NAV.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={() => setOpen(false)}
+            className="py-[14px] text-[15px] text-[#e5e5e5] font-medium no-underline"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+          >
+            {item.label}
+          </Link>
+        ))}
+        <Link
+          href="/rueckruf"
+          onClick={() => setOpen(false)}
+          className="mt-4 inline-flex items-center justify-center rounded-full px-5 py-3 text-[13px] font-bold no-underline"
           style={{
-            position: 'absolute',
-            top: 76,
-            left: 0,
-            right: 0,
-            background: 'rgba(10,10,10,0.97)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '12px 24px 20px',
+            background: 'linear-gradient(120deg,#C8FF00,#e9ff8a 45%,#C8FF00)',
+            color: '#0A0A0A',
           }}
         >
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={anchor(item.href)}
-              onClick={() => setOpen(false)}
-              style={{
-                padding: '14px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                fontSize: 15,
-                color: '#e5e5e5',
-                fontWeight: 500,
-              }}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      )}
+          Gespräch buchen
+        </Link>
+      </div>
     </header>
   );
 }
