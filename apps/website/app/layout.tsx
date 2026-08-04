@@ -13,6 +13,7 @@ import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import { siteOrigin } from "@/lib/seo";
 import "./globals.css";
+import "./nexify-anhang.css";
 
 const origin = siteOrigin();
 
@@ -20,16 +21,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(origin),
   title: { default: "NeXify AI — Premium Websites, Apps & AI-Automatisierung", template: "%s | NeXify AI" },
   description:
-    "AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 449 Euro netto. Deutsch & Nederlands.",
+    "KI-Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren. Transparent zum Tagessatz von 449 €. Deutsch & Nederlands.",
   keywords: [
-    "Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung",
-    "AI-gestützte Automatisierung", "AI-Agenten", "NeXify AI", "Venlo", "webontwikkeling", "AI-automatisering",
+    "KI Agenten", "Automatisierung", "Chatbot", "Terminbuchung", "KI Agentur", "NeXify AI",
+    "Prozessautomatisierung", "E-Mail Triage", "Leadqualifizierung", "Wissensdatenbank",
   ],
   authors: [{ name: company.owner }],
   creator: company.owner,
   publisher: company.legalName,
-  // Canonical/og:url pro Seite via pageMetadata() — kein Root-Canonical für alle Unterseiten
-  // Locale-SoT: de + x-default primary (Acquisition DACH); NL nur Sitz-Alternate
   alternates: {
     languages: {
       de: "/",
@@ -41,16 +40,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "de_DE",
-    alternateLocale: ["en_GB", "nl_NL"],
+    alternateLocale: ["nl_NL"],
     siteName: company.brand,
     title: "NeXify AI — Chat it. Automate it.",
-    description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit. 449 € netto / Arbeitstag.",
+    description: "KI-Automatisierung für Betriebe. 449 € / Umsetzungstag. Deutsch & Nederlands.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI — Chat it. Automate it." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "NeXify AI — Chat it. Automate it.",
-    description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 449 / Arbeitstag netto.",
+    description: "KI-Agenten für Betriebe. 449 € / Umsetzungstag netto.",
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
@@ -62,7 +61,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark", viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#0A0A0A", colorScheme: "dark", viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
@@ -87,16 +86,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "@type": "Offer",
       price: String(company.dayRate),
       priceCurrency: "EUR",
-      description: "Tagessatz netto pro Arbeitstag (bis zu acht planbare Fachstunden)",
+      description: "Tagessatz netto pro Umsetzungstag",
       unitText: "DAY",
     },
   };
   return (
     <html lang="de" data-scroll-behavior="smooth">
       <head>
-        {/* Fail-safe: scroll-reveal starts at opacity:0 and is un-hidden by JS.
-            Without JS (or if it fails to run) the whole page below the fold would
-            stay invisible — force it visible so content always renders. */}
         <noscript>
           <style>{`.reveal{opacity:1 !important;transform:none !important;}`}</style>
         </noscript>
