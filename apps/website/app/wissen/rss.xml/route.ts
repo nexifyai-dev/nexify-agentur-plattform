@@ -1,4 +1,4 @@
-import { WISSEN_ARTICLES } from "../../lib/content/wissen-articles";
+import { WISSEN_ARTICLES } from "@/lib/content/wissen-articles";
 
 export const dynamic = "force-static";
 
