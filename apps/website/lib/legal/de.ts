@@ -22,7 +22,7 @@ export const legalDe: Record<string, LegalPageData> = {
           "NeXify AI by NeXify – Chat it. Automate it.",
           "Inhaber: Pascal Courbois (Eenmanszaak nach niederländischem Recht)",
           "Anschrift: Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande",
-          "Handelsregister: KvK Nr. 90483944 (Kamer van Koophandel, Eindhoven)",
+          "Handelsregister: KvK Nr. 90483944 (Kamer van Koophandel, Roermond)",
           "Umsatzsteuer-Identifikationsnummer: NL865786276B01",
         ] },
       { id: "kontakt", heading: "§ 2 Kontakt",
@@ -39,7 +39,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "aufsicht", heading: "§ 4 Aufsichtsbehörden und Register",
         paragraphs: [
-          "Zuständige Handelskammer: Kamer van Koophandel (KvK), Regio Eindhoven, Niederlande.",
+          "Zuständige Handelskammer: Kamer van Koophandel (KvK), Regio Roermond, Niederlande.",
           "Datenschutz-Aufsichtsbehörde: Autoriteit Persoonsgegevens (AP), Postbus 93374, 2509 AJ Den Haag, Niederlande.",
           "Es besteht keine gesetzliche Verpflichtung zur Bestellung einer Berufshaftpflichtversicherung; eine solche wird derzeit nicht unterhalten.",
         ] },
