@@ -230,7 +230,7 @@ export const en = {
   },
   process: {
     eyebrow: "Approach",
-    title: "Five steps from idea to operation",
+    title: "Six steps from idea to operation",
     intro:
       "A standardised process ensures that suitable projects are delivered in days rather than months – with clear quality checks, no surprises and full transparency at every step.",
     steps: [
@@ -238,7 +238,8 @@ export const en = {
       { n: "02", icon: "MessageSquareMore", title: "Concept and fixed price range", text: "The effort is stated in working days. You see scope, price bracket, assumptions and possible extensions up front – in writing and binding." },
       { n: "03", icon: "Code2", title: "AI-assisted implementation", text: "Modern development and testing tools accelerate analysis, design, code, tests and documentation – under continuous expert guidance." },
       { n: "04", icon: "Settings2", title: "Testing and acceptance", text: "Functionality, presentation, mobile view, forms, performance and key user journeys are verifiably tested and documented." },
-      { n: "05", icon: "Rocket", title: "Handover and further development", text: "You receive code, documentation, clear operational information and a prioritised list of sensible next steps." },
+      { n: "05", icon: "Rocket", title: "Go live and handover", text: "The agent moves verifiably into production – including code, documentation and clear operational information." },
+      { n: "06", icon: "Workflow", title: "Operations and further development", text: "Monitoring, adjustments and a prioritised list of sensible next steps keep the result valuable in the long run." },
     ],
     promiseTitle: "What you can rely on",
     promises: [
@@ -270,13 +271,25 @@ export const en = {
         icon: "Bot",
         title: "AI & agents",
         text: "Production-ready AI integrations with control, logs and approvals.",
-        points: ["GPT, Claude & Gemini integration", "RAG knowledge connectivity", "AI advisors like NeXify AI", "Quotation & email automation", "Evaluation & guardrails"],
+        points: ["OpenRouter model routing (DeepSeek et al.)", "RAG knowledge connectivity (LightRAG)", "AI advisors like NeXify AI", "AgentMemory & evaluation", "Guardrails, logs & approvals"],
+      },
+      {
+        icon: "Globe2",
+        title: "Lead generation & sales",
+        text: "Automated search, qualification and outreach – measurable all the way to the booked call.",
+        points: ["Lead search via SearXNG & Firecrawl", "AI lead scoring & enrichment", "Email sequences with follow-ups", "Proposal automation", "CRM & pipeline integration"],
+      },
+      {
+        icon: "Smartphone",
+        title: "Communication channels",
+        text: "Your customers reach you where they already are – from one system.",
+        points: ["Web chat & WhatsApp integration", "Email triage with AI replies", "Appointment booking & calendar sync", "Bilingual DE / NL", "Webhooks & API integration"],
       },
       {
         icon: "ShieldCheck",
         title: "Operations & security",
         text: "Reliable operations with clear responsibilities and GDPR compliance.",
-        points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & protection", "SSL, security headers, hardening", "GDPR-compliant data flows", "Transactional emails (Resend)"],
+        points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & protection", "SSL, security headers, hardening", "Monitoring (Prometheus/Grafana)", "Daily backups & GDPR-compliant data flows"],
       },
     ],
     novaTitle: "NeXify AI – your AI advisor on this website",
