@@ -87,6 +87,10 @@ export function PricingPage() {
               <div className="mt-2 text-sm uppercase tracking-[0.2em] text-zinc-500">{t.common.netPerDay.replace("€ 449 netto / ", "netto / ")}</div>
               <h2 className="mt-8 font-[family-name:var(--font-heading)] text-xl font-medium text-white">{t.pricing.dayRateTitle}</h2>
               <p className="mt-3 text-[14.5px] leading-relaxed text-zinc-400">{t.pricing.dayRateText}</p>
+              <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+                Tagesabrechnung: Rechnung sofort fällig, Zahlung bis 09:00 Uhr des Folgetages.{" "}
+                <Link href="/agb" className="underline hover:text-white">Details in den AGB (§ 4)</Link>
+              </p>
               <div className="mt-auto grid gap-6 pt-8 sm:grid-cols-2">
                 <div>
                   <h3 className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">{t.pricing.includedTitle}</h3>

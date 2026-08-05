@@ -20,6 +20,7 @@ export function ContactForm() {
   const t = useContent();
   const [state, setState] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [privacy, setPrivacy] = useState(false);
+  const [agb, setAgb] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", company: "", phone: "", message: "" });
 
   const submit = async (e: React.FormEvent) => {
@@ -57,9 +58,13 @@ export function ContactForm() {
         <input type="checkbox" required className="mt-0.5 size-4 shrink-0 accent-white" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} data-testid="contact-privacy-checkbox" />
         <span>{lang === "nl" ? "Ik heb de privacyverklaring gelezen. *" : "Ich habe die Datenschutzerklärung zur Kenntnis genommen. *"} <Link href="/datenschutz" className="underline hover:text-white">{lang === "nl" ? "Privacyverklaring" : "Datenschutz"}</Link></span>
       </label>
+      <label className="flex items-start gap-2.5 text-xs leading-relaxed text-zinc-500">
+        <input type="checkbox" required className="mt-0.5 size-4 shrink-0 accent-white" checked={agb} onChange={(e) => setAgb(e.target.checked)} data-testid="contact-agb-checkbox" />
+        <span>{lang === "nl" ? "Ik heb de algemene voorwaarden (incl. dagafrekeningsmodel) gelezen en aanvaard ze. *" : "Ich habe die AGB (inkl. Tagesabrechnungsmodell) gelesen und akzeptiere sie. *"} <Link href="/agb" className="underline hover:text-white">{lang === "nl" ? "Algemene voorwaarden" : "AGB"}</Link></span>
+      </label>
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <p className="text-xs text-zinc-600">{t.contact.b2bNote}</p>
-        <button type="submit" className="btn-primary w-full sm:w-auto" disabled={state === "sending" || !privacy} data-testid="contact-submit-btn">
+        <button type="submit" className="btn-primary w-full sm:w-auto" disabled={state === "sending" || !privacy || !agb} data-testid="contact-submit-btn">
           {state === "sending" ? t.contact.sending : t.contact.submit} <ArrowRight />
         </button>
       </div>

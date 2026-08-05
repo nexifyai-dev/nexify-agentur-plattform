@@ -72,7 +72,7 @@ export const legalDe: Record<string, LegalPageData> = {
   datenschutz: {
     slug: "datenschutz", title: "Datenschutzerklärung",
     intro: "Datenschutzinformationen gemäß Art. 12 ff. DSGVO sowie § 25 TTDSG. Wir verarbeiten personenbezogene Daten ausschließlich auf Grundlage der DSGVO, des TTDSG und des niederländischen Umsetzungsrechts (UAVG). Transparenz ist die Grundlage für Vertrauen.",
-    updated: "4. August 2026",
+    updated: "5. August 2026",
     related: [{ label: "Impressum", href: "/impressum" }, { label: "Cookie-Richtlinie", href: "/cookie-richtlinie" }, { label: "AVV", href: "/avv" }, { label: "KI-Hinweise", href: "/ki-hinweise" }, { label: "AGB", href: "/agb" }],
     sections: [
       { id: "verantwortlicher", heading: "1. Verantwortlicher",
@@ -115,7 +115,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "ki-chat", heading: "6. KI-Berater (Live-Chat)",
         paragraphs: [
-          "Der KI-Berater ist ein Large Language Model, das über den Anbieter 9Router und DeepSeek (Volksrepublik China) betrieben wird. Ihre Chat-Nachrichten werden zur Beantwortung an das Modell übermittelt.",
+          "Der KI-Berater ist ein Large Language Model, das über den Routing-Dienst 9Router sowie die Modell-Anbieter DeepSeek (Volksrepublik China), OpenRouter (USA) und Upstage (Südkorea) betrieben wird. Ihre Chat-Nachrichten werden zur Beantwortung an das Modell übermittelt.",
           "Es werden keine Chat-Inhalte zum Training der KI-Modelle verwendet. Eine Speicherung erfolgt ausschließlich zur Fehleranalyse und Qualitätssicherung, maximal 12 Monate.",
           "Bitte geben Sie im Chat keine Passwörter, Zahlungsdaten, Gesundheitsdaten oder sonstigen besonders sensiblen Daten (Art. 9 DSGVO) an.",
           "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Beantwortung Ihrer Anfragen). Bei Drittlandübermittlung: Art. 44 ff. DSGVO mit geeigneten Garantien.",
@@ -127,7 +127,7 @@ export const legalDe: Record<string, LegalPageData> = {
           "Cloudflare Inc. (USA) – CDN, WAF, DNS (SCC)",
           "Resend Inc. (USA) – Versand von E-Mails (SCC)",
           "Supabase Inc. (USA) – Datenbank, EU-Region (SCC)",
-          "DeepSeek / 9Router – LLM-Inferenz für den KI-Berater (geeignete Garantien)",
+          "DeepSeek, OpenRouter und Upstage (über 9Router) – LLM-Inferenz, Embeddings und Textanalyse (geeignete Garantien)",
           "Hetzner GmbH (DE) – VPS-Hosting für interne Dienste",
         ] },
       { id: "drittland", heading: "8. Drittlandübermittlung",
@@ -196,7 +196,7 @@ export const legalDe: Record<string, LegalPageData> = {
   agb: {
     slug: "agb", title: "Allgemeine Geschäftsbedingungen (B2B)",
     intro: "Diese AGB gelten für sämtliche Leistungen von NeXify AI gegenüber Unternehmern (§ 14 BGB), juristischen Personen des öffentlichen Rechts und öffentlich-rechtlichen Sondervermögen. Verbraucherverträge (§ 13 BGB) werden nicht geschlossen.",
-    updated: "4. August 2026",
+    updated: "5. August 2026",
     related: [{ label: "Impressum", href: "/impressum" }, { label: "Datenschutz", href: "/datenschutz" }, { label: "AVV", href: "/avv" }, { label: "Widerruf", href: "/widerruf" }, { label: "KI-Hinweise", href: "/ki-hinweise" }],
     sections: [
       { id: "geltung", heading: "§ 1 Geltungsbereich",
@@ -206,7 +206,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "vertragsschluss", heading: "§ 2 Vertragsschluss",
         paragraphs: [
-          "Angebote des Auftragnehmers sind freibleibend und unverbindlich, sofern nicht ausdrücklich anders bezeichnet.",
+          "Angebote des Auftragnehmers sind freibleibend und unverbindlich, sofern nicht ausdrücklich anders bezeichnet. Schriftliche Angebote sind gemäß § 4.6 für 14 Kalendertage ab Ausstellungsdatum verbindlich.",
           "Ein Vertrag kommt durch schriftliche Auftragsbestätigung des Auftragnehmers oder durch Aufnahme der Leistungserbringung zustande.",
           "KI-gestützte Angebotskalkulationen (Angebots-Generator) sind unverbindliche Richtwerte und stellen kein bindendes Angebot dar.",
           "Nebenabreden und Änderungen bedürfen der Textform.",
@@ -216,14 +216,55 @@ export const legalDe: Record<string, LegalPageData> = {
           "Der Leistungsumfang ergibt sich aus der Leistungsbeschreibung im jeweiligen Angebot bzw. der Auftragsbestätigung.",
           "Gegenstand sind insbesondere: Konzeption, Entwicklung, Integration und Betrieb von KI-Agenten, Automatisierungen, Websites und Webanwendungen.",
           "Nicht enthalten sind – sofern nicht gesondert vereinbart – laufende Hostingkosten, Drittdienstleistungen (z. B. API-Gebühren), Domaingebühren und Wartungsleistungen.",
+          "Die tägliche Leistungserbringung wird durch Tagesberichte dokumentiert; der Tagesbericht dient zugleich als Leistungsnachweis (siehe § 4.1).",
         ] },
-      { id: "verguetung", heading: "§ 4 Vergütung und Zahlungsbedingungen",
+      { id: "verguetung", heading: "§ 4 Vergütung, Tagesabrechnung und Projektkontinuität",
         paragraphs: [
-          "Der Tagessatz beträgt 449,00 € netto pro Arbeitstag (max. 8 Fachstunden). Alle Preise verstehen sich netto zzgl. gesetzlicher Umsatzsteuer (bei grenzüberschreitenden B2B-Leistungen ggf. Reverse-Charge-Verfahren).",
-          "Aufwand wird nach tatsächlich geleisteten Stunden abgerechnet, in 30-Minuten-Einheiten.",
-          "Rechnungen sind innerhalb von 14 Tagen ohne Abzug zahlbar.",
-          "Bei Überschreitung der Zahlungsfrist gerät der Auftraggeber ohne weitere Mahnung in Verzug; es gelten Verzugszinsen gemäß § 288 BGB (9 Prozentpunkte über dem Basiszinssatz bei B2B).",
-          "Der Auftragnehmer ist berechtigt, Vorauszahlungen oder Sicherheitsleistungen zu verlangen.",
+          "(1) NeXify AI erbringt Leistungen zum vereinbarten Netto-Tagessatz (derzeit 449,00 € zzgl. anwendbarer Umsatzsteuer). Der Tagessatz gilt je angefangenem, vollständigem Arbeitstag und ist im schriftlich bestätigten Projektauftrag festgehalten.",
+          "(2) Das Vergütungsmodell von NeXify AI basiert auf dem Prinzip der vollständigen täglichen Transparenz: Der Auftraggeber erhält täglich einen detaillierten Leistungsnachweis (Tagesbericht) und zahlt ausschließlich für tatsächlich erbrachte und dokumentierte Arbeit. Es entstehen keine verdeckten Kosten, keine Pauschalierungen und kein Risiko unerwarteter Nachrechnungen.",
+          "(3) Es gibt keinen Mindestabrechnungszeitraum über einen Arbeitstag hinaus. Der Auftraggeber kann das Projekt täglich mit dem Abschluss eines Arbeitstages ohne weitere Verpflichtung pausieren oder beenden, sofern alle bis dahin fälligen Rechnungen beglichen sind.",
+        ],
+        subsections: [
+          { id: "tagesbericht", heading: "§ 4.1 Tagesbericht als Leistungsnachweis",
+            paragraphs: [
+              "(1) NeXify AI übermittelt dem Auftraggeber jeweils am Ende jedes Arbeitstages, spätestens bis 20:00 Uhr, einen Tagesbericht in digitaler Form (PDF per E-Mail und/oder im Kundenportal). Der Tagesbericht enthält: eine übersichtliche Zusammenfassung der an diesem Tag erbrachten Leistungen, den aktuellen Projektstand und die erreichten Zwischenergebnisse, konkrete nächste Schritte für den Folgetag sowie etwaige Abhängigkeiten, Rückfragen oder Entscheidungsbedarfe.",
+              "(2) Der Tagesbericht dient gleichzeitig als Leistungsnachweis im Sinne des Werkvertrags- und Dienstleistungsrechts. Mit dem Versand des Tagesberichts gilt die Leistung des jeweiligen Arbeitstages als erbracht und zur Abrechnung freigegeben.",
+              "(3) Einwände gegen den Inhalt des Tagesberichts sind dem Auftraggeber innerhalb von 24 Stunden nach Empfang schriftlich mitzuteilen. Widerspricht der Auftraggeber nicht innerhalb dieser Frist, gilt der im Tagesbericht beschriebene Leistungsumfang als anerkannt.",
+            ] },
+          { id: "faelligkeit", heading: "§ 4.2 Sofortige Fälligkeit und Zahlungsmodalitäten",
+            paragraphs: [
+              "(1) Jede Tagesrechnung ist sofort fällig. Der Rechnungsbetrag ist bis spätestens 09:00 Uhr des unmittelbar folgenden Arbeitstages auf dem angegebenen Konto von NeXify AI in voller Höhe zu entrichten.",
+              "(2) Die Rechnung wird gemeinsam mit dem Tagesbericht versendet und enthält einen direkten Online-Zahlungslink (Revolut Pay / Kartenzahlung / Banküberweisung), der eine sofortige 1-Klick-Zahlung ermöglicht. Alternativ steht die im Rechnungsdokument angegebene IBAN für Überweisungen zur Verfügung.",
+              "(3) Als Zahlungseingang gilt der Zeitpunkt der Gutschrift auf dem Konto von NeXify AI, nicht der Zeitpunkt der Auslösung der Zahlung durch den Auftraggeber. Bei SEPA-Überweisungen ist daher eine ausreichende Vorlaufzeit einzuplanen; die Nutzung des bereitgestellten Online-Zahlungslinks wird ausdrücklich empfohlen.",
+              "(4) Alle Rechnungen werden unter einer fortlaufenden, unveränderlichen Rechnungsnummer im Format NEXIFY-YYYY-NNNNN ausgestellt. Die Rechnungsnummernvergabe ist lückenlos und nicht rückdatierbar.",
+            ] },
+          { id: "umsatzsteuer", heading: "§ 4.3 Umsatzsteuer und grenzüberschreitende Leistungen",
+            paragraphs: [
+              "(1) Alle genannten Preise und Tagessätze verstehen sich als Netto-Beträge zzgl. der jeweils geltenden Umsatzsteuer. NeXify AI ist in den Niederlanden umsatzsteuerlich registriert (BTW NL865786276B01).",
+              "(2) Für Leistungen an Unternehmen (B2B) mit Sitz in einem anderen EU-Mitgliedstaat und gültiger Umsatzsteuer-Identifikationsnummer (USt-IdNr.) gilt das Reverse-Charge-Verfahren nach Art. 196 MwStSystRL: Die Umsatzsteuer wird in diesem Fall nicht von NeXify AI berechnet; der Auftraggeber schuldet die Umsatzsteuer in seinem Ansässigkeitsstaat selbst. Die Rechnung weist in diesem Fall den Hinweis „Steuerschuldnerschaft des Leistungsempfängers“ aus.",
+              "(3) Für Leistungen an Auftraggeber mit Sitz in den Niederlanden wird die niederländische BTW (21 %) berechnet und ausgewiesen.",
+              "(4) NeXify AI richtet sich ausschließlich an Unternehmer im Sinne des § 2 UStG (DE) / Art. 7 Wet OB 1968 (NL). Eine Erbringung von Leistungen an Verbraucher (B2C) findet nicht statt.",
+            ] },
+          { id: "kontinuitaet", heading: "§ 4.4 Projektkontinuität und Zahlungsverzug",
+            paragraphs: [
+              "(1) Die pünktliche Zahlung ist die Grundlage der nahtlosen Projektfortsetzung: NeXify AI plant die Arbeitskapazität des Folgetages auf Basis des bestätigten Zahlungseingangs. Diese Struktur gewährleistet, dass dem Auftraggeber stets volle Ressourcen und volle Aufmerksamkeit gewidmet werden können.",
+              "(2) Liegt bis 09:00 Uhr des Folgearbeitstages kein vollständiger Zahlungseingang für die vorangegangene Tagesrechnung vor, sendet NeXify AI zunächst eine freundliche automatische Zahlungserinnerung an den Auftraggeber. Die Arbeit wird in dieser Zeit in den Wartemodus versetzt; die Arbeitsaufnahme erfolgt unverzüglich nach bestätigtem Zahlungseingang.",
+              "(3) Bleibt die Zahlung auch nach der Erinnerung aus, ist NeXify AI berechtigt, die Leistungserbringung bis zum vollständigen Zahlungseingang zu unterbrechen, ohne dass dies als Vertragsverletzung seitens NeXify AI gewertet werden kann.",
+              "(4) Ab dem ersten Werktag nach Ablauf der Zahlungsfrist gerät der Auftraggeber ohne weitere Mahnung in Verzug (§ 286 Abs. 2 Nr. 1 BGB analog / Art. 6:83 BW). Ab Verzugseintritt werden Verzugszinsen in Höhe von 9 Prozentpunkten über dem jeweiligen Basiszinssatz (DE: § 247 BGB; NL: Wettelijk handelsrente) fällig. NeXify AI behält sich die Geltendmachung weiterer Verzugsschäden ausdrücklich vor.",
+              "(5) Erbringt NeXify AI Vorleistungen (z. B. Konzepte, Skizzen, Code-Entwürfe) auf Basis noch nicht beglichener Tagesrechnungen, entsteht hieraus kein Anspruch auf kostenlose Weiterverwendung dieser Vorleistungen. Alle im Rahmen des Projekts erstellten Arbeitsergebnisse verbleiben bis zum vollständigen Zahlungsausgleich im Eigentum von NeXify AI.",
+            ] },
+          { id: "projektstart", heading: "§ 4.5 Projektstart und erste Tagesrechnung",
+            paragraphs: [
+              "(1) Die erste Tagesrechnung wird für den ersten tatsächlichen Arbeitstag ausgestellt, unmittelbar nachdem die Auftragsbestätigung des Auftraggebers vorliegt und die Arbeit aufgenommen wurde.",
+              "(2) NeXify AI beginnt in der Regel am nächsten Werktag nach schriftlicher Auftragsbestätigung mit der Arbeit, sofern keine anderweitige Vereinbarung getroffen wurde.",
+              "(3) Für die Erstellung und Zusendung des initialen Konzepts oder Projektplans (sofern im Auftragsumfang enthalten) gilt ebenso die Tagesabrechnung. Der Auftraggeber erhält mit dem ersten Tagesbericht eine vollständige Übersicht aller an diesem Tag durchgeführten Analyse-, Planungs- und Konzeptionsleistungen.",
+            ] },
+          { id: "angebote", heading: "§ 4.6 Angebote und Kostenrahmen",
+            paragraphs: [
+              "(1) Alle Angebote von NeXify AI sind 14 Kalendertage ab Ausstellungsdatum verbindlich, sofern keine andere Frist angegeben ist.",
+              "(2) Angebote enthalten eine realistische Aufwandsspanne in Arbeitstagen. Ein verbindlicher Gesamtfestpreis wird vereinbart, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien abschließend schriftlich festgelegt sind.",
+              "(3) Entsteht während der Projektlaufzeit Mehrbedarf, der über den ursprünglich vereinbarten Umfang hinausgeht, wird dieser vor Ausführung transparent angezeigt und erst nach schriftlicher Freigabe durch den Auftraggeber realisiert. Niemals nach der Ausführung.",
+            ] },
         ] },
       { id: "mitwirkung", heading: "§ 5 Mitwirkungspflichten des Auftraggebers",
         paragraphs: [
@@ -301,7 +342,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "uav", heading: "§ 3 Unterauftragsverarbeiter",
         paragraphs: [
-          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Vercel Inc., Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek/9Router, Hetzner GmbH.",
+          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Vercel Inc., Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek, OpenRouter und Upstage (über 9Router), Hetzner GmbH.",
           "Änderungen der Unterauftragsverarbeiter werden dem Auftraggeber mit einer Frist von 14 Tagen in Textform angekündigt. Erfolgt kein Widerspruch, gilt die Änderung als genehmigt.",
           "Mit allen Unterauftragsverarbeitern bestehen vertragliche Verpflichtungen auf dem Niveau dieses AVV.",
         ] },
