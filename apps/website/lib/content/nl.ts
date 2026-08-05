@@ -230,7 +230,7 @@ export const nl: Dict = {
   },
   process: {
     eyebrow: "Werkwijze",
-    title: "Vijf stappen van idee naar livegang",
+    title: "Zes stappen van idee naar livegang",
     intro:
       "Een gestandaardiseerd proces zorgt ervoor dat passende projecten in dagen in plaats van maanden worden uitgevoerd – met duidelijke kwaliteitscontroles, zonder verrassingen en met volledige transparantie in elke stap.",
     steps: [
@@ -238,7 +238,8 @@ export const nl: Dict = {
       { n: "02", icon: "MessageSquareMore", title: "Concept en prijsindicatie", text: "De inspanning wordt in werkdagen uitgedrukt. U ziet vooraf scope, prijsindicatie, aannames en mogelijke uitbreidingen – schriftelijk en betrouwbaar." },
       { n: "03", icon: "Code2", title: "AI-ondersteunde uitvoering", text: "Moderne ontwikkel- en controletools versnellen analyse, design, code, tests en documentatie – onder permanente vakinhoudelijke leiding." },
       { n: "04", icon: "Settings2", title: "Tests en acceptatie", text: "Functionaliteit, weergave, mobiele weergave, formulieren, performance en centrale gebruikersflows worden aantoonbaar getest en gedocumenteerd." },
-      { n: "05", icon: "Rocket", title: "Overdracht en doorontwikkeling", text: "U ontvangt code, documentatie, duidelijke beheerinformatie en een geprioriteerde lijst met zinvolle vervolgstappen." },
+      { n: "05", icon: "Rocket", title: "Livegang en overdracht", text: "De agent gaat aantoonbaar naar productie – inclusief code, documentatie en duidelijke beheerinformatie." },
+      { n: "06", icon: "Workflow", title: "Beheer en doorontwikkeling", text: "Monitoring, aanpassingen en een geprioriteerde lijst met zinvolle vervolgstappen houden het resultaat blijvend waardevol." },
     ],
     promiseTitle: "Waar u op kunt rekenen",
     promises: [
@@ -270,13 +271,25 @@ export const nl: Dict = {
         icon: "Bot",
         title: "AI & agenten",
         text: "Productierijpe AI-integraties met controle, logging en goedkeuringen.",
-        points: ["GPT-, Claude- & Gemini-integratie", "RAG-kenniskoppeling", "AI-adviseurs zoals NeXify AI", "Offerte- & e-mailautomatisering", "Evaluatie & guardrails"],
+        points: ["OpenRouter-modellroutering (DeepSeek e.a.)", "RAG-kenniskoppeling (LightRAG)", "AI-adviseurs zoals NeXify AI", "AgentMemory & evaluatie", "Guardrails, logs & goedkeuringen"],
+      },
+      {
+        icon: "Globe2",
+        title: "Leadgeneratie & verkoop",
+        text: "Geautomatiseerde zoekopdracht, kwalificatie en benadering – meetbaar tot aan de afspraak.",
+        points: ["Leadzoekopdracht via SearXNG & Firecrawl", "AI-leadscoring & verrijking", "E-mailreeksen met follow-ups", "Offerteautomatisering", "CRM- & pipeline-koppeling"],
+      },
+      {
+        icon: "Smartphone",
+        title: "Communicatiekanalen",
+        text: "Uw klanten bereiken u waar ze al zijn – vanuit één systeem.",
+        points: ["Webchat & WhatsApp-integratie", "E-mailtriage met AI-antwoorden", "Afspraakboeking & kalendersync", "Tweetalig DE / NL", "Webhooks & API-koppeling"],
       },
       {
         icon: "ShieldCheck",
         title: "Beheer & veiligheid",
         text: "Betrouwbaar beheer met duidelijke verantwoordelijkheden en AVG-conformiteit.",
-        points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & bescherming", "SSL, security-headers, hardening", "AVG-conforme datastromen", "Transactionele e-mails (Resend)"],
+        points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & bescherming", "SSL, security-headers, hardening", "Monitoring (Prometheus/Grafana)", "Dagelijkse back-ups & AVG-conforme datastromen"],
       },
     ],
     novaTitle: "NeXify AI – uw AI-adviseur op deze website",

@@ -248,7 +248,7 @@ export const de = {
   },
   process: {
     eyebrow: "Arbeitsweise",
-    title: "Fünf Schritte von der Idee zum Betrieb",
+    title: "Sechs Schritte von der Idee zum Betrieb",
     intro:
       "Ein standardisierter Ablauf sorgt dafür, dass passende Projekte in Tagen statt Monaten umgesetzt werden – mit klaren Qualitätsprüfungen, ohne Überraschungen und mit voller Nachvollziehbarkeit in jedem Schritt.",
     steps: [
@@ -256,7 +256,8 @@ export const de = {
       { n: "02", icon: "MessageSquareMore", title: "Konzept und Festpreisrahmen", text: "Der Aufwand wird in Arbeitstagen ausgewiesen. Sie sehen vorab Scope, Preisrahmen, Annahmen und mögliche Erweiterungen – schriftlich und verbindlich." },
       { n: "03", icon: "Code2", title: "AI-gestützte Umsetzung", text: "Moderne Entwicklungs- und Prüfwerkzeuge beschleunigen Analyse, Design, Code, Tests und Dokumentation – unter permanenter fachlicher Führung." },
       { n: "04", icon: "Settings2", title: "Tests und Abnahme", text: "Funktion, Darstellung, Mobilansicht, Formulare, Performance und zentrale Nutzerwege werden nachvollziehbar geprüft und dokumentiert." },
-      { n: "05", icon: "Rocket", title: "Übergabe und Weiterentwicklung", text: "Sie erhalten Code, Dokumentation, klare Betriebsinformationen und eine priorisierte Liste sinnvoller nächster Schritte." },
+      { n: "05", icon: "Rocket", title: "Go Live und Übergabe", text: "Der Agent geht nachweisbar in den produktiven Betrieb über – inklusive Code, Dokumentation und klarer Betriebsinformationen." },
+      { n: "06", icon: "Workflow", title: "Betrieb und Weiterentwicklung", text: "Monitoring, Anpassungen und eine priorisierte Liste sinnvoller nächster Schritte halten das Ergebnis dauerhaft wertvoll." },
     ],
     promiseTitle: "Was Sie sich darauf verlassen können",
     promises: [
@@ -288,13 +289,25 @@ export const de = {
         icon: "Bot",
         title: "AI & Agenten",
         text: "Produktionsreife AI-Integrationen mit Kontrolle, Protokollen und Freigaben.",
-        points: ["GPT, Claude & Gemini Integration", "RAG-Wissensanbindung", "AI-Berater wie NeXify AI", "Angebots- & E-Mail-Automatisierung", "Evaluation & Guardrails"],
+        points: ["OpenRouter-Modell-Routing (DeepSeek u. a.)", "RAG-Wissensanbindung (LightRAG)", "AI-Berater wie NeXify AI", "AgentMemory & Evaluierung", "Guardrails, Logs & Freigaben"],
+      },
+      {
+        icon: "Globe2",
+        title: "Lead-Generierung & Vertrieb",
+        text: "Automatisierte Suche, Qualifizierung und Ansprache – messbar bis zum Termin.",
+        points: ["Lead-Suche via SearXNG & Firecrawl", "AI-Lead-Scoring & Anreicherung", "E-Mail-Sequenzen mit Follow-ups", "Angebots-Automatisierung", "CRM- & Pipeline-Anbindung"],
+      },
+      {
+        icon: "Smartphone",
+        title: "Kommunikations-Kanäle",
+        text: "Ihre Kunden erreichen Sie dort, wo sie bereits sind – aus einem System.",
+        points: ["Web-Chat & WhatsApp-Integration", "E-Mail-Triage mit AI-Antworten", "Terminbuchung & Kalender-Sync", "Zweisprachig DE / NL", "Webhooks & API-Anbindung"],
       },
       {
         icon: "ShieldCheck",
         title: "Betrieb & Sicherheit",
         text: "Zuverlässiger Betrieb mit klaren Verantwortlichkeiten und DSGVO-Konformität.",
-        points: ["Vercel & Self-Hosting (Docker/Traefik)", "Cloudflare CDN & Schutz", "SSL, Security-Header, Hardening", "DSGVO-konforme Datenflüsse", "Transaktionale E-Mails (Resend)"],
+        points: ["Vercel & Self-Hosting (Docker/Traefik)", "Cloudflare CDN & Schutz", "SSL, Security-Header, Hardening", "Monitoring (Prometheus/Grafana)", "Tägliche Backups & DSGVO-konforme Datenflüsse"],
       },
     ],
     novaTitle: "NeXify AI – Ihr AI-Berater auf dieser Website",
