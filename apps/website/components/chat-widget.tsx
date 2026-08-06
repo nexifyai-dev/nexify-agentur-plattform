@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useLang } from '@/lib/lang-context';
+import { LogoMark } from '@/components/logo';
 
 interface PlanModule { name: string; description: string; days_min: number; days_max: number; }
 interface PlanData {
@@ -187,7 +188,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
     {chatOpen && (<div key={lang} data-testid="chat-panel" style={{position:'fixed',right:24,bottom:96,zIndex:60,width:'min(420px,calc(100vw - 32px))',height:'min(620px,calc(100vh - 140px))',display:'flex',flexDirection:'column',borderRadius:22,border:'1px solid rgba(200,255,0,0.15)',background:'rgba(14,14,17,0.96)',backdropFilter:'blur(28px)',boxShadow:'0 32px 80px rgba(0,0,0,0.7)',overflow:'hidden',animation:'nx-bubblein .3s cubic-bezier(0.22,1,0.36,1)'}}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <span style={{width:8,height:8,borderRadius:999,background:'#C8FF00',boxShadow:'0 0 8px rgba(200,255,0,0.8)'}}/>
+          <LogoMark size={26} />
           <div><span style={{fontSize:13,fontWeight:700}}>NeXify AI</span><span style={{display:'block',fontSize:10,color:'#71717a',marginTop:1}}>{lang === 'en' ? 'Real-time answers' : lang === 'nl' ? 'Antwoorden in realtime' : 'Beantwortet in Echtzeit'}</span></div>
         </div>
         <span onClick={() => setChatOpen(false)} style={{cursor:'pointer',color:'#71717a',fontSize:20,lineHeight:1,padding:'0 4px'}}>×</span>
