@@ -194,3 +194,4 @@
 |---|---|
 | 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
 | 2026-08-06 | Audit Runde 3: 16 Dienste + 6 öffentliche Endpunkte gehealthchecked; SEC-01 geschlossen (Rate-Limit Eigenbau aktiv); OPS-02 geschlossen (145.14.158.198 veraltet); WhatsApp-Bridge DOWN bestätigt (seit 27.07.); MCPs alle OK; Hermes v0.20.0 aktuell; DeepSeek Flash Update keine Breaking Changes; DOC-01 n8n-Cleanup offen |
+| 2026-08-06 | **MAIL-DESIGN-VORGABE** (8cfb56ca, Pascal-Direktive): kanonische mail_shell() mit CI-Logo systemweit — alle Mail-Pfade (Angebot, Kundenportal, Follow-up, Kampagne, Kontakt, Outreach, Leads, GTM), HTML+Plain-Text, Dark-Mode-Meta, List-Unsubscribe. Vorgabe: docs/standards/MAIL-DESIGN-VORGABE.md. E2E 85/85. |
