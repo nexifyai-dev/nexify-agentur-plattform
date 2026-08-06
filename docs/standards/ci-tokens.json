@@ -1,0 +1,65 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "description": "NeXifyAI CI-Design-Tokens — Single Source of Truth für Farben, Fonts, Radien, Abstände. Verwendung: Website (Tailwind/CSS), E-Mail-Templates (Inline), alle Apps. KEINE hartcodierten Farben außerhalb dieser Token. Quelle: ZENTRALE-KONFIGURATION.md §7.",
+  "color": {
+    "bg": {
+      "base":      { "value": "#09090B", "description": "Seitenhintergrund (Website, E-Mail-Body)" },
+      "surface":   { "value": "#0C0C0F", "description": "Karten, Panels, Kachel-Flächen (Website-Referenz, 14× genutzt)" },
+      "elevated":  { "value": "#18181B", "description": "Erhöhte Flächen, Hover-Karten" },
+      "overlay":   { "value": "#0A0A0A", "description": "Header, Footer, Overlays, CTA-Schriftgrund" }
+    },
+    "border": {
+      "default": { "value": "#26262B", "description": "Standard-Rahmen" },
+      "subtle":  { "value": "#1F1F23", "description": "Dezente Trennlinien" }
+    },
+    "text": {
+      "primary":    { "value": "#FAFAFA", "description": "Überschriften, primärer Text (weiß)" },
+      "secondary":  { "value": "#A1A1AA", "description": "Fließtext, Beschreibungen" },
+      "tertiary":   { "value": "#71717A", "description": "Metadaten, Labels" },
+      "muted":      { "value": "#52525B", "description": "Footer, Rechtshinweise, disabled" },
+      "on-accent":  { "value": "#0A0A0A", "description": "Text auf Lime-Akzent (Kontrast 12:1)" }
+    },
+    "accent": {
+      "default": { "value": "#C8FF00", "description": "Lime — CTAs, Links, Hervorhebungen, E-Mail-Buttons" },
+      "soft":    { "value": "#D4FF4D", "description": "Hover/hellere Akzentvariante" },
+      "glow":    { "value": "rgba(200,255,0,0.35)", "description": "Akzent-Glow/Border (Subtilität)" }
+    },
+    "status": {
+      "success": { "value": "#34D399", "description": "Erfolg (emerald)" },
+      "warning": { "value": "#FBBF24", "description": "Warnung (amber)" },
+      "error":   { "value": "#F87171", "description": "Fehler (red)" }
+    }
+  },
+  "font": {
+    "heading": { "value": "Outfit", "fallback": "system-ui, sans-serif", "description": "Überschriften (--font-heading)" },
+    "body":    { "value": "Manrope", "fallback": "system-ui, sans-serif", "description": "Fließtext (--font-body)" },
+    "email":   { "value": "Manrope, Arial, sans-serif", "description": "E-Mail-Fallback-Stack (Webfonts unsicher in Clients)" },
+    "sizes": {
+      "xs":  { "value": "11px" },
+      "sm":  { "value": "13px" },
+      "md":  { "value": "14.5px" },
+      "lg":  { "value": "19px" },
+      "xl":  { "value": "24px" },
+      "2xl": { "value": "36px" }
+    }
+  },
+  "radius": {
+    "card":    { "value": "16px", "description": "Cards, Panels" },
+    "button":  { "value": "999px", "description": "Buttons, Chips, Pills" },
+    "field":   { "value": "12px", "description": "Inputs" },
+    "small":   { "value": "8px", "description": "Badges, kleine Elemente" }
+  },
+  "spacing": {
+    "xs": { "value": "4px" }, "sm": { "value": "8px" }, "md": { "value": "16px" },
+    "lg": { "value": "24px" }, "xl": { "value": "32px" }, "2xl": { "value": "48px" }
+  },
+  "email": {
+    "maxWidth": { "value": "600px", "description": "E-Mail-Container (Client-Kompatibilität)" },
+    "ctaPadding": { "value": "13px 30px", "description": "CTA-Button-Padding" },
+    "darkModeMeta": { "value": "<meta name=\"color-scheme\" content=\"light dark\"><meta name=\"supported-color-schemes\" content=\"light dark\">", "description": "Pflicht-Meta für Apple Mail/Gmail/Outlook" }
+  },
+  "contrast": {
+    "accentOnDark": { "value": "12:1", "description": "#0A0A0A auf #C8FF00 — WCAG AA ✅" },
+    "whiteOnAccent": { "value": "1.9:1", "description": "VERBOTEN — weiße Schrift auf Lime failt WCAG" }
+  }
+}

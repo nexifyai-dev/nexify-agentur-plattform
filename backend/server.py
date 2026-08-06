@@ -332,7 +332,7 @@ def mail_shell(label: str, body_html: str) -> str:
     """Kanonisches Mail-Layout: Header (CI-Logo + Label), Body, Impressum-Footer."""
     return f"""<!doctype html><html><head>{MAIL_DARK_META}</head><body style="margin:0;padding:0;background:#0a0a0a;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 12px;"><tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#0C0C0F;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
 <tr><td style="padding:32px 32px 20px;border-bottom:1px solid #26262b;">
   {MAIL_LOGO_BLOCK}
   <div style="font-family:Manrope,Arial,sans-serif;font-size:11px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">{label}</div>
