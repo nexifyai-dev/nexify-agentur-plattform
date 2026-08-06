@@ -5,50 +5,14 @@ import { useState } from 'react';
 import { useLang } from '@/lib/lang-context';
 import { useAuth } from '@/lib/auth';
 import { UserRound } from 'lucide-react';
+import { LogoMark } from '@/components/logo';
 
-/** Anhang-Logo (SVG NX-Mark + Lime-Punkt + Wortmarke), exakt nach "NeXify Homepage.dc.html". */
+/** CI-Logo (Rauten-Symbol mit Lime-Gradient), systemweit einheitlich. */
 export function NxLogoMark() {
-  return (
-    <span
-      style={{
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 34,
-        height: 34,
-        borderRadius: 10,
-        background: 'linear-gradient(155deg,#18181c,#0a0a0c)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        flex: 'none',
-      }}
-    >
-      <svg width="20" height="20" viewBox="0 0 34 34" fill="none">
-        <defs>
-          <linearGradient id="nxLogoGrad" x1="6" y1="28" x2="28" y2="6" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#d4d4d8" />
-            <stop offset="1" stopColor="#fafafa" />
-          </linearGradient>
-        </defs>
-        <rect x="6" y="6" width="4.4" height="22" rx="1" fill="url(#nxLogoGrad)" />
-        <rect x="23.6" y="6" width="4.4" height="22" rx="1" fill="url(#nxLogoGrad)" />
-        <polygon points="6,6 11.5,6 28,28 22.5,28" fill="url(#nxLogoGrad)" />
-      </svg>
-      <span
-        style={{
-          position: 'absolute',
-          top: -3,
-          right: -3,
-          width: 9,
-          height: 9,
-          borderRadius: 999,
-          background: '#C8FF00',
-          boxShadow: '0 0 8px rgba(200,255,0,0.75), 0 0 0 3px #0A0A0A',
-        }}
-      />
-    </span>
-  );
+  return <LogoMark size={34} />;
 }
+
+type Props = {
 
 /** Nav auf echte Routen (Unterseiten existieren unter app/[locale]/…) mit Locale-Prefix. */
 const NAV = {
@@ -123,7 +87,7 @@ export function SiteHeader() {
         }}
       >
         <Link href={href('/')} style={{ display: 'flex', alignItems: 'center', gap: 11, flex: 'none' }} data-testid="logo">
-          <NxLogoMark />
+          <LogoMark size={34} />
           <span
             style={{
               fontFamily: 'Outfit, sans-serif',
