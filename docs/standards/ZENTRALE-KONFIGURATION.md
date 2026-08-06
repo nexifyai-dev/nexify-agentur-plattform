@@ -171,11 +171,13 @@
 
 | ID | Gap | Status |
 |---|---|---|
-| OPS-01 | WhatsApp-Bridge DOWN seit 27.07. (Port 3000 tot, kein Bridge-Prozess) — Re-Pairing via Dashboard (QR-Code) nötig | blocked (User) |
+| OPS-01 | WhatsApp-Bridge DOWN seit 27.07. (Port 3000 tot, kein Bridge-Prozess) — Re-Pairing via Dashboard (QR-Code) nötig. WhatsApp-Kanal-Spezifikation liegt vor (Meta Business AI als NeXify AI, Routing-Logik, 4.986/5.000 Zeichen). Live-Validierung blockiert bis Bridge läuft. | blocked (User) |
 | COMPLIANCE-01 | AVV/Drittland-Risiko: OpenRouter bietet Enterprise DPA mit EU-SCCs (Art. 46 GDPR). DeepSeek = Subprocessor via OpenRouter. Nächster Schritt: DPA bei OpenRouter anfragen. | open (analysiert) |
 | MARKET-02 | UWG §7-Compliance-Check E-Mail-Kette | open |
 | TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Footer-Button deployed, Browser-Daemon für Test nicht verfügbar) | open |
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
+| OPS-03 | E-Mail-Triage: coo-board-loop Cron FAILED (File name too long), kein E-Mail-Poller → eingehende Mails werden nicht verarbeitet. inbox-mail-poller Cron erstellt (15m-Intervall), coo-board-loop-Reparatur ausstehend. | open (teilfix) |
+| WHATSAPP-01 | WhatsApp-Kanal-Spezifikation (NXAI-KANAL-WHATSAPP-2026-08-06): Meta Business AI Persona, Routing-Logik, 4.986/5.000 Zeichen. Namenskonflikt NOVA/NeXify AI offen (NXAI-KOMM-001 §17), /ki-hinweise-Seite leer. | open |
 
 ### Geschlossen (Audit Runde 3)
 
