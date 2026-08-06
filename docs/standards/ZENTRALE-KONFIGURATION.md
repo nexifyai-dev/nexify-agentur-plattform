@@ -74,7 +74,7 @@
 | hermes-dash.nexifyai.cloud | Cloudflare-Tunnel → 9119 | Hermes Dashboard |
 | dashboard.nexifyai.cloud | Cloudflare-Tunnel → 4001 | Kundenportal (Portal) |
 | gitlab.nexifyai.cloud | Cloudflare-Tunnel → 8922 | GitLab |
-| n8n.nexifyai.cloud | Cloudflare-Tunnel → 5678 | n8n (falls aktiv) |
+| n8n.nexifyai.cloud | Cloudflare-Tunnel → 5678 | n8n (DEPRECATED — abgeschafft laut AGENTS.md, Referenz entfernen → DOC-01) |
 | *.nexifyai.cloud | Wildcard → 8080 | Fallback |
 
 ## 5. LLM-Stack (SOLL, v2.1/V4 — DeepSeek-only)
@@ -171,17 +171,24 @@
 
 | ID | Gap | Status |
 |---|---|---|
-| OPS-01 | WhatsApp-Re-Pairing (Pascal: alte Session vor QR löschen) | blocked (User) |
-| OPS-02 | Manager-IP 145.14.158.198 unerreichbar — klären | open |
+| OPS-01 | WhatsApp-Bridge DOWN seit 27.07. (Port 3000 tot, kein Bridge-Prozess) — Re-Pairing via Dashboard (QR-Code) nötig | blocked (User) |
 | COMPLIANCE-01 | AVV/Drittland-Risiko (DeepSeek ohne AVV) dokumentieren | open |
-| SEC-01 | Rate-Limit/Spam-Schutz (slowapi) für contact/offers/planner | open |
 | MARKET-02 | UWG §7-Compliance-Check E-Mail-Kette | open |
-| TDDDG-01 | Cookie-Banner live E2E (nach Deploy 16c3282f) | open |
+| TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Header-Fix committed f0ca28b4) | open |
 | AGENTS-01 | Profile compliance+sales E2E-Test | open |
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
+| DOC-01 | n8n-Referenz in §4 (n8n.nexifyai.cloud) — n8n abgeschafft, Doku bereinigen | open |
+
+### Geschlossen (2026-08-06 Audit)
+
+| ID | Gap | Grund |
+|---|---|---|
+| SEC-01 | Rate-Limit/Spam-Schutz | Eigenbau-Middleware aktiv: 5 Regeln (chat 20/min, plan 10/min, offers 5/min, contact 5/min, webhooks 100/min), 60s-Fenster, IP-basiert |
+| OPS-02 | Manager-IP 145.14.158.198 | Veraltet — nicht diese Maschine. Kanonisch: 72.62.152.47 (§2) |
 
 ## 12. Changelog
 
 | Datum | Änderung |
 |---|---|
 | 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
+| 2026-08-06 | Audit Runde 3: 16 Dienste + 6 öffentliche Endpunkte gehealthchecked; SEC-01 geschlossen (Rate-Limit Eigenbau aktiv); OPS-02 geschlossen (145.14.158.198 veraltet); WhatsApp-Bridge DOWN bestätigt (seit 27.07.); MCPs alle OK; Hermes v0.20.0 aktuell; DeepSeek Flash Update keine Breaking Changes; DOC-01 n8n-Cleanup offen |
