@@ -315,29 +315,30 @@ def ci_email(
     nl = language == "nl"
     cta = ""
     if cta_label and cta_url:
-        cta = f"""<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px;"><tr><td style="border-radius:999px;background:linear-gradient(120deg,#e4e4e7,#ffffff 45%,#c4c4cc);">
-        <a href="{cta_url}" style="display:inline-block;padding:13px 30px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#09090b;text-decoration:none;">{cta_label}</a></td></tr></table>"""
+        # CI-konform: Lime #C8FF00 (Akzent) auf dunklem Grund, dunkle Schrift.
+        cta = f"""<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px;"><tr><td style="border-radius:999px;background:#C8FF00;">
+        <a href="{cta_url}" style="display:inline-block;padding:13px 30px;font-family:Manrope,Arial,sans-serif;font-size:14px;font-weight:700;color:#0A0A0A;text-decoration:none;">{cta_label}</a></td></tr></table>"""
     legal_note = (
         "Deze e-mail is gericht aan ondernemers (B2B). Vrijblijvende indicaties vormen geen bindend aanbod. Privacyverklaring: nexifyai.cloud/datenschutz"
         if nl
         else "Diese E-Mail richtet sich an Unternehmer (B2B). Unverbindliche Indikationen stellen kein bindendes Angebot dar. Datenschutz: nexifyai.cloud/datenschutz"
     )
-    return f"""<!doctype html><html><body style="margin:0;padding:0;background:#0a0a0a;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 12px;"><tr><td align="center">
+    return f"""<!doctype html><html><body style="margin:0;padding:0;background:#09090B;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#09090B;padding:32px 12px;"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
 <tr><td style="padding:28px 32px 18px;border-bottom:1px solid #26262b;">
-  <div style="font-family:Georgia,serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
-  <div style="font-family:Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div>
+  <div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
+  <div style="font-family:Manrope,Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div>
 </td></tr>
-<tr><td style="padding:28px 32px 8px;font-family:Arial,sans-serif;">
+<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
   <h1 style="margin:0 0 14px;color:#ffffff;font-size:19px;font-weight:600;">{title}</h1>
   <div style="color:#a1a1aa;font-size:14px;line-height:1.8;">{body_html}</div>
   {cta}
 </td></tr>
-<tr><td style="padding:20px 32px 26px;font-family:Arial,sans-serif;">
+<tr><td style="padding:20px 32px 26px;font-family:Manrope,Arial,sans-serif;">
   <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{legal_note}</p>
 </td></tr>
-<tr><td style="padding:18px 32px;border-top:1px solid #26262b;font-family:Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">{LEGAL_FOOTER}</td></tr>
+<tr><td style="padding:18px 32px;border-top:1px solid #26262b;font-family:Manrope,Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">{LEGAL_FOOTER}</td></tr>
 </table></td></tr></table></body></html>"""
 
 
@@ -603,14 +604,14 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
         for s in offer.get("summary", [])
     )
     summary_html = (
-        f"""<tr><td style="padding:16px 32px 0;font-family:Arial,sans-serif;">
+        f"""<tr><td style="padding:16px 32px 0;font-family:Manrope,Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{"Uw wensen in het kort" if nl else "Ihre Anforderungen im Überblick"}</div>
   <ul style="margin:0;padding-left:18px;">{summary_items}</ul></td></tr>"""
         if summary_items
         else ""
     )
     reco_html = (
-        f"""<tr><td style="padding:14px 32px 4px;font-family:Arial,sans-serif;">
+        f"""<tr><td style="padding:14px 32px 4px;font-family:Manrope,Arial,sans-serif;">
   <div style="border-left:3px solid #c0c0c8;background:#141417;border-radius:8px;padding:14px 16px;">
     <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{"Onze aanbeveling voor u" if nl else "Unsere Empfehlung für Sie"}</div>
     <div style="color:#d4d4d8;font-size:13px;line-height:1.7;">{offer.get("recommendation", "")}</div>
@@ -639,14 +640,14 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
 <tr><td style="padding:32px 32px 20px;border-bottom:1px solid #26262b;">
   <div style="font-family:Georgia,serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
-  <div style="font-family:Arial,sans-serif;font-size:11px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">{t["subject_note"]}</div>
+  <div style="font-family:Manrope,Arial,sans-serif;font-size:11px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">{t["subject_note"]}</div>
 </td></tr>
-<tr><td style="padding:28px 32px 8px;font-family:Arial,sans-serif;">
+<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
   <h1 style="margin:0 0 12px;color:#ffffff;font-size:20px;font-weight:600;">{offer.get("title", "")}</h1>
   <p style="margin:0;color:#a1a1aa;font-size:14px;line-height:1.7;">{offer.get("intro", "")}</p>
 </td></tr>
 {summary_html}
-<tr><td style="padding:20px 32px;font-family:Arial,sans-serif;">
+<tr><td style="padding:20px 32px;font-family:Manrope,Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:10px;">{t["scope"]}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #26262b;border-radius:12px;background:#141417;">{rows}
   <tr><td style="padding:16px;color:#ffffff;font-size:14px;font-weight:700;">{t["total"]}</td><td></td>
@@ -654,19 +655,19 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
   <div style="color:#71717a;font-size:11px;padding-top:8px;">{t["vat"]}</div>
 </td></tr>
 {reco_html}
-<tr><td style="padding:8px 32px;font-family:Arial,sans-serif;">
+<tr><td style="padding:8px 32px;font-family:Manrope,Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{t["assumptions"]}</div>
   <ul style="margin:0;padding-left:18px;">{assumptions}</ul>
 </td></tr>
-<tr><td style="padding:16px 32px;font-family:Arial,sans-serif;">
+<tr><td style="padding:16px 32px;font-family:Manrope,Arial,sans-serif;">
   <div style="font-size:11px;color:#71717a;letter-spacing:2px;text-transform:uppercase;padding-bottom:6px;">{t["steps"]}</div>
   <ul style="margin:0;padding-left:18px;">{steps}</ul>
 </td></tr>
-<tr><td style="padding:20px 32px 28px;font-family:Arial,sans-serif;">
+<tr><td style="padding:20px 32px 28px;font-family:Manrope,Arial,sans-serif;">
   <p style="margin:0 0 16px;color:#d4d4d8;font-size:14px;">{t["cta"]}</p>
   <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{t["legal"]}</p>
 </td></tr>
-<tr><td style="padding:20px 32px;border-top:1px solid #26262b;font-family:Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">
+<tr><td style="padding:20px 32px;border-top:1px solid #26262b;font-family:Manrope,Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">
 NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56
 </td></tr>
 </table></td></tr></table></body></html>"""
@@ -682,7 +683,7 @@ def followup_email_html(offer_row, language: str) -> str:
     )
     return f"""<!doctype html><html><body style="margin:0;background:#0a0a0a;padding:32px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;">
-<tr><td style="padding:32px;font-family:Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
+<tr><td style="padding:32px;font-family:Manrope,Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
 <div style="font-family:Georgia,serif;font-size:22px;color:#fff;padding-bottom:20px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
 {body}
 </td></tr></table></body></html>"""
@@ -1741,7 +1742,7 @@ async def contact(body: ContactIn):
     )
     html = f"""<!doctype html><html><body style="margin:0;background:#0a0a0a;padding:32px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;">
-<tr><td style="padding:32px;font-family:Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
+<tr><td style="padding:32px;font-family:Manrope,Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
 <div style="font-family:Georgia,serif;font-size:22px;color:#fff;padding-bottom:20px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
 {confirm_body}</td></tr></table></body></html>"""
     asyncio.create_task(send_email(body.email, confirm_subject, html))
