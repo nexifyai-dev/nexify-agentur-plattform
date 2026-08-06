@@ -45,6 +45,11 @@ export function CookieConsent() {
       setState(stored);
     }
     setMounted(true);
+
+    // Footer-Button ("Cookie-Einstellungen") öffnet das Banner erneut.
+    const open = () => setState("pending");
+    window.addEventListener("nexify-open-consent", open);
+    return () => window.removeEventListener("nexify-open-consent", open);
   }, []);
 
   const accept = useCallback(() => {
