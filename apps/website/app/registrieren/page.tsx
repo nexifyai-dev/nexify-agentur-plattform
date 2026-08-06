@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { LogoMark } from "@/components/logo";
+import { Logo } from "@/components/logo";
 import { api, useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/lang-context";
 
@@ -48,7 +48,7 @@ function RegisterForm() {
 
   return (
     <div className="glass w-full max-w-md p-8 md:p-10">
-      <div className="mx-auto w-fit"><LogoMark size={48} /></div>
+      <div className="mx-auto w-fit"><Logo /></div>
       <h1 className="mt-6 text-center font-[family-name:var(--font-heading)] text-2xl font-medium text-white">
         {nl ? "Klantaccount aanmaken" : "Kundenkonto anlegen"}
       </h1>
