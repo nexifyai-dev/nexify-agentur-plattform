@@ -327,8 +327,7 @@ def ci_email(
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#09090B;padding:32px 12px;"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
 <tr><td style="padding:28px 32px 18px;border-bottom:1px solid #26262b;">
-  <div style="display:flex;align-items:center;gap:12px;"><img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" style="display:block;width:34px;height:34px;border:0;border-radius:8px;"><div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;">X</span>ify <span style="color:#9ca3af;">AI</span></div></div>
-  <div style="font-family:Manrope,Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div>
+  <div style="display:flex;align-items:center;gap:12px;"><img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" style="display:block;width:34px;height:34px;border:0;border-radius:8px;"><div><div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;font-weight:700;">X</span>ify <span style="color:#9ca3af;">AI</span></div><div style="font-family:Manrope,Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div></div></div>
 </td></tr>
 <tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
   <h1 style="margin:0 0 14px;color:#ffffff;font-size:19px;font-weight:600;">{title}</h1>
