@@ -132,25 +132,52 @@ const CHAT_PLAN_TYPES: Record<string, { type: string; lang: string }> = {
   "corporate website": { type: "Unternehmenswebsite", lang: "en" },
   webseite: { type: "Unternehmenswebsite", lang: "de" },
   bedrijfswebsite: { type: "Unternehmenswebsite", lang: "nl" },
+  homepage: { type: "Unternehmenswebsite", lang: "de" },
   onlineshop: { type: "Onlineshop", lang: "de" },
   "online-shop": { type: "Onlineshop", lang: "nl" },
   webshop: { type: "Onlineshop", lang: "nl" },
+  shop: { type: "Onlineshop", lang: "de" },
+  bestellsystem: { type: "Onlineshop", lang: "de" },
+  "bestell-system": { type: "Onlineshop", lang: "de" },
   ecommerce: { type: "Enterprise-Commerce", lang: "de" },
   "e-commerce": { type: "Enterprise-Commerce", lang: "en" },
   enterprise: { type: "Enterprise-Commerce", lang: "de" },
   webapp: { type: "Web-App", lang: "de" },
   "web-app": { type: "Web-App", lang: "en" },
   webapplikatie: { type: "Web-App", lang: "nl" },
+  kiosk: { type: "Web-App", lang: "de" },
+  lieferdienst: { type: "Web-App", lang: "de" },
+  lieferando: { type: "Web-App", lang: "de" },
+  plattform: { type: "Web-App", lang: "de" },
+  platform: { type: "Web-App", lang: "en" },
+  portal: { type: "Web-App", lang: "de" },
+  marktplatz: { type: "Web-App", lang: "de" },
+  marketplace: { type: "Web-App", lang: "en" },
+  buchungssystem: { type: "Web-App", lang: "de" },
+  "booking system": { type: "Web-App", lang: "en" },
+  reservierung: { type: "Web-App", lang: "de" },
+  dashboard: { type: "Web-App", lang: "de" },
+  software: { type: "Web-App", lang: "de" },
+  anwendung: { type: "Web-App", lang: "de" },
+  applikation: { type: "Web-App", lang: "nl" },
+  lösung: { type: "Web-App", lang: "de" },
   "mobile app": { type: "Mobile App", lang: "de" },
   mobilapp: { type: "Mobile App", lang: "de" },
   automatisierung: { type: "Automatisierung", lang: "de" },
   automation: { type: "Automatisierung", lang: "en" },
   automatisering: { type: "Automatisierung", lang: "nl" },
+  workflow: { type: "Automatisierung", lang: "de" },
+  crm: { type: "Automatisierung", lang: "de" },
+  tool: { type: "Automatisierung", lang: "de" },
+  integration: { type: "Automatisierung", lang: "de" },
+  terminbuchung: { type: "Automatisierung", lang: "de" },
+  "appointment booking": { type: "Automatisierung", lang: "en" },
   "ki-agent": { type: "AI-Agenten", lang: "de" },
   "ai-agent": { type: "AI-Agenten", lang: "en" },
   aiagent: { type: "AI-Agenten", lang: "nl" },
   chatbot: { type: "AI-Agenten", lang: "de" },
   "ki-chatbot": { type: "AI-Agenten", lang: "de" },
+  assistant: { type: "AI-Agenten", lang: "en" },
 };
 
 /** Plan-Intent-Keywords: wenn eines davon in der Nachricht vorkommt, triggert den Planner */
@@ -158,6 +185,12 @@ const PLAN_INTENT_KEYWORDS = [
   "angebot", "offer", "offerte", "preis", "price", "prijs", "kosten", "cost", "kost",
   "projekt planen", "plan project", "project plannen", "brauche", "need", "nodig",
   "erstellen", "erstellung", "create", "bauen", "build", "bouwen",
+  "system", "plattform", "platform", "portal", "lösung", "software",
+  "anwendung", "application", "app", "tool", "dashboard", "kiosk",
+  "bestellsystem", "lieferdienst", "onlineshop", "shop", "store",
+  "marktplatz", "marketplace", "buchung", "booking", "reservierung",
+  "termin", "appointment", "workflow", "integration", "automatisierung",
+  "chatbot", "assistant", "agent", "crm",
 ];
 
 /** Erkennt, ob die Nachricht einen Plan-Intent hat und extrahiert den Projekttyp */
@@ -173,7 +206,8 @@ function detectPlanIntent(message: string): { triggered: boolean; projectType: s
     .filter(([kw]) => lower.includes(kw))
     .sort(([a], [b]) => b.length - a.length);
 
-  if (typeMatches.length === 0) return { triggered: false, projectType: null, language: "de" };
+  // Kein spezifischer Projekttyp erkannt → Default: Web-App
+  if (typeMatches.length === 0) return { triggered: true, projectType: "Web-App", language: "de" };
 
   return {
     triggered: true,
