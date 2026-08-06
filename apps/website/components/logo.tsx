@@ -32,7 +32,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       {!compact && (
         <span className="leading-none">
           <span className="block whitespace-nowrap font-[family-name:var(--font-heading)] text-[16px] font-semibold tracking-wide text-white sm:text-[19px]">
-            Ne<span className="text-silver font-bold">X</span>ify{" "}
+            Ne<span className="text-[#C8FF00] font-bold">X</span>ify{" "}
             <span className="font-light text-zinc-400">AI</span>
           </span>
           <span className="mt-1 hidden text-[8.5px] uppercase tracking-[0.34em] text-zinc-500 sm:block">Chat it. Automate it.</span>
