@@ -95,7 +95,7 @@ export function SiteHeader() {
               whiteSpace: 'nowrap',
             }}
           >
-            NeXify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
+            Ne<span style={{ color: '#C8FF00', fontWeight: 700 }}>X</span>ify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
           </span>
         </Link>
 
