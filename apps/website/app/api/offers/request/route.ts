@@ -16,6 +16,7 @@ import { proxyPost } from "@/lib/backend";
 import { resendConfigured, sendOfferRequestNotification } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
   // Align with backend OfferRequestIn (server.py) — extras must not be forwarded upstream.
