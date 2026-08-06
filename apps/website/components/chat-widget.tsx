@@ -166,8 +166,8 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
               <input type="tel" placeholder={t.phone} value={offerForm.phone} onChange={e => setOfferForm(f => ({ ...f, phone: e.target.value }))}
                 onKeyDown={e => { if (e.key === 'Enter') requestOffer(); }}
                 style={{ border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, background: 'rgba(255,255,255,0.05)', color: '#fff', padding: '10px 14px', fontSize: 13, outline: 'none' }} />
-              <button onClick={requestOffer} disabled={offerStep === 'sending'} style={{ ...btnStyle, background: 'linear-gradient(135deg,#C8FF00,#9ecf00)', color: '#0A0A0A', border: 'none', justifyContent: 'center', padding: '12px' }}>
-                {offerStep === 'sending' ? '…' : `✉ ${t.send}`}
+              <button onClick={requestOffer} style={{ ...btnStyle, background: 'linear-gradient(135deg,#C8FF00,#9ecf00)', color: '#0A0A0A', border: 'none', justifyContent: 'center', padding: '12px' }}>
+                ✉ {t.send}
               </button>
             </div>
           )}
