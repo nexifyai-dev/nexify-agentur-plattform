@@ -1,4 +1,4 @@
-// /api/chat — Live Chat via 9Router
+// /api/chat — Live Chat via 9Router + AI-Projektplaner-Integration
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -121,6 +121,106 @@ function withButtons(text: string) {
   return { reply: clean || text, buttons };
 }
 
+// --- NeXify AI Chat-to-Plan-Integration ---
+
+/** Mapping: Chat-Keywords → Planner-Projekttyp (language-keyed) */
+const CHAT_PLAN_TYPES: Record<string, { type: string; lang: string }> = {
+  landingpage: { type: "Landingpage", lang: "de" },
+  "landing-page": { type: "Landingpage", lang: "en" },
+  "landing page": { type: "Landingpage", lang: "nl" },
+  website: { type: "Unternehmenswebsite", lang: "de" },
+  "corporate website": { type: "Unternehmenswebsite", lang: "en" },
+  webseite: { type: "Unternehmenswebsite", lang: "de" },
+  bedrijfswebsite: { type: "Unternehmenswebsite", lang: "nl" },
+  onlineshop: { type: "Onlineshop", lang: "de" },
+  "online-shop": { type: "Onlineshop", lang: "nl" },
+  webshop: { type: "Onlineshop", lang: "nl" },
+  ecommerce: { type: "Enterprise-Commerce", lang: "de" },
+  "e-commerce": { type: "Enterprise-Commerce", lang: "en" },
+  enterprise: { type: "Enterprise-Commerce", lang: "de" },
+  webapp: { type: "Web-App", lang: "de" },
+  "web-app": { type: "Web-App", lang: "en" },
+  webapplikatie: { type: "Web-App", lang: "nl" },
+  "mobile app": { type: "Mobile App", lang: "de" },
+  mobilapp: { type: "Mobile App", lang: "de" },
+  automatisierung: { type: "Automatisierung", lang: "de" },
+  automation: { type: "Automatisierung", lang: "en" },
+  automatisering: { type: "Automatisierung", lang: "nl" },
+  "ki-agent": { type: "AI-Agenten", lang: "de" },
+  "ai-agent": { type: "AI-Agenten", lang: "en" },
+  aiagent: { type: "AI-Agenten", lang: "nl" },
+  chatbot: { type: "AI-Agenten", lang: "de" },
+  "ki-chatbot": { type: "AI-Agenten", lang: "de" },
+};
+
+/** Plan-Intent-Keywords: wenn eines davon in der Nachricht vorkommt, triggert den Planner */
+const PLAN_INTENT_KEYWORDS = [
+  "angebot", "offer", "offerte", "preis", "price", "prijs", "kosten", "cost", "kost",
+  "projekt planen", "plan project", "project plannen", "brauche", "need", "nodig",
+  "erstellen", "erstellung", "create", "bauen", "build", "bouwen",
+];
+
+/** Erkennt, ob die Nachricht einen Plan-Intent hat und extrahiert den Projekttyp */
+function detectPlanIntent(message: string): { triggered: boolean; projectType: string | null; language: string } {
+  const lower = message.toLowerCase();
+
+  // Prüfe auf Plan-Intent-Keywords
+  const hasIntent = PLAN_INTENT_KEYWORDS.some((kw) => lower.includes(kw));
+  if (!hasIntent) return { triggered: false, projectType: null, language: "de" };
+
+  // Finde Projekttyp-Match (längste Matches zuerst)
+  const typeMatches = Object.entries(CHAT_PLAN_TYPES)
+    .filter(([kw]) => lower.includes(kw))
+    .sort(([a], [b]) => b.length - a.length);
+
+  if (typeMatches.length === 0) return { triggered: false, projectType: null, language: "de" };
+
+  return {
+    triggered: true,
+    projectType: typeMatches[0][1].type,
+    language: typeMatches[0][1].lang,
+  };
+}
+
+const PLANNER_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.nexifyai.cloud") + "/api/planner/plan";
+
+async function callPlanner(projectType: string, message: string, language: string) {
+  // Extrahiere Branche und Ziel aus der Nachricht (einfache Heuristik)
+  const industryPatterns: Record<string, RegExp> = {
+    de: /(?:für|für eine[nr]?|branche|praxis|kanzlei|agentur|handel|bau|arzt|zahnarzt|maschinenbau|industrie|gastronomie|hotel|einzelhandel|logistik|bildung|versicherung|immobilien)\s+(\S+(?:\s+\S+){0,4})/i,
+    en: /(?:for a[n]?|industry|practice|agency|retail|construction|doctor|dentist|engineering|manufacturing|logistics|education|insurance|real\s*estate)\s+(\S+(?:\s+\S+){0,4})/i,
+    nl: /(?:voor een|branche|praktijk|bureau|handel|bouw|arts|tandarts|machinebouw|industrie|logistiek|onderwijs|verzekering|vastgoed)\s+(\S+(?:\s+\S+){0,4})/i,
+  };
+
+  const goalPatterns: Record<string, RegExp> = {
+    de: /(?:ziel|erreichen|anfragen|verkauf|mehr|online|kunden|termin|buchung|automatisieren|optimieren|steigern)\s+(\S+(?:\s+\S+){0,10})/i,
+    en: /(?:goal|achieve|inquiries|sales|more|online|customers|appointment|booking|automate|optimize|increase)\s+(\S+(?:\s+\S+){0,10})/i,
+    nl: /(?:doel|bereiken|aanvragen|verkoop|meer|online|klanten|afspraak|boeking|automatiseren|optimaliseren|verhogen)\s+(\S+(?:\s+\S+){0,10})/i,
+  };
+
+  const lang = language || "de";
+  const industryMatch = message.match(industryPatterns[lang] || industryPatterns.de);
+  const goalMatch = message.match(goalPatterns[lang] || goalPatterns.de);
+
+  const body: Record<string, unknown> = {
+    project_type: projectType,
+    industry: industryMatch?.[1] || "Unbekannte Branche",
+    goal: goalMatch?.[1] || message.slice(0, 120),
+    features: [],
+    details: message.slice(0, 500),
+    language: lang,
+  };
+
+  const res = await fetch(PLANNER_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) throw new Error(`Planner failed: ${res.status}`);
+  return res.json();
+}
+
 export async function POST(request: Request) {
   try {
     const { message, language } = await request.json();
@@ -131,6 +231,29 @@ export async function POST(request: Request) {
       return Response.json(
         withButtons("Guten Tag!\n\nWie kann ich Ihnen behilflich sein? Ich beantworte Ihre Fragen zu unseren Leistungen, Preisen oder erstelle eine erste Einschätzung für Ihr Projekt.\n\n[BTN:Leistungen ansehen|/leistungen]\n[BTN:Preise & Ablauf|/preise]\n[BTN:Rückruf vereinbaren|/rueckruf]")
       );
+    }
+
+    // --- NeXify AI: Plan-Intent-Erkennung ---
+    const planIntent = detectPlanIntent(msg);
+    if (planIntent.triggered && planIntent.projectType) {
+      try {
+        const planResult = await callPlanner(planIntent.projectType, msg, lang);
+        const eur = (n: number) => {
+          // Client-seitige Formatierung; hier Rohwerte übergeben
+          return n;
+        };
+        const planText = `${planResult.plan.summary}\n\nModule & Preisspanne:\n${planResult.plan.modules.map((m: { name: string; days_min: number; days_max: number }) => `– ${m.name}: ${m.days_min === m.days_max ? m.days_min : `${m.days_min}–${m.days_max}`} Tag(e) · ${m.days_min === m.days_max ? `${(m.days_min * 449).toLocaleString("de-DE")} €` : `${(m.days_min * 449).toLocaleString("de-DE")} – ${(m.days_max * 449).toLocaleString("de-DE")} €`}`).join("\n")}\n\nRichtpreis gesamt: ${planResult.price_min.toLocaleString("de-DE")} – ${planResult.price_max.toLocaleString("de-DE")} € netto\n\n[BTN:Verbindliches Angebot per E-Mail|/angebot?session=${planResult.session_id}]\n[BTN:Preise & Ablauf|/preise]\n[BTN:Rückruf vereinbaren|/rueckruf]`;
+
+        const out = withButtons(planText);
+        return Response.json({
+          type: "plan",
+          plan: planResult,
+          ...out,
+        });
+      } catch (e) {
+        console.error("Planner integration error:", e);
+        // Fallback: normaler Chat
+      }
     }
 
     // API-Key direkt
@@ -161,30 +284,31 @@ export async function POST(request: Request) {
 
     if (response.ok) {
       const raw = await response.text();
-      // 9Router hängt gelegentlich Content nach dem JSON an → bis zum letzten } parsen
       const data = JSON.parse(raw.slice(0, raw.lastIndexOf("}") + 1));
       const text = data?.choices?.[0]?.message?.content?.trim();
       if (text) {
         const out = withButtons(text);
         return Response.json({
+          type: "text",
           ...out,
           buttons: out.buttons.length > 0 ? out.buttons : [{ label: "Rückruf vereinbaren", href: "/rueckruf" }, { label: "Leistungen", href: "/leistungen" }],
         });
       }
     }
 
-    // API-Fehler oder leere Antwort
     const status = response.status;
-    return Response.json(
-      withButtons(
+    return Response.json({
+      type: "text",
+      ...withButtons(
         status === 401 || status === 403
           ? "Guten Tag!\n\nUnser Live-Beratungssystem ist aktuell in Wartung.\n\nPascal Courbois steht Ihnen persönlich zur Verfügung:\n• Telefon: +31 6 133 188 56\n• E-Mail: mail@nexifyai.cloud\n\n[BTN:Rückruf vereinbaren|/rueckruf]\n[BTN:Kontaktformular|/kontakt]"
           : "Guten Tag!\n\nVielen Dank für Ihre Anfrage. Pascal Courbois wird sich innerhalb eines Werktages persönlich bei Ihnen melden.\n\n[BTN:Rückruf vereinbaren|/rueckruf]\n[BTN:Leistungen ansehen|/leistungen]"
-      )
-    );
+      ),
+    });
   } catch (e) {
-    return Response.json(
-      withButtons("Guten Tag!\n\nBitte entschuldigen Sie die technische Störung. Sie erreichen uns direkt:\n\n• E-Mail: mail@nexifyai.cloud\n• Telefon: +31 6 133 188 56\n\n[BTN:Rückruf vereinbaren|/rueckruf]\n[BTN:Kontaktformular|/kontakt]")
-    );
+    return Response.json({
+      type: "text",
+      ...withButtons("Guten Tag!\n\nBitte entschuldigen Sie die technische Störung. Sie erreichen uns direkt:\n\n• E-Mail: mail@nexifyai.cloud\n• Telefon: +31 6 133 188 56\n\n[BTN:Rückruf vereinbaren|/rueckruf]\n[BTN:Kontaktformular|/kontakt]"),
+    });
   }
 }
