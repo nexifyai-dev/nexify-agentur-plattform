@@ -102,8 +102,8 @@ label{display:block;font-family:'Outfit',sans-serif;font-size:11px;font-weight:5
 input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:10px;color:var(--silver);font-family:'Manrope',sans-serif;font-size:15px;outline:none;transition:all 0.25s}
 input:focus{border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.06);box-shadow:0 0 0 3px rgba(255,255,255,0.04)}
 input::placeholder{color:#52525b}
-button{width:100%;padding:14px;background:linear-gradient(120deg,#e4e4e7,#ffffff 45%,#c4c4cc);border:none;border-radius:10px;color:#0a0a0a;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;letter-spacing:0.01em;box-shadow:0 4px 16px rgba(255,255,255,0.06)}
-button:hover{opacity:0.92;transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,255,255,0.1)}
+button{width:100%;padding:14px;background:linear-gradient(120deg,#C8FF00,#eaffb0 45%,#8fce00);border:none;border-radius:10px;color:#0a0a0a;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;letter-spacing:0.01em;box-shadow:0 4px 16px rgba(200,255,0,0.12)}
+button:hover{opacity:0.92;transform:translateY(-1px);box-shadow:0 6px 24px rgba(200,255,0,0.18)}
 button:active{transform:translateY(0)}
 .error{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-text);padding:12px 16px;border-radius:10px;margin-bottom:20px;text-align:center;font-size:13px;font-weight:500}
 .footer{text-align:center;margin-top:28px;font-size:11px;color:#52525b}
@@ -117,18 +117,17 @@ button:active{transform:translateY(0)}
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" style="display:block;margin:0 auto 20px;filter:drop-shadow(0 0 20px rgba(255,255,255,0.08))">
   <defs>
     <linearGradient id="ls" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fafafa"/>
-      <stop offset="0.45" stop-color="#a1a1aa"/>
-      <stop offset="0.7" stop-color="#e4e4e7"/>
-      <stop offset="1" stop-color="#71717a"/>
+      <stop offset="0" stop-color="#C8FF00"/>
+      <stop offset="0.5" stop-color="#eaffb0"/>
+      <stop offset="1" stop-color="#8fce00"/>
     </linearGradient>
   </defs>
   <path d="M24 4 41 14v20L24 44 7 34V14L24 4Z" stroke="url(#ls)" stroke-width="1.6"/>
   <path d="M17 17 31 31M31 17 17 31" stroke="url(#ls)" stroke-width="2.6" stroke-linecap="round"/>
   <circle cx="24" cy="24" r="3.2" fill="url(#ls)"/>
 </svg>
-<h1><span class="silver">NeX</span>ify <span class="light">AI</span></h1>
-<div class="tagline">Admin Dashboard</div>
+<h1>Ne<span style="color:#C8FF00;font-weight:700">X</span>ify <span class="light">AI</span></h1>
+<div class="tagline">Chat it. Automate it.</div>
 </div>
 <!--ERROR-->
 <form method="POST" action="/auth/login">
