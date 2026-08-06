@@ -88,14 +88,29 @@ export function SiteHeader() {
           <LogoMark size={34} />
           <span
             style={{
-              fontFamily: 'Outfit, sans-serif',
-              fontWeight: 600,
-              fontSize: 17,
-              letterSpacing: '-0.01em',
-              whiteSpace: 'nowrap',
+              display: 'flex', flexDirection: 'column', justifyContent: 'center',
+              lineHeight: 1.15,
             }}
           >
-            Ne<span style={{ color: '#C8FF00', fontWeight: 700 }}>X</span>ify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
+            <span
+              style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontWeight: 600,
+                fontSize: 17,
+                letterSpacing: '-0.01em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Ne<span style={{ color: '#C8FF00', fontWeight: 700 }}>X</span>ify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
+            </span>
+            <span
+              style={{
+                fontFamily: 'Outfit, sans-serif', fontSize: 8.5, letterSpacing: '0.34em',
+                textTransform: 'uppercase', color: '#52525b', whiteSpace: 'nowrap', marginTop: 2,
+              }}
+            >
+              Chat it. Automate it.
+            </span>
           </span>
         </Link>
 

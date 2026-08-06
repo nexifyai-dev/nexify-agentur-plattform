@@ -29,7 +29,7 @@ function htmlPage(title: string, body: string): NextResponse {
   const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title></head>
 <body style="margin:0;background:#0A0A0A;color:#e5e5e5;font-family:Manrope,Arial,sans-serif;padding:48px 16px;">
 <main style="max-width:520px;margin:0 auto;">
-  <div style="font-family:Outfit,Arial,sans-serif;font-size:28px;margin-bottom:16px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" style="display:block;width:34px;height:34px;border:0;border-radius:8px;"><div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;font-weight:700;">X</span>ify <span style="color:#9E9E9E;font-weight:300;">AI</span></div></div>
   <h1 style="font-size:20px;font-weight:600;">${title}</h1>
   <p style="line-height:1.6;color:#a1a1aa;">${body}</p>
   <p style="margin-top:24px;font-size:13px;color:#71717a;"><a href="https://www.nexifyai.cloud/de" style="color:#a1a1aa;">www.nexifyai.cloud</a></p>

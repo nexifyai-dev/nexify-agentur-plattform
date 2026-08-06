@@ -119,7 +119,7 @@
 | Dark-Mode-Meta | `<meta name="color-scheme" content="light dark">` | E-Mails + Web |
 
 **Kontrast:** Lime #C8FF00 mit Text #09090B ≈ 12:1 (WCAG AA ✅). Niemals weißen Text auf Lime (≈1.9:1, failt).
-**E-Mail-CI:** ci_email() in backend/server.py — Lime-CTA, Manrope/Outfit mit Fallback, #09090B-BG, Dark-Mode-Meta (Commit 94c3fc44).
+**E-Mail-CI:** Kanonische `mail_shell(label, body_html)` in backend/server.py (Vorgabe 2026-08-06, `docs/standards/MAIL-DESIGN-VORGABE.md`): dunkle Karte #111114 auf #0a0a0a, Border #26262b, Radius 16px, CI-Logo (logo-mark.png + Wortmarke Lime X #C8FF00 / AI #9E9E9E fw300), Impressum-Footer, Dark-Mode-Meta. Alle Pfade: offer_email_html, ci_email, followup_email_html, /campaign/send, Outreach-/Leads-Templates. HTML+Plain (multipart) via `text:`-Param (Resend) / MIMEMultipart (SMTP) + List-Unsubscribe. E2E 72/72 PASS.
 
 ## 8. Wichtige Env-Dateien (Secrets → Referenzen, Werte in Dateien)
 
