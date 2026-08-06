@@ -172,19 +172,19 @@
 | ID | Gap | Status |
 |---|---|---|
 | OPS-01 | WhatsApp-Bridge DOWN seit 27.07. (Port 3000 tot, kein Bridge-Prozess) — Re-Pairing via Dashboard (QR-Code) nötig | blocked (User) |
-| COMPLIANCE-01 | AVV/Drittland-Risiko (DeepSeek ohne AVV) dokumentieren | open |
+| COMPLIANCE-01 | AVV/Drittland-Risiko: OpenRouter bietet Enterprise DPA mit EU-SCCs (Art. 46 GDPR). DeepSeek = Subprocessor via OpenRouter. Nächster Schritt: DPA bei OpenRouter anfragen. | open (analysiert) |
 | MARKET-02 | UWG §7-Compliance-Check E-Mail-Kette | open |
-| TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Header-Fix committed f0ca28b4) | open |
-| AGENTS-01 | Profile compliance+sales E2E-Test | open |
+| TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Footer-Button deployed, Browser-Daemon für Test nicht verfügbar) | open |
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
-| DOC-01 | n8n-Referenz in §4 (n8n.nexifyai.cloud) — n8n abgeschafft, Doku bereinigen | open |
 
-### Geschlossen (2026-08-06 Audit)
+### Geschlossen (Audit Runde 3)
 
 | ID | Gap | Grund |
 |---|---|---|
 | SEC-01 | Rate-Limit/Spam-Schutz | Eigenbau-Middleware aktiv: 5 Regeln (chat 20/min, plan 10/min, offers 5/min, contact 5/min, webhooks 100/min), 60s-Fenster, IP-basiert |
 | OPS-02 | Manager-IP 145.14.158.198 | Veraltet — nicht diese Maschine. Kanonisch: 72.62.152.47 (§2) |
+| AGENTS-01 | Profile compliance+sales E2E-Test | Beide Profile erstellt + E2E getestet: Compliance (19s) + Sales (22s), deepseek-v4-flash-0731 via 9Router ✅ |
+| DOC-01 | n8n-Referenz in §4 | In §4 als DEPRECATED markiert; Cloudflare-Tunnel-Deaktivierung ausstehend (P3, kein Betriebsrisiko) |
 
 ## 12. Changelog
 
