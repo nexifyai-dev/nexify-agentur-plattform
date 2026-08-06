@@ -188,10 +188,21 @@
 | AGENTS-01 | Profile compliance+sales E2E-Test | Beide Profile erstellt + E2E getestet: Compliance (19s) + Sales (22s), deepseek-v4-flash-0731 via 9Router ✅ |
 | DOC-01 | n8n-Referenz in §4 | In §4 als DEPRECATED markiert; Cloudflare-Tunnel-Deaktivierung ausstehend (P3, kein Betriebsrisiko) |
 
-## 12. Changelog
+## 12. Systemvorgaben (verbindlich, Pascal-Direktive 2026-08-06)
+
+Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2.2, System-Prompt).
+
+| Vorgabe | Inhalt |
+|---|---|
+| **Abweichungs-Null-Toleranz** | Bei JEDER Arbeit ALLE Abweichungen erkennen — auch außerhalb des aktuellen Fokus (indirekte Abhängigkeiten, Nachbarsysteme). Jede Abweichung ausnahmslos fixen und in Produktion bringen mit Ergebnis-Check + Qualitätskontrolle nach fest definierten Vorgaben (Test-Pyramide, Qualitätsgates). „Nur Fokus-Pfad geprüft" ist kein Abschlusskriterium. |
+| **Betriebshandbuch-Pflicht** | Zu jedem System/Dienst/Komponente Betriebshandbuch führen (Betrieb, Wartung, Troubleshooting, Wiederanlauf, Fehlerbehandlung). Fehler und Optimierungen erkannt UND umgesetzt. Teil der Qualitätsgates. |
+| **Online-Recherchepflicht** | Ständige proaktive Tiefen-Recherche (offizielle Doku, Changelogs, GitHub Issues, Bestpraxis, Mitbewerber-/Kunden-/Marketing-Analysen). Ergebnisse in AgentMemory + `~/.hermes/cron/output/` ablegen. SearXNG: Host 127.0.0.1:8090, `language=de&time_range=month`. |
+
+## 13. Changelog
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-06 | **SYSTEMVORGABEN v2.2 (Pascal-Direktive)**: §12 verankert — Abweichungs-Null-Toleranz (alle Abweichungen auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), Betriebshandbuch-Pflicht, Online-Recherchepflicht (proaktiv, Tiefen-Recherche). Kanonisch: docs/standards/ARBEITSVORGABEN-v2.2.md + SOUL.md v2.2 + AgentMemory. |
 | 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
 | 2026-08-06 | Audit Runde 3: 16 Dienste + 6 öffentliche Endpunkte gehealthchecked; SEC-01 geschlossen (Rate-Limit Eigenbau aktiv); OPS-02 geschlossen (145.14.158.198 veraltet); WhatsApp-Bridge DOWN bestätigt (seit 27.07.); MCPs alle OK; Hermes v0.20.0 aktuell; DeepSeek Flash Update keine Breaking Changes; DOC-01 n8n-Cleanup offen |
 | 2026-08-06 | **MAIL-DESIGN-VORGABE** (8cfb56ca, Pascal-Direktive): kanonische mail_shell() mit CI-Logo systemweit — alle Mail-Pfade (Angebot, Kundenportal, Follow-up, Kampagne, Kontakt, Outreach, Leads, GTM), HTML+Plain-Text, Dark-Mode-Meta, List-Unsubscribe. Vorgabe: docs/standards/MAIL-DESIGN-VORGABE.md. E2E 85/85. |

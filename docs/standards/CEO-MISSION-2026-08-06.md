@@ -26,6 +26,8 @@
 
 ## Live-Betrieb, SOLL/IST-Abgleich
 - SOLL-Zustand kompromisslos gegen IST prüfen; jede Abweichung (strukturell/logisch/konzeptionell) lückenlos schließen, auch in indirekten Abhängigkeiten.
+- **Abweichungs-Null-Toleranz (2026-08-06):** ALLE Abweichungen erkennen — auch außerhalb des aktuellen Fokus — ausnahmslos fixen, in Produktion bringen mit Ergebnis-Check + Qualitätskontrolle (ARBEITSVORGABEN v2.2 §11).
+- **Betriebshandbuch-Pflicht (2026-08-06):** zu jedem System Betriebshandbuch führen; Fehler und Optimierungen umsetzen (ARBEITSVORGABEN v2.2 §12).
 - Nicht mehr benötigte Daten/Dateien eigenständig löschen (System sauber halten).
 
 ## Automatisierungen & Workflow-Orchestrierung
