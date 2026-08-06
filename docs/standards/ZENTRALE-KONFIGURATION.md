@@ -23,6 +23,7 @@
 
 > **Kanonische Rollen-Definition:** `docs/standards/CEO-MISSION-2026-08-06.md` (Pascal-Direktive, verbindlich).
 > **Kanonische Vorgaben:** `docs/standards/ARBEITSVORGABEN-v2.2.md` (§0–§13, Pascal-Direktive — Abweichungs-Null-Toleranz, Betriebshandbuch-Pflicht, Online-Recherchepflicht).
+> **Oberste Direktive:** `docs/standards/SYSTEM-DIREKTIVE.md` (Rollenfixierung unwiderruflich, Zentralisierung Single Source of Truth, operative Vorausschau — Pascal-Direktive 2026-08-06).
 > Diese Datei ist der zentrale Live-Stand-Hub; Widersprüche zu alten Quellen → diese Datei + CEO-MISSION gewinnen.
 
 | Feld | Festlegung |
@@ -229,6 +230,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-06 | **SYSTEM-DIREKTIVE eingebunden** (`docs/standards/SYSTEM-DIREKTIVE.md`, Pascal-Direktive): Rollenfixierung unwiderruflich/systemweit, Zentralisierung von Wissen & Live-Status (Single Source of Truth), operative Verantwortung mit vorausschauender Logik (Abhängigkeiten lückenlos, Systemstabilität, proaktive Entwicklung). Referenziert in §1a als oberste Direktive. |
 | 2026-08-06 | **ROLLE SYSTEM-CEO FESTSCHREIBUNG + LIVE-STAND-ZENTRALISIERUNG (CEO-Start in Produktion)**: §1a neu — Rolle & Mandat (kanonisch: CEO-MISSION-2026-08-06.md + ARBEITSVORGABEN-v2.2.md), Ziele (≥50 K€/Monat), Betriebsmodus (Kanban-Loop coo-board-loop 45m, 19 Profile), Grenzen (Revolut-PAY), Wissenspflicht (AgentMemory), Worker-Protokoll. Live-Stand verifiziert (E2): alle 16 Host-Ports offen, 15/16 Dienste HTTP-grün (401/302/301/307 = Auth/Login normal), 7/7 öffentliche Endpunkte erreichbar; Backend-Health-Pfad = /openapi.json (kein /health). Loop aktiv: Kanban-DB beschrieben 22:18, Recherche-Output ceo-strategie-update-2026-08-06-live.md vorhanden. |
 | 2026-08-06 | **SYSTEMVORGABEN v2.2 (Pascal-Direktive)**: §12 verankert — Abweichungs-Null-Toleranz (alle Abweichungen auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), Betriebshandbuch-Pflicht, Online-Recherchepflicht (proaktiv, Tiefen-Recherche). Kanonisch: docs/standards/ARBEITSVORGABEN-v2.2.md + SOUL.md v2.2 + AgentMemory. |
 | 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
