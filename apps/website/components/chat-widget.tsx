@@ -189,7 +189,8 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <LogoMark size={26} />
-          <div><span style={{fontSize:13,fontWeight:700}}>NeXify AI</span><span style={{display:'block',fontSize:10,color:'#71717a',marginTop:1}}>{lang === 'en' ? 'Real-time answers' : lang === 'nl' ? 'Antwoorden in realtime' : 'Beantwortet in Echtzeit'}</span></div>
+          <div><span style={{fontSize:13,fontWeight:700}}>NeXify AI</span><span style={{display:'block',fontSize:10,color:'#71717a',marginTop:1}}>{lang === 'en' ? 'Real-time answers' : lang === 'nl' ? 'Antwoorden in realtime' : 'Beantwortet in Echtzeit'}</span>
+          <span style={{display:'block',fontSize:9.5,color:'#8b8b93',marginTop:3}}>{lang === 'en' ? 'AI assistant — you are interacting with an AI.' : lang === 'nl' ? 'AI-assistent — u heeft interactie met een AI.' : 'KI-Assistent — Sie interagieren mit einer KI.'}</span></div>
         </div>
         <span onClick={() => setChatOpen(false)} style={{cursor:'pointer',color:'#71717a',fontSize:20,lineHeight:1,padding:'0 4px'}}>×</span>
       </div>
