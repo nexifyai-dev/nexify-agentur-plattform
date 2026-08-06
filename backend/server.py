@@ -305,12 +305,66 @@ create index if not exists idx_channel_events_ts    on nexify_channel_events (ts
 LEGAL_FOOTER = """NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56"""
 
 
+# Kanonisches Mail-Design (Vorgabe 2026-08-06): Dunkle Karte #111114 auf #0a0a0a,
+# Border #26262b, Radius 16px, Header mit CI-Logo (LogoMark-PNG + Wortmarke, Lime X),
+# Label-Zeile (Kategorie), Footer mit Impressum. Gilt für ALLE Mails (Resend + Hostinger,
+# Angebot, Kundenportal, Follow-up, Erstkontakt/Kampagne) — HTML + Plain-Text (multipart).
+MAIL_LOGO_BLOCK = (
+    '<div style="display:flex;align-items:center;gap:12px;">'
+    '<img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" '
+    'style="display:block;width:34px;height:34px;border:0;border-radius:8px;">'
+    '<div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">'
+    'Ne<span style="color:#C8FF00;font-weight:700;">X</span>ify <span style="color:#9E9E9E;font-weight:300;">AI</span>'
+    "</div></div>"
+)
+MAIL_FOOTER_HTML = (
+    "NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>"
+    "Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>"
+    "mail@nexifyai.cloud · +31 6 133 188 56"
+)
+MAIL_DARK_META = (
+    '<meta name="color-scheme" content="light dark">'
+    '<meta name="supported-color-schemes" content="light dark">'
+)
+
+
+def mail_shell(label: str, body_html: str) -> str:
+    """Kanonisches Mail-Layout: Header (CI-Logo + Label), Body, Impressum-Footer."""
+    return f"""<!doctype html><html><head>{MAIL_DARK_META}</head><body style="margin:0;padding:0;background:#0a0a0a;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 12px;"><tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
+<tr><td style="padding:32px 32px 20px;border-bottom:1px solid #26262b;">
+  {MAIL_LOGO_BLOCK}
+  <div style="font-family:Manrope,Arial,sans-serif;font-size:11px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">{label}</div>
+</td></tr>
+{body_html}
+<tr><td style="padding:20px 32px;border-top:1px solid #26262b;font-family:Manrope,Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">
+{MAIL_FOOTER_HTML}
+</td></tr>
+</table></td></tr></table></body></html>"""
+
+
+def html_to_text(html: str) -> str:
+    """Robuster Plain-Text aus Mail-HTML (multipart/alternative, Spam-/Deliverability-Best-Practice)."""
+    import html as _html
+    import re
+
+    s = re.sub(r"(?i)<(br|/tr|/p|/li|/h1|/h2|/h3|/div)[^>]*>", "\n", html)
+    s = re.sub(r"(?i)<a [^>]*href=\"([^\"]+)\"[^>]*>(.*?)</a>", r"\2 (\1)", s)
+    s = re.sub(r"(?i)<[^>]+>", "", s)
+    s = _html.unescape(s)
+    s = re.sub(r"[ \t]+", " ", s)
+    s = re.sub(r"\n{3,}", "\n\n", s)
+    return s.strip()
+
+
 def ci_email(
     title: str,
     body_html: str,
     cta_label: str | None = None,
     cta_url: str | None = None,
     language: str = "de",
+    label: str | None = None,
 ) -> str:
     nl = language == "nl"
     cta = ""
@@ -323,22 +377,17 @@ def ci_email(
         if nl
         else "Diese E-Mail richtet sich an Unternehmer (B2B). Unverbindliche Indikationen stellen kein bindendes Angebot dar. Datenschutz: nexifyai.cloud/datenschutz"
     )
-    return f"""<!doctype html><html><head><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"><style>:root{{color-scheme:light dark}}</style></head><body style="margin:0;padding:0;background:#09090B;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#09090B;padding:32px 12px;"><tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
-<tr><td style="padding:28px 32px 18px;border-bottom:1px solid #26262b;">
-  <div style="display:flex;align-items:center;gap:12px;"><img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" style="display:block;width:34px;height:34px;border:0;border-radius:8px;"><div><div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;font-weight:700;">X</span>ify <span style="color:#9ca3af;">AI</span></div><div style="font-family:Manrope,Arial,sans-serif;font-size:10px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">Chat it. Automate it.</div></div></div>
-</td></tr>
-<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
-  <h1 style="margin:0 0 14px;color:#ffffff;font-size:19px;font-weight:600;">{title}</h1>
-  <div style="color:#a1a1aa;font-size:14px;line-height:1.8;">{body_html}</div>
+    if label is None:
+        label = "Vrijblijvende offerte" if nl else "Unverbindliches Angebot"
+    body = f"""<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
+  <h1 style="margin:0 0 12px;color:#ffffff;font-size:20px;font-weight:600;">{title}</h1>
+  <div style="color:#a1a1aa;font-size:14px;line-height:1.7;">{body_html}</div>
   {cta}
 </td></tr>
-<tr><td style="padding:20px 32px 26px;font-family:Manrope,Arial,sans-serif;">
+<tr><td style="padding:14px 32px 26px;font-family:Manrope,Arial,sans-serif;">
   <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{legal_note}</p>
-</td></tr>
-<tr><td style="padding:18px 32px;border-top:1px solid #26262b;font-family:Manrope,Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">{LEGAL_FOOTER}</td></tr>
-</table></td></tr></table></body></html>"""
+</td></tr>"""
+    return mail_shell(label, body)
 
 
 COMPANY_KNOWLEDGE = """
@@ -634,14 +683,7 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
         if nl
         else "Dies ist eine unverbindliche Indikation, ausschließlich B2B. Ein verbindliches Angebot folgt nach finaler Scope-Abstimmung.",
     }
-    return f"""<!doctype html><html><body style="margin:0;padding:0;background:#0a0a0a;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 12px;"><tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
-<tr><td style="padding:32px 32px 20px;border-bottom:1px solid #26262b;">
-  <div style="font-family:Georgia,serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
-  <div style="font-family:Manrope,Arial,sans-serif;font-size:11px;color:#71717a;letter-spacing:3px;text-transform:uppercase;padding-top:6px;">{t["subject_note"]}</div>
-</td></tr>
-<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
+    body = f"""<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
   <h1 style="margin:0 0 12px;color:#ffffff;font-size:20px;font-weight:600;">{offer.get("title", "")}</h1>
   <p style="margin:0;color:#a1a1aa;font-size:14px;line-height:1.7;">{offer.get("intro", "")}</p>
 </td></tr>
@@ -665,11 +707,8 @@ def offer_email_html(offer: dict, name: str, language: str, price_total: int) ->
 <tr><td style="padding:20px 32px 28px;font-family:Manrope,Arial,sans-serif;">
   <p style="margin:0 0 16px;color:#d4d4d8;font-size:14px;">{t["cta"]}</p>
   <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">{t["legal"]}</p>
-</td></tr>
-<tr><td style="padding:20px 32px;border-top:1px solid #26262b;font-family:Manrope,Arial,sans-serif;color:#52525b;font-size:11px;line-height:1.7;">
-NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>mail@nexifyai.cloud · +31 6 133 188 56
-</td></tr>
-</table></td></tr></table></body></html>"""
+</td></tr>"""
+    return mail_shell(t["subject_note"], body)
 
 
 def followup_email_html(offer_row, language: str) -> str:
@@ -680,25 +719,29 @@ def followup_email_html(offer_row, language: str) -> str:
         if nl
         else f"Guten Tag {name},<br/><br/>vor Kurzem haben wir Ihnen ein unverbindliches Angebot gesendet. Haben Sie noch Fragen zu Umfang, Zeitplan oder Preis? Ich unterstütze Sie gerne – eine kurze Antwort auf diese E-Mail genügt.<br/><br/>Mit besten Grüßen,<br/>Pascal Courbois · NeXify AI"
     )
-    return f"""<!doctype html><html><body style="margin:0;background:#0a0a0a;padding:32px 12px;">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;">
-<tr><td style="padding:32px;font-family:Manrope,Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
-<div style="font-family:Georgia,serif;font-size:22px;color:#fff;padding-bottom:20px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
+    label = "Vervolg op uw offerte" if nl else "Follow-up auf Ihr Angebot"
+    inner = f"""<tr><td style="padding:32px;font-family:Manrope,Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
 {body}
-</td></tr></table></body></html>"""
+</td></tr>"""
+    return mail_shell(label, inner)
 
 
 def _smtp_send(to: str, subject: str, html: str) -> str:
     import smtplib
+    from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
-    msg = MIMEText(html, "html", "utf-8")
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = SENDER_EMAIL or ""
     msg["To"] = to
+    msg["X-Mailer"] = "NeXifyAI/1.0"
     reply_to = os.environ.get("REPLY_TO_EMAIL")
     if reply_to:
         msg["Reply-To"] = reply_to
+    msg["List-Unsubscribe"] = f"<mailto:{reply_to or SENDER_EMAIL}?subject=unsubscribe>"
+    msg.attach(MIMEText(html_to_text(html), "plain", "utf-8"))
+    msg.attach(MIMEText(html, "html", "utf-8"))
     with smtplib.SMTP_SSL(
         os.environ.get("SMTP_HOST", "smtp.hostinger.com"),
         int(os.environ.get("SMTP_PORT", "465")),
@@ -712,7 +755,13 @@ async def send_email(
     to: str, subject: str, html: str, attachments: list | None = None
 ) -> str | None:
     try:
-        params = {"from": SENDER_EMAIL, "to": [to], "subject": subject, "html": html}
+        params = {
+            "from": SENDER_EMAIL,
+            "to": [to],
+            "subject": subject,
+            "html": html,
+            "text": html_to_text(html),  # multipart-Alternative gegen Spam-Filter
+        }
         reply_to = os.environ.get("REPLY_TO_EMAIL")
         if reply_to:
             params["reply_to"] = [reply_to]
@@ -757,23 +806,28 @@ async def campaign_send(req: CampaignSendReq):
         subject = lead.subject or "KI-Chatbot Demo"
         text_body = lead.body or ""
 
-        # HTML wrapper: professional template
-        html_body = f"""<div style="font-family:Manrope,Arial,sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a">
-  <div style="background:#0A0A0A;padding:20px 30px;border-radius:8px 8px 0 0">
-    <span style="color:#fff;font-size:20px;font-weight:700">NeXifyAI</span>
-  </div>
-  <div style="padding:30px;background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 8px 8px">
-    <p style="white-space:pre-line;font-size:15px;line-height:1.6">{text_body}</p>
-    {"<p><a href='" + lead.calendly_url + "' style='display:inline-block;background:#7c3aed;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px'>Demo-Call buchen →</a></p>" if lead.calendly_url else ""}
-  </div>
-  <div style="padding:20px 30px;font-size:12px;color:#888;border-top:1px solid #eee">
-    <p><strong>NeXifyAI</strong> · Pascal Courbois<br>
-    mail@nexifyai.cloud · <a href="https://nexifyai.cloud" style="color:#888">nexifyai.cloud</a><br>
-    Datenschutz: <a href="https://nexifyai.cloud/datenschutz" style="color:#888">nexifyai.cloud/datenschutz</a><br>
-    Abmelden: <a href="https://nexifyai.cloud/unsubscribe" style="color:#888">hier abmelden</a></p>
-    <p>© 2026 NeXifyAI · Diese E-Mail wurde im Rahmen unserer Dienstleistung gesendet.</p>
-  </div>
-</div>"""
+        # Kanonisches Mail-Design (mail_shell): dunkle Karte, CI-Logo, Impressum-Footer.
+        paragraphs = "".join(
+            f"<p style='margin:0 0 12px;white-space:pre-wrap'>{text_body}</p>"
+        )
+        cta_html = (
+            f"""<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px;"><tr><td style="border-radius:999px;background:#C8FF00;">
+        <a href="{lead.calendly_url}" style="display:inline-block;padding:13px 30px;font-family:Manrope,Arial,sans-serif;font-size:14px;font-weight:700;color:#0A0A0A;text-decoration:none;">Demo-Call buchen</a></td></tr></table>"""
+            if lead.calendly_url
+            else ""
+        )
+        body = f"""<tr><td style="padding:28px 32px 8px;font-family:Manrope,Arial,sans-serif;">
+  <div style="color:#a1a1aa;font-size:14px;line-height:1.7;">{paragraphs}</div>
+  {cta_html}
+</td></tr>
+<tr><td style="padding:14px 32px 26px;font-family:Manrope,Arial,sans-serif;">
+  <p style="margin:0;color:#52525b;font-size:11px;line-height:1.6;">
+    B2B-Kontakt · Quelle: {lead.name or "öffentlich"} · 
+    <a href="https://www.nexifyai.cloud/unsubscribe" style="color:#a1a1aa;">Abmelden</a> ·
+    <a href="https://www.nexifyai.cloud/datenschutz" style="color:#a1a1aa;">Datenschutz</a>
+  </p>
+</td></tr>"""
+        html_body = mail_shell("Chat it. Automate it.", body)
 
         try:
             email_id = await send_email(to, subject, html_body)
@@ -1739,11 +1793,12 @@ async def contact(body: ContactIn):
         if nl
         else f"Guten Tag {body.name},<br/><br/>vielen Dank für Ihre Anfrage. Wir melden uns innerhalb eines Werktags persönlich bei Ihnen.<br/><br/>Mit besten Grüßen,<br/>Pascal Courbois · NeXify AI"
     )
-    html = f"""<!doctype html><html><body style="margin:0;background:#0a0a0a;padding:32px 12px;">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;">
-<tr><td style="padding:32px;font-family:Manrope,Arial,sans-serif;color:#d4d4d8;font-size:14px;line-height:1.8;">
-<div style="font-family:Georgia,serif;font-size:22px;color:#fff;padding-bottom:20px;">Ne<span style="color:#c0c0c8;">X</span>ify <span style="color:#9ca3af;">AI</span></div>
-{confirm_body}</td></tr></table></body></html>"""
+    html = ci_email(
+        "Wir haben Ihre Anfrage erhalten" if not nl else "Wij hebben uw aanvraag ontvangen",
+        confirm_body,
+        language=body.language,
+        label="Kontaktanfrage" if not nl else "Contactaanvraag",
+    )
     asyncio.create_task(send_email(body.email, confirm_subject, html))
     if INTERNAL_NOTIFY_EMAIL:
         notify = f"<p>Neue Anfrage über die Website:</p><p><b>{body.name}</b> ({body.email})<br/>Firma: {body.company or '-'}<br/>Telefon: {body.phone or '-'}<br/>Sprache: {body.language}</p><p>{body.message}</p>"
