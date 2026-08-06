@@ -238,10 +238,6 @@ export async function POST(request: Request) {
     if (planIntent.triggered && planIntent.projectType) {
       try {
         const planResult = await callPlanner(planIntent.projectType, msg, lang);
-        const eur = (n: number) => {
-          // Client-seitige Formatierung; hier Rohwerte übergeben
-          return n;
-        };
         const planText = `${planResult.plan.summary}\n\nModule & Preisspanne:\n${planResult.plan.modules.map((m: { name: string; days_min: number; days_max: number }) => `– ${m.name}: ${m.days_min === m.days_max ? m.days_min : `${m.days_min}–${m.days_max}`} Tag(e) · ${m.days_min === m.days_max ? `${(m.days_min * 449).toLocaleString("de-DE")} €` : `${(m.days_min * 449).toLocaleString("de-DE")} – ${(m.days_max * 449).toLocaleString("de-DE")} €`}`).join("\n")}\n\nRichtpreis gesamt: ${planResult.price_min.toLocaleString("de-DE")} – ${planResult.price_max.toLocaleString("de-DE")} € netto\n\n[BTN:Verbindliches Angebot per E-Mail|/angebot?session=${planResult.session_id}]\n[BTN:Preise & Ablauf|/preise]\n[BTN:Rückruf vereinbaren|/rueckruf]`;
 
         const out = withButtons(planText);
