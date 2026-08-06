@@ -166,4 +166,16 @@ Register: `12_register/OFFENE_FRAGEN_REGISTER.md` → **F32**.
 
 ---
 
+---
+
+## §17 Systemvorgaben 2026-08-06 (Pascal-Direktive — verbindlich, systemweit)
+
+Kanonisch: `docs/standards/ARBEITSVORGABEN-v2.2.md` · SOUL.md v2.2 · AgentMemory.
+
+| # | Vorgabe | Kern |
+|---|---------|------|
+| 17.1 | **Abweichungs-Null-Toleranz** | Bei jeder Arbeit ALLE Abweichungen erkennen — auch nicht im Fokus (indirekte Abhängigkeiten, Nachbarsysteme). Ausnahmslos fixen, in Produktion bringen mit Ergebnis-Check + Qualitätskontrolle nach fest definierten Vorgaben. „Nur Fokus-Pfad geprüft" ≠ fertig. |
+| 17.2 | **Betriebshandbuch-Pflicht** | Zu jedem System/Dienst Betriebshandbuch führen (Betrieb, Wartung, Troubleshooting, Wiederanlauf, Fehlerbehandlung). Fehler und Optimierungen erkennen UND umsetzen. |
+| 17.3 | **Online-Recherchepflicht** | Ständige proaktive Tiefen-Recherche (Doku, Changelogs, Issues, Bestpraxis, Markt). Ergebnisse in AgentMemory + `~/.hermes/cron/output/`. |
+
 *Primärquelle `docs/governance/` schlägt diesen Auszug. Offene Normkonflikte eskalieren — nicht raten.*
