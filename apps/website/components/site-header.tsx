@@ -12,8 +12,6 @@ export function NxLogoMark() {
   return <LogoMark size={34} />;
 }
 
-type Props = {
-
 /** Nav auf echte Routen (Unterseiten existieren unter app/[locale]/…) mit Locale-Prefix. */
 const NAV = {
   de: [
