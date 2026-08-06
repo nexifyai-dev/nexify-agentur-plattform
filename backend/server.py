@@ -542,9 +542,10 @@ async def llm_complete(
     *,
     purpose: str = "customer",
     model: str | None = None,
+    thinking: dict | None = None,
 ) -> str:
     """Complete via 9router. Routes all tasks through 9router with caching."""
-    ck = _cache_key(model or purpose, messages, max_tokens)
+    ck = _cache_key(f"{model or purpose}:{json.dumps(thinking or {})}", messages, max_tokens)
     cached = _get_cached(ck)
     if cached is not None:
         return cached
@@ -554,6 +555,7 @@ async def llm_complete(
             purpose=purpose,  # type: ignore[arg-type]
             model=model,
             max_tokens=max_tokens,
+            thinking=thinking,
         )
         _set_cached(ck, result, cache_ttl)
         return result
@@ -1541,30 +1543,47 @@ async def planner_plan(body: PlannerIn):
         f"Gewuenschte Funktionen: {', '.join(body.features) if body.features else 'keine Angabe'}\n"
         f"Weitere Details: {body.details or 'keine'}"
     )
-    try:
-        raw = await llm_complete(
-            [
-                {
-                    "role": "system",
-                    "content": PLANNER_PROMPT.format(language=body.language),
-                },
-                {"role": "user", "content": brief},
-            ],
-            max_tokens=3000,
-            task_type="plan",
-            cache_ttl=300,
-        )
-    except Exception as e:
-        logger.error(f"planner llm failed: {e}")
-        raise HTTPException(status_code=502, detail="Projektplan konnte nicht erstellt werden.")
-    raw = raw.strip()
-    start, end = raw.find("{"), raw.rfind("}")
-    if start == -1 or end == -1:
-        raise HTTPException(status_code=502, detail="Projektplan konnte nicht verarbeitet werden.")
-    try:
-        plan = json.loads(raw[start : end + 1])
-    except Exception:
-        raise HTTPException(status_code=502, detail="Projektplan konnte nicht verarbeitet werden.")
+    # JSON-Reliability: Think-Max liefert gelegentlich NUR reasoning_content
+    # (leeres content) oder Markdown-Zaun. Retry mit verschärftem Hinweis.
+    plan = None
+    last_err = "Projektplan konnte nicht verarbeitet werden."
+    for attempt in range(2):
+        prompt = PLANNER_PROMPT.format(language=body.language)
+        if attempt > 0:
+            prompt += (
+                "\nZUSAETZLICHER HINWEIS: Deine letzte Antwort war kein gueltiges JSON. "
+                "Antworte JETZT ausschliesslich mit einem einzigen JSON-Objekt, "
+                "ohne Einleitung, ohne Markdown-Zaun, ohne Erklaerung."
+            )
+        try:
+            raw = await llm_complete(
+                [
+                    {"role": "system", "content": prompt},
+                    {"role": "user", "content": brief},
+                ],
+                max_tokens=3000,
+                task_type="plan",
+                cache_ttl=300 if attempt == 0 else 0,
+                thinking={"type": "disabled"},
+            )
+        except Exception as e:
+            logger.error(f"planner llm failed (attempt {attempt}): {e}")
+            last_err = "Projektplan konnte nicht erstellt werden."
+            continue
+        raw = (raw or "").strip()
+        start, end = raw.find("{"), raw.rfind("}")
+        if start == -1 or end == -1:
+            logger.warning(f"planner json braces missing (attempt {attempt})")
+            continue
+        try:
+            plan = json.loads(raw[start : end + 1])
+            if isinstance(plan, dict) and plan.get("modules"):
+                break
+        except Exception as e:
+            logger.warning(f"planner json parse failed (attempt {attempt}): {e}")
+            continue
+    if not isinstance(plan, dict):
+        raise HTTPException(status_code=502, detail=last_err)
     days_min = sum(int(m.get("days_min", 1)) for m in plan.get("modules", []))
     days_max = sum(
         int(m.get("days_max", m.get("days_min", 1))) for m in plan.get("modules", [])
@@ -1747,6 +1766,7 @@ async def request_offer(body: OfferRequestIn):
                 compress_history(history) + [{"role": "user", "content": prompt}],
                 max_tokens=9000,
                 task_type="offer",
+                thinking={"type": "disabled"},
             )
         except Exception as e:
             logger.error(f"offer llm failed: {e}")

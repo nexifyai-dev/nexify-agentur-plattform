@@ -77,7 +77,11 @@ def _env(*names: str, default: str = "") -> str:
 
 def load_config() -> NineRouterConfig:
     base_url = _env("NINEROUTER_BASE_URL", "OPENAI_BASE_URL", default="https://ai-router.nexifyai.cloud/v1")
-    api_key = _env("NINEROUTER_API_KEY", "NINEROUTER_KEY", "OPENAI_API_KEY")
+    # W-05: CUSTOM_API_KEY ist der Universal-Key (lokal+remote). NINEROUTER_KEY
+    # ist für beide Endpoints tot; NINEROUTER_API_KEY kann in einigen
+    # EnvironmentFiles einen alten rotierten Wert tragen. Reihenfolge:
+    # CUSTOM_API_KEY zuerst.
+    api_key = _env("CUSTOM_API_KEY", "NINEROUTER_API_KEY", "NINEROUTER_KEY", "OPENAI_API_KEY")
     primary = _env("PRIMARY_MODEL", default="nexifyai-combo-llm")
     customer = _env("CUSTOMER_MODEL", default="ds/deepseek-v4-flash")
     fallback = _env("FALLBACK_MODEL", default="ds/deepseek-v4-flash")
@@ -164,10 +168,11 @@ class NineRouter:
         msg = resp.choices[0].message
         content = (msg.content or "").strip()
         if not content:
-            rc = getattr(msg, "reasoning_content", None) or (getattr(msg, "model_extra", None) or {}).get(
-                "reasoning_content"
-            )
-            content = (rc or "").strip()
+            # DeepSeek Think-Max liefert bei JSON-Tasks manchmal NUR
+            # reasoning_content. Reasoning ist weder Kundentext noch gültiges
+            # JSON (V-9R-01) — niemals als content verwenden. Leerer String
+            # löst Retry im Caller aus statt kaputtes JSON zu liefern.
+            return ""
         if "<think>" in content:
             content = re.sub(r"<think>.*?</think>", "", content, flags=re.S).strip()
         return content
@@ -180,6 +185,7 @@ class NineRouter:
         model: str | None = None,
         max_tokens: int = 4000,
         retries: int = 3,
+        thinking: dict | None = None,
     ) -> str:
         self.check_cost_brake()
         primary = self.resolve_model(purpose, model)
@@ -191,11 +197,13 @@ class NineRouter:
         for attempt in range(retries):
             use_model = chain[min(attempt, len(chain) - 1)]
             try:
-                resp = await self.client.chat.completions.create(
-                    model=use_model,
-                    messages=messages,
-                    max_tokens=max_tokens,
-                )
+                kwargs: dict[str, Any] = dict(model=use_model, messages=messages, max_tokens=max_tokens)
+                if thinking is not None:
+                    # JSON-Tasks: kein Reasoning nötig → schneller + sauberer
+                    # content (Think-Max liefert sonst leeren content).
+                    # OpenAI-SDK: unbekannte Felder nur via extra_body.
+                    kwargs["extra_body"] = {"thinking": thinking}
+                resp = await self.client.chat.completions.create(**kwargs)
                 content = self.extract_content(resp)
                 if content:
                     if use_model != primary:
