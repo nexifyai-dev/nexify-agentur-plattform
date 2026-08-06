@@ -277,3 +277,8 @@ input.field:focus, textarea.field:focus, select.field:focus {
   --font-heading: "Outfit Variable", "Outfit Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope Variable", "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
 }
+
+/* NeXifyAI Go-Live: 6 Schritte, responsive (kein leerer Bereich in Mobile) */
+.nx-process-grid { grid-template-columns: repeat(6, 1fr); }
+@media (max-width: 1023px) { .nx-process-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 639px) { .nx-process-grid { grid-template-columns: repeat(2, 1fr); } }
