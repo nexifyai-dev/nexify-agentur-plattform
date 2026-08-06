@@ -12,12 +12,31 @@
 |---|---|
 | Unternehmen | NeXify AI by NeXify – chat it. Automate it. |
 | Inhaber/CEO | Pascal Courbois |
-| System-CEO | Hermes Agent (zweiter CEO, ADMIN-Vollmacht, 24/7) |
+| System-CEO | Hermes Agent (zweiter CEO, ADMIN-Vollmacht, 24/7) — Rolle kanonisch: §1a + docs/standards/CEO-MISSION-2026-08-06.md |
 | Sitz | Graaf van Loonstraat 1E, 5921 JA Venlo, NL |
 | Kontakt | mail@nexifyai.cloud · +31 6 133 188 56 |
 | Ziel | ≥50 K€/Monat ≈ 6 Kunden/Woche (€449/Tag netto) |
 | Sprache systemweit | Deutsch (Doku, Kommunikation, Prompts) |
 | B2B-Fokus | DACH + NL, ausschließlich B2B |
+
+## 1a. Rolle & Mandat — System-CEO (Hermes) [FESTSCHREIBUNG 2026-08-06]
+
+> **Kanonische Rollen-Definition:** `docs/standards/CEO-MISSION-2026-08-06.md` (Pascal-Direktive, verbindlich).
+> **Kanonische Vorgaben:** `docs/standards/ARBEITSVORGABEN-v2.2.md` (§0–§13, Pascal-Direktive — Abweichungs-Null-Toleranz, Betriebshandbuch-Pflicht, Online-Recherchepflicht).
+> Diese Datei ist der zentrale Live-Stand-Hub; Widersprüche zu alten Quellen → diese Datei + CEO-MISSION gewinnen.
+
+| Feld | Festlegung |
+|---|---|
+| Rolle | Hermes = **System-CEO** (zweiter CEO neben Pascal), volle Eigenverantwortung für dauerhaften autonomen Live-Produktionsbetrieb |
+| Befugnis | ADMIN-Vollmacht: A4-Aktionen (DB-Schema, SSH-Härtung, Deploys) eigenverantwortlich; Sub-Agenten-Team (19 Profile) braucht Hermes' Zustimmung |
+| Betrieb | 24/7. Loop: Kanban-Board `nexify` (Host /root/.hermes/kanban/boards/nexify/kanban.db) + Dispatcher + Cron `coo-board-loop` (45m, gepinnt) |
+| Ziel | ≥50 K€/Monat ≈ 6 Kunden/Woche (€449/Tag, GDOK §10); Kunden zufrieden; Ziele proaktiv übertreffen |
+| Kommunikation | Systemweit Deutsch; alle Kanäle (Website-Chat, WhatsApp, E-Mail) einheitlich charmant-business, nicht übertrieben; terse (kein Füllwort-Geschwätz) |
+| Harte Grenze | Revolut-PAY-Zahlungen NUR mit expliziter Pascal-Freigabe (GDOK §10) |
+| Angebots-Pflicht | Mit jedem Angebot Kundenkonto-Einladungs-Mail (Kunde legt Konto an, um Angebot anzunehmen) |
+| Wissenspflicht | Vor jeder Aufgabe: AgentMemory-Suche; nach jeder Aktion: AgentMemory-Speichern (MCP-Tool, REST 3113-POST tot); LightRAG konsistent; Recherche-Ergebnisse in `~/.hermes/cron/output/` |
+| Worker-Protokoll | Letzter Tool-Call jedes Workers MUSS `kanban_complete(artifacts=...)` / `kanban_block` sein |
+| Modell | NUR `openrouter/deepseek/deepseek-v4-flash-0731` via 9Router (Think-Max); Ausnahmen nur mit schriftlicher Freigabe (§2.3 Vorgaben) |
 
 ## 2. Server-Architektur
 
@@ -63,6 +82,11 @@
 | WhatsApp-Bridge | 3000 | Hermes-native WhatsApp (Session /root/.hermes/platforms/whatsapp) | gepaart +31613318856 |
 | SSH | 2222 | Admin (Port≠22, PermitRootLogin no, fail2ban) | Key |
 
+> **Live-Verifizierung 2026-08-06 22:20 (E2, Hermes-Container → Host-127.0.0.1):** Alle 16 Ports offen.
+> HTTP-Ergebnisse: 8902 / 20128 / 9622 / 3113 / 8642 / 8090 / 3003 / 3000 = 200 ✅ · 8000 = 401 (Kong-Auth erwartet) ·
+> 8901 = `/openapi.json` 200 (kein `/health`-Endpunkt — Health-Check künftig via `/openapi.json`) ·
+> 9119 / 8787 = 302 (Login) · 3030 = 301 (Login) · 8080 = 307 (Login) · 3111 MCP = 404 bei GET (POST-only, normal).
+
 ## 4. Öffentliche Endpunkte
 
 | Hostname | Ziel | Zweck |
@@ -76,6 +100,9 @@
 | gitlab.nexifyai.cloud | Cloudflare-Tunnel → 8922 | GitLab |
 | n8n.nexifyai.cloud | Cloudflare-Tunnel → 5678 | n8n (DEPRECATED — abgeschafft laut AGENTS.md, Referenz entfernen → DOC-01) |
 | *.nexifyai.cloud | Wildcard → 8080 | Fallback |
+
+> **Live-Verifizierung 2026-08-06 22:20 (E2):** www = 200 ✅ · api = 200 (openapi) ✅ · dashboard = 200 ✅ ·
+> webui / hermes-dash / gitlab = 302 (Login) ✅ · ai-router = 401 (Auth erwartet) ✅.
 
 ## 5. LLM-Stack (SOLL, v2.1/V4 — DeepSeek-only)
 
@@ -202,6 +229,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-06 | **ROLLE SYSTEM-CEO FESTSCHREIBUNG + LIVE-STAND-ZENTRALISIERUNG (CEO-Start in Produktion)**: §1a neu — Rolle & Mandat (kanonisch: CEO-MISSION-2026-08-06.md + ARBEITSVORGABEN-v2.2.md), Ziele (≥50 K€/Monat), Betriebsmodus (Kanban-Loop coo-board-loop 45m, 19 Profile), Grenzen (Revolut-PAY), Wissenspflicht (AgentMemory), Worker-Protokoll. Live-Stand verifiziert (E2): alle 16 Host-Ports offen, 15/16 Dienste HTTP-grün (401/302/301/307 = Auth/Login normal), 7/7 öffentliche Endpunkte erreichbar; Backend-Health-Pfad = /openapi.json (kein /health). Loop aktiv: Kanban-DB beschrieben 22:18, Recherche-Output ceo-strategie-update-2026-08-06-live.md vorhanden. |
 | 2026-08-06 | **SYSTEMVORGABEN v2.2 (Pascal-Direktive)**: §12 verankert — Abweichungs-Null-Toleranz (alle Abweichungen auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), Betriebshandbuch-Pflicht, Online-Recherchepflicht (proaktiv, Tiefen-Recherche). Kanonisch: docs/standards/ARBEITSVORGABEN-v2.2.md + SOUL.md v2.2 + AgentMemory. |
 | 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
 | 2026-08-06 | Audit Runde 3: 16 Dienste + 6 öffentliche Endpunkte gehealthchecked; SEC-01 geschlossen (Rate-Limit Eigenbau aktiv); OPS-02 geschlossen (145.14.158.198 veraltet); WhatsApp-Bridge DOWN bestätigt (seit 27.07.); MCPs alle OK; Hermes v0.20.0 aktuell; DeepSeek Flash Update keine Breaking Changes; DOC-01 n8n-Cleanup offen |
