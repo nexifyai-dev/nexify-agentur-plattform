@@ -1638,6 +1638,8 @@ async def chat(body: ChatMessageIn):
     history.append({"role": "user", "content": body.message})
 
     async def gen():
+        import asyncio
+
         full = []
         hold = len(OFFER_READY_MARKER) + 8
         pending = ""
@@ -1645,7 +1647,17 @@ async def chat(body: ChatMessageIn):
             stream = await open_chat_stream(
                 compress_history(history), 3000, task_type="chat"
             )
-            async for chunk in stream:
+            it = stream.__aiter__()
+            while True:
+                # Keep-Alive gegen Cloudflare-Idle-Timeout (100s, nicht
+                # konfigurierbar): bei >40s ohne Token SSE-Kommentar senden.
+                try:
+                    chunk = await asyncio.wait_for(it.__anext__(), timeout=40)
+                except asyncio.TimeoutError:
+                    yield ": ping\n\n"
+                    continue
+                except StopAsyncIteration:
+                    break
                 delta = chunk.choices[0].delta if chunk.choices else None
                 content = getattr(delta, "content", None) if delta else None
                 if content:

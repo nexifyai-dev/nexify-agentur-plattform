@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from openai import AsyncOpenAI
+import httpx  # noqa: E402 — Timeout-Konfiguration (openai-Dependency)
 
 logger = logging.getLogger("nexify.ninerouter")
 
@@ -117,11 +118,23 @@ class CostBrakeError(RuntimeError):
 class NineRouter:
     """OpenAI-compatible client wrapper with model policy + fallbacks."""
 
+    # LLM-Calls dürfen nicht ewig hängen: Think-Max-Antworten dauern real
+    # 8–30s; 90s read-Timeout ist großzügig, aber begrenzt. SDK-Default wäre
+    # 10min (Recherche 2026-08-06) — zu lang für Web-Requests.
+    _TIMEOUT = httpx.Timeout(
+        connect=10.0,
+        write=30.0,
+        read=90.0,
+        pool=10.0,
+    )
+
     def __init__(self, config: NineRouterConfig | None = None):
         self.config = config or load_config()
         self.client = AsyncOpenAI(
             base_url=self.config.base_url or None,
             api_key=self.config.api_key or "missing-key",
+            timeout=self._TIMEOUT,
+            max_retries=2,
         )
 
     def resolve_model(self, purpose: Purpose = "internal", explicit: str | None = None) -> str:
