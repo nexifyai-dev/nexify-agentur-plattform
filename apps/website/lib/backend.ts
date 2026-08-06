@@ -53,7 +53,9 @@ export async function proxyPost(path: string, body: unknown): Promise<Response |
   if (!base) return null;
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15_000);
+  // LLM-Calls (DeepSeek Think-Max) dauern 8–22s+; 15s brach den Planner-Proxy
+  // zu früh ab und fiel auf den lokalen Fallback zurück. Route-seitig maxDuration=60.
+  const timeout = setTimeout(() => controller.abort(), 60_000);
   try {
     const upstream = await fetch(`${base}${path}`, {
       method: "POST",

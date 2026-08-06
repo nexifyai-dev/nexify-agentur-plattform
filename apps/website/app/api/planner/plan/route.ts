@@ -2,61 +2,112 @@ import { NextResponse } from "next/server";
 import { proxyPost } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
+// LLM-Calls (DeepSeek Think-Max via 9Router) brauchen 8–22s; Vercel-Hobby-Limit sonst 10s.
+export const maxDuration = 60;
 
-const PROJECT_TYPES: Record<string, { days: number; label: string }> = {
-  landingpage: { days: 1, label: "Landingpage" },
-  website: { days: 2.5, label: "Unternehmenswebsite" },
-  shop: { days: 7, label: "Onlineshop" },
-  enterprise: { days: 12, label: "Enterprise-Commerce" },
-  "web-app": { days: 7, label: "Web-App" },
-  "mobile-app": { days: 7, label: "Mobile App" },
-  automation: { days: 1, label: "Automatisierung" },
-  "ai-agent": { days: 3, label: "AI-Agenten" },
+type Module = { name: string; description: string; days_min: number; days_max: number };
+type Plan = {
+  title: string;
+  summary: string;
+  modules: Module[];
+  structure: string[];
+  phases: { name: string; text: string }[];
+  recommendation: string;
 };
+type PlanResult = { session_id: string; plan: Plan; days_min: number; days_max: number; price_min: number; price_max: number };
 
-function localEstimate(type: string, description: string, features: string[]) {
-  const project = PROJECT_TYPES[type] || { days: 5, label: "Individuelles Projekt" };
-  const dayRate = 449;
-  const priceMin = project.days * dayRate;
-  const priceMax = Math.ceil(project.days * 1.3) * dayRate;
+const DAY_RATE = 449;
+
+// Deterministic local fallback in EXACTLY the component contract (PlanResult).
+// Never change this shape — apps/website/components/project-planner.tsx renders it.
+function localPlan(body: PlannerBody, sessionId: string): PlanResult {
+  const typeLabel = body.project_type || "Individuelles Projekt";
+  const industry = body.industry || "Ihre Branche";
+  const goal = body.goal || "mehr Anfragen";
+  const feat = body.features?.length ? body.features.join(", ") : "keine zusätzlichen Funktionen";
+  const modules: Module[] = [
+    { name: "Konzept & Inhaltsstruktur", description: `Zielgruppengerechte Struktur und Inhalte für ${industry}, ausgerichtet auf: ${goal}.`, days_min: 1, days_max: 1 },
+    { name: "Design & Prototyping", description: "Modernes, responsives Design passend zur Marke und Branche.", days_min: 1, days_max: 2 },
+    { name: "Entwicklung & Implementierung", description: `Umsetzung von ${typeLabel} inkl. ${feat}.`, days_min: 2, days_max: 4 },
+    { name: "Testing & Qualitätssicherung", description: "Funktions-, Responsive- und Ladezeit-Tests auf allen Geräten.", days_min: 1, days_max: 1 },
+    { name: "Deployment & Übergabe", description: "Livegang, Einweisung und Dokumentation – persönlich von Pascal Courbois.", days_min: 1, days_max: 1 },
+  ];
+  const days_min = modules.reduce((s, m) => s + m.days_min, 0);
+  const days_max = modules.reduce((s, m) => s + m.days_max, 0);
   return {
-    type: project.label,
-    days: project.days,
-    priceRange: `${priceMin.toLocaleString("de-DE")} – ${priceMax.toLocaleString("de-DE")} €`,
-    dayRate,
-    description,
-    features,
-    modules: [
-      "Konzept & Architektur",
-      "Design & Prototyping",
-      "Entwicklung & Implementierung",
-      "Testing & Qualitätssicherung",
-      "Deployment & Übergabe",
-    ],
-    nextSteps:
-      "Ihr Projektplan wird innerhalb eines Arbeitstages persönlich geprüft und als verbindliches Angebot per E-Mail zugestellt.",
-    generatedAt: new Date().toISOString(),
-    estimate: "local" as const,
+    session_id: sessionId,
+    plan: {
+      title: `${industry}-Projekt: ${goal}`,
+      summary: `Gebaut wird ein individuelles Projekt (${typeLabel}) für ${industry}, das gezielt auf Ihr Ziel ausgerichtet ist: ${goal}. Die Umsetzung erfolgt in klar definierten Modulen mit transparenter Preisspanne – inklusive persönlicher Betreuung durch Pascal Courbois.`,
+      modules,
+      structure: [
+        "Startseite mit klarem Nutzenversprechen",
+        "Leistungen & Referenzen",
+        "Kontakt- & Lead-Formulare",
+        "Individuelle Landingpages für Kampagnen",
+        "Blog / Wissensbereich für SEO",
+        "Datenschutz, Impressum & Rechtliches",
+      ],
+      phases: [
+        { name: "Zielklärung", text: "Gemeinsame Definition von Zielen, Zielgruppe und Erfolgskennzahlen." },
+        { name: "Konzept", text: "Struktur, Inhalte und Design-Entwurf werden konkret ausgearbeitet." },
+        { name: "Umsetzung", text: "Entwicklung der Module in kurzen, prüfbaren Iterationen." },
+        { name: "Tests & Abnahme", text: "Qualitätssicherung und Freigabe durch Sie." },
+        { name: "Übergabe", text: "Livegang, Einweisung und Übergabe der Zugänge." },
+      ],
+      recommendation:
+        "Empfehlung: Starten Sie mit der Kernversion (Konzept + Design + Entwicklung) und erweitern Sie später um SEO, KI-Funktionen oder Automatisierung. So investieren Sie fokussiert und sehen schnell erste Ergebnisse.",
+    },
+    days_min,
+    days_max,
+    price_min: days_min * DAY_RATE,
+    price_max: days_max * DAY_RATE,
   };
 }
 
+// Matches what apps/website/components/project-planner.tsx sends.
+type PlannerBody = {
+  project_type?: string;
+  industry?: string;
+  goal?: string;
+  features?: string[];
+  details?: string | null;
+  language?: string;
+};
+
 export async function POST(request: Request) {
-  let body: { type?: string; description?: string; features?: string[] };
+  let body: PlannerBody;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Ungültige Anfrage" }, { status: 400 });
   }
 
-  // Prefer the canonical backend planner when configured; the planner is a
-  // non-lead calculator, so fall back to a deterministic local estimate rather
-  // than failing if the backend is unset or unreachable.
+  const sessionId = crypto.randomUUID();
+
+  // Canonical path: FastAPI backend (ai-plan generation). The backend expects
+  // exactly this body shape (PlannerIn) and returns the PlanResult contract.
   try {
     const upstream = await proxyPost("/api/planner/plan", body);
-    if (upstream && upstream.ok) return upstream;
+    if (upstream && upstream.ok) {
+      const text = await upstream.text();
+      try {
+        const parsed = JSON.parse(text) as PlanResult;
+        // Validate the contract so a wrong-shape backend response can never
+        // crash the component again.
+        if (parsed && parsed.plan && Array.isArray(parsed.plan.modules) && typeof parsed.plan.title === "string") {
+          return new Response(text, {
+            status: 200,
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+          });
+        }
+      } catch {
+        // malformed JSON → fall through to local plan
+      }
+    }
   } catch {
-    // fall through to local estimate
+    // backend unreachable/timeout → local plan (never 500)
   }
 
-  return NextResponse.json(localEstimate(body.type ?? "", body.description ?? "", body.features ?? []));
+  return NextResponse.json(localPlan(body, sessionId));
 }
