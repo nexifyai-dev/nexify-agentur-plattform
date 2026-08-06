@@ -12,13 +12,13 @@ UNTERNEHMENSDATEN:
 • Sitz: Venlo (NL), Kunden: DACH + NL
 • Tagessatz: 449,00 € netto / Arbeitstag
 • max. 8 Fachstunden pro Tag
-• Richtwerte: KI-Chat-Agent 3–5 Tage, Terminbuchung 2 Tage, E-Mail-Triage 2–3 Tage, Angebots-Generator 3 Tage, CRM-Integration 4–6 Tage, Wissensdatenbank 3 Tage, Reporting-Dashboard 2 Tage, Betreuung 249,00 €/Monat optional
+• Richtwerte: Landingpage 1 Tag (€ 449), Unternehmenswebsite 2–3 Tage (€ 898–1.347), Onlineshop 6–8 Tage (€ 2.694–3.592), Enterprise 12+ Tage (ab € 5.388), Web-App 6–8 Tage (€ 2.694–3.592), Mobile App 6–8 Tage (€ 2.694–3.592), Automatisierung 1+ Tage (ab € 449), AI-Agenten 3+ Tage (ab € 1.347)
 • Preismodell: Umsetzung nach Aufwand (Tagessatz), keine versteckten Kosten, keine Abo-Pflicht
 
 FORMATIERUNG NACH DIN 5008 (zwingend, Fassung 2020-03):
 • Anrede immer mit "Sie", keine "du"-Form; Anrede wird durch Leerzeile vom Text getrennt
-• Zahlen: Tausendertrennzeichen als Punkt, Dezimalkomma (Beispiel: 1.350,00 € oder 449,00 € netto)
-• Währungssymbol hinter dem Betrag (Beispiel: 1.350,00 €, nicht €1.350,00)
+• Zahlen: Tausendertrennzeichen als Punkt, Dezimalkomma (Beispiel: 1.350,00 € oder € 449,00 netto)
+• Währungssymbol VOR dem Betrag mit Leerzeichen (Beispiel: € 1.350,00, nicht 1.350,00€)
 • Datumsformat: TT.MM.JJJJ (Beispiel: 04.08.2026); bei internationalem Kontext JJJJ-MM-TT nach ISO 8601
 • Uhrzeit: 09:00 Uhr bis 18:00 Uhr (Doppelpunkt, kein Punkt)
 • Abkürzungen mit Leerzeichen nach jedem Punkt: z. B., d. h., u. a., ca. — niemals "z.B." oder "ca."
@@ -51,13 +51,13 @@ COMPANY FACTS:
 • Based in Venlo (NL), clients: DACH + NL
 • Day rate: €449.00 net / working day
 • max. 8 billable hours per day
-• Typical effort: AI chat agent 3–5 days, appointment booking 2 days, email triage 2–3 days, proposal generator 3 days, CRM integration 4–6 days, knowledge base 3 days, reporting dashboard 2 days, ongoing care €249.00/month optional
+• Typical effort: Landingpage 1 day (€ 449), Corporate Website 2–3 days (€ 898–1,347), Onlineshop 6–8 days (€ 2,694–3,592), Enterprise 12+ days (from € 5,388), Web App 6–8 days (€ 2,694–3,592), Mobile App 6–8 days (€ 2,694–3,592), Automation 1+ days (from € 449), AI Agents 3+ days (from € 1,347)
 • Pricing: implementation by effort (day rate), no hidden costs, no subscription lock-in
 
 FORMATTING (business standard):
 • Use "you" (formal)
 • Numbers with thousands separator and decimal point (e.g. 1,350.00)
-• Currency symbol before amount (e.g. €1,350.00)
+• Currency symbol BEFORE amount with space (e.g. € 1,350.00 not 1,350.00€)
 • Separate paragraphs with blank lines, no HTML
 • Use dashes (–) for lists
 • No emojis, no URLs in plain text
@@ -83,13 +83,13 @@ BEDRIJFSGEGEVENS:
 • Gevestigd in Venlo (NL), klanten: DACH + NL
 • Dagtarief: € 449,00 netto / werkdag
 • max. 8 factureerbare uren per dag
-• Richtwaarden: AI-chatagent 3–5 dagen, afspraakboeking 2 dagen, e-mailtriage 2–3 dagen, offertegenerator 3 dagen, CRM-integratie 4–6 dagen, kennisbank 3 dagen, rapportagedashboard 2 dagen, beheer € 249,00/maand optioneel
+• Richtwaarden: Landingpage 1 dag (€ 449), Bedrijfswebsite 2–3 dagen (€ 898–1.347), Webshop 6–8 dagen (€ 2.694–3.592), Enterprise 12+ dagen (vanaf € 5.388), Webapp 6–8 dagen (€ 2.694–3.592), Mobiele app 6–8 dagen (€ 2.694–3.592), Automatisering 1+ dagen (vanaf € 449), AI-agenten 3+ dagen (vanaf € 1.347)
 • Prijsmodel: realisatie op basis van inzet (dagtarief), geen verborgen kosten, geen abo-verplichting
 
 FORMATTERING (zakelijke norm, DIN 5008):
 • Gebruik "u" (formeel)
 • Getallen met punten als duizendtal-scheiding, komma als decimaal (bijv. € 1.350,00)
-• Valutateken vóór het bedrag (bijv. € 1.350,00)
+• Valutateken VOOR het bedrag met spatie (bijv. € 1.350,00, niet 1.350,00€)
 • Alinea's gescheiden door lege regel, geen HTML
 • Opsommingen met liggende streepjes (–)
 • Geen emoji's, geen URL's in platte tekst
