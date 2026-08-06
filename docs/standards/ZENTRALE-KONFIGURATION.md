@@ -171,7 +171,7 @@
 
 | ID | Gap | Status |
 |---|---|---|
-| OPS-01 | WhatsApp-Bridge: systemd-Service erstellt (nexifyai-whatsapp-bridge.service), aktiv und persistent. Live-Validierung steht noch aus (4 Testnachrichten). | ✅ (offen: Validierung) |
+| OPS-01 | WhatsApp-Bridge: systemd-Service läuft (nexifyai-whatsapp-bridge), aber Session abgelaufen — QR-Code-Pairing nötig (Pascal: Dashboard → Pair-with-QR). Bridge im Pairing-Modus, nicht verbunden. | blocked (User-QR) |
 | OPS-03 | E-Mail-Triage: inbox-poller.py via IMAP (Hostinger) aktiv — verarbeitet ungelesene Mails als Tasks. Cron-Job im Script-Mode (15min). | ✅ |
 | COMPLIANCE-01 | AVV/Drittland-Risiko: OpenRouter bietet Enterprise DPA mit EU-SCCs. Nächster Schritt: DPA-Anfrage. | open |
 | TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Browser-Daemon down) | open |
