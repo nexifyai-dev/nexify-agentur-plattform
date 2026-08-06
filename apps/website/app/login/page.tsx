@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LogoMark } from "@/components/logo";
+import { Logo } from "@/components/logo";
 import { api, useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/lang-context";
 
@@ -43,7 +43,7 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 pt-24" data-testid="login-page">
       <div className="glass w-full max-w-md p-8 md:p-10">
-        <div className="mx-auto w-fit"><LogoMark size={48} /></div>
+        <div className="mx-auto w-fit"><Logo /></div>
         <h1 className="mt-6 text-center font-[family-name:var(--font-heading)] text-2xl font-medium text-white">
           {nl ? "Inloggen" : "Anmelden"}
         </h1>
