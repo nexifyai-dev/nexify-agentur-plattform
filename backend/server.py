@@ -323,7 +323,7 @@ def ci_email(
         if nl
         else "Diese E-Mail richtet sich an Unternehmer (B2B). Unverbindliche Indikationen stellen kein bindendes Angebot dar. Datenschutz: nexifyai.cloud/datenschutz"
     )
-    return f"""<!doctype html><html><head><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"><style>:root{color-scheme:light dark}</style></head><body style="margin:0;padding:0;background:#09090B;">
+    return f"""<!doctype html><html><head><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"><style>:root{{color-scheme:light dark}}</style></head><body style="margin:0;padding:0;background:#09090B;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#09090B;padding:32px 12px;"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#111114;border:1px solid #26262b;border-radius:16px;overflow:hidden;">
 <tr><td style="padding:28px 32px 18px;border-bottom:1px solid #26262b;">
