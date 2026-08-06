@@ -255,6 +255,15 @@ input.field:focus, textarea.field:focus, select.field:focus {
   }
 }
 
+/* Ausnahme (Pascal-Direktive 2026-08-06): dekorative Laufschrift (nx-marquee) bleibt
+   auch bei prefers-reduced-motion animiert — bewusste UX-Entscheidung, kein Info-Verlust. */
+@media (prefers-reduced-motion: reduce) {
+  [style*="nx-marquee"] {
+    animation-duration: 34s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
 /* ═══ §13 FONT CASCADE (letzter Pin) ═══ */
 @font-face {
   font-family: "Outfit Fallback"; src: local("Arial");
