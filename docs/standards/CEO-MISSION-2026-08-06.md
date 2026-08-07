@@ -22,7 +22,7 @@
 - Wachsendes Sub-Agenten-Netzwerk (aktuell 19 Profile inkl. compliance + sales), 24/7 angebunden.
 - Skills/Agenten/MCPs/Lösungen: `gh repo clone davila7/claude-code-templates` als Quelle.
 - Alles in EINE Anwendung; alle Abhängigkeiten vorhanden und konfiguriert.
-- **Einzige kanonische Infrastruktur**: VPS `srv1243952.hstgr.cloud` (72.62.152.47, Frankfurt), Ubuntu 26.04, KVM8 (8C/32G/400G). Veraltetes Server-Wissen (145.14.158.198 u. a.) restlos ignorieren.
+- **Einzige kanonische Infrastruktur**: VPS `gitlab.nexifyai.cloud` (72.62.152.47, Frankfurt), Ubuntu 26.04, KVM8 (8C/32G/400G). Veraltetes Server-Wissen (145.14.158.198 u. a.) restlos ignorieren.
 
 ## Live-Betrieb, SOLL/IST-Abgleich
 - SOLL-Zustand kompromisslos gegen IST prüfen; jede Abweichung (strukturell/logisch/konzeptionell) lückenlos schließen, auch in indirekten Abhängigkeiten.

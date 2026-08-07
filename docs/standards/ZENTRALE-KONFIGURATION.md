@@ -7,18 +7,49 @@
 > Secrets liegen ausschließlich in `/etc/nexifyai/*.env` (root-only) — hier nur Referenzen.
 
 ## 1. Identität & Grundlagen
+<<<<<<< HEAD
+=======
+## 1a. Grundprinzip: Erweitern statt Aushebeln (Vollintegrationspflicht)
+
+> **Pascal-Direktive 2026-08-07 — generelle Vorgabe für JEDE Arbeit, systemweit.**
+
+**Kern:** Wir erweitern stets und hebeln bestehende Lösungen NICHT aus. Jede neue
+Möglichkeit wird mit bestehenden Lösungen verbunden, stabilisiert und vollintegriert —
+nie isoliert, nie als Ersatz ohne Migration.
+
+**Anwendungspflicht (verbindlich):**
+1. **Bestand prüfen:** Existiert eine Lösung für denselben Zweck? (Dienste, Routen,
+   Panels, Skills, Timer, Datenquellen — ZK + Repo + AgentMemory)
+2. **Erweitern statt ersetzen:** Bestehende Lösung stabilisieren und ERGÄNZEN.
+   Ablösung nur mit Freigabe + Migrationspfad.
+3. **Vollintegration:** Neue Fähigkeit mit dem Gesamtsystem verbinden — WebUI-Panel,
+   Backend-Routen, i18n, CI, Doku, Timer, AgentMemory, Skills. Keine Insellösung.
+4. **Recherche-Pflicht (§13):** Online recherchierte Gesamt-Möglichkeiten aktiv
+   nutzen, verbinden, integrieren.
+5. **Dokumentation:** ZK + Repo-Doku + Skill-Referenz + Betriebshandbuch (§12).
+6. **Qualität:** Test-Pyramide (§5) + E2E-Gegentest (§5.4).
+
+**Verankert:** RSS/LLM-Wiki als ERWEITERUNG der WebUI (neue Panels, bestehende
+/api/wiki/*-Routen genutzt, nicht dupliziert); Memory-Panel-Sektionen (Gedächtnis/
+Notizen/Profil/Agenten-Seele/Project Context) aus Live-Stand übernommen statt neu gebaut.
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 
 | Feld | Wert |
 |---|---|
 | Unternehmen | NeXify AI by NeXify – chat it. Automate it. |
 | Inhaber/CEO | Pascal Courbois |
+<<<<<<< HEAD
 | System-CEO | Hermes Agent (zweiter CEO, ADMIN-Vollmacht, 24/7) — Rolle kanonisch: §1a + docs/standards/CEO-MISSION-2026-08-06.md |
+=======
+| System-CEO | Hermes Agent (zweiter CEO, ADMIN-Vollmacht, 24/7) |
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 | Sitz | Graaf van Loonstraat 1E, 5921 JA Venlo, NL |
 | Kontakt | mail@nexifyai.cloud · +31 6 133 188 56 |
 | Ziel | ≥50 K€/Monat ≈ 6 Kunden/Woche (€449/Tag netto) |
 | Sprache systemweit | Deutsch (Doku, Kommunikation, Prompts) |
 | B2B-Fokus | DACH + NL, ausschließlich B2B |
 
+<<<<<<< HEAD
 ## 1a. Rolle & Mandat — System-CEO (Hermes) [FESTSCHREIBUNG 2026-08-06]
 
 > **Kanonische Rollen-Definition:** `docs/standards/CEO-MISSION-2026-08-06.md` (Pascal-Direktive, verbindlich).
@@ -39,6 +70,8 @@
 | Worker-Protokoll | Letzter Tool-Call jedes Workers MUSS `kanban_complete(artifacts=...)` / `kanban_block` sein |
 | Modell | NUR `openrouter/deepseek/deepseek-v4-flash-0731` via 9Router (Think-Max); Ausnahmen nur mit schriftlicher Freigabe (§2.3 Vorgaben) |
 
+=======
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 ## 2. Server-Architektur
 
 | Server | IP | Rolle | Zugang |
@@ -52,7 +85,7 @@
 |---|---|
 | Standort | Germany — Frankfurt |
 | OS | Ubuntu 26.04 |
-| Hostname | srv1243952.hstgr.cloud |
+| Hostname | gitlab.nexifyai.cloud |
 | IPv4 | 72.62.152.47 |
 | Uptime (Stand) | 2 Tage 21 Std |
 | Plan | KVM 8 (8 CPU / 32 GB / 400 GB / 32 TB) |
@@ -82,11 +115,16 @@
 | Portainer | 8080 | Container-Management | Login |
 | WhatsApp-Bridge | 3000 | Hermes-native WhatsApp (Session /root/.hermes/platforms/whatsapp) | gepaart +31613318856 |
 | SSH | 2222 | Admin (Port≠22, PermitRootLogin no, fail2ban) | Key |
+<<<<<<< HEAD
 
 > **Live-Verifizierung 2026-08-07 07:12 (E2, Hermes-Container → Host-127.0.0.1):** 15/16 Ports HTTP-antwortend (2222 = SSH, kein HTTP — erwartet).
 > 3003 / 3113 / 8090 = 200 ✅ · 8000 = 401 (Kong-Auth erwartet) · 3030 / 8080 / 9622 / 20128 = 301/307 (Login/Redirect) ·
 > 8901 / 8902 / 8642 / 3000 / 3111 = 404 bei GET auf `/` (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP — normal) ·
 > 9119 / 8787 = 302 (Login) ✅.
+=======
+| LLM-Wiki (Karpathy) | /workspace/nexifyai/wiki | Wissensbasis (raw/, entities/, concepts/, comparisons/, queries/) via WebUI-Panel + /api/wiki/* | Session-Auth |
+| RSS (blogwatcher-cli 0.2.1) | 0.2.1 (DB /workspace/nexifyai/blogwatcher/) | Feed-Monitoring via WebUI-Panel + /api/rss/* + Ingest in Wiki | Session-Auth |
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 
 ## 4. Öffentliche Endpunkte
 
@@ -102,18 +140,33 @@
 | n8n.nexifyai.cloud | Cloudflare-Tunnel → 5678 | n8n (DEPRECATED — abgeschafft laut AGENTS.md, Referenz entfernen → DOC-01) |
 | *.nexifyai.cloud | Wildcard → 8080 | Fallback |
 
+<<<<<<< HEAD
 > **Live-Verifizierung 2026-08-07 07:12 (E2):** www = 200 ✅ · dashboard = 200 ✅ · api = 404 auf `/` (Health-Pfad `/openapi.json` = 200) ✅ ·
 > webui / hermes-dash / gitlab = 302 (Login) ✅ · ai-router = 307 (Redirect → Auth, erwartet) ✅.
 
+=======
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 ## 5. LLM-Stack (SOLL, v2.1/V4 — DeepSeek-only)
 
 | Rolle | Modell (via 9Router) | Think |
 |---|---|---|
 | DEFAULT/EXECUTE | openrouter/deepseek/deepseek-v4-flash-0731 | max (Hermes), disabled (Backend-JSON-Tasks) |
 | COMPLEX/DEEP | openrouter/deepseek/deepseek-v4-pro | max |
+<<<<<<< HEAD
 | PLAN/REVIEW | upstage/solar-pro3-260323 | — |
 | EMBED | upstage/solar-embedding-1-large | — |
 
+=======
+| PLAN/REVIEW | openrouter/deepseek/deepseek-v4-flash-0731 | max |
+| EMBED | upstage/solar-embedding-1-large (einzige Nicht-LLM-Ausnahme, kein DeepSeek-Äquivalent) | — |
+
+> **Pascal-Direktive 2026-08-07 (DeepSeek-only):** Systemweit AUSSCHLIESSLICH
+> `deepseek-v4-flash-0731` (Standard) und `deepseek-v4-pro` (nur für wirklich tiefe Aufgaben).
+> Alle anderen LLMs entfernt; weitere Modelle existieren NUR in 9Router (manuelle Nutzung durch Pascal).
+
+- **MOA:** deaktiviert seit 2026-08-07 (`moa.enabled: false`, Backup config.yaml.bak-20260807-moa) — 3× identische Referenz + Aggregator = 4× Kosten ohne Diversität. Reaktivierung: `moa_aggregator` auf v4-pro getiered.
+- **Auxiliary-Tiering v3.2** (WebUI-Config, Backup .bak-20260807-deepseekonly): ALLE Aux-Rollen auf deepseek-v4-flash-0731 via custom:9Router (effort high); nur `curator` + `moa_aggregator` auf deepseek-v4-pro (effort max); custom:upstage-Provider + solar-pro3 aus Configs entfernt; upstage-API-Key nicht mehr in Hermes-Configs.
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 - **9Router-Key-Matrix:** `CUSTOM_API_KEY` (secrets.env/hermes.env) = universal lokal+remote. `NINEROUTER_KEY` = tot. Backend `ninerouter.py` Key-Kette: CUSTOM_API_KEY → NINEROUTER_API_KEY → NINEROUTER_KEY → OPENAI_API_KEY.
 - **JSON-Tasks (planner/offer):** `thinking={"type":"disabled"}` via `extra_body` (SDK lehnt thinking-kwarg ab; Think-Max liefert sonst leeres content → 502).
 - **Backend-Env:** CUSTOMER_MODEL=ds/deepseek-v4-flash, FALLBACK=ds/deepseek-v4-flash, NINEROUTER_BASE_URL=http://127.0.0.1:20128/v1, CAMPAIGN_DRY_RUN=1.
@@ -147,15 +200,25 @@
 | Dark-Mode-Meta | `<meta name="color-scheme" content="light dark">` | E-Mails + Web |
 
 **Kontrast:** Lime #C8FF00 mit Text #09090B ≈ 12:1 (WCAG AA ✅). Niemals weißen Text auf Lime (≈1.9:1, failt).
+<<<<<<< HEAD
 **E-Mail-CI:** Kanonische `mail_shell(label, body_html)` in backend/server.py (Vorgabe 2026-08-06, `docs/standards/MAIL-DESIGN-VORGABE.md`): dunkle Karte #111114 auf #0a0a0a, Border #26262b, Radius 16px, CI-Logo (logo-mark.png + Wortmarke Lime X #C8FF00 / AI #9E9E9E fw300), Impressum-Footer, Dark-Mode-Meta. Alle Pfade: offer_email_html, ci_email, followup_email_html, /campaign/send, Outreach-/Leads-Templates. HTML+Plain (multipart) via `text:`-Param (Resend) / MIMEMultipart (SMTP) + List-Unsubscribe. E2E 72/72 PASS.
+=======
+**E-Mail-CI:** ci_email() in backend/server.py — Lime-CTA, Manrope/Outfit mit Fallback, #09090B-BG, Dark-Mode-Meta (Commit 94c3fc44).
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 
 ## 8. Wichtige Env-Dateien (Secrets → Referenzen, Werte in Dateien)
 
 | Datei | Inhalt | Lesbarkeit |
 |---|---|---|
+<<<<<<< HEAD
 | /etc/nexifyai/hermes.env (=secrets.env, symlink) | CUSTOM_API_KEY, GITHUB_TOKEN, SUPABASE_* (inkl. SECRET_KEY), VERCEL_*, RESEND, SMTP, Cloudflare | root |
 | /etc/nexifyai/credentials.env | FRONTEND_URL, CORS_ORIGINS, AGENTMEMORY_BEARER_TOKEN, FIRECRAWL | ACL hermeswebui |
 | /etc/nexifyai/9router.env | DEEPSEEK/UPSTAGE-Keys + 9router.service-Env (Key rotiert → CUSTOM_API_KEY syncen!) | root |
+=======
+| /etc/nexifyai/hermes.env (=secrets.env, symlink) | CUSTOM_API_KEY, GITHUB_TOKEN, SUPABASE_*, VERCEL_*, RESEND, SMTP, Cloudflare | root |
+| /etc/nexifyai/credentials.env | FRONTEND_URL, CORS_ORIGINS, AGENTMEMORY_BEARER_TOKEN, FIRECRAWL | ACL hermeswebui |
+| /etc/nexifyai/9router.env | DEEPSEEK-Keys + 9router.service-Env (Key rotiert → CUSTOM_API_KEY syncen!); CUSTOMER/FALLBACK_MODEL = deepseek-v4-flash-0731 (solar-mini-Altlast entfernt 2026-08-07) | root |
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 | /opt/nexifyai/repos/nexify-agentur-plattform/backend/.env | FRONTEND_URL=https://www.nexifyai.cloud, CUSTOMER_MODEL, NINEROUTER_BASE_URL | root |
 | /opt/nexifyai/config/pipeline.env | Lead-Pipeline-Env | root |
 | /root/.hermes/.env | Hermes-Key (muss CUSTOM_API_KEY spiegeln — Worker 401 sonst!) | root |
@@ -194,6 +257,10 @@
 | nexifyai-autopilot-kreislauf-e2e-smoke.timer | 00:00 | E2E-Smoke | ✅ |
 | coo-board-loop (Cron) | 45m | Kanban-Dispatcher | ✅ |
 | WebUI-Cron | 29 Jobs | Bereichs-Agenten (05:30-22:00) | ✅ (deliver=local) |
+<<<<<<< HEAD
+=======
+| nexifyai-rss-wiki.timer | 07:30 | RSS-Scan + Wiki-Ingest (Neues → raw/articles + log.md) | ⏳ (wird eingerichtet) |
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 
 ## 11. Offene Punkte (Live-Gaps → Kanban)
 
@@ -206,7 +273,10 @@
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
 | WHATSAPP-01 | WhatsApp-Kanal-Spezifikation liegt vor (Meta Business AI, 4.986/5.000 Zeichen). Live-Validierung jetzt möglich (Bridge läuft). | open |
 | WHATSAPP-02 | Namenskonflikt NOVA vs NeXify AI (NXAI-KOMM-001 §17) + /ki-hinweise-Seite leer | open |
+<<<<<<< HEAD
 | OPS-04 | **Supabase-Cloud→OSS (Prompt-Direktive „ZU ERSETZEN DURCH DIE LOKALE OSS LÖSUNG")**: Lokale Instanz aktiv (Kong 8000 = 401, DB 172.21.0.4/172.21.0.5 in backend-db-local/override.env + credentials.env DB_HOST). ABER `SUPABASE_CONNECTION_STRING` in credentials.env zeigt noch auf Cloud `db.mdlgodcvpasgplcrkiad.supabase.co` (Rest-Pfad). Backend-Code im Container nicht einsehbar (Host-Pfad /opt/nexifyai) → aktive Nutzung ungeklärt (E1). Aktion: CONNECTION_STRING auf lokale Instanz umstellen nach Verifikation, dass Backend lokal liest. | open |
+=======
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
 
 ### Geschlossen (Audit Runde 3)
 
@@ -217,6 +287,7 @@
 | AGENTS-01 | Profile compliance+sales E2E-Test | Beide Profile erstellt + E2E getestet: Compliance (19s) + Sales (22s), deepseek-v4-flash-0731 via 9Router ✅ |
 | DOC-01 | n8n-Referenz in §4 | In §4 als DEPRECATED markiert; Cloudflare-Tunnel-Deaktivierung ausstehend (P3, kein Betriebsrisiko) |
 
+<<<<<<< HEAD
 ## 12. Systemvorgaben (verbindlich, Pascal-Direktive 2026-08-06)
 
 Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2.2, System-Prompt).
@@ -243,3 +314,13 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | 2026-08-06 | **MAIL-DESIGN-VORGABE** (8cfb56ca, Pascal-Direktive): kanonische mail_shell() mit CI-Logo systemweit — alle Mail-Pfade (Angebot, Kundenportal, Follow-up, Kampagne, Kontakt, Outreach, Leads, GTM), HTML+Plain-Text, Dark-Mode-Meta, List-Unsubscribe. Vorgabe: docs/standards/MAIL-DESIGN-VORGABE.md. E2E 85/85. |
 | 2026-08-06 | **MAILING-VERSAND 2026-08-06 (Pascal-Direktive „heute Mails raus, bis morgen 09:00, 500 inkl. bereits gesendeter")**: bulk-send-Filter in send_to_qualified_v2.py von score>=50 auf alle gültigen E-Mail-Adressen gesenkt (Bestand: 335 Leads, nur 33 mit score>=50, davon fast alle ohne gültige E-Mail; 155 gültige nicht-kontaktierte Adressen = reales Tagesmaximum ≈ 219 kumuliert inkl. 61+3 zuvor gesendeter); Lead-Template auf mail_shell-Stand (CI-Logo, Werbe-Kennzeichnung, Opt-out {{email}}, DSGVO Art.6/21 + §7 UWG + EU-AI-Act Art.50, Plain-Text-Teil in email_lead.py ergänzt) deployed auf /workspace/templates/{lead_email,lead_email_v2}.html + /usr/local/share/nexifyai-templates/ + src/pipeline/email_lead.py + scripts/send_to_qualified_v2.py (Backups .bak.20260806-mailing); Versand via Hostinger-SMTP läuft mit 60–180s-Delay. BACKUP-GAP supabase-db GESCHLOSSEN (E3: Dump im 00:00-Tarball, verify RESULT=OK 10:48, Timer aktiv). Leadgen-Batch 3000 läuft (107 inserted, ~150/Tag — zu langsam für 500/Tag-Ziel, Pool-Ausbau offen). |
 | 2026-08-06 | **MARQUEE-FIX + WHATSAPP + CEO-MISSION (CEO-Runde 4)**: Reduced-Motion-Marquee-Problem E3-bewiesen (CDP-Emulation: Animation tot bei prefers-reduced-motion) + Fix live (globals.css §12-Ausnahme `[style*="nx-marquee"]` 34s!important, Commit 150f8c60, Vercel success, CDP-Nachweis BEWEGT=True beide Modi). WhatsApp-Re-Pairing vorbereitet: alte Session (invalide 27.07.) gesichert+geleert, Bridge active „Waiting for scan…" → QR im Dashboard scannen (hermes-dash.nexifyai.cloud → Channels → WhatsApp). CEO-MISSION-2026-08-06.md versioniert (docs/standards/). 3 Recherche-Subagenten (DACH-Markt, Mitbewerber, B2B-Marketing) gestartet. |
+=======
+## 12. Changelog
+
+| Datum | Änderung |
+|---|---|
+| 2026-08-07 | **Pascal-Direktive DeepSeek-only:** PLAN/REVIEW → flash; Auxiliary-Tiering v3.2 (alle Rollen flash, nur curator/moa_aggregator pro); Upstage nur noch Embedding; 9router.env solar-mini-Altlast bereinigt |
+| 2026-08-07 | §1a Erweitern-statt-Aushebeln (Pascal-Direktive, Vollintegrationspflicht); LLM-Wiki (/workspace/nexifyai/wiki, WIKI_PATH, WebUI-Panel) + RSS (blogwatcher-cli 0.2.1, /api/rss/*, WebUI-Panel) integriert; Container-Sync → Repo (b14ed900) |
+| 2026-08-06 | Initiale Masterdatei; FRONTEND_URL-Fix, E-Mail-CI (94c3fc44), Profile compliance+sales, WebUI-Rück-Button-Injektion, Backup-verify-Fix, SSE-Keep-Alive, AsyncOpenAI-Timeout |
+| 2026-08-06 | Audit Runde 3: 16 Dienste + 6 öffentliche Endpunkte gehealthchecked; SEC-01 geschlossen (Rate-Limit Eigenbau aktiv); OPS-02 geschlossen (145.14.158.198 veraltet); WhatsApp-Bridge DOWN bestätigt (seit 27.07.); MCPs alle OK; Hermes v0.20.0 aktuell; DeepSeek Flash Update keine Breaking Changes; DOC-01 n8n-Cleanup offen |
+>>>>>>> e772a1ab (docs(governance): DeepSeek-only-Direktive 2026-08-07 - solar/Upstage entfernt, Stack v3.2 (flash/pro), Embedding-Ausnahme)
