@@ -15,5 +15,5 @@ test("LegalPage component - disclaimer and structure hooks", () => {
 
 test("LegalPage - DE content has last-updated stamp", () => {
   const src = readFileSync(join(root, "lib/legal/de.ts"), "utf8");
-  assert.match(src, /updated: "2\. August 2026"/);
+  assert.match(src, /updated: "4\. August 2026"/);
 });

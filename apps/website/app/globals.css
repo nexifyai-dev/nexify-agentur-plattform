@@ -282,3 +282,12 @@ input.field:focus, textarea.field:focus, select.field:focus {
 .nx-process-grid { grid-template-columns: repeat(6, 1fr); }
 @media (max-width: 1023px) { .nx-process-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 639px) { .nx-process-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ═══ §14 REFERENCE OVERFLOW GUARDS (Anhang "NeXify Homepage.dc.html") ═══ */
+/* Grid-Spalten minmax(0, …) statt minmax(auto, …): verhindert intrinsisches
+   Aufblähen durch lange Wörter/Inhalte; Text-Spalten min-width:0. */
+.nx-hero-grid { grid-template-columns: minmax(0, .95fr) minmax(530px, 1.05fr); }
+.nx-hero-grid > * { min-width: 0; }
+.hero-copy { min-width: 0; }
+.operator-wrap { min-width: 0; overflow: visible; }
+.operator-wrap > * { min-width: 0; }

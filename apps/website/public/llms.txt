@@ -2,12 +2,14 @@
 
 > Premium B2B agency for AI-assisted websites, online shops, web/mobile apps and automation. Transparent day rate €449 net. Primary markets: DACH + Netherlands. German UI default; Dutch seat in Venlo.
 
-NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accelerated with AI tools — not anonymous agency overhead. Contact for project estimates within one working day, or use the on-site AI advisor chat.
+NeXify AI (Eenmanszaak, Pascal Courbois) delivers personal specialist work accelerated with AI tools — not anonymous agency overhead. Contact for project estimates within one working day, or use the on-site AI advisor chat. No AggregateRating: we publish no fake reviews or ratings.
 
 ## Services
 
 - [Home](https://www.nexifyai.cloud/): Positioning, day rate, process overview
 - [Leistungen](https://www.nexifyai.cloud/leistungen): Service catalogue (landing pages, websites, shops, apps, automation, AI agents)
+- [Websites](https://www.nexifyai.cloud/leistungen/websites): Corporate websites, transparent €449 net / day
+- [AI-Agenten](https://www.nexifyai.cloud/leistungen/ai-agenten): Custom AI agents with clear handover points
 - [Preise](https://www.nexifyai.cloud/preise): €449 net / working day calculator and scope notes
 - [Prozess](https://www.nexifyai.cloud/prozess): How engagement works from first contact to delivery
 - [Vergleich](https://www.nexifyai.cloud/vergleich): How NeXify differs from typical agencies and chatbots

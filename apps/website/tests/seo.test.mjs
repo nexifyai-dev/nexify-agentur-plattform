@@ -213,5 +213,6 @@ test("venlo local SEO page has SSR metadata, BreadcrumbList and LocalBusiness/Pl
   assert.match(sitemap, /"\/venlo"/);
 
   const footer = read("components/site-footer.tsx");
-  assert.match(footer, /href:\s*"\/venlo"/);
+  assert.match(footer, /href:\s*'\/venlo'/);
+  assert.match(footer, /Venlo/);
 });

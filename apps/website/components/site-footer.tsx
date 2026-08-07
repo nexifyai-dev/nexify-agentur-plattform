@@ -24,6 +24,7 @@ const T = {
       { label: 'FAQ', href: '/faq' },
       { label: 'Wissen', href: '/wissen' },
       { label: 'Plattform', href: '/plattform' },
+      { label: 'Venlo', href: '/venlo' },
     ],
     legalLinks: [
       { label: 'Impressum', href: '/impressum' },

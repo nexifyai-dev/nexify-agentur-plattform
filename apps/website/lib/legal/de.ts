@@ -410,6 +410,7 @@ export const legalDe: Record<string, LegalPageData> = {
       { id: "eingesetzt", heading: "§ 2 Eingesetzte Speicherungen",
         paragraphs: ["Diese Website verwendet ausschließlich folgende Speicherungen:"],
         bullets: [
+          "Statistik: Es werden keine Statistik-Cookies (z. B. Google Analytics) eingesetzt — Auswertungen erfolgen serverseitig und pseudonym.",
           "nexify-lang (localStorage) – Speicherung der Sprachwahl",
           "nexify-consent (localStorage) – Speicherung der Cookie-Präferenzen",
           "NEXT_LOCALE (Cookie) – Session-basierte Spracherkennung",
