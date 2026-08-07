@@ -43,7 +43,14 @@ Lückenlose Prüfung, Abweichungsanalyse, Fix.
 
 APIs, MCPs, Webhooks vollständig — keine Attrappen ohne Evidence.
 
+**Erweitern statt Aushebeln (Pascal-Direktive 2026-08-07):** Jede Erweiterung verbindet
+sich mit bestehenden Lösungen, stabilisiert und vollintegriert sie (WebUI-Panels,
+Routen, i18n, Timer, Doku). Bestehende Systeme werden nie ohne Migrationspfad ersetzt.
+Neue Fähigkeiten (z.B. LLM-Wiki, RSS) ergänzen das Gesamtsystem — als Optimierung,
+nicht als Parallelwelt. Siehe ZENTRALE-KONFIGURATION §1a.
+
 **Quelle:** `04_workflows/` (referenziert) · `08_evidence/`
+
 
 ## §4 Propagationspflicht
 
