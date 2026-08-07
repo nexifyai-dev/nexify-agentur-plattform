@@ -52,7 +52,7 @@
 |---|---|
 | Standort | Germany — Frankfurt |
 | OS | Ubuntu 26.04 |
-| Hostname | srv1243952.hstgr.cloud |
+| Hostname | gitlab.nexifyai.cloud |
 | IPv4 | 72.62.152.47 |
 | Uptime (Stand) | 2 Tage 21 Std |
 | Plan | KVM 8 (8 CPU / 32 GB / 400 GB / 32 TB) |
