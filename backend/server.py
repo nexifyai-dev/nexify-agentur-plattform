@@ -454,6 +454,7 @@ REGELN:
 - JEDE Position muss erkennbar aus dem Gespraech abgeleitet sein – keine generischen Fuellpositionen.
 - Nicht besprochene Details: KEINE stillen Annahmen im Leistungsumfang – fuehre sie transparent unter assumptions auf.
 - Schreibe warm, persoenlich und professionell. Der Kunde muss spueren, dass dieses Angebot exklusiv fuer ihn erstellt wurde.
+- Datenschutz (DSGVO Art. 5 Abs. 1 lit. c): Uebermittle in KEINEM Fall unnötige personenbezogene Daten. Nutze fuer die Anrede ausschliesslich den Vornamen (bzw. „Kunde"/„Interessent", falls nur ein Firmenname vorliegt). Keine E-Mail-Adressen, Telefonnummern, vollstaendigen Namen oder sonstigen Kontaktdaten in Ausgaben wiederholen.
 - Antworte AUSNAHMSLOS mit dem JSON-Objekt. Auch wenn Angaben fehlen: erstelle das bestmoegliche Angebot und liste offene Punkte unter assumptions. Stelle KEINE Rueckfragen.
 - Halte das JSON kompakt: kurze Saetze, keine ueberfluessigen Fuellwoerter."""
 
@@ -1825,7 +1826,10 @@ async def contact(body: ContactIn):
 @app.post("/api/offers/request")
 async def request_offer(body: OfferRequestIn):
     history = get_history(body.session_id, body.language)
-    prompt = OFFER_PROMPT.format(language=body.language, name=body.name)
+    # PII-Minimierung (DSGVO Art. 5 Abs. 1 lit. c): nur Vorname in den
+    # LLM-Prompt — vollständiger Name bleibt in DB/E-Mail, nicht im Prompt.
+    first_name = (body.name or "").strip().split()[0] if (body.name or "").strip() else "Kunde"
+    prompt = OFFER_PROMPT.format(language=body.language, name=first_name)
     offer = None
     for attempt in range(2):
         try:
