@@ -20,7 +20,7 @@ from urllib.parse import urlparse, parse_qs, unquote, urlencode
 import jwt
 from jwt import PyJWKClient
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://mdlgodcvpasgplcrkiad.supabase.co")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "http://127.0.0.1:8000")
 SUPABASE_JWKS_URL = os.environ.get(
     "SUPABASE_JWKS_URL",
     f"{SUPABASE_URL}/auth/v1/.well-known/jwks.json",
@@ -29,7 +29,7 @@ SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 BACKEND_JWT_SECRET = os.environ.get("JWT_SECRET", "")
 
 _ref = SUPABASE_URL.replace("https://", "").replace("http://", "").split(".")[0]
-PROJECT_REF = _ref if _ref else "mdlgodcvpasgplcrkiad"
+PROJECT_REF = _ref if _ref else "nexifyai-local"
 
 LOGIN_URL = "https://admin.nexifyai.cloud/auth/login"
 COOKIE_MAIN = f"sb-{PROJECT_REF}-auth-token"

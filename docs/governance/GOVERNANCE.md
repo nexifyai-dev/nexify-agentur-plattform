@@ -106,7 +106,7 @@ Siehe: `03_checklisten/POST_GOLIVE_CHECKLISTE.md`
 | agentmemory Viewer | 3113 | Node-Viewer | ✅ |
 | LightRAG | 9621 | Vektor-Suche | ✅ |
 | Spaether | 8900 | Monitoring | ✅ |
-| n8n | 5678 | Automation | ✅ |
+| n8n | ehem. 5678 | abgeschafft (keine Vollintegration) | ❌ |
 | Traefik | 80/443 | Reverse Proxy | ✅ |
 | Portainer | 9000/9443 | Container-Mgmt | ✅ |
 | GitLab | 8081/8929/22 | DevOps | ✅ |

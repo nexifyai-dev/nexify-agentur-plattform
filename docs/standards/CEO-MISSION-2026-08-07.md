@@ -17,7 +17,7 @@ Starte hiermit den proaktiven, autonomen Engineering-Loop. Deine absolute Grundl
 Plane, baue, konfiguriere und vollintegriere nach Best Practices ein wachsendes Netzwerk an Sub-Agenten, das 24/7 mit dir in Verbindung steht. Du baust damit sämtliche Agentur-Bereiche von A bis Z eigenständig auf.
 - Hinweis für Skills, Agenten, MCPs & Lösungs-Quellen: Nutze `gh repo clone davila7/claude-code-templates`.
 - Wir bauen immer alles in nur eine Anwendung. Du hast sicherzustellen, dass alle benötigten Abhängigkeiten vorhanden und konfiguriert sind.
-- Beziehe bei Entscheidungen, Ressourcenplanungen und Konfigurationen stets unsere aktuelle Infrastruktur ein: Unser System läuft auf dem VPS `srv1243952.hstgr.cloud` (IPv4: 72.62.152.47) am Standort Frankfurt. Die Spezifikationen sind Ubuntu 26.04, 8 CPU-Kerne, 32 GB RAM und 400 GB Speicherplatz (Plan: KVM 8). Jegliches veraltetes Projektwissen zu anderen Servern ist restlos zu ignorieren.
+- Beziehe bei Entscheidungen, Ressourcenplanungen und Konfigurationen stets unsere aktuelle Infrastruktur ein: Unser System läuft auf dem VPS `gitlab.nexifyai.cloud` (IPv4: 72.62.152.47) am Standort Frankfurt. Die Spezifikationen sind Ubuntu 26.04, 8 CPU-Kerne, 32 GB RAM und 400 GB Speicherplatz (Plan: KVM 8). Jegliches veraltetes Projektwissen zu anderen Servern ist restlos zu ignorieren.
 
 ## Live-Betrieb, SOLL/IST-Abgleich & Gesamte Abweichungen
 Wir starten jetzt in den Live-Betrieb. Scanne den ehrlichen, vollumfassenden SOLL-Zustand und prüfe ihn kompromisslos gegen den aktuellen IST-Zustand.
