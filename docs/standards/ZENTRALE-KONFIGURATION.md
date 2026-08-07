@@ -39,6 +39,30 @@
 | Worker-Protokoll | Letzter Tool-Call jedes Workers MUSS `kanban_complete(artifacts=...)` / `kanban_block` sein |
 | Modell | NUR `openrouter/deepseek/deepseek-v4-flash-0731` via 9Router (Think-Max); Ausnahmen nur mit schriftlicher Freigabe (§2.3 Vorgaben) |
 
+## 1b. Grundprinzip: Erweitern statt Aushebeln (Vollintegrationspflicht)
+
+> **Pascal-Direktive 2026-08-07 — generelle Vorgabe für JEDE Arbeit, systemweit.**
+
+**Kern:** Wir erweitern stets und hebeln bestehende Lösungen NICHT aus. Jede neue
+Möglichkeit wird mit bestehenden Lösungen verbunden, stabilisiert und vollintegriert —
+nie isoliert, nie als Ersatz ohne Migration.
+
+**Anwendungspflicht (verbindlich):**
+1. **Bestand prüfen:** Existiert eine Lösung für denselben Zweck? (Dienste, Routen,
+   Panels, Skills, Timer, Datenquellen — ZK + Repo + AgentMemory)
+2. **Erweitern statt ersetzen:** Bestehende Lösung stabilisieren und ERGÄNZEN.
+   Ablösung nur mit Freigabe + Migrationspfad.
+3. **Vollintegration:** Neue Fähigkeit mit dem Gesamtsystem verbinden — WebUI-Panel,
+   Backend-Routen, i18n, CI, Doku, Timer, AgentMemory, Skills. Keine Insellösung.
+4. **Recherche-Pflicht (§13):** Online recherchierte Gesamt-Möglichkeiten aktiv
+   nutzen, verbinden, integrieren.
+5. **Dokumentation:** ZK + Repo-Doku + Skill-Referenz + Betriebshandbuch (§12).
+6. **Qualität:** Test-Pyramide (§5) + E2E-Gegentest (§5.4).
+
+**Verankert:** RSS/LLM-Wiki als ERWEITERUNG der WebUI (neue Panels, bestehende
+/api/wiki/*-Routen genutzt, nicht dupliziert); Memory-Panel-Sektionen (Gedächtnis/
+Notizen/Profil/Agenten-Seele/Project Context) aus Live-Stand übernommen statt neu gebaut.
+
 ## 2. Server-Architektur
 
 | Server | IP | Rolle | Zugang |
@@ -82,6 +106,8 @@
 | Portainer | 8080 | Container-Management | Login |
 | WhatsApp-Bridge | 3000 | Hermes-native WhatsApp (Session /root/.hermes/platforms/whatsapp) | gepaart +31613318856 |
 | SSH | 2222 | Admin (Port≠22, PermitRootLogin no, fail2ban) | Key |
+| LLM-Wiki (Karpathy) | /workspace/nexifyai/wiki | Wissensbasis (raw/, entities/, concepts/, comparisons/, queries/) via WebUI-Panel + /api/wiki/* | Session-Auth |
+| RSS (blogwatcher-cli 0.2.1) | 0.2.1 (DB /workspace/nexifyai/blogwatcher/) | Feed-Monitoring via WebUI-Panel + /api/rss/* + Ingest in Wiki | Session-Auth |
 
 > **Live-Verifizierung 2026-08-07 07:12 (E2, Hermes-Container → Host-127.0.0.1):** 15/16 Ports HTTP-antwortend (2222 = SSH, kein HTTP — erwartet).
 > 3003 / 3113 / 8090 = 200 ✅ · 8000 = 401 (Kong-Auth erwartet) · 3030 / 8080 / 9622 / 20128 = 301/307 (Login/Redirect) ·
@@ -201,6 +227,7 @@
 | nexifyai-autopilot-kreislauf-e2e-smoke.timer | 00:00 | E2E-Smoke | ✅ |
 | coo-board-loop (Cron) | 45m | Kanban-Dispatcher | ✅ |
 | WebUI-Cron | 29 Jobs | Bereichs-Agenten (05:30-22:00) | ✅ (deliver=local) |
+| nexifyai-rss-wiki.timer | 07:30 | RSS-Scan + Wiki-Ingest (Neues → raw/articles + log.md) | ⏳ (wird eingerichtet) |
 
 ## 11. Offene Punkte (Live-Gaps → Kanban)
 
