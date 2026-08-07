@@ -174,7 +174,7 @@ Vollständige Regel inkl. Kanaltabelle: **HERMES.md Kap. 21.4.**
 | Hermes Agent | Runtime `:8787`, Gateway `:8644` | Gateway = einzige Kommunikationsebene |
 | **AgentMemory (ZENTRAL)** | `:3111` (Worker), `:3113` (Viewer), `agentmemory.nexifyai.cloud` | **268 Funktionen in 18 Domänen**: Memory, Graph, Crystallize, Sessions, Routinen, Governance, Mesh, MCP. Voll-Doku: `AGENTMEMORY-VOLLDOKUMENTATION-20260724.md` — HERMES.md Anhang E, A-17. **V-01:** Zwei getrennte Stores (iii-Engine :3111 vs MCP Binary, nie automatisch konsolidiert) |
 | LightRAG | `:9621` (WebUI) / `:9622` (API) | **AKTIV seit 05.08.2026** — keyless, DeepSeek via 9Router; public `rag.nexifyai.cloud` (307 → `/lightrag/webui/`); WebUI-Proxy `/lightrag` auf :8787 (Login-geschützt) |
-| GitLab CE | `srv1243952.hstgr.cloud:8922` | 84 Repos, CI-Runner ✅, Monorepo integriert |
+| GitLab CE | `gitlab.nexifyai.cloud:8922` | 84 Repos, CI-Runner ✅, Monorepo integriert |
 | Traefik | — | Reverse Proxy v3.7.7. **V-08:** `grep -ci "error"` false-alarms. **V-07:** auth-forward blockiert SSE/EventSource |
 | Prometheus / Grafana / cAdvisor | `:9090` / `:3030` / `:8080` | **V-14:** Docker Service Discovery erhöht Targets automatisch |
 

@@ -9,7 +9,7 @@
 - Firma: NeXify AI — „chat it. Automate it." (CEO: Pascal Courbois; Hermes = System-CEO / **zweiter CEO**)
 - Mandat: `docs/standards/CEO-MISSION-2026-08-07.md` — autonomer Live-Produktionsbetrieb, Abweichungs-Null-Toleranz, E2E-Gegentest, Recherchepflicht
 - Sprache/Zeitzone: Deutsch · Europe/Berlin · Datum DD.MM.YYYY HH:MM
-- VPS: `srv1243952.hstgr.cloud` (72.62.152.47, Frankfurt, Ubuntu 26.04, 8C/32GB/400GB, KVM 8)
+- VPS: `gitlab.nexifyai.cloud` (72.62.152.47, Frankfurt, Ubuntu 26.04, 8C/32GB/400GB, KVM 8)
 - Domains: www/api/dashboard/webui/agentmemory/rag/ai-router/hermes-dash/gitlab.nexifyai.cloud (Cloudflare-Tunnel)
 
 ## Dienste & Ports (Live-Stand 07.08.2026, gegen IST verifiziert)
