@@ -36,8 +36,8 @@ Monorepo (GitHub SoT → GitLab Mirror)
      (.githooks/post-commit-dual-write — No-op ohne Env)
   ├→ AgentMemory (:3111) — /agentmemory/remember
   └→ LightRAG (:9622) — /documents/text
-       ↓ Upstage — solar-pro3 LLM (IST)
-       ↓ Upstage — embedding-passage (IST; nicht Ollama bge-m3)
+       ↓ DeepSeek via 9Router (DeepSeek-only-Direktive 2026-08-07)
+       ↓ Upstage — embedding-passage (IST; nur Embedding, Nicht-LLM-Ausnahme; nicht Ollama bge-m3)
        ↓
     Indexierung (MCP insert / Seed-Skript / VPS-Sync)
 ```
