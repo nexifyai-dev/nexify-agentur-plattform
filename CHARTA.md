@@ -75,6 +75,12 @@ das Gesamtsystem eigenständig im 24/7-Betrieb aufgebaut/gepflegt/gesichert/
 stabilisiert/optimiert wird.
 
 ## §10 Modellstrategie
+> **Ergänzung 2026-08-07 (verbindlich, Pascal-Direktive DeepSeek-only):** Systemweit
+> AUSSCHLIESSLICH `openrouter/deepseek/deepseek-v4-flash-0731` (Standard) und
+> `deepseek-v4-pro` (nur tiefe Aufgaben) via 9Router (Think-Max). Upstage
+> `solar-embedding-1-large` NUR Embedding (Nicht-LLM-Ausnahme). Dieser Abschnitt
+> ersetzt die frühere „Ersatz durch Upstage"-Strategie.
+
 Vollständiger Ersatz aller LLM-Modelle durch Upstage — Ausnahme DeepSeek (bleibt
 vollintegriert). Gestaffelt, Validierung je Modell, kein Komplett-Swap ohne
 Rückfallebene. Cursor-Modelle laufen tokenbasiert ohne automatischen Kostenstopp
