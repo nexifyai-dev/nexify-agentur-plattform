@@ -35,7 +35,21 @@ const T = {
   nl: { offerTitle: 'Offerte per e-mail aanvragen', offerText: 'Wij sturen u het plan als offerte – gecontroleerd door Pascal Courbois.', name: 'Uw naam *', email: 'Uw e-mail *', company: 'Bedrijf (optioneel)', phone: 'Telefoon (optioneel)', send: 'Offerte aanvragen', sending: 'Verzenden …', sent: 'Uw offerte is onderweg! Controleer uw inbox.', total: 'Richtprijs netto', modules: 'Modules', range: 'Bereik', askName: 'Wat is uw naam?', askEmail: 'Uw e-mailadres?', back: '← Terug' },
 };
 
+// NIR/UPDATED: 07.08.2026 22:05 (CONV-01)
+// WHAT: Proaktiver Auto-Open nur auf High-Intent-Seiten (/preise, /leistungen),
+//       nach 30-45s Dwell-Time (Research: 21x Speed-to-Lead; nicht <5s).
+// WHY: 4,2s-Auto-Open auf ALLEN Seiten = Conversion-Killer (aufdringlich).
+// PITFALL: duration zwischen 30-45s; ohne chatAutoOpen-Prop kein Auto-Open.
+// DEPENDS: window.location.pathname — SSR-sicher gelesen.
 export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
+  const [autoOpenMs, setAutoOpenMs] = useState<number | null>(null);
+  useEffect(() => {
+    if (chatAutoOpen === false) return;
+    const p = typeof window !== 'undefined' ? window.location.pathname : '';
+    const highIntent = p === '/preise' || p === '/leistungen';
+    if (!highIntent) return;
+    setAutoOpenMs(30000 + Math.floor(Math.random() * 15000)); // 30-45s
+  }, [chatAutoOpen]);
   const { lang } = useLang();
   const t = T[lang] || T.de;
   const [chatOpen, setChatOpen] = useState(false);
@@ -50,7 +64,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
 
   useEffect(() => { const s = document.createElement('style'); s.textContent = KEYFRAMES; document.head.appendChild(s); return () => { s.remove(); }; }, []);
   useEffect(() => { setMessages([GREETINGS[lang] || GREETINGS.de]); }, [lang]);
-  useEffect(() => { if (chatAutoOpen !== false) { const t = setTimeout(() => setChatOpen(true), 4200); return () => clearTimeout(t); } }, [chatAutoOpen]);
+  useEffect(() => { if (autoOpenMs !== null) { const t = setTimeout(() => setChatOpen(true), autoOpenMs); return () => clearTimeout(t); } }, [autoOpenMs]);
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typing, offerStep]);
 
   const sendChatMessage = async () => {
