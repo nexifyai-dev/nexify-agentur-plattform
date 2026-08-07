@@ -1886,8 +1886,9 @@ async def request_offer(body: OfferRequestIn):
         try:
             async with pool.acquire() as con:
                 await con.execute(
-                    """insert into nexify_offers (id,session_id,name,email,company,language,offer_json,price_total,email_id,followup_at)
-                       values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)""",
+                    """insert into nexify_offers (id,session_id,name,email,company,language,offer_json,price_total,email_id,followup_at,customer_id)
+                       select $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,
+                              (select id from nexify_users where lower(email) = lower($4) limit 1)""",
                     offer_id,
                     uuid.UUID(body.session_id),
                     body.name,
