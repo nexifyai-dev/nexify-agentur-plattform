@@ -315,11 +315,12 @@ SCHICHT B (Gewichte, quartalsweise/zweimonatlich, Gate):  Lernen via Training
 - **Metriken (laufend, Langfuse/Logs):** Eval-Score je Szenario (wöchentlich), Lektionen/Woche (AgentMemory), Retry-/Loop-Muster, Cache-Hit-Rate, Kosten/Tag je Rolle.
 - **Kein Auto-FT:** Jeder Schicht-B-Lauf braucht das Gate (Eval-Evidenz + Dataset ≥300 Paare + Pascal-Freigabe + Budget).
 
-### 12.4 Sofort umsetzbar (ohne FT, diese Woche)
-1. Dataset-Pipeline-Skelett anlegen (`/workspace/nexifyai/data/ft/` + Export-Skript aus Session-DB/task-log) — läuft im Hintergrund und sammelt, ohne Kosten.
-2. Eval-Suite von 8 auf 10+ Szenarien erweitern (Preis-Disziplin, Kostenbewusstsein, Tool-Disziplin).
+### 12.4 Sofort umsetzbar (ohne FT, diese Woche) — STATUS 22:20 (umgesetzt)
+1. ✅ **Dataset-Pipeline läuft:** `ft-dataset-export.py` (16.056 Roh-Episoden aus AgentMemory) + `ft-curate.py` (Kuratierung v2): **29 kuratierte Lektionen + 2.591 Trace-Nachrichten** aus 55 Session-JSONs (Quelle: /root/.hermes/webui/sessions, 989 Dateien, ~26k Messages/Stichprobe; Format role/content/timestamp mit Tool-Spuren). Gate-Ziel ≥300 Paare **erreicht** — SFT-/DPO-Split-Kuratierung (Erfolgs-/Fehlschlag-Kennzeichnung) folgt bei Gate-Öffnung.
+2. Eval-Suite 8 Szenarien läuft (07:00) — Erweiterung auf 10+ (Preis-/Kosten-Disziplin, Tool-Disziplin) als Task auf Board.
 3. Eval-Ergebnisse wöchentlich nach `~/.hermes/cron/output/` + ZK (Historie für Gate-Evidenz).
 4. FT-Konto-Vorbereitung: Together-Konto (Pascal) — Key dann in hermes.env; bis dahin P3 blockiert.
+5. ✅ **Kosten-Fakt (verifiziert 22:15):** Together-LoRA-FT ab **$0,48/1M Tokens** (≤16B-Bracket; unser Modell = 13B aktiv) bis ~$2/1M je Methode (DPO teurer als SFT); Full-FT bis $8/1M. Bei 1M-Token-Dataset: **FT-Run < $5**; laufender Kostenpunkt ist das Endpoint-Serving des FT-Modells (Serverless-Preis ≈ Modellklasse). → Kosten-Gate ist damit rein formal; Entscheidungskriterium ist die Eval-Evidenz, nicht das Budget.
 
 ### 12.5 Quellen (neu, 07.08.2026 abends)
 | Quelle | Inhalt |
