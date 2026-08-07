@@ -233,14 +233,14 @@ Notizen/Profil/Agenten-Seele/Project Context) aus Live-Stand übernommen statt n
 
 | ID | Gap | Status |
 |---|---|---|
-| OPS-01 | WhatsApp-Bridge: systemd-Service läuft (nexifyai-whatsapp-bridge), aber Session abgelaufen — QR-Code-Pairing nötig (Pascal: Dashboard → Pair-with-QR). Bridge im Pairing-Modus, nicht verbunden. | blocked (User-QR) |
+| OPS-01 | WhatsApp-Bridge: `whatsapp-baileys.service` (Port 3000) VERBUNDEN (2026-08-07 verifiziert: /health `{"status":"connected"}`). Service-Name im ZK korrigiert (nicht nexifyai-whatsapp-bridge). | ✅ |
 | OPS-03 | E-Mail-Triage: inbox-poller.py via IMAP (Hostinger) aktiv — verarbeitet ungelesene Mails als Tasks. Cron-Job im Script-Mode (15min). | ✅ |
 | COMPLIANCE-01 | AVV/Drittland-Risiko: OpenRouter bietet Enterprise DPA mit EU-SCCs. Nächster Schritt: DPA-Anfrage. | open |
 | TDDDG-01 | Cookie-Banner E2E-Test ausstehend (Browser-Daemon down) | open |
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
 | WHATSAPP-01 | WhatsApp-Kanal-Spezifikation liegt vor (Meta Business AI, 4.986/5.000 Zeichen). Live-Validierung jetzt möglich (Bridge läuft). | open |
 | WHATSAPP-02 | Namenskonflikt NOVA vs NeXify AI (NXAI-KOMM-001 §17) + /ki-hinweise-Seite leer | open |
-| OPS-04 | **Supabase-Cloud→OSS (Prompt-Direktive „ZU ERSETZEN DURCH DIE LOKALE OSS LÖSUNG")**: Lokale Instanz aktiv (Kong 8000 = 401, DB 172.21.0.4/172.21.0.5 in backend-db-local/override.env + credentials.env DB_HOST). ABER `SUPABASE_CONNECTION_STRING` in credentials.env zeigt noch auf Cloud `db.mdlgodcvpasgplcrkiad.supabase.co` (Rest-Pfad). Backend-Code im Container nicht einsehbar (Host-Pfad /opt/nexifyai) → aktive Nutzung ungeklärt (E1). Aktion: CONNECTION_STRING auf lokale Instanz umstellen nach Verifikation, dass Backend lokal liest. | open |
+| OPS-04 | **Supabase-Cloud→OSS GESCHLOSSEN (2026-08-07 GO-LIVE):** Alle DSNs/URLs lokal — credentials.env (CONNECTION_STRING+DB_URL), hermes.env+secrets.env (SUPABASE_URL/REST_URL/JWKS_URL/PROJECT_ID), pipeline.env (DB_URL); 0 Cloud-Refs (grep-verifiziert). Backend-Runtime-Env lokal (E2), E2E Register→Login→Lokale-DB bestanden, Cleanup OK. `nexifyai-db-ip.sh` erweitert (zieht pipeline.env+credentials.env mit). Supabase-MCP-Wrapper auf lokalen Kong-/mcp-Endpoint (mcp-remote, read_only_user-PW sync). Cloud-DB nicht mehr auflösbar (DNS tot) — nur interne Konten (2) betroffen, lokal vorhanden. | ✅ |
 
 ### Geschlossen (Audit Runde 3)
 
@@ -266,6 +266,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-07 | **GO-LIVE-Härtung (Nachmittag):** OPS-04 geschlossen (Cloud→Lokal komplett: Env-Dateien, Backend-Runtime, E2E Register/Login lokal bestanden); WhatsApp-Bridge connected (OPS-01 ✅); DRY_RUN-Drop-Ins (backend+mail-webhook) entfernt — tote Config, Mails sind ECHT (Hostinger-SMTP direkt, Resend via Backend); backup.sh Duplikat-Block (10b nach rm -rf) entfernt → falsche WARN weg; Docker-Healthchecks ergänzt: prometheus+grafana (monitoring-Compose), firecrawl-api (curl statt wget) — alle healthy; Supabase-MCP auf lokalen Kong-/mcp (mcp-remote-Bridge, read_only_user-PW sync); send_to_qualified_v2.py Welle-B-Email-Dedupe; Phase-1-Tests abgeschlossen (Pipeline 30/30, Bulk 64 Mails inkl. Welle B, Drip-Gegentest 0 Duplikate, Test-Lead 484 gelöscht) |
 | 2026-08-07 | **Pascal-Direktive DeepSeek-only (v3.2):** PLAN/REVIEW → flash; Auxiliary-Tiering v3.2 (alle Rollen flash, nur curator/moa_aggregator pro); Upstage nur noch Embedding (Nicht-LLM-Ausnahme); 9router.env solar-mini-Altlast bereinigt; lightrag.env OPENAI_API_BASE/KEY → 9Router; Konfliktmarker-Korruption aus main bereinigt |
 | 2026-08-07 | **E2E-GEGENTEST-PFLICHT (v2.3, Pascal-Direktive „Baue stets den E2E-Gegentest ein")**: §5.4 in ARBEITSVORGABEN v2.3 + SOUL.md verankert — unabhängige Gegenprobe widerlegt Primärnachweis (Negativ-/Fehler-/Randfälle, Datenintegrität, Rollback-Pfad, Regression); binäres Ergebnis; Gate §5.3 ergänzt; Kurzreferenz [9]/[10] erweitert; §12-Tabelle ergänzt. Gilt für JEDE Änderung/Behebung/Deployment. |
 | 2026-08-07 | **ROLLE GESTARTET + ZENTRALISIERUNG VERIFIZIERT (System-CEO, dauerhaft)**: Rolle gem. SYSTEM-DIREKTIVE §1 angenommen (unwiderruflich). Credential-Coverage 15/15 gegen Prompt-Zugangsdaten verifiziert (Supabase inkl. SECRET_KEY, GitHub dev+org-PAT, Cloudflare Account/Master/API, Vercel Admin/UserID) — SUPABASE_SECRET_KEY in hermes.env ergänzt (lag nur in credentials.env). Live-Stand re-verifiziert 07:12: 15/16 Ports HTTP-antwortend (2222=SSH), 7/7 Endpunkte erreichbar (api-Health-Pfad `/openapi.json`=200). |

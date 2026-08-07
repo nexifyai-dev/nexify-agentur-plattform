@@ -139,6 +139,10 @@ for l in leads:
     if (now - contacted_at).total_seconds() > 48 * 3600:
         reengage_candidates.append(l)
 
+# 2026-08-07 GO-LIVE: Email-Dedupe (Lead-Pool enthält Duplikat-Emails -> keine Doppel-Mail)
+_seen = set()
+reengage_candidates = [l for l in reengage_candidates if not (l[contact_email] in _seen or _seen.add(l[contact_email]))]
+
 logger.info(f"Qualifiziert: {len(new_leads)} neue Leads, {len(reengage_candidates)} Reaktivierungs-Kandidaten")
 logger.info("Senden an qualifizierte Leads (langsam + unregelmäßig)...")
 
