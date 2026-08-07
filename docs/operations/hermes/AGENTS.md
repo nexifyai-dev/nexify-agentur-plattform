@@ -45,7 +45,7 @@
 curl -s http://127.0.0.1:20128/health      # 9Router
 curl -s http://127.0.0.1:3111/health       # AgentMemory Worker
 curl -s http://127.0.0.1:3113/             # AgentMemory Viewer
-curl -s http://127.0.0.1:9621/health       # LightRAG WebUI
+curl -s http://127.0.0.1:9622/health       # LightRAG WebUI
 curl -s http://127.0.0.1:9622/health       # LightRAG API
 curl -s http://127.0.0.1:8787/             # Hermes WebUI (Container)
 curl -s http://127.0.0.1:8644/health       # Hermes Gateway
