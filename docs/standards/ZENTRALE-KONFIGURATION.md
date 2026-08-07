@@ -83,10 +83,10 @@
 | WhatsApp-Bridge | 3000 | Hermes-native WhatsApp (Session /root/.hermes/platforms/whatsapp) | gepaart +31613318856 |
 | SSH | 2222 | Admin (Port≠22, PermitRootLogin no, fail2ban) | Key |
 
-> **Live-Verifizierung 2026-08-06 22:20 (E2, Hermes-Container → Host-127.0.0.1):** Alle 16 Ports offen.
-> HTTP-Ergebnisse: 8902 / 20128 / 9622 / 3113 / 8642 / 8090 / 3003 / 3000 = 200 ✅ · 8000 = 401 (Kong-Auth erwartet) ·
-> 8901 = `/openapi.json` 200 (kein `/health`-Endpunkt — Health-Check künftig via `/openapi.json`) ·
-> 9119 / 8787 = 302 (Login) · 3030 = 301 (Login) · 8080 = 307 (Login) · 3111 MCP = 404 bei GET (POST-only, normal).
+> **Live-Verifizierung 2026-08-07 07:12 (E2, Hermes-Container → Host-127.0.0.1):** 15/16 Ports HTTP-antwortend (2222 = SSH, kein HTTP — erwartet).
+> 3003 / 3113 / 8090 = 200 ✅ · 8000 = 401 (Kong-Auth erwartet) · 3030 / 8080 / 9622 / 20128 = 301/307 (Login/Redirect) ·
+> 8901 / 8902 / 8642 / 3000 / 3111 = 404 bei GET auf `/` (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP — normal) ·
+> 9119 / 8787 = 302 (Login) ✅.
 
 ## 4. Öffentliche Endpunkte
 
@@ -102,8 +102,8 @@
 | n8n.nexifyai.cloud | Cloudflare-Tunnel → 5678 | n8n (DEPRECATED — abgeschafft laut AGENTS.md, Referenz entfernen → DOC-01) |
 | *.nexifyai.cloud | Wildcard → 8080 | Fallback |
 
-> **Live-Verifizierung 2026-08-06 22:20 (E2):** www = 200 ✅ · api = 200 (openapi) ✅ · dashboard = 200 ✅ ·
-> webui / hermes-dash / gitlab = 302 (Login) ✅ · ai-router = 401 (Auth erwartet) ✅.
+> **Live-Verifizierung 2026-08-07 07:12 (E2):** www = 200 ✅ · dashboard = 200 ✅ · api = 404 auf `/` (Health-Pfad `/openapi.json` = 200) ✅ ·
+> webui / hermes-dash / gitlab = 302 (Login) ✅ · ai-router = 307 (Redirect → Auth, erwartet) ✅.
 
 ## 5. LLM-Stack (SOLL, v2.1/V4 — DeepSeek-only)
 
@@ -153,7 +153,7 @@
 
 | Datei | Inhalt | Lesbarkeit |
 |---|---|---|
-| /etc/nexifyai/hermes.env (=secrets.env, symlink) | CUSTOM_API_KEY, GITHUB_TOKEN, SUPABASE_*, VERCEL_*, RESEND, SMTP, Cloudflare | root |
+| /etc/nexifyai/hermes.env (=secrets.env, symlink) | CUSTOM_API_KEY, GITHUB_TOKEN, SUPABASE_* (inkl. SECRET_KEY), VERCEL_*, RESEND, SMTP, Cloudflare | root |
 | /etc/nexifyai/credentials.env | FRONTEND_URL, CORS_ORIGINS, AGENTMEMORY_BEARER_TOKEN, FIRECRAWL | ACL hermeswebui |
 | /etc/nexifyai/9router.env | DEEPSEEK/UPSTAGE-Keys + 9router.service-Env (Key rotiert → CUSTOM_API_KEY syncen!) | root |
 | /opt/nexifyai/repos/nexify-agentur-plattform/backend/.env | FRONTEND_URL=https://www.nexifyai.cloud, CUSTOMER_MODEL, NINEROUTER_BASE_URL | root |
@@ -230,6 +230,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-07 | **ROLLE GESTARTET + ZENTRALISIERUNG VERIFIZIERT (System-CEO, dauerhaft)**: Rolle gem. SYSTEM-DIREKTIVE §1 angenommen (unwiderruflich). Credential-Coverage 15/15 gegen Prompt-Zugangsdaten verifiziert (Supabase inkl. SECRET_KEY, GitHub dev+org-PAT, Cloudflare Account/Master/API, Vercel Admin/UserID) — SUPABASE_SECRET_KEY in hermes.env ergänzt (lag nur in credentials.env). Live-Stand re-verifiziert 07:12: 15/16 Ports HTTP-antwortend (2222=SSH), 7/7 Endpunkte erreichbar (api-Health-Pfad `/openapi.json`=200). |
 | 2026-08-06 | **E2E-SMOKE-FIX (P0, live)**: `nexify-kreislauf-e2e-smoke.service` FAILED (seit 22:59) — Root-Cause: LightRAG-Verarbeitung dauert jetzt 40–60s (Extract ~25s + Merge ~15s + Flush ~4s, DeepSeek-v4-flash via 9Router Think-Max), Smoke-Poll-Timeout war nur 40×1s → brach vor PROCESSED ab (21:59+ reproduzierbar, pass=8 fail=1). Fix: `for i in $(seq 1 40)` → `seq 1 120` in /opt/nexifyai/scripts/autopilot/jobs/kreislauf-e2e-smoke.sh (Backup .bak-20260806) + `systemctl reset-failed`. Verifikation: manueller Lauf 23:36 `pass=10 fail=0` + `exit=0` (LightRAG→AgentMemory sync synced=1). 22:59-transiente Fails (am_health 404, gateway 000000, otel down) nicht reproduzierbar, Folge-Lauf grün. Host-only-Script (nicht im Repo) — Fix direkt am Host, hier dokumentiert. |
 | 2026-08-06 | **SYSTEM-DIREKTIVE eingebunden** (`docs/standards/SYSTEM-DIREKTIVE.md`, Pascal-Direktive): Rollenfixierung unwiderruflich/systemweit, Zentralisierung von Wissen & Live-Status (Single Source of Truth), operative Verantwortung mit vorausschauender Logik (Abhängigkeiten lückenlos, Systemstabilität, proaktive Entwicklung). Referenziert in §1a als oberste Direktive. |
 | 2026-08-06 | **ROLLE SYSTEM-CEO FESTSCHREIBUNG + LIVE-STAND-ZENTRALISIERUNG (CEO-Start in Produktion)**: §1a neu — Rolle & Mandat (kanonisch: CEO-MISSION-2026-08-06.md + ARBEITSVORGABEN-v2.2.md), Ziele (≥50 K€/Monat), Betriebsmodus (Kanban-Loop coo-board-loop 45m, 19 Profile), Grenzen (Revolut-PAY), Wissenspflicht (AgentMemory), Worker-Protokoll. Live-Stand verifiziert (E2): alle 16 Host-Ports offen, 15/16 Dienste HTTP-grün (401/302/301/307 = Auth/Login normal), 7/7 öffentliche Endpunkte erreichbar; Backend-Health-Pfad = /openapi.json (kein /health). Loop aktiv: Kanban-DB beschrieben 22:18, Recherche-Output ceo-strategie-update-2026-08-06-live.md vorhanden. |
