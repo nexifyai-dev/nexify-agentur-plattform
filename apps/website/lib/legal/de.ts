@@ -127,8 +127,8 @@ export const legalDe: Record<string, LegalPageData> = {
           "Cloudflare Inc. (USA) – CDN, WAF, DNS (SCC)",
           "Resend Inc. (USA) – Versand von E-Mails (SCC)",
           "Supabase Inc. (USA) – Datenbank, EU-Region (SCC)",
-          "DeepSeek, OpenRouter und Upstage (über 9Router) – LLM-Inferenz, Embeddings und Textanalyse (geeignete Garantien)",
-          "Hetzner GmbH (DE) – VPS-Hosting für interne Dienste",
+          "DeepSeek, OpenRouter und Upstage (über 9Router) – LLM-Inferenz, Embeddings und Textanalyse (geeignete Garantien); für OpenRouter ist Zero Data Retention (ZDR) aktiviert, sodass keine Prompts gespeichert werden",
+          "Hostinger (EU, VPS Frankfurt/DE) – Server-Infrastruktur für Backend und Datenbank",
         ] },
       { id: "drittland", heading: "8. Drittlandübermittlung",
         paragraphs: [
@@ -342,7 +342,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "uav", heading: "§ 3 Unterauftragsverarbeiter",
         paragraphs: [
-          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Vercel Inc., Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek, OpenRouter und Upstage (über 9Router), Hetzner GmbH.",
+          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Vercel Inc., Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek, OpenRouter und Upstage (über 9Router), Hostinger (VPS Frankfurt/DE).",
           "Änderungen der Unterauftragsverarbeiter werden dem Auftraggeber mit einer Frist von 14 Tagen in Textform angekündigt. Erfolgt kein Widerspruch, gilt die Änderung als genehmigt.",
           "Mit allen Unterauftragsverarbeitern bestehen vertragliche Verpflichtungen auf dem Niveau dieses AVV.",
         ] },
@@ -464,6 +464,7 @@ export const legalDe: Record<string, LegalPageData> = {
         paragraphs: [
           "Personenbezogene Daten, die im Rahmen von KI-gestützten Leistungen verarbeitet werden, unterliegen der Datenschutzerklärung und dem AVV.",
           "Es erfolgt kein Training von KI-Modellen mit Ihren Daten, es sei denn, dies ist ausdrücklich und schriftlich vereinbart.",
+          "Für den Routing-Dienst 9Router ist bei OpenRouter Zero Data Retention (ZDR) aktiviert: Es werden keine Prompts gespeichert. Modellanfragen können über Drittlandstandorte (z. B. USA, Volksrepublik China, Südkorea) laufen; dies erfolgt auf Grundlage geeigneter Garantien nach Art. 44 ff. DSGVO (Details im AVV und der Datenschutzerklärung).",
         ] },
     ],
   },
