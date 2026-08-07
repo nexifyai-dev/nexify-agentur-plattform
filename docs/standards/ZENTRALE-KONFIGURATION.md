@@ -206,6 +206,7 @@
 | AGENTS-02 | 3-Ebenen-Org finalisieren (Design-/Security-Squad) | open |
 | WHATSAPP-01 | WhatsApp-Kanal-Spezifikation liegt vor (Meta Business AI, 4.986/5.000 Zeichen). Live-Validierung jetzt möglich (Bridge läuft). | open |
 | WHATSAPP-02 | Namenskonflikt NOVA vs NeXify AI (NXAI-KOMM-001 §17) + /ki-hinweise-Seite leer | open |
+| OPS-04 | **Supabase-Cloud→OSS (Prompt-Direktive „ZU ERSETZEN DURCH DIE LOKALE OSS LÖSUNG")**: Lokale Instanz aktiv (Kong 8000 = 401, DB 172.21.0.4/172.21.0.5 in backend-db-local/override.env + credentials.env DB_HOST). ABER `SUPABASE_CONNECTION_STRING` in credentials.env zeigt noch auf Cloud `db.mdlgodcvpasgplcrkiad.supabase.co` (Rest-Pfad). Backend-Code im Container nicht einsehbar (Host-Pfad /opt/nexifyai) → aktive Nutzung ungeklärt (E1). Aktion: CONNECTION_STRING auf lokale Instanz umstellen nach Verifikation, dass Backend lokal liest. | open |
 
 ### Geschlossen (Audit Runde 3)
 
