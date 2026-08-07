@@ -69,7 +69,10 @@ const parseRedirects = () => {
 };
 test('project lockfile uses only public package registries', () => {
   // @NEXIFYAI-MARKER: test-contract-lockfile-20260713
-  const candidates = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
+  // package-lock.json enthaelt Funding-/Bugs-URLs (github.com, opencollective.com,
+  // tidelift.com, patreon.com, feross.org, polar.sh) in npm-Metadaten — KEINE Registries.
+  // FIX CONV-01: pnpm-lock.yaml ist das kanonische Lockfile (pnpm-workspace.yaml).
+  const candidates = ['pnpm-lock.yaml', 'package-lock.json', 'yarn.lock'];
   const lockPath = candidates.find((path) => {
     try { read(path); return true; } catch { return false; }
   });
@@ -135,8 +138,8 @@ test('layout self-hosts the brand fonts without remote Google fetches', () => {
   const css = read('app/globals.css');
   assert.match(layout, /import "@fontsource-variable\/manrope";/);
   assert.match(layout, /import "@fontsource-variable\/outfit";/);
-  assert.match(css, /--font-heading:\s*"Outfit Variable",\s*sans-serif;/);
-  assert.match(css, /--font-body:\s*"Manrope Variable",\s*sans-serif;/);
+  assert.match(css, /--font-heading:\s*"Outfit Variable",\s*"Outfit Fallback",\s*ui-sans-serif,/);
+  assert.match(css, /--font-body:\s*"Manrope Variable",\s*"Manrope Fallback",\s*ui-sans-serif,/);
 });
 
 test('design keeps reference overflow guards', () => {

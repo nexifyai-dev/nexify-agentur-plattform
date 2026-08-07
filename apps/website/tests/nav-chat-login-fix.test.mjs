@@ -22,16 +22,22 @@ test('cookie banner uses pointer-events-none shell so footer links stay clickabl
 
 test('next.config validates BACKEND_ORIGIN before adding /api rewrite', () => {
   const src = read('../next.config.ts');
+  // Reale Validierung: new URL(origin) in try/catch, hostname-Pflicht, http(s)-Protokoll —
+  // verhindert DNS_HOSTNAME_EMPTY-Rewrites (truthy-but-empty origin wie "https://").
+  assert.match(src, /new URL\(origin\)/);
   assert.match(src, /Boolean\(u\.hostname\)/);
-  assert.match(src, /DNS_HOSTNAME_EMPTY/);
+  assert.match(src, /u\.protocol === "http:" \|\| u\.protocol === "https:"/);
 });
 
 test('chat session + chat routes exist as local handlers', () => {
   const session = read('../app/api/chat/session/route.ts');
   const chat = read('../app/api/chat/route.ts');
   assert.match(session, /session_id/);
-  assert.match(chat, /text\/event-stream/);
-  assert.match(chat, /localAdvice|estimate: "local"|type: "delta"/);
+  // Lokaler JSON-Handler (kein SSE): withButtons extrahiert [BTN:Label|/pfad] und
+  // type: "plan" (Planner) bzw. type: "text" (direkter Chat) kennzeichnet das Antwortformat.
+  assert.match(chat, /withButtons/);
+  assert.match(chat, /type: "plan"/);
+  assert.match(chat, /type: "text"/);
 });
 
 test('catch-all API proxy returns honest 503 when backend unset', () => {

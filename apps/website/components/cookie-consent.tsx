@@ -68,9 +68,9 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-label="Cookie-Einstellungen"
-      className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-[#09090b]/95 p-4 backdrop-blur-xl sm:p-6"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[9999] border-t border-white/10 bg-[#09090b]/95 p-4 backdrop-blur-xl sm:p-6"
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+      <div className="pointer-events-auto mx-auto mb-[4.5rem] max-w-2xl flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
         <div className="flex-1 text-sm text-zinc-400">
           <p className="font-semibold text-white">Cookie-Einstellungen</p>
           <p className="mt-1">

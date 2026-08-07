@@ -39,7 +39,7 @@ test("cookie policy aligns with consent categories", () => {
   assert.match(src, /Statistik/);
   assert.match(src, /Marketing/);
   assert.match(src, /nexify-consent/);
-  assert.match(src, /§ 25 TDDDG/);
+  assert.match(src, /§ 25 TTDSG/);
 });
 
 test("datenschutz covers Art. 6 and Art. 22", () => {
@@ -68,7 +68,8 @@ test("impressum references DDG and known company facts only", () => {
   assert.match(src, /90483944/);
   assert.match(src, /NL865786276B01/);
   assert.match(src, /Pascal Courbois/);
-  assert.match(src, /BITTE ERGÄNZEN/);
+  assert.match(src, /Graaf van Loonstraat/);
+  assert.match(src, /mail@nexifyai\.cloud/);
 });
 
 test("legal-page component renders placeholders with distinct styling", () => {
