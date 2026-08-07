@@ -3,29 +3,37 @@ import "@fontsource-variable/manrope";
 import "@fontsource-variable/outfit";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { DeferredWidgets } from "@/components/deferred-widgets";
+import { ChatWidget } from "@/components/chat-widget";
+import { CookieConsent } from "@/components/cookie-consent";
+import { StickyCta } from "@/components/sticky-cta";
+import { ExitIntent } from "@/components/exit-intent";
 import { PwaRegister } from "@/components/pwa-register";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
 import { siteOrigin } from "@/lib/seo";
 import "./globals.css";
-import "./nexify-anhang.css";
 
 const origin = siteOrigin();
 
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
-  title: { default: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.", template: "%s | NeXify AI" },
+  title: {
+    default: "NeXify AI by NeXify — chat it. Automate it.",
+    template: "%s | NeXify AI",
+  },
   description:
-    "NeXify AI plant, baut und betreibt KI-Agenten, die Anfragen beantworten, Termine buchen und Prozesse automatisieren. 449 €/Umsetzungstag. Deutsch & Nederlands. Chat it. Automate it.",
+    "NeXify AI by NeXify — chat it. Automate it. AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 449 Euro netto. Deutsch & Nederlands. Sitz Venlo (NL).",
   keywords: [
-    "KI Agenten", "Automatisierung", "Chatbot", "Terminbuchung", "KI Agentur", "NeXify AI",
-    "Prozessautomatisierung", "E-Mail Triage", "Leadqualifizierung", "Wissensdatenbank",
+    "Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung",
+    "AI-gestützte Automatisierung", "AI-Agenten", "NeXify AI", "Venlo", "webontwikkeling", "AI-automatisering",
+    "chat it. Automate it.",
   ],
   authors: [{ name: company.owner }],
   creator: company.owner,
   publisher: company.legalName,
+  // Canonical/og:url pro Seite via pageMetadata() — kein Root-Canonical für alle Unterseiten
+  // Locale-SoT: de + x-default primary (Acquisition DACH); NL nur Sitz-Alternate
   alternates: {
     languages: {
       de: "/",
@@ -37,16 +45,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "de_DE",
-    alternateLocale: ["nl_NL"],
-    siteName: company.brand,
-    title: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.",
-    description: "KI-Agenten für Betriebe. 449 € / Umsetzungstag. Deutsch & Nederlands. Chat it. Automate it.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI — Chat it. Automate it." }],
+    alternateLocale: ["en_GB", "nl_NL"],
+    siteName: company.brandFull,
+    title: "NeXify AI by NeXify — chat it. Automate it.",
+    description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit. 449 € netto / Arbeitstag. Sitz Venlo.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI by NeXify — chat it. Automate it." }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NeXify AI — KI-Agenten für Ihr Unternehmen · Auf Autopilot.",
-    description: "KI-Agenten für Betriebe. 449 € / Umsetzungstag netto.",
+    title: "NeXify AI by NeXify — chat it. Automate it.",
+    description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 449 / Arbeitstag netto.",
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
@@ -58,14 +66,16 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: "#0A0A0A", colorScheme: "dark", viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#09090b", colorScheme: "dark", viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": ["ProfessionalService", "LocalBusiness"],
+    "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
     name: company.legalName,
-    brand: company.brand,
+    alternateName: [company.brand, company.brandFull],
+    brand: { "@type": "Brand", name: company.brand, slogan: company.descriptor },
+    slogan: company.descriptor,
     url: origin,
     email: company.email,
     telephone: company.phone,
@@ -83,13 +93,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       "@type": "Offer",
       price: String(company.dayRate),
       priceCurrency: "EUR",
-      description: "Tagessatz netto pro Umsetzungstag",
+      description: "Tagessatz netto pro Arbeitstag (bis zu acht planbare Fachstunden)",
       unitText: "DAY",
     },
   };
   return (
     <html lang="de" data-scroll-behavior="smooth">
       <head>
+        {/* Fail-safe: scroll-reveal starts at opacity:0 and is un-hidden by JS.
+            Without JS (or if it fails to run) the whole page below the fold would
+            stay invisible — force it visible so content always renders. */}
         <noscript>
           <style>{`.reveal{opacity:1 !important;transform:none !important;}`}</style>
         </noscript>
@@ -101,9 +114,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             Zum Inhalt springen
           </a>
           <SiteHeader />
-          <div id="main-content" className="min-h-[100svh]">{children}</div>
+          <div id="main-content">{children}</div>
           <SiteFooter />
-          <DeferredWidgets />
+          <StickyCta />
+          <ExitIntent />
+          <ChatWidget />
+          <CookieConsent />
           <PwaRegister />
           </AuthProvider>
         </LanguageProvider>

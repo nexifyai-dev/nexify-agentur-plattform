@@ -142,10 +142,17 @@ export function LegalPage({ page, lang = "de" }: { page: LegalPageData; lang?: "
   );
 }
 
-/** Legacy flat (non-locale-prefixed) app/* route tree — resolves the page client-side via useLang(). */
+/**
+ * Flat app/* legal routes — language from NEXT_LOCALE / localStorage (LanguageProvider).
+ * DE → German law texts (DDG/DSGVO/TDDDG). NL → Dutch law texts (KvK/AVG/Tw).
+ * EN falls back to DE legal corpus (B2B DACH default); do not show DE under NL.
+ */
 export function LegalPageView({ slug }: { slug: string }) {
   const { lang } = useLang();
   const page = (lang === "nl" ? legalNl : legalDe)[slug];
   if (!page) return null;
-  return <LegalPage page={page} lang={lang === "nl" ? "nl" : "de"} />;
+  const pageLang: "de" | "nl" | "en" = lang === "nl" ? "nl" : lang === "en" ? "en" : "de";
+  // EN UI chrome with DE legal body is intentional until a full EN corpus is SoT;
+  // NL must never render legalDe.
+  return <LegalPage page={page} lang={pageLang === "nl" ? "nl" : pageLang === "en" ? "en" : "de"} />;
 }

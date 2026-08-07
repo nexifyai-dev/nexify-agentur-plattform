@@ -85,7 +85,10 @@ async function handle(req: NextRequest): Promise<NextResponse> {
     url.searchParams.get("format") === "json" ||
     (req.headers.get("accept") || "").includes("application/json");
 
-  if (!email || !email.includes("@") || !token) {
+  // UWG §7: Opt-out muss ohne Hürde möglich sein. Token bleibt Hardening
+  // gegen Spam-Missbrauch, ist aber nicht erforderlich — eine valide E-Mail
+  // genügt (Abmeldung schadet dem Betroffenen nie).
+  if (!email || !email.includes("@")) {
     if (wantJson) {
       return NextResponse.json(
         { ok: false, error: "email_and_token_required" },
@@ -96,6 +99,29 @@ async function handle(req: NextRequest): Promise<NextResponse> {
       "Abmeldung",
       "Bitte nutzen Sie den Abmelde-Link aus der E-Mail (enthält Token).",
     );
+  }
+
+  await persistUnsub(email);
+
+  // Art. 21 DSGVO: Opt-out zusätzlich in der leads-Tabelle persistieren
+  // (PostgREST, env-gesteuert — auf Vercel nicht gesetzt, lokal via pipeline.env).
+  const sbUrl = process.env.SUPABASE_URL?.trim();
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || process.env.SUPABASE_SERVICE_KEY?.trim();
+  if (sbUrl && sbKey) {
+    try {
+      await fetch(`${sbUrl.replace(/\/$/, "")}/rest/v1/leads?contact_email=eq.${encodeURIComponent(email)}`, {
+        method: "PATCH",
+        headers: {
+          "apikey": sbKey,
+          "Authorization": `Bearer ${sbKey}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify({ unsubscribed: true }),
+      });
+    } catch {
+      // File persistenz greift bereits; DB-Update ist Best-Effort
+    }
   }
 
   const expected = tokenFor(email, salt);
@@ -109,8 +135,6 @@ async function handle(req: NextRequest): Promise<NextResponse> {
       "Sie erhalten von NeXify AI keine weiteren Outreach-Mails an diese Adresse (sofern der Link gültig war).",
     );
   }
-
-  await persistUnsub(email);
 
   if (wantJson) {
     return NextResponse.json({ ok: true, status: "unsubscribed", email });
