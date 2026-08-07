@@ -1,160 +1,103 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { useLang } from '@/lib/lang-context';
-import { useAuth } from '@/lib/auth';
-import { UserRound } from 'lucide-react';
-import { LogoMark } from '@/components/logo';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Menu, X, UserRound } from "lucide-react";
+import { Logo } from "@/components/logo";
+import { useLang } from "@/lib/lang-context";
+import { useAuth } from "@/lib/auth";
 
-/** CI-Logo (Rauten-Symbol mit Lime-Gradient), systemweit einheitlich. */
-export function NxLogoMark() {
-  return <LogoMark size={34} />;
-}
-
-/** Nav auf echte Routen (Unterseiten existieren unter app/[locale]/…) mit Locale-Prefix. */
 const NAV = {
   de: [
-    { label: 'Leistungen', href: '/leistungen' },
-    { label: 'Preise', href: '/preise' },
-    { label: 'Prozess', href: '/prozess' },
-    { label: 'Referenzen', href: '/referenzen' },
-    { label: 'Über uns', href: '/ueber-mich' },
-    { label: 'FAQ', href: '/faq' },
+    { label: "Leistungen", href: "/leistungen" },
+    { label: "Preise", href: "/preise" },
+    { label: "Prozess", href: "/prozess" },
+    { label: "Vergleich", href: "/vergleich" },
+    { label: "Referenzen", href: "/referenzen" },
+    { label: "Wissen", href: "/wissen" },
+    { label: "Über mich", href: "/ueber-mich" },
   ],
   en: [
-    { label: 'Services', href: '/leistungen' },
-    { label: 'Pricing', href: '/preise' },
-    { label: 'Process', href: '/prozess' },
-    { label: 'References', href: '/referenzen' },
-    { label: 'About', href: '/ueber-mich' },
-    { label: 'FAQ', href: '/faq' },
+    { label: "Services", href: "/leistungen" },
+    { label: "Pricing", href: "/preise" },
+    { label: "Process", href: "/prozess" },
+    { label: "Compare", href: "/vergleich" },
+    { label: "References", href: "/referenzen" },
+    { label: "Knowledge", href: "/wissen" },
+    { label: "About", href: "/ueber-mich" },
   ],
   nl: [
-    { label: 'Diensten', href: '/leistungen' },
-    { label: 'Prijzen', href: '/preise' },
-    { label: 'Proces', href: '/prozess' },
-    { label: 'Referenties', href: '/referenzen' },
-    { label: 'Over ons', href: '/ueber-mich' },
-    { label: 'FAQ', href: '/faq' },
+    { label: "Diensten", href: "/leistungen" },
+    { label: "Prijzen", href: "/preise" },
+    { label: "Proces", href: "/prozess" },
+    { label: "Vergelijk", href: "/vergleich" },
+    { label: "Referenties", href: "/referenzen" },
+    { label: "Kennis", href: "/wissen" },
+    { label: "Over mij", href: "/ueber-mich" },
   ],
-} as const;
+};
 
-const CTA = {
-  de: { book: 'Gespräch buchen', account: 'Konto', login: 'Anmelden' },
-  en: { book: 'Book a call', account: 'Account', login: 'Log in' },
-  nl: { book: 'Gesprek boeken', account: 'Account', login: 'Inloggen' },
-} as const;
 
 export function SiteHeader() {
   const { lang, setLang } = useLang();
   const { user } = useAuth();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const t = CTA[lang];
-  const prefix = lang === 'de' ? '' : `/${lang}`;
-  const href = (h: string) => `${prefix}${h}`;
-  const nav = NAV[lang];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const accountHref = user && typeof user === 'object' ? (user.role === 'admin' ? '/admin' : '/konto') : '/login';
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- close menus on route change
+    setOpen(false);
+  }, [pathname]);
+
 
   return (
     <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: 'rgba(10,10,10,0.72)',
-        backdropFilter: 'blur(20px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
-      }}
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
+        scrolled ? "border-white/10 bg-black/70 backdrop-blur-2xl" : "border-transparent bg-transparent"
+      }`}
+      data-testid="site-header"
     >
-      <div
-        style={{
-          width: 'min(1280px, calc(100% - 48px))',
-          marginInline: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 76,
-          gap: 16,
-          flexWrap: 'nowrap',
-        }}
-      >
-        <Link href={href('/')} style={{ display: 'flex', alignItems: 'center', gap: 11, flex: 'none' }} data-testid="logo">
-          <LogoMark size={34} />
-          <span
-            style={{
-              display: 'flex', flexDirection: 'column', justifyContent: 'center',
-              lineHeight: 1.15,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'Outfit, sans-serif',
-                fontWeight: 600,
-                fontSize: 17,
-                letterSpacing: '-0.01em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Ne<span style={{ color: '#C8FF00', fontWeight: 700 }}>X</span>ify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
-            </span>
-            <span
-              style={{
-                fontFamily: 'Outfit, sans-serif', fontSize: 8.5, letterSpacing: '0.34em',
-                textTransform: 'uppercase', color: '#52525b', whiteSpace: 'nowrap', marginTop: 2,
-              }}
-            >
-              Chat it. Automate it.
-            </span>
-          </span>
+      <div className="site-container flex h-[64px] items-center justify-between gap-3 sm:h-[74px] sm:gap-5">
+        {/* shrink-0: never collapse under nav pressure (was min-w-0 shrink → logo width 0 @ lg) */}
+        <Link href="/" aria-label="NeXify AI – Startseite" data-testid="header-logo-link" className="relative z-10 shrink-0">
+          <Logo />
         </Link>
 
-        <nav className="nx-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 22, whiteSpace: 'nowrap' }}>
-          {nav.map((item) => (
+        {/* Desktop nav from xl (1280+): at lg/1024 full nav + CTAs squeezed logo under „Leistungen“ */}
+        <nav className="hidden min-w-0 items-center gap-4 xl:flex 2xl:gap-6" data-testid="header-nav">
+          {NAV[lang].map((item) => (
             <Link
               key={item.href}
-              href={href(item.href)}
-              style={{ fontSize: 13, color: '#a1a1aa', fontWeight: 500 }}
-              data-testid={`nav-${item.href.slice(1)}`}
+              href={item.href}
+              data-testid={`nav-link-${item.href.slice(1)}`}
+              className={`whitespace-nowrap text-[13px] font-medium transition-colors ${
+                pathname === item.href ? "text-white" : "text-zinc-400 hover:text-white"
+              }`}
             >
               {item.label}
             </Link>
           ))}
-        </nav>
+          </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 'none' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              borderRadius: 999,
-              border: '1px solid rgba(255,255,255,0.12)',
-              padding: 3,
-            }}
-            data-testid="lang-switcher"
-          >
-            {(['de', 'en', 'nl'] as const).map((l) => (
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+          <div className="flex items-center rounded-full border border-white/12 p-0.5 sm:p-1" data-testid="lang-switcher">
+            {(["de", "en", "nl"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
                 data-testid={`lang-switcher-${l}`}
-                style={{
-                  border: 'none',
-                  background: lang === l ? 'rgba(200,255,0,0.15)' : 'transparent',
-                  color: lang === l ? '#C8FF00' : '#71717a',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  borderRadius: 999,
-                  padding: '5px 10px',
-                  cursor: 'pointer',
-                }}
+                className={`min-h-9 min-w-9 rounded-full px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all sm:min-h-0 sm:min-w-0 sm:px-3 ${
+                  lang === l ? "bg-white text-black shadow-[0_0_14px_rgba(255,255,255,0.25)]" : "text-zinc-400 hover:text-white"
+                }`}
               >
                 {l}
               </button>
@@ -162,108 +105,57 @@ export function SiteHeader() {
           </div>
 
           <Link
-            href={accountHref}
-            aria-label={t.account}
+            href={user && typeof user === "object" ? (user.role === "admin" ? "/admin" : "/konto") : "/login"}
+            className="inline-flex size-11 items-center justify-center rounded-full border border-white/12 text-zinc-300 transition-colors hover:border-white/30 hover:text-white sm:size-10"
+            aria-label={lang === "de" ? "Konto" : "Account"}
             data-testid="header-account-link"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 38,
-              height: 38,
-              borderRadius: 999,
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: '#e5e5e5',
-            }}
           >
-            <UserRound size={15} />
+            <UserRound size={16} />
           </Link>
 
           <Link
-            href={href('/kontakt')}
-            data-testid="header-cta"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              borderRadius: 999,
-              padding: '11px 20px',
-              background: 'linear-gradient(120deg,#C8FF00,#e9ff8a 45%,#C8FF00)',
-              color: '#0A0A0A',
-              fontWeight: 700,
-              fontSize: 12.5,
-              whiteSpace: 'nowrap',
-              boxShadow: '0 0 22px rgba(200,255,0,0.25)',
-              flex: 'none',
-            }}
+            href="/rueckruf"
+            className="btn-ghost hidden !px-4 !py-2.5 !text-[13px] xl:inline-flex"
+            data-testid="header-booking-cta"
           >
-            {t.book}
+            {lang === "en" ? "Book call" : lang === "nl" ? "Gesprek boeken" : "Termin buchen"}
+          </Link>
+          <Link href="/kontakt" className="btn-primary hidden md:inline-flex !px-5 !py-2.5 !text-[13px] xl:!px-6" data-testid="header-cta">
+            {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
           </Link>
 
-          <span
-            className="nx-mobile-toggle"
-            onClick={() => setOpen((s) => !s)}
-            data-testid="mobile-nav-toggle"
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              border: '1px solid rgba(255,255,255,0.15)',
-              cursor: 'pointer',
-              flex: 'none',
-              gap: 4,
-              flexDirection: 'column',
-            }}
+          <button
+            className="inline-flex size-11 items-center justify-center rounded-full border border-white/12 text-white sm:size-10 xl:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Menü schließen" : "Menü öffnen"}
+            aria-expanded={open}
+            aria-controls="mobile-nav-menu"
+            data-testid="mobile-menu-toggle"
           >
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-            <span style={{ width: 16, height: 1.5, background: '#e5e5e5' }} />
-          </span>
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
 
       {open && (
-        <div
-          data-testid="mobile-nav-menu"
-          style={{
-            position: 'absolute',
-            top: 76,
-            left: 0,
-            right: 0,
-            background: 'rgba(10,10,10,0.97)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '12px 24px 20px',
-          }}
-        >
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={href(item.href)}
-              onClick={() => setOpen(false)}
-              style={{
-                padding: '14px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                fontSize: 15,
-                color: '#e5e5e5',
-                fontWeight: 500,
-              }}
-            >
-              {item.label}
+        <div id="mobile-nav-menu" className="max-h-[min(80vh,calc(100dvh-64px))] overflow-y-auto border-t border-white/10 bg-black/90 backdrop-blur-2xl xl:hidden" data-testid="mobile-menu" role="dialog" aria-label="Navigation">
+          <nav className="site-container flex flex-col gap-1 py-4" aria-label="Mobile">
+            {NAV[lang].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-xl px-4 py-3.5 text-base font-medium ${pathname === item.href ? "bg-white/5 text-white" : "text-zinc-400"}`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/kontakt" className="btn-primary mt-2 min-h-12 justify-center">
+              {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
             </Link>
-          ))}
-          <Link
-            href={accountHref}
-            onClick={() => setOpen(false)}
-            style={{ padding: '14px 0', fontSize: 15, color: '#e5e5e5', fontWeight: 500 }}
-          >
-            {t.login}
-          </Link>
+            <Link href="/rueckruf" className="btn-ghost mt-1 min-h-12 justify-center !text-sm">
+              {lang === "en" ? "Book callback" : lang === "nl" ? "Terugbelafspraak" : "Rückruf buchen"}
+            </Link>
+          </nav>
         </div>
       )}
     </header>

@@ -1,3 +1,5 @@
+import { company } from "@/lib/company";
+
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
@@ -35,7 +37,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
             Ne<span className="text-[#C8FF00] font-bold">X</span>ify{" "}
             <span className="font-light text-zinc-400">AI</span>
           </span>
-          <span className="mt-1 hidden text-[8.5px] uppercase tracking-[0.34em] text-zinc-500 sm:block">Chat it. Automate it.</span>
+          <span className="mt-1 hidden text-[8.5px] uppercase tracking-[0.34em] text-zinc-500 sm:block">{company.descriptor}</span>
         </span>
       )}
     </span>

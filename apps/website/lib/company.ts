@@ -1,6 +1,9 @@
 export const company = {
   brand: "NeXify AI",
+  /** Canonical product line — never „Automat it.“ (Google typo). */
   descriptor: "Chat it. Automate it.",
+  /** Full public brand string (meta, footer, JSON-LD, listings). */
+  brandFull: "NeXify AI by NeXify — chat it. Automate it.",
   legalName: "NeXify AI by NeXify – Chat it. Automate it.",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",
@@ -22,6 +25,11 @@ export const company = {
   vatRate: 0.21,
   targetMarket: "Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden",
   businessOnly: true,
+  /**
+   * Proposed GBP hours from legacy press kits — NOT verified as SoT.
+   * Do not invent into imprint; owner confirms via issue #237 / GBP checklist.
+   */
+  openingHoursProposed: ["Mo-Fr 09:00-18:00", "Sa 10:00-14:00"] as const,
 } as const;
 
 export const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL ?? "";
