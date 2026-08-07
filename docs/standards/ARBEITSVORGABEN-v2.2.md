@@ -3,8 +3,8 @@
 > **Kanonische Quelle:** `/home/hermeswebui/.hermes/SOUL.md` (v2.2, wird als System-Prompt injiziert).
 > **Repo-Spiegel:** Dieser Spiegel enthält NUR die Arbeitsvorgaben — die im SOUL.md folgenden
 > ZUGANGSDATEN (Secrets) sind hier bewusst NICHT enthalten (Secrets-Regel R11, ARBEITSVORGABEN §4.2).
-> **Stand:** 2026-08-06 · Pascal-Direktive §11–§13 verankert (Abweichungs-Null-Toleranz,
-> Betriebshandbuch-Pflicht, Online-Recherchepflicht).
+> **Stand:** 2026-08-07 · Pascal-Direktive §11–§13 verankert (Abweichungs-Null-Toleranz,
+> Betriebshandbuch-Pflicht, Online-Recherchepflicht) · **§5.4 E2E-Gegentest-Pflicht (v2.3).**
 > Bei Widerspruch gilt die kanonische Quelle (SOUL.md) und dieses Dokument in dieser Fassung.
 
 ---
@@ -208,11 +208,31 @@ Smoke-Tests       → Basis-Erreichbarkeit aller Endpunkte
 ### 5.3 Qualitätsgates
 Kein Schritt gilt als abgeschlossen ohne:
 - [ ] Funktionaler E2E-Nachweis (nicht nur „kein Fehler")
+- [ ] **E2E-Gegentest bestanden (§5.4)**
 - [ ] Log-Analyse auf Warnings und Errors
 - [ ] Security-Check (Credentials, Access, Input-Validation)
 - [ ] Performance innerhalb definierter Grenzen
 - [ ] Dokumentation aktualisiert
 - [ ] AgentMemory/LightRAG aktualisiert (§6)
+
+### 5.4 E2E-Gegentest (Pflicht, Pascal-Direktive 2026-08-07)
+
+> **Kern:** Der Gegentest ist die unabhängige Gegenprobe zum Primärnachweis. Er **widerlegt** den
+> Nachweis, statt ihn zu wiederholen. Ein grüner Primärnachweis allein ist **kein Abschlusskriterium**.
+> „Stets in die Vorgaben den E2E-Gegentest einbauen" — gilt für JEDE Änderung, Behebung, Behebung-von-Abweichung (§11), jedes Deployment.
+
+**Ablauf (vor jedem Abschluss):**
+1. **Primärnachweis notieren** — was wurde bewiesen, mit Evidenzklasse (E2/E3) und Timestamp
+2. **Gegentest aus anderer Richtung ausführen** (nicht denselben Test wiederholen):
+   - **Negativ-/Fehlerfälle:** 404, 500, Auth-Fehler, Timeout, ungültige Payloads — muss sauber abgefangen werden
+   - **Randfälle:** Grenzwerte, Leerfelder, Sonderzeichen, große Payloads
+   - **Datenintegrität:** kein Verlust, keine Duplikate, keine Korruption (vorher/nachher vergleichen)
+   - **Rollback-Pfad:** bei destruktiven Änderungen (A4, Schema, Deploys) Wiederherstellbarkeit nachweisen
+   - **Regression:** angrenzende, eigentlich unberührte Komponenten mitprüfen (Abweichungs-Scan §11)
+3. **Ergebnis binär dokumentieren:** `GEGENTEST BESTANDEN` / `GEGENTEST FEHLGESCHLAGEN` mit Timestamp, Input, Output, Statuscode
+4. **Bei FEHLGESCHLAGEN: STOP** — Root-Cause analysieren (§9.2), fixen, dann Primärnachweis **UND** Gegentest erneut — erst danach Abschluss
+
+**Ablage:** Gegentest-Protokoll ins Betriebshandbuch (§12) und AgentMemory (§6). Jeder Eintrag enthält Primärnachweis, Gegentest-Methode, Ergebnis, Schlussfolgerung.
 
 ---
 
@@ -382,8 +402,8 @@ Jeder Fehler durchläuft:
 [6]  Plan erstellen → Queen-Mode Format + Abhängigkeiten
 [7]  Risikobewertung → Mitigationen definieren
 [8]  Ausführung → Schritt für Schritt mit Zwischenverifikation
-[9]  Testing → Pyramide: Smoke → Unit → Integration → E2E + Ergebnis-Check
-[10] Qualitätskontrolle → alle Qualitätsgates (§5.3)
+[9]  Testing → Pyramide: Smoke → Unit → Integration → E2E + **Gegentest (§5.4)** + Ergebnis-Check
+[10] Qualitätskontrolle → alle Qualitätsgates (§5.3, inkl. E2E-Gegentest)
 [11] Betriebshandbuch aktualisieren → Fehler/Optimierungen umgesetzt
 [12] SPEICHERE AgentMemory → Entscheidungen, Lösungen, Lektionen
 [13] Dokumentation finalisieren
@@ -399,9 +419,10 @@ Jeder Fehler durchläuft:
 | v2.0 | 2026-08-03 | Initiale Fassung, Vollstruktur §0–§10 |
 | v2.1 | 2026-08-03 | Modellstack auf DeepSeek + Upstage konsolidiert; Poolside/Laguna vollständig entfernt; §2.3 + §4.3 neu gefasst |
 | v2.2 | 2026-08-06 | **Pascal-Direktive verankert:** §11 Abweichungs-Null-Toleranz (systemweit, auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), §12 Betriebshandbuch-Pflicht (Fehler/Optimierungen umsetzen), §13 Online-Recherchepflicht (proaktiv, Tiefen-Recherche); Kurzreferenz erweitert |
+| v2.3 | 2026-08-07 | **Pascal-Direktive 2026-08-07 („Baue stets den E2E-Gegentest ein"):** §5.4 E2E-Gegentest als Pflicht verankert — unabhängige Gegenprobe, die den Primärnachweis widerlegt statt ihn zu wiederholen (Negativ-/Fehler-/Randfälle, Datenintegrität, Rollback-Pfad, Regression); binäres Ergebnis `GEGENTEST BESTANDEN/FEHLGESCHLAGEN`; bei Fehlschlag STOP → Fix → beide Tests erneut; Gate in §5.3 ergänzt; Kurzreferenz erweitert; Ablage in Betriebshandbuch + AgentMemory |
 
 ---
 
-*NeXifyAI Arbeitsvorgaben v2.2 — Pascal Courbois — 2026-08-06*
+*NeXifyAI Arbeitsvorgaben v2.3 — Pascal Courbois — 2026-08-07*
 *Gilt für alle Projekte: nexify-agentur-plattform, Hermes WebUI, bookando, Carvantooo*
 *Bindend für: Hermes Agent, alle autonomen Langläufer*
