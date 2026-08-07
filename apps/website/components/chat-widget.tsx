@@ -35,20 +35,21 @@ const T = {
   nl: { offerTitle: 'Offerte per e-mail aanvragen', offerText: 'Wij sturen u het plan als offerte – gecontroleerd door Pascal Courbois.', name: 'Uw naam *', email: 'Uw e-mail *', company: 'Bedrijf (optioneel)', phone: 'Telefoon (optioneel)', send: 'Offerte aanvragen', sending: 'Verzenden …', sent: 'Uw offerte is onderweg! Controleer uw inbox.', total: 'Richtprijs netto', modules: 'Modules', range: 'Bereik', askName: 'Wat is uw naam?', askEmail: 'Uw e-mailadres?', back: '← Terug' },
 };
 
-// NIR/UPDATED: 07.08.2026 22:05 (CONV-01)
+// NIR/UPDATED: 07.08.2026 22:45 (CONV-01)
 // WHAT: Proaktiver Auto-Open nur auf High-Intent-Seiten (/preise, /leistungen),
 //       nach 30-45s Dwell-Time (Research: 21x Speed-to-Lead; nicht <5s).
 // WHY: 4,2s-Auto-Open auf ALLEN Seiten = Conversion-Killer (aufdringlich).
 // PITFALL: duration zwischen 30-45s; ohne chatAutoOpen-Prop kein Auto-Open.
 // DEPENDS: window.location.pathname — SSR-sicher gelesen.
 export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boolean }) {
-  const [autoOpenMs, setAutoOpenMs] = useState<number | null>(null);
+  const [autoOpenDelay, setAutoOpenDelay] = useState<number | null>(null);
+  // CONV-01: Auto-Open nur High-Intent-Seiten, 30-45s Dwell (nie <5s)
   useEffect(() => {
     if (chatAutoOpen === false) return;
-    const p = typeof window !== 'undefined' ? window.location.pathname : '';
-    const highIntent = p === '/preise' || p === '/leistungen';
-    if (!highIntent) return;
-    setAutoOpenMs(30000 + Math.floor(Math.random() * 15000)); // 30-45s
+    if (typeof window === 'undefined') return;
+    const p = window.location.pathname;
+    if (p !== '/preise' && p !== '/leistungen') return;
+    setAutoOpenDelay(30000 + Math.floor(Math.random() * 15000)); // 30-45s
   }, [chatAutoOpen]);
   const { lang } = useLang();
   const t = T[lang] || T.de;
@@ -64,7 +65,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
 
   useEffect(() => { const s = document.createElement('style'); s.textContent = KEYFRAMES; document.head.appendChild(s); return () => { s.remove(); }; }, []);
   useEffect(() => { setMessages([GREETINGS[lang] || GREETINGS.de]); }, [lang]);
-  useEffect(() => { if (autoOpenMs !== null) { const t = setTimeout(() => setChatOpen(true), autoOpenMs); return () => clearTimeout(t); } }, [autoOpenMs]);
+  useEffect(() => { if (autoOpenDelay !== null) { const t = setTimeout(() => setChatOpen(true), autoOpenDelay); return () => clearTimeout(t); } }, [autoOpenDelay]);
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typing, offerStep]);
 
   const sendChatMessage = async () => {
@@ -88,7 +89,7 @@ export default function ChatWidget({ chatAutoOpen = true }: { chatAutoOpen?: boo
       if (sid) { setOfferSession(sid); setOfferStep('name'); }
       return;
     }
-    href.startsWith('http') ? window.open(href, '_blank', 'noopener') : (window.location.href = href);
+    if (href.startsWith('http')) { window.open(href, '_blank', 'noopener'); } else if (typeof window !== 'undefined') { window.location.assign(href); }
   };
 
   const requestOffer = async () => {

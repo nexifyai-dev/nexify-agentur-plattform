@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type * as THREE from 'three';
 
 /**
  * 3D-Hero exakt nach Anhang "NeXify Homepage.dc.html":
@@ -13,7 +14,7 @@ export function Hero3D() {
 
   useEffect(() => {
     let raf = 0;
-    let renderer: any;
+    let renderer: THREE.WebGLRenderer | undefined;
     let resizeObserver: ResizeObserver | undefined;
     let pointerHandler: ((e: PointerEvent) => void) | undefined;
 
@@ -64,7 +65,7 @@ export function Hero3D() {
       const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
       const nodeMat = new THREE.MeshBasicMaterial({ color: 0xc8ff00 });
       const seenVerts = new Set<string>();
-      const posAttr = (wireGeo as any).attributes.position;
+      const posAttr = wireGeo.attributes.position;
       for (let i = 0; i < posAttr.count; i++) {
         const x = posAttr.getX(i);
         const y = posAttr.getY(i);
