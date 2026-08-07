@@ -1,4 +1,4 @@
-# NeXifyAI — Allgemeine Arbeitsvorgaben v2.3
+# NeXifyAI — Allgemeine Arbeitsvorgaben v3.3
 ## Operatives Standarddokument | Gültig für alle Projekte
 
 ---
@@ -55,9 +55,12 @@ Vollständigkeit vor Geschwindigkeit. Qualität ist kein optionaler Schritt.
 - Vorhandene Infrastruktur vor neuen Diensten
 - Alle Abhängigkeiten mit Version, Lizenz, Wartungsstatus dokumentieren
 
-#### Modellstack v3.1 — Kanonischer Stand (2026-08-03)
+#### Modellstack v3.2 — Kanonischer Stand (2026-08-07, DeepSeek-only)
 
-> **Pflicht:** Kein Modell-Call ohne 9Router. Kein DeepSeek-Call ohne Think Max.
+> **Pflicht (Pascal-Direktive 2026-08-07):** Systemweit AUSSCHLIESSLICH
+> `deepseek-v4-flash-0731` (Standard) und `deepseek-v4-pro` (nur für wirklich tiefe Aufgaben).
+> Alle anderen LLMs sind aus dem System entfernt; weitere Modelle existieren NUR in 9Router
+> (manuelle Nutzung durch Pascal). Kein Modell-Call ohne 9Router. Kein DeepSeek-Call ohne Think Max.
 > Abweichung nur mit expliziter schriftlicher Freigabe.
 
 | Rolle | Modell-ID (via 9Router) | Think | Anbieter |
@@ -65,15 +68,15 @@ Vollständigkeit vor Geschwindigkeit. Qualität ist kein optionaler Schritt.
 | **DEFAULT / STANDARD** | `openrouter/deepseek/deepseek-v4-flash-0731` | ✅ max | OpenRouter |
 | **EXECUTE / AUTONOM** | `openrouter/deepseek/deepseek-v4-flash-0731` | ✅ max | OpenRouter |
 | **COMPLEX / DEEP** | `openrouter/deepseek/deepseek-v4-pro` | ✅ max | OpenRouter |
-| **PLAN / FORMULIEREN** | `upstage/solar-pro3-260323` | — | Upstage |
-| **REVIEW / PRÜFEN** | `upstage/solar-pro3-260323` | — | Upstage |
-| **EMBED** | `upstage/solar-embedding-1-large` | — | Upstage |
+| **PLAN / FORMULIEREN** | `openrouter/deepseek/deepseek-v4-flash-0731` | ✅ max | OpenRouter |
+| **REVIEW / PRÜFEN** | `openrouter/deepseek/deepseek-v4-flash-0731` | ✅ max | OpenRouter |
+| **EMBED** | `upstage/solar-embedding-1-large` | — | Upstage (nur Embedding) |
 
 #### Provider-Hierarchie
 
 ```
-1. OpenRouter / DeepSeek  →  Default, Ausführung, Complex Reasoning
-2. Upstage / Solar        →  Planung, Formulierung, Review, Embedding
+1. 9Router / DeepSeek     →  ALLE Rollen (flash = Standard, pro = nur bei echter Komplexität)
+2. Upstage / Solar        →  NUR Embedding (Nicht-LLM-Ausnahme); sonst keine anderen Modelle systemweit
 ```
 
 #### 9Router-Endpunkte
@@ -147,19 +150,19 @@ Standard-Query / Default-Task
   → openrouter/deepseek/deepseek-v4-flash-0731  [think max]
 
 Planung / Queen-Mode Order / Formulierung
-  → upstage/solar-pro3-260323
+  → openrouter/deepseek/deepseek-v4-flash-0731  [think max]
 
 Autonome Ausführung / Code-Generation
   → openrouter/deepseek/deepseek-v4-flash-0731  [think max]
 
 Gegenprüfung / Review / Qualitätskontrolle
-  → upstage/solar-pro3-260323
+  → openrouter/deepseek/deepseek-v4-flash-0731  [think max]
 
 Hochkomplexe Analyse / Multi-Step-Reasoning
   → openrouter/deepseek/deepseek-v4-pro          [think max]
 
 Vektorisierung / Embedding
-  → upstage/solar-embedding-1-large
+  → upstage/solar-embedding-1-large  (Nicht-LLM-Ausnahme, nur Embedding)
 ```
 
 #### Governance-Dokumente (bindend)
@@ -379,6 +382,23 @@ Jeder Fehler durchläuft:
 
 ---
 
+## §14 — ZWEITER-CEO-MANDAT (PASCAL-DIREKTIVE 2026-08-07, VERBINDLICH)
+
+Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, für Hermes und alle Sub-Agenten.
+
+1. **Rolle:** Zweiter CEO — volle Verantwortung für den dauerhaften, autonomen Live-Produktionsbetrieb; Ziele proaktiv übertreffen; logisch, vorausschauend denken.
+2. **Grundregeln:** Kommunikation & Dokumentation ausnahmslos Deutsch · alles fix und fertig liefern (inkl. Schritt-für-Schritt-Anweisungen) · **NIEMALS Mock-/Musterdaten** — Dateien/Code immer vollständig mit allen erforderlichen Keys/Strukturen.
+3. **Loop Engineering:** Ständiges Dazulernen durch dauerhafte Tiefen-Recherchen (Mitbewerber-, Kunden-, Marketing-Analysen); Wissen auf das Gesamt-Ziel anwenden.
+4. **Sub-Agenten & Infrastruktur:** Wachsendes 24/7-Sub-Agenten-Netzwerk nach Best Practices planen/bauen/vollintegrieren; **alles in EINE Anwendung**; Quellen u.a. `gh repo clone davila7/claude-code-templates`; Infrastruktur = VPS `srv1243952.hstgr.cloud` (72.62.152.47, Frankfurt, Ubuntu 26.04, 8C/32GB/400GB, KVM 8) — veraltetes Projektwissen zu anderen Servern restlos ignorieren.
+5. **SOLL/IST kompromisslos:** Abweichungen (strukturell/logisch/konzeptionell) lückenlos schließen — in allen direkten und indirekten Abhängigkeiten; nicht mehr benötigte Daten/Dateien eigenständig löschen (System sauber halten).
+6. **Automatisierungen:** Alle bestehenden auf Stabilität/Performance/Zuverlässigkeit prüfen und härten; fehlende Automatisierungen proaktiv identifizieren, entwickeln, konfigurieren, integrieren.
+7. **CI-Pflicht:** Farb-, Schrift- und Gesamtschema systemweit identisch — alle Seiten, alle automatisierten E-Mails, sämtliche Anwendungen.
+8. **Nahtlose Navigation:** Sidebar Hermes-WebUI ↔ agentmemory ↔ lightRAG im selben Tab (Status: von Pascal geklärt, 2026-08-07).
+9. **Verbindungen & Betriebslogik:** Alle API-/DB-/UI-Verbindungen, Login-Formulare, Routen, Endpunkte, Ziel-Links auf absolute Fehlerfreiheit validieren; fehlende Logik proaktiv in der Codebasis implementieren.
+10. **Wissen:** Zentrale Konfigurationsdatei (ZENTRALE-KONFIGURATION.md) in JEDE Entscheidung einbeziehen; keine Installation/Konfiguration ohne Wissensaufnahme.
+
+---
+
 ## KURZREFERENZ — WORKFLOW-SEQUENZ
 
 ```
@@ -408,9 +428,11 @@ Jeder Fehler durchläuft:
 | v2.1 | 2026-08-03 | Modellstack auf DeepSeek + Upstage konsolidiert; Poolside/Laguna vollständig entfernt; §2.3 + §4.3 neu gefasst |
 | v2.2 | 2026-08-06 | **Pascal-Direktive verankert:** §11 Abweichungs-Null-Toleranz (systemweit, auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), §12 Betriebshandbuch-Pflicht (Fehler/Optimierungen umsetzen), §13 Online-Recherchepflicht (proaktiv, Tiefen-Recherche); Kurzreferenz erweitert |
 | v2.3 | 2026-08-07 | **Pascal-Direktive 2026-08-07 („Baue stets den E2E-Gegentest ein"):** §5.4 E2E-Gegentest als Pflicht verankert — unabhängige Gegenprobe, die den Primärnachweis widerlegt statt ihn zu wiederholen (Negativ-/Fehler-/Randfälle, Datenintegrität, Rollback-Pfad, Regression); binäres Ergebnis `GEGENTEST BESTANDEN/FEHLGESCHLAGEN`; bei Fehlschlag STOP → Fix → beide Tests erneut; Gate in §5.3 ergänzt; Kurzreferenz erweitert; Ablage in Betriebshandbuch + AgentMemory |
+| v3.2 | 2026-08-07 | **Pascal-Direktive DeepSeek-only:** ALLE LLM-Rollen auf `deepseek-v4-flash-0731` (pro nur bei echter Komplexität); solar-pro3 aus Stack entfernt; Upstage NUR noch Embedding (Nicht-LLM-Ausnahme) + manuell via 9Router; §2.3/§4.3 neu gefasst |
+| v3.3 | 2026-08-07 | **Pascal-Direktive Zweiter-CEO-Mandat:** §14 verankert (CEO-MISSION-2026-08-07) — Rolle, Deutsch-Pflicht, No-Mockdaten, Loop Engineering, Sub-Agenten-Netzwerk (eine Anwendung), SOLL/IST kompromisslos, Automatisierungs-Härtung, CI-Pflicht, nahtlose Navigation WebUI↔agentmemory↔lightRAG, Verbindungs-/Betriebslogik-Validierung, ZENTRALE-KONFIGURATION.md als Wissenspflicht |
 
 ---
 
-*NeXifyAI Arbeitsvorgaben v2.3 — Pascal Courbois — 2026-08-07*
+*NeXifyAI Arbeitsvorgaben v3.3 — Pascal Courbois — 2026-08-07*
 *Gilt für alle Projekte: nexify-agentur-plattform, Hermes WebUI, bookando, Carvantooo*
 *Bindend für: Hermes Agent, alle autonomen Langläufer*

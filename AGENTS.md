@@ -11,9 +11,12 @@ den VPS selbst — verbunden via Cursor Remote-SSH direkt auf den Server.
 ## Primäre Quelle (verbindlich, in dieser Reihenfolge)
 1. `docs/governance/` in diesem Repo — **139 Dokumente, real, älter und
    autoritativer** als alles Folgende. Bei Widerspruch gewinnt diese Quelle.
-2. `CHARTA.md` (Chat-Konsolidierung, §0–§16) — bestätigter, aber
+2. **Zweiter-CEO-Mandat 2026-08-07** — `docs/standards/CEO-MISSION-2026-08-07.md`
+   + `docs/standards/ARBEITSVORGABEN-v3.3.md` (§14) — Pascal-Direktive, geht
+   Konflikten mit älterer Governance vor (neuestes Datum gewinnt).
+3. `CHARTA.md` (Chat-Konsolidierung, §0–§16) — bestätigter, aber
    vereinfachter Auszug von (1), nicht Ersatz.
-3. `design_guidelines.json` (Repo-Root, Stand 04.07.2026) — verbindliches
+4. `design_guidelines.json` (Repo-Root, Stand 04.07.2026) — verbindliches
    Design. NICHT die ältere „Graphite Premium"-Referenz aus
    `nexify/02_regelwerke/GESAMTZIELBILD_V3.md` verwenden.
 
