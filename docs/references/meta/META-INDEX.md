@@ -68,6 +68,19 @@ Fehler: `#190` Token ungültig · `#101` Client-ID falsch · `#100` Parameter ·
 Weitere llms.txt-Indizes (live): `developers.facebook.com/documentation/{business-messaging/whatsapp,mcp,development,facebook-login,threads,ads-commerce}/llms.txt`.
 Graph-API-Änderungsprotokoll: `developers.facebook.com/docs/graph-api/changelog`. OpenAPI-Spec: `github.com/facebook/openapi`.
 
+
+## Business-Assets (NeXify) — verankert 2026-08-08
+
+| Asset | ID | Env |
+|---|---|---|
+| Business (agentur-asset) | 1162686936938399 | `META_BUSINESS_ID` |
+| Werbekonto (nexifyai-werbekonto) | 2236954670479629 (Graph: `act_2236954670479629`) | `META_AD_ACCOUNT_ID` |
+| Facebook-Seite (NeXify – Chat it. Automate it.) | 702237169646391 | `META_PAGE_ID` |
+| Instagram (@nexify.automate) | Username verknüpft | `META_INSTAGRAM_HANDLE` |
+| User-Token (EAG…, User 997068836684907, bis ~2026-10) | — | `META_USER_TOKEN` (Scope: nur public_profile!) |
+| App-Token (App-ID\|Secret) | — | `META_APP_TOKEN` (dauerhaft) |
+
+**Zugriffsstatus (2026-08-08, E2E):** Page #100 (Feature/Review), Business #100 (Permission), AdAccount #200 (ads_management/ads_read) mit User-Token — Asset-Zugriff erst nach System-User-Token (`META_ACCESS_TOKEN`) mit `business_management`, `ads_read` etc. Verifikation: `/opt/nexifyai/scripts/meta_assets_verify.py`.
 ## Betriebsregeln
 
 1. Agent-UA-Pflicht bei JEDEM Request (siehe `META_USER_AGENT`), konsistent, nicht randomisieren.
