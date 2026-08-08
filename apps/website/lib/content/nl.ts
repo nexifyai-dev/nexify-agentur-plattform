@@ -51,8 +51,10 @@ export const nl: Dict = {
     servicesText: "Acht helder gedefinieerde bouwstenen – elk met een doorlooptijd, duidelijke resultaten en een transparant dagtarief.",
     processEyebrow: "Werkwijze",
     processTitle: "Vijf stappen. Nul verrassingen.",
-    quotesEyebrow: "Stemmen & resultaten",
+    quotesEyebrow: "Referenties & resultaten",
     quotesTitle: "Wat samenwerken met NeXify AI betekent",
+    quotesText:
+      "Geen verzonnen beoordelingen, geen gekochte stemmen — alleen aantoonbare projectresultaten op het gebied van web, commerce en automatisering. Details en referentiecontacten op verzoek.",
     ctaBandTitle: "Klaar voor uw project?",
     ctaBandText:
       "Beschrijf uw plan – doorgaans ontvangt u binnen één werkdag een eerlijke inschatting met omvang en prijsindicatie. Of vraag het direct aan NeXify AI, onze AI-adviseur in de chat.",
@@ -320,20 +322,6 @@ export const nl: Dict = {
         title: "Mkb-dienstverlener",
         text: "Geautomatiseerde offerte- en e-mailflow met AI-voorkwalificatie van binnenkomende aanvragen en CRM-integratie.",
         results: ["–70 % handmatige verwerkingstijd", "Reactietijd van 2 dagen naar 2 uur", "Volledig gelogde workflow"],
-      },
-    ],
-    quotes: [
-      {
-        quote: "Binnen drie dagen stond er een website waarvoor bureaus ons drie maanden hadden geoffreerd – in betere kwaliteit en voor een fractie van de prijs.",
-        author: "Directeur, adviesbureau (DACH)",
-      },
-      {
-        quote: "De combinatie van persoonlijke verantwoordelijkheid en AI-snelheid is indrukwekkend. Elke toezegging werd nagekomen, elke inspanning vooraf transparant gemaakt.",
-        author: "Eigenaar, handelsonderneming (NL)",
-      },
-      {
-        quote: "Eindelijk iemand die automatisering niet als buzzword verkoopt, maar als gecontroleerd, meetbaar proces realiseert.",
-        author: "Operations-manager, dienstverlener (DE)",
       },
     ],
   },

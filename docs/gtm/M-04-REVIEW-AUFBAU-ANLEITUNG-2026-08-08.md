@@ -12,7 +12,7 @@
 # DEPENDS: docs/gtm/NAP_MASTER_V1.md, GBP-OPS-CHECKLIST.md, evidence/supply-wave1/S01/S19,
 #          infra/lead-pipeline/templates/lead_email_review_request.html
 # DOCS-REF: FREWERT-MARKETING-MASSNAHMENKATALOG-2026-08-08.md M-04
-# SESSION: t_ceb434ff M-04
+# SESSION: t_6881891e M-04a (Update: Zitate entfernt — keine dokumentierte Freigabe)
 
 # M-04 — Externer Review-Aufbau: Google Business Profile + ProvenExpert
 
@@ -20,7 +20,7 @@
 
 | Kanal | Status | Owner-Gate |
 |---|---|---|
-| Website /erfahrungen | LIVE (Seite + Review-Schema, kein AggregateRating) | — |
+| Website /erfahrungen | LIVE (ehrlicher Aufbau: Projekteinblicke + „Referenzen auf Anfrage“, kein Review-Schema, kein AggregateRating) | — |
 | Google Business Profile | `pending_owner` (S01) | Pascal: Login + Verifizierung |
 | ProvenExpert | `ready_to_submit` (S19) | Pascal: Account/E-Mail-Confirm |
 | Review-Request-Mail | Template bereit (infra/lead-pipeline/templates/lead_email_review_request.html) | Versand via bestehender Pipeline |
@@ -67,12 +67,18 @@
 
 ## 5. Erfolgsmetrik (M-04)
 
-- [x] /erfahrungen live (Seite + Schema)
+- [x] /erfahrungen live (ehrlicher Aufbau, keine Fake-Zitate)
 - [x] Review-Request-Template erstellt
 - [ ] GBP verifiziert (Pascal)
 - [ ] ProvenExpert-Profil live (Pascal)
-- [ ] ≥1 echtes Review öffentlich
-- [ ] Erst dann: AggregateRating-Schema auf /erfahrungen ergänzen (Doku im Code)
+- [ ] ≥1 echtes Review öffentlich + Freigabe-Datei in `docs/gtm/evidence/testimonials/`
+- [ ] Erst dann: Zitate auf /erfahrungen + /referenzen ergänzen UND Review-Schema/
+      AggregateRating auf /erfahrungen (Doku im Code)
+
+> **Hinweis (t_6881891e):** Die ursprünglich ausgelieferten 3 Kundenstimmen wurden
+> entfernt — `docs/gtm/evidence/testimonials/` enthielt keine Freigabe-Dokumente.
+> Zitate kommen erst wieder auf die Seiten, wenn je Stimme eine Freigabe-Datei
+> (Permission-Pipeline Schritt 2) vorliegt.
 
 ## 6. Quellen
 

@@ -69,8 +69,10 @@ export const de = {
     servicesText: "Acht klar definierte Leistungsbausteine – jeweils mit Zeitspanne, klaren Ergebnissen und transparentem Tagessatz.",
     processEyebrow: "Arbeitsweise",
     processTitle: "Fünf Schritte. Null Überraschungen.",
-    quotesEyebrow: "Stimmen & Ergebnisse",
+    quotesEyebrow: "Referenzen & Ergebnisse",
     quotesTitle: "Was Zusammenarbeit mit NeXify AI bedeutet",
+    quotesText:
+      "Keine erfundenen Bewertungen, keine gekauften Stimmen — nur belegbare Projektergebnisse aus Web, Commerce und Automatisierung. Details und Referenzkontakte gern auf Anfrage.",
     ctaBandTitle: "Bereit für Ihr Projekt?",
     ctaBandText:
       "Beschreiben Sie Ihr Vorhaben – in der Regel erhalten Sie innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne und Preisrahmen. Oder fragen Sie NeXify AI, unseren AI-Berater, direkt im Chat.",
@@ -338,20 +340,6 @@ export const de = {
         title: "Mittelständischer Dienstleister",
         text: "Automatisierte Angebots- und E-Mail-Strecke mit AI-Vorqualifizierung eingehender Anfragen und CRM-Integration.",
         results: ["–70 % manuelle Bearbeitungszeit", "Antwortzeit von 2 Tagen auf 2 Stunden", "Vollständig protokollierter Workflow"],
-      },
-    ],
-    quotes: [
-      {
-        quote: "Innerhalb von drei Tagen stand eine Website, für die uns Agenturen drei Monate angeboten hatten – in besserer Qualität und zu einem Bruchteil des Preises.",
-        author: "Geschäftsführer, Beratungsunternehmen (DACH)",
-      },
-      {
-        quote: "Die Kombination aus persönlicher Verantwortung und AI-Geschwindigkeit ist beeindruckend. Jede Zusage wurde gehalten, jeder Aufwand vorher transparent gemacht.",
-        author: "Inhaber, Handelsunternehmen (NL)",
-      },
-      {
-        quote: "Endlich jemand, der Automatisierung nicht als Buzzword verkauft, sondern als kontrollierten, messbaren Prozess umsetzt.",
-        author: "Operations-Leitung, Dienstleister (DE)",
       },
     ],
   },

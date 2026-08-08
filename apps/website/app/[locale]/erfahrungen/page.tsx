@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import { ExperiencesPage } from "@/components/pages/experiences";
 
 export const metadata: Metadata = {
-  title: "Erfahrungen — Kundenstimmen zu Web, Commerce & Automatisierung",
+  title: "Erfahrungen — Referenzen, Projekte & ehrliche Einblicke",
 };
 
 export default function Page() {
