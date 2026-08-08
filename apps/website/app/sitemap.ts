@@ -29,6 +29,7 @@ const staticRoutes: {
   { path: "/botschafter", priority: 0.8, changeFrequency: "monthly" },
   { path: "/sprechstunde", priority: 0.8, changeFrequency: "monthly" },
   { path: "/referenzen", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/erfahrungen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/wissen", priority: 0.8, changeFrequency: "weekly" },
   { path: "/faq", priority: 0.8, changeFrequency: "monthly" },
   { path: "/ueber-mich", priority: 0.75, changeFrequency: "monthly" },
