@@ -320,7 +320,10 @@ MAIL_LOGO_BLOCK = (
 MAIL_FOOTER_HTML = (
     "NeXify AI by NeXify – chat it. Automate it. · Pascal Courbois<br/>"
     "Graaf van Loonstraat 1E · 5921 JA Venlo · NL · KvK 90483944 · BTW NL865786276B01<br/>"
-    "mail@nexifyai.cloud · +31 6 133 188 56"
+    "mail@nexifyai.cloud · +31 6 133 188 56<br/>"
+    '<a href="https://www.nexifyai.cloud/agb" style="color:#71717a;">AGB / Nutzungsbedingungen</a> · '
+    '<a href="https://www.nexifyai.cloud/datenschutz" style="color:#71717a;">Datenschutz</a> · '
+    '<a href="https://www.nexifyai.cloud/impressum" style="color:#71717a;">Impressum</a>'
 )
 MAIL_DARK_META = (
     '<meta name="color-scheme" content="light dark">'

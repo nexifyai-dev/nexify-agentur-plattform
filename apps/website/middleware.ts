@@ -20,6 +20,17 @@ function isLocale(value: string | undefined): value is Locale {
   return !!value && (locales as readonly string[]).includes(value);
 }
 
+/** Legal pages ship real server-side translations (lib/legal/{de,en,nl}.ts). */
+const LEGAL_SLUGS = new Set([
+  "agb",
+  "impressum",
+  "datenschutz",
+  "widerruf",
+  "cookie-richtlinie",
+  "avv",
+  "ki-hinweise",
+]);
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -38,6 +49,12 @@ export function middleware(request: NextRequest) {
   // Strip legacy locale prefixes → Emergent unprefixed routes
   // (preserves explicit user choice in cookie; does not invent NL from headers)
   if (isLocale(first)) {
+    const restFirst = segments[1];
+    // Keep /en|/nl legal routes on the app/[locale] tree (real translations).
+    // German stays unprefixed (DACH-first). Everything else keeps stripping.
+    if (first !== "de" && restFirst && LEGAL_SLUGS.has(restFirst)) {
+      return NextResponse.next();
+    }
     const rest = segments.slice(1).join("/");
     const url = request.nextUrl.clone();
     url.pathname = rest ? `/${rest}` : "/";
