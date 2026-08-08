@@ -510,192 +510,41 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, f
 *Bindend für: Hermes Agent, alle autonomen Langläufer*
 ```
 
-ZUGANGSDATEN
+ZUGANGSDATEN — REDIGIERT (Sicherheit)
+
+> **Alle Keys, Passwörter und Zugangsdaten sind AUSSCHLIESSLICH in `hermes.env` zu pflegen**
+> (kanonisch: `/etc/nexifyai/hermes.env`, Spiegel: `/root/.hermes/hermes.env`; Container: `/home/hermeswebui/.hermes/hermes.env`).
+> Keine Secrets in Repo-Dateien, Code, Commits, Logs oder Chat-Kanälen (CONFIDENTIALITY-GUARD §0b).
+> Nachfolgend nur Struktur/Platzhalter.
+
+SUPABASE CLOUD (NICHT LOKAL!) — ALTLAST/TOT, ersetzt durch lokale OSS-Lösung (OPS-04 GESCHLOSSEN)
+
+| Feld | Wert |
+|---|---|
+| Daten API | https://***.supabase.co/rest/v1/ (Cloud tot — nur lokale Supabase-OSS, §3) |
+| Project ID | *** (Cloud tot) |
+| Access Token | `***` (in hermes.env) |
+| Publishable key | `***` (in hermes.env) |
+| Secret key | `***` (in hermes.env) |
+| JWT-Keys | `***` (in hermes.env) |
+| Datenbank PW | `***` (in hermes.env) |
+| Connection | postgresql://postgres:***@***:5432/postgres |
+
+GITHUB (PATs in hermes.env, Werte hier redigiert)
+- nexify-dev PAT: `***`
+- NeXifyAI-by-NeXify Org PAT: `***`
+- GitHub-App Private Key: `[REDACTED PRIVATE KEY]` — Pfad: /root/.github/nexify-github-app.pem (root-only)
+- App ID: 3865469 · Client ID: Iv23li7oxPfvxfc9eXyu · Public link: https://github.com/apps/nexify-ai-github-automation
+
+CLOUDFLARE (in hermes.env, Werte hier redigiert)
+- Account ID: a112f895c19e0d65f6f64b3e89f747f8 (kein Secret — öffentlich via DNS)
+- API Token: `***` · Master Key: `***` · API-Schlüssel: `***`
+
+VERCEL (in hermes.env, Werte hier redigiert)
+- Admin Token: `***` · User ID: PQnMvUrBh0qqxETK6q3BiClp (kein Secret)
+
+9ROUTER
+- Endpoint: http://127.0.0.1:20128/v1 (remote: https://ai-router.nexifyai.cloud/v1)
+- API-Schlüssel: `sk-c71...d013` (gekürzt, voll in hermes.env)
+- Default Model: openrouter/deepseek/deepseek-v4-flash-0731
 
-SUPABASE CLOUD (NICHT LOKAL!) >>>> ZU ERSETZEN DURCH DIE LOKALE OSS LÖSUNG!!!!!!
-
-
-
-Project Name
-
-NeXify AI Agentur-Webseite und ADMIN-Portal
-
-
-
-Daten API
-
-https://mdlgodcvpasgplcrkiad.supabase.co/rest/v1/
-
-
-
-Project ID
-
-mdlgodcvpasgplcrkiad
-
-
-
-Access Token
-
-sbp\_dfe9b43432eea0e3d86d4b5dbcba2cd66decbaef
-
-
-
-Project Region
-
-eu-west-1
-
-
-
-Owner
-
-u6288408171@gmail.com
-
-
-
-Publishable key
-
-sb\_publishable\_aNUsyopLTVcl7m02XWP8Dg\_ZmsuBNq6
-
-
-
-Secret key
-
-sb\_secret\_myHGPKx6B64MxmRrnEMg6Q\_jONDMi6A
-
-
-
-Current key
-
-***REDACTED***
-
-ECC (P-256)
-
-
-
-Previously used key
-
-Previous key
-
-***REDACTED***
-
-Legacy HS256 (Shared Secret)
-
-
-
-Datenbank PW
-
-***REDACTED***
-
-
-
-postgresql://postgres:***@db.mdlgodcvpasgplcrkiad.supabase.co:5432/postgres
-
------------------
-
-GiHub (nexify-dev) Key
-
-github\_pat\_11B6N3NKQ0fQxV1sJIuVcF\_cCAk8YdooWbtyp9nPJXjUi66uJzERzZUAaWZoVkyGkSXB7IOJC2DH7G3OYk
-
-
-
-GitHub (NeXifyAI-by-NeXify-Chat-it-Automate-it) Organsisation Key
-
-github\_pat\_11B6N3NKQ01YQinZ0BOIM3\_B9rh4kRbcT9U1dCSSXEYT0ZTpNSXygbkSofyjJkCCNCVLLXF4KVNbqN3Zi3
-
-
-
-Private Key: /root/.github/nexify-github-app.pem
-
-
-
-About
-
-Owned by: @nexifyai-dev
-
-
-
-App ID: 3865469
-
-
-
-Using your App ID to get installation tokens? You can now use your Client ID instead.
-
-
-
-Client ID: Iv23li7oxPfvxfc9eXyu
-
-
-
-GitHub Apps can use OAuth credentials to identify users. Learn more about identifying users by reading our integration developer documentation.
-
-
-
-Public link
-
-https://github.com/apps/nexify-ai-github-automation
-
-
-
-\[REDACTED PRIVATE KEY]
-
-
----------------------------
-
-
-CLOUDFLARE ZUGANG
-
-
-
-Account ID
-
-a112f895c19e0d65f6f64b3e89f747f8
-
-
-
-API Token
-
-cfat\_3xDjOFq9rgYxcLfkFJvzzhcUbS6u8xrQoQGzCZd748e72178
-
-
-
-https://dash.cloudflare.com/profile/api-tokens#:\~:text=cfk\_baju84kxnvALYSSdb7O5z1WOCqqBao1AiSqriEOPc6cd9e16
-
-
-
-
-
-Account ID
-a112f895c19e0d65f6f64b3e89f747f8
-
-nexify.login@gmail.com
-
-CLOUDFLARE MASTER KEY
-**cfat\_f1Yy8K69sWxSramq4GrjNKwBHLtI1TJS6GyC1jS36540e87e**
-
-CLOUDFLARE API-SCHLUESSEL
-cfk\_baju84kxnvALYSSdb7O5z1WOCqqBao1AiSqriEOPc6cd9e16
-
-
-------------------------
-
-VERCEL ADMIN TOKEN
-
-vcp\_3i1Blah7eZiWdQfaYjhCBYCDfeswKhfF4ewYY8aDMDXN64jwRt2mOV38
-
-
-
-VERCEL USER ID
-
-PQnMvUrBh0qqxETK6q3BiClp
-
-
-------------------------
-
-Endpoint
-http://127.0.0.1:20128/v1
-
-API-Schlüssel
-sk-c71...d013
-
-Default Model
-openrouter/deepseek/deepseek-v4-flash-0731
