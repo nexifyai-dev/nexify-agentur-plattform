@@ -34,6 +34,7 @@ Fehler: `#190` Token ungültig · `#101` Client-ID falsch · `#100` Parameter ·
 
 - **Meta Developer Tools MCP:** Remote, Streamable HTTP, `https://mcp.facebook.com/devtools`, OAuth (Meta-Entwicklerkonto, keine App-ID/Secret im Client), Beta.
 - Einbindung in Hermes: `mcp_servers.meta_devtools` → Wrapper `/opt/nexifyai/scripts/meta-devtools-mcp-wrapper.sh` → `npx mcp-remote` (OAuth-Token in `~/.mcp-auth`).
+- **Blocker (2026-08-08, E2E-getestet):** `mcp-remote` scheitert mit `InvalidClientMetadataError: Dynamic registration is not available for this client` — Meta bietet KEINE dynamische Client-Registrierung und keine statische Client-ID für Drittanbieter. DevTools-MCP funktioniert daher NUR in validierten Clients (Claude Desktop/Code, Codex, Cursor, ChatGPT) mit OAuth-Login des Meta-Entwicklerkontos. Hermes-Config bleibt vorbereitet (aktiv, sobald Meta freigibt); REST-Betrieb läuft über App Access Token.
 - **10 Tools** (Präfix `devtools_`): `discovery` (Doc-Suche), `app_list`, `app` (Settings/Security/Restrictions/DPO), `app_review`, `compliance`, `api_usage` (Rate-Limits/Deprecations), `webhook_list`, `webhook_manage` (subscribe/unsubscribe/update_fields, **Manage-Scope**), `webhook_test`, `api_changelog`.
 - **Scopes** pro App: `read` (nur lesen) / `manage` (lesen + Webhook-Verwaltung — einzige Schreibfunktion). Verwaltung: facebook.com → Einstellungen → Business-Integrationen.
 - Nur offiziell validierte Clients; andere über `mcp-remote`-Brücke (stdio-Proxy).
