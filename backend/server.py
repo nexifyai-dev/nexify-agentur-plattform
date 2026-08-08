@@ -16,6 +16,7 @@ import re
 import json
 import uuid
 import hashlib
+import hmac
 import time
 import asyncio
 import logging
@@ -1174,6 +1175,36 @@ async def health():
         "db": "supabase" if pool else "unavailable",
         "time": datetime.now(timezone.utc).isoformat(),
     }
+
+
+# ── Meta-Webhooks (Messenger / Instagram / WhatsApp) — verankert 2026-08-08 ──
+# GET: Verify-Handshake (hub.mode/hub.challenge/hub.verify_token)
+# POST: X-Hub-Signature-256 = HMAC-SHA256(body, META_APP_SECRET) — Pflichtvalidierung
+@app.get("/webhooks/meta")
+async def meta_webhook_verify(mode: str | None = None, challenge: str | None = None, verify_token: str | None = None):
+    expected = os.environ.get("META_WEBHOOK_VERIFY", "")
+    if mode == "subscribe" and verify_token and verify_token == expected:
+        return PlainTextResponse(content=challenge or "")
+    return PlainTextResponse(content="Verification failed", status_code=403)
+
+
+@app.post("/webhooks/meta")
+async def meta_webhook_receive(request: Request):
+    body = await request.body()
+    sig = request.headers.get("X-Hub-Signature-256", "")
+    secret = os.environ.get("META_APP_SECRET", "")
+    expected = "sha256=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
+    if not secret or not hmac.compare_digest(sig, expected):
+        logger.warning("meta-webhook: ungültige Signatur abgewiesen")
+        return PlainTextResponse(content="Invalid signature", status_code=403)
+    try:
+        payload = json.loads(body or b"{}")
+        logger.info("meta-webhook: Event object=%s entries=%d", payload.get("object"), len(payload.get("entry", []) or []))
+    except Exception:
+        logger.warning("meta-webhook: Payload nicht parsebar")
+    # Antwort-Pipeline (Hermes-Webhook) wird nach Meta-Freischaltung verdrahtet;
+    # sofortiges 200 verhindert Meta-Retries.
+    return {"received": True, "object": (json.loads(body or b"{}") or {}).get("object")}
 
 
 @app.get("/api/health/llm")
