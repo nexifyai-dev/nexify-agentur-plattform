@@ -11,6 +11,15 @@ Alle wesentlichen Änderungen an der Website werden nach [Keep a Changelog](http
 - Sitemap-Einträge `/ki-roi-rechner` + `/chatbot-kosten-rechner` (priority 0.8).
 - Tests: `tests/free-tools.test.mjs` (Logik, Randfälle, Datei-Contracts), `tests/e2e/m07-free-tools.spec.ts` (5 E2E: bekannte Ergebnisse, 0-Eingaben-Hinweise, CTA-UTM, Schema, interne Links). `pnpm test` 211/211, E2E m07 5/5, Regression critical-path + ebook 7/7.
 
+### Hinzugefügt (2026-08-08 — M-08)
+- **Branchenpages vertieft (5 bestehende: handwerk, steuerberater, ecommerce, immobilien, agenturen)**: Pain-Point-Sektion („Es ist nicht Ihre Schuld, dass …“), 1 konkrete Anwendung je Branche, 3 Anwendungsfälle (Website/Automatisierung/AI-Agent) mit Leistungs-Links, Branchen-FAQ mit **FAQPage-Schema**, Service-Schema, 3 Conversion-CTAs (Rückruf/Audit/Preise), Wissen-Artikel-Link (M-05).
+- **5 neue Branchenseiten**: `/branchen/kanzleien` (Rechtsanwälte), `/branchen/logistik`, `/branchen/pflege` (Gesundheit), `/branchen/gastronomie`, `/branchen/produktion` — je Unique-Content, Pain-Points, Anwendungsfälle, FAQ (FAQPage-Schema), Sitemap-Einträge automatisch via `branchenSlugs()`.
+- **Cross-Links**: Leistungsseiten (websites, automatisierung, ai-agenten, beratung, audit) verlinken die neuen Branchen-Slugs.
+- **Contract-Tests** (`tests/branchen-m08.test.mjs`, 11 Tests): Slugs, Pain-Point-, FAQPage- und Anwendungsfall-Verträge, Unique-Content-Check, Negativfall (404-Guard), Fake-Metriken-Verbot, Wissen-Link-Validierung, Regression auf die bestehenden 5 Branchen.
+- **Anleitung** (`docs/gtm/M-08-BRANCHENPAGES-AUFBAU-ANLEITUNG-2026-08-08.md`).
+
+## [2026-08-05] — Compliance-Audit (GDOK §4)
+
 ### Hinzugefügt (2026-08-08 — M-04)
 - **/erfahrungen Review-Landingpage** (app/erfahrungen + [locale]-Fallback): echte, anonymisierte Kundenstimmen aus `content.references.quotes`, 5-Sterne-Visualisierung, CTA zu /audit + /preise + /rueckruf. Schema `Review`/`Rating` pro Stimme — **kein AggregateRating** (V-GTM-TRUST-01/02, keine erfundenen Bewertungen).
 - **Review-Request-Mail-Template** (`infra/lead-pipeline/templates/lead_email_review_request.html`) — Nach-Projektabschluss-Mail, Opt-out-Link, KI-Hinweis, UWG/DSGVO-konform.
