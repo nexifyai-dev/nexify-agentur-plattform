@@ -37,6 +37,18 @@ test("leistung detail route exists with FAQ + answer-first", () => {
   assert.doesNotMatch(page, /"@type":\s*"AggregateRating"/);
 });
 
+test("M-02b: Service JSON-LD offers points to /preise, not the page itself", () => {
+  const page = read("app/leistungen/[slug]/page.tsx");
+  assert.match(page, /"@type": "Service"/);
+  assert.match(page, /provider:/);
+  assert.match(page, /areaServed:/);
+  // nur offers.url → /preise; Service.url (Zeile 75) darf Seite selbst bleiben
+  const offersBlock = page.split("offers: {")[1].split("},")[0];
+  assert.match(offersBlock, /url: "https:\/\/www\.nexifyai\.cloud\/preise"/);
+  assert.doesNotMatch(offersBlock, /\$\{path\}/);
+  assert.doesNotMatch(page, /"@type":\s*"AggregateRating"/);
+});
+
 test("sitemap includes leistungen slugs and branchen", () => {
   const sm = read("app/sitemap.ts");
   assert.match(sm, /leistungSeoSlugs/);

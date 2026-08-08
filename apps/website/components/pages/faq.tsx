@@ -110,16 +110,16 @@ export function FaqPage() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-zinc-400">{t.faqPage.ctaText}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link href="/kontakt" className="btn-primary" data-testid="faq-cta-contact">
+              <Link href="/kontakt?utm_source=faq" className="btn-primary" data-testid="faq-cta-contact">
                 {t.faqPage.ctaContact} <ArrowRight size={16} />
               </Link>
-              <Link href="/preise#planner" className="btn-ghost" data-testid="faq-cta-planner">
+              <Link href="/preise#planner?utm_source=faq" className="btn-ghost" data-testid="faq-cta-planner">
                 {t.faqPage.ctaPlanner}
               </Link>
               <Link href="/leistungen" className="btn-ghost !py-2.5 text-sm" data-testid="faq-cta-services">
                 {t.faqPage.ctaServices}
               </Link>
-              <Link href="/preise" className="btn-ghost !py-2.5 text-sm" data-testid="faq-cta-pricing">
+              <Link href="/preise?utm_source=faq" className="btn-ghost !py-2.5 text-sm" data-testid="faq-cta-pricing">
                 {t.faqPage.ctaPricing}
               </Link>
               <Link href="/wissen" className="btn-ghost !py-2.5 text-sm" data-testid="faq-cta-wissen">
