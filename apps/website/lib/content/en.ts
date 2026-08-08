@@ -51,8 +51,10 @@ export const en = {
     servicesText: "Eight clearly defined service modules – each with a time range, clear deliverables and a transparent daily rate.",
     processEyebrow: "Approach",
     processTitle: "Five steps. Zero surprises.",
-    quotesEyebrow: "Testimonials & results",
+    quotesEyebrow: "References & results",
     quotesTitle: "What working with NeXify AI means",
+    quotesText:
+      "No invented testimonials, no bought reviews — only verifiable project results in web, commerce and automation. Details and reference contacts gladly on request.",
     ctaBandTitle: "Ready for your project?",
     ctaBandText:
       "Describe your project – you will typically receive an honest assessment with effort range and price bracket within one working day. Or ask NeXify AI, our AI advisor, directly in the chat.",
@@ -320,20 +322,6 @@ export const en = {
         title: "Mid-sized service provider",
         text: "Automated quotation and email pipeline with AI pre-qualification of incoming enquiries and CRM integration.",
         results: ["–70% manual processing time", "Response time from 2 days to 2 hours", "Fully logged workflow"],
-      },
-    ],
-    quotes: [
-      {
-        quote: "Within three days we had a website that agencies had quoted us three months for – of better quality and at a fraction of the price.",
-        author: "Managing Director, Consultancy (DACH)",
-      },
-      {
-        quote: "The combination of personal accountability and AI speed is impressive. Every commitment was kept, every effort was made transparent up front.",
-        author: "Owner, Trading Company (NL)",
-      },
-      {
-        quote: "Finally someone who doesn't sell automation as a buzzword, but implements it as a controlled, measurable process.",
-        author: "Head of Operations, Service Provider (DE)",
       },
     ],
   },

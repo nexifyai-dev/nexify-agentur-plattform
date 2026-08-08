@@ -1,4 +1,12 @@
 
+## 2026-08-08 — M-04a /erfahrungen ehrlicher Aufbau (Fake-Zitate entfernt) + Review-Request-Template + GBP/ProvenExpert-Anleitung — t_6881891e
+- **GEGENTEST (§5.4):** Die von t_ceb434ff ausgelieferten 3 Kundenstimmen auf /erfahrungen (und /referenzen + Home) hatten KEINE dokumentierte Freigabe — `docs/gtm/evidence/testimonials/` leer (Permission-Pipeline fordert je Stimme eine Freigabe-Datei). → Alle 3 Zitate aus de/en/nl-Content entfernt; Seiten zeigen jetzt ehrlichen Aufbau.
+- **/erfahrungen neu (LIVE):** Projekteinblicke (3 anonymisierte Cases aus /referenzen-Bestand), Block „Referenzen auf Anfrage" mit CTA /kontakt, CTAs /audit + /preise (data-testid experiences-cta-*), KEIN Review-Schema, KEIN AggregateRating, keine Sterne-Behauptung. Titel/Description ehrlich („Referenzen, Projekte & ehrliche Einblicke").
+- **/referenzen + Home (references-section):** Zitate-Grid entfernt, Home-Sektion jetzt CTA-Band zu /referenzen + /erfahrungen mit ehrlichem Text (home.quotesText neu, de/en/nl).
+- **Review-Request-Mail:** Template infra/lead-pipeline/templates/lead_email_review_request.html (CI-konform: Dark/Luxury #0A0A0A, C8FF00-Akzent, Outfit/Manrope, NAP + KvK/BTW/DSGVO/UWG/Art. 50-KI-Hinweis) — bereits vorhanden, verifiziert + Produktions-Kopie nach /usr/local/share/nexifyai-templates/ (MD5 identisch 54c228e6).
+- **Anleitung:** docs/gtm/M-04-REVIEW-AUFBAU-ANLEITUNG-2026-08-08.md aktualisiert (Status: ehrlicher Aufbau; Zitate-Reaktivierung erst mit Freigabe-Dateien). GBP-Schritte (business.google.com, Graaf van Loonstraat 1E, 5921 JA Venlo, Kategorie, UTM, Verifizierung) + ProvenExpert (Free-Tarif) enthalten.
+- **E2E:** pnpm typecheck grün, lint 0 Errors, Tests 7/7 + 18/18 grün, pnpm build grün (/erfahrungen + /referenzen statisch), Deploy via PR → main → deploy-vercel.yml.
+
 ## 2026-08-08 — M-03a Stadt-Landingpages Teil 1/2 (Berlin, Hamburg, München, Köln, Frankfurt am Main) — t_246ecdb2
 - **Live:** /stadt/ki-agentur-berlin, /stadt/ki-agentur-hamburg, /stadt/ki-agentur-muenchen, /stadt/ki-agentur-koeln, /stadt/ki-agentur-frankfurt-am-main — HTTP 200, Titel-Muster "KI-Agentur [Stadt] » Gratis KI-Audit | NeXify AI" exakt (Layout-Template liefert Suffix, page ohne — Fix e4cae81f aktiv).
 - **URL-Vorgabe:** Slugs auf /stadt/ki-agentur-<stadt> umbenannt (Commit f61b63d0) — entspricht Task-Vorgabe; alte Kurz-Slugs (/stadt/berlin) führen jetzt sauber zu 404 (dynamicParams=false).

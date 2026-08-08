@@ -19,13 +19,13 @@ import { JsonLd } from "@/components/json-ld";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Erfahrungen mit NeXify AI — Kundenstimmen zu Websites, Shops & Automatisierung",
+  title: "Erfahrungen mit NeXify AI — Referenzen, Projekte & ehrliche Einblicke",
   description:
-    "Was Kunden über die Zusammenarbeit mit NeXify AI sagen: echte Stimmen zu Websites, Onlineshops und AI-Automatisierung – transparent, anonymisiert, ohne Fake-Bewertungen.",
+    "Ehrliche Einblicke in Projekte von NeXify AI: Websites, Onlineshops und AI-Automatisierung. Referenzen auf Anfrage, keine Fake-Reviews, keine gekauften Bewertungen.",
   path: "/erfahrungen",
-  ogTitle: "Erfahrungen mit NeXify AI — echte Kundenstimmen",
+  ogTitle: "Erfahrungen mit NeXify AI — ehrliche Projekteinblicke",
   ogDescription:
-    "Kundenstimmen zu Web, Commerce & Automatisierung. Ehrliche Einblicke statt Fake-Reviews – 449 € netto pro Arbeitstag, persönlich verantwortet.",
+    "Anonymisierte Projektergebnisse aus Web, Commerce & Automatisierung. Referenzen auf Anfrage — transparent statt Fake-Reviews.",
 });
 
 const breadcrumbJsonLd = breadcrumbListJsonLd([

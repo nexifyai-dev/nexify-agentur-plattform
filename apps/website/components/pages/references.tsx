@@ -1,6 +1,6 @@
 "use client";
 
-import { Quote, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { useContent } from "@/lib/content";
 
@@ -31,18 +31,6 @@ export function ReferencesPage() {
                   ))}
                 </ul>
               </article>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {t.references.quotes.map((q, i) => (
-            <Reveal key={i} delay={i * 100}>
-              <figure className="glass h-full p-8">
-                <Quote size={22} className="text-zinc-600" />
-                <blockquote className="mt-5 text-[15px] leading-relaxed text-zinc-300">„{q.quote}“</blockquote>
-                <figcaption className="mt-5 text-xs uppercase tracking-[0.15em] text-zinc-600">{q.author}</figcaption>
-              </figure>
             </Reveal>
           ))}
         </div>
