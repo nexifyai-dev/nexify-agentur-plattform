@@ -1,15 +1,14 @@
 // FILE: /apps/website/lib/gtm/leistungen-seo.ts
 // NIR: 02.08.2026 10:55
-// UPDATED: 02.08.2026 10:55
+// UPDATED: 08.08.2026 14:55
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI GTM
 // WHAT: Full-service SEO/AEO catalog — keywords, answer-first, FAQ per Leistung
 // WHY: Page-1 + AI-citation coverage for every sellable NeXify Angebot (zero paid ads)
 // BEST-PRACTICE: Commercial-intent DE keywords; unique H1/meta; no stuffing; B2B only
 // PITFALL: V-SEO-L01: No fake AggregateRating; no invented local offices
-// DEPENDS: company.dayRate, branchen slugs
-// DOCS-REF: docs/gtm/PAGE1-KEYWORD-MAP.md
-// SESSION: seo-page1-all-services-7dd5
+// DOCS-REF: docs/gtm/GEO-LLM-SEO-2026-08-08.md (M-13: FAQ ≥6 je Seite, Antwort-zuerst, Frageform-H2)
+// SESSION: m13-geo-llm-seo-7dd5
 
 import { company } from "@/lib/company";
 
@@ -95,6 +94,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Für welche Regionen liefert ihr?",
         a: "Lieferung remote für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden — Sitz Venlo (NL), ohne Fake-Filialnetz.",
       },
+      {
+        q: "Was ist in einer Landingpage enthalten?",
+        a: "Strategie, individuelles Premium-Design, Next.js-Umsetzung, Kontakt- oder Leadformular, technisches SEO und Performance-Basis — inklusive rechtlicher Pflichtverlinkungen.",
+      },
+      {
+        q: "Bekomme ich den Quellcode der Landingpage?",
+        a: "Ja, vollständige Übergabe mit Repository — kein Lock-in. Hosting und Domain können Sie selbst betreiben oder wir begleiten die Einrichtung.",
+      },
+      {
+        q: "Für wen lohnt sich eine Landingpage statt einer Website?",
+        a: "Für ein einzelnes Angebot, eine Kampagne oder einen Markteintritt mit klarem Ziel (Lead, Anmeldung, Termin). Mehrere Zielgruppen brauchen eher eine Unternehmenswebsite.",
+      },
     ],
     branchen: ["handwerk", "immobilien", "ecommerce"],
     related: ["websites", "automatisierung", "beratung"],
@@ -151,6 +162,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Arbeitet ihr auch remote für Deutschland?",
         a: "Lieferung remote für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden — Sitz Venlo (NL), ohne Fake-Filialnetz.",
       },
+      {
+        q: "Welche Seiten sind in einer Unternehmenswebsite enthalten?",
+        a: "Startseite, Leistungsseiten, Expertenprofil, Preis- und Prozessdarstellung, Kontaktstrecke mit Formular sowie rechtliche Seiten (Impressum, Datenschutz, AGB).",
+      },
+      {
+        q: "Gehört SEO und Sitemap zum Umfang?",
+        a: "Ja, SEO-Metadaten und Sitemap gehören ab Tag eins dazu — inklusive strukturierter Daten und technischer Grundlagen für Google und KI-Suchmaschinen.",
+      },
+      {
+        q: "Was passiert nach dem Go-Live?",
+        a: "Sie erhalten Code, Dokumentation und klare Betriebsinformationen. Wartung und Weiterentwicklung sind separat buchbar — ohne Retainer-Zwang.",
+      },
     ],
     branchen: ["handwerk", "steuerberater", "agenturen", "kanzleien", "logistik", "pflege", "gastronomie", "produktion"],
     related: ["landingpages", "ki-begleiter", "beratung"],
@@ -206,6 +229,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Ab wann brauche ich Enterprise-Commerce?",
         a: "Typischerweise ab sehr großen Katalogen (ca. 50.000+ Artikel), schweren Importpipelines oder PIM/ERP-Kernsystemen.",
       },
+      {
+        q: "Welche Shop-Funktionen sind im Standardumfang?",
+        a: "Produkt- und Kategoriestruktur, Suche und Filter, Checkout mit Zahlungsanbieter, Bestellkommunikation per E-Mail, SEO und strukturierte Daten sowie Schnittstellen und Produktimport.",
+      },
+      {
+        q: "Übernehmt ihr einen bestehenden Produktkatalog?",
+        a: "Ja, über geplante Importpipelines. Datenqualität und Mapping werden vorab geklärt — keine Blackbox-Migration.",
+      },
+      {
+        q: "Wie lange dauert ein Onlineshop?",
+        a: "Standard-Shops sechs bis acht Arbeitstage, große Kataloge ab zwölf Tagen. Der Zeitrahmen steht vor Projektstart schriftlich fest.",
+      },
     ],
     branchen: ["ecommerce", "handwerk"],
     related: ["enterprise-commerce", "automatisierung", "web-apps"],
@@ -260,6 +295,18 @@ export const leistungenSeo: LeistungSeo[] = [
       {
         q: "Übernehmt ihr Bestandsdaten?",
         a: "Ja, über geplante Importpipelines. Datenqualität und Mapping werden im Blueprint geklärt — keine Blackbox-Migration.",
+      },
+      {
+        q: "Was unterscheidet Enterprise-Commerce von einem Standard-Shop?",
+        a: "Datenmodell, Suchindex, Importpipeline, Caching, Varianten und ERP/PIM-Anbindung werden von Beginn an skalierbar angelegt — Performance ist Architekturprinzip, keine Nachrüstung.",
+      },
+      {
+        q: "Welche Integrationen sind typisch?",
+        a: "PIM-/ERP-Anbindung, Lieferanten-Feeds, Delta-Importe, Monitoring und Recovery. Die konkrete Integrationsliste entsteht im technischen Blueprint vor dem Build.",
+      },
+      {
+        q: "Wie wird die Performance sichergestellt?",
+        a: "Durch Suchindex-Strategie, Caching und Lasttests. Antwortzeiten und Datenqualität werden als Abnahmekriterien definiert — messbar statt versprochen.",
       },
     ],
     branchen: ["ecommerce"],
@@ -317,6 +364,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Bleibt der Code bei uns?",
         a: "Ja. Vollständige Übergabe, kein Plattform-Lock-in.",
       },
+      {
+        q: "Welche Web-App-Funktionen sind im Standardumfang?",
+        a: "Login und Rollenkonzept, Dashboards und Auswertungen, Datenmodelle und APIs, Workflows mit Benachrichtigungen sowie Datei- und Dokumentenverwaltung.",
+      },
+      {
+        q: "Wie läuft ein Web-App-Projekt ab?",
+        a: "Produktkonzept vor dem Build, dann responsive Umsetzung mit Backend/API, Tests und Deployment-Übergabe — inklusive Betriebsdokumentation.",
+      },
+      {
+        q: "Bauen Sie auch komplexe Systeme?",
+        a: "Ja, ab zwölf Arbeitstagen. Umfang, Integrationen und Abnahmekriterien werden vorab schriftlich festgelegt — Mehrbedarf wird immer vor Ausführung sichtbar.",
+      },
     ],
     branchen: ["steuerberater", "agenturen", "immobilien"],
     related: ["kundenportal", "mobile-apps", "automatisierung"],
@@ -371,6 +430,18 @@ export const leistungenSeo: LeistungSeo[] = [
       {
         q: "Geht das remote für DACH?",
         a: "Lieferung remote für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden — Sitz Venlo (NL), ohne Fake-Filialnetz.",
+      },
+      {
+        q: "Welche App-Funktionen sind im Standardumfang?",
+        a: "iOS und Android aus einer Codebasis, Authentifizierung, Push und Benachrichtigungen, Offline-/Sync-Konzept und Store-Vorbereitung.",
+      },
+      {
+        q: "Wie lange dauert eine Mobile App?",
+        a: "Kompakte Cross-Platform-MVPs in sechs bis acht Arbeitstagen, umfangreiche Apps ab zwölf Tagen — inklusive Gerätetests und Release-Checkliste.",
+      },
+      {
+        q: "Wer veröffentlicht die App in den Stores?",
+        a: "Wir bereiten die Veröffentlichung vor (Release-Checkliste, Assets, Datenschutzangaben). Die Store-Accounts gehören Ihnen — keine Übergabe fremder Zugänge.",
       },
     ],
     branchen: ["handwerk", "immobilien", "ecommerce"],
@@ -428,6 +499,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Nutzt ihr n8n?",
         a: "n8n ist bei uns kein Integrationsziel. Wir wählen Workflow- und Integrationswege passend zu Sicherheit, Betrieb und Ihrem Stack.",
       },
+      {
+        q: "Welche Prozesse eignen sich zuerst?",
+        a: "Häufige, regelbasierte und nervige Abläufe: E-Mail- und Dokumentenflows, CRM-/ERP-Integrationen, Berichtserstellung. Hier ist der Return sofort messbar.",
+      },
+      {
+        q: "Wie schnell ist ein Workflow produktiv?",
+        a: "Erste messbare Ergebnisse gibt es bei fokussierten Workflows nach zwei bis vier Wochen — Prozesskarte und Baseline vor dem Build, Auswertung nach dem Go-Live.",
+      },
+      {
+        q: "Bleibt die Automatisierung kontrollierbar?",
+        a: "Ja: Freigaben und Policy-Gates, Monitoring sowie Fehler- und Recovery-Pfade gehören zum Lieferumfang — jede Aktion bleibt nachvollziehbar.",
+      },
     ],
     branchen: ["handwerk", "steuerberater", "ecommerce", "immobilien", "kanzleien", "logistik", "pflege", "gastronomie", "produktion"],
     related: ["ai-agenten", "audit", "ki-plattform"],
@@ -484,6 +567,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Ist das DSGVO-tauglich?",
         a: "Wir planen Zugriffe, Speicherung und Freigaben bewusst. Konkrete Rechtsberatung ist nicht Bestandteil — AVV und KI-Hinweise stellen wir bereit.",
       },
+      {
+        q: "Welche Aufgaben übernimmt ein AI-Agent?",
+        a: "Typisch sind Support-Vorqualifizierung, interne Wissensarbeit mit Quellenangabe und Backoffice-Routine wie Statusprüfung oder Entwurfserstellung — immer mit menschlicher Freigabe bei heiklen Schritten.",
+      },
+      {
+        q: "Wie wird die Qualität der Antworten geprüft?",
+        a: "Durch Evaluation und Testsuiten mit Negativtests, Evidence-Logs jeder Aktion sowie definierte Ausstiegskriterien — Qualität ist Teil des Lieferumfangs.",
+      },
+      {
+        q: "Wie schnell ist ein Agent einsatzbereit?",
+        a: "Erste Agenten-Versionen entstehen ab drei Arbeitstagen. Der schmale Pilot (ein Prozess, eine Datenquelle) ist der empfohlene Start.",
+      },
     ],
     branchen: ["steuerberater", "agenturen", "ecommerce", "kanzleien", "logistik", "pflege", "gastronomie", "produktion"],
     related: ["ki-begleiter", "automatisierung", "ki-plattform"],
@@ -538,6 +633,18 @@ export const leistungenSeo: LeistungSeo[] = [
       {
         q: "Was kostet es?",
         a: "Ab ca. 3 Tagen × 449 €. Nach kurzem Fit-Call oder Audit priorisieren wir den sinnvollsten Slice.",
+      },
+      {
+        q: "Woran erkennt der Nutzer, dass er mit KI spricht?",
+        a: "Transparenz ist Pflicht: Der KI-Hinweis kennzeichnet Chat-Kontakt (EU AI Act Art. 50). Grenzen und Eskalation an Menschen sind Teil des Konzepts.",
+      },
+      {
+        q: "Welche Daten nutzt der Begleiter?",
+        a: "Eine definierte Wissensbasis (z. B. eigene Dokumente, FAQ, Produktdaten) mit Rechten je Rolle — keine freie Internetrecherche ohne Freigabe.",
+      },
+      {
+        q: "Wie wird der Begleiter in die Website eingebettet?",
+        a: "Als Chat-Widget mit eigenem Design, DSGVO-Hinweis und Session-Log — wie NeXify AI auf dieser Website, nur für Ihr Unternehmen.",
       },
     ],
     branchen: ["steuerberater", "agenturen", "immobilien"],
@@ -595,6 +702,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Remote für Deutschland?",
         a: "Lieferung remote für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden — Sitz Venlo (NL), ohne Fake-Filialnetz.",
       },
+      {
+        q: "Welche Portal-Funktionen sind im MVP enthalten?",
+        a: "Authentifizierung und Rollen, Status und Tickets/Aufgaben, Dokumentenablage, Benachrichtigungen, Audit-Trail und eine API zu Bestandssystemen.",
+      },
+      {
+        q: "Wie schnell ist ein Kundenportal live?",
+        a: "Typisch sechs bis acht Arbeitstage für das MVP. Vorab entsteht ein Produktkonzept mit Scope und Abnahmekriterien.",
+      },
+      {
+        q: "Was reduziert ein Portal im Tagesgeschäft?",
+        a: "Manuelle Statusmails und Rückfragen: Kunden sehen Status und Dokumente selbst — Kommunikation wird transparenter und Support entlastet.",
+      },
     ],
     branchen: ["steuerberater", "agenturen", "immobilien"],
     related: ["web-apps", "white-label", "automatisierung"],
@@ -651,6 +770,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Wie startet man?",
         a: "Fit-Call oder Audit-Tag, dann Pilot. Siehe auch AI-Agenten und Automatisierung.",
       },
+      {
+        q: "Welche Bausteine gehören zu einer KI-Plattform?",
+        a: "Modell-Routing mit Allowlists, Agentengedächtnis und Session-Kontext, semantische Wissenssuche (RAG), Freigaben und Policy-Gates sowie Betriebs- und Sicherheitsgrenzen.",
+      },
+      {
+        q: "Was bringt Modell-Routing im Betrieb?",
+        a: "Passende Modelle je Aufgabe, Kostenkontrolle und definierte Ausfallpfade — statt eines einzigen Blackbox-Anbieters mit Preisrisiko.",
+      },
+      {
+        q: "Wie bleiben Antworten nachvollziehbar?",
+        a: "Durch Dual-Write und Indexierung, zitierbare Quellen und Evidence-Logs je Agentenaktion — skaliert vom Pilot bis zum Betrieb.",
+      },
     ],
     branchen: ["agenturen", "steuerberater", "ecommerce"],
     related: ["ai-agenten", "automatisierung", "audit"],
@@ -705,6 +836,18 @@ export const leistungenSeo: LeistungSeo[] = [
       {
         q: "BAFA-Beratung?",
         a: "Wir sind kein BAFA-zertifizierter Berater und behaupten das nicht. Förderfragen klären Sie mit Ihrem Steuerberater/zuständiger Stelle.",
+      },
+      {
+        q: "Was bekomme ich nach der Beratung schriftlich?",
+        a: "Eine Ist-Analyse mit Priorisierung nach Aufwand × Nutzen, technischer Machbarkeit, Risiken und einer klaren Empfehlung — Pilot, weitere Tage oder Pause.",
+      },
+      {
+        q: "Für wen ist KI-Beratung sinnvoll?",
+        a: "Für Geschäftsführung, Ops und IT-Verantwortliche im Mittelstand, die vor einer Investition entscheiden wollen, was sich lohnt — und was bewusst nicht.",
+      },
+      {
+        q: "Wie läuft die Beratung ab?",
+        a: "Remote per Video, in der Regel ein halber bis ganzer Tag: Gespräch, Sichtung der Systeme, schriftliche Prioritäten — ohne Verkaufsfolien.",
       },
     ],
     branchen: ["handwerk", "steuerberater", "ecommerce", "kanzleien", "logistik", "pflege", "gastronomie", "produktion"],
@@ -762,6 +905,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Was kostet ein Workshop-Tag?",
         a: "449 € netto pro Arbeitstag. Reisezeit/Spesen nur wenn vor Ort und vorab vereinbart.",
       },
+      {
+        q: "Was ist das Ergebnis eines Workshops?",
+        a: "Team-Alignment, ein priorisierter Use-Case-Backlog und eine schriftliche Empfehlung für den nächsten Schritt — kein Motivationsseminar.",
+      },
+      {
+        q: "Welche Themen deckt ein Workshop ab?",
+        a: "KI-Grundlagen mit Live-Demos relevanter Patterns, Automatisierungs-Use-Cases, Guardrails und Risiken sowie optional eine Hands-on-Übung zu Prompts und Flows.",
+      },
+      {
+        q: "Eignet sich ein Workshop als Projektstart?",
+        a: "Ja, häufig als Kickoff: Das Team versteht danach, welche Prozesse sich lohnen — und der Übergang in einen Pilot ist direkt möglich.",
+      },
     ],
     branchen: ["agenturen", "steuerberater", "handwerk"],
     related: ["beratung", "audit", "white-label"],
@@ -818,6 +973,18 @@ export const leistungenSeo: LeistungSeo[] = [
         q: "Gibt es Mindestvolumen?",
         a: "Nein. Ein klarer Pilot-Slice reicht als Einstieg.",
       },
+      {
+        q: "Was liefert ihr im White-Label?",
+        a: "Web-, Shop- und AI-Umsetzung unter Ihrer Marke (nach Vereinbarung), mit klarer Tagessatz-Kalkulation für Ihre Angebote und Repo-Disziplin bei der Übergabe.",
+      },
+      {
+        q: "Wie kalkuliere ich als Partner meine Marge?",
+        a: "Transparent: Ihre Angebotskalkulation baut auf dem Tagessatz auf, wir zeigen die Rechengrundlage — keine versteckten Retainer oder Zusatzgebühren.",
+      },
+      {
+        q: "Brauchen Partner ein Paid-Portal?",
+        a: "Nein. Es gibt kein Partner-Portal-Abo — der Einstieg läuft über Gespräch, NDA auf Wunsch und klare Pilot-Scopes.",
+      },
     ],
     branchen: ["agenturen"],
     related: ["websites", "web-apps", "automatisierung", "workshops"],
@@ -872,6 +1039,18 @@ export const leistungenSeo: LeistungSeo[] = [
       {
         q: "Remote möglich?",
         a: "Lieferung remote für Unternehmen in Deutschland, Österreich, der Schweiz und den Niederlanden — Sitz Venlo (NL), ohne Fake-Filialnetz.",
+      },
+      {
+        q: "Was ist im Audit-Deliverable enthalten?",
+        a: "Ist-Zustand von Website, Tools und Prozessen, die Top-3 Hebel nach Aufwand × Nutzen, eine Festpreis-Empfehlung für einen Pilot sowie Risiken und Guardrails.",
+      },
+      {
+        q: "Muss ich nach dem Audit kaufen?",
+        a: "Nein, es besteht keine Kaufpflicht. Das Dokument gehört Ihnen — Entscheidung über Pilot oder Pause liegt bei Ihnen.",
+      },
+      {
+        q: "Für wen lohnt sich der Audit-Tag?",
+        a: "Für KMU vor einer KI-Investition, die eine belastbare Entscheidungsgrundlage wollen — statt teurer Fehlstarts mit Tool-Lizenzen.",
       },
     ],
     branchen: ["handwerk", "steuerberater", "ecommerce", "immobilien", "agenturen", "kanzleien", "logistik", "pflege", "gastronomie", "produktion"],

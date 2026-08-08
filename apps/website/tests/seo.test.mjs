@@ -79,10 +79,10 @@ test("faq categories are expansive with H2 sections in UI", () => {
   assert.match(ui, /data-testid="faq-page"/);
   assert.match(ui, /data-testid=\{`faq-section-\$\{cat\.id\}`\}/);
   assert.match(ui, /href="\/leistungen"/);
-  assert.match(ui, /href="\/preise"/);
-  assert.match(ui, /href="\/kontakt"/);
+  assert.match(ui, /href="\/preise(?:#planner)?\?utm_source=faq/);
+  assert.match(ui, /href="\/preise#planner/);
+  assert.match(ui, /href="\/kontakt\?utm_source=faq/);
   assert.match(ui, /href="\/wissen"/);
-  assert.match(ui, /preise#planner/);
   assert.doesNotMatch(cats, /999/);
 });
 
@@ -233,9 +233,9 @@ test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
   assert.match(page, /pageMetadata/);
   assert.match(page, /breadcrumbListJsonLd/);
   assert.match(page, /articleJsonLd/);
-  assert.match(page, /href="\/preise"/);
+  assert.match(page, /href="\/preise(?:[?"][^"]*)?"/);
   assert.match(page, /href="\/leistungen"/);
-  assert.match(page, /href="\/kontakt"/);
+  assert.match(page, /href="\/kontakt(?:[?"][^"]*)?"/);
 
   const index = read("components/pages/knowledge.tsx");
   assert.match(index, /WISSEN_ARTICLES/);
@@ -255,8 +255,8 @@ test("venlo local SEO page has SSR metadata, BreadcrumbList and LocalBusiness/Pl
   assert.match(page, /449|company\.dayRate/);
   assert.match(page, /Graaf van Loonstraat|company\.address/);
   assert.match(page, /href="\/leistungen"/);
-  assert.match(page, /href="\/preise"/);
-  assert.match(page, /href="\/kontakt"/);
+  assert.match(page, /href="\/preise(?:[?"][^"]*)?"/);
+  assert.match(page, /href="\/kontakt(?:[?"][^"]*)?"/);
   assert.match(page, /data-testid="venlo-page"/);
   assert.doesNotMatch(page, /999/);
 

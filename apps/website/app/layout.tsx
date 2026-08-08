@@ -102,6 +102,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     },
     areaServed: ["DE", "AT", "CH", "NL"],
     priceRange: "€€",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: company.phone,
+      email: company.email,
+      areaServed: ["DE", "AT", "CH", "NL"],
+      availableLanguage: ["de", "nl", "en"],
+    },
     makesOffer: {
       "@type": "Offer",
       price: String(company.dayRate),
