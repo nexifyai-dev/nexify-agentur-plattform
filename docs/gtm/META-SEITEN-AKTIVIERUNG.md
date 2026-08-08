@@ -34,6 +34,26 @@ App-Dashboard → App 28086460497651702 → Produkte hinzufügen:
 4. **Marketing:** Content-Plan (2 Beiträge/Woche, CI #0a0a0a/#C8FF00), erste 5 Beiträge liegen bereit (docs/gtm/META-SEITEN-MARKETING.md); Ads-Ansatz: Werbekonto 2236954670479629, CTA → /preise, Zielgruppe DE/AT/CH/NL.
 5. **Verifikation:** `meta-whatsapp-verify.py` (WhatsApp), Seite-POST-Test (Testbeitrag → löschen), Messenger-Echo-Test.
 
+
+## SCHRITT-FÜR-SCHRITT (Pascal, je ~2 Minuten) — Stand 2026-08-08
+
+> Webhook-Empfang ist BEREITS LIVE: Alle 3 Subscriptions (page/instagram/whatsapp_business_account) per API registriert und aktiv; Callback `https://api.nexifyai.cloud/webhooks/meta`, Verify-Tokens akzeptiert (beide). Es fehlen NUR die Asset-Verknüpfungen unten.
+
+### A) Messenger aktivieren (2 Min)
+1. https://developers.facebook.com/apps/28086460497651702 öffnen
+2. Linkes Menü: **Messenger** → **Setup** → **Erste Schritte**
+3. Seite wählen: **NeXify - Chat it. Automate it.** (Telefonprofil 1071302456068905 oder FB-Seite 702237169646391) → **Weiter**
+4. Auf der Setup-Seite unten: **„Zugriffstoken generieren"** → Token kopieren → **mir schicken** (`META_PAGE_TOKEN`)
+
+### B) Instagram aktivieren (2 Min)
+1. App-Dashboard → **„+ Produkt hinzufügen"** (linkes Menü, unten) → **Instagram**
+2. **„Instagram-Konto verbinden"** → **@nexify.automate** wählen → bestätigen
+3. Fertig (Webhook ist schon aktiv)
+
+### C) WhatsApp (läuft parallel bei dir)
+- WABA + Nummer sind eingerichtet (Phone-ID 767191923135508 verankert) — fehlt: **WABA-ID** + **System-User-Token** (Business Settings → System Users → Generate token, Permissions `whatsapp_business_messaging` + `whatsapp_business_management`) → mir schicken
+
+**Nach den Tokens mache ich automatisch (API):** Page-Subscription (`/{page_id}/subscribed_apps`), Seiten-CI (Profil/Beschreibung/CTA), Messenger-Begrüßung, erste 5 Beiträge, WABA-Subscription, Templates, Sendetest.
 ## Blockaden (aktuell)
 
 | Blockade | Lösung |
