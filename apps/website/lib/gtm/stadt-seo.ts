@@ -31,16 +31,16 @@ export type Stadt = {
 };
 
 export const staedte: Stadt[] = [
-  { slug: "berlin", name: "Berlin", bundesland: "Berlin" },
-  { slug: "hamburg", name: "Hamburg", bundesland: "Hamburg" },
-  { slug: "muenchen", name: "München", bundesland: "Bayern" },
-  { slug: "koeln", name: "Köln", bundesland: "Nordrhein-Westfalen" },
-  { slug: "frankfurt-am-main", name: "Frankfurt am Main", bundesland: "Hessen" },
-  { slug: "duesseldorf", name: "Düsseldorf", bundesland: "Nordrhein-Westfalen" },
-  { slug: "stuttgart", name: "Stuttgart", bundesland: "Baden-Württemberg" },
-  { slug: "leipzig", name: "Leipzig", bundesland: "Sachsen" },
-  { slug: "dortmund", name: "Dortmund", bundesland: "Nordrhein-Westfalen" },
-  { slug: "hannover", name: "Hannover", bundesland: "Niedersachsen" },
+  { slug: "ki-agentur-berlin", name: "Berlin", bundesland: "Berlin" },
+  { slug: "ki-agentur-hamburg", name: "Hamburg", bundesland: "Hamburg" },
+  { slug: "ki-agentur-muenchen", name: "München", bundesland: "Bayern" },
+  { slug: "ki-agentur-koeln", name: "Köln", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-frankfurt-am-main", name: "Frankfurt am Main", bundesland: "Hessen" },
+  { slug: "ki-agentur-duesseldorf", name: "Düsseldorf", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-stuttgart", name: "Stuttgart", bundesland: "Baden-Württemberg" },
+  { slug: "ki-agentur-leipzig", name: "Leipzig", bundesland: "Sachsen" },
+  { slug: "ki-agentur-dortmund", name: "Dortmund", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-hannover", name: "Hannover", bundesland: "Niedersachsen" },
 ];
 
 export function stadtSlugs(): string[] {
@@ -57,13 +57,14 @@ export function getStadt(slug: string): Stadt | undefined {
  * Kein 1:1-Template: jede Stadt hat eigene Texte (E2E-Gegentest Similarity < 60%).
  */
 export const stadtContent: Record<string, StadtSeoContent> = {
-  "berlin": {
+  "ki-agentur-berlin": {
     h1: "KI-Agentur Berlin — Websites, Apps & KI-Automatisierung",
     intro: "Wir bauen für Berliner KMU Websites, Apps und KI-Automatisierung, die echten Umsatz bringen. Kein buzzword-Gefasel, sondern handfeste Prozesse: Terminbuchung, Angebotserstellung, Kundenkommunikation. Unser Team arbeitet remote-first vom Standort Venlo aus, mit regelmäßigen Berlin-Besuchen für Workshops. Tagessatz 449 Euro, transparent und fest – ohne Überraschungen. Sie profitieren von schnellen Reaktionszeiten und pragmatischen Lösungen, die zu Ihrer Branche passen – ob Handwerk, Gastronomie oder Tech.",
     services: [
       { title: "Website & Webshop", text: "Wir entwickeln performante Websites und Webshops, die auf Conversion optimiert sind. Von der Struktur bis zum Ladezeit-Tuning: alles auf Ihre Berliner Zielgruppe ausgerichtet. Sie erhalten ein System, das Sie selbst pflegen können. Kein Ballast, keine überflüssigen Plugins." },
       { title: "KI-Automatisierung & Chatbots", text: "Ihr Support-Team schläft nie: Wir integrieren Chatbots, die Termine vergeben, Standardfragen beantworten und Leads qualifizieren. Dazu automatisieren wir interne Workflows wie Rechnungserstellung und E-Mail-Follow-ups. Ihre Mitarbeiter arbeiten an den wichtigen Aufgaben, nicht an Routine." },
       { title: "WhatsApp-Marketing & CRM", text: "Wir verbinden Ihr CRM mit WhatsApp, damit Sie Kunden dort erreichen, wo sie täglich sind. Automatisierte Kampagnen, personalisierte Nachrichten, ohne Datenschutz-Risiko. Sie behalten den Überblick über jeden Kontakt und steigern die Wiederkaufrate messbar." },
+      { title: "Branchenlösungen für Berlins Wirtschaft", text: "Berlins Wirtschaftsgefüge ist einzigartig: junge Technologie-Startups, eine starke Kreativwirtschaft, Gesundheitsunternehmen und ein wachsendes Handwerk. Wir kennen die unterschiedlichen Anforderungen dieser Branchen und bauen Lösungen, die zu Ihrem Geschäftsmodell passen — vom schnellen MVP für ein Scale-up bis zur stabilen Plattform für einen etablierten Mittelständler. Auch Förderprogramme und Digitalisierungsinitiativen des Landes Berlin können Ihre Projekte unterstützen; wir beraten Sie gern, welche Anschlussfähigkeit Ihre Lösung dafür mitbringen sollte." },
     ],
     localNote: "Wir sind zwar remote-first in Venlo, aber kein Fake-Büro in Berlin. Wir pflegen echte Kooperationen mit lokalen Partnern und besuchen Sie bei Bedarf persönlich. Die Zusammenarbeit funktioniert digital – mit festen Ansprechpartnern und klaren Kommunikationswegen.",
     faqs: [
@@ -73,15 +74,16 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie funktioniert die Remote-Zusammenarbeit?", a: "Wir nutzen strukturierte Projektmanagement-Tools und wöchentliche Videocalls. Sie haben direkten Draht zu Ihrem Projektleiter. Bei Kickoff und Review sind wir vor Ort in Berlin, wenn es nötig ist." },
     ],
   },
-  "hamburg": {
+  "ki-agentur-hamburg": {
     h1: "KI-Agentur Hamburg — Websites, Apps & KI-Automatisierung",
     intro: "Für Hamburger Mittelstand und Startups entwickeln wir digitale Lösungen, die den Hafen an Effizienz denken. Website, App oder KI-basierte Prozessautomatisierung – wir setzen auf bewährte Technik statt Experimente. Remote-first aus Venlo, aber mit Verständnis für lokale Branchen wie Logistik, Handel und Medien. Tagessatz 449 Euro, kalkulierbar und fair. Sie bekommen einen Partner, der liefert und mitdenkt – ohne monatelange Implementierungszeit.",
     services: [
       { title: "Webentwicklung & Webshops", text: "Ob Corporate Site oder Shop: Wir bauen mit modernem Stack, der schnell läuft und einfach zu pflegen ist. Typisch Hamburger Hanse-Geist: pragmatisch, zuverlässig, auf den Punkt. Ihre Kunden finden schnell, was sie suchen – und kaufen." },
       { title: "KI-Automatisierung & Chatbots", text: "Wir ersetzen manuelle Schreibtischarbeit durch intelligente Automatisierung. Chatbots für Vertrieb und Support, automatische Datenverarbeitung, Formularerkennung. Ihre Prozesse laufen rund um die Uhr, ohne Fehler und ohne Personalkosten." },
       { title: "WhatsApp Business & CRM-Anbindung", text: "Kommunizieren Sie mit Kunden über WhatsApp – zentralisiert und DSGVO-konform. Wir verknüpfen Ihr CRM, senden Erinnerungen, Angebote und Newsletter. In der maritimen Stadt wissen Sie: Der Wind dreht schnell. Wir halten Ihre Kunden auf Kurs." },
+      { title: "Lösungen für Logistik, Hafen & Handel", text: "Hamburg lebt von Logistik, Hafenwirtschaft, Handel und Medien — dazu kommen Reedereien, Speditionen und ein breiter Dienstleistungssektor. Für diese Branchen automatisieren wir Sendungsstatus-Kommunikation, bauen Buchungsportale und integrieren Bestellsysteme in Warenwirtschaften. Auch klassische Hamburger Handelshäuser profitieren von digitalen Prozessen, die Bestellabwicklung und Reklamationen beschleunigen. Wir sprechen Ihre Branche, nicht nur Ihre Software." },
     ],
-    localNote: "Remote-first aus Venlo, aber kein Schein-Filialkonzept in Hamburg. Wir arbeiten digital mit klaren Prozessen und sind für Workshops zu Ihnen vor Ort. Unsere Erfahrung aus norddeutscher und niederländischer Wirtschaft macht die Zusammenarbeit unkompliziert – und ehrlich.",
+    localNote: "Remote-first aus Venlo, aber kein Schein-Filialkonzept in Hamburg. Wir arbeiten digital mit klaren Prozessen und sind für Workshops zu Ihnen vor Ort. Unsere Erfahrung aus norddeutscher und niederländischer Wirtschaft macht die Zusammenarbeit unkompliziert – und ehrlich. Die Elbmetropole ist für uns kein abstrakter Markt: Wir kennen die Erwartungen hanseatischer Unternehmen an Pünktlichkeit, Verbindlichkeit und direkte Kommunikation. Projekte starten mit einem klaren Kickoff, in dem Ziele, Budgetrahmen und Erfolgskriterien schriftlich fixiert werden — bevor auch nur eine Zeile Code entsteht.",
     faqs: [
       { q: "Was kostet eine KI-Automatisierung in Hamburg?", a: "Der Tagessatz beträgt 449 Euro; ein kleines Automatisierungsprojekt startet bei 2.500 Euro. Machbarkeit und Aufwand klären wir in einem kostenlosen Erstgespräch. Sie erhalten ein transparentes Angebot." },
       { q: "Wie lange dauert die Entwicklung einer App in Hamburg?", a: "Eine Standard-App benötigt 6 bis 12 Wochen. Komplexe Integrationen können länger dauern. Sie bekommen von Anfang an einen Umsetzungsplan mit festen Deadlines." },
@@ -89,15 +91,16 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie kommen wir mit Ihnen in Kontakt, wenn Sie remote sind?", a: "Täglich per E-Mail, Slack oder Telefon – und bei Bedarf per Videocall. Wir sind auch regelmäßig in Hamburg, etwa für Workshops und Projekt-Kickoffs. Persönlicher Kontakt bleibt essentiell." },
     ],
   },
-  "muenchen": {
+  "ki-agentur-muenchen": {
     h1: "KI-Agentur München — Websites, Apps & KI-Automatisierung",
     intro: "Für Münchner Unternehmen – von Automobilzulieferern bis zur Biotech-Szene – entwickeln wir Websites, Apps und KI-Automatisierung, die komplexe Anforderungen mit einfacher Bedienbarkeit verbinden. Unser remote-first-Team in Venlo kombiniert deutsche Präzision mit pragmatischer Herangehensweise. Tagessatz 449 Euro, Festpreise für klare Projekte. Wir liefern nicht nur Code, sondern auch Strategie. So bleiben Sie wettbewerbsfähig im Herzen des High-Tech-Standorts.",
     services: [
       { title: "Hochleistungs-Websites & Webshops", text: "Technisch anspruchsvolle Plattformen, die auch bei hohen Zugriffszahlen stabil laufen. Wir optimieren für Suchmaschinen, Conversions und Mobile-First. Ihr Webauftritt wird zur effektiven Vertriebsmaschine – ohne komplizierte Verwaltung." },
       { title: "KI-Automatisierung & intelligente Chatbots", text: "Von der automatisierten Angebotserstellung bis zur Predictive Analytics: Wir setzen Machine Learning gezielt ein, wo es Mehrwert bringt. Chatbots sprechen natürlich und integrieren sich in Ihre Systeme. Sie sparen Zeit und Kosten nachweislich." },
       { title: "WhatsApp-Marketing & CRM-Workflows", text: "WhatsApp ist der direkte Draht zum Kunden. Wir automatisieren Kampagnen und Support, verknüpfen mit Salesforce, HubSpot oder individuellen CRMs. DSGVO-konform, mit klarer Dokumentation. Ihre Vertriebsmannschaft nutzt die effektivste Kommunikationslinie." },
+      { title: "Industrie, Mobilität & Versicherung", text: "Der Münchner Markt ist geprägt von Automobil- und Zulieferindustrie, Maschinenbau, Versicherungen und einer dichten Forschungslandschaft. Wir bauen für diese Unternehmen Konfiguratoren, B2B-Portale und Dokumentenautomatisierung, die sich in bestehende ERP- und CRM-Landschaften einfügen. Auch Mittelständler im Umland profitieren: Wir arbeiten deutschlandweit remote und kommen für Workshops gern in die bayerische Landeshauptstadt. Präzision und Termintreue sind hier kein Extra, sondern Standard." },
     ],
-    localNote: "Remote-first aus Venlo, aber keine virtuelle Filiale. Wir betreuen Münchner Unternehmen mit festem Ansprechpartner und besuchen Sie für Strategieworkshops und Reviews. Die Distanz ist überwindbar – was zählt, sind schnelle Entscheidungswege und Ergebnisse.",
+    localNote: "Remote-first aus Venlo, aber keine virtuelle Filiale. Wir betreuen Münchner Unternehmen mit festem Ansprechpartner und besuchen Sie für Strategieworkshops und Reviews. Die Distanz ist überwindbar – was zählt, sind schnelle Entscheidungswege und Ergebnisse. In einer Stadt, in der technische Exzellenz zum Selbstverständnis gehört, messen wir uns gern an diesem Anspruch: saubere Architektur, dokumentierter Code und ein Projektmanagement, das Termine hält. Für Unternehmen in Schwabing, im Werksviertel oder im Umland gilt derselbe Standard — keine Unterschiede zwischen Stadt und Region.",
     faqs: [
       { q: "Wie sind Ihre Preise für ein Projekt in München?", a: "Tagessatz 449 Euro; eine durchschnittliche Website liegt bei 4.000 bis 7.000 Euro. KI-Projekte projektieren wir individuell. Sie erhalten immer eine Festpreisgarantie aus dem ersten Workshop." },
       { q: "Wie lange dauert die Umsetzung eines Chatbots?", a: "Basierend auf Standardmodulen zwei bis vier Wochen. Individuelle Integrationen in CRM oder ERP benötigen vier bis sechs Wochen. Nach der Freigabe starten wir sofort." },
@@ -105,15 +108,16 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie läuft die Remote-Zusammenarbeit mit einem Münchner Kunden ab?", a: "Regelmäßige Videocalls, Kanban-Board mit offenem Zugang, wöchentliche Statusmails. Für Kreativ-Workshops und Abnahme sind wir persönlich in München. So bleibt die Kommunikation effektiv und vertrauensvoll." },
     ],
   },
-  "koeln": {
+  "ki-agentur-koeln": {
     h1: "KI-Agentur Köln — Websites, Apps & KI-Automatisierung",
     intro: "Kölns Mittelstand braucht digitale Lösungen, die mithalten mit den Besten. Wir entwickeln Websites, Apps und KI-Automatisierung für Medien, Versicherungen, Logistik und das Handwerk – mit klarer Kante und ohne Schnickschnack. Remote-first aus Venlo, mit echter Verbindung zur Domstadt durch regelmäßige Präsens. Tagessatz 449 Euro, transparent kalkuliert. Sie profitieren von unserer jahrelangen Erfahrung mit lokalen und internationalen Teams – und von Ergebnissen, die Sie messen können.",
     services: [
       { title: "Webentwicklung für mittelständische Unternehmen", text: "Performante Websites und Webshops, die auf Geschwindigkeit und Bedienbarkeit getrimmt sind. Wir nutzen bewährte Strukturen und achten auf SEO-Grundlagen. Ihre Seite wird zum Verkaufsargument – gerade für Kölner Kunden, die Wert auf Verlässlichkeit legen." },
       { title: "KI-gestützte Automatisierung & Chatbots", text: "Ob Versicherungsanfragen, Terminvereinbarungen oder Dokumentenprüfung – wir automatisieren wiederkehrende Abläufe. Unsere Chatbots lernen aus den Gesprächen und verbessern sich kontinuierlich. Sie entlasten Ihr Team spürbar, ohne die Qualität zu beeinträchtigen." },
       { title: "WhatsApp-Marketing & CRM-Integration", text: "Wir machen WhatsApp zum Vertriebskanal: personalisierte Nachrichten, automatisierte Follow-ups, die den Beratungstermin ausfüllen. Ihr CRM bleibt die zentrale Datenbasis. DSGVO-konform und mit messbarem ROI für jedes Geschäftsfeld." },
+      { title: "Medien, Versicherungen & Handwerk", text: "Köln ist Medienstandort, Versicherungshochburg und Heimat eines starken Handwerks — vom Kölner Dom umgeben von Mittelstand, der digital aufholt. Für Medienhäuser bauen wir Content-Plattformen, für Versicherungen automatisierte Antragsstrecken, für Handwerksbetriebe Terminbuchung und WhatsApp-Kommunikation. Die Kölner Wirtschaft ist vielseitig; unsere Lösungen sind es auch. Wir beraten auf Deutsch und Niederländisch — für die Nachbarschaft am Rhein kein Hindernis, sondern ein Vorteil." },
     ],
-    localNote: "Remote-first aus Venlo, kein Büro in Köln „auf dem Papier“. Wir arbeiten digital mit klaren Prozessen, sind aber regelmäßig vor Ort in Workshops und bei der Einführung. Das ist keine Kulisse, sondern gelebte Nähe auf Distanz.",
+    localNote: "Remote-first aus Venlo, kein Büro in Köln „auf dem Papier“. Wir arbeiten digital mit klaren Prozessen, sind aber regelmäßig vor Ort in Workshops und bei der Einführung. Das ist keine Kulisse, sondern gelebte Nähe auf Distanz. Kölns Wirtschaft ist bunt — vom Medienviertel über den Versicherungsring bis zu den Handwerksbetrieben in den Veedeln. Unsere Lösungen spiegeln diese Vielfalt: mal ein schlanker Website-Relaunch, mal eine vollautomatische Terminstrecke, mal ein Chatbot, der Versicherungsfragen rund um die Uhr beantwortet. Jedes Projekt bekommt genau den Umfang, den es braucht — nicht mehr, nicht weniger.",
     faqs: [
       { q: "Was kostet eine Website in Köln?", a: "Ab 4.500 Euro für eine professionelle Seite mit CMS. Komplexere Projekte wie Webshops starten bei 7.500 Euro. Der Tagessatz liegt bei 449 Euro, mit Festpreisvereinbarung." },
       { q: "Wie lange dauert ein Chatbot-Projekt in Köln?", a: "Mit Standardmodulen etwa drei Wochen. Individuelle Anpassungen an Ihr CRM oder ERP dauern fünf bis acht Wochen. Sie erhalten einen verbindlichen Terminplan vor Projektstart." },
@@ -121,13 +125,14 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie funktioniert die Kommunikation bei Remote-Projekten?", a: "Direct über Slack und E-Mail, mit wöchentlichen Statuscalls. Für Workshops und das finale Testing kommen wir nach Köln. Das hält den Aufwand gering und die Abstimmung hoch." },
     ],
   },
-  "frankfurt-am-main": {
+  "ki-agentur-frankfurt-am-main": {
     h1: "KI-Agentur Frankfurt am Main — Websites, Apps & KI-Automatisierung",
     intro: "Frankfurt ist das Finanzzentrum – hier zählt Effizienz bis auf die zweite Nachkommastelle. Wir unterstützen lokale KMU und Startups mit Websites, Apps und KI-Automatisierung, die Prozesse nachweislich beschleunigen. Remote-first aus Venlo, mit einer Arbeitsweise, die auf Transparenz und Liefertreue ausgelegt ist. Tagessatz 449 Euro, unbürokratisch. Ob Kanzlei, FinTech oder Beratung: Sie erhalten digitale Werkzeuge, die Ihren Alltag erleichtern und Ihren Gewinn steigern.",
     services: [
       { title: "Professionelle Websites & Webshops", text: "Klare Struktur, schnelle Ladezeiten, überzeugende Darstellung – genau das erwarten Frankfurter Kunden. Wir bauen Websites und Webshops, die Vertrauen schaffen und Umsatz generieren. Pflegeleicht, ohne Versteckspiel. Sie können Inhalte selbst anpassen." },
       { title: "KI-Automatisierung & Chatbots für Dienstleister", text: "Automatisierte Terminvereinbarungen, Dokumentenanalysen und Kundenqualifikation – das spart Kosten und minimiert Fehler. Unsere Chatbots liefern präzise Antworten und leiten komplexe Fälle an Ihr Team weiter. Effizienz, wie sie im Bankenviertel üblich ist." },
       { title: "WhatsApp-Marketing & CRM-Anbindung", text: "Wir bauen eine nahtlose Schnittstelle zwischen WhatsApp und Ihrem CRM. Automatisierte Nachrichten, Status-Updates, Zahlungserinnerungen – DSGVO-konform und serviceorientiert. Ihre Kunden schätzen die schnelle Antwortzeit, Sie sparen Personalressourcen." },
+      { title: "Finanzdienstleistung, Kanzleien & Beratung", text: "Frankfurt ist das Finanzzentrum Deutschlands: Banken, Versicherungen, Wirtschaftsprüfer, Kanzleien und Unternehmensberatungen prägen die Stadt. Für diese Kundengruppe entwickeln wir Compliance-freundliche Portale, automatisierte Reportings und sichere Kundenkommunikation mit strengen Zugriffskonzepten. Auch Logistikunternehmen rund um den Flughafen nutzen unsere Automatisierung für Frachtstatus und Disposition. Vertraulichkeit und Liefertreue sind in Frankfurt keine Zusatzleistung, sondern Grundlage der Zusammenarbeit." },
     ],
     localNote: "Remote-first aus Venlo, aber keine vorgetäuschte Niederlassung. Wir betreuen Frankfurter Firmen mit digitalen Meetings und attraktiven Präsenzterminen. Unser Team ist auch in der Finanzmetropole keine Unbekannte: regelmäßige Kontakte zu lokalen Partnern erhalten die Bodenhaftung.",
     faqs: [
@@ -137,7 +142,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Ist die Remote-Arbeit mit einem Frankfurter Terminkalender vereinbar?", a: "Ja, wir arbeiten asynchron mit definierten Reaktionszeiten. Sie erreichen uns werktags innerhalb von zwei Stunden. Für wichtige Gespräche und Abnahmen sind wir persönlich in Frankfurt – terminlich flexibel." },
     ],
   },
-  "duesseldorf": {
+  "ki-agentur-duesseldorf": {
     h1: "KI-Agentur Düsseldorf — Websites, Apps & KI-Automatisierung",
     intro: "Wir bauen für Düsseldorfer KMU aus Medien, Mode und Logistik performante Websites, individuelle Apps und KI-Automatisierung. Kein Buzzword-Bingo, sondern messbare Prozesse: Anfragen beantworten, Termine buchen, Dokumente prüfen. Remote-first von Venlo aus spart Ihnen overhead, der Tagessatz liegt bei 449 Euro. Sie erhalten einen festen Ansprechpartner, klare Meilensteine und Code, der Ihnen gehört. Ob Neubau oder Optimierung bestehender Systeme – wir setzen Prioritäten, die Ihren Umsatz stützen.",
     services: [
@@ -153,7 +158,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum arbeiten Sie remote-first von Venlo aus?", a: "Wir haben uns bewusst gegen ein teures Büro in Düsseldorf entschieden. Das spart Kosten, die wir an Sie weitergeben. remote-first heißt für Sie: flexible Termine, kürzere Wartezeiten und dennoch ein persönlicher Ansprechpartner." },
     ],
   },
-  "stuttgart": {
+  "ki-agentur-stuttgart": {
     h1: "KI-Agentur Stuttgart — Websites, Apps & KI-Automatisierung",
     intro: "Stuttgarter KMU aus Automobilzulieferung, Maschinenbau und IT profitieren von unseren maßgeschneiderten Websites, Apps und Automatisierungslösungen. Wir ersetzen manuelle Arbeit durch KI-Chatbots und Workflows, die Fehler reduzieren. Entwickelt wird remote-first in Venlo – das bedeutet für Sie: kein Overhead, Tagessatz 449 Euro. Wir verstehen Ihre Industrie, liefern sauberen Code und integrieren sich in bestehende Systeme. Der Fokus liegt auf Effizienzgewinn, der sich im Betriebsergebnis niederschlägt.",
     services: [
@@ -169,7 +174,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum kein Standort in Stuttgart?", a: "Weil ein Büro in Stuttgart Ihre Kosten unnötig erhöht. remote-first spart Miete und Anfahrtszeit – das geben wir an Sie weiter. Sie erhalten trotzdem enge Betreuung und schriftliche Dokumentation aller Schritte." },
     ],
   },
-  "leipzig": {
+  "ki-agentur-leipzig": {
     h1: "KI-Agentur Leipzig — Websites, Apps & KI-Automatisierung",
     intro: "Leipziger KMU aus Logistik, Handel und Kreativwirtschaft bekommen von uns Websites, Apps und KI-Lösungen, die im Alltag funktionieren. Wir digitalisieren Prozesse ohne Umwege: Chatbots beantworten Kundenanfragen, Automatisierungen übernehmen Dateneingaben, Webshops laufen stabil. Entwickelt wird remote-first aus Venlo, Tagessatz 449 Euro. Sie erhalten einen Partner, der zuhört und liefert – mit klarer Kommunikation und nachvollziehbaren Ergebnissen. Kein Projekt, das sich zieht, sondern ein Ziel, das wir gemeinsam erreichen.",
     services: [
@@ -185,7 +190,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum arbeiten Sie nicht direkt in Leipzig?", a: "Weil wir die Kosten gering halten wollen. Ohne teures Büro in Leipzig können wir Ihnen einen fairen Stundensatz anbieten. Die Nähe ist dennoch da – durch Technik und gelegentliche Besuche." },
     ],
   },
-  "dortmund": {
+  "ki-agentur-dortmund": {
     h1: "KI-Agentur Dortmund — Websites, Apps & KI-Automatisierung",
     intro: "Dortmunder KMU aus Industrie, Handwerk und Gesundheitswesen setzen auf unsere Websites, Apps und Automatisierungen, die den Unterschied machen. Wir analysieren Ihre Prozesse und bauen genau die Lösung, die Sie brauchen – von KI-Chatbots für Terminbuchungen bis hin zu Webshops mit komplexen Kalkulationen. remote-first aus Venlo mit Tagessatz 449 Euro. Ehrlich, termintreu und ohne versteckte Kosten. Ihr Nutzen: mehr Zeit fürs Kerngeschäft, weniger manuelle Arbeit, zufriedenere Kunden. Wir sind Ihr Wegbegleiter für die digitale Zukunft.",
     services: [
@@ -201,7 +206,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Ist die Remote-Zusammenarbeit für uns geeignet?", a: "Ja, wir haben Prozesse entwickelt, die remote genauso reibungslos funktionieren: tägliche Updates, klare Tickets und ein Transparenz-Dashboard. Wenn Sie persönliche Treffen bevorzugen, sind wir gerne vor Ort in Dortmund – das ist im Festpreis enthalten." },
     ],
   },
-  "hannover": {
+  "ki-agentur-hannover": {
     h1: "KI-Agentur Hannover — Websites, Apps & KI-Automatisierung",
     intro: "Hannoversche KMU aus Versicherung, Maschinenbau und Dienstleistung setzen auf unsere digitalen Lösungen. Wir bauen performante Websites, performante Apps und implementieren KI-Chatbots, die echte Arbeit abnehmen. Alles remote-first aus Venlo konzipiert und entwickelt – für Sie heißt das: Tagessatz 449 Euro, transparente Abrechnung und keine Standort-Nachteile. Wir verstehen lokale Besonderheiten, arbeiten ergebnisorientiert und halten Termine ein. Sie erhalten Code, der wartbar bleibt und Dokumentation, die verständlich ist.",
     services: [

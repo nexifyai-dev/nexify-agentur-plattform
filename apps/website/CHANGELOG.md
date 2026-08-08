@@ -4,6 +4,10 @@ Alle wesentlichen Änderungen an der Website werden nach [Keep a Changelog](http
 
 ## [Unreleased]
 
+### Hinzugefügt (2026-08-08 — M-02a)
+- **Schema.org Layout-Ebene (M-02 Teil 1)**: Organization-JSON-LD global im Root-Layout (Logo, ContactPoint, address, Offer) — ergänzt um `sameAs` mit der einzigen verifizierten externen Identität (WhatsApp Business `https://wa.me/31613318856`; keine Social-Profile existieren, keine erfundenen URLs). `organizationJsonLd()`-Helper in `lib/seo.ts` synchron aktualisiert. BreadcrumbList (alle Content-Seiten außer Homepage) und WebSite+SearchAction (Homepage) waren bereits live (M-13-Baseline) — E2E verifiziert 08.08.2026: 5 URLs parsen via `json.loads`, je Typ exakt 1×, 404 nur globales Organization, FAQPage/OfferCatalog unverändert.
+- **Deploy-Enabler (nur CLI-Pfad, nicht committet)**: `packageManager: pnpm@10.14.0` im Worktree-Root gesetzt, da Vercel-CLI-Build sonst pnpm 6.35.1 nutzt (engines-Fehler). GH-Actions-Pfad (deploy-vercel.yml) ist davon unabhängig.
+
 ### Hinzugefügt (2026-08-08 — M-10)
 - **Pressemappe** (`docs/gtm/PRESSE-MAPPE-2026-08-08.md`): Story-Angle „Erste KI-Agentur mit 24/7-Agenten-Netzwerk für den Mittelstand in DACH+NL“, 3 Kernbotschaften, Faktenblatt (Team, Leistungen, Preise — verifiziert gegen preisliste-leistungskatalog.md, KvK 90483944, BTW NL865786276B01, Sitz Venlo), verifizierte anonymisierte Projektdaten (Quelle /referenzen de.ts), Kundenstimmen, Presse-Logos-Konzept (Platzierung Startseite//referenzen/Pressemappe/Footer, Nutzungsrecht-Pflicht), Freigabe-Gate Pascal.
 - **2 Gastartikel-Entwürfe** (`docs/gtm/drafts/`): (a) unternehmer.de-Stil „Warum Ihr Unternehmen 2026 auf KI-Automatisierung setzen sollte“ (638 Wörter, du-Form, werbefrei, Einreichungsweg unternehmer.de/autor-werden), (b) Startup Valley-Stil „KI-Agenten im Mittelstand: 5 Praxisbeispiele“ (653 Wörter, 5 anonymisierte Use-Cases aus /referenzen). Keine erfundenen Zahlen (V-PR-01), kein Versand ohne Pascal-Freigabe (V-PR-02).

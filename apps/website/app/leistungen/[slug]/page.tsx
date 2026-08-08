@@ -83,7 +83,9 @@ export default async function LeistungDetailPage({ params }: Props) {
       "@type": "Offer",
       priceCurrency: "EUR",
       description: `${l.daysLabel} · ${leistungPriceHint(l)} · Tagessatz ${company.dayRate} €`,
-      url: `https://www.nexifyai.cloud${path}`,
+      // M-02b: Angebots-Detail (Preise) auf /preise statt Seite selbst — Preistransparenz + AEO
+      // @NEXIFYAI-MARKER: phase1-m02b-offers-preise-20260808
+      url: "https://www.nexifyai.cloud/preise",
     },
   };
 
