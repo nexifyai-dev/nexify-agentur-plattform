@@ -1181,12 +1181,18 @@ async def health():
 # GET: Verify-Handshake (hub.mode/hub.challenge/hub.verify_token)
 # POST: X-Hub-Signature-256 = HMAC-SHA256(body, META_APP_SECRET) — Pflichtvalidierung
 @app.get("/webhooks/meta")
+@app.get("/webhooks/meta/")
 async def meta_webhook_verify(mode: str | None = Query(None, alias="hub.mode"),
                               challenge: str | None = Query(None, alias="hub.challenge"),
                               verify_token: str | None = Query(None, alias="hub.verify_token")):
-    expected = os.environ.get("META_WEBHOOK_VERIFY", "")
-    if mode == "subscribe" and verify_token and verify_token == expected:
+    # Akzeptiert beide Verify-Tokens (Meta-Dashboard kann jedes verwenden)
+    expected = {
+        os.environ.get("META_WEBHOOK_VERIFY", ""),
+        os.environ.get("WHATSAPP_CLOUD_VERIFY_TOKEN", ""),
+    }
+    if mode == "subscribe" and verify_token and verify_token in expected:
         return PlainTextResponse(content=challenge or "")
+    logger.warning("meta-webhook: Verify fehlgeschlagen (mode=%s token_len=%s)", mode, len(verify_token or ""))
     return PlainTextResponse(content="Verification failed", status_code=403)
 
 
