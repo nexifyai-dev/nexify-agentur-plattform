@@ -2,11 +2,30 @@
 """
 NeXifyAI Drip Campaign (3 Mails / 10 Tage) — NXAI-KOMM-001 v2.0-konform
 Mail 1 (Tag 0):  Erstkontakt   -> lead_email_v2.html
-Mail 2 (Tag 4):  Zusatzargument -> lead_email_followup.html
-Mail 3 (Tag 10): Breakup-Mail   -> lead_email_breakup.html
+Mail 2 (Tag 4):  Zusatzargument -> lead_email_followup_m2.html
+Mail 3 (Tag 10): Breakup-Mail   -> lead_email_breakup_m3.html
+
+FILE: /usr/local/bin/nexifyai-drip-campaign.py
+NIR: 08.08.2026 10:55
+UPDATED: 08.08.2026 10:55
+NAME: NeXifyAI Agent
+TEAM: NeXifyAI Core
+WHAT: Drip-Campaign-Sequenz (Tag 0/4/10) fuer Lead-Generierung via Supabase + SMTP.
+WHY: MAIL-02-Deployment — M2/M3-Templates (lead_email_followup_m2.html,
+     lead_email_breakup_m3.html) in Produktion; Auflagen A (--dry-run-Guard)
+     und B (UWG-Status-Break contacted/opted_out/unsubscribed) umgesetzt.
+BEST-PRACTICE: State-File-Dedupe verhindert Doppelversand; Dry-Run laesst
+     State-File unveraendert (sauberer Gegentest); Opt-out bricht Sequenz
+     script-seitig (Art. 21 DSGVO / UWG §7).
+PITFALL: V-xx — Monorepo-Kopie war hinter Produktion zurueck (fehlte
+     unsubscribed-Check); alle 3 Kopien synchron gehalten.
+DEPENDS: /opt/nexifyai/config/pipeline.env, Supabase, /usr/local/share/nexifyai-templates/,
+     src.pipeline.email_lead (via /workspace)
+DOCS-REF: /opt/nexifyai/docs/standards/KOMM-001.md (falls vorhanden)
 """
 import os
 import sys
+import argparse
 import logging
 import json
 from pathlib import Path
@@ -25,6 +44,15 @@ logging.basicConfig(
     handlers=[logging.FileHandler('/var/log/nexifyai/drip-campaign.log'), logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
+
+# Auflage A (MAIL-02): --dry-run -> KEIN send_email, nur Log; State bleibt unveraendert
+parser = argparse.ArgumentParser(description='NeXifyAI Drip Campaign')
+parser.add_argument('--dry-run', action='store_true',
+                    help='Nur Log "[DRY-RUN] wuerde senden an ...", kein Versand, kein State-Write')
+args = parser.parse_args()
+DRY_RUN = args.dry_run
+if DRY_RUN:
+    logger.info("DRY-RUN Modus aktiv – kein Versand, kein State-Write")
 
 # Load pipeline.env
 with open('/opt/nexifyai/config/pipeline.env') as f:
@@ -96,7 +124,7 @@ for attempt in (1, 2, 3, 4):
         # verursachen "Server disconnected" — neuer Client = neuer Verbindungsaufbau.
         opts = SyncClientOptions(headers={'Authorization': f'Bearer {SB_JWT}'}) if SB_JWT else None
         client = create_client(SB_URL, SB_KEY, options=opts)
-        response = client.table('leads').select('contact_email,name,score,status,id,created_at').execute()
+        response = client.table('leads').select('contact_email,name,score,status,id,created_at,unsubscribed').execute()
         leads = response.data
         logger.info(f"Fetched {len(leads)} leads")
         break
@@ -123,13 +151,20 @@ for lead in leads:
     created_at = datetime.fromisoformat(lead['created_at'].replace('Z', '+00:00'))
     days_since = (now - created_at).days
 
-    if lead.get('status') == 'contacted':
+    # Auflage B (MAIL-02, UWG §7): Opt-out/Status bricht Sequenz script-seitig
+    if lead.get('status') in ('contacted', 'opted_out', 'unsubscribed'):
+        continue
+    if lead.get('unsubscribed'):  # Art. 21 DSGVO: Widerspruch = keine Drip-Mails
         continue
 
     # Mail 1: Tag 0
     if email not in state['mails_sent'].get('mail1', []) and days_since >= 0:
         html = render_template(TEMPLATE_DIR / 'lead_email_v2.html', email, company)
         subject = subject_for(company, '{company}: Wie viel Zeit kostet Ihr Angebotsprozess aktuell?')
+        if DRY_RUN:
+            logger.info(f"[DRY-RUN] wuerde senden an {email} (Mail 1)")
+            mails_sent += 1
+            continue
         logger.info(f"[Mail 1] Sende an {email}...")
         ok = send_email(email, subject, html)
         if ok:
@@ -141,10 +176,14 @@ for lead in leads:
         else:
             logger.error(f"[Mail 1] FEHLER {email}")
 
-    # Mail 2: Tag 4
+    # Mail 2: Tag 4 (MAIL-02: lead_email_followup_m2.html)
     elif email not in state['mails_sent'].get('mail2', []) and days_since >= 4:
-        html = render_template(TEMPLATE_DIR / 'lead_email_followup.html', email, company)
-        subject = subject_for(company, '{company}: kurze Nachfrage zu meiner letzten Mail')
+        html = render_template(TEMPLATE_DIR / 'lead_email_followup_m2.html', email, company)
+        subject = subject_for(company, '{company}: kurze Nachfrage zu meiner Mail')
+        if DRY_RUN:
+            logger.info(f"[DRY-RUN] wuerde senden an {email} (Mail 2)")
+            mails_sent += 1
+            continue
         logger.info(f"[Mail 2] Sende an {email}...")
         ok = send_email(email, subject, html)
         if ok:
@@ -156,10 +195,14 @@ for lead in leads:
         else:
             logger.error(f"[Mail 2] FEHLER {email}")
 
-    # Mail 3: Tag 10 (Breakup)
+    # Mail 3: Tag 10 (MAIL-02: lead_email_breakup_m3.html)
     elif email not in state['mails_sent'].get('mail3', []) and days_since >= 10:
-        html = render_template(TEMPLATE_DIR / 'lead_email_breakup.html', email, company)
-        subject = subject_for(company, '{company}: letzte Nachricht von NeXify AI')
+        html = render_template(TEMPLATE_DIR / 'lead_email_breakup_m3.html', email, company)
+        subject = subject_for(company, '{company}: letzte Nachricht')
+        if DRY_RUN:
+            logger.info(f"[DRY-RUN] wuerde senden an {email} (Mail 3)")
+            mails_sent += 1
+            continue
         logger.info(f"[Mail 3] Sende an {email}...")
         ok = send_email(email, subject, html)
         if ok:
@@ -175,6 +218,8 @@ for lead in leads:
         logger.info("Max 10 Mails erreicht – beende Run...")
         break
 
-state['last_run'] = now.isoformat()
-save_state(state)
-logger.info(f"Done. {mails_sent} Mails gesendet.")
+# Dry-Run: State-File unveraendert lassen (Gegentest §5.4)
+if not DRY_RUN:
+    state['last_run'] = now.isoformat()
+    save_state(state)
+logger.info(f"Done. {mails_sent} Mails gesendet." if not DRY_RUN else f"Done. {mails_sent} Mails (DRY-RUN, nichts gesendet).")
