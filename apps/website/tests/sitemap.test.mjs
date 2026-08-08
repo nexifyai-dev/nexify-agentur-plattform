@@ -12,7 +12,7 @@ test('Sitemap - homepage has highest priority', () => {
 });
 
 test('Sitemap - money pages present', () => {
-  for (const path of ['/leistungen', '/preise', '/vergleich', '/kontakt', '/rueckruf', '/checkliste', '/partner', '/alternativen', '/branchen', '/audit', '/erfahrungen']) {
+  for (const path of ['/leistungen', '/preise', '/vergleich', '/kontakt', '/rueckruf', '/checkliste', '/ebook', '/partner', '/alternativen', '/branchen', '/audit', '/erfahrungen']) {
     assert.ok(sitemapSrc.includes(`"${path}"`) || sitemapSrc.includes(`'${path}'`), path);
   }
 });

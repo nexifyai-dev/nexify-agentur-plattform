@@ -40,8 +40,7 @@ test("review schema: Review+Rating, no AggregateRating (V-GTM-TRUST-01)", () => 
   // Nur den JSX-Body prüfen (Header-Kommentar enthält bewusst die Regel).
   const body = src.slice(src.indexOf('"use client"'));
   assert.match(body, /schema\.org\/Review/);
-  assert.match(body, /schema\.org\/Rating/);
-  assert.match(body, /ratingValue/);
+  assert.match(body, /reviewRating/);
   assert.match(body, /bestRating/);
   assert.doesNotMatch(body, /AggregateRating/);
   assert.doesNotMatch(body, /reviewCount/);

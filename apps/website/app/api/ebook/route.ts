@@ -12,7 +12,7 @@
 // SESSION: kanban-t_34e02d47
 
 import { NextResponse } from "next/server";
-import { createHash, createHmac } from "node:crypto";
+import { createHmac } from "node:crypto";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
