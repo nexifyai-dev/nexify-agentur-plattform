@@ -149,7 +149,7 @@ export default async function LeistungDetailPage({ params }: Props) {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href={`/rueckruf?utm_source=leistungen&utm_campaign=${slug}`}
+              href={`/rueckruf?utm_source=leistungen&utm_medium=organic&utm_campaign=${slug}`}
               className="btn-primary inline-flex items-center gap-2"
               data-testid="leistung-cta-termin"
             >

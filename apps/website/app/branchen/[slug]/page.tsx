@@ -197,7 +197,7 @@ export default async function BranchePage({ params }: Props) {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href={`/rueckruf?utm_source=branchen&utm_campaign=${slug}`}
+              href={`/rueckruf?utm_source=branchen&utm_medium=organic&utm_campaign=${slug}`}
               className="btn-primary inline-flex items-center gap-2"
               data-testid="branche-cta-rueckruf"
             >
