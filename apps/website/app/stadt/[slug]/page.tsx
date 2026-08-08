@@ -35,7 +35,8 @@ export async function generateMetadata({ params }: Props) {
   const content = getStadtContent(slug);
   if (!stadt || !content) return {};
   return pageMetadata({
-    title: `KI-Agentur ${stadt.name} » Gratis KI-Audit | NeXify AI`,
+    // Root-Layout-Template haengt "| NeXify AI" an -> hier NICHT mitgeben (sonst doppelt)
+    title: `KI-Agentur ${stadt.name} » Gratis KI-Audit`,
     description: content.intro.slice(0, 155),
     path: `/stadt/${slug}`,
     ogTitle: content.h1,
