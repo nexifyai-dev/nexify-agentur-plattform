@@ -13,6 +13,8 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return wissenArticleSlugs().map((slug) => ({ slug }));
 }
