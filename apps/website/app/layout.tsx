@@ -78,6 +78,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     brand: { "@type": "Brand", name: company.brand, slogan: company.descriptor },
     slogan: company.descriptor,
     url: origin,
+    // sameAs: WhatsApp Business ist die einzige verifizierte externe Identität
+    // (Meta Business Manager, öffentlich via wa.me). Keine Social-Profile
+    // (LinkedIn/X/Instagram) existieren — keine erfundenen URLs (M-02a, Stand 08.08.2026).
+    sameAs: [company.whatsappHref],
     logo: {
       "@type": "ImageObject",
       url: `${origin}/logo-mark.png`,

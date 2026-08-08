@@ -328,6 +328,8 @@ export function organizationJsonLd() {
     name: company.legalName,
     alternateName: [company.brand, company.brandFull],
     url: siteOrigin(),
+    // sameAs: WhatsApp Business = einzige verifizierte externe Identität (M-02a).
+    sameAs: [company.whatsappHref],
     logo: {
       "@type": "ImageObject",
       url: `${siteOrigin()}/logo-mark.png`,
