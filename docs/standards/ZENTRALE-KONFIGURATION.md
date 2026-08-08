@@ -295,6 +295,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | Wissensbasis | `docs/references/meta/META-INDEX.md` + archivierte Meta-Doku (whatsapp-cloud-api-index 48 KB, whatsapp-get-started, graph-api-overview, webhooks-getting-started) |
 | Skill | `meta-graph-apis` (devops) |
 | Business-Assets | `META_BUSINESS_ID` (1162686936938399 · agentur-asset), `META_AD_ACCOUNT_ID` (2236954670479629 · nexifyai-werbekonto, Graph: act_…), `META_PAGE_ID` (702237169646391 · NeXify – Chat it. Automate it.), `META_INSTAGRAM_HANDLE` (@nexify.automate) — in hermes.env. Verifiziert 2026-08-08: User-Token hat nur public_profile (Page #100, AdAccount #200) → Asset-Zugriff erst mit System-User-Token (`META_ACCESS_TOKEN`) |
+| Seiten-Aktivierung | Portfolio 888468287689944 · Telefonprofil/Primär 1071302456068905 · FB 702237169646391 · IG @nexify.automate — in hermes.env (`META_PORTFOLIO_ID`, `META_PAGE_ID_TELEFONPROFIL`). Webhook-Proxy `infra/meta-webhook/` (Verify+HMAC, E2E getestet). Pfad: `docs/gtm/META-SEITEN-AKTIVIERUNG.md` (Checkliste) + `META-SEITEN-MARKETING.md` (CI/Copy/Beiträge). **Blockiert durch App-Review (2 Werktage)** + fehlende Tokens (Page-Token, System-User-Token) |
 | Tokens (User/App) | `META_USER_TOKEN` (EAG…, User 997068836684907 „Pascal Pascal“, gültig bis ~2026-10, Scope public_profile) · `META_APP_TOKEN` (App-ID|Secret-Form, dauerhaft) — in hermes.env, verifiziert via debug_token |
 | Offen (Pascal) | WhatsApp-Produkt-Setup: WABA-ID + Phone-Number-ID + System-User-Token → `META_BUSINESS_ACCOUNT_ID` / `META_PHONE_NUMBER_ID` / `META_ACCESS_TOKEN` in hermes.env |
 
@@ -312,6 +313,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-08 09:30 | **META-SEITEN-PAKET (Aktivierung + Marketing):** Portfolio/Primär-Seite verankert; Webhook-Proxy (Verify-Handshake + X-Hub-Signature-256, Weiterleitung an Hermes) gebaut und E2E getestet (5/5 inkl. Gegentests); Aktivierungs-Checkliste (App-Review-Permissions, Page-/System-Token) + Marketing-Paket (CI, Profile, 5 Beiträge, Ads-Ansatz) unter docs/gtm/ |
 | 2026-08-08 08:30 | **META-BUSINESS-ASSETS + NSCALE VERANKERT:** Business (1162686936938399), Ad Account (2236954670479629), Page (702237169646391), Instagram (@nexify.automate) + META_USER_TOKEN/META_APP_TOKEN in hermes.env (debug_token verifiziert); Zugriffsgrenzen dokumentiert (#100/#200 → System-User-Token nötig). Nscale-Bildgenerierung (FLUX.1-schnell) E2E 200 + Gegentest 401 BESTANDEN, NSCALE_* in hermes.env, Skill nscale-image, Doku docs/references/nscale/ |
 | 2026-08-08 07:30 | **META-PLATTFORM VERANKERT (nexifyaiapp):** App-Credentials in hermes.env (META_*), Graph-API-Zugriff E2E+Gegentest verifiziert (App Access Token, #190/#101 abgelehnt), Meta-DevTools-MCP konfiguriert (meta_devtools, mcp-remote; Beta: nur validierte Clients), Skill meta-graph-apis, Doku docs/references/meta/ (META-INDEX + 4 archivierte Meta-Doku-Seiten + llms.txt-Indizes), AgentMemory gespeichert. Offen: OAuth nur über validierte Clients, WhatsApp-Produkt-Setup (WABA/Phone-ID/System-User-Token) |
 
