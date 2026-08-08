@@ -63,7 +63,7 @@ export const productizedOffers: ProductizedOffer[] = [
       "Übergabe + kurze Einweisung",
       "Klarer Upsell-Pfad: weitere Tage oder Retainer",
     ],
-    ctaHref: "/rueckruf?utm_source=preise&utm_campaign=pilot",
+    ctaHref: "/rueckruf?utm_source=preise&utm_medium=organic&utm_campaign=pilot",
     ctaLabel: "Pilot besprechen",
     badge: "Beliebt",
   },
@@ -81,7 +81,7 @@ export const productizedOffers: ProductizedOffer[] = [
       "Kein Zwang — nur wenn der Pilot trägt",
       `Transparent: ${DAY_RATE} € × gebuchte Tage`,
     ],
-    ctaHref: "/rueckruf?utm_source=preise&utm_campaign=retainer",
+    ctaHref: "/rueckruf?utm_source=preise&utm_medium=organic&utm_campaign=retainer",
     ctaLabel: "Retainer klären",
   },
 ];
