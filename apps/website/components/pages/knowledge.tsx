@@ -105,6 +105,65 @@ export function KnowledgePage() {
             );
           })}
         </div>
+
+        <section className="mt-20" aria-labelledby="wissen-tools-heading" data-testid="wissen-tools">
+          <Reveal>
+            <h2
+              id="wissen-tools-heading"
+              className="font-[family-name:var(--font-heading)] text-2xl font-medium tracking-tight text-white"
+            >
+              Kostenlose KI-Rechner
+            </h2>
+            <p className="mt-2 max-w-2xl text-[14.5px] text-zinc-500">
+              Zwei interaktive Tools, die Ihr Automatisierungspotenzial in 30 Sekunden beziffern —
+              ohne Anmeldung, ohne Datenweitergabe.
+            </p>
+          </Reveal>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <Reveal>
+              <article className="glass glass-lift flex h-full flex-col p-8" data-testid="knowledge-tool-roi">
+                <span className="rounded-full border border-white/12 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                  Kostenloses Tool
+                </span>
+                <h3 className="mt-5 font-[family-name:var(--font-heading)] text-xl font-medium leading-snug text-white">
+                  KI-ROI-Rechner
+                </h3>
+                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-zinc-500">
+                  Was sparen 20, 40 und 60&nbsp;% Automatisierung Ihrem Team pro Jahr? Gerechnet
+                  wird ausschließlich mit Ihren Zahlen — Mitarbeiter, Stunden, Stundensatz.
+                </p>
+                <Link
+                  href="/ki-roi-rechner"
+                  className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-white"
+                  data-testid="knowledge-tool-link-roi"
+                >
+                  Ersparnis berechnen <ArrowRight size={14} />
+                </Link>
+              </article>
+            </Reveal>
+            <Reveal>
+              <article className="glass glass-lift flex h-full flex-col p-8" data-testid="knowledge-tool-chatbot">
+                <span className="rounded-full border border-white/12 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                  Kostenloses Tool
+                </span>
+                <h3 className="mt-5 font-[family-name:var(--font-heading)] text-xl font-medium leading-snug text-white">
+                  Chatbot-Kosten-Rechner
+                </h3>
+                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-zinc-500">
+                  Eigenbau, Full-Service-Agentur oder NeXify KI-Begleiter? Vergleichen Sie die
+                  einmaligen und 3-Jahres-Kosten mit Marktspannen 2026.
+                </p>
+                <Link
+                  href="/chatbot-kosten-rechner"
+                  className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-white"
+                  data-testid="knowledge-tool-link-chatbot"
+                >
+                  Kosten vergleichen <ArrowRight size={14} />
+                </Link>
+              </article>
+            </Reveal>
+          </div>
+        </section>
       </div>
     </main>
   );

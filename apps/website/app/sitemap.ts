@@ -32,6 +32,8 @@ const staticRoutes: {
   { path: "/referenzen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/erfahrungen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/wissen", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/ki-roi-rechner", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/chatbot-kosten-rechner", priority: 0.8, changeFrequency: "monthly" },
   { path: "/faq", priority: 0.8, changeFrequency: "monthly" },
   { path: "/ueber-mich", priority: 0.75, changeFrequency: "monthly" },
   { path: "/venlo", priority: 0.75, changeFrequency: "monthly" },
