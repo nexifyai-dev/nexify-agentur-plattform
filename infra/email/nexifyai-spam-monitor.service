@@ -1,0 +1,8 @@
+[Unit]
+Description=NeXifyAI Spam-/Junk-Ordner-Monitor (IMAP)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/nexifyai/scripts/spam-monitor.py
+TimeoutStartSec=180
