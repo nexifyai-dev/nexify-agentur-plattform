@@ -72,13 +72,26 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
+    "@id": `${origin}/#organization`,
     name: company.legalName,
     alternateName: [company.brand, company.brandFull],
     brand: { "@type": "Brand", name: company.brand, slogan: company.descriptor },
     slogan: company.descriptor,
     url: origin,
+    logo: {
+      "@type": "ImageObject",
+      url: `${origin}/logo-mark.png`,
+    },
     email: company.email,
     telephone: company.phone,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: company.phone,
+      email: company.email,
+      areaServed: ["DE", "AT", "CH", "NL"],
+      availableLanguage: ["de", "nl", "en"],
+    },
     founder: { "@type": "Person", name: company.owner },
     address: {
       "@type": "PostalAddress",

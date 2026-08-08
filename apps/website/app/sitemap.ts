@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { wissenArticleSlugs } from "@/lib/content/wissen-articles";
 import { branchenSlugs } from "@/lib/gtm/branchen";
 import { leistungSeoSlugs } from "@/lib/gtm/leistungen-seo";
+import { stadtSlugs } from "@/lib/gtm/stadt-seo";
 import { siteOrigin } from "@/lib/seo";
 
 /**
@@ -80,5 +81,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticEntries, ...leistungEntries, ...branchenEntries, ...wissenEntries];
+  const stadtEntries: MetadataRoute.Sitemap = stadtSlugs().map((slug) => ({
+    url: `${base}/stadt/${slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
+  return [...staticEntries, ...leistungEntries, ...branchenEntries, ...wissenEntries, ...stadtEntries];
 }

@@ -16,6 +16,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, GraduationCap } from "lucide-react";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbListJsonLd } from "@/lib/seo";
 import { company } from "@/lib/company";
 
 const TASKS = [
@@ -62,7 +64,8 @@ export default function BotschafterPage() {
   };
 
   return (
-    <main className="pb-16 pt-28 md:pb-24 md:pt-36" data-testid="botschafter-page">
+    <>
+      <main className="pb-16 pt-28 md:pb-24 md:pt-36" data-testid="botschafter-page">
       <div className="site-container max-w-3xl">
         <span className="eyebrow">Campus · kostenfrei</span>
         <h1 className="mt-4 font-[family-name:var(--font-heading)] text-4xl font-light tracking-tight text-white sm:text-5xl">
@@ -153,5 +156,12 @@ export default function BotschafterPage() {
         </div>
       </div>
     </main>
+    <JsonLd
+      data={breadcrumbListJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Botschafter", path: "/botschafter" },
+      ])}
+    />
+    </>
   );
 }
