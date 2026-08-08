@@ -31,16 +31,16 @@ export type Stadt = {
 };
 
 export const staedte: Stadt[] = [
-  { slug: "berlin", name: "Berlin", bundesland: "Berlin" },
-  { slug: "hamburg", name: "Hamburg", bundesland: "Hamburg" },
-  { slug: "muenchen", name: "München", bundesland: "Bayern" },
-  { slug: "koeln", name: "Köln", bundesland: "Nordrhein-Westfalen" },
-  { slug: "frankfurt-am-main", name: "Frankfurt am Main", bundesland: "Hessen" },
-  { slug: "duesseldorf", name: "Düsseldorf", bundesland: "Nordrhein-Westfalen" },
-  { slug: "stuttgart", name: "Stuttgart", bundesland: "Baden-Württemberg" },
-  { slug: "leipzig", name: "Leipzig", bundesland: "Sachsen" },
-  { slug: "dortmund", name: "Dortmund", bundesland: "Nordrhein-Westfalen" },
-  { slug: "hannover", name: "Hannover", bundesland: "Niedersachsen" },
+  { slug: "ki-agentur-berlin", name: "Berlin", bundesland: "Berlin" },
+  { slug: "ki-agentur-hamburg", name: "Hamburg", bundesland: "Hamburg" },
+  { slug: "ki-agentur-muenchen", name: "München", bundesland: "Bayern" },
+  { slug: "ki-agentur-koeln", name: "Köln", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-frankfurt-am-main", name: "Frankfurt am Main", bundesland: "Hessen" },
+  { slug: "ki-agentur-duesseldorf", name: "Düsseldorf", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-stuttgart", name: "Stuttgart", bundesland: "Baden-Württemberg" },
+  { slug: "ki-agentur-leipzig", name: "Leipzig", bundesland: "Sachsen" },
+  { slug: "ki-agentur-dortmund", name: "Dortmund", bundesland: "Nordrhein-Westfalen" },
+  { slug: "ki-agentur-hannover", name: "Hannover", bundesland: "Niedersachsen" },
 ];
 
 export function stadtSlugs(): string[] {
@@ -57,7 +57,7 @@ export function getStadt(slug: string): Stadt | undefined {
  * Kein 1:1-Template: jede Stadt hat eigene Texte (E2E-Gegentest Similarity < 60%).
  */
 export const stadtContent: Record<string, StadtSeoContent> = {
-  "berlin": {
+  "ki-agentur-berlin": {
     h1: "KI-Agentur Berlin — Websites, Apps & KI-Automatisierung",
     intro: "Wir bauen für Berliner KMU Websites, Apps und KI-Automatisierung, die echten Umsatz bringen. Kein buzzword-Gefasel, sondern handfeste Prozesse: Terminbuchung, Angebotserstellung, Kundenkommunikation. Unser Team arbeitet remote-first vom Standort Venlo aus, mit regelmäßigen Berlin-Besuchen für Workshops. Tagessatz 449 Euro, transparent und fest – ohne Überraschungen. Sie profitieren von schnellen Reaktionszeiten und pragmatischen Lösungen, die zu Ihrer Branche passen – ob Handwerk, Gastronomie oder Tech.",
     services: [
@@ -74,7 +74,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie funktioniert die Remote-Zusammenarbeit?", a: "Wir nutzen strukturierte Projektmanagement-Tools und wöchentliche Videocalls. Sie haben direkten Draht zu Ihrem Projektleiter. Bei Kickoff und Review sind wir vor Ort in Berlin, wenn es nötig ist." },
     ],
   },
-  "hamburg": {
+  "ki-agentur-hamburg": {
     h1: "KI-Agentur Hamburg — Websites, Apps & KI-Automatisierung",
     intro: "Für Hamburger Mittelstand und Startups entwickeln wir digitale Lösungen, die den Hafen an Effizienz denken. Website, App oder KI-basierte Prozessautomatisierung – wir setzen auf bewährte Technik statt Experimente. Remote-first aus Venlo, aber mit Verständnis für lokale Branchen wie Logistik, Handel und Medien. Tagessatz 449 Euro, kalkulierbar und fair. Sie bekommen einen Partner, der liefert und mitdenkt – ohne monatelange Implementierungszeit.",
     services: [
@@ -91,7 +91,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie kommen wir mit Ihnen in Kontakt, wenn Sie remote sind?", a: "Täglich per E-Mail, Slack oder Telefon – und bei Bedarf per Videocall. Wir sind auch regelmäßig in Hamburg, etwa für Workshops und Projekt-Kickoffs. Persönlicher Kontakt bleibt essentiell." },
     ],
   },
-  "muenchen": {
+  "ki-agentur-muenchen": {
     h1: "KI-Agentur München — Websites, Apps & KI-Automatisierung",
     intro: "Für Münchner Unternehmen – von Automobilzulieferern bis zur Biotech-Szene – entwickeln wir Websites, Apps und KI-Automatisierung, die komplexe Anforderungen mit einfacher Bedienbarkeit verbinden. Unser remote-first-Team in Venlo kombiniert deutsche Präzision mit pragmatischer Herangehensweise. Tagessatz 449 Euro, Festpreise für klare Projekte. Wir liefern nicht nur Code, sondern auch Strategie. So bleiben Sie wettbewerbsfähig im Herzen des High-Tech-Standorts.",
     services: [
@@ -108,7 +108,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie läuft die Remote-Zusammenarbeit mit einem Münchner Kunden ab?", a: "Regelmäßige Videocalls, Kanban-Board mit offenem Zugang, wöchentliche Statusmails. Für Kreativ-Workshops und Abnahme sind wir persönlich in München. So bleibt die Kommunikation effektiv und vertrauensvoll." },
     ],
   },
-  "koeln": {
+  "ki-agentur-koeln": {
     h1: "KI-Agentur Köln — Websites, Apps & KI-Automatisierung",
     intro: "Kölns Mittelstand braucht digitale Lösungen, die mithalten mit den Besten. Wir entwickeln Websites, Apps und KI-Automatisierung für Medien, Versicherungen, Logistik und das Handwerk – mit klarer Kante und ohne Schnickschnack. Remote-first aus Venlo, mit echter Verbindung zur Domstadt durch regelmäßige Präsens. Tagessatz 449 Euro, transparent kalkuliert. Sie profitieren von unserer jahrelangen Erfahrung mit lokalen und internationalen Teams – und von Ergebnissen, die Sie messen können.",
     services: [
@@ -125,7 +125,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Wie funktioniert die Kommunikation bei Remote-Projekten?", a: "Direct über Slack und E-Mail, mit wöchentlichen Statuscalls. Für Workshops und das finale Testing kommen wir nach Köln. Das hält den Aufwand gering und die Abstimmung hoch." },
     ],
   },
-  "frankfurt-am-main": {
+  "ki-agentur-frankfurt-am-main": {
     h1: "KI-Agentur Frankfurt am Main — Websites, Apps & KI-Automatisierung",
     intro: "Frankfurt ist das Finanzzentrum – hier zählt Effizienz bis auf die zweite Nachkommastelle. Wir unterstützen lokale KMU und Startups mit Websites, Apps und KI-Automatisierung, die Prozesse nachweislich beschleunigen. Remote-first aus Venlo, mit einer Arbeitsweise, die auf Transparenz und Liefertreue ausgelegt ist. Tagessatz 449 Euro, unbürokratisch. Ob Kanzlei, FinTech oder Beratung: Sie erhalten digitale Werkzeuge, die Ihren Alltag erleichtern und Ihren Gewinn steigern.",
     services: [
@@ -142,7 +142,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Ist die Remote-Arbeit mit einem Frankfurter Terminkalender vereinbar?", a: "Ja, wir arbeiten asynchron mit definierten Reaktionszeiten. Sie erreichen uns werktags innerhalb von zwei Stunden. Für wichtige Gespräche und Abnahmen sind wir persönlich in Frankfurt – terminlich flexibel." },
     ],
   },
-  "duesseldorf": {
+  "ki-agentur-duesseldorf": {
     h1: "KI-Agentur Düsseldorf — Websites, Apps & KI-Automatisierung",
     intro: "Wir bauen für Düsseldorfer KMU aus Medien, Mode und Logistik performante Websites, individuelle Apps und KI-Automatisierung. Kein Buzzword-Bingo, sondern messbare Prozesse: Anfragen beantworten, Termine buchen, Dokumente prüfen. Remote-first von Venlo aus spart Ihnen overhead, der Tagessatz liegt bei 449 Euro. Sie erhalten einen festen Ansprechpartner, klare Meilensteine und Code, der Ihnen gehört. Ob Neubau oder Optimierung bestehender Systeme – wir setzen Prioritäten, die Ihren Umsatz stützen.",
     services: [
@@ -158,7 +158,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum arbeiten Sie remote-first von Venlo aus?", a: "Wir haben uns bewusst gegen ein teures Büro in Düsseldorf entschieden. Das spart Kosten, die wir an Sie weitergeben. remote-first heißt für Sie: flexible Termine, kürzere Wartezeiten und dennoch ein persönlicher Ansprechpartner." },
     ],
   },
-  "stuttgart": {
+  "ki-agentur-stuttgart": {
     h1: "KI-Agentur Stuttgart — Websites, Apps & KI-Automatisierung",
     intro: "Stuttgarter KMU aus Automobilzulieferung, Maschinenbau und IT profitieren von unseren maßgeschneiderten Websites, Apps und Automatisierungslösungen. Wir ersetzen manuelle Arbeit durch KI-Chatbots und Workflows, die Fehler reduzieren. Entwickelt wird remote-first in Venlo – das bedeutet für Sie: kein Overhead, Tagessatz 449 Euro. Wir verstehen Ihre Industrie, liefern sauberen Code und integrieren sich in bestehende Systeme. Der Fokus liegt auf Effizienzgewinn, der sich im Betriebsergebnis niederschlägt.",
     services: [
@@ -174,7 +174,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum kein Standort in Stuttgart?", a: "Weil ein Büro in Stuttgart Ihre Kosten unnötig erhöht. remote-first spart Miete und Anfahrtszeit – das geben wir an Sie weiter. Sie erhalten trotzdem enge Betreuung und schriftliche Dokumentation aller Schritte." },
     ],
   },
-  "leipzig": {
+  "ki-agentur-leipzig": {
     h1: "KI-Agentur Leipzig — Websites, Apps & KI-Automatisierung",
     intro: "Leipziger KMU aus Logistik, Handel und Kreativwirtschaft bekommen von uns Websites, Apps und KI-Lösungen, die im Alltag funktionieren. Wir digitalisieren Prozesse ohne Umwege: Chatbots beantworten Kundenanfragen, Automatisierungen übernehmen Dateneingaben, Webshops laufen stabil. Entwickelt wird remote-first aus Venlo, Tagessatz 449 Euro. Sie erhalten einen Partner, der zuhört und liefert – mit klarer Kommunikation und nachvollziehbaren Ergebnissen. Kein Projekt, das sich zieht, sondern ein Ziel, das wir gemeinsam erreichen.",
     services: [
@@ -190,7 +190,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Warum arbeiten Sie nicht direkt in Leipzig?", a: "Weil wir die Kosten gering halten wollen. Ohne teures Büro in Leipzig können wir Ihnen einen fairen Stundensatz anbieten. Die Nähe ist dennoch da – durch Technik und gelegentliche Besuche." },
     ],
   },
-  "dortmund": {
+  "ki-agentur-dortmund": {
     h1: "KI-Agentur Dortmund — Websites, Apps & KI-Automatisierung",
     intro: "Dortmunder KMU aus Industrie, Handwerk und Gesundheitswesen setzen auf unsere Websites, Apps und Automatisierungen, die den Unterschied machen. Wir analysieren Ihre Prozesse und bauen genau die Lösung, die Sie brauchen – von KI-Chatbots für Terminbuchungen bis hin zu Webshops mit komplexen Kalkulationen. remote-first aus Venlo mit Tagessatz 449 Euro. Ehrlich, termintreu und ohne versteckte Kosten. Ihr Nutzen: mehr Zeit fürs Kerngeschäft, weniger manuelle Arbeit, zufriedenere Kunden. Wir sind Ihr Wegbegleiter für die digitale Zukunft.",
     services: [
@@ -206,7 +206,7 @@ export const stadtContent: Record<string, StadtSeoContent> = {
       { q: "Ist die Remote-Zusammenarbeit für uns geeignet?", a: "Ja, wir haben Prozesse entwickelt, die remote genauso reibungslos funktionieren: tägliche Updates, klare Tickets und ein Transparenz-Dashboard. Wenn Sie persönliche Treffen bevorzugen, sind wir gerne vor Ort in Dortmund – das ist im Festpreis enthalten." },
     ],
   },
-  "hannover": {
+  "ki-agentur-hannover": {
     h1: "KI-Agentur Hannover — Websites, Apps & KI-Automatisierung",
     intro: "Hannoversche KMU aus Versicherung, Maschinenbau und Dienstleistung setzen auf unsere digitalen Lösungen. Wir bauen performante Websites, performante Apps und implementieren KI-Chatbots, die echte Arbeit abnehmen. Alles remote-first aus Venlo konzipiert und entwickelt – für Sie heißt das: Tagessatz 449 Euro, transparente Abrechnung und keine Standort-Nachteile. Wir verstehen lokale Besonderheiten, arbeiten ergebnisorientiert und halten Termine ein. Sie erhalten Code, der wartbar bleibt und Dokumentation, die verständlich ist.",
     services: [
