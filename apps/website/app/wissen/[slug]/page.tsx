@@ -30,6 +30,33 @@ export async function generateMetadata({ params }: PageProps) {
   });
 }
 
+/**
+ * Rendert [Label](/pfad) innerhalb eines Absatzes als interne Next-Links.
+ * WHY: Interne Verlinkung (M-05-Pflicht, min. 3 je Artikel) ohne HTML-Konstrukte
+ * im Content — Link-Label bleiben Crawlbar, Kaputte-Pfade fallen im Build nicht auf.
+ */
+function renderParagraph(text: string, key: number) {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+  return (
+    <p key={key} className="text-[15.5px] leading-[1.85] text-zinc-300">
+      {parts.map((part, i) => {
+        const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        if (!m) return <span key={i}>{part}</span>;
+        return (
+          <Link
+            key={i}
+            href={m[2]}
+            className="font-medium text-zinc-200 underline decoration-zinc-600 underline-offset-4 transition-colors hover:text-white hover:decoration-zinc-300"
+            data-testid={`wissen-body-link-${m[2].replace(/[^a-z0-9-]/gi, "")}`}
+          >
+            {m[1]}
+          </Link>
+        );
+      })}
+    </p>
+  );
+}
+
 export default async function WissenArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const article = getWissenArticle(slug);
@@ -48,6 +75,18 @@ export default async function WissenArticlePage({ params }: PageProps) {
     datePublished: article.datePublished,
     dateModified: article.dateModified,
   });
+
+  const faqJsonLd = article.faqs?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: article.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
 
   const others = WISSEN_ARTICLES.filter((a) => a.slug !== article.slug);
 
@@ -84,12 +123,40 @@ export default async function WissenArticlePage({ params }: PageProps) {
           <p className="mt-5 text-lg leading-relaxed text-zinc-400">{article.excerpt}</p>
 
           <div className="mt-10 space-y-5 border-t border-white/10 pt-8">
-            {article.body.map((paragraph, i) => (
-              <p key={i} className="text-[15.5px] leading-[1.85] text-zinc-300">
-                {paragraph}
-              </p>
-            ))}
+            {article.body.map((paragraph, i) => renderParagraph(paragraph, i))}
           </div>
+
+          {article.faqs?.length ? (
+            <section
+              className="mt-12 border-t border-white/10 pt-8"
+              aria-label="Häufige Fragen"
+              data-testid="wissen-faq"
+            >
+              <h2 className="font-[family-name:var(--font-heading)] text-xl font-medium text-white">
+                Häufige Fragen
+              </h2>
+              <div className="mt-4 space-y-4">
+                {article.faqs.map((f, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+                    data-testid={`wissen-faq-item-${i}`}
+                  >
+                    <h3 className="text-[15px] font-semibold text-white">{f.q}</h3>
+                    <p className="mt-2 text-[14px] leading-[1.75] text-zinc-400">{f.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {article.cta ? (
+            <div className="mt-10 text-center" data-testid="wissen-cta">
+              <Link href={article.cta.href} className="btn-primary" data-testid="wissen-cta-button">
+                {article.cta.label} <ArrowRight size={14} className="ml-1 inline" />
+              </Link>
+            </div>
+          ) : null}
 
           <nav
             className="mt-12 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
@@ -149,6 +216,7 @@ export default async function WissenArticlePage({ params }: PageProps) {
       </main>
       <JsonLd data={breadcrumbJsonLd} />
       <JsonLd data={articleSchema} />
+      {faqJsonLd ? <JsonLd data={faqJsonLd} /> : null}
     </>
   );
 }

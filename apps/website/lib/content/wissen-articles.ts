@@ -1,7 +1,18 @@
 /**
  * Crawlable Wissen articles (SSR). Separate from accordion teasers in de.wissen.articles
  * so search engines get full HTML text under /wissen/[slug].
+ *
+ * FORMAT-KONVENTION (M-05 Blog-Serie):
+ * - body: Absätze; interne Links als [Label](/pfad) — werden zu Next-Links gerendert.
+ * - faqs: optional — wird als sichtbarer FAQ-Block + FAQPage-JSON-LD gerendert.
+ * - cta: optional — CTA-Button mit UTM (Default /kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=<slug>).
+ * - Alle Markt-Zahlen mit Quellenangabe im Text (keine erfundenen Zahlen).
  */
+
+export type WissenArticleFaq = {
+  q: string;
+  a: string;
+};
 
 export type WissenArticle = {
   slug: string;
@@ -13,6 +24,8 @@ export type WissenArticle = {
   datePublished: string;
   dateModified: string;
   body: string[];
+  faqs?: WissenArticleFaq[];
+  cta?: { label: string; href: string };
 };
 
 export const WISSEN_ARTICLES: WissenArticle[] = [
@@ -35,21 +48,341 @@ export const WISSEN_ARTICLES: WissenArticle[] = [
     ],
   },
   {
+    slug: "was-kostet-ki-chatbot-2026",
+    tag: "Preise",
+    readTime: "8 Min.",
+    title: "Was kostet ein KI-Chatbot 2026?",
+    description:
+      "KI-Chatbot-Kosten 2026 im Überblick: Baukasten-Abos, Agenturprojekte, laufende LLM-Token und versteckte Kosten — mit NeXify-Tagessatz 449 € netto.",
+    excerpt:
+      "Von 49 € Baukasten bis Enterprise: Was ein KI-Chatbot 2026 wirklich kostet, welche Kostenfaktoren Sie vorab kennen sollten und wo die versteckten Posten liegen.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Die ehrliche Antwort vorweg: Einen einheitlichen Preis für einen KI-Chatbot gibt es nicht. Die Spannen des Marktes sind riesig — und sie beschreiben unterschiedliche Produkte. Wer 2026 ein Angebot vergleicht, sollte drei Modelle kennen: den [Baukasten als Abo](/leistungen), die Agentur-Lösung mit Projektkosten und die individuell entwickelte Variante mit eigenen Daten (RAG).",
+      "Baukasten-Lösungen starten bei 49 bis 200 Euro im Monat (Marktbeobachtung 2026, z. B. Chatbot4You, ManyChat). Der Haken: Diese Bots arbeiten oft regelbasiert und kosten unterm Strich Zeit — zwei bis fünf Stunden Pflege pro Woche sind keine Seltenheit. Professionelle SaaS-Plattformen liegen bei 500 bis 2.500 Euro monatlich plus Setup-Kosten von 2.000 bis 15.000 Euro, wie der Marktüberblick von Chatarmin (2026) zeigt; Agenten-Lizenzen für Support-Teams kommen mit 40 bis 80 Euro pro Sitzplatz obendrauf.",
+      "Die dritte Variante ist die individuell entwickelte Lösung: einmalige Projektkosten für Analyse, Integration, Wissensbasis und Tests — plus laufende LLM-Token- und Hostingkosten. Genau hier hilft ein transparenter Tagessatz statt Pauschalversprechen: Bei NeXify AI gilt 449 € netto pro Arbeitstag, Mehrbedarf wird vor Ausführung sichtbar gemacht. Ein [KI-Begleiter mit eigener Wissensbasis](/leistungen/ki-begleiter) startet typischerweise ab drei Arbeitstagen (ab 1.347 € netto) — je nach Datenquellen und Integrationstiefe.",
+      "Die laufenden Kosten unterschätzen viele. Der einzige Posten mit belastbaren Hersteller-Preislisten sind die LLM-Token: OpenAI verlangt für GPT-5.5 laut Preisliste 5,00 USD je 1 Mio. Input-Token und 30,00 USD je 1 Mio. Output-Token, Anthropic für Claude Haiku 4.5 je 1,00/5,00 USD (Stand 2026, Quellen: OpenAI API Docs, Anthropic API Pricing). Als Größenordnung: 10.000 Support-Tickets mit Haiku 4.5 kosten laut Anthropic-Rechenbeispiel rund 37 USD. Dazu kommen Hosting, Wartung und die Pflege der Wissensbasis — wer die vergisst, hat nach sechs Monaten einen Bot, der veraltete Antworten liefert.",
+      "Drei Hebel senken die Gesamtkosten: erstens ein klar begrenzter Scope (FAQ-Beantwortung statt mehrstufiger Dialoge), zweitens Prompt-Caching und Batch-APIs (bis zu 50 % Rabatt), drittens ein Anbieter, der den Aufwand in Tagen statt in vagen Paketen ausweist. Vergleichbar kalkulieren Sie nur, wenn Sie Projektkosten, laufende Kosten und Pflegeaufwand über 36 Monate rechnen — nicht nur den Monatspreis.",
+      "Ihr Einstieg muss kein Großprojekt sein: Ein [Audit-Tag (449 € netto)](/audit) priorisiert die sinnvollsten Anwendungsfälle, danach entsteht der erste fokussierte Slice. Die Leistungsübersicht finden Sie unter [Leistungen](/leistungen), die Preismodelle unter [Preise](/preise) — und für Ihre konkrete Anforderung erreichen Sie uns direkt über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=was-kostet-ki-chatbot-2026).",
+    ],
+    faqs: [
+      {
+        q: "Was kostet ein KI-Chatbot 2026 im Monat?",
+        a: "Baukästen ab etwa 49 €/Monat, professionelle SaaS-Plattformen 500–2.500 €/Monat plus Setup (2.000–15.000 €). Individuelle Lösungen laufen über Projektkosten plus LLM-Token (Marktbeobachtung 2026, z. B. Chatarmin).",
+      },
+      {
+        q: "Was kostet ein individueller KI-Chatbot mit eigenen Daten?",
+        a: "Bei NeXify AI gilt ein Tagessatz von 449 € netto; ein KI-Begleiter mit Wissensbasis startet typischerweise ab drei Arbeitstagen (ab 1.347 € netto).",
+      },
+      {
+        q: "Welche laufenden Kosten hat ein KI-Chatbot?",
+        a: "LLM-Token (z. B. Claude Haiku 4.5: 1,00 USD Input / 5,00 USD Output je 1 Mio. Token, Stand 2026), Hosting, Wartung und Wissensbasis-Pflege.",
+      },
+    ],
+  },
+  {
+    slug: "ki-automatisierung-kmu-7-gewinne",
+    tag: "Automatisierung",
+    readTime: "7 Min.",
+    title: "KI-Automatisierung für KMU: 7 schnelle Gewinne",
+    description:
+      "Sieben KI-Workflows mit schnellem ROI für kleine und mittlere Unternehmen: E-Mail-Triage, Angebotserstellung, Lead-Qualifizierung & Co. — mit realen Zeitersparnissen.",
+    excerpt:
+      "Nicht die Strategie, sondern konkrete Workflows bringen den ersten Gewinn: sieben KI-Automatisierungen, die KMU 2026 messbar Zeit sparen.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "41 Prozent der deutschen Unternehmen setzen 2026 aktiv KI ein — vor zwei Jahren waren es 17 Prozent (Bitkom-Studie 2026). Trotzdem bleibt die häufigste Hürde fehlendes Wissen über konkrete Anwendungsfälle: 27,4 Prozent der KMU nennen das als größtes Hindernis (Bitkom 2026). Der Weg aus der Lähmung ist keine KI-Strategie, sondern der erste fokussierte Workflow. Wer sieben typische Automatisierungen umsetzt, spart realistisch 5 bis 15 Stunden pro Woche (Praxisbericht wirgesdigital, 2026).",
+      "Die Reihenfolge ist entscheidend: Zuerst Prozesse, die häufig, regelbasiert und nervig sind — [so priorisieren wir auch bei NeXify](/leistungen/automatisierung). Studien zeigen, dass sich 40 bis 60 Prozent der Routine-Aufgaben in einem typischen KMU automatisieren lassen, ohne dass die Qualität sinkt (wirgesdigital, 2026). Diese sieben Gewinne kommen in der Praxis am häufigsten vor:",
+      "1) E-Mail-Triage: KI liest neue Mails, klassifiziert (Anfrage, Rechnung, Spam), priorisiert und schlägt Antwortentwürfe vor. Ersparnis: 30 bis 60 Minuten pro Mitarbeitendem und Tag. 2) Angebotserstellung: Aus Stammdaten und Bausteinen entsteht der Entwurf in Minuten statt Stunden. 3) Termin-Koordination: Die KI prüft Kalender und schlägt Zeiten vor — der Klassiker für Handwerk und Beratung.",
+      "4) Lead-Qualifizierung: Webformular-Anfragen werden automatisch angereichert und nach Priorität sortiert, bevor ein Mensch sie sieht. 5) Content-Erstellung: Erste Entwürfe für Angebote, Newsletter und Posts — immer mit menschlicher Freigabe. 6) Buchhaltungsvorbereitung: Belege klassifizieren, Rechnungsdaten extrahieren. 7) Kundenservice-Antworten: Standardfragen beantwortet die KI mit festen Antwortbausteinen; schwierige Fälle eskalieren sofort an Menschen.",
+      "Das Tool-Budget für diese Workflows ist überschaubar: 50 bis 150 Euro monatlich decken die meisten KMU-Workflows ab (wirgesdigital, 2026). Erste messbare Ergebnisse gibt es nach zwei bis vier Wochen — wenn der Workflow vor dem Tool steht. Die größte Falle ist der umgekehrte Weg: Werkzeuge kaufen, ohne den Prozess zu klären. Und n8n ist dafür kein Muss: Wir wählen Workflow- und Integrationswege passend zu Sicherheit, Betrieb und Ihrem Stack.",
+      "Bei NeXify AI startet [Automatisierung ab einem Arbeitstag (ab 449 € netto)](/leistungen/automatisierung): Prozesskarte vor dem Build, Freigaben und Policy-Gates, Monitoring und Recovery-Pfade. Der [Audit-Tag (449 € netto)](/audit) priorisiert vorab die Top-Hebel. Eine Einordnung der Kosten finden Sie unter [Preise](/preise) — und die Strategie dahinter im Artikel [AI-Automatisierung für KMU: Die richtige Reihenfolge](/wissen/ai-automatisierung-kmu). Für die ersten konkreten Workflows erreichen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=ki-automatisierung-kmu-7-gewinne).",
+    ],
+    faqs: [
+      {
+        q: "Welche KI-Automatisierung bringt KMU am schnellsten Zeitersparnis?",
+        a: "E-Mail-Triage spart in der Praxis 30–60 Minuten pro Mitarbeitendem und Tag; Angebotserstellung und Termin-Koordination folgen dicht dahinter (Praxisberichte 2026).",
+      },
+      {
+        q: "Was kostet KI-Automatisierung für ein KMU?",
+        a: "Werkzeug-Budget meist 50–150 €/Monat; die Umsetzung bei NeXify AI ab einem Arbeitstag à 449 € netto inkl. Prozesskarte, Freigaben und Monitoring.",
+      },
+      {
+        q: "Wie schnell sieht man Ergebnisse?",
+        a: "Bei fokussierten Workflows sind erste messbare Ergebnisse nach 2–4 Wochen üblich (wirgesdigital, 2026).",
+      },
+    ],
+  },
+  {
+    slug: "whatsapp-marketing-handwerk",
+    tag: "Marketing",
+    readTime: "7 Min.",
+    title: "WhatsApp-Marketing für Handwerk & lokale Betriebe",
+    description:
+      "WhatsApp-Marketing für Handwerker und lokale Betriebe: Reichweite in Deutschland, DSGVO-konforme Wege, echte Kosten der Business API und Praxisbeispiele.",
+    excerpt:
+      "WhatsApp ist der meistgenutzte Kanal in Deutschland — doch Marketing darüber will sauber geplant sein. Zahlen, Kosten und der DSGVO-konforme Weg für lokale Betriebe.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "WhatsApp ist in Deutschland die beliebteste mobile App überhaupt: rund 50 Millionen Nutzer, das entspricht etwa 80 Prozent der deutschsprachigen Bevölkerung ab 14 Jahren (Lime Connect / Global Web Index). Weltweit sind es über zwei Milliarden monatlich aktive Nutzer (Meta, 2020). Für Handwerk und lokale Betriebe heißt das: Der Kanal, in dem Ihre Kunden ohnehin privat kommunizieren, ist derselbe, über den sie auch Termine, Angebote und Statusanfragen erwarten.",
+      "Der entscheidende Unterschied: Werbung per klassischem Broadcast ist nur über die kostenpflichtige WhatsApp Business API zulässig und DSGVO-tauglich — nicht über die kostenlose Business-App. Die API wird pro Unterhaltung abgerechnet: Service-Unterhaltungen (vom Kunden gestartet) sind seit dem 01.11.2024 komplett kostenlos, Marketing-Unterhaltungen (vom Unternehmen initiiert) kosten in Deutschland 11,31 Cent (Meta-Preisliste, Stand Januar 2026). Öffnungsraten von über 95 Prozent machen den Kanal trotzdem günstig im Vergleich zu E-Mail (hellomateo, 2026).",
+      "Der zweite Punkt ist die Einwilligung: Marketing-Nachrichten an Kunden brauchen ein aktives Opt-in nach Art. 6 Abs. 1 a DSGVO — die bloße Existenz einer Handynummer aus einer alten Auftragsmappe reicht nicht. Sauber aufgesetzt bedeutet: Opt-in dokumentieren, Widerruf jederzeit ermöglichen und [die Datenschutz-Grundlagen im Betrieb verankern](/datenschutz). Wer das ignoriert, riskiert Abmahnungen, die teurer sind als jedes Tool.",
+      "Für Handwerksbetriebe lohnt sich WhatsApp-Marketing vor allem in drei Varianten: 1) Service-Kommunikation — Terminbestätigungen, Status, Rückfragen: kostenlos über die API und entlastet das Telefon. 2) Kampagnen mit hoher Relevanz — z. B. Winterdienst, Saisonwartung, aktuelle Fördertöpfe: bei 11,31 Cent pro Nachricht rechnen sich schon kleine Listen. 3) Nachfass-Zyklen nach Angeboten: Eine freundliche Rückfrage nach drei Tagen hebt die Abschlussquote messbar.",
+      "Die Praxis-Falle: Viele Betriebe starten mit Broadcasts, bevor sie Service und Opt-in sauber aufgebaut haben. Besser ist die umgekehrte Reihenfolge: erst Anfragen und Termine über WhatsApp beantworten (kostenlos), dann mit einem klaren Anlass und dokumentierter Einwilligung die erste Kampagne fahren. Wir begleiten genau diese Reihenfolge — von der [Automatisierung der Antwortwege](/leistungen/automatisierung) bis zur Einbettung in Website und [KI-Begleiter](/leistungen/ki-begleiter).",
+      "Die technische Anbindung über die Business API ist kein Selbstläufer: Vorlagen müssen durch Metas Prüfung, Nummern verifiziert werden und Fehler im Handling führen zu Sperrungen. Deshalb lohnt die fachliche Umsetzung durch eine Agentur, die den Kanal als Prozess baut — nicht als einmaligen Versand. Sprechen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=whatsapp-marketing-handwerk) an; die Leistungsübersicht finden Sie unter [Leistungen](/leistungen).",
+    ],
+    faqs: [
+      {
+        q: "Ist WhatsApp-Marketing für Handwerker DSGVO-konform möglich?",
+        a: "Ja, über die WhatsApp Business API mit dokumentiertem Opt-in (Art. 6 Abs. 1 a DSGVO) und jederzeit möglichem Widerruf. Broadcasts über die kostenlose Business-App sind nicht zulässig.",
+      },
+      {
+        q: "Was kostet WhatsApp-Marketing?",
+        a: "Service-Unterhaltungen sind seit 01.11.2024 kostenlos; Marketing-Unterhaltungen kosten in Deutschland 11,31 Cent (Meta-Preisliste, Stand 2026).",
+      },
+      {
+        q: "Wie viele Menschen in Deutschland nutzen WhatsApp?",
+        a: "Rund 50 Millionen — etwa 80 % der deutschsprachigen Bevölkerung ab 14 Jahren (Lime Connect / Global Web Index).",
+      },
+    ],
+  },
+  {
+    slug: "ai-agenten-einfuehrung",
+    tag: "KI-Agenten",
+    readTime: "8 Min.",
+    title: "AI-Agenten im Unternehmen: Einführung ohne Chaos",
+    description:
+      "AI-Agenten im Unternehmen einführen: Rollen, Freigaben, Datenzugriff und Evidence statt Blackbox. Der praxisnahe Fahrplan für einen kontrollierten Start.",
+    excerpt:
+      "Ein AI-Agent ist kein Chatbot mit Extra-Funktion. Was vor der Einführung geklärt sein muss: Rollen, Freigaben, Datenzugriff — und wie der Pilot ohne Chaos gelingt.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Ein AI-Agent unterscheidet sich fundamental von einem Chatbot: Er beantwortet nicht nur Fragen, er handelt — prüft Status, erstellt Entwürfe, löst Workflows aus. Genau diese Fähigkeit macht die Einführung zur Organisationsaufgabe, nicht zur Technikfrage. Wer Agenten ohne Rollen, Freigaben und Datenzugriffsregeln startet, bekommt Chaos; wer die Leitplanken zuerst setzt, bekommt ein Werkzeug, das Routinearbeit nachweisbar übernimmt.",
+      "Der Unterschied in der Praxis: Ein Chatbot nennt Öffnungszeiten; ein Agent prüft den Auftragsstatus im CRM, entwirft die Antwort und legt sie einem Menschen zur Freigabe vor. Dafür braucht er definierte Rechte — und die fehlen in den meisten Unternehmen. Die erste Frage ist deshalb nicht \u201cWelches Tool?\u201c, sondern: \u201cWelche Rolle darf der Agent übernehmen, und wer gibt die finale Freigabe?\u201c Genau diese Struktur bauen wir bei NeXify: [Agenten mit Rollen, Wissenszugriff, Tool-Anbindung und Freigabestufen](/leistungen/ai-agenten) — ab drei Arbeitstagen (ab 1.347 € netto).",
+      "Der bewährte Einstieg ist der schmale Pilot: ein Prozess, eine klar begrenzte Datenquelle, ein definierter Erfolgsmaßstab. Drei typische Pilotfälle: Support-Vorqualifizierung (der Agent beantwortet Standardfragen und reicht den Rest weiter), interne Wissensarbeit (Zusammenfassungen aus eigenen Dokumenten mit Quellenangabe) und Backoffice-Routine (Rechnungsdaten prüfen, Statusmails entwerfen). Was Agenten 2026 noch nicht können, gehört ehrlich benannt: komplexe Einzelfälle, strategische Entscheidungen, alles ohne menschliche Kontrolle.",
+      "Die drei häufigsten Fehler bei der Einführung: Erstens, Agenten mit Zugriff auf alles — Datenzugriff muss minimal sein, pro Rolle und Zweck. Zweitens, fehlende Protokollierung — jede Aktion muss nachvollziehbar sein (Evidence), sonst ist die Freigabe eine Fiktion. Drittens, keine Ausstiegskriterien — wer nicht definiert, wann der Agent abgeschaltet oder der Prozess zurückgerollt wird, trägt das Risiko in den Betrieb. Diese Punkte gehören vor den ersten Produktionslauf, nicht danach.",
+      "Datenschutz ist dabei kein Zusatzkapitel: Verarbeitet der Agent personenbezogene Daten über externe Anbieter, braucht es einen Auftragsverarbeitungsvertrag (Art. 28 DSGVO); die Transparenzpflicht der EU-KI-Verordnung (Art. 50) gilt seit dem 02.08.2026 auch für Agenten im Kundenkontakt. Mehr dazu im Artikel [Chatbot & DSGVO](/wissen/chatbot-dsgvo) — und die Grundlagen der [KI-Plattform mit Router, Memory und Wissensgraph](/leistungen/ki-plattform).",
+      "Der Fahrplan für sechs Wochen: Woche 1 Prozess und Erfolgsmaßstab festlegen, Woche 2 Datenquelle und Rollen definieren, Woche 3–4 Pilot bauen und testen (inkl. Negativtests), Woche 5 Freigabe-Workflow und Monitoring scharf schalten, Woche 6 Auswertung und Entscheidung über den nächsten Slice. Kosten: der [Audit-Tag (449 € netto)](/audit) schafft die Grundlage, danach entscheidet der Scope. Übersicht unter [Leistungen](/leistungen) und [Preise](/preise) — für den Start erreichen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=ai-agenten-einfuehrung).",
+    ],
+    faqs: [
+      {
+        q: "Was ist der Unterschied zwischen Chatbot und AI-Agent?",
+        a: "Ein Chatbot beantwortet Fragen; ein Agent führt Aktionen aus (Status prüfen, Entwürfe erstellen, Workflows anstoßen) — mit Rollen, Tools und Freigaben.",
+      },
+      {
+        q: "Wie startet man AI-Agenten ohne Chaos?",
+        a: "Mit einem schmalen Pilot: ein Prozess, eine Datenquelle, definierte Rollen und Freigaben, Protokollierung und Ausstiegskriterien vor dem Produktionslauf.",
+      },
+      {
+        q: "Was kostet ein AI-Agent bei NeXify AI?",
+        a: "Ab drei Arbeitstagen × 449 € netto = ab 1.347 € netto; der Scope folgt Datenquellen und Tool-Anbindungen.",
+      },
+    ],
+  },
+  {
+    slug: "chatbot-dsgvo",
+    tag: "Recht",
+    readTime: "7 Min.",
+    title: "Chatbot & DSGVO: Was Sie wissen müssen",
+    description:
+      "KI-Chatbot DSGVO-konform betreiben: Rechtsgrundlagen nach Art. 6, AVV nach Art. 28, Art. 22 und die KI-Verordnung ab August 2026 — kompakt erklärt.",
+    excerpt:
+      "Ein KI-Chatbot darf personenbezogene Daten verarbeiten — aber nicht einfach so. Rechtsgrundlagen, AVV und die neue Transparenzpflicht ab August 2026 im Überblick.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Die erste Frage, die fast jedes Unternehmen vor einem KI-Chatbot stellt: \u201cDürfen wir das überhaupt?\u201c Die kurze Antwort: Ja — aber mit klarer Rechtsgrundlage. Ein Chatbot ist datenschutzrechtlich erst einmal ein weiterer Kanal, wie Telefon oder E-Mail. Die Regeln der DSGVO gelten unverändert, nur dass viele sie beim Thema KI plötzlich vergessen (Praxisleitfaden TaskPilot FlowDesk, 2026).",
+      "Drei Rechtsgrundlagen nach Art. 6 Abs. 1 DSGVO dominieren in der Praxis: Vertragsanbahnung (b) für Support-Fragen wie \u201cWo ist meine Bestellung?\u201c, berechtigtes Interesse (f) für die interne Auswertung von Chatverläufen — mit dokumentierter Interessenabwägung — und Einwilligung (a), sobald der Bot proaktiv Angebote schickt oder Leads für Marketing sammelt. Die häufigste Grenzüberschreitung: Wer Chatverläufe für Marketingzwecke nutzt oder Leads an den Vertrieb weitergibt, braucht ein aktives Opt-in — der Bot \u201clernt ja sowieso aus allem\u201c ist keine Rechtsgrundlage.",
+      "Läuft die KI über einen externen Anbieter, verarbeitet dieser Ihre Kundendaten in Ihrem Auftrag — dafür brauchen Sie einen Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Entscheidend ist der Blick auf den Server-Standort: Fließen Daten in die USA, braucht es zusätzliche Absicherung (Standardvertragsklauseln) und eine transparente Erwähnung in der Datenschutzerklärung. Anbieter mit nachweislicher EU-Verarbeitung vermeiden das Drittlandrisiko von vornherein — wir planen Speicher- und Verarbeitungsorte bei [KI-Projekten bewusst](/leistungen/ki-plattform).",
+      "Art. 22 DSGVO (automatisierte Entscheidungen) betrifft die meisten Support-Chatbots nicht: Wer Öffnungszeiten nennt oder Termine vorschlägt, entscheidet nicht im rechtlichen Sinn. Relevant wird die Norm erst, wenn der Bot allein über etwas mit rechtlicher oder ähnlich erheblicher Wirkung entscheidet — etwa eine automatische Bonitätsprüfung oder Vertragskündigung. Die Praxisregel: Immer wenn eine Anfrage über \u201cbeantworten\u201c hinausgeht und in Richtung \u201centscheiden\u201c geht, gehört ein Mensch als Rückfallebene in den Ablauf.",
+      "Seit dem 02.08.2026 kommt die EU-KI-Verordnung dazu: Nutzer müssen klar erkennen, dass sie mit einer KI chatten (Art. 50 KI-VO — Transparenzpflicht). Das gilt für Chatbots im Kundenkontakt, für KI-Hinweise auf der Website und für Agenten. Die fünf Bausteine eines DSGVO-konformen Bots: Transparenz (\u201cSie chatten mit einer KI\u201c), Rechtsgrundlage, Datensparsamkeit, AVV mit EU-Verarbeitung und Mensch als Fallback bei heiklen Fällen. Unsere [KI-Hinweise](/ki-hinweise) und die [Datenschutzerklärung](/datenschutz) zeigen, wie das in der Praxis aussieht.",
+      "Und die Aufbewahrung? Die DSGVO schreibt keine feste Frist vor, verlangt aber zweckgebundene, begrenzte Speicherung — eine klar dokumentierte Löschfrist für Chatverläufe gehört zum Betriebskonzept. Rechtliche Details im Einzelfall klären Sie mit Ihrem Datenschutzbeauftragten; die Antworten auf häufige Fragen finden Sie im [FAQ](/faq). Für die Umsetzung: [KI-Begleiter](/leistungen/ki-begleiter) und [AI-Agenten](/leistungen/ai-agenten) bauen wir mit diesen Leitplanken von Beginn an — sprechen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=chatbot-dsgvo) an.",
+    ],
+    faqs: [
+      {
+        q: "Darf ein KI-Chatbot personenbezogene Daten verarbeiten?",
+        a: "Ja, mit Rechtsgrundlage nach Art. 6 DSGVO: Vertragsanbahnung (b), berechtigtes Interesse (f) oder Einwilligung (a) für Marketing. Externe Anbieter brauchen einen AVV nach Art. 28.",
+      },
+      {
+        q: "Betrifft Art. 22 DSGVO meinen Chatbot?",
+        a: "Meist nicht — erst wenn der Bot allein über etwas mit rechtlicher Wirkung entscheidet (z. B. Bonitätsprüfung). Dann gehört ein Mensch als Rückfallebene in den Ablauf.",
+      },
+      {
+        q: "Was ändert die EU-KI-Verordnung ab August 2026?",
+        a: "Art. 50 KI-VO verlangt Transparenz: Nutzer müssen klar erkennen, dass sie mit einer KI chatten.",
+      },
+    ],
+  },
+  {
+    slug: "website-kosten-2026",
+    tag: "Preise",
+    readTime: "7 Min.",
+    title: "Website-Kosten 2026: Was ist realistisch?",
+    description:
+      "Website-Kosten 2026 realistisch einordnen: 1.500–5.000 € für Unternehmensseiten, 5.000–50.000 € für Shops — und was NeXify mit Tagessatz 449 € anders macht.",
+    excerpt:
+      "Unternehmenswebsite, Onlineshop oder Plattform: Die realistischen Marktpreise 2026, die Kostenfallen — und warum die billigste Website oft die teuerste ist.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Die gängigen Preisspannen des europäischen Marktes 2026 sind bekannt: Unternehmenswebsites liegen bei 1.500 bis 5.000 Euro, E-Commerce-Lösungen bei 5.000 bis 50.000 Euro, individuelle Webanwendungen bei 10.000 bis 100.000 Euro (Preisleitfaden webcraftdev, 2026). Nach Dienstleister-Typ gerechnet: Einsteiger-Freelancer 500 bis 2.000 Euro, erfahrene Freelancer und kleine Agenturen 2.000 bis 8.000 Euro, klassische Webagenturen 5.000 bis 20.000 Euro.",
+      "Diese Zahlen sind jedoch nutzlos, wenn unklar bleibt, was im Preis steckt. 67 Prozent der kleinen und mittleren Unternehmen unterschätzen die tatsächlichen Kosten ihres Webprojekts (webcraftdev, 2026) — und viele zahlen am Ende doppelt: einmal für eine Website, die keine Kontakte bringt, und ein zweites Mal für den sauberen Neubau. Die wahre Kostenfrage ist nicht \u201cWas kostet die Seite?\u201c, sondern \u201cWas kostet es mich, wenn sie ihre Aufgabe nicht erfüllt?\u201c",
+      "Deshalb arbeitet NeXify AI mit einem festen Tagessatz statt undurchsichtiger Paketpreise: 449 € netto pro Arbeitstag, bis zu acht planbare Fachstunden. Eine vollständige B2B-Unternehmenswebsite entsteht in zwei bis drei Arbeitstagen — also für 898 bis 1.347 € netto (Positionierung, Leistungsseiten, SEO-Grundlage, Kontaktstrecke, Rechtsseiten). Ein [Onlineshop](/leistungen/onlineshops) mit Katalog, Checkout und Zahlungen liegt bei sechs bis acht Arbeitstagen (2.694–3.592 € netto). Der Unterschied zum Markt: kein Overhead, ein verantwortlicher Ansprechpartner, AI-beschleunigte Umsetzung — und Mehrbedarf wird vor Ausführung ausgewiesen, nie nachträglich versteckt.",
+      "Die laufenden Kosten vergisst fast jeder: Domain (10–20 €/Jahr), Hosting, E-Mail, Wartung und Updates. Wer eine Website als Einmalausgabe plant, hat nach zwölf Monaten eine veraltete Seite. Realistisch sind 15 bis 25 Prozent der Erstellungskosten pro Jahr für Betrieb und Pflege — bei einer Website für 3.000 Euro also 450 bis 750 Euro jährlich. Genau diese Transparenz unterscheidet ein belastbares Angebot von einem Lockpreis.",
+      "Die größte Preisfalle ist der Baukasten: 0 bis 600 Euro pro Jahr klingen günstig, aber Plattform-Abos (12–45 €/Monat), fehlende SEO-Kontrolle und begrenzte Anpassbarkeit machen viele Baukasten-Seiten nach zwei Jahren zum Neubaufall. Für einen schnellen Start mit klarer Positionierung ist eine professionelle Seite beim [Tagessatz-Modell](/preise) oft günstiger als drei Baukasten-Jahre plus Neubau.",
+      "Bevor Sie Budgets vergleichen, lohnt der [Checkliste-Leitfaden](/checkliste) mit den entscheidenden Fragen an Anbieter: Was ist im Preis enthalten, wer ist Ansprechpartner, wie werden Änderungen abgerechnet, wem gehört der Quellcode? Die Leistungsbausteine im Detail finden Sie unter [Leistungen](/leistungen) — und eine Einordnung der Web-App-Kosten im Artikel [Was kostet eine Web-App 2026?](/wissen/was-kostet-web-app-2026). Für eine konkrete Einordnung Ihres Vorhabens: [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=website-kosten-2026).",
+    ],
+    faqs: [
+      {
+        q: "Was kostet eine Unternehmenswebsite 2026 realistisch?",
+        a: "Marktüblich 1.500–5.000 € (webcraftdev, 2026). Bei NeXify AI: 2–3 Arbeitstage × 449 € = 898–1.347 € netto inkl. Leistungsseiten, SEO und Rechtsseiten.",
+      },
+      {
+        q: "Warum sind Agentur-Preise so unterschiedlich?",
+        a: "Der sichtbare Output ist ähnlich, der Umfang nicht: Strategie, Inhalte, SEO und Betreuung machen den Unterschied — vergleichen Sie den Leistungsumfang, nicht den Preis.",
+      },
+      {
+        q: "Welche laufenden Kosten hat eine Website?",
+        a: "Domain (10–20 €/Jahr), Hosting, E-Mail und Pflege — realistisch 15–25 % der Erstellungskosten pro Jahr.",
+      },
+    ],
+  },
+  {
+    slug: "ki-steuerbuero",
+    tag: "Branche",
+    readTime: "7 Min.",
+    title: "KI im Steuerbüro: Automatisierung statt Überstunden",
+    description:
+      "KI im Steuerbüro 2026: 50 % Automatisierungspotenzial der Steuerfachangestellten-Tätigkeiten, die fünf größten Hebel und der 90-Tage-Fahrplan für Kanzleien.",
+    excerpt:
+      "Fachkräftemangel und Honorardruck: Wo KI in Steuerkanzleien messbar Zeit spart, was die Rechtslage erlaubt — und wie der Start in 90 Tagen gelingt.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Die Zahlen zwingen zum Handeln: Das Durchschnittsalter deutscher Steuerberater liegt bei 53,6 Jahren, 45 Prozent sind über 50, nur 2,3 Prozent unter 30 (BStBK 2025). Bis 2035 gehen über 40.000 Berufsträger in den Ruhestand — bei aktuell rund 89.856 aktiven (Fachdaten 2025). Gleichzeitig erwägen 30 Prozent der Kanzleien Mandatskündigungen wegen Überlast (Innofact 2024). KI ersetzt dabei nicht den Berufsstand — der ist durch § 57 StBerG und § 203 StGB geschützt —, aber das realistische Automatisierungspotenzial der Steuerfachangestellten-Tätigkeiten liegt bei 50 Prozent (IAB/BIBB 2024).",
+      "Die fünf größten Hebel 2026 sind keine Zukunftsmusik, sondern verfügbare Anwendungen: 1) E-Mail-Triage und Mandantenzuordnung — KI klassifiziert Post und ordnet sie dem richtigen Mandanten zu, mit Trefferquoten über 95 Prozent. 2) Fristenerkennung — Fristen werden aus Schreiben extrahiert und im Kalender verankert. 3) Belegerfassung — OCR erfasst und klassifiziert Belege. 4) Bescheidprüfung — Plausibilitätsprüfung auf strukturierten Datensätzen. 5) Antwortentwürfe im Stil der Kanzlei — mit menschlicher Freigabe vor dem Versand (Kanzlei-Leitfaden dpa-consulting, 2026).",
+      "Was KI im Steuerbüro nicht kann, gehört ehrlich benannt: Gestaltungsberatung mit Haftungsverantwortung, Vertrauensbeziehungen zu Mandanten, komplexe atypische Einzelfälle und behördliche Gespräche. Die Arbeitsteilung der Kanzlei 2026 lautet: Routine geht an die KI, Entscheidungen bleiben beim Berufsträger. Wer diese Leitplanke respektiert, nutzt KI als Verstärker — nicht als Risiko. Kanzleien, die jetzt starten, berichten von 25 bis 35 Prozent mehr Umsatz pro Mitarbeiter binnen zwölf Monaten bei gleichem Team (dpa-consulting, 2026).",
+      "Die technischen Voraussetzungen sind überschaubar, aber Pflicht: Cloud-Infrastruktur mit DATEV-Anbindung, EU-Hosting, AVV nach Art. 28 DSGVO, Multi-Tenant-Isolation und die EU-AI-Act-Compliance ab August 2026. Genau hier liegt der Mehrwert einer fachlichen Begleitung: [Automatisierung](/leistungen/automatisierung) und [KI-Plattform-Integration](/leistungen/ki-plattform) werden so gebaut, dass Mandantendaten geschützt bleiben und jede Aktion nachvollziehbar ist.",
+      "Der realistische Fahrplan: 90 Tage bis zum ersten produktiven Prozess. Woche 1–2: E-Mail-Triage als Pilot mit einer definierten Mandantengruppe. Woche 3–6: Fristenerkennung und Belegerfassung anschließen. Woche 7–10: Antwortentwürfe mit Freigabe-Workflow. Woche 11–12: Auswertung gegen die Baseline — gemessen in Minuten pro Vorgang und Fehlerquote. Der [Audit-Tag (449 € netto)](/audit) priorisiert die fünf Hebel für Ihre konkrete Kanzlei; die Branchenseite [Steuerberater](/branchen/steuerberater) zeigt den Einstieg im Detail.",
+      "Wer wartet, verliert doppelt: Fachkräfte und Mandate. Die Erwartungshaltung der Mandanten hat sich bereits verschoben — 82 Prozent arbeiten seit der Pandemie digitaler mit ihrer Kanzlei (dpa-consulting, 2026). Eine Kanzlei, die 18-Uhr-Antworten statt 48-Stunden-Wartezeit liefert, setzt den Standard. Weitere Hintergründe zu Preisen und Vorgehen: [Preise](/preise) und [Leistungen](/leistungen). Für den Einstieg erreichen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=ki-steuerbuero).",
+    ],
+    faqs: [
+      {
+        q: "Wie viel lässt sich im Steuerbüro automatisieren?",
+        a: "Das Automatisierungspotenzial der Steuerfachangestellten-Tätigkeiten liegt bei rund 50 % (IAB/BIBB 2024). Die fünf größten Hebel: E-Mail-Triage, Fristen, Belege, Bescheidprüfung, Antwortentwürfe.",
+      },
+      {
+        q: "Ersetzt KI den Steuerberater?",
+        a: "Nein — der Beruf ist gesetzlich geschützt (§ 57 StBerG, § 203 StGB). KI automatisiert Routine; Beratung, Haftung und Entscheidungen bleiben beim Berufsträger.",
+      },
+      {
+        q: "Welche rechtlichen Voraussetzungen gelten?",
+        a: "EU-Hosting, AVV nach Art. 28 DSGVO, Multi-Tenant-Isolation und EU-AI-Act-Compliance ab August 2026.",
+      },
+    ],
+  },
+  {
+    slug: "automation-roi",
+    tag: "Wirtschaftlichkeit",
+    readTime: "7 Min.",
+    title: "Automation-ROI: So rechnen Sie richtig",
+    description:
+      "ROI von Automatisierungsprojekten realistisch berechnen: Formel, Kostenblöcke, Break-even und die drei Fehler, die jede Kalkulation verfälschen.",
+    excerpt:
+      "220–400 % ROI sind dokumentiert — aber nur mit vollständiger Rechnung. Die drei Kostenblöcke, die Baseline-Messung und die Frage, wann Sie besser nicht automatisieren.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "Schweizer KMU-Realdaten zeigen: Fokussierte Automatisierungsprojekte erreichen im ersten Jahr ROI-Werte von 220 bis 400 Prozent — aber nur mit klar definiertem Scope, messbarer Baseline und benanntem Verantwortlichen (IAPME-Analyse 2026, zitiert in stakk.agency). Projekte ohne diese Grundlagen lagen im Schnitt 40 bis 60 Prozentpunkte darunter. Der Unterschied liegt nicht im Tool, sondern in der Vollständigkeit der Kalkulation.",
+      "Die Formel ist einfach: ROI = (Jährliche Einsparung − Jährliche Gesamtkosten) ÷ Jährliche Gesamtkosten. Die Falle liegt in den drei Kostenblöcken, die systematisch unterschätzt werden. Die Tool-Lizenz (typisch rund 20 Prozent der Kosten) wird zuverlässig erfasst. Die Einrichtung — bei externer Begleitung 1.500 bis 3.000 Euro für einen Pilot, 3.000 bis 8.000 Euro mit Systemanbindungen — macht rund 50 Prozent aus und wird meist zu niedrig angesetzt. Die laufende Wartung (rund 30 Prozent: 1–2 Stunden monatlich plus Anpassungen bei Prozessänderungen) wird am häufigsten komplett vergessen.",
+      "Der zweite entscheidende Faktor ist die Baseline: Sie müssen wissen, wie lange ein Prozess heute dauert, bevor Sie die Einsparung rechnen. Praxisbeispiel aus einem Dienstleistungsbetrieb mit acht Mitarbeitern: Das Team schätzte den Aufwand für Rechnungsverarbeitung auf 2 Stunden pro Woche — die Messung ergab 6,5 Stunden (stakk.agency, 2026). Ohne diese Messung wäre die ROI-Rechnung um mehr als das Dreifache abgewichen. Vier Wochen Zeiterfassung vor dem Pilot sind die günstigste Investition des gesamten Projekts.",
+      "Daraus folgt der realistische Break-even: Bei fokussierten Piloten liegt er bei vier bis neun Monaten, abhängig vom Prozessvolumen (IAPME 2026). Die drei unterschätzten Positionen kippen keine gute Automatisierung — aber sie verschieben den Break-even von Monat 4 auf Monat 7. Wer das von Anfang an einkalkuliert, ist nach sieben Monaten angenehm überrascht statt enttäuscht. Übrigens: Die BAFA-Förderung deckt bis zu 50 Prozent der Beratungskosten (maximal 3.500 €) und verbessert den ROI im ersten Jahr erheblich (stakk.agency, 2026).",
+      "Ebenso wichtig ist die Frage, wann Sie nicht automatisieren sollten: Prozesse, die nur einmal pro Monat laufen, schlechte Datenqualität haben oder kurz vor einer Änderung stehen, sind keine Kandidaten. Und der ROI-Rechenfehler Nummer eins bleibt: nur die eingesparten Stunden mit einem Stundensatz multiplizieren, ohne Einarbeitung, Datenbereinigung und Wartung zu addieren. Unsere [Checkliste](/checkliste) führt durch die entscheidenden Fragen; die [Preisübersicht](/preise) zeigt das Tagessatz-Modell (449 € netto) für die Umsetzung.",
+      "Bei NeXify AI gehört die Wirtschaftlichkeitsrechnung zum Projekt: Vor dem Build entsteht eine Prozesskarte mit Messgrößen, nach dem Go-Live wird gegen die Baseline ausgewertet — in Minuten pro Vorgang, Fehlerquote und Freigabezeit. So bleibt [Automatisierung](/leistungen/automatisierung) ein Investment mit Nachweis statt einem Werkzeug ohne Kennzahl. Details zu den Leistungen: [Leistungen](/leistungen). Für Ihre ROI-Rechnung erreichen Sie uns über [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=automation-roi).",
+    ],
+    faqs: [
+      {
+        q: "Welcher ROI ist bei Automatisierung realistisch?",
+        a: "220–400 % im ersten Jahr bei fokussierten Projekten mit klarem Scope, Baseline und Verantwortlichem (IAPME 2026); der Break-even liegt bei 4–9 Monaten.",
+      },
+      {
+        q: "Welche Kosten vergisst man bei der ROI-Rechnung?",
+        a: "Einrichtung (~50 % der Kosten), laufende Wartung (~30 %) und Datenbereinigung — sie verschieben den Break-even typisch von Monat 4 auf Monat 7.",
+      },
+      {
+        q: "Gibt es Förderung für Automatisierungsprojekte?",
+        a: "Die BAFA-Förderung deckt bis zu 50 % der Beratungskosten (max. 3.500 €) und verbessert den ROI im ersten Jahr erheblich.",
+      },
+    ],
+  },
+  {
+    slug: "chatgpt-unternehmen-grenzen",
+    tag: "KI-Grundlagen",
+    readTime: "7 Min.",
+    title: "ChatGPT für Unternehmen: Grenzen & Alternativen",
+    description:
+      "ChatGPT im Unternehmen: Datenschutz-Risiken, Halluzinationen und fehlende Prozessanbindung — und wann eine KI-Plattform mit eigenen Daten die bessere Wahl ist.",
+    excerpt:
+      "Über ein Drittel der deutschen Unternehmen nutzt KI-Tools — oft ChatGPT. Wo die Grenzen für den Unternehmenseinsatz liegen und was eine saubere Alternative ausmacht.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-08",
+    body: [
+      "ChatGPT hat die Arbeitswelt verändert: Über ein Drittel der deutschen Unternehmen nutzt KI-Tools im Arbeitsalltag (Bitkom, 2025). Für viele ist ChatGPT der erste Kontakt mit generativer KI — und genau dort entstehen die typischen Grenzen des Unternehmenseinsatzes. Drei Probleme kehren in der Praxis immer wieder: Datenschutz, Halluzinationen und fehlende Anbindung an die eigenen Prozesse.",
+      "Das Datenschutzproblem ist strukturell: OpenAI verarbeitet Eingaben auf Servern in den USA. Seit dem Schrems-II-Urteil des Europäischen Gerichtshofs (2020) ist der Datentransfer rechtlich komplex; das EU-US Data Privacy Framework steht auf unsicherem Boden. In der Standardkonfiguration nutzt OpenAI Eingaben zudem zur Weiterentwicklung — für Kundendaten oder interne Dokumente ist das mit den Grundsätzen der Zweckbindung und Datenminimierung (Art. 5 DSGVO) schwer vereinbar. Die Bußgeldpraxis zeigt die Dimension: Italien verhängte gegen OpenAI 15 Millionen Euro (2024), Irland gegen Meta 1,2 Milliarden Euro (2023); maximal drohen 20 Millionen Euro oder 4 Prozent des weltweiten Jahresumsatzes (Lurus / DSGVO, 2026).",
+      "Die zweite Grenze ist die Antwortqualität: Generative Modelle liefern plausible Aussagen, die falsch sein können — im Fachkontext von KMU ein ernstes Problem, wenn daraus Entscheidungen oder Kundenkommunikation entstehen. Ohne definierte Wissensbasis, Quellenangaben und Freigabeprozesse ist ChatGPT ein Werkzeug für Entwürfe, kein System für verbindliche Antworten. Genau hier setzt die [KI-Plattform](/leistungen/ki-plattform) an: Modell-Routing, Agentengedächtnis und semantische Wissenssuche auf den eigenen Daten — mit Freigaben und Nachweisen statt Blackbox.",
+      "Die dritte Grenze: ChatGPT denkt mit, aber handelt nicht. Für Angebotserstellung, Statusanfragen oder Rechnungsprüfung braucht es Anbindungen an CRM, Dateien und Workflows — also [Automatisierung](/leistungen/automatisierung) und [AI-Agenten](/leistungen/ai-agenten) mit Rollen und Tools. Der Unterschied ist der gleiche wie zwischen einem Wörterbuch und einem Mitarbeiter: Das eine liefert Antworten, der andere erledigt Aufgaben.",
+      "Das heißt nicht \u201cnie ChatGPT\u201c: Für interne Entwürfe, Ideenfindung und unkritische Texte ist das Tool legitim — wenn keine personenbezogenen oder vertraulichen Daten eingegeben werden und die Ergebnisse vor der Verwendung geprüft werden. Wer Daten nicht in die USA transferieren will, wählt Anbieter mit nachweislicher EU-Verarbeitung oder eine [eigene Plattform](/leistungen/ki-plattform). Eine Einordnung der Datenschutzfragen liefert der Artikel [Chatbot & DSGVO](/wissen/chatbot-dsgvo).",
+      "Der pragmatische Weg: KI-Werkzeuge im Unternehmen nicht verbieten, sondern klassifizieren — welches Werkzeug darf welche Daten sehen, und welche Ergebnisse brauchen menschliche Freigabe? Unsere [KI-Hinweise](/ki-hinweise) und die [Datenschutzerklärung](/datenschutz) dokumentieren diesen Rahmen; die Leistungsübersicht steht unter [Leistungen](/leistungen). Für die Einordnung Ihres Einsatzes: [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=chatgpt-unternehmen-grenzen).",
+    ],
+    faqs: [
+      {
+        q: "Darf ich ChatGPT im Unternehmen für Kundendaten nutzen?",
+        a: "Nur mit Vorsicht: Standardkonfiguration verarbeitet in den USA und nutzt Eingaben ggf. für Training. Für personenbezogene Daten braucht es AVV, Absicherung des Drittlandtransfers und dokumentierte Grundsätze.",
+      },
+      {
+        q: "Welche Bußgelder drohen bei DSGVO-Verstößen mit KI?",
+        a: "Bis zu 20 Mio. € oder 4 % des weltweiten Jahresumsatzes. Beispiele: 15 Mio. € gegen OpenAI (Italien 2024), 1,2 Mrd. € gegen Meta (Irland 2023).",
+      },
+      {
+        q: "Was ist die Alternative zu ChatGPT für Unternehmen?",
+        a: "Eine KI-Plattform mit eigenen Daten, Modell-Routing, Freigaben und Nachweisen — bei NeXify AI ab drei Arbeitstagen (ab 1.347 € netto).",
+      },
+    ],
+  },
+  {
     slug: "was-kostet-web-app-2026",
     tag: "Preise",
     readTime: "5 Min.",
     title: "Was kostet eine Web-App 2026?",
     description:
-      "Transparente Kosten für Web-Apps 2026: Tagessatz 449 € netto, typische Aufwandsspannen und wann ein Festpreis sinnvoll ist – ohne Agentur-Overhead.",
+      "Transparente Kosten für Web-Apps 2026: Marktspanne 10.000–100.000 €, Tagessatz 449 € netto bei NeXify, typische Aufwandsspannen und wann ein Festpreis sinnvoll ist.",
     excerpt:
-      "Statt undurchsichtiger Paketpreise: ein fester Tagessatz, eine klare Aufwandsspanne und sichtbarer Mehrbedarf – so kalkulieren Sie Web-Apps realistisch.",
+      "Statt undurchsichtiger Paketpreise: Markteinordnung, fester Tagessatz, klare Aufwandsspanne und sichtbarer Mehrbedarf — so kalkulieren Sie Web-Apps realistisch.",
     datePublished: "2026-07-22",
-    dateModified: "2026-07-31",
+    dateModified: "2026-08-08",
     body: [
-      "Die ehrliche Antwort auf „Was kostet eine Web-App?“ hängt von Umfang, Integrationen und Abnahmekriterien ab – nicht von Marketing-Paketen. Bei NeXify AI liegt der Tagessatz fest bei 449 € netto pro Arbeitstag (bis zu acht planbare Fachstunden für Konzeption, Design, Entwicklung, Tests und Dokumentation).",
-      "Typische Startumfänge für fokussierte Web-Apps liegen oft im niedrigen bis mittleren zweistelligen Tagesbereich, sobald Login, Rollen, Kernworkflows und ein sauberes Deployment definiert sind. Spezialintegrationen, Migrationen oder ungeklärte Fachlogik verlängern die Spanne – und werden vor Ausführung ausgewiesen, nie nachträglich versteckt.",
-      "Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen. Solange Annahmen noch schwanken, ist eine Aufwandsspanne ehrlicher: Sie behalten Kostenkontrolle, ohne Qualität durch Pauschalversprechen zu opfern.",
-      "Vergleichen Sie den Tagessatz mit klassischen Agenturmodellen: Weniger Übergaben, ein verantwortlicher Ansprechpartner und AI-gestützte Umsetzung verkürzen die Durchlaufzeit. Die konkrete Spanne für Ihr Vorhaben klären wir unter Preise und im direkten Kontakt – die Leistungsbausteine stehen unter Leistungen.",
+      "Die ehrliche Antwort auf \u201cWas kostet eine Web-App?\u201c hängt von Umfang, Integrationen und Abnahmekriterien ab — nicht von Marketing-Paketen. Zur Einordnung: Individuelle Webanwendungen kosten am Markt 2026 typischerweise 10.000 bis 100.000 Euro (Preisleitfaden webcraftdev, 2026). Bei NeXify AI liegt der Tagessatz fest bei 449 € netto pro Arbeitstag (bis zu acht planbare Fachstunden für Konzeption, Design, Entwicklung, Tests und Dokumentation).",
+      "Typische Startumfänge für fokussierte Web-Apps liegen oft im niedrigen bis mittleren zweistelligen Tagesbereich, sobald Login, Rollen, Kernworkflows und ein sauberes Deployment definiert sind — etwa ein [Kundenportal](/leistungen/kundenportal) mit Login, Status und Dokumenten in sechs bis acht Arbeitstagen (2.694–3.592 € netto). Spezialintegrationen, Migrationen oder ungeklärte Fachlogik verlängern die Spanne — und werden vor Ausführung ausgewiesen, nie nachträglich versteckt.",
+      "Ein verbindlicher Gesamtfestpreis ist möglich, sobald Umfang, Inhalte, Integrationen und Abnahmekriterien eindeutig feststehen. Solange Annahmen noch schwanken, ist eine Aufwandsspanne ehrlicher: Sie behalten Kostenkontrolle, ohne Qualität durch Pauschalversprechen zu opfern. Die 67 Prozent der KMU, die ihre Webprojektkosten unterschätzen (webcraftdev, 2026), haben meist genau diese Spanne nie gesehen — eine klare Baseline vor dem Start ist die beste Investition.",
+      "Vergleichen Sie den Tagessatz mit klassischen Agenturmodellen: Weniger Übergaben, ein verantwortlicher Ansprechpartner und AI-gestützte Umsetzung verkürzen die Durchlaufzeit. Die konkrete Spanne für Ihr Vorhaben klären wir unter [Preise](/preise) und im direkten [Kontakt](/kontakt?utm_source=wissen&utm_medium=artikel&utm_campaign=was-kostet-web-app-2026) — die Leistungsbausteine stehen unter [Leistungen](/leistungen), die Abgrenzung zur klassischen Website im Artikel [Website-Kosten 2026](/wissen/website-kosten-2026).",
+    ],
+    faqs: [
+      {
+        q: "Was kostet eine Web-App 2026 am Markt?",
+        a: "Individuelle Webanwendungen liegen typischerweise bei 10.000–100.000 € (webcraftdev, 2026). Bei NeXify AI gilt der Tagessatz von 449 € netto.",
+      },
+      {
+        q: "Was kostet ein Kundenportal bei NeXify AI?",
+        a: "Ein MVP mit Login, Rollen, Status und Dokumenten: 6–8 Arbeitstage × 449 € = 2.694–3.592 € netto.",
+      },
+      {
+        q: "Wann ist ein Festpreis sinnvoll?",
+        a: "Sobald Umfang, Integrationen und Abnahmekriterien eindeutig feststehen; solange Annahmen schwanken, ist eine Aufwandsspanne ehrlicher.",
+      },
     ],
   },
 ];
