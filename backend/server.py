@@ -25,7 +25,7 @@ from datetime import datetime, timezone, timedelta
 
 import asyncpg
 import resend
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
@@ -1181,7 +1181,9 @@ async def health():
 # GET: Verify-Handshake (hub.mode/hub.challenge/hub.verify_token)
 # POST: X-Hub-Signature-256 = HMAC-SHA256(body, META_APP_SECRET) — Pflichtvalidierung
 @app.get("/webhooks/meta")
-async def meta_webhook_verify(mode: str | None = None, challenge: str | None = None, verify_token: str | None = None):
+async def meta_webhook_verify(mode: str | None = Query(None, alias="hub.mode"),
+                              challenge: str | None = Query(None, alias="hub.challenge"),
+                              verify_token: str | None = Query(None, alias="hub.verify_token")):
     expected = os.environ.get("META_WEBHOOK_VERIFY", "")
     if mode == "subscribe" and verify_token and verify_token == expected:
         return PlainTextResponse(content=challenge or "")
