@@ -18,6 +18,8 @@ import { useState } from "react";
 import { ArrowRight, FileDown } from "lucide-react";
 import { DelightSuccess } from "@/components/delight-success";
 import { InboundSpeedPromise } from "@/components/inbound-speed-promise";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbListJsonLd } from "@/lib/seo";
 import { company } from "@/lib/company";
 
 const PDF_HREF = "/docs/nexify-website-ki-checkliste.pdf";
@@ -77,7 +79,8 @@ export default function ChecklistePage() {
   const showDownload = state === "ok" || (state !== "idle" && state !== "sending");
 
   return (
-    <main className="pb-16 pt-28 md:pb-24 md:pt-36" data-testid="checkliste-page">
+    <>
+      <main className="pb-16 pt-28 md:pb-24 md:pt-36" data-testid="checkliste-page">
       <div className="site-container max-w-3xl">
         <span className="eyebrow">Lead-Magnet · kostenfrei</span>
         <h1 className="mt-4 font-[family-name:var(--font-heading)] text-4xl font-light tracking-tight text-white sm:text-5xl">
@@ -183,6 +186,39 @@ export default function ChecklistePage() {
           </p>
         )}
       </div>
+
+      <div className="site-container mt-16 max-w-3xl">
+        <div className="grid gap-4 sm:grid-cols-2" data-testid="checkliste-tools">
+          <Link
+            href="/ki-roi-rechner"
+            className="glass glass-lift flex items-center justify-between gap-3 p-5 transition-colors hover:border-white/25"
+            data-testid="checkliste-tool-roi"
+          >
+            <span>
+              <span className="block font-[family-name:var(--font-heading)] text-base font-medium text-white">KI-ROI-Rechner</span>
+              <span className="mt-1 block text-[13px] leading-5 text-zinc-500">
+                Ersparnis durch KI-Automatisierung in 30 Sekunden berechnen
+              </span>
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-zinc-400" />
+          </Link>
+          <Link
+            href="/chatbot-kosten-rechner"
+            className="glass glass-lift flex items-center justify-between gap-3 p-5 transition-colors hover:border-white/25"
+            data-testid="checkliste-tool-chatbot"
+          >
+            <span>
+              <span className="block font-[family-name:var(--font-heading)] text-base font-medium text-white">Chatbot-Kosten-Rechner</span>
+              <span className="mt-1 block text-[13px] leading-5 text-zinc-500">
+                Eigenbau vs. Agentur vs. KI-Begleiter — Kostenvergleich
+              </span>
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-zinc-400" />
+          </Link>
+        </div>
+      </div>
     </main>
+    <JsonLd data={breadcrumbListJsonLd([{ name: "Home", path: "/" }, { name: "Checkliste", path: "/checkliste" }])} />
+    </>
   );
 }

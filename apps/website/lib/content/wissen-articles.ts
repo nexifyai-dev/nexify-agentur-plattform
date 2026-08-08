@@ -26,6 +26,9 @@ export type WissenArticle = {
   body: string[];
   faqs?: WissenArticleFaq[];
   cta?: { label: string; href: string };
+  /** H2-Frageform-Abschnitte (M-13 GEO): je Artikel 3+ Frage-Überschriften,
+   *  Antwort-zuerst im Folgeabsatz. Wird als <h2> serverseitig gerendert. */
+  sections?: { h2: string; answer: string }[];
 };
 
 export const WISSEN_ARTICLES: WissenArticle[] = [

@@ -26,6 +26,8 @@ import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return leistungSeoSlugs().map((slug) => ({ slug }));
 }
@@ -119,7 +121,7 @@ export default async function LeistungDetailPage({ params }: Props) {
           </div>
 
           <h2 className="mt-12 font-[family-name:var(--font-heading)] text-2xl font-light text-white">
-            Enthalten
+            Was ist bei {l.shortTitle} enthalten?
           </h2>
           <ul className="mt-4 space-y-2.5" data-testid="leistung-features">
             {l.features.map((f) => (
@@ -131,7 +133,7 @@ export default async function LeistungDetailPage({ params }: Props) {
           </ul>
 
           <h2 className="mt-12 font-[family-name:var(--font-heading)] text-2xl font-light text-white">
-            Ergebnis
+            Welches Ergebnis liefert {l.shortTitle}?
           </h2>
           <ul className="mt-4 space-y-2.5" data-testid="leistung-outcomes">
             {l.outcomes.map((o) => (
@@ -149,23 +151,23 @@ export default async function LeistungDetailPage({ params }: Props) {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href={`/rueckruf?utm_source=leistungen&utm_campaign=${slug}`}
+              href={`/rueckruf?utm_source=leistungen&utm_medium=organic&utm_campaign=${slug}`}
               className="btn-primary inline-flex items-center gap-2"
               data-testid="leistung-cta-termin"
             >
               Termin buchen
               <ArrowRight className="size-4" />
             </Link>
-            <Link href="/rueckruf" className="btn-ghost" data-testid="leistung-cta-rueckruf-alt">
+            <Link href="/rueckruf?utm_source=leistungen&utm_medium=organic&utm_campaign=leistungen_rueckruf" className="btn-ghost" data-testid="leistung-cta-rueckruf-alt">
               Kostenlosen Rückruf
             </Link>
-            <Link href="/preise" className="btn-ghost" data-testid="leistung-cta-preise">
+            <Link href="/preise?utm_source=leistungen&utm_medium=organic&utm_campaign=leistungen_preise" className="btn-ghost" data-testid="leistung-cta-preise">
               Preise
             </Link>
           </div>
 
           <h2 className="mt-16 font-[family-name:var(--font-heading)] text-2xl font-light text-white">
-            Häufige Fragen
+            Häufige Fragen zu {l.shortTitle} — direkt beantwortet
           </h2>
           <div className="mt-6 space-y-4" data-testid="leistung-faq">
             {l.faqs.map((f) => (
@@ -181,9 +183,9 @@ export default async function LeistungDetailPage({ params }: Props) {
 
           {l.branchen.length > 0 && (
             <section className="mt-14" data-testid="leistung-branchen-links">
-              <h2 className="font-[family-name:var(--font-heading)] text-xl font-light text-white">
-                Branchen
-              </h2>
+              <h2 className="mt-12 font-[family-name:var(--font-heading)] text-2xl font-light text-white">
+            In welchen Branchen ist {l.shortTitle} im Einsatz?
+          </h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {l.branchen.map((b) => (
                   <Link
@@ -206,13 +208,13 @@ export default async function LeistungDetailPage({ params }: Props) {
 
           <section className="mt-10" data-testid="leistung-vergleich-links">
             <h2 className="font-[family-name:var(--font-heading)] text-xl font-light text-white">
-              Vergleich & Alternativen
+              Was unterscheidet {l.shortTitle} von Alternativen?
             </h2>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link href="/vergleich" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">
                 Klassische IT vs NeXify
               </Link>
-              <Link href="/preise" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">
+              <Link href="/preise?utm_source=leistungen&utm_medium=organic&utm_campaign=leistungen_preise" className="rounded-full border border-white/12 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">
                 Preise & Tagessatz
               </Link>
             </div>
@@ -221,7 +223,7 @@ export default async function LeistungDetailPage({ params }: Props) {
           {related.length > 0 && (
             <section className="mt-10" data-testid="leistung-related">
               <h2 className="font-[family-name:var(--font-heading)] text-xl font-light text-white">
-                Verwandte Leistungen
+                Welche Leistungen ergänzen {l.shortTitle}?
               </h2>
               <ul className="mt-4 space-y-2">
                 {related.map((r) =>

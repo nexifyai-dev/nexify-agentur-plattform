@@ -35,6 +35,7 @@ import booking
 import agent as agent_mod
 import email_agent
 import channel_sync
+import ebook_endpoint
 from memory import mem_add, mem_search
 from ninerouter import CostBrakeError, router as nine
 from locale_util import DEFAULT_LOCALE, parse_accept_language
@@ -1872,6 +1873,9 @@ async def contact(body: ContactIn):
         )
     )
     return {"status": "ok", "lead_id": str(lead_id)}
+
+
+app.include_router(ebook_endpoint.router)
 
 
 @app.post("/api/offers/request")

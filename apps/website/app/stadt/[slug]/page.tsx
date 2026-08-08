@@ -23,6 +23,8 @@ import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return stadtSlugs().map((slug) => ({ slug }));
 }
@@ -48,7 +50,7 @@ export default async function StadtPage({ params }: Props) {
   if (!stadt || !content) notFound();
 
   const path = `/stadt/${slug}`;
-  const utm = `utm_source=stadtseite&utm_campaign=${slug}`;
+  const utm = `utm_source=stadtseite&utm_medium=organic&utm_campaign=${slug}`;
 
   const breadcrumbJsonLd = breadcrumbListJsonLd([
     { name: "Home", path: "/" },

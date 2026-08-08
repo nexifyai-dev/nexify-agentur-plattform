@@ -23,6 +23,8 @@ const T = {
       { label: 'Prozess', href: '/prozess' },
       { label: 'FAQ', href: '/faq' },
       { label: 'Wissen', href: '/wissen' },
+      { label: 'KI-ROI-Rechner', href: '/ki-roi-rechner' },
+      { label: 'Chatbot-Kosten-Rechner', href: '/chatbot-kosten-rechner' },
       { label: 'Plattform', href: '/plattform' },
       { label: 'Venlo', href: '/venlo' },
     ],
@@ -57,6 +59,8 @@ const T = {
       { label: 'Process', href: '/prozess' },
       { label: 'FAQ', href: '/faq' },
       { label: 'Knowledge', href: '/wissen' },
+      { label: 'ROI Calculator', href: '/ki-roi-rechner' },
+      { label: 'Chatbot Cost Calculator', href: '/chatbot-kosten-rechner' },
       { label: 'Platform', href: '/plattform' },
     ],
     legalLinks: [
@@ -90,6 +94,8 @@ const T = {
       { label: 'Proces', href: '/prozess' },
       { label: 'FAQ', href: '/faq' },
       { label: 'Kennis', href: '/wissen' },
+      { label: 'ROI-rekenmachine', href: '/ki-roi-rechner' },
+      { label: 'Chatbot-kostencalculator', href: '/chatbot-kosten-rechner' },
       { label: 'Platform', href: '/plattform' },
     ],
     legalLinks: [

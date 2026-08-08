@@ -291,3 +291,79 @@ export function servicesOfferCatalogJsonLd(
 export function serializeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }
+
+/**
+ * schema.org WebSite + SearchAction — homepage-level entity (M-02).
+ * SearchAction targets the real SSR /suche route (no dead placeholder).
+ */
+export function websiteSearchActionJsonLd(path = "/") {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteOrigin()}/#website`,
+    url: absoluteUrl(path),
+    name: company.brand,
+    alternateName: company.brandFull,
+    inLanguage: ["de", "nl", "en"],
+    publisher: {
+      "@id": `${siteOrigin()}/#organization`,
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteOrigin()}/suche?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+/** Organization entity — referenced by @id from page-level schemas. */
+export function organizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteOrigin()}/#organization`,
+    name: company.legalName,
+    alternateName: [company.brand, company.brandFull],
+    url: siteOrigin(),
+    // sameAs: WhatsApp Business = einzige verifizierte externe Identität (M-02a).
+    sameAs: [company.whatsappHref],
+    logo: {
+      "@type": "ImageObject",
+      url: `${siteOrigin()}/logo-mark.png`,
+    },
+    email: company.email,
+    telephone: company.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: company.address,
+      postalCode: "5921 JA",
+      addressLocality: "Venlo",
+      addressCountry: "NL",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: company.phone,
+      email: company.email,
+      areaServed: ["DE", "AT", "CH", "NL"],
+      availableLanguage: ["de", "nl", "en"],
+    },
+  };
+}
+
+/** schema.org FAQPage from a list of Q/A pairs (M-02: any page with a FAQ block). */
+export function faqPageJsonLd(faqs: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+    inLanguage: "de",
+  };
+}

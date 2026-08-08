@@ -1,4 +1,6 @@
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, websiteSearchActionJsonLd, faqPageJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+import { HOME_FAQS_DE } from "@/lib/content/home-faqs";
 import { HomePage } from "@/components/pages/home";
 
 export const metadata = pageMetadata({
@@ -10,5 +12,11 @@ export const metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <HomePage />;
+  return (
+    <>
+      <JsonLd data={websiteSearchActionJsonLd("/")} />
+      <JsonLd data={faqPageJsonLd(HOME_FAQS_DE)} />
+      <HomePage />
+    </>
+  );
 }

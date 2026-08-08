@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { wissenArticleSlugs } from "@/lib/content/wissen-articles";
 import { branchenSlugs } from "@/lib/gtm/branchen";
 import { leistungSeoSlugs } from "@/lib/gtm/leistungen-seo";
+import { stadtSlugs } from "@/lib/gtm/stadt-seo";
 import { siteOrigin } from "@/lib/seo";
 
 /**
@@ -32,6 +33,8 @@ const staticRoutes: {
   { path: "/referenzen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/erfahrungen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/wissen", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/ki-roi-rechner", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/chatbot-kosten-rechner", priority: 0.8, changeFrequency: "monthly" },
   { path: "/faq", priority: 0.8, changeFrequency: "monthly" },
   { path: "/ueber-mich", priority: 0.75, changeFrequency: "monthly" },
   { path: "/venlo", priority: 0.75, changeFrequency: "monthly" },
@@ -78,5 +81,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticEntries, ...leistungEntries, ...branchenEntries, ...wissenEntries];
+  const stadtEntries: MetadataRoute.Sitemap = stadtSlugs().map((slug) => ({
+    url: `${base}/stadt/${slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
+  return [...staticEntries, ...leistungEntries, ...branchenEntries, ...wissenEntries, ...stadtEntries];
 }

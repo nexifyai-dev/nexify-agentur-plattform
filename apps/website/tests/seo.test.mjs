@@ -79,10 +79,10 @@ test("faq categories are expansive with H2 sections in UI", () => {
   assert.match(ui, /data-testid="faq-page"/);
   assert.match(ui, /data-testid=\{`faq-section-\$\{cat\.id\}`\}/);
   assert.match(ui, /href="\/leistungen"/);
-  assert.match(ui, /href="\/preise"/);
-  assert.match(ui, /href="\/kontakt"/);
+  assert.match(ui, /href="\/preise(?:#planner)?\?utm_source=faq/);
+  assert.match(ui, /href="\/preise#planner/);
+  assert.match(ui, /href="\/kontakt\?utm_source=faq/);
   assert.match(ui, /href="\/wissen"/);
-  assert.match(ui, /preise#planner/);
   assert.doesNotMatch(cats, /999/);
 });
 
@@ -137,11 +137,62 @@ test("JsonLd component serializes application/ld+json safely", () => {
 
 test("root layout has no global root-only canonical and uses 449 EUR", () => {
   const layout = read("app/layout.tsx");
-  assert.doesNotMatch(layout, /alternates:\s*\{\s*canonical:\s*"\/"/);
+  assert.doesNotMatch(layout, /alternates:\s*\{\s*canonical:\s*"\//);
   assert.match(layout, /449 Euro netto/);
   assert.match(layout, /€ 449 \/ Arbeitstag netto/);
   assert.match(layout, /price:\s*String\(company\.dayRate\)/);
   assert.match(layout, /replace\(\/<\/g,\s*"\\\\u003c"\)/);
+  // M-02: Organization carries @id, logo and contactPoint on every page
+  assert.match(layout, /"@id":\s*`\$\{origin\}\/#organization`/);
+  assert.match(layout, /logo:/);
+  assert.match(layout, /logo-mark\.png/);
+  assert.match(layout, /contactPoint:/);
+  assert.match(layout, /contactType:\s*"customer service"/);
+});
+
+test("M-02: homepage exposes WebSite + SearchAction + FAQPage JSON-LD", () => {
+  const page = read("app/page.tsx");
+  assert.match(page, /websiteSearchActionJsonLd/);
+  assert.match(page, /faqPageJsonLd/);
+  assert.match(page, /HOME_FAQS_DE/);
+  const seo = read("lib/seo.ts");
+  assert.match(seo, /"@type": "WebSite"/);
+  assert.match(seo, /"@type": "SearchAction"/);
+  assert.match(seo, /\/suche\?q=\{search_term_string\}/);
+  assert.match(seo, /query-input/);
+  assert.match(seo, /"@type": "FAQPage"/);
+  assert.match(seo, /"@type": "Question"/);
+  assert.match(seo, /acceptedAnswer/);
+});
+
+test("M-02: home-faqs data matches homepage UI FAQ block (single source)", () => {
+  const homeFaqs = read("lib/content/home-faqs.ts");
+  const home = read("components/pages/home.tsx");
+  const deBlock = home.split("faqEyebrow:\"FAQ\",faqTitle:\"Häufige Fragen.\",")[1].split("faqEyebrow:\"FAQ\",faqTitle:\"Frequently Asked Questions.\"")[0];
+  const uiCount = (deBlock.match(/\{q:"/g) || []).length;
+  assert.ok(uiCount >= 5, `expected >=5 visible DE homepage FAQs, got ${uiCount}`);
+  for (const [q, a] of [
+    ["Wie schnell ist ein Agent einsatzbereit?", "1 bis 5 Umsetzungstage"],
+    ["Was kostet der laufende Betrieb?", "Umsetzung pro Tag"],
+    ["Wie sicher sind unsere Daten?", "AVV nach Art. 28 DSGVO"],
+  ]) {
+    assert.match(homeFaqs, new RegExp(escapeRegex(q)));
+    assert.match(homeFaqs, new RegExp(escapeRegex(a).replace(/\\ /g, "\\s*")));
+  }
+});
+
+test("M-02: indexable client pages (checkliste, partner, botschafter) expose BreadcrumbList", () => {
+  for (const [rel, path, label] of [
+    ["app/checkliste/page.tsx", "/checkliste", "Checkliste"],
+    ["app/partner/page.tsx", "/partner", "Partner"],
+    ["app/botschafter/page.tsx", "/botschafter", "Botschafter"],
+  ]) {
+    const page = read(rel);
+    assert.match(page, /breadcrumbListJsonLd/);
+    assert.match(page, /JsonLd/);
+    assert.match(page, new RegExp(`path:\\s*"${escapeRegex(path)}"`));
+    assert.match(page, new RegExp(`name:\\s*"${escapeRegex(label)}"`));
+  }
 });
 
 test("leistungen page self-canonical and 449 in description", () => {
@@ -182,9 +233,9 @@ test("wissen articles are crawlable SSR routes with Article JSON-LD", () => {
   assert.match(page, /pageMetadata/);
   assert.match(page, /breadcrumbListJsonLd/);
   assert.match(page, /articleJsonLd/);
-  assert.match(page, /href="\/preise"/);
+  assert.match(page, /href="\/preise(?:[?"][^"]*)?"/);
   assert.match(page, /href="\/leistungen"/);
-  assert.match(page, /href="\/kontakt"/);
+  assert.match(page, /href="\/kontakt(?:[?"][^"]*)?"/);
 
   const index = read("components/pages/knowledge.tsx");
   assert.match(index, /WISSEN_ARTICLES/);
@@ -204,8 +255,8 @@ test("venlo local SEO page has SSR metadata, BreadcrumbList and LocalBusiness/Pl
   assert.match(page, /449|company\.dayRate/);
   assert.match(page, /Graaf van Loonstraat|company\.address/);
   assert.match(page, /href="\/leistungen"/);
-  assert.match(page, /href="\/preise"/);
-  assert.match(page, /href="\/kontakt"/);
+  assert.match(page, /href="\/preise(?:[?"][^"]*)?"/);
+  assert.match(page, /href="\/kontakt(?:[?"][^"]*)?"/);
   assert.match(page, /data-testid="venlo-page"/);
   assert.doesNotMatch(page, /999/);
 
