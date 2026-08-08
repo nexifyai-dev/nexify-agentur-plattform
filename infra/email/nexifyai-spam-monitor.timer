@@ -2,7 +2,9 @@
 Description=NeXifyAI Spam-Monitor (3x täglich)
 
 [Timer]
-OnCalendar=*-*-* 07:00,13:00,19:00
+OnCalendar=07:00
+OnCalendar=13:00
+OnCalendar=19:00
 Persistent=true
 
 [Install]
