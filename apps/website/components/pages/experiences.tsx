@@ -80,7 +80,7 @@ export function ExperiencesPage() {
                       {q.author}
                     </span>
                   </span>
-                  <meta itemProp="reviewRating" itemScope itemType="https://schema.org/Rating" content="5" />
+                  <meta itemProp="reviewRating" content="5" />
                   <meta itemProp="bestRating" content="5" />
                   <p className="mt-2 flex items-center gap-1.5 text-[11px] text-zinc-600">
                     <ShieldCheck size={13} aria-hidden /> Anonymisiert, mit Freigabe veröffentlicht

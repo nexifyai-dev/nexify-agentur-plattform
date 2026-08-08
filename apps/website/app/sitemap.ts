@@ -24,6 +24,7 @@ const staticRoutes: {
   { path: "/prozess", priority: 0.85, changeFrequency: "monthly" },
   { path: "/plattform", priority: 0.85, changeFrequency: "monthly" },
   { path: "/checkliste", priority: 0.85, changeFrequency: "monthly" },
+  { path: "/ebook", priority: 0.85, changeFrequency: "monthly" },
   { path: "/alternativen", priority: 0.85, changeFrequency: "monthly" },
   { path: "/partner", priority: 0.8, changeFrequency: "monthly" },
   { path: "/botschafter", priority: 0.8, changeFrequency: "monthly" },
