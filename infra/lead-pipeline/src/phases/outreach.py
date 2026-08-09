@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 import os
 
 # Hostinger-SMTP-Konfig (aus pipeline.env oder default)
-SMTP_HOST = os.getenv("SMTP_HOST", "smtp.hostinger.com")
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.resend.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "465"))
 SMTP_USER = os.getenv("SMTP_USER", "mail@nexifyai.cloud")
 # Hostinger-SMTP nutzt IMAP_PASSWORD (nicht API-Token)
