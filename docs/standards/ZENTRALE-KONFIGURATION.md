@@ -348,10 +348,22 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | Keep-Alive | leere Zeilen / SSE :keep-alive beim Warten; 10-min-Inference-Limit |
 | Doku | api-docs.deepseek.com (Pricing/Rate-Limit/Thinking/Tool-Calls-strict/Responses/FIM/JSON-Mode) — gescannt 2026-08-09 |
 
+## 12e. AutoSEO-Pipeline (nach AutoSEO-Muster getautoseo.com, Pascal-Auftrag 2026-08-09)
+
+| Feld | Wert |
+|---|---|
+| Zweck | 1 Experten-Artikel/Tag → /wissen → Auto-Deploy (Vercel) — GEO/LLM-SEO-Angriff (ChatGPT/Perplexity-Empfehlungen) |
+| Skript | /opt/nexifyai/scripts/autoseo-pipeline.py (DeepSeek ds/deepseek-v4-flash Think-Max, JSON-Mode, 1.500+ Wörter, Quellen, FAQ, H2-Fragen, interne Links, CTA-UTM) |
+| Timer | nexifyai-autoseo.timer täglich 06:30 (systemd) · Log /var/log/nexifyai/autoseo.log · State /opt/nexifyai/autoseo/state.json |
+| Pool | /opt/nexifyai/autoseo (Themen im Skript, 10 Start-Keywords, rotierend) |
+| Deploy | Registry wissen-articles.ts → Commit → push origin sync-gitlab:main → Vercel |
+| AutoSEO-Benchmark | getautoseo.com: 30 Artikel/Monat garantiert, 100 DA Backlinks/Monat, Dashboard, 98% günstiger als Agentur ($5.000/mo) — wir: eigene Pipeline (DeepSeek-Direkt, ~0,14$/1M) |
+
 ## 13. Changelog
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-09 18:30 | **FREEAGENT-VOLLÜBERNAHME (Pascal):** UI-Login via Camoufox (Verify-Code aus Mailbox) → MwSt-Setup: Periode ab 2026-08-09 Registered, BTW 21%, Value-Added (API tax_status=Registered) → Kategorien verfügbar → freeagent_sync.sh gefixt (gruppierte Keys, echte Nominalcodes, dated_on) → Bank-Transaktionen automatisch klassifiziert (201, E3). Produkte: UI-Feature im Trial nicht verfügbar + API-POST 404 → Items-Weg dokumentiert. **AUTOSEO-PIPELINE gebaut:** autoseo-pipeline.py + Timer 06:30 + Testlauf (GEO-Artikel); Benchmark getautoseo.com analysiert (30 Artikel/Monat, Backlinks, Dashboard, GEO). **Vorgaben v3.5+:** FreeAgent-Vollübernahme, Recherche-bei-Unwissen, Nichts-ungefixt-lassen, Konto-Standard (MASTER_PASSWORD + mail@nexifyai.cloud) verankert |
 | 2026-08-09 17:50 | **CEO-RUNDE 2+3 (Stabilität + Aufräumen):** Gateway-Restart (Host-ds/-Config aktiv, Dashboard 4 Plattformen ok); ds-direct-Connection deaktiviert (ein DeepSeek-Pfad via /beta); Kanban t_32a9b14d (WA Session-Reset) geschlossen; AGENTS.md-Duplikat-Fix + Push e328bcae; Profil-Configs ohne OpenRouter-Refs; WhatsApp-Scan-Watcher auf 24h; WebUI-Container-Restart (Up 3 min healthy) — 31 ds/-Referenzen aktiv; Bulk18-Auto-Check (bulk18-check.timer → Telegram); ds-fim.py deployt (E3: add-Funktion komplettiert) |
 | 2026-08-09 17:40 | **DEEPSEEK-DIREKT-UMBAU (Pascal-Direktive, E3):** 9Router: deepseek-official Node enabled + baseURL /beta, OpenRouter-Connection deaktiviert (402/Guthaben), deniedProviders deepseek entfernt (Solar-Altlast-Policy ersetzt), providerThinking.deepseek=max. Hermes: 55 Modell-Referenzen openrouter/... -> ds/deepseek-v4-flash (Host+WebUI). Key-Fix: DEEPSEEK_API_KEY in hermes.env war INVALID -> aus 9Router-DB gespiegelt. Codex CLI 0.147.0 installiert + DeepSeek konfiguriert (HOME/.codex — Fallstrick: HOME!=/root!), CODEX_OK E2E. Strict-Tool-Calls + FIM via /beta E3. Vorgaben: ToDo-/Diff-/Strict-Pflicht in SOUL/AGENTS/Arbeitsvorgaben v3.5. FIM-Skript infra/scripts/ds-fim.py |
 | 2026-08-09 17:05 | **VERSAND-RICHTLINIE (Pascal-Direktive):** KEIN WhatsApp-Outbound (nexifyai-whatsapp-wave.timer DISABLED; Kanal bis auf Weiteres nur konversationell, aktuell gesperrt 4h) + KEIN Hostinger-SMTP mehr. Mail-Versand NUR Resend: API + SMTP (smtp.resend.com:465, user=resend, pass=RESEND_API_KEY). Umgestellt: systemd-Units bulk/drip/followup (EnvironmentFile=/etc/nexifyai/mail-resend.env, Inline-Secrets entfernt), pipeline.env, hermes.env (SMTP_*), /opt/nexifyai/.env (notify.sh), Backend server.py (SMTP-Login env-basiert, Default resend). E2E: send_email smtplib OK, /api/ebook mailSent=true, 0 Hostinger-Referenzen aktiv. Test-Leads gelöscht. WhatsApp-Re-Pairing wartet auf Sperrende (QR-Loop + Scan-Watcher 6h aktiv) |
