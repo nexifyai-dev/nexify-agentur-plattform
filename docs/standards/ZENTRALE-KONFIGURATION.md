@@ -331,10 +331,28 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | OFFEN (Pascal) | MwSt-Setup in FreeAgent (sales_tax_registration_status=Not Registered) → schaltet Kategorien/Write-API frei; danach Produkte in UI anlegen |
 | Anleitung | docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md |
 
+## 12d. LLM-Stack: DeepSeek-Direkt (Pascal-Direktive 2026-08-09) [KEIN OpenRouter mehr]
+
+| Feld | Wert |
+|---|---|
+| Standard-Modell | `ds/deepseek-v4-flash` = deepseek-v4-flash (reasoning_effort=max, Think-Max; 9Router providerThinking.deepseek.mode=max) |
+| Tiefe Aufgaben | `ds/deepseek-v4-pro` (nur echte Komplexität) |
+| Provider-Pfad | 9Router → https://api.deepseek.com/beta DIREKT (deepseek-official Node, enabled; OpenRouter-Connection isActive=0) |
+| API-Key | DEEPSEEK_API_KEY in hermes.env (aus 9Router-DB gespiegelt, 2026-08-09 — alter Key war invalid!) |
+| Preise /1M | flash: In 0,14$ (Cache 0,0028$) / Out 0,28$ · pro: In 0,435$ (Cache 0,003625$) / Out 0,87$ · Concurrency flash 2500 / pro 500 · Preiserhöhung angekündigt |
+| Kontext/Output | 1M Kontext, max 384K Output; Thinking: `thinking:{type}` + `reasoning_effort: low/high/max` (max=Think-Max) |
+| Strict-Tool-Calls | /beta + tools[].function.strict=true (Schema: alle props required, additionalProperties=false; E3) |
+| FIM | /beta/completions (prompt+suffix, max 4K) — Skript infra/scripts/ds-fim.py |
+| Responses API | nur flash (Codex-Wire); Codex CLI 0.147.0 → ~/.codex (HOME/.codex!) config.toml+models.json, base_url api.deepseek.com, wire_api responses, effort max |
+| user_id-Isolation | DeepSeek-Param `user_id` (regex [a-zA-Z0-9-_], max 512) — für Mandanten-Isolation nutzbar |
+| Keep-Alive | leere Zeilen / SSE :keep-alive beim Warten; 10-min-Inference-Limit |
+| Doku | api-docs.deepseek.com (Pricing/Rate-Limit/Thinking/Tool-Calls-strict/Responses/FIM/JSON-Mode) — gescannt 2026-08-09 |
+
 ## 13. Changelog
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-09 17:40 | **DEEPSEEK-DIREKT-UMBAU (Pascal-Direktive, E3):** 9Router: deepseek-official Node enabled + baseURL /beta, OpenRouter-Connection deaktiviert (402/Guthaben), deniedProviders deepseek entfernt (Solar-Altlast-Policy ersetzt), providerThinking.deepseek=max. Hermes: 55 Modell-Referenzen openrouter/... -> ds/deepseek-v4-flash (Host+WebUI). Key-Fix: DEEPSEEK_API_KEY in hermes.env war INVALID -> aus 9Router-DB gespiegelt. Codex CLI 0.147.0 installiert + DeepSeek konfiguriert (HOME/.codex — Fallstrick: HOME!=/root!), CODEX_OK E2E. Strict-Tool-Calls + FIM via /beta E3. Vorgaben: ToDo-/Diff-/Strict-Pflicht in SOUL/AGENTS/Arbeitsvorgaben v3.5. FIM-Skript infra/scripts/ds-fim.py |
 | 2026-08-09 17:05 | **VERSAND-RICHTLINIE (Pascal-Direktive):** KEIN WhatsApp-Outbound (nexifyai-whatsapp-wave.timer DISABLED; Kanal bis auf Weiteres nur konversationell, aktuell gesperrt 4h) + KEIN Hostinger-SMTP mehr. Mail-Versand NUR Resend: API + SMTP (smtp.resend.com:465, user=resend, pass=RESEND_API_KEY). Umgestellt: systemd-Units bulk/drip/followup (EnvironmentFile=/etc/nexifyai/mail-resend.env, Inline-Secrets entfernt), pipeline.env, hermes.env (SMTP_*), /opt/nexifyai/.env (notify.sh), Backend server.py (SMTP-Login env-basiert, Default resend). E2E: send_email smtplib OK, /api/ebook mailSent=true, 0 Hostinger-Referenzen aktiv. Test-Leads gelöscht. WhatsApp-Re-Pairing wartet auf Sperrende (QR-Loop + Scan-Watcher 6h aktiv) |
 | 2026-08-09 16:10 | **FREEAGENT-VOLLINTEGRATION (Pascal-Auftrag, E3):** OAuth-Token-Refresh gebaut + persistiert; freeagent_sync.sh + systemd-Timer (30 min) installiert; 4 Bankkonten (Revolut-Feed) + Transaktionen verifiziert; Beleg-Dropbox + Upload-Mechanismus; Klassifizierungs-Regelwerk (Transfer-Skip). API-Grenzen: POST /products + POST /attachments existieren nicht (Konto-Setup fehlt: MwSt Not Registered, 0 Kategorien) → Anleitung docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md, 12 Produkte definiert, Pascal: MwSt-Setup + Produktanlage in UI |
 | 2026-08-09 15:17 | **CEO-RUNDE 2026-08-09 #2 (WhatsApp-Re-Pairing + Board + Doku-Sync):** WhatsApp-Session registered=False (device_removed) → frisches Pairing gestartet (bridge.js --pair-only --pair-json, QR live via wa-qr.png + Telegram-Alarm); Doppel-Bridge-Konflikt identifiziert (hermes-whatsapp-bridge.service vs Gateway-Adapter); Kanban: M-02/M-03/M-04/M-05 superseded geschlossen (4 Tasks, Kinder done); Doku-Sync Master↔Spiegel abgeglichen; ZK-Root-Doppelablage entfernt |

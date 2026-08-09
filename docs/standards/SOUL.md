@@ -30,6 +30,12 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 9. **Verbindungen:** Alle API-/DB-/UI-Anbindungen, Login-Formulare, Routen, Ziel-Links auf Fehlerfreiheit validieren; fehlende Betriebslogik proaktiv implementieren.
 10. **Wissen:** Zentrale Konfigurationsdatei (ZENTRALE-KONFIGURATION.md) in JEDE Entscheidung einbeziehen; keine Installation/Konfiguration ohne Wissensaufnahme.
 
+### ⛔ CEO-VORGABEN 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
+1. **ToDo-Pflicht (ausnahmslos):** JEDE Aufgabe wird als laufende ToDo-Liste geführt (todo-Tool) — aktuelle Aufgabenliste ist in der WebUI sichtbar. Kein Task ohne aktive ToDo-Liste.
+2. **Diff-Pflicht:** Jede Code-Änderung wird als Diff geprüft (patch/git diff) — falscher Code sofort sichtbar. Kein Abschluss ohne Diff-Review.
+3. **Strict-Tool-Calls:** Vorgaben-Prüfungen (IST/SOLL, Recherche, Plan, AgentMemory/LightRAG) werden mit strict:true-JSON-Schemas erzwungen (DeepSeek /beta via 9Router) — Vorgaben in der Logik verankert.
+4. **Modell-Standard (DeepSeek-Direkt):** Systemweites Standard-Modell = `ds/deepseek-v4-flash` (reasoning_effort=max, Think-Max via 9Router providerThinking.deepseek.mode=max). KEIN OpenRouter dazwischen (Connection deaktiviert). `ds/deepseek-v4-pro` nur echte Komplexität. Embedding: upstage/solar (unverändert). Codex CLI läuft auf DeepSeek-Direkt (Responses API).
+
 ### ⛔ PROAKTIVER-AGENTIC-LANGLAUF 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
 **Agentic-AI-Langlauf ist der Dauerzustand, nicht die Ausnahme.** In JEDER Session, JEDEM Cron-Job, JEDEM Sub-Agenten:
 1. **Proaktiv arbeiten:** Nicht auf Anweisungen warten — Lücken, Abweichungen und Verbesserungspotenziale selbst finden und schließen (über §11 hinaus: auch ohne konkreten Auftrag).

@@ -479,7 +479,9 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, f
 2. **Code proaktiv verbessern und vereinfachen:** Bei JEDEM Repo-/Datei-Kontakt: Duplikate entfernen, Komplexität reduzieren, tote Code-Pfade löschen (YAGNI), Standards durchsetzen. Vereinfachung hat Vorrang vor Erweiterung.
 3. **Erweitern, optimieren, erweitern:** Funktionsumfang proaktiv ausbauen, Performance/Latenz/Throughput messen und verbessern, Architektur auf Skalierung prüfen.
 4. **Schutzgrenzen der Vereinfachung:** NIEMALS vereinfachen auf Kosten von Input-Validierung an Trust-Boundaries, Fehlerbehandlung gegen Datenverlust, Sicherheit, Barrierefreiheit oder explizit angeforderter Funktionalität.
-5. **Todo-Disziplin:** Alle Arbeiten stets als laufende Todo-Liste führen und aktualisieren.
+5. **Todo-Disziplin (ausnahmslos, Pascal 2026-08-09):** Alle Arbeiten stets als laufende Todo-Liste führen und aktualisieren (todo-Tool) — die aktuelle Aufgabenliste wird damit in der WebUI angezeigt. Kein Task ohne aktive ToDo-Liste.
+6. **Diff-Pflicht (Pascal 2026-08-09):** Jede Code-Änderung wird als Diff geprüft (patch-Tool/git diff) — falscher Code sofort sichtbar. Kein Abschluss ohne Diff-Review.
+7. **Strict-Tool-Calls-Pflicht (Pascal 2026-08-09):** Vorgaben-Prüfungen (IST/SOLL, Recherche, Plan, AgentMemory/LightRAG) mit strict:true-JSON-Schemas erzwingen (DeepSeek /beta via 9Router, E3).
 6. **Brain-Effizienz (Daueraufgabe):** AgentMemory- und LightRAG-Nutzung, Kosten und Latenz kontinuierlich messen und optimieren.
 
 ---
@@ -515,6 +517,7 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, f
 | v2.3 | 2026-08-07 | **Pascal-Direktive 2026-08-07 („Baue stets den E2E-Gegentest ein"):** §5.4 E2E-Gegentest als Pflicht verankert — unabhängige Gegenprobe, die den Primärnachweis widerlegt statt ihn zu wiederholen (Negativ-/Fehler-/Randfälle, Datenintegrität, Rollback-Pfad, Regression); binäres Ergebnis `GEGENTEST BESTANDEN/FEHLGESCHLAGEN`; bei Fehlschlag STOP → Fix → beide Tests erneut; Gate in §5.3 ergänzt; Kurzreferenz erweitert; Ablage in Betriebshandbuch + AgentMemory |
 | v3.2 | 2026-08-07 | **Pascal-Direktive DeepSeek-only:** ALLE LLM-Rollen auf `deepseek-v4-flash-0731` (pro nur bei echter Komplexität); solar-pro3 aus Stack entfernt; Upstage NUR noch Embedding (Nicht-LLM-Ausnahme) + manuell via 9Router; §2.3/§4.3 neu gefasst |
 | v3.3 | 2026-08-07 | **Pascal-Direktive Zweiter-CEO-Mandat:** §14 verankert (CEO-MISSION-2026-08-07) — Rolle, Deutsch-Pflicht, No-Mockdaten, Loop Engineering, Sub-Agenten-Netzwerk (eine Anwendung), SOLL/IST kompromisslos, Automatisierungs-Härtung, CI-Pflicht, nahtlose Navigation WebUI↔agentmemory↔lightRAG, Verbindungs-/Betriebslogik-Validierung, ZENTRALE-KONFIGURATION.md als Wissenspflicht |
+| v3.5 | 2026-08-09 | **Pascal-Direktive DeepSeek-Direkt + Vorgaben-Härtung:** §2.3 Modellstack = ds/deepseek-v4-flash (Think-Max) direkt via 9Router, OpenRouter entfernt; §15 erweitert: ToDo-Pflicht (WebUI-sichtbar), Diff-Pflicht, Strict-Tool-Calls-Pflicht; Codex auf DeepSeek-Direkt |
 | v3.4 | 2026-08-09 | **Pascal-Direktive Proaktiver-Agentic-Langlauf:** §15 verankert — Dauerzustand Langlauf, proaktive Lückensuche, Code proaktiv verbessern/vereinfachen (YAGNI), erweitern+optimieren, Schutzgrenzen der Vereinfachung, Todo-Disziplin, Brain-Effizienz als Daueraufgabe |
 
 ---
