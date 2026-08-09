@@ -486,13 +486,14 @@ STIL & FORMATIERUNG:
 OFFER_READY_MARKER = "[ANGEBOT_BEREIT]"
 
 OFFER_PROMPT = """Erstelle aus dem gesamten bisherigen Beratungsgespraech ein INDIVIDUELLES Premium-Angebot als reines JSON (keine Erklaerung, kein Markdown-Zaun) in der Sprache "{language}" mit exakt diesen Feldern:
-{{"title": "praegnanter Projekttitel mit Bezug zum Unternehmen des Kunden", "intro": "3-4 Saetze persoenliche Einleitung an {name}: nimm konkret Bezug auf sein Unternehmen, seine Branche und die im Gespraech genannten Ziele", "summary": ["4-7 Stichpunkte: die im Gespraech geaeusserten Anforderungen und Wuensche des Kunden"], "items": [{{"name": "...", "description": "2-3 Saetze, konkret auf die besprochenen Beduerfnisse zugeschnitten – nenne Branche, Funktionen und Ziele aus dem Gespraech", "days_min": 1, "days_max": 2}}], "recommendation": "2-3 Saetze persoenliche Experten-Empfehlung fuer genau diesen Kunden (sinnvolle Prioritaeten, empfohlene erste Ausbaustufe, was sich besonders lohnt)", "assumptions": ["..."], "next_steps": ["..."]}}
+{{"title": "praegnanter Projekttitel mit Bezug zum Unternehmen des Kunden ({company}) — nie Platzhalter wie [Kundenunternehmen] zurueckgeben", "intro": "3-4 Saetze persoenliche Einleitung an {name}: nimm konkret Bezug auf sein Unternehmen ({company}), seine Branche und die im Gespraech genannten Ziele", "summary": ["4-7 Stichpunkte: die im Gespraech geaeusserten Anforderungen und Wuensche des Kunden"], "items": [{{"name": "...", "description": "2-3 Saetze, konkret auf die besprochenen Beduerfnisse zugeschnitten – nenne Branche, Funktionen und Ziele aus dem Gespraech", "days_min": 1, "days_max": 2}}], "recommendation": "2-3 Saetze persoenliche Experten-Empfehlung fuer genau diesen Kunden (sinnvolle Prioritaeten, empfohlene erste Ausbaustufe, was sich besonders lohnt)", "assumptions": ["..."], "next_steps": ["..."]}}
 REGELN:
 - Schreibe IMMER korrekte Umlaute und Eszett (ä, ö, ü, ß) – niemals Ersatzschreibweisen wie ae, oe, ue, ss.
 - Tagessatz 449 EUR netto, realistische Arbeitstage gemaess Leistungskatalog, maximal 5 Positionen.
 - JEDE Position muss erkennbar aus dem Gespraech abgeleitet sein – keine generischen Fuellpositionen.
 - Nicht besprochene Details: KEINE stillen Annahmen im Leistungsumfang – fuehre sie transparent unter assumptions auf.
 - Schreibe warm, persoenlich und professionell. Der Kunde muss spueren, dass dieses Angebot exklusiv fuer ihn erstellt wurde.
+- SPRICH DEN KUNDEN MIT SEINEM ECHTEN VORNAMEN ({name}) AN – niemals mit fremden Namen, niemals mit Platzhaltern wie [Kundenunternehmen].
 - Datenschutz (DSGVO Art. 5 Abs. 1 lit. c): Uebermittle in KEINEM Fall unnötige personenbezogene Daten. Nutze fuer die Anrede ausschliesslich den Vornamen (bzw. „Kunde"/„Interessent", falls nur ein Firmenname vorliegt). Keine E-Mail-Adressen, Telefonnummern, vollstaendigen Namen oder sonstigen Kontaktdaten in Ausgaben wiederholen.
 - Antworte AUSNAHMSLOS mit dem JSON-Objekt. Auch wenn Angaben fehlen: erstelle das bestmoegliche Angebot und liste offene Punkte unter assumptions. Stelle KEINE Rueckfragen.
 - Halte das JSON kompakt: kurze Saetze, keine ueberfluessigen Fuellwoerter."""
@@ -1909,7 +1910,7 @@ async def request_offer(body: OfferRequestIn):
     # PII-Minimierung (DSGVO Art. 5 Abs. 1 lit. c): nur Vorname in den
     # LLM-Prompt — vollständiger Name bleibt in DB/E-Mail, nicht im Prompt.
     first_name = (body.name or "").strip().split()[0] if (body.name or "").strip() else "Kunde"
-    prompt = OFFER_PROMPT.format(language=body.language, name=first_name)
+    prompt = OFFER_PROMPT.format(language=body.language, name=first_name, company=(body.company or "dem Unternehmen").strip() or "dem Unternehmen")
     offer = None
     for attempt in range(2):
         try:
@@ -1965,6 +1966,10 @@ async def request_offer(body: OfferRequestIn):
     email_id = await send_email(body.email, subject, html, attachments=attachments)
 
     offer_id = uuid.uuid4()
+    try:
+        session_uuid = uuid.UUID(str(body.session_id))
+    except (ValueError, AttributeError):
+        session_uuid = uuid.uuid4()
     pool = await db()
     if pool:
         try:
@@ -1974,7 +1979,7 @@ async def request_offer(body: OfferRequestIn):
                        select $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,
                               (select id from nexify_users where lower(email) = lower($4) limit 1)""",
                     offer_id,
-                    uuid.UUID(body.session_id),
+                    session_uuid,
                     body.name,
                     body.email,
                     body.company,
