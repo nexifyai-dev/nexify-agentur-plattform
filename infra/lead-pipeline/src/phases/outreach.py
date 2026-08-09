@@ -40,7 +40,12 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
 
     try:
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context, timeout=60) as server:
+        if int(SMTP_PORT) == 465:
+            server = smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context, timeout=60)
+        else:
+            server = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=60)
+            server.starttls(context=context)
+        with server:
             server.login(SMTP_USER, SMTP_PASSWORD)
             server.sendmail(SMTP_USER, to_email, msg.as_string())
         return True
