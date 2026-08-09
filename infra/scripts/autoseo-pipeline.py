@@ -60,27 +60,41 @@ def call_ds(prompt):
         "model": MODEL,
         "messages": [{"role": "user", "content": prompt}],
         "reasoning_effort": "max",
-        "response_format": {"type": "json_object"},
-        "max_tokens": 8000,
+        "max_tokens": 12000,
     })
-    r = subprocess.run(["curl", "-s", "--max-time", "600", ROUTER,
-                        "-H", f"Authorization: Bearer {key}",
-                        "-H", "Content-Type: application/json", "-d", body],
-                       capture_output=True, text=True)
-    raw = r.stdout
-    idx = raw.find("{")
-    if idx < 0:
-        raise RuntimeError(f"Kein JSON: {raw[:200]}")
-    d, _ = json.JSONDecoder().raw_decode(raw[idx:])
-    content = d["choices"][0]["message"].get("content", "")
-    return json.loads(content)
+    last = None
+    for attempt in range(3):
+        r = subprocess.run(["curl", "-s", "--max-time", "600", ROUTER,
+                            "-H", f"Authorization: Bearer {key}",
+                            "-H", "Content-Type: application/json", "-d", body],
+                           capture_output=True, text=True)
+        raw = r.stdout
+        idx = raw.find("{")
+        if idx < 0:
+            last = RuntimeError(f"Kein JSON: {raw[:150]}")
+            continue
+        try:
+            d, _ = json.JSONDecoder().raw_decode(raw[idx:])
+            content = d["choices"][0]["message"].get("content", "").strip()
+        except Exception as e:
+            last = RuntimeError(f"Response-Parse: {e}")
+            continue
+        if not content:
+            last = RuntimeError("Leerer Content (JSON-Mode) — Retry")
+            continue
+        try:
+            return json.loads(content)
+        except Exception as e:
+            last = RuntimeError(f"Content kein JSON ({len(content)} Zeichen): {e}")
+            continue
+    raise last
 
 PROMPT = """Du bist SEO-Content-Autor für die deutsche B2B-KI-Agentur NeXify AI (www.nexifyai.cloud, Venlo/NL, Zielgruppe DACH-KMU). Schreibe einen Experten-Artikel nach dem Muster der besten SEO-Agenturen: 1.500+ Wörter, Fachkenntnis, Quellen, Anti-Robot-Qualität ("If you wouldn't share it on LinkedIn, it's not good enough").
 
 Thema: {title}
 Zielseite (interner CTA): {ziel}
 
-FORMAT (ausschließlich JSON, keine Markdown-Umrandung):
+FORMAT (ausschließlich JSON, keine Markdown-Umrandung, keine Erklärungen — antworte NUR mit dem JSON-Objekt):
 {{
  "slug": "{slug}",
  "title": "{title}",

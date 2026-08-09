@@ -84,7 +84,7 @@ LOGIN_PAGE = r"""<!DOCTYPE html>
 <title>NeXifyAI — Admin Login</title>
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css2?family=outfit:wght@300;400;500;600;700&family=manrope:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none'><rect width='48' height='48' rx='10' fill='%230a0a0c'/><defs><linearGradient id='s' x1='4' y1='4' x2='44' y2='44' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23fafafa'/><stop offset='0.45' stop-color='%23a1a1aa'/><stop offset='0.7' stop-color='%23e4e4e7'/><stop offset='1' stop-color='%2371717a'/></linearGradient></defs><path d='M24 4 41 14v20L24 44 7 34V14L24 4Z' stroke='url(%23s)' stroke-width='1.6'/><path d='M17 17 31 31M31 17 17 31' stroke='url(%23s)' stroke-width='2.6' stroke-linecap='round'/><circle cx='24' cy='24' r='3.2' fill='url(%23s)'/></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none'><rect width='48' height='48' rx='12' fill='%230A0A0A'/><rect x='7' y='7' width='7' height='34' rx='2' fill='%23fafafa'/><rect x='34' y='7' width='7' height='34' rx='2' fill='%23fafafa'/><polygon points='7,7 15,7 41,41 33,41' fill='%23fafafa'/><circle cx='41' cy='7' r='5' fill='%23C8FF00'/><circle cx='41' cy='7' r='5' fill='none' stroke='%230A0A0A' stroke-width='3'/></svg>">
 <style>
 :root{--bg:#09090b;--panel:rgba(255,255,255,0.03);--line:rgba(255,255,255,0.08);--silver:#d4d4d8;--silver2:#a1a1aa;--white:#fafafa;--red-bg:rgba(239,68,68,0.1);--red-line:rgba(239,68,68,0.2);--red-text:#fca5a5}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -116,15 +116,17 @@ button:active{transform:translateY(0)}
 <div class="brand">
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" style="display:block;margin:0 auto 20px;filter:drop-shadow(0 0 20px rgba(255,255,255,0.08))">
   <defs>
-    <linearGradient id="ls" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#C8FF00"/>
-      <stop offset="0.5" stop-color="#eaffb0"/>
-      <stop offset="1" stop-color="#8fce00"/>
+    <linearGradient id="ls" x1="7" y1="41" x2="41" y2="7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d4d4d8"/>
+      <stop offset="1" stop-color="#fafafa"/>
     </linearGradient>
   </defs>
-  <path d="M24 4 41 14v20L24 44 7 34V14L24 4Z" stroke="url(#ls)" stroke-width="1.6"/>
-  <path d="M17 17 31 31M31 17 17 31" stroke="url(#ls)" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="24" cy="24" r="3.2" fill="url(#ls)"/>
+  <rect width="48" height="48" rx="12" fill="#0A0A0A"/>
+  <rect x="7" y="7" width="7" height="34" rx="2" fill="url(#ls)"/>
+  <rect x="34" y="7" width="7" height="34" rx="2" fill="url(#ls)"/>
+  <polygon points="7,7 15,7 41,41 33,41" fill="url(#ls)"/>
+  <circle cx="41" cy="7" r="5" fill="#C8FF00"/>
+  <circle cx="41" cy="7" r="5" fill="none" stroke="#0A0A0A" strokeWidth="3"/>
 </svg>
 <h1>Ne<span style="color:#C8FF00;font-weight:700">X</span>ify <span class="light">AI</span></h1>
 <div class="tagline">Chat it. Automate it.</div>
