@@ -1,7 +1,7 @@
 {
   "id": "nexifyai-apps",
   "name": "NeXify AI Apps",
-  "description": "AgentMemory (Brain) + LightRAG (Wissen) als Tabs in der Workstation — same-origin Proxy /agentmemory/ + /lightrag/.",
+  "description": "AgentMemory (Brain) + LightRAG (Wissen) + 9Router + n8n + Paperclip als Tabs in der Workstation.",
   "version": "0.1.0",
   "author": "nexifyai",
   "assets": {
