@@ -350,13 +350,38 @@ def mail_shell(label: str, body_html: str) -> str:
 
 
 def html_to_text(html: str) -> str:
-    """Robuster Plain-Text aus Mail-HTML (multipart/alternative, Spam-/Deliverability-Best-Practice)."""
+    """Robuster Plain-Text aus Mail-HTML (multipart/alternative, Spam-/Deliverability-Best-Practice).
+    ReDoS-sicher via stdlib HTMLParser (2026-08-09, Code-Scanning py/polynomial-redos)."""
     import html as _html
     import re
+    from html.parser import HTMLParser
 
-    s = re.sub(r"(?i)<(br|/tr|/p|/li|/h1|/h2|/h3|/div)[^>]*>", "\n", html)
-    s = re.sub(r"(?i)<a [^>]*href=\"([^\"]+)\"[^>]*>(.*?)</a>", r"\2 (\1)", s)
-    s = re.sub(r"(?i)<[^>]+>", "", s)
+    class _TextExtractor(HTMLParser):
+        BLOCK = {"br", "p", "li", "h1", "h2", "h3", "div", "tr"}
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.out = []
+            self.href = None
+        def handle_starttag(self, tag, attrs):
+            if tag == "a":
+                self.href = dict(attrs).get("href")
+            elif tag in self.BLOCK:
+                self.out.append("\n")
+        def handle_startendtag(self, tag, attrs):
+            if tag == "br":
+                self.out.append("\n")
+        def handle_endtag(self, tag):
+            if tag == "a" and self.href:
+                self.out.append(f" ({self.href})")
+                self.href = None
+            elif tag in self.BLOCK:
+                self.out.append("\n")
+        def handle_data(self, data):
+            self.out.append(data)
+
+    p = _TextExtractor()
+    p.feed(html)
+    s = "".join(p.out)
     s = _html.unescape(s)
     s = re.sub(r"[ \t]+", " ", s)
     s = re.sub(r"\n{3,}", "\n\n", s)
