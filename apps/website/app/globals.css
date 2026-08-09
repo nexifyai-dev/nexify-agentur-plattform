@@ -294,3 +294,47 @@ input.field:focus, textarea.field:focus, select.field:focus {
 .hero-copy { min-width: 0; }
 .operator-wrap { min-width: 0; overflow: visible; }
 .operator-wrap > * { min-width: 0; }
+
+/* ── nexify-anhang.css (eingebettet 2026-08-09, Mobile-Breakpoints waren tot) ── */
+/* ============================================================
+   Anhang-Design (PR47 Luxury Dark / Lime) — "NeXify Homepage.dc.html"
+   Keyframes + Breakpoints, 1:1 aus dem Anhang.
+   ============================================================ */
+
+/* Unterseiten-Lime-Overrides (G9/G10) — muss VOR Keyframes stehen,
+   da @import in CSS nur am Dateianfang gültig ist. */
+
+@keyframes nx-shimmer { to { background-position: 200% center; } }
+@keyframes nx-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes nx-pulsering { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(2.1); opacity: 0; } }
+@keyframes nx-marquee { to { transform: translateX(-50%); } }
+@keyframes nx-fadeup { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes nx-typing { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+@keyframes nx-bubblein { from { opacity: 0; transform: translateY(12px) scale(0.9); } to { opacity: 1; transform: none; } }
+
+/* Anhang-Basis: Scrollbar, Selection */
+html { scroll-behavior: smooth; overflow-x: hidden; }
+::selection { background: rgba(200,255,0,0.25); color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0A0A0A; }
+::-webkit-scrollbar-thumb { background: #26261a; border-radius: 8px; border: 2px solid #0A0A0A; }
+
+.nx-mobile-toggle { display: none; }
+
+@media (max-width: 1080px) {
+  .nx-desktop-nav { display: none !important; }
+  .nx-mobile-toggle { display: flex !important; }
+  .nx-hero-grid, .nx-pricing-grid, .nx-about-grid { grid-template-columns: 1fr !important; }
+  .nx-3col, .nx-services-grid { grid-template-columns: 1fr 1fr !important; }
+  .nx-process-grid, .nx-stats-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* Mobile-Header: Lang-Switcher + CTA kompakt, sonst Überlauf (Burger ragt aus Viewport) */
+@media (max-width: 520px) {
+  [data-testid="lang-switcher"] { display: none !important; }
+  [data-testid="header-cta"] { padding: 10px 14px !important; font-size: 11.5px !important; }
+}
+
+@media (max-width: 380px) {
+  [data-testid="header-cta"] { display: none !important; }
+}
