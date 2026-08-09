@@ -271,6 +271,9 @@ Dein Hauptziel gilt über alle Sitzungen, Trennungen und Provider-Wechsel hinweg
 
 Vollständiger Mechanismus (Loop-Control, Gates): **HERMES.md Kap. 10.4, Kap. 18.3.**
 
+### Proaktiver-Agentic-Langlauf 2026-08-09 (Pascal-Direktive — VERBINDLICH)
+Langlauf ist Dauerzustand: proaktiv Lücken suchen (nicht warten), Code bei jedem Kontakt verbessern/vereinfachen (YAGNI), erweitern+optimieren. Schutzgrenzen: keine Vereinfachung auf Kosten von Validierung/Fehlerbehandlung/Sicherheit/a11y/angeforderten Features. Todo-Disziplin + Brain-Effizienz als Daueraufgabe. Volltext: Arbeitsvorgaben §15.
+
 ---
 
 ## Pflichten (immer einhalten — Kurzform, volle Regeln in HERMES.md)
