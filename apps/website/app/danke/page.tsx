@@ -17,7 +17,7 @@ import type { DelightVariant } from "@/lib/delight-copy";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Danke — Anfrage erhalten | NeXify AI",
+  title: "Danke — Anfrage erhalten",
   description:
     "Vielen Dank für Ihre Anfrage. Wir melden uns in der Regel innerhalb eines Werktags persönlich.",
   path: "/danke",

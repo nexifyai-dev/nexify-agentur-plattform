@@ -21,7 +21,7 @@ import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 const audit = productizedOffers.find((o) => o.id === "audit")!;
 
 export const metadata = pageMetadata({
-  title: `KI-/Prozess-Audit — ${audit.priceNet} € netto (1 Tag) | NeXify AI`,
+  title: `KI-/Prozess-Audit — ${audit.priceNet} € netto (1 Tag)`,
   description:
     "1-Tages-Audit zum Tagessatz: schriftliche Prioritäten, Top-Hebel, Festpreis-Empfehlung für einen Pilot. Kein Folien-Theater — B2B DACH + NL.",
   path: "/audit",

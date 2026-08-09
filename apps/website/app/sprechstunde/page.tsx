@@ -18,7 +18,7 @@ import { company } from "@/lib/company";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Kostenlose AI-Sprechstunde — Office Hours buchen | NeXify AI",
+  title: "Kostenlose AI-Sprechstunde — Office Hours buchen",
   description:
     "Kostenlose 20-Minuten-Sprechstunde zu Website, Shop oder AI-Automatisierung für KMU. Persönlich mit Pascal Courbois — Termin über Rückruf-Buchung.",
   path: "/sprechstunde",

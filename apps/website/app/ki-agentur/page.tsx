@@ -5,7 +5,7 @@ import { company } from "@/lib/company";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "KI-Agentur für KMU — DACH & NL | NeXify AI",
+  title: "KI-Agentur für KMU — DACH & NL",
   description:
     "KI-gestützte Websites, Apps und Automatisierung für KMU in DACH und NL. Sitz Venlo — remote-first, persönlich, 449 € netto/Tag. Keine Fake-Büros.",
   path: "/ki-agentur",

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props) {
   const b = getBranche(slug);
   if (!b) return {};
   return pageMetadata({
-    title: `${b.title.split("—")[0].trim()} | NeXify AI`,
+    title: `${b.title.split("—")[0].trim()}`,
     description: b.description.slice(0, 155),
     path: `/branchen/${slug}`,
     ogTitle: b.title,

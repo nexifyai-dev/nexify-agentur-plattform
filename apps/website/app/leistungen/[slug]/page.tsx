@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props) {
   const l = getLeistungSeo(slug);
   if (!l) return {};
   return pageMetadata({
-    title: `${l.metaTitle} | NeXify AI`,
+    title: `${l.metaTitle}`,
     description: l.metaDescription.slice(0, 160),
     path: `/leistungen/${slug}`,
     ogTitle: l.h1,

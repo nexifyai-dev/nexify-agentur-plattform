@@ -16,7 +16,7 @@ import { JsonLd } from "@/components/json-ld";
 import { pageMetadata, breadcrumbListJsonLd, absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Chatbot-Kosten-Rechner kostenlos — Eigenbau vs. Agentur | NeXify AI",
+  title: "Chatbot-Kosten-Rechner kostenlos — Eigenbau vs. Agentur",
   description:
     "Kostenloser Chatbot-Kosten-Rechner: Eigenbau, Full-Service-Agentur oder NeXify KI-Begleiter — transparent vergleichen mit Marktspannen 2026. Keine Anmeldung.",
   path: "/chatbot-kosten-rechner",

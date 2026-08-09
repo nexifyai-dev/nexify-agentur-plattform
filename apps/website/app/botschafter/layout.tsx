@@ -16,7 +16,7 @@ import { JsonLd } from "@/components/json-ld";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Campus-Botschafter — Studentisches Empfehlungsprogramm | NeXify AI",
+  title: "Campus-Botschafter — Studentisches Empfehlungsprogramm",
   description:
     "Kostenloses Campus-Botschafter-Programm: Content, Warm Intros und Lernen rund um Web & AI — kein Arbeitsverhältnis, klare B2B-Ethik.",
   path: "/botschafter",

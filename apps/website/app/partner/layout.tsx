@@ -16,7 +16,7 @@ import { JsonLd } from "@/components/json-ld";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Partner werden — Empfehlungen & Co-Marketing | NeXify AI",
+  title: "Partner werden — Empfehlungen & Co-Marketing",
   description:
     "Empfehlungspartner für Websites, Shops und AI-Automatisierung (449 € Tagessatz). Kostenloses Kennenlernen für Steuerberater, SEO-Freelancer und Studios in DACH + NL.",
   path: "/partner",

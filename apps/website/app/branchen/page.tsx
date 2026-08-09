@@ -18,7 +18,7 @@ import { branchen } from "@/lib/gtm/branchen";
 import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Branchen — KI & Automatisierung für KMU | NeXify AI",
+  title: "Branchen — KI & Automatisierung für KMU",
   description:
     "Branchenseiten für Handwerk, Steuerberatung, E-Commerce, Immobilien und Agentur-Partner — mit Audit- und Pilot-Pfad zum Tagessatz 449 €.",
   path: "/branchen",

@@ -19,7 +19,7 @@ import { pageMetadata, breadcrumbListJsonLd, serializeJsonLd, absoluteUrl } from
 import { WORK_WEEKS_PER_YEAR } from "@/lib/gtm/free-tools";
 
 export const metadata: Metadata = pageMetadata({
-  title: "KI-ROI-Rechner kostenlos — Automatisierungspotenzial berechnen | NeXify AI",
+  title: "KI-ROI-Rechner kostenlos — Automatisierungspotenzial berechnen",
   description:
     "Kostenloser KI-ROI-Rechner: Berechnen Sie in 30 Sekunden, was 20/40/60 % Automatisierung Ihres Teams jährlich sparen. Keine Anmeldung, keine Datenweitergabe.",
   path: "/ki-roi-rechner",
