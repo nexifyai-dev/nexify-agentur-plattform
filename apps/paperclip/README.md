@@ -12,9 +12,7 @@ Paperclip übernimmt:
 
 ## Status
 
-> **Planned — noch nicht implementiert.**  
-> Die Komponente ist architektonisch geplant und in der Hermes-Infrastruktur referenziert.  
-> Implementierung startet sobald die Kernflüsse (Vitrine + Backend) stabil laufen.
+> **LIVE seit 2026-08-09 (Pascal-Mandat):** Paperclip Factory auf `127.0.0.1:3100` (systemd `nexifyai-paperclip.service`). Serviert `GET /api/health`, `GET /api/skills` (Skill-Quelle P0) und Skills statisch unter `/skills/{n}`. Quellcode: `server.py` (FastAPI).
 
 ## Geplante Technologie
 
