@@ -142,13 +142,13 @@ export default function VergleichPage() {
               Audit (449&nbsp;€) → Pilot (5 Tage). Ausschließlich B2B.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-booking">
+              <Link href="/rueckruf?utm_source=vergleich&utm_medium=organic&utm_campaign=vergleich_rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-booking">
                 Termin buchen <ArrowRight className="size-4" />
               </Link>
-              <Link href="/audit" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-audit">
+              <Link href="/audit?utm_source=vergleich&utm_medium=organic&utm_campaign=vergleich_audit" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-audit">
                 Audit ansehen
               </Link>
-              <Link href="/preise" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-pricing">
+              <Link href="/preise?utm_source=vergleich&utm_medium=organic&utm_campaign=vergleich_preise" className="btn-ghost !px-6 !py-3 !text-[13px]" data-testid="vergleich-cta-pricing">
                 Pakete & Preise
               </Link>
             </div>

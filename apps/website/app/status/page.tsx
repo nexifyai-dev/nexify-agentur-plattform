@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "Systemstatus",
+  title: "Systemstatus | NeXify AI",
   description: "Aktueller Betriebsstatus der NeXify AI Plattform – echte Messwerte, keine Fake-Uptime.",
   path: "/status",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "Systemstatus",
+  title: "Systemstatus | NeXify AI",
   description: "Aktueller Betriebsstatus der NeXify AI Plattform – echte Messwerte, keine Fake-Uptime.",
   path: "/status",
   dateModified: "2026-08-04",

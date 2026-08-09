@@ -67,7 +67,7 @@ export default function VergleichChatgptPage() {
             ))}
           </ul>
           <div className="mt-12 flex flex-wrap gap-3">
-            <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-chatgpt-cta">
+            <Link href="/rueckruf?utm_source=vergleich-chatgpt&utm_medium=organic&utm_campaign=vergleich-chatgpt_rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-chatgpt-cta">
               Termin buchen <ArrowRight className="size-4" />
             </Link>
             <Link href="/vergleich" className="btn-ghost !px-6 !py-3 !text-[13px]">Alle Vergleiche</Link>

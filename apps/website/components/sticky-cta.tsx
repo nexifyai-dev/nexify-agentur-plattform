@@ -25,7 +25,7 @@ export function StickyCta() {
       {/* Leave clear space on the right for the chat launcher (60px + margin). */}
       <div className="pointer-events-auto mx-auto flex max-w-lg gap-2 pr-[4.75rem]">
         <Link
-          href="/rueckruf"
+          href="/rueckruf?utm_source=sticky-cta&utm_medium=organic&utm_campaign=sticky-cta_rueckruf"
           className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-[#C8FF00] px-4 py-3 text-sm font-medium shadow-[0_8px_32px_rgba(200,255,0,.35)]"
           style={{ color: '#0A0A0A' }}
           data-testid="sticky-cta-link"
@@ -34,7 +34,7 @@ export function StickyCta() {
           <ArrowRight className="size-4 shrink-0" />
         </Link>
         <Link
-          href="/kontakt"
+          href="/kontakt?utm_source=sticky-cta&utm_medium=organic&utm_campaign=sticky-cta_kontakt"
           className="flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-black/70 px-4 py-3 text-sm font-medium text-white backdrop-blur-md"
           data-testid="sticky-cta-contact"
         >

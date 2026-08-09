@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "Widerruf / Herroeping",
+  title: "Widerruf / Herroeping | NeXify AI",
   description: "Hinweis: kein Verbraucher-Widerrufsrecht bei ausschließlich B2B-Verträgen.",
   path: "/widerruf",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "Widerruf",
+  title: "Widerruf | NeXify AI",
   description: "Hinweis: kein Verbraucher-Widerrufsrecht bei ausschließlich B2B-Verträgen.",
   path: "/widerruf",
   dateModified: "2026-08-02",

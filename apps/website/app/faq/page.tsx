@@ -5,7 +5,7 @@ import { de } from "@/lib/content/de";
 import { flattenFaqItems } from "@/lib/content/faq-categories";
 
 export const metadata = pageMetadata({
-  title: "FAQ — Häufige Fragen zu NeXify AI, Preisen, KI & DSGVO",
+  title: "FAQ — Häufige Fragen zu NeXify AI, Preisen, KI & DSGVO | NeXify AI",
   description:
     "FAQ für DACH-KMU: Was ist NeXify AI? Tagessatz 449 € netto, Leistungen, KI-Agenten, Datenschutz/DSGVO, Onboarding und Venlo-Sitz.",
   path: "/faq",

@@ -5,7 +5,7 @@ import { LeistungenExtended } from "@/components/leistungen-extended";
 import { services } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
-  title: "Leistungen — Websites, Shops, Apps, KI & Automatisierung",
+  title: "Leistungen — Websites, Shops, Apps, KI & Automatisierung | NeXify AI",
   description: "Alle NeXify Leistungen: Landingpages, Websites, Shops, Web-Apps, Mobile Apps, Automatisierung, AI-Agenten, KI-Begleiter, Portal, Beratung, Workshops, White-Label. 449 € netto/Tag.",
   path: "/leistungen",
   ogTitle: "Leistungen — Websites, Shops, Apps & AI | NeXify AI",

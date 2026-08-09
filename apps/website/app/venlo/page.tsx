@@ -125,7 +125,7 @@ export default function VenloPage() {
               </li>
               <li>
                 <Link
-                  href="/preise"
+                  href="/preise?utm_source=venlo&utm_medium=organic&utm_campaign=venlo_preise"
                   className="inline-flex items-center rounded-full border border-white/12 px-4 py-2 text-[13px] font-semibold text-zinc-300 transition-colors hover:border-white/25 hover:text-white"
                   data-testid="venlo-link-preise"
                 >
@@ -142,7 +142,7 @@ export default function VenloPage() {
                 </Link>
               </li>
               <li>
-                <Link href="/kontakt" className="btn-primary" data-testid="venlo-link-kontakt">
+                <Link href="/kontakt?utm_source=venlo&utm_medium=organic&utm_campaign=venlo_kontakt" className="btn-primary" data-testid="venlo-link-kontakt">
                   Kontakt <ArrowRight size={14} className="ml-1 inline" />
                 </Link>
               </li>

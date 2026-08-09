@@ -122,7 +122,7 @@ export function ExitIntent() {
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">{t.body}</p>
         <div className="mt-6 flex flex-col gap-2 sm:flex-row">
           <Link
-            href="/rueckruf"
+            href="/rueckruf?utm_source=exit-intent&utm_medium=organic&utm_campaign=exit-intent_rueckruf"
             className="btn-primary inline-flex flex-1 items-center justify-center gap-2 !px-5 !py-3 !text-[13px]"
             data-testid="exit-intent-primary"
             onClick={() => setOpen(false)}
@@ -131,7 +131,7 @@ export function ExitIntent() {
             <ArrowRight className="size-4" />
           </Link>
           <Link
-            href="/checkliste"
+            href="/checkliste?utm_source=exit-intent&utm_medium=organic&utm_campaign=exit-intent_checkliste"
             className="inline-flex flex-1 items-center justify-center rounded-full border border-white/20 px-5 py-3 text-[13px] font-medium text-white hover:bg-white/5"
             data-testid="exit-intent-secondary"
             onClick={() => setOpen(false)}

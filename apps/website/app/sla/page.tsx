@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "SLA / Verfügbarkeitsgarantie",
+  title: "SLA / Verfügbarkeitsgarantie | NeXify AI",
   description: "Service Level Agreement von NeXify AI – Verfügbarkeits- und Reaktionszusagen mit messbarer Realität.",
   path: "/sla",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "SLA / Verfügbarkeitsgarantie",
+  title: "SLA / Verfügbarkeitsgarantie | NeXify AI",
   description: "Service Level Agreement von NeXify AI – Verfügbarkeits- und Reaktionszusagen mit messbarer Realität.",
   path: "/sla",
   dateModified: "2026-08-04",

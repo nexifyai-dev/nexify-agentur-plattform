@@ -16,7 +16,7 @@ import { JsonLd } from "@/components/json-ld";
 import { EbookLanding } from "@/components/pages/ebook";
 
 export const metadata = pageMetadata({
-  title: "E-Book: KI-Automation für den Mittelstand — 10 Strategien (kostenlos)",
+  title: "E-Book: KI-Automation für den Mittelstand — 10 Strategien (kostenlos) | NeXify AI",
   description:
     "10 konkrete KI-Strategien für DACH-KMU: Chatbot, E-Mail-Automation, Angebote, Lead-Nachverfolgung. Jetzt kostenlos als E-Book laden — solange verfügbar.",
   path: "/ebook",

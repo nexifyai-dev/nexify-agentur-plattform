@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { KnowledgePage } from "@/components/pages/knowledge";
 
 export const metadata = pageMetadata({
-  title: "Wissen — Einblicke in AI-gestützte Entwicklung",
+  title: "Wissen — Einblicke in AI-gestützte Entwicklung | NeXify AI",
   description:
     "Praxisnahe Artikel zu Websites, E-Commerce, AI-Agenten, Automatisierung und Web-App-Kosten (449 € Tagessatz) — inkl. eigenständiger Beiträge unter /wissen/…",
   path: "/wissen",

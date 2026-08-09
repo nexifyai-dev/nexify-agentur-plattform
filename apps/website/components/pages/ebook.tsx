@@ -112,7 +112,7 @@ export function EbookLanding() {
               <FileDown className="size-5" /> E-Book jetzt herunterladen
             </a>
             <p className="mt-4 text-xs text-zinc-500">
-              Haben Sie Fragen? <Link href="/rueckruf" className="underline hover:text-zinc-300">Kostenlose Automatisierungs-Analyse</Link>
+              Haben Sie Fragen? <Link href="/rueckruf?utm_source=ebook&utm_medium=organic&utm_campaign=ebook_rueckruf" className="underline hover:text-zinc-300">Kostenlose Automatisierungs-Analyse</Link>
             </p>
           </div>
         ) : (

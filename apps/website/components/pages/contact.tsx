@@ -31,7 +31,7 @@ export function ContactPage() {
                 <div className="text-[13px] text-zinc-500">{nl ? "Boek een bindende terugbelafspraak – Pascal Courbois belt u persoonlijk." : "Buchen Sie einen verbindlichen Rückruf-Termin – Pascal Courbois ruft Sie persönlich an."}</div>
               </div>
             </div>
-            <Link href="/rueckruf" className="btn-ghost w-full justify-center !py-2.5 !text-[13px] sm:w-auto" data-testid="contact-callback-btn">
+            <Link href="/rueckruf?utm_source=kontakt&utm_medium=organic&utm_campaign=kontakt_rueckruf" className="btn-ghost w-full justify-center !py-2.5 !text-[13px] sm:w-auto" data-testid="contact-callback-btn">
               {nl ? "Tijdslot kiezen" : "Zeitfenster wählen"}
             </Link>
           </div>

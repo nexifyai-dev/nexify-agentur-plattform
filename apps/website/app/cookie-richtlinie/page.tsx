@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "Cookie-Richtlinie / Cookiebeleid",
+  title: "Cookie-Richtlinie / Cookiebeleid | NeXify AI",
   description: "Cookies und Speichertechniken gemäß § 25 TDDDG – Kategorien Notwendig, Statistik, Marketing.",
   path: "/cookie-richtlinie",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "Cookie-Richtlinie",
+  title: "Cookie-Richtlinie | NeXify AI",
   description: "Cookies und Speichertechniken gemäß § 25 TDDDG – Kategorien Notwendig, Statistik, Marketing.",
   path: "/cookie-richtlinie",
   dateModified: "2026-08-02",

@@ -33,7 +33,7 @@ export function HeroSection() {
         </Reveal>
         <Reveal delay={300}>
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/kontakt" className="btn-primary" data-testid="hero-cta">
+            <Link href="/kontakt?utm_source=home&utm_medium=organic&utm_campaign=home_kontakt" className="btn-primary" data-testid="hero-cta">
               {t.home.ctaPrimary} <ArrowRight size={16} />
             </Link>
             <Link href="/leistungen" className="btn-ghost" data-testid="hero-cta-secondary">

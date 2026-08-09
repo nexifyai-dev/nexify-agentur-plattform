@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "Datenschutzerklärung / Privacyverklaring",
+  title: "Datenschutzerklärung / Privacyverklaring | NeXify AI",
   description: "Informationspflichten nach Art. 12–14 DSGVO für Website, KI-Chat und B2B-Anfragen.",
   path: "/datenschutz",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "Datenschutzerklärung",
+  title: "Datenschutzerklärung | NeXify AI",
   description: "Informationspflichten nach Art. 12–14 DSGVO für Website, KI-Chat und B2B-Anfragen.",
   path: "/datenschutz",
   dateModified: "2026-08-02",

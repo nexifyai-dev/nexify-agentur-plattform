@@ -20,7 +20,7 @@ export function CtaSection() {
               <h2 className="mx-auto max-w-2xl font-[family-name:var(--font-heading)] text-2xl font-light tracking-tight text-white sm:text-5xl">{t.home.ctaBandTitle}</h2>
               <p className="mx-auto mt-6 max-w-xl text-zinc-400">{t.home.ctaBandText}</p>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <Link href="/kontakt" className="btn-primary" data-testid="cta-band-btn">
+                <Link href="/kontakt?utm_source=home&utm_medium=organic&utm_campaign=home_kontakt" className="btn-primary" data-testid="cta-band-btn">
                   {t.home.ctaBandBtn} <ArrowRight size={16} />
                 </Link>
               </div>

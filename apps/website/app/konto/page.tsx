@@ -322,7 +322,7 @@ export default function PortalPage() {
                   </ol>
                   <div className="mt-7 flex flex-wrap gap-3">
                     <a href="#portal-request" className="btn-primary !py-2.5 !text-[13px]" data-testid="portal-empty-cta-request">{empty.ctaRequest}</a>
-                    <Link href="/rueckruf" className="btn-ghost !py-2.5 !text-[13px]" data-testid="portal-empty-cta-book">{empty.ctaBook}</Link>
+                    <Link href="/rueckruf?utm_source=konto&utm_medium=organic&utm_campaign=konto_rueckruf" className="btn-ghost !py-2.5 !text-[13px]" data-testid="portal-empty-cta-book">{empty.ctaBook}</Link>
                     <a href={company.whatsappHref} target="_blank" rel="noopener noreferrer" className="btn-ghost !py-2.5 !text-[13px]" data-testid="portal-empty-cta-whatsapp">
                       <MessageCircle size={14} /> {empty.ctaWhatsApp}
                     </a>
@@ -353,7 +353,7 @@ export default function PortalPage() {
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-zinc-400">{t.statusHelp}</p>
             <Link
-              href="/rueckruf"
+              href="/rueckruf?utm_source=konto&utm_medium=organic&utm_campaign=konto_rueckruf"
               className="mt-4 inline-flex text-sm font-semibold text-zinc-200 transition-colors hover:text-white"
               data-testid="portal-book-call"
             >

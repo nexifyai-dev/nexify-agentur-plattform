@@ -54,7 +54,7 @@ export default function KiAgenturPage() {
             </ul>
           </section>
           <div className="mt-14 flex flex-wrap gap-3">
-            <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="ki-agentur-cta">
+            <Link href="/rueckruf?utm_source=ki-agentur&utm_medium=organic&utm_campaign=ki-agentur_rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="ki-agentur-cta">
               Termin buchen <ArrowRight className="size-4" />
             </Link>
             <Link href="/leistungen" className="btn-ghost !px-6 !py-3 !text-[13px]">Leistungen</Link>

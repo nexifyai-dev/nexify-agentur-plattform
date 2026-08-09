@@ -68,10 +68,10 @@ export default function BranchenHubPage() {
           </div>
 
           <div className="mt-12 flex flex-wrap gap-3">
-            <Link href="/audit" className="btn-primary" data-testid="branchen-to-audit">
+            <Link href="/audit?utm_source=branchen&utm_medium=organic&utm_campaign=branchen_audit" className="btn-primary" data-testid="branchen-to-audit">
               Zum Audit
             </Link>
-            <Link href="/preise" className="btn-ghost" data-testid="branchen-to-preise">
+            <Link href="/preise?utm_source=branchen&utm_medium=organic&utm_campaign=branchen_preise" className="btn-ghost" data-testid="branchen-to-preise">
               Pakete & Preise
             </Link>
             <Link href="/leistungen" className="btn-ghost" data-testid="branchen-to-leistungen">

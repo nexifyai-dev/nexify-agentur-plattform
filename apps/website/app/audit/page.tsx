@@ -109,13 +109,13 @@ export default function AuditPage() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <Link href="/preise" className="btn-ghost" data-testid="audit-to-preise">
+            <Link href="/preise?utm_source=audit&utm_medium=organic&utm_campaign=audit_preise" className="btn-ghost" data-testid="audit-to-preise">
               Alle Pakete
             </Link>
             <Link href="/branchen" className="btn-ghost" data-testid="audit-to-branchen">
               Branchen
             </Link>
-            <Link href="/checkliste" className="btn-ghost" data-testid="audit-to-checkliste">
+            <Link href="/checkliste?utm_source=audit&utm_medium=organic&utm_campaign=audit_checkliste" className="btn-ghost" data-testid="audit-to-checkliste">
               Kostenlose Checkliste
             </Link>
           </div>

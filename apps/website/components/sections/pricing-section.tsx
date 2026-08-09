@@ -40,7 +40,7 @@ export function PricingSection() {
 
         <Reveal delay={600}>
           <div className="mt-12 text-center">
-            <Link href="/preise" className="btn-primary inline-flex items-center gap-2" data-testid="pricing-cta">
+            <Link href="/preise?utm_source=home&utm_medium=organic&utm_campaign=home_preise" className="btn-primary inline-flex items-center gap-2" data-testid="pricing-cta">
               Alle Preise im Detail <ArrowRight size={16} />
             </Link>
           </div>

@@ -95,6 +95,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); }
 .glass:hover { border-color: var(--line-2); background: var(--panel-2); }
 .glass-lift:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
 
+@layer components {
 /* ═══ §5 BUTTONS (Lime exakt nach Anhang) ═══ */
 .btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -118,6 +119,8 @@ h1, h2, h3, h4 { font-family: var(--font-heading); }
 }
 .btn-ghost:hover { border-color: rgba(200,255,0,0.4); background-color: rgba(200,255,0,0.05); transform: translateY(-2px); }
 
+
+}
 /* ═══ §6 HERO ═══ */
 .hero-grid-bg {
   position: absolute; inset: 0;

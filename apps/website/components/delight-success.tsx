@@ -63,7 +63,7 @@ export function DelightSuccess({
       </div>
       <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         {variant !== "booking" ? (
-          <Link href="/rueckruf" className="btn-primary !py-2.5 !text-[13px]" data-testid="delight-cta-book">
+          <Link href="/rueckruf?utm_source=delight-success&utm_medium=organic&utm_campaign=delight-success_rueckruf" className="btn-primary !py-2.5 !text-[13px]" data-testid="delight-cta-book">
             <CalendarCheck2 size={15} /> {t.ctaBook}
           </Link>
         ) : null}

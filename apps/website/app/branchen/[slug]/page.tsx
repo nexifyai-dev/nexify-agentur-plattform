@@ -207,13 +207,13 @@ export default async function BranchePage({ params }: Props) {
               <ArrowRight className="size-4" />
             </Link>
             <Link
-              href="/audit"
+              href="/audit?utm_source=branchen&utm_medium=organic&utm_campaign=branchen_audit"
               className="btn-ghost inline-flex items-center gap-2"
               data-testid="branche-cta-audit"
             >
               Audit ({company.dayRate} €)
             </Link>
-            <Link href="/preise" className="btn-ghost" data-testid="branche-cta-preise">
+            <Link href="/preise?utm_source=branchen&utm_medium=organic&utm_campaign=branchen_preise" className="btn-ghost" data-testid="branche-cta-preise">
               Preise
             </Link>
           </div>

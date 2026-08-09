@@ -59,7 +59,7 @@ export default function VergleichFreelancePage() {
             </table>
           </div>
           <div className="mt-12 flex flex-wrap gap-3">
-            <Link href="/rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-freelance-cta">
+            <Link href="/rueckruf?utm_source=vergleich-freelance&utm_medium=organic&utm_campaign=vergleich-freelance_rueckruf" className="btn-primary !px-6 !py-3 !text-[13px]" data-testid="vergleich-freelance-cta">
               Termin buchen <ArrowRight className="size-4" />
             </Link>
             <Link href="/partner" className="btn-ghost !px-6 !py-3 !text-[13px]">Partner werden</Link>

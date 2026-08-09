@@ -22,7 +22,7 @@ export default function NotFound() {
           <Link href="/" className="btn-primary inline-flex" data-testid="not-found-home-link">
             Zur Startseite
           </Link>
-          <Link href="/rueckruf" className="btn-secondary inline-flex" data-testid="not-found-booking-link">
+          <Link href="/rueckruf?utm_source=not-found&utm_medium=organic&utm_campaign=not-found_rueckruf" className="btn-secondary inline-flex" data-testid="not-found-booking-link">
             Rückruf buchen
           </Link>
           <Link href="/faq" className="inline-flex text-sm text-zinc-400 underline-offset-4 hover:underline" data-testid="not-found-faq-link">

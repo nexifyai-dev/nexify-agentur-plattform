@@ -87,7 +87,7 @@ export default function Page() {
                 NeXify AI arbeitet zum festen Tagessatz von 449 € netto. Viele Automatisierungen starten
                 mit 2–5 Tagen — die Ersparnis oben übersteigt das meist im ersten Jahr.
               </p>
-              <Link href="/preise" className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-white" data-testid="roi-hint-pricing">
+              <Link href="/preise?utm_source=ki-roi-rechner&utm_medium=organic&utm_campaign=ki-roi-rechner_preise" className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-white" data-testid="roi-hint-pricing">
                 Preise ansehen <ArrowRight size={14} />
               </Link>
             </div>

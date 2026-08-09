@@ -114,13 +114,13 @@ export function SiteHeader() {
           </Link>
 
           <Link
-            href="/rueckruf"
+            href="/rueckruf?utm_source=header&utm_medium=organic&utm_campaign=header_rueckruf"
             className="btn-ghost hidden !px-4 !py-2.5 !text-[13px] xl:inline-flex"
             data-testid="header-booking-cta"
           >
             {lang === "en" ? "Book call" : lang === "nl" ? "Gesprek boeken" : "Termin buchen"}
           </Link>
-          <Link href="/kontakt" className="btn-primary hidden md:inline-flex !px-5 !py-2.5 !text-[13px] xl:!px-6" data-testid="header-cta">
+          <Link href="/kontakt?utm_source=header&utm_medium=organic&utm_campaign=header_kontakt" className="btn-primary hidden md:inline-flex !px-5 !py-2.5 !text-[13px] xl:!px-6" data-testid="header-cta">
             {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
           </Link>
 
@@ -149,10 +149,10 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/kontakt" className="btn-primary mt-2 min-h-12 justify-center">
+            <Link href="/kontakt?utm_source=header&utm_medium=organic&utm_campaign=header_kontakt" className="btn-primary mt-2 min-h-12 justify-center">
               {lang === "en" ? "Start project" : lang === "nl" ? "Project starten" : "Projekt starten"}
             </Link>
-            <Link href="/rueckruf" className="btn-ghost mt-1 min-h-12 justify-center !text-sm">
+            <Link href="/rueckruf?utm_source=header&utm_medium=organic&utm_campaign=header_rueckruf" className="btn-ghost mt-1 min-h-12 justify-center !text-sm">
               {lang === "en" ? "Book callback" : lang === "nl" ? "Terugbelafspraak" : "Rückruf buchen"}
             </Link>
           </nav>

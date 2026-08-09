@@ -119,10 +119,10 @@ export default function AlternativenPage() {
             <Link href="/vergleich" className="btn-ghost inline-flex items-center gap-2" data-testid="alternativen-vergleich">
               Detailvergleich Preise <ArrowRight className="size-4" />
             </Link>
-            <Link href="/rueckruf" className="btn-primary inline-flex items-center gap-2" data-testid="alternativen-book">
+            <Link href="/rueckruf?utm_source=alternativen&utm_medium=organic&utm_campaign=alternativen_rueckruf" className="btn-primary inline-flex items-center gap-2" data-testid="alternativen-book">
               Rückruf buchen
             </Link>
-            <Link href="/sprechstunde" className="btn-ghost" data-testid="alternativen-office">
+            <Link href="/sprechstunde?utm_source=alternativen&utm_medium=organic&utm_campaign=alternativen_sprechstunde" className="btn-ghost" data-testid="alternativen-office">
               Sprechstunde
             </Link>
           </div>

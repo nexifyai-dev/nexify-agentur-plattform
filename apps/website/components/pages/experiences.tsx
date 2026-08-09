@@ -115,7 +115,7 @@ export function ExperiencesPage() {
           <Link href="/audit" className="btn-primary" data-testid="experiences-cta-audit">
             Jetzt KI-/Prozess-Audit starten <ArrowRight size={14} className="ml-1 inline" />
           </Link>
-          <Link href="/preise" className="btn-secondary" data-testid="experiences-cta-preise">
+          <Link href="/preise?utm_source=erfahrungen&utm_medium=organic&utm_campaign=erfahrungen_preise" className="btn-secondary" data-testid="experiences-cta-preise">
             Preise & Ablauf ansehen
           </Link>
         </div>

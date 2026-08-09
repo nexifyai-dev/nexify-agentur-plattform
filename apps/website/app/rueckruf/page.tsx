@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { CallbackPage } from "@/components/pages/callback";
 
 export const metadata = pageMetadata({
-  title: "Rückruf-Termin buchen — Pascal Courbois ruft Sie persönlich an",
+  title: "Rückruf-Termin buchen — Pascal Courbois ruft Sie persönlich an | NeXify AI",
   description: "Wählen Sie ein freies Zeitfenster und buchen Sie Ihren verbindlichen, kostenlosen Rückruf-Termin. Persönliche Beratung zu Websites, Shops, Apps und AI-Automatisierung – Deutsch & Nederlands.",
   path: "/rueckruf",
   ogTitle: "Rückruf-Termin buchen | NeXify AI",

@@ -75,7 +75,7 @@ export default function SprechstundePage() {
               <ArrowRight className="size-4" />
             </Link>
             <Link
-              href="/checkliste"
+              href="/checkliste?utm_source=sprechstunde&utm_medium=organic&utm_campaign=sprechstunde_checkliste"
               className="btn-ghost inline-flex items-center gap-2"
               data-testid="sprechstunde-checklist"
             >

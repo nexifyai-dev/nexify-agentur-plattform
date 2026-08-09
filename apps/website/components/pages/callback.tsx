@@ -158,7 +158,7 @@ export function CallbackPage() {
               {!loading && slots.length === 0 && (
                 <div className="glass mt-5 p-6 text-sm leading-relaxed text-zinc-400" data-testid="no-slots">
                   {t.none}
-                  <div className="mt-4"><Link href="/kontakt" className="btn-ghost !py-2 !text-[12px]">{t.contactAlt}</Link></div>
+                  <div className="mt-4"><Link href="/kontakt?utm_source=kontakt&utm_medium=organic&utm_campaign=kontakt_kontakt" className="btn-ghost !py-2 !text-[12px]">{t.contactAlt}</Link></div>
                 </div>
               )}
               <div className="mt-5 space-y-6">

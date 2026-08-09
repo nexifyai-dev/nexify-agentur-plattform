@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { PricingPage } from "@/components/pages/pricing";
 
 export const metadata = pageMetadata({
-  title: "Preise — 449 € netto pro Arbeitstag, volle Transparenz",
+  title: "Preise — 449 € netto pro Arbeitstag, volle Transparenz | NeXify AI",
   description: "Ein Tagessatz für alles: 449 € netto pro Arbeitstag. Interaktiver Projektkosten-Rechner, klare Leistungsspannen, keine versteckten Kosten. Ausschließlich B2B.",
   path: "/preise",
   ogTitle: "Preise — 449 € netto / Arbeitstag | NeXify AI",
