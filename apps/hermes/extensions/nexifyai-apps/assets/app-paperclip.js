@@ -1,28 +1,28 @@
 /**
- * NeXify AI Paperclip — External App Tab (Platzhalter)
- * Paperclip-Dienst existiert nicht mehr (entfernt 18.07.2026).
- * Button bleibt als Platzhalter — Ziel zeigt auf noch nicht aktiven Port 3100.
- * Re-Setup mit Pascal klären (Task t_b83d8323).
+ * NeXify AI Paperclip — External App Tab
+ * Paperclip Factory: API aktiv auf :3100 (/api/health ok, /api/skills),
+ * Web-UI existiert nicht (API-only Factory). Tab zeigt CI-gestyltes
+ * Info-Panel statt 404-Iframe.
  * CI: design_guidelines.json Dark/Luxury (#0A0A0A, #C8FF00, Outfit/Manrope)
  */
 (function() {
   'use strict';
 
   const APP_ID = 'nexifyai-app-paperclip';
-  const DEFAULT_URL = 'http://127.0.0.1:3100/';
   const LABEL = 'Paperclip';
   const ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
-
-  function getUrl() {
-    try { localStorage.removeItem(APP_ID + '-url'); } catch (e) {}
-    return DEFAULT_URL;
-  }
 
   function createPanel() {
     const panel = document.createElement('div');
     panel.className = 'nexifyai-app-panel';
     panel.id = APP_ID + '-panel';
-    panel.innerHTML = `<iframe src="${getUrl()}" title="${LABEL}" loading="lazy"></iframe>`;
+    panel.innerHTML = `
+      <div class="nexifyai-app-info" style="padding:40px 32px;font-family:Manrope,system-ui,sans-serif;color:#A1A1AA;line-height:1.6">
+        <h2 style="font-family:Outfit,sans-serif;font-weight:600;font-size:20px;color:#FFF;margin:0 0 12px">NeXify AI Paperclip Factory</h2>
+        <p style="margin:0 0 8px">Skill-Factory-API aktiv (Port 3100).</p>
+        <p style="margin:0 0 20px">Endpunkte: <code style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:2px 8px;color:#C8FF00">/api/health</code> · <code style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:2px 8px;color:#C8FF00">/api/skills</code></p>
+        <p style="margin:0;font-size:13px">Web-Oberfläche folgt — API-Nutzung direkt oder &uuml;ber Agenten.</p>
+      </div>`;
     document.body.appendChild(panel);
     return panel;
   }
@@ -31,7 +31,7 @@
     const btn = document.createElement('button');
     btn.className = 'rail-btn nav-tab has-tooltip nexifyai-app-rail';
     btn.id = APP_ID + '-btn';
-    btn.title = 'Paperclip — Skills-Factory (Platzhalter, Dienst inaktiv)';
+    btn.title = 'Paperclip — Skills-Factory (API aktiv)';
     btn.innerHTML = ICON;
     btn.addEventListener('click', function() {
       window.NeXifyAIAppPaperclip.toggle();
@@ -54,6 +54,8 @@
   window.NeXifyAIAppPaperclip = {
     name: LABEL,
     open: function() {
+      document.querySelectorAll('.nexifyai-app-panel').forEach(function(p){p.classList.remove('active');});
+      document.querySelectorAll('.nexifyai-app-rail').forEach(function(b){b.classList.remove('active');});
       document.getElementById(APP_ID + '-panel').classList.add('active');
       document.getElementById(APP_ID + '-btn').classList.add('active');
     },

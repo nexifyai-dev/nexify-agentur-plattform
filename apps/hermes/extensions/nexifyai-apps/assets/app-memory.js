@@ -56,6 +56,8 @@
   window.NeXifyAIAppMemory = {
     name: LABEL,
     open: function() {
+      document.querySelectorAll('.nexifyai-app-panel').forEach(function(p){p.classList.remove('active');});
+      document.querySelectorAll('.nexifyai-app-rail').forEach(function(b){b.classList.remove('active');});
       document.getElementById(APP_ID + '-panel').classList.add('active');
       document.getElementById(APP_ID + '-btn').classList.add('active');
     },
