@@ -1,6 +1,6 @@
 # FILE: .github/workflows/mirror-to-gitlab.yml
 # NIR: 24.07.2026 12:33
-# UPDATED: 02.08.2026 08:55
+# UPDATED: 09.08.2026 18:12
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Spiegelt Git-Branches und Tags zum self-hosted VPS-GitLab.
@@ -64,15 +64,25 @@ jobs:
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
           # --prune: remove refs on GitLab that no longer exist on GitHub.
-          # --force is intentionally omitted: GitLab branch-protection rules block
-          # force-pushes to protected branches (e.g. main). GitHub is the sole
-          # source of truth, so divergence only occurs from accidental direct pushes
-          # to GitLab — those are handled by a separate branch-protection rule on
-          # the GitLab side rather than by overwriting here.
+          # First try a normal push. If GitLab has diverged refs (fetch-first
+          # rejection), retry once with --force so the mirror converges back to
+          # GitHub as source of truth.
+          push_log="$(mktemp)"
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
             push --prune gitlab \
             'refs/heads/*:refs/heads/*' \
-            'refs/tags/*:refs/tags/*'; then
-            echo "::error::GitLab branch/tag mirror push failed"
-            exit 1
+            'refs/tags/*:refs/tags/*' 2>&1 | tee "$push_log"; then
+            if grep -Fq "(fetch first)" "$push_log"; then
+              echo "::warning::Detected non-fast-forward on GitLab mirror refs. Retrying once with --force."
+              if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
+                push --prune --force gitlab \
+                'refs/heads/*:refs/heads/*' \
+                'refs/tags/*:refs/tags/*'; then
+                echo "::error::GitLab branch/tag mirror force retry failed"
+                exit 1
+              fi
+            else
+              echo "::error::GitLab branch/tag mirror push failed"
+              exit 1
+            fi
           fi
