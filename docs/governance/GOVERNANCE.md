@@ -284,3 +284,7 @@ Siehe: `11_fuehrung/DOS_AGENT_GOVERNANCE.md`
 ---
 
 *Alle Dokumente unter `docs/governance/` sind versioniert und verbindlich. Bei Widerspruch gilt: Live-System schlägt alter Doku. Aktuellste Version im Git-Repo schlägt Kopie. `CHARTA.md` ist bestätigter Auszug — Primärquelle bleibt dieser Ordnerbaum (§16). Design-System: `design_guidelines.json` (`#0A0A0A`, Outfit/Manrope). Offener Normkonflikt: F32.*
+
+## Proaktiver Agentic-AI-Langlauf (Pascal-Direktive 2026-08-09 — VERBINDLICH, ALLE Daten/Dateien)
+
+Proaktiv im Agentic-AI-Langlauf arbeiten: proaktiv verbessern, Code verbessern UND vereinfachen (YAGNI), erweitern, optimieren, erweitern — bei JEDEM Kontakt mit Daten, Dateien und Konfigurationen, ohne auf Aufträge zu warten. Keine Ausnahmen. (Volltexte: ARBEITSVORGABEN §15, SOUL.md, ZK-Kopf, SYSTEM-DIREKTIVE, CHARTA, HERMES.md 5b, README.)
