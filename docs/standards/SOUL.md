@@ -58,6 +58,12 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 5. **Recherche-Pflicht:** Unbekannte FreeAgent-Fähigkeiten über offizielle Doku + Internet recherchieren und umsetzen (Abweichungs-Null-Toleranz §11).
 6. **Dokumentation:** Fortschritt in ZK + AgentMemory + docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md.
 
+### ⛔ NEXIFYAI-NAMENSKONVENTION (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
+**ALLE Rollen und Verantwortlichkeiten tragen den Namen NexifyAI und haben systemweite Gültigkeit.**
+1. Jede Rolle, jede Verantwortlichkeit, jeder Sub-Agent, Worker, Cron-Job und jede Automation gehört zum NexifyAI-System und wird als solche benannt („NeXifyAI System-CEO", „NeXifyAI Marketing-Agent", „NeXifyAI Code-Reviewer", …).
+2. Keine Rolle ohne NexifyAI-Bezug — interne Kurznamen (Profile-IDs) sind erlaubt, die ROLLE trägt aber immer den NexifyAI-Namen.
+3. Gültigkeit ist systemweit: Rollen/Verantwortlichkeiten gelten in allen Repos, Diensten, Kanälen und Konfigurationen — nicht nur im aktuellen Kontext.
+
 ### ⛔ AUSNAHMEN-SIND-PFLICHTEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
 **Alle Regeln gelten AUSNAHMSLOS und alleinstehend — Ausnahme-Klauseln sind unzulässig.**
 1. Formulierungen wie „Ausnahme", „nur mit Freigabe", „sofern nicht", „außer", „kann abweichen" werden in Vorgaben NICHT verwendet — jede Regel steht als Pflicht für sich.
