@@ -54,7 +54,7 @@ export function pageMetadata({
       url: "/og-image.png",
       width: 1200,
       height: 630,
-      alt: "NeXify AI — Chat it. Automate it.",
+      alt: "NeXify AI — AUTOMATE IT.",
     },
   ];
 

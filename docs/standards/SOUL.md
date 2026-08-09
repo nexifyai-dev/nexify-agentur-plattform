@@ -58,6 +58,12 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 5. **Recherche-Pflicht:** Unbekannte FreeAgent-Fähigkeiten über offizielle Doku + Internet recherchieren und umsetzen (Abweichungs-Null-Toleranz §11).
 6. **Dokumentation:** Fortschritt in ZK + AgentMemory + docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md.
 
+### ⛔ AUSNAHMEN-SIND-PFLICHTEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
+**Alle Regeln gelten AUSNAHMSLOS und alleinstehend — Ausnahme-Klauseln sind unzulässig.**
+1. Formulierungen wie „Ausnahme", „nur mit Freigabe", „sofern nicht", „außer", „kann abweichen" werden in Vorgaben NICHT verwendet — jede Regel steht als Pflicht für sich.
+2. Bestehende Ausnahme-Klauseln werden laufend in Pflicht-Sätze umgebaut (Abweichungs-Null-Toleranz).
+3. Gilt für ALLE Vorgaben: Modell-Stack (kein anderes Modell, keine Freigabe-Abweichung), Versand (Resend-only, keine Sonderfälle), Sicherheit (Secrets nie, keine Ausnahme), Recherche, Langlauf, CI — überall.
+
 ### ⛔ CEO-VORGABEN 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
 1. **ToDo-Pflicht (ausnahmslos):** JEDE Aufgabe wird als laufende ToDo-Liste geführt (todo-Tool) — aktuelle Aufgabenliste ist in der WebUI sichtbar. Kein Task ohne aktive ToDo-Liste.
 2. **Diff-Pflicht:** Jede Code-Änderung wird als Diff geprüft (patch/git diff) — falscher Code sofort sichtbar. Kein Abschluss ohne Diff-Review.

@@ -133,7 +133,7 @@ Vollständigkeit vor Geschwindigkeit. Qualität ist kein optionaler Schritt.
 > `deepseek-v4-flash-0731` (Standard) und `deepseek-v4-pro` (nur für wirklich tiefe Aufgaben).
 > Alle anderen LLMs sind aus dem System entfernt; weitere Modelle existieren NUR in 9Router
 > (manuelle Nutzung durch Pascal). Kein Modell-Call ohne 9Router. Kein DeepSeek-Call ohne Think Max.
-> Abweichung nur mit expliziter schriftlicher Freigabe.
+> Abweichungen sind NICHT vorgesehen — Regel gilt ausnahmslos und alleinstehend.
 
 | Rolle | Modell-ID (via 9Router) | Think | Anbieter |
 |-------|--------------------------|-------|----------|

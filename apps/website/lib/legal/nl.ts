@@ -1,7 +1,7 @@
 import type { LegalPageData } from "./de";
 
 const C = {
-  legalName: "NeXify AI by NeXify – Chat it. Automate it.",
+  legalName: "NeXify AI by NeXify",
   owner: "Pascal Courbois",
   address: "Graaf van Loonstraat 1E, 5921 JA Venlo, Nederland",
   email: "mail@nexifyai.cloud",
@@ -19,7 +19,7 @@ export const legalPagesNl: Record<string, LegalPageData> = {
   impressum: {
     slug: "impressum",
     title: "Colofon",
-    intro: "Aanbiedersidentificatie en contactgegevens van NeXify AI by NeXify – Chat it. Automate it.",
+    intro: "Aanbiedersidentificatie en contactgegevens van NeXify AI by NeXify",
     updated: "2 augustus 2026",
     related: [
       { label: "Privacyverklaring", href: "/datenschutz" },
