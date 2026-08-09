@@ -103,7 +103,7 @@ def _load_status() -> str:
 
 def _leads_count() -> int:
     try:
-        req = urllib.request.Request("http://127.0.0.1:8900/api/leads/")
+        req = urllib.request.Request("http://127.0.0.1:8887/api/leads")
         with urllib.request.urlopen(req, timeout=3) as resp:
             data = json.loads(resp.read())
             if isinstance(data, list):
@@ -509,7 +509,7 @@ class PortalHandler(SimpleHTTPRequestHandler):
     def _companies(self):
         """Derive company list from leads (spaether has no dedicated companies endpoint)."""
         try:
-            req = urllib.request.Request("http://127.0.0.1:8900/api/leads/")
+            req = urllib.request.Request("http://127.0.0.1:8887/api/leads")
             with urllib.request.urlopen(req, timeout=10) as resp:
                 data = json.loads(resp.read())
                 leads = data.get("leads", data if isinstance(data, list) else [])
