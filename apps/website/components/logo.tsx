@@ -1,28 +1,24 @@
 import { company } from "@/lib/company";
 
+// Kanonisches Brand-Logo (design_guidelines.json "logo" + app/icon.svg):
+// N-Marke = 2 senkrechte Rechtecke + Diagonale, Gradient #d4d4d8→#fafafa,
+// Lime-Punkt oben-rechts. NICHT das alte Hexagon-Node-SVG (Falsch-Logo, bis 09.08.2026).
 export function LogoMark({ size = 34 }: { size?: number }) {
+  const gid = `nx-n-${size}`;
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <rect width="48" height="48" rx="12" fill="#0A0A0A" />
+      <rect x="7" y="7" width="7" height="34" rx="2" fill={`url(#${gid})`} />
+      <rect x="34" y="7" width="7" height="34" rx="2" fill={`url(#${gid})`} />
+      <polygon points="7,7 15,7 41,41 33,41" fill={`url(#${gid})`} />
+      <circle cx="41" cy="7" r="5" fill="#C8FF00" />
+      <circle cx="41" cy="7" r="5" fill="none" stroke="#0A0A0A" strokeWidth="3" />
       <defs>
-        <linearGradient id="lg-silver" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#fafafa" />
-          <stop offset="0.45" stopColor="#a1a1aa" />
-          <stop offset="0.7" stopColor="#e4e4e7" />
-          <stop offset="1" stopColor="#71717a" />
-        </linearGradient>
-        <linearGradient id="lg-silver2" x1="44" y1="4" x2="4" y2="44" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#e4e4e7" />
-          <stop offset="1" stopColor="#52525b" />
+        <linearGradient id={gid} x1="7" y1="41" x2="41" y2="7" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#d4d4d8" />
+          <stop offset="1" stopColor="#fafafa" />
         </linearGradient>
       </defs>
-      <path d="M24 2.5 42.5 13v22L24 45.5 5.5 35V13L24 2.5Z" stroke="url(#lg-silver)" strokeWidth="1.6" />
-      <path d="M24 9 36.5 16.2v14.6L24 38 11.5 30.8V16.2L24 9Z" stroke="url(#lg-silver2)" strokeWidth="0.9" opacity="0.55" />
-      <path d="M16.5 16.5 31.5 31.5M31.5 16.5l-15 15" stroke="url(#lg-silver)" strokeWidth="2.4" strokeLinecap="round" />
-      <circle cx="16.5" cy="16.5" r="2.6" fill="#0a0a0c" stroke="url(#lg-silver)" strokeWidth="1.4" />
-      <circle cx="31.5" cy="16.5" r="2.6" fill="#0a0a0c" stroke="url(#lg-silver)" strokeWidth="1.4" />
-      <circle cx="16.5" cy="31.5" r="2.6" fill="#0a0a0c" stroke="url(#lg-silver)" strokeWidth="1.4" />
-      <circle cx="31.5" cy="31.5" r="2.6" fill="#0a0a0c" stroke="url(#lg-silver)" strokeWidth="1.4" />
-      <circle cx="24" cy="24" r="3.4" fill="url(#lg-silver)" />
     </svg>
   );
 }

@@ -27,42 +27,38 @@ test("erfahrungen page exists (unprefixed + locale fallback)", () => {
   assert.equal(existsSync(join(root, "app/[locale]/erfahrungen/page.tsx")), true);
 });
 
-test("experiences component renders review cards with data-testid", () => {
+test("experiences component renders case cards with data-testid", () => {
   const src = read("components/pages/experiences.tsx");
   assert.match(src, /data-testid="experiences-page"/);
-  assert.match(src, /data-testid=\{`experience-card-/);
+  assert.match(src, /data-testid=\{`experience-case-/);
   assert.match(src, /data-testid="experiences-cta-audit"/);
   assert.match(src, /data-testid="experiences-cta-preise"/);
 });
 
-test("review schema: Review+Rating, no AggregateRating (V-GTM-TRUST-01)", () => {
+test("honest build: KEIN Review-/AggregateRating-Schema (M-04a, V-GTM-TRUST-01)", () => {
   const src = read("components/pages/experiences.tsx");
-  // Nur den JSX-Body prüfen (Header-Kommentar enthält bewusst die Regel).
   const body = src.slice(src.indexOf('"use client"'));
-  assert.match(body, /schema\.org\/Review/);
-  assert.match(body, /reviewRating/);
-  assert.match(body, /bestRating/);
+  // Ehrlicher Aufbau (M-04a): keine Sterne-Behauptung, kein Review-Schema,
+  // solange keine dokumentierten Kunden-Freigaben existieren.
+  assert.doesNotMatch(body, /schema\.org\/Review/);
+  assert.doesNotMatch(body, /reviewRating/);
   assert.doesNotMatch(body, /AggregateRating/);
   assert.doesNotMatch(body, /reviewCount/);
+  assert.match(body, /Referenzen auf Anfrage/);
 });
 
-test("no fake reviews: quotes come from content references (source check)", () => {
+test("no fake reviews: keine Zitat-Texte, nur anonymisierte Projekteinblicke", () => {
   const page = read("components/pages/experiences.tsx");
-  const content = read("lib/content/de.ts");
-  // Component darf keine eigenen Zitat-Texte hardcoden — nur via useContent().
-  assert.match(page, /t\.references\.quotes/);
-  // Jede Quote in de.ts existiert als belegte, anonymisierte Referenz.
-  const quoteCount = (content.match(/quote:/g) || []).length;
-  assert.ok(quoteCount >= 3, `erwarte >=3 Stimmen in content, habe ${quoteCount}`);
-  // Anonymisierte Autoren (keine Klarnamen/Erfindungen)
-  assert.doesNotMatch(content.slice(content.indexOf("quotes:")), /Muster|Beispielkunde|Testkunde/i);
+  // M-04a: Zitate entfernt (keine Freigabe-Dateien) — Component rendert
+  // Projekteinblicke, keine quote-Struktur.
+  assert.doesNotMatch(page, /t\.references\.quotes/);
+  assert.match(page, /experience-case-/);
 });
 
-test("empty review list renders without crashing (negativfall)", () => {
+test("case list renders without crashing (negativfall)", () => {
   const src = read("components/pages/experiences.tsx");
-  // map über quotes → bei leerem Array rendert der Grid leer, kein TypeError.
-  assert.match(src, /quotes\.map/);
-  assert.match(src, /flex flex-wrap/); // CTA bleibt sichtbar
+  // map über cases → bei leerem Array rendert der Grid leer, kein TypeError.
+  assert.match(src, /\.map\(/);
 });
 
 test("sitemap lists /erfahrungen", () => {
