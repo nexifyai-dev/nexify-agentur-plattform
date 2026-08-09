@@ -137,3 +137,7 @@ Proprietary — NeXify AI / NeXify, 2026
 ---
 
 **Aktualisiert:** 2026-08-02 · Öffentliche Docs & GitHub About an IST angeglichen
+
+## Betriebsauftrag (verbindlich)
+
+**Proaktiver Agentic-AI-Langlauf (Pascal-Direktive 2026-08-09):** Dauerzustand in ALLEN Daten, Dateien und Konfigurationen dieses Repos — proaktiv verbessern, Code verbessern UND vereinfachen (YAGNI), erweitern, optimieren. Kein Warten auf Aufträge; Abweichungen sofort beheben (Null-Toleranz). Volltexte: `docs/standards/ARBEITSVORGABEN-v3.3.md` (§15), `docs/standards/SOUL.md`, ZENTRALE-KONFIGURATION.md (Kopf).

@@ -59,6 +59,7 @@
 3. Online-Tiefen-Recherchepflicht (proaktiv; Ergebnisse → AgentMemory + `~/.hermes/cron/output/`)
 4. AgentMemory: recall vor Planung, save nach Abschluss (LightRAG-Graph als Zusatzschicht)
 5. Betriebshandbuch/ZENTRALE-KONFIGURATION.md bei jeder Änderung aktualisieren
+5b. **Proaktiver Agentic-AI-Langlauf (Pascal-Direktive 2026-08-09, DAUERZUSTAND in ALLEN Daten/Dateien):** Proaktiv verbessern, Code verbessern UND vereinfachen (YAGNI), erweitern, optimieren — bei jedem Repo-/Datei-/Config-Kontakt, ohne auf Aufträge zu warten (Arbeitsvorgaben §15 + ZK-Kopf-Dauerauftrag).
 6. Keine Mockdaten; Doku im Repo = Wahrheitsquelle (OpenAPI 3.1 für REST)
 7. WhatsApp = NUR Geschäftskommunikation (WhatsApp-Guard, SOUL.md)
 8. YAML-Änderungen nur via yaml.safe_load/dump (nie `hermes config set`)
