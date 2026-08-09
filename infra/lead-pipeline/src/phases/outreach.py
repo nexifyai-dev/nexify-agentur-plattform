@@ -48,5 +48,5 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
         print(f"SMTP-Error für {to_email}: {e}")
         if "quota" in str(e).lower():
             print("Tages-Quota erreicht – Lauf sofort beendet (nächster Timer-Lauf erneut).")
-            raise SystemExit(3)
+            raise SystemExit(0)  # sauber beenden — kein Restart-Loop (Timer startet beim nächsten Fenster)
         return False
