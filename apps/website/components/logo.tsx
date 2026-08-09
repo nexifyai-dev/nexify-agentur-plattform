@@ -1,24 +1,26 @@
 import { company } from "@/lib/company";
 
-// Kanonisches Brand-Logo (design_guidelines.json "logo" + app/icon.svg):
-// N-Marke = 2 senkrechte Rechtecke + Diagonale, Gradient #d4d4d8→#fafafa,
-// Lime-Punkt oben-rechts. NICHT das alte Hexagon-Node-SVG (Falsch-Logo, bis 09.08.2026).
+// Kanonisches Brand-Logo (design_guidelines.json "logo" + app/icon.svg + Re-Branding 2026-08-09):
+// NX-Mark = dunkle Kachel #0c0c0f + Outline + Neon-Lime-Glow, N-Geometrie #C8FF00, Lime-Punkt.
 export function LogoMark({ size = 34 }: { size?: number }) {
   const gid = `nx-n-${size}`;
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <rect width="48" height="48" rx="12" fill="#0A0A0A" />
-      <rect x="7" y="7" width="7" height="34" rx="2" fill={`url(#${gid})`} />
-      <rect x="34" y="7" width="7" height="34" rx="2" fill={`url(#${gid})`} />
-      <polygon points="7,7 15,7 41,41 33,41" fill={`url(#${gid})`} />
-      <circle cx="41" cy="7" r="5" fill="#C8FF00" />
-      <circle cx="41" cy="7" r="5" fill="none" stroke="#0A0A0A" strokeWidth="3" />
+    <svg width={size} height={size} viewBox="0 0 1024 1024" fill="none" aria-hidden="true">
       <defs>
-        <linearGradient id={gid} x1="7" y1="41" x2="41" y2="7" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#d4d4d8" />
-          <stop offset="1" stopColor="#fafafa" />
-        </linearGradient>
+        <radialGradient id={`${gid}-glow`} cx="0.58" cy="0.56" r="0.5" gradientUnits="objectBoundingBox">
+          <stop offset="0" stopColor="#C8FF00" stopOpacity="0.18" />
+          <stop offset="1" stopColor="#C8FF00" stopOpacity="0" />
+        </radialGradient>
       </defs>
+      <rect width="1024" height="1024" rx="184" fill="#0c0c0f" />
+      <rect width="1024" height="1024" rx="184" fill={`url(#${gid}-glow)`} />
+      <rect x="3" y="3" width="1018" height="1018" rx="181" stroke="rgba(255,255,255,0.10)" strokeWidth="6" />
+      <g fill="#C8FF00">
+        <rect x="164" y="225" width="133" height="574" rx="20" />
+        <rect x="346" y="225" width="133" height="574" rx="20" />
+        <polygon points="225,225 389,225 840,799 676,799" />
+      </g>
+      <circle cx="835" cy="189" r="58" fill="#C8FF00" />
     </svg>
   );
 }
