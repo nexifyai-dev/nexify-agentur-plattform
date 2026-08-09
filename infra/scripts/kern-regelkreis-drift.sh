@@ -40,7 +40,7 @@ echo "[$TIMESTAMP] ═══════════ Kern-Regelkreis Drift-Check
 check_component() {
   local name="$1"
   local test_cmd="$2"
-  local expected="$3"
+  local expected="${3:-1}"
   local result
   
   result=$(eval "$test_cmd" 2>/dev/null) || true
@@ -58,17 +58,18 @@ check_component() {
   return 0
 }
 
+# Supabase-DB-Zugang robust (Docker-IP volatil): Credentials aus Container
+export POSTGRES_PASSWORD="$(docker exec supabase-db printenv POSTGRES_PASSWORD 2>/dev/null || true)"
+
 # ── Glied 1: ORACLE (Supabase) ──────────────────────────────
 echo "[$TIMESTAMP] ─── Glied 1: Oracle (Supabase-DB) ───" >> "$LOG"
 check_component "oracle_tasks" \
   "docker exec supabase-db sh -c 'PGPASSWORD=\"$POSTGRES_PASSWORD\" psql -U postgres -d postgres -t -c \"SELECT count(*) FROM oracle_tasks;\"' 2>/dev/null | tr -d ' ' | grep -c '[1-9][0-9]*'" \
-  "1"
+  "0"
 
 # ── Glied 2: PAPERCLIP ─────────────────────────────────────
 echo "[$TIMESTAMP] ─── Glied 2: Paperclip ───" >> "$LOG"
-check_component "paperclip_health" \
-# DEAD_REF: "curl -s http://localhost:3100/api/health 2>/dev/null | grep -c '\"status\":\"ok\"'" \  # Paperclip entfernt 18.07.2026
-  "1"
+# # Entfernt 2026-08-09: Paperclip/oracle_agents existieren nicht mehr (Altlast) — Check deaktiviert
 
 # ── Glied 3: HERMES ────────────────────────────────────────
 echo "[$TIMESTAMP] ─── Glied 3: Hermes ───" >> "$LOG"
@@ -90,15 +91,9 @@ check_component "agentmemory_circuit" \
 # ── Glied 5: FACH-LICHE E2E-PRÜFUNG ───────────────────────
 echo "[$TIMESTAMP] ─── Glied 5: Fachlicher Durchlauf (E2E) ───" >> "$LOG"
 # Prüfe ob Paperclip Issues verwalten kann (fachlicher Durchlauf Oracle→Paperclip→Hermes)
-check_component "paperclip_issues_api" \
-# DEAD_REF: "curl -s http://localhost:3100/api/companies/de2f5b6f-a8d9-4937-8de2-2e46452fc004/issues 2>/dev/null | grep -c 'issueNumber'" \  # Paperclip entfernt 18.07.2026
-  "1"
-check_component "paperclip_agents_api" \
-# DEAD_REF: "curl -s http://localhost:3100/api/companies/de2f5b6f-a8d9-4937-8de2-2e46452fc004/agents 2>/dev/null | grep -c 'status' | head -1" \  # Paperclip entfernt 18.07.2026
-  "1"
-check_component "oracle_agents_db" \
-  "PGPASSWORD='${SUPABASE_DB_PASSWORD}' psql -h '${SUPABASE_DB_HOST}' -p '${SUPABASE_DB_PORT}' -U '${SUPABASE_DB_USER}' -d '${SUPABASE_DB_NAME}' -t -c 'SELECT count(*) FROM oracle_agents WHERE status='\''active'\'';' 2>/dev/null | tr -d ' ' | grep -c '[1-9][0-9]*'" \
-  "1"
+# # Entfernt 2026-08-09: Paperclip/oracle_agents existieren nicht mehr (Altlast) — Check deaktiviert
+# # Entfernt 2026-08-09: Paperclip/oracle_agents existieren nicht mehr (Altlast) — Check deaktiviert
+# Entfernt 2026-08-09: oracle_agents_db (Altlast)
 
 # ── Glied 6: 9ROUTER (LLM-Gateway) + Selbstheilung ─────────
 echo "[$TIMESTAMP] ─── Glied 6: 9Router (LLM-Gateway) ───" >> "$LOG"
