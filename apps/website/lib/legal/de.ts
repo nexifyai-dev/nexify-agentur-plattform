@@ -19,7 +19,7 @@ export const legalDe: Record<string, LegalPageData> = {
     sections: [
       { id: "diensteanbieter", heading: "§ 1 Diensteanbieter",
         paragraphs: [
-          "NeXify AI by NeXify – Chat it. Automate it.",
+          "NeXify AI by NeXify",
           "Inhaber: Pascal Courbois (Eenmanszaak nach niederländischem Recht)",
           "Anschrift: Graaf van Loonstraat 1E, 5921 JA Venlo, Niederlande",
           "Handelsregister: KvK Nr. 90483944 (Kamer van Koophandel, Roermond)",

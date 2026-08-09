@@ -1,0 +1,51 @@
+{
+  "id": "nexifyai-apps",
+  "name": "NeXify AI Apps",
+  "description": "AgentMemory (Brain) + LightRAG (Wissen) als Tabs in der Workstation — same-origin Proxy /agentmemory/ + /lightrag/.",
+  "version": "0.1.0",
+  "author": "nexifyai",
+  "assets": {
+    "scripts": [
+      "assets/app-memory.js",
+      "assets/app-wissen.js"
+    ],
+    "stylesheets": [
+      "assets/app-shared.css"
+    ]
+  },
+  "capabilities": [
+    "manifest-bundle"
+  ],
+  "lifecycle": {
+    "webui_restart_required": false,
+    "sidecar_start_required": false,
+    "native_host_start_required": false,
+    "native_host_autostart": "none"
+  },
+  "screenshots": [],
+  "permissions": {
+    "webui_api": {
+      "read": [],
+      "write": []
+    },
+    "webui_navigation": false,
+    "dom": {
+      "owned": true,
+      "mutates_core_views": true
+    },
+    "storage": {
+      "owned": true,
+      "shared_webui_keys": []
+    },
+    "loopback_sidecar": false,
+    "native_host": false,
+    "filesystem": {
+      "arbitrary": false,
+      "serves_bundled_assets": true
+    },
+    "network_external": false,
+    "embeds_iframe": true,
+    "requires_csp_frame_extra": false
+  },
+  "settings_schema": []
+}

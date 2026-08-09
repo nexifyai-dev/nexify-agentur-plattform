@@ -1,0 +1,129 @@
+{
+  "extensions": [
+    {
+      "id": "nexifyai-app-memory",
+      "name": "NeXify AI Brain",
+      "description": "AgentMemory (Brain) als Tab (same-origin Proxy /agentmemory/ → 127.0.0.1:3113)",
+      "scripts": [
+        "assets/app-memory.js"
+      ],
+      "stylesheets": [
+        "assets/app-shared.css"
+      ],
+      "enabled": true,
+      "permissions": {
+        "storage": {
+          "owned": true
+        }
+      },
+      "settings_schema": [
+        {
+          "key": "url",
+          "type": "string",
+          "label": "AgentMemory URL",
+          "default": "/agentmemory/"
+        }
+      ]
+    },
+    {
+      "id": "nexifyai-app-wissen",
+      "name": "NeXify AI Wissen",
+      "description": "LightRAG als Tab (same-origin Proxy /lightrag/ → 127.0.0.1:9622)",
+      "scripts": [
+        "assets/app-wissen.js"
+      ],
+      "stylesheets": [
+        "assets/app-shared.css"
+      ],
+      "enabled": true,
+      "permissions": {
+        "storage": {
+          "owned": true
+        }
+      },
+      "settings_schema": [
+        {
+          "key": "url",
+          "type": "string",
+          "label": "LightRAG URL",
+          "default": "/lightrag/"
+        }
+      ]
+    },
+    {
+      "id": "nexifyai-app-router",
+      "name": "NeXify AI Router",
+      "description": "9Router-Cockpit als Tab (ai-router.nexifyai.cloud)",
+      "scripts": [
+        "assets/app-router.js"
+      ],
+      "stylesheets": [
+        "assets/app-shared.css"
+      ],
+      "enabled": true,
+      "permissions": {
+        "storage": {
+          "owned": true
+        }
+      },
+      "settings_schema": [
+        {
+          "key": "url",
+          "type": "string",
+          "label": "9Router URL",
+          "default": "https://ai-router.nexifyai.cloud/"
+        }
+      ]
+    },
+    {
+      "id": "nexifyai-app-automation",
+      "name": "NeXify AI Automation",
+      "description": "n8n Workflow-Editor als Tab (Port 5678, reaktiviert 2026-08-09)",
+      "scripts": [
+        "assets/app-automation.js"
+      ],
+      "stylesheets": [
+        "assets/app-shared.css"
+      ],
+      "enabled": true,
+      "permissions": {
+        "storage": {
+          "owned": true
+        }
+      },
+      "settings_schema": [
+        {
+          "key": "url",
+          "type": "string",
+          "label": "n8n URL",
+          "default": "http://127.0.0.1:5678/"
+        }
+      ]
+    },
+    {
+      "id": "nexifyai-app-paperclip",
+      "name": "NeXify AI Paperclip",
+      "description": "Paperclip als Tab — PLATZHALTER, Dienst inaktiv (Port 3100)",
+      "scripts": [
+        "assets/app-paperclip.js"
+      ],
+      "stylesheets": [
+        "assets/app-shared.css"
+      ],
+      "enabled": true,
+      "permissions": {
+        "storage": {
+          "owned": true
+        }
+      },
+      "settings_schema": [
+        {
+          "key": "url",
+          "type": "string",
+          "label": "Paperclip URL",
+          "default": "http://127.0.0.1:3100/"
+        }
+      ]
+    }
+  ]
+}

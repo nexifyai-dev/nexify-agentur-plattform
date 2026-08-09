@@ -125,7 +125,7 @@ button:active{transform:translateY(0)}
   <circle cx="835" cy="189" r="58" fill="#C8FF00"/>
 </svg>
 <h1>Ne<span style="color:#C8FF00;font-weight:700">X</span>ify <span class="light">AI</span></h1>
-<div class="tagline">Chat it. Automate it.</div>
+<div class="tagline">AUTOMATE IT.</div>
 </div>
 <!--ERROR-->
 <form method="POST" action="/auth/login">

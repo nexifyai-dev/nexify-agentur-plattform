@@ -867,7 +867,7 @@ async def campaign_send(req: CampaignSendReq):
     <a href="https://www.nexifyai.cloud/datenschutz" style="color:#a1a1aa;">Datenschutz</a>
   </p>
 </td></tr>"""
-        html_body = mail_shell("Chat it. Automate it.", body)
+        html_body = mail_shell("AUTOMATE IT.", body)
 
         try:
             email_id = await send_email(to, subject, html_body)

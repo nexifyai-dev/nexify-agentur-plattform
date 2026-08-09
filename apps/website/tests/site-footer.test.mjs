@@ -3,7 +3,7 @@ import test from 'node:test';
 
 test('SiteFooter Component - has correct company information', () => {
   const company = {
-    legalName: "NeXifyAI by NeXify – Chat it. Automate it.",
+    legalName: "NeXifyAI by NeXify",
     email: "mail@nexifyai.cloud",
     phone: "+31 6 133 188 56",
   };
