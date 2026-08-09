@@ -316,10 +316,26 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | Doku | `docs/references/nscale/nscale-llms.txt` (Index 24 KB); live docs.nscale.com; Skill `nscale-image` |
 | Betrieb | OpenAI-kompatibel (base_url /v1); 429 = Credits leer (prepaid, console.nscale.com aufladen); Service-Token zeitlich begrenzt |
 
+## 12c. FreeAgent (Buchhaltung, Vollintegration 2026-08-09)
+
+| Feld | Wert |
+|---|---|
+| Firma | NeXify AI by NeXify (EUR, NL, Venlo) — API-verifiziert |
+| API-Basis | https://api.freeagent.com/v2 (OAuth2, Basic-Auth an /v2/token_endpoint) |
+| Credentials | FREEAGENT_* in hermes.env (Client-ID/Secret, Access/Refresh-Token) |
+| Skript | /opt/nexifyai/scripts/freeagent_sync.sh (sync/belege/refresh/status) |
+| Timer | freeagent-sync.timer, alle 30 min (sync + belege), Log /var/log/freeagent-sync.log |
+| Bankkonten | 4: Business Checking + Revolut EUR Merchant/Online/Spesen (Feed verbunden) |
+| Beleg-Dropbox | /opt/nexifyai/freeagent/belege/ → Upload → belege/done |
+| Produkte | 12 Produkte definiert (Website-Katalog 449€/Tag), Anlage via FreeAgent-UI (API-POST nicht verfügbar) |
+| OFFEN (Pascal) | MwSt-Setup in FreeAgent (sales_tax_registration_status=Not Registered) → schaltet Kategorien/Write-API frei; danach Produkte in UI anlegen |
+| Anleitung | docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md |
+
 ## 13. Changelog
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-09 16:10 | **FREEAGENT-VOLLINTEGRATION (Pascal-Auftrag, E3):** OAuth-Token-Refresh gebaut + persistiert; freeagent_sync.sh + systemd-Timer (30 min) installiert; 4 Bankkonten (Revolut-Feed) + Transaktionen verifiziert; Beleg-Dropbox + Upload-Mechanismus; Klassifizierungs-Regelwerk (Transfer-Skip). API-Grenzen: POST /products + POST /attachments existieren nicht (Konto-Setup fehlt: MwSt Not Registered, 0 Kategorien) → Anleitung docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md, 12 Produkte definiert, Pascal: MwSt-Setup + Produktanlage in UI |
 | 2026-08-09 15:17 | **CEO-RUNDE 2026-08-09 #2 (WhatsApp-Re-Pairing + Board + Doku-Sync):** WhatsApp-Session registered=False (device_removed) → frisches Pairing gestartet (bridge.js --pair-only --pair-json, QR live via wa-qr.png + Telegram-Alarm); Doppel-Bridge-Konflikt identifiziert (hermes-whatsapp-bridge.service vs Gateway-Adapter); Kanban: M-02/M-03/M-04/M-05 superseded geschlossen (4 Tasks, Kinder done); Doku-Sync Master↔Spiegel abgeglichen; ZK-Root-Doppelablage entfernt |
 | 2026-08-09 | **CEO-RUNDE 2026-08-09 #1 (WhatsApp + Monitoring):** health-watchdog.py um whatsapp_bridge_status() + was_down-Fix erweitert; health-check.sh Retry (000/5xx, 2s/8s); WhatsApp-Session getrennt → Re-Pairing vorbereitet (systemd-run wa-pair-daemon, 40x90s, auto gateway-restart bei creds); SSH-Host-Zugang validiert (2222); stale mcp-remote-Prozesse gekillt (Load 13→8) |
 | 2026-08-08 19:35 | **M-05b BLOG-SERIE TEIL 2/2 (t_45c5aea8):** 5 /wissen-Artikel auf 800+ Wörter (Website-Kosten, KI-Steuerbüro, Automation-ROI, ChatGPT-Grenzen, Web-App-Update) + E2E (24 Links 200, Schema valid) + Fakten-Gegentest (10 Zahlen gegen Quellen) |
