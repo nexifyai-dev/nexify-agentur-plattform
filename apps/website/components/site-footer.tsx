@@ -143,9 +143,6 @@ export function SiteFooter() {
         <div>
           <span style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
             <Logo />
-            <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, fontSize: 16 }}>
-              Ne<span style={{ color: '#C8FF00', fontWeight: 700 }}>X</span>ify <span style={{ fontWeight: 300, color: '#9E9E9E' }}>AI</span>
-            </span>
           </span>
           <p style={{ marginTop: 14, maxWidth: 280, fontSize: 13, lineHeight: 1.7, color: '#71717a', fontWeight: 300 }}>
             {t.tagline}
