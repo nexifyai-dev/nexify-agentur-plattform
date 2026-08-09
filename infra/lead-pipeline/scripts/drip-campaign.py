@@ -124,7 +124,7 @@ for attempt in (1, 2, 3, 4):
         # verursachen "Server disconnected" — neuer Client = neuer Verbindungsaufbau.
         opts = SyncClientOptions(headers={'Authorization': f'Bearer {SB_JWT}'}) if SB_JWT else None
         client = create_client(SB_URL, SB_KEY, options=opts)
-        response = client.table('leads').select('contact_email,name,score,status,id,created_at,unsubscribed').execute()
+        response = client.table('leads').select('contact_email,name,score,status,id,created_at,unsubscribed,source,metadata').execute()
         leads = response.data
         logger.info(f"Fetched {len(leads)} leads")
         break
@@ -155,6 +155,14 @@ for lead in leads:
     if lead.get('status') in ('contacted', 'opted_out', 'unsubscribed'):
         continue
     if lead.get('unsubscribed'):  # Art. 21 DSGVO: Widerspruch = keine Drip-Mails
+        continue
+    # OPT-IN-PFLICHT (UWG §7 Abs. 2, DSGVO Art. 6): nur Leads mit ausdrücklicher
+    # Einwilligung dürfen Drip-Mails erhalten. Quelle: ebook-Formular (source=ebook)
+    # oder metadata.consent=true. Gescrapte firecrawl-Leads haben KEIN Opt-in.
+    source = lead.get('source') or ''
+    meta = lead.get('metadata') or {}
+    consent = bool(meta.get('consent')) if isinstance(meta, dict) else False
+    if not (str(source).startswith('ebook') or consent):
         continue
 
     # Mail 1: Tag 0
