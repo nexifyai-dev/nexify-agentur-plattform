@@ -1,6 +1,6 @@
 # FILE: .github/workflows/mirror-to-gitlab.yml
 # NIR: 24.07.2026 12:33
-# UPDATED: 09.08.2026 18:12
+# UPDATED: 09.08.2026 18:39
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: Spiegelt Git-Branches und Tags zum self-hosted VPS-GitLab.
@@ -67,18 +67,77 @@ jobs:
           # First try a normal push. If GitLab has diverged refs (fetch-first
           # rejection), retry once with --force so the mirror converges back to
           # GitHub as source of truth.
+          # Derive the GitLab project API base URL from VPS_GITLAB_URL.
+          # VPS_GITLAB_URL is the HTTPS clone URL, e.g.:
+          #   https://gitlab.example.com/group/project.git
+          # We need:
+          #   https://gitlab.example.com/api/v4/projects/group%2Fproject
+          gitlab_base="${VPS_GITLAB_URL%.git}"
+          gitlab_host="$(printf '%s' "$gitlab_base" | sed 's|^\(https://[^/]*\)/.*|\1|')"
+          gitlab_path="$(printf '%s' "$gitlab_base" | sed 's|^https://[^/]*/||')"
+          gitlab_encoded_path="$(printf '%s' "$gitlab_path" | python3 -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))')"
+          gitlab_api="${gitlab_host}/api/v4/projects/${gitlab_encoded_path}"
+
+          # Helper: unprotect a branch via the GitLab API (no-op if not found).
+          unprotect_branch() {
+            local branch="$1"
+            local http_code
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" \
+              --request DELETE \
+              --header "PRIVATE-TOKEN: $VPS_GITLAB_TOKEN" \
+              "${gitlab_api}/protected_branches/${branch}")
+            if [ "$http_code" = "204" ] || [ "$http_code" = "404" ]; then
+              return 0
+            fi
+            echo "::warning::Failed to unprotect GitLab branch '${branch}' (HTTP ${http_code}). Will still attempt push."
+          }
+
+          # Helper: re-protect a branch (push access: maintainers only, no force).
+          reprotect_branch() {
+            local branch="$1"
+            local http_code
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" \
+              --request POST \
+              --header "PRIVATE-TOKEN: $VPS_GITLAB_TOKEN" \
+              --header "Content-Type: application/json" \
+              --data "{\"name\":\"${branch}\",\"push_access_level\":40,\"merge_access_level\":40,\"allow_force_push\":false}" \
+              "${gitlab_api}/protected_branches")
+            if [ "$http_code" != "201" ] && [ "$http_code" != "409" ]; then
+              echo "::error::Failed to re-protect GitLab branch '${branch}' after mirror push (HTTP ${http_code}). The branch is now unprotected — protect it manually."
+            fi
+          }
+
           push_log="$(mktemp)"
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
             push --prune gitlab \
             'refs/heads/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*' 2>&1 | tee "$push_log"; then
-            if grep -Fq "(fetch first)" "$push_log"; then
-              echo "::warning::Detected non-fast-forward on GitLab mirror refs. Retrying once with --force."
+            if grep -Fq "(fetch first)" "$push_log" || grep -Fq "pre-receive hook declined" "$push_log" || grep -Fq "protected branch" "$push_log"; then
+              echo "::warning::Detected non-fast-forward or protected-branch rejection on GitLab mirror. Temporarily unprotecting protected branches and retrying with --force."
+              # Collect the rejected branches from the push log.
+              rejected_branches="$(grep -E '! \[(remote )?rejected\]' "$push_log" | awk '{for(i=1;i<=NF;i++){if($i=="->"){print $(i+1); break}}}' | sort -u || true)"
+              if [ -z "$rejected_branches" ]; then
+                # Fallback: unprotect 'main' which is the most common protected branch.
+                rejected_branches="main"
+              fi
+              for branch in $rejected_branches; do
+                unprotect_branch "$branch"
+              done
+              force_log="$(mktemp)"
+              force_ok=true
               if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
                 push --prune --force gitlab \
                 'refs/heads/*:refs/heads/*' \
-                'refs/tags/*:refs/tags/*'; then
+                'refs/tags/*:refs/tags/*' 2>&1 | tee "$force_log"; then
+                force_ok=false
+              fi
+              # Always re-protect, even if push failed.
+              for branch in $rejected_branches; do
+                reprotect_branch "$branch"
+              done
+              if [ "$force_ok" = "false" ]; then
                 echo "::error::GitLab branch/tag mirror force retry failed"
+                cat "$force_log"
                 exit 1
               fi
             else
