@@ -108,7 +108,7 @@ jobs:
       github.event_name == 'push'
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           path: repo
 
@@ -207,7 +207,7 @@ jobs:
        (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'lightrag-reindex'))
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: LightRAG verfügbar?
         id: lightrag-check
@@ -247,7 +247,7 @@ jobs:
       (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'hermes-sync')
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Hermes verfügbar?
         id: hermes-check
@@ -352,7 +352,7 @@ jobs:
        (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'governance-audit'))
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: §2 Vollprüfung SOLL/IST
         run: |

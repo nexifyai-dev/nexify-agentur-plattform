@@ -21,7 +21,7 @@ jobs:
     env:
       TZ: Europe/Berlin
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Verify globals.css contains the full [locale] design system
         shell: bash
