@@ -307,6 +307,24 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 | Offen (Pascal) | WhatsApp-Produkt-Setup: WABA-ID + Phone-Number-ID + System-User-Token → `META_BUSINESS_ACCOUNT_ID` / `META_PHONE_NUMBER_ID` / `META_ACCESS_TOKEN` in hermes.env |
 
 
+## 12a2. Social-Media Auto-Publishing (Facebook + Instagram, Pascal 2026-08-09)
+
+**Setup:** AutoSEO-Pipeline postet jeden Artikel automatisch auf Facebook (Page `facebook.com/nexify.automate.it`) + Instagram (via Graph API). Schritt ist env-getrieben — fehlende Tokens = Skip mit Log.
+
+| Env (hermes.env) | Zweck |
+|---|---|
+| META_PAGE_ID | Facebook-Page-ID (nexify.automate.it) |
+| META_PAGE_TOKEN | Page-Token mit pages_manage_posts (+ pages_read_engagement) |
+| IG_BUSINESS_ID | Instagram-Business-Account-ID (via Graph: /<page_id>?fields=instagram_business_account) |
+
+**Token-Beschaffung (Pascal, einmalig):**
+1. Facebook: eingeloggt als Page-Admin → developers.facebook.com/tools/explorer → App 28086460497651702 → Permissions `pages_show_list, pages_manage_posts, pages_read_engagement, instagram_basic, instagram_content_publish` → Generate Access Token → dann `/me/accounts` → Page-Token kopieren → hermes.env `META_PAGE_TOKEN` + `META_PAGE_ID`
+2. Instagram: `/me/accounts` → Page-ID → `/<page_id>?fields=instagram_business_account` → ID → hermes.env `IG_BUSINESS_ID`
+3. Danach: 9Router/Backend-Restart nicht nötig (env wird pro Lauf gelesen); nächster AutoSEO-Artikel postet automatisch.
+4. Alternative (empfohlen, dauerhaft): System-User-Permanent-Token (Business Settings → System Users → Generate token, Permissions wie oben) — läuft nicht ab.
+
+**Hinweis:** Aktuelle META_USER_TOKEN (public_profile only) + META_APP_TOKEN (Invalid application ID) sind für Posting unbrauchbar — ersetzen.
+
 ## 12b. Nscale (Bildgenerierung & Serverless Inference) [2026-08-08]
 
 | Element | Wert / Ort |
@@ -363,6 +381,7 @@ Kanonische Fassung: `docs/standards/ARBEITSVORGABEN-v2.2.md` (Quelle: SOUL.md v2
 
 | Datum | Änderung |
 |---|---|
+| 2026-08-09 19:30 | **SOCIAL + CI (Pascal-OOB):** AutoSEO-Pipeline um Social-Share erweitert (FB-Post auf nexify.automate.it + IG-Post, env-getrieben, Skip+Log bei fehlenden Tokens — Anleitung §12a2). Alle Host-Skripte ins Repo gespiegelt (freeagent_sync, wa-scan-watch, bulk18-check, kern-regelkreis-drift, ds-fim, autoseo) — Repo = Wahrheitsquelle (CI). Blog /wissen bereits in Header-Nav verifiziert. Meta-Bestand geprüft: Page nexify.automate.it existiert; User-Token nur public_profile, App-Token invalid — Pascal erzeugt Page-/System-User-Token (Anleitung) |
 | 2026-08-09 19:45 | **CEO-SCAN (Kosten/Brain-Effizienz):** 9Router-Usage analysiert — Kosten-Trend 07.08 $6,71 / 08.08 $7,03 / 09.08 $3,42 (~50% günstiger durch DeepSeek-Direkt; OpenRouter-Requests nur Altlast-Vormittag, qwen/reasoner-Nutzung war VOR Umstellung; aktuelle Requests 100% ds/deepseek-v4-flash). Connections: nur DeepSeek aktiv (OpenRouter+ds-direct+qwen deaktiviert/gelöscht). Kein Handlungsbedarf — Restart + Regression 200. Hinweis: kurze Prompts mit max_tokens<100 können durch Thinking leeren content liefern (finish=length) — Token-Budget >= 128 bei Tests |
 | 2026-08-09 19:20 | **CEO-RUNDE (Scan+Cleanup):** Titel-Doppel-Suffix auf 12 Seiten gefixt (d904dde4, LIVE 5/5 einfach — Pattern: nie Suffix in page-title, Template liefert ihn); Hexagon-Logo in 10 Portal-Statics ersetzt (0 Funde); env-Duplikate bereinigt (9 Keys, Backup .bak); AutoSEO-Qualitaet E3 (FAQPage+Article-Schema, ~4.000 Woerter); Timer-Gesamtcheck OK (Tagesabrechnung NEXIFY-2026-00241, Autopilot aktiv, Backup 03:00 enabled); WhatsApp-Session-Baks + 16MB bridge.log.bak als Aufraeum-Kandidaten nach erfolgreichem Re-Pairing dokumentiert |
 | 2026-08-09 18:30 | **FREEAGENT-VOLLÜBERNAHME (Pascal):** UI-Login via Camoufox (Verify-Code aus Mailbox) → MwSt-Setup: Periode ab 2026-08-09 Registered, BTW 21%, Value-Added (API tax_status=Registered) → Kategorien verfügbar → freeagent_sync.sh gefixt (gruppierte Keys, echte Nominalcodes, dated_on) → Bank-Transaktionen automatisch klassifiziert (201, E3). Produkte: UI-Feature im Trial nicht verfügbar + API-POST 404 → Items-Weg dokumentiert. **AUTOSEO-PIPELINE gebaut:** autoseo-pipeline.py + Timer 06:30 + Testlauf (GEO-Artikel); Benchmark getautoseo.com analysiert (30 Artikel/Monat, Backlinks, Dashboard, GEO). **Vorgaben v3.5+:** FreeAgent-Vollübernahme, Recherche-bei-Unwissen, Nichts-ungefixt-lassen, Konto-Standard (MASTER_PASSWORD + mail@nexifyai.cloud) verankert |

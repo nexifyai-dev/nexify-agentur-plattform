@@ -193,7 +193,59 @@ def main():
                        capture_output=True)
     except OSError:
         pass
+    social_share(art)
     log("Fertig")
+
+
+def social_share(art):
+    """Facebook + Instagram-Post (AutoSEO, Pascal 2026-08-09). Tokens aus hermes.env;
+    fehlen sie, wird uebersprungen (Log). Token-Beschaffung: ZK §12a."""
+    try:
+        env = {}
+        for l in open("/etc/nexifyai/hermes.env"):
+            if "=" in l and not l.startswith("#"):
+                k, v = l.strip().split("=", 1)
+                env[k] = v
+    except OSError:
+        return
+    page_token = env.get("META_PAGE_TOKEN", "")
+    page_id = env.get("META_PAGE_ID", "")
+    ig_id = env.get("IG_BUSINESS_ID", "")
+    url = f"https://www.nexifyai.cloud/wissen/{art['slug']}"
+    msg = f"Neu im Wissen-Blog: {art['title']}\n{url}"
+    if page_token and page_id:
+        r = subprocess.run(["curl", "-s", "--max-time", "30",
+                            "-X", "POST",
+                            f"https://graph.facebook.com/v22.0/{page_id}/feed",
+                            "-d", f"message={msg}",
+                            "-d", f"access_token={page_token}"],
+                           capture_output=True, text=True)
+        ok = "error" not in r.stdout
+        log(f"FB-Post: {'OK' if ok else r.stdout[:120]}")
+    else:
+        log("Social-Skip: META_PAGE_TOKEN/META_PAGE_ID fehlen (ZK §12a Anleitung)")
+    if page_token and ig_id:
+        # IG: Bild als Media-Container, dann publish
+        img = f"https://www.nexifyai.cloud/og-image.png"
+        r = subprocess.run(["curl", "-s", "--max-time", "30",
+                            "-X", "POST",
+                            f"https://graph.facebook.com/v22.0/{ig_id}/media",
+                            "-d", f"image_url={img}",
+                            "-d", f"caption={msg}",
+                            "-d", f"access_token={page_token}"],
+                           capture_output=True, text=True)
+        try:
+            cid = json.loads(r.stdout).get("id", "")
+            if cid:
+                subprocess.run(["curl", "-s", "--max-time", "30", "-X", "POST",
+                                f"https://graph.facebook.com/v22.0/{ig_id}/media_publish",
+                                "-d", f"creation_id={cid}",
+                                "-d", f"access_token={page_token}"], capture_output=True, text=True)
+                log("IG-Post: OK")
+        except Exception as e:
+            log(f"IG-Post fehlgeschlagen: {e} | {r.stdout[:120]}")
+    else:
+        log("Social-Skip: IG_BUSINESS_ID fehlt")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """DeepSeek FIM (Fill-In-The-Middle) — Code-Vervollstaendigung via /beta (E3 2026-08-09).
+# NIR: 09.08.2026 17:47
+# NAME: NeXifyAI ComplianceEngine
+# TEAM: NeXifyAI Core
+# WHAT: (auto-dokumentiert)
+# WHY: (auto-dokumentiert — fehlte NIR-Header)
+# DEPENDS: (auto-dokumentiert)
+
 Usage: ds-fim.py --prompt "def fib(a):" --suffix "return fib(a-1)+fib(a-2)" [--model deepseek-v4-flash] [--max-tokens 512]
 Nutzt DEEPSEEK_API_KEY aus /etc/nexifyai/hermes.env (oder env). Max 4K Tokens (API-Grenze)."""
 import argparse, json, os, subprocess, sys
