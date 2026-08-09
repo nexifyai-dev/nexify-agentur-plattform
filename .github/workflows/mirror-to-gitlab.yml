@@ -63,10 +63,14 @@ jobs:
             clone --bare "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" repository.git
           cd repository.git
           git remote add gitlab "$VPS_GITLAB_URL"
-          # --force: GitHub is the source of truth; any GitLab-side commits
-          # (e.g. direct pushes) are intentionally overwritten on every mirror run.
+          # --prune: remove refs on GitLab that no longer exist on GitHub.
+          # --force is intentionally omitted: GitLab branch-protection rules block
+          # force-pushes to protected branches (e.g. main). GitHub is the sole
+          # source of truth, so divergence only occurs from accidental direct pushes
+          # to GitLab — those are handled by a separate branch-protection rule on
+          # the GitLab side rather than by overwriting here.
           if ! git -c "http.extraHeader=Authorization: Basic $gitlab_auth" \
-            push --prune --force gitlab \
+            push --prune gitlab \
             'refs/heads/*:refs/heads/*' \
             'refs/tags/*:refs/tags/*'; then
             echo "::error::GitLab branch/tag mirror push failed"
