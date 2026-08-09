@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps) {
   const article = getWissenArticle(slug);
   if (!article) return {};
   return pageMetadata({
-    title: `${article.title} — Wissen | NeXify AI`,
+    title: `${article.title} — Wissen`,
     description: article.description,
     path: `/wissen/${article.slug}`,
     ogTitle: `${article.title} | NeXify AI`,
