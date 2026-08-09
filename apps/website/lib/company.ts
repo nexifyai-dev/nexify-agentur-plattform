@@ -3,7 +3,7 @@ export const company = {
   /** Canonical product line — never „Automat it.“ (Google typo). */
   descriptor: "AUTOMATE IT.",
   /** Full public brand string (meta, footer, JSON-LD, listings). */
-  brandFull: "NeXify AI by NeXify — chat it. Automate it.",
+  brandFull: "NeXify AI by NeXify — AUTOMATE IT.",
   legalName: "NeXify AI by NeXify",
   legalForm: "Eenmanszaak",
   owner: "Pascal Courbois",

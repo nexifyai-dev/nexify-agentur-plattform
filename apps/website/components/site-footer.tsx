@@ -7,7 +7,7 @@ import { useLang } from '@/lib/lang-context';
 
 const T = {
   de: {
-    tagline: 'chat it. automate it. KI-Automatisierung für Betriebe im DACH- und NL-Raum.',
+    tagline: 'AUTOMATE IT. KI-Automatisierung für Betriebe im DACH- und NL-Raum.',
     company: 'Unternehmen',
     product: 'Produkt',
     legal: 'Recht',
@@ -43,7 +43,7 @@ const T = {
     b2b: 'Angebote richten sich ausschließlich an Unternehmen (B2B).',
   },
   en: {
-    tagline: 'chat it. automate it. AI automation for businesses in DACH and the NL.',
+    tagline: 'AUTOMATE IT. AI automation for businesses in DACH and the NL.',
     company: 'Company',
     product: 'Product',
     legal: 'Legal',
@@ -78,7 +78,7 @@ const T = {
     b2b: 'Offers are exclusively directed at businesses (B2B).',
   },
   nl: {
-    tagline: 'chat it. automate it. AI-automatisering voor bedrijven in DACH en NL.',
+    tagline: 'AUTOMATE IT. AI-automatisering voor bedrijven in DACH en NL.',
     company: 'Bedrijf',
     product: 'Product',
     legal: 'Juridisch',

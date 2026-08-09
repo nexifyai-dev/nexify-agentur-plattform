@@ -19,15 +19,15 @@ const origin = siteOrigin();
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
   title: {
-    default: "NeXify AI by NeXify — chat it. Automate it.",
+    default: "NeXify AI by NeXify — AUTOMATE IT.",
     template: "%s | NeXify AI",
   },
   description:
-    "NeXify AI by NeXify — chat it. Automate it. AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 449 Euro netto. Deutsch & Nederlands. Sitz Venlo (NL).",
+    "NeXify AI by NeXify — AUTOMATE IT. AI-gestützte Websites, Onlineshops, Web-Apps, mobile Apps und Automatisierungen. Persönlich umgesetzt zum transparenten Tagessatz von 449 Euro netto. Deutsch & Nederlands. Sitz Venlo (NL).",
   keywords: [
     "Webentwicklung", "Webdesign", "Next.js Agentur", "Onlineshop Entwicklung", "Web-App Entwicklung",
     "AI-gestützte Automatisierung", "AI-Agenten", "NeXify AI", "Venlo", "webontwikkeling", "AI-automatisering",
-    "chat it. Automate it.",
+    "AUTOMATE IT.",
   ],
   authors: [{ name: company.owner }],
   creator: company.owner,
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
     locale: "de_DE",
     alternateLocale: ["en_GB", "nl_NL"],
     siteName: company.brandFull,
-    title: "NeXify AI by NeXify — chat it. Automate it.",
+    title: "NeXify AI by NeXify — AUTOMATE IT.",
     description: "Premium-Websites und Software mit persönlicher Verantwortung und AI-gestützter Geschwindigkeit. 449 € netto / Arbeitstag. Sitz Venlo.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI by NeXify — chat it. Automate it." }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "NeXify AI by NeXify — AUTOMATE IT." }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NeXify AI by NeXify — chat it. Automate it.",
+    title: "NeXify AI by NeXify — AUTOMATE IT.",
     description: "Premium-Websites, Shops, Apps und AI-Automatisierung. € 449 / Arbeitstag netto.",
     images: ["/og-image.png"],
   },

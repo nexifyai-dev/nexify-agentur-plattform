@@ -68,7 +68,7 @@ export const de = {
     servicesTitle: "Vom ersten Klick bis zur skalierten Plattform",
     servicesText: "Acht klar definierte Leistungsbausteine – jeweils mit Zeitspanne, klaren Ergebnissen und transparentem Tagessatz.",
     processEyebrow: "Arbeitsweise",
-    processTitle: "Fünf Schritte. Null Überraschungen.",
+    processTitle: "Sechs Schritte. Null Überraschungen.",
     quotesEyebrow: "Referenzen & Ergebnisse",
     quotesTitle: "Was Zusammenarbeit mit NeXify AI bedeutet",
     quotesText:

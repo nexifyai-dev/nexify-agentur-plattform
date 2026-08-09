@@ -1,6 +1,6 @@
 # Website — NeXify AI by NeXify
 
-Öffentliche Agentur-Website: **chat it. Automate it.**
+Öffentliche Agentur-Website: **AUTOMATE IT.**
 
 | | |
 |---|---|

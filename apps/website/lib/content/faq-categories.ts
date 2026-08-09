@@ -25,7 +25,7 @@ export const faqCategoriesDe: FaqCategory[] = [
     items: [
       {
         q: "Was ist NeXify AI?",
-        a: "NeXify AI by NeXify — chat it. Automate it. — ist die Marke für Premium-Websites, Onlineshops, Web-Apps und KI-Automatisierungen. Ein erfahrener Fachmann verantwortet Konzeption bis Übergabe; moderne AI-Werkzeuge beschleunigen Umsetzung und Prüfung. Zielmarkt ist der deutschsprachige DACH-Raum (DE/AT/CH), Sitz in Venlo (NL).",
+        a: "NeXify AI by NeXify — AUTOMATE IT. — ist die Marke für Premium-Websites, Onlineshops, Web-Apps und KI-Automatisierungen. Ein erfahrener Fachmann verantwortet Konzeption bis Übergabe; moderne AI-Werkzeuge beschleunigen Umsetzung und Prüfung. Zielmarkt ist der deutschsprachige DACH-Raum (DE/AT/CH), Sitz in Venlo (NL).",
       },
       {
         q: "Was unterscheidet NeXify AI von einer klassischen Agentur?",
@@ -40,8 +40,8 @@ export const faqCategoriesDe: FaqCategory[] = [
         a: "Pascal Courbois — Deutscher aus der Grenzregion Limburg, seit über fünf Jahren in den Niederlanden. Mehr als 20 Jahre Praxis in IT, Kaufmannswesen und Vertrieb (u. a. Telekom Deutschland, Vodafone, Postcon). Beratung auf Deutsch und Niederländisch, ausschließlich B2B.",
       },
       {
-        q: "Was bedeutet der Claim „chat it. Automate it.“?",
-        a: "Chat: Erstberatung und Qualifizierung über den NeXify AI Chat sowie klare Kommunikation. Automate: Wiederkehrende Prozesse, Angebote, Follow-ups und betriebsfähige Agenten — mit Leitplanken, Freigaben und Protokollierung.",
+        q: "Was bedeutet der Claim „AUTOMATE IT.“?",
+        a: "Der Claim steht für den Kern des Angebots: wiederkehrende Prozesse, Angebote, Follow-ups und betriebsfähige Agenten — automatisiert mit Leitplanken, Freigaben und Protokollierung. Die Erstberatung übernimmt der NeXify AI Chat.",
       },
       {
         q: "Für welche Branchen arbeitet NeXify AI?",
@@ -344,7 +344,7 @@ export const faqCategoriesNl: FaqCategory[] = [
     items: [
       {
         q: "Wat is NeXify AI?",
-        a: "NeXify AI by NeXify — chat it. Automate it. — is het merk voor premium websites, webshops, webapps en AI-automatisering. Eén ervaren vakman verantwoordt van concept tot overdracht; moderne AI-tools versnellen uitvoering en controle. Doelmarkt is DACH (DE/AT/CH), vestiging in Venlo (NL).",
+        a: "NeXify AI by NeXify — AUTOMATE IT. — is het merk voor premium websites, webshops, webapps en AI-automatisering. Eén ervaren vakman verantwoordt van concept tot overdracht; moderne AI-tools versnellen uitvoering en controle. Doelmarkt is DACH (DE/AT/CH), vestiging in Venlo (NL).",
       },
       {
         q: "Wat onderscheidt NeXify AI van een klassiek bureau?",
@@ -359,8 +359,8 @@ export const faqCategoriesNl: FaqCategory[] = [
         a: "Pascal Courbois — Duitser uit de grensregio Limburg, al ruim vijf jaar in Nederland. Meer dan 20 jaar praktijk in IT, commercie en sales. Advies in het Duits en Nederlands, uitsluitend B2B.",
       },
       {
-        q: "Wat betekent „chat it. Automate it.“?",
-        a: "Chat: eerste advies en kwalificatie via de NeXify AI-chat plus duidelijke communicatie. Automate: terugkerende processen, offertes, follow-ups en productieklare agenten — met guardrails, goedkeuringen en logging.",
+        q: "Wat betekent „AUTOMATE IT.“?",
+        a: "De claim staat voor de kern van het aanbod: terugkerende processen, offertes, follow-ups en productieklare agenten — geautomatiseerd met guardrails, goedkeuringen en logging. Het eerste advies geeft de NeXify AI-chat.",
       },
       {
         q: "Voor welke branches werkt NeXify AI?",
@@ -663,7 +663,7 @@ export const faqCategoriesEn: FaqCategory[] = [
     items: [
       {
         q: "What is NeXify AI?",
-        a: "NeXify AI by NeXify — chat it. Automate it. — is the brand for premium websites, online shops, web apps and AI automation. One experienced professional owns concept through handover; modern AI tools accelerate delivery and review. Primary market: German-speaking DACH; office in Venlo (NL).",
+        a: "NeXify AI by NeXify — AUTOMATE IT. — is the brand for premium websites, online shops, web apps and AI automation. One experienced professional owns concept through handover; modern AI tools accelerate delivery and review. Primary market: German-speaking DACH; office in Venlo (NL).",
       },
       {
         q: "How does NeXify AI differ from a classic agency?",
@@ -678,7 +678,7 @@ export const faqCategoriesEn: FaqCategory[] = [
         a: "Pascal Courbois — German from the Limburg border region, based in the Netherlands for 5+ years. 20+ years in IT, commerce and sales. Advice in German and Dutch, B2B only.",
       },
       {
-        q: "What does “chat it. Automate it.” mean?",
+        q: "What does “AUTOMATE IT.” mean?",
         a: "Chat: first advice and qualification via the NeXify AI chat plus clear communication. Automate: recurring processes, quotes, follow-ups and production-ready agents — with guardrails, approvals and logging.",
       },
       {
