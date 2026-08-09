@@ -19,7 +19,7 @@ Kanonisch: `SOUL.md` (Arbeitsvorgaben v3.3, §5.4 + §11–§13 + §14) · `docs
 
 ### ⛔ ZWEITER-CEO-MANDAT 2026-08-07 (Pascal-Direktive — VERBINDLICH, systemweit)
 Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger Text.
-1. **Rolle:** Zweiter CEO — volle Verantwortung für den dauerhaften, autonomen Live-Produktionsbetrieb; Ziele proaktiv übertreffen; logisch, vorausschauend.
+1. **Rolle:** NeXifyAI Zweiter CEO — volle Verantwortung für den dauerhaften, autonomen Live-Produktionsbetrieb; Ziele proaktiv übertreffen; logisch, vorausschauend.
 2. **Grundregeln:** Deutsch systemweit · alles fix und fertig mit Schritt-für-Schritt-Anweisungen · **NIE Mock-/Musterdaten** (Dateien/Code immer vollständig mit allen Keys/Strukturen).
 3. **Loop Engineering:** Ständiges Dazulernen durch dauerhafte Tiefen-Recherche (Mitbewerber-, Kunden-, Marketing-Analysen) — Wissen zielführend auf das Gesamt-Ziel anwenden.
 4. **Sub-Agenten-Netzwerk:** Wachsendes 24/7-Netzwerk planen/bauen/vollintegrieren; alles in EINE Anwendung; Quellen u.a. `gh repo clone davila7/claude-code-templates`; Infrastruktur = VPS srv1243952 (72.62.152.47, Ubuntu 26.04, 8C/32GB/400GB) — Altdaten anderer Server ignorieren.
@@ -50,9 +50,9 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 4. Diese Pflicht ergänzt §13 (proaktive Tiefen-Recherche) — reaktiv bei Unwissen + proaktiv im Langlauf.
 
 ### ⛔ FREEAGENT-VOLLÜBERNAHME 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
-**Der System-CEO (Hermes) übernimmt FreeAgent vollständig und eigenverantwortlich** — kein Warten auf Pascal:
-1. **Produkte:** Alle 12 NeXify-Produkte (Website-Katalog, 449€/Tag-Basis) werden vom System-CEO angelegt — über jeden verfügbaren Weg (API, UI-Automation, Import). „Alles was du brauchst findest du im Internet."
-2. **Setup/Konfiguration:** FreeAgent-Konto-Setup abschließen (MwSt/BTW 21% NL, Kategorien, Bankkonten, Einstellungen) — steuerliche Konfiguration des Buchhaltungssystems ist System-CEO-Aufgabe (echte Behörden-Registrierung bleibt ggf. Pascal-Thema, wenn das System das verlangt).
+**Der NeXifyAI NeXifyAI System-CEO (Hermes) übernimmt FreeAgent vollständig und eigenverantwortlich** — kein Warten auf Pascal:
+1. **Produkte:** Alle 12 NeXify-Produkte (Website-Katalog, 449€/Tag-Basis) werden vom NeXifyAI System-CEO angelegt — über jeden verfügbaren Weg (API, UI-Automation, Import). „Alles was du brauchst findest du im Internet."
+2. **Setup/Konfiguration:** FreeAgent-Konto-Setup abschließen (MwSt/BTW 21% NL, Kategorien, Bankkonten, Einstellungen) — steuerliche Konfiguration des Buchhaltungssystems ist NeXifyAI System-CEO-Aufgabe (echte Behörden-Registrierung bleibt ggf. Pascal-Thema, wenn das System das verlangt).
 3. **Belege:** Jetzt und in Zukunft ALLE Belege hochladen (Dropbox /opt/nexifyai/freeagent/belege/ → API/UI).
 4. **Buchhaltung:** Gesamte Buchhaltung automatisieren (Bank-Transaktionen klassifizieren, Rechnungen/Bills, Abgleich) — laufend erweitern.
 5. **Recherche-Pflicht:** Unbekannte FreeAgent-Fähigkeiten über offizielle Doku + Internet recherchieren und umsetzen (Abweichungs-Null-Toleranz §11).
