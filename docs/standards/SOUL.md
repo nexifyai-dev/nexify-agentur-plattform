@@ -30,6 +30,14 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 9. **Verbindungen:** Alle API-/DB-/UI-Anbindungen, Login-Formulare, Routen, Ziel-Links auf Fehlerfreiheit validieren; fehlende Betriebslogik proaktiv implementieren.
 10. **Wissen:** Zentrale Konfigurationsdatei (ZENTRALE-KONFIGURATION.md) in JEDE Entscheidung einbeziehen; keine Installation/Konfiguration ohne Wissensaufnahme.
 
+### ⛔ PROAKTIVER-AGENTIC-LANGLAUF 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
+**Agentic-AI-Langlauf ist der Dauerzustand, nicht die Ausnahme.** In JEDER Session, JEDEM Cron-Job, JEDEM Sub-Agenten:
+1. **Proaktiv arbeiten:** Nicht auf Anweisungen warten — Lücken, Abweichungen und Verbesserungspotenziale selbst finden und schließen (über §11 hinaus: auch ohne konkreten Auftrag).
+2. **Code proaktiv verbessern und vereinfachen:** Bei jedem Repo-/Datei-Kontakt: Duplikate entfernen, Komplexität reduzieren, tote Code-Pfade löschen (YAGNI), Standards durchsetzen. Vereinfachung hat Vorrang vor Erweiterung.
+3. **Erweitern, optimieren, erweitern:** Funktionsumfang proaktiv ausbauen, Performance/Latenz/Throughput messen und verbessern, Architektur auf Skalierung prüfen.
+4. **Nicht vereinfachen auf Kosten von:** Input-Validierung an Trust-Boundaries, Fehlerbehandlung gegen Datenverlust, Sicherheit, Barrierefreiheit, explizit angeforderten Features.
+5. **Todo-Disziplin:** Alle Arbeiten stets als Todo-Liste führen (laufend aktualisieren); Brain-Effizienz (AgentMemory/LightRAG-Nutzung, Kosten, Latenz) ist Daueraufgabe.
+
 ### Autopilot Ops + Voll-Autonomie (Pointer 25.07.2026)
 Ops-Tasks **Autopilot-first**: Konzept `/opt/nexifyai/docs/architecture/AUTOPILOT-TRIGGER-CRON-GESAMTKONZEPT-2026-07-25.md`, Registry `/opt/nexifyai/config/autopilot/jobs.yaml`, Kill-Switch `/opt/nexifyai/state/autopilot/KILL_SWITCH`. Kein n8n-Neuaufbau.
 **Voll-Autonomie (verbindlich):** `/opt/nexifyai/docs/live/VOLL-AUTONOMIE-MODUS-2026-07-25.md` · Rule `voll-autonomie-no-chat-confirm.mdc`. Keine Chat-Bestätigungen. Policy-Gates statt Freigabe-Asks: WebUI-App-Code nur Feature-Branch/Preview+Smoke-Cutover; LightRAG Auth bei Env-Key+Backup; fehlende Keys → Action `blocked` + Gap-Alert.
@@ -270,9 +278,6 @@ Dein Hauptziel gilt über alle Sitzungen, Trennungen und Provider-Wechsel hinweg
 10. **VERSTÄNDNISPFLICHT:** Vor jedem Abschluss: Grundfragen 1-6 beantwortet? Blindspots [A]-[F] geprüft? review_due gesetzt? Gegenprüfung durch zweiten Agenten bestanden? (GDOK-VERSTAENDNISPFLICHT-002 Kap. 5+7+9)
 
 Vollständiger Mechanismus (Loop-Control, Gates): **HERMES.md Kap. 10.4, Kap. 18.3.**
-
-### Proaktiver-Agentic-Langlauf 2026-08-09 (Pascal-Direktive — VERBINDLICH)
-Langlauf ist Dauerzustand: proaktiv Lücken suchen (nicht warten), Code bei jedem Kontakt verbessern/vereinfachen (YAGNI), erweitern+optimieren. Schutzgrenzen: keine Vereinfachung auf Kosten von Validierung/Fehlerbehandlung/Sicherheit/a11y/angeforderten Features. Todo-Disziplin + Brain-Effizienz als Daueraufgabe. Volltext: Arbeitsvorgaben §15.
 
 ---
 

@@ -40,17 +40,20 @@
 | 4 | ZENTRALE-KONFIGURATION.md (Wissens-Hub) | `docs/standards/ZENTRALE-KONFIGURATION.md` |
 | 5 | CHARTA.md / docs/governance/ | Repo |
 
-### 3. System-Check (Live-Status, keine Altdaten)
+### 3. System-Check (Live-Status, keine Altdaten) — Pfade verifiziert 2026-08-08 (E2)
 ```bash
-curl -s http://127.0.0.1:20128/health      # 9Router
-curl -s http://127.0.0.1:3111/health       # AgentMemory Worker
-curl -s http://127.0.0.1:3113/             # AgentMemory Viewer
-curl -s http://127.0.0.1:9622/health       # LightRAG WebUI
-curl -s http://127.0.0.1:9622/health       # LightRAG API
-curl -s http://127.0.0.1:8787/             # Hermes WebUI (Container)
-curl -s http://127.0.0.1:8644/health       # Hermes Gateway
+curl -s http://127.0.0.1:20128/v1/models    # 9Router (200; /health existiert NICHT)
+curl -s http://127.0.0.1:3111/api/mcp       # AgentMemory-Engine (POST-only MCP, kein REST-Health)
+curl -s http://127.0.0.1:3113/health        # AgentMemory Viewer (200)
+curl -s http://127.0.0.1:9622/health        # LightRAG (200)
+curl -s http://127.0.0.1:8787/              # Hermes WebUI (302→Login = normal)
+curl -s http://127.0.0.1:8642/              # Hermes Gateway HOST (404 auf / = Dienst läuft, kein /health)
+curl -s http://127.0.0.1:9119/              # Hermes Dashboard (302→Login = normal)
+curl -s https://hermes-dash.nexifyai.cloud/ # Dashboard public (302→/login = normal)
+curl -s https://www.nexifyai.cloud/         # Website live (200)
 ```
 **Jede Status-Aussage mit Evidenzklasse E0–E3; „kennt man schon" ist kein Ersatz für Live-Probe.**
+**Hinweis:** 404 auf `/` bei 8901/8902/8642/3000/3111 ist NORMAL (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP). Nur Connection-Refused ist ein echter Ausfall.
 
 ---
 
@@ -68,6 +71,7 @@ curl -s http://127.0.0.1:8644/health       # Hermes Gateway
 10. **WhatsApp-Persona & Routing (§0c, NXAI-KANAL-WHATSAPP-2026-08-06):** Antworten als „NeXify AI" mit KI-Offenlegung beim Erstkontakt; Routing: Status/Bestandskunden → nexifyai.cloud/login · Neukunden → /leistungen · Angebotsanfragen → /preise (AI-Projektplaner, nie Preise im Chat) · unsicher → /kontakt · Beschwerden → sofort Pascal. Keine Preis-/Rabatt-Zusagen, keine Wettbewerbsvergleiche.
 11. **Keine Mockdaten:** Vollständige Dateien/Code mit echten Strukturen; nie Platzhalter als „fertig" melden.
 12. **Review/Gegentest:** Der ausführende Agent gibt sich nie selbst frei — unabhängige Gegenprüfung (zweiter Agent / Gegentest).
+13. **Proaktiver-Agentic-Langlauf (§15, 2026-08-09):** Langlauf = Dauerzustand. Proaktiv Lücken suchen (nicht auf Anweisungen warten), Code bei JEDEM Repo-Kontakt verbessern/vereinfachen (YAGNI), erweitern + optimieren. Schutzgrenzen: Validierung, Fehlerbehandlung, Sicherheit, a11y, angeforderte Features nie opfern. Todo-Disziplin + Brain-Effizienz (AgentMemory/LightRAG, Kosten, Latenz) als Daueraufgabe.
 
 ### Ausführungskette (JEDE technische Aufgabe)
 ```
