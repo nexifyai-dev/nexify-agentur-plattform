@@ -7,7 +7,7 @@ import { flattenFaqItems } from "@/lib/content/faq-categories";
 export const metadata = pageMetadata({
   title: "FAQ — Häufige Fragen zu NeXify AI, Preisen, KI & DSGVO",
   description:
-    "Umfassende FAQ für DACH-KMU: Was ist NeXify AI? Tagessatz 449 € netto, Leistungen, KI-Agenten, Datenschutz/DSGVO, Onboarding, Venlo-Sitz und warum nicht nur ChatGPT.",
+    "FAQ für DACH-KMU: Was ist NeXify AI? Tagessatz 449 € netto, Leistungen, KI-Agenten, Datenschutz/DSGVO, Onboarding und Venlo-Sitz.",
   path: "/faq",
   ogTitle: "FAQ — Preise, KI, DSGVO & Arbeitsweise | NeXify AI",
   ogDescription:

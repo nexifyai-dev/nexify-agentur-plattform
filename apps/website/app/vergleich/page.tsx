@@ -20,7 +20,7 @@ import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Vergleich — Klassische IT vs NeXify AI (449 € Tagessatz)",
   description:
-    "Klassische IT-Tagessätze oft 1.000–1.500 € — NeXify AI: 449 € netto/Tag, GitHub/GitLab-Qualität, persönlich verantwortet. Transparenter Vergleich für KMU in DACH + NL.",
+    "Klassische IT-Tagessätze oft 1.000–1.500 € — NeXify AI: 449 € netto/Tag, persönlich verantwortet. Transparenter Vergleich für KMU in DACH + NL.",
   path: "/vergleich",
   ogTitle: "Klassische IT vs NeXify AI — ehrlicher Preisvergleich",
   ogDescription:

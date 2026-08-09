@@ -21,7 +21,7 @@ import { breadcrumbListJsonLd, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Erfahrungen mit NeXify AI — Referenzen, Projekte & ehrliche Einblicke",
   description:
-    "Ehrliche Einblicke in Projekte von NeXify AI: Websites, Onlineshops und AI-Automatisierung. Referenzen auf Anfrage, keine Fake-Reviews, keine gekauften Bewertungen.",
+    "Ehrliche Einblicke in Projekte von NeXify AI: Websites, Onlineshops und AI-Automatisierung. Referenzen auf Anfrage, keine Fake-Reviews.",
   path: "/erfahrungen",
   ogTitle: "Erfahrungen mit NeXify AI — ehrliche Projekteinblicke",
   ogDescription:
