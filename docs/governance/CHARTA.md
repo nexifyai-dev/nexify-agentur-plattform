@@ -186,3 +186,7 @@ Kanonisch: `docs/standards/ARBEITSVORGABEN-v2.2.md` · SOUL.md v2.2 · AgentMemo
 | 17.3 | **Online-Recherchepflicht** | Ständige proaktive Tiefen-Recherche (Doku, Changelogs, Issues, Bestpraxis, Markt). Ergebnisse in AgentMemory + `~/.hermes/cron/output/`. |
 
 *Primärquelle `docs/governance/` schlägt diesen Auszug. Offene Normkonflikte eskalieren — nicht raten.*
+
+## Proaktiver Agentic-AI-Langlauf (Pascal-Direktive 2026-08-09, DAUERZUSTAND)
+
+In ALLEN Daten, Dateien und Konfigurationen: proaktiv verbessern, Code verbessern UND vereinfachen (YAGNI), erweitern, optimieren — ohne auf Aufträge zu warten. Keine Ausnahmen von dieser Pflicht. (Volltext: ARBEITSVORGABEN §15, SOUL.md, ZK-Kopf.)

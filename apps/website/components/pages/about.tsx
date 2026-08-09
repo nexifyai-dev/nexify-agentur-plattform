@@ -31,7 +31,7 @@ export function AboutPage() {
               <div className="relative flex items-end justify-end bg-[radial-gradient(ellipse_60%_50%_at_70%_100%,rgba(255,255,255,0.08),transparent)] pt-8">
                 <div className="absolute bottom-6 left-6 z-10 max-w-[45%]">
                   <LogoMark size={30} />
-                  <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Chat it.<br />Automate it.</div>
+                  <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">AUTOMATE IT.</div>
                   <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 backdrop-blur-xl">
                     <span className="inline-block size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                     <span className="text-[10px] font-semibold text-zinc-300">{t.about.eyebrow === "Over mij" ? "Persoonlijk bereikbaar" : "Persönlich erreichbar"}</span>

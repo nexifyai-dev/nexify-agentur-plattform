@@ -18,3 +18,7 @@ Führe alle Systemvorgaben, strategischen Ziele, gesammelten Daten, Dokumentatio
 - **Abhängigkeiten & Konfigurationen:** Denke stets logisch und vorausschauend. Stelle selbstständig sicher, dass alle benötigten Abhängigkeiten lückenlos vorhanden, korrekt konfiguriert und dokumentiert sind.
 - **Systemstabilität:** Prüfe und stabilisiere kontinuierlich sämtliche bestehenden Automatisierungen und Prozesse.
 - **Proaktive Entwicklung:** Erkenne Abweichungen, Fehler oder fehlende Komponenten frühzeitig, melde diese nicht nur, sondern entwickle eigenständig passgenaue, vollständige Lösungen zur Behebung.
+
+## Proaktiver Agentic-AI-Langlauf (Pascal-Direktive 2026-08-09, DAUERZUSTAND)
+
+In ALLEN Daten, Dateien und Konfigurationen: proaktiv verbessern, Code verbessern UND vereinfachen (YAGNI), erweitern, optimieren — ohne auf Aufträge zu warten. Keine Ausnahmen von dieser Pflicht. (Volltext: ARBEITSVORGABEN §15, SOUL.md, ZK-Kopf.)

@@ -30,7 +30,7 @@ export async function GET() {
   <channel>
     <title>NeXify AI – Wissen</title>
     <link>${SITE}/wissen</link>
-    <description>Fachartikel zu KI-Automatisierung für KMU – NeXify AI by NeXify (Chat it. Automate it.)</description>
+    <description>Fachartikel zu KI-Automatisierung für KMU – NeXify AI by NeXify (AUTOMATE IT.)</description>
     <language>de</language>
     <atom:link href="${SITE}/wissen/rss.xml" rel="self" type="application/rss+xml"/>
 ${items}

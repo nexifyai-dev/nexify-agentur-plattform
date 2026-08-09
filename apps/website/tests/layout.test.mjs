@@ -22,7 +22,7 @@ test('Layout Component - has correct viewport settings', () => {
 test('Layout Component - has correct JSON-LD structured data', () => {
   const jsonLd = {
     "@type": "ProfessionalService",
-    name: "NeXifyAI by NeXify – Chat it. Automate it.",
+    name: "NeXifyAI by NeXify",
     areaServed: ["DE", "AT", "CH", "NL"],
   };
   assert.equal(jsonLd["@type"], "ProfessionalService");
