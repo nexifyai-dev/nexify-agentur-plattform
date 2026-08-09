@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puls · NeXifyAI Lead Dashboard</title>
+<link rel="icon" href="/favicon.svg">
+<style>
+  :root {
+    --bg: #09090b;
+    --panel: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --silver: #d4d4d8;
+    --silver-2: #a1a1aa;
+    --muted: #71717a;
+    --green: #34d399;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box }
+  body {
+    background: var(--bg);
+    color: #fafafa;
+    font-family: "Inter Tight", "IBM Plex Sans", sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 24px }
+  
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    backdrop-filter: blur(20px);
+    position: sticky; top:0; z-index:100;
+    background: rgba(9,9,11,0.85);
+  }
+  .header-inner { display:flex; align-items:center; justify-content:space-between }
+  .brand { display:flex; align-items:center; gap:12px; cursor:pointer }
+  .brand svg { width:28px; height:28px }
+  .brand h1 { font-size:18px; font-weight:600; color:var(--silver) }
+  .brand span { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.2em }
+  .header-actions { display:flex; gap:12px }
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--silver);
+    transition: all 0.2s;
+  }
+  .btn:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15) }
+  .btn-primary {
+    background: linear-gradient(135deg, rgba(212,212,216,0.15), rgba(161,161,170,0.08));
+    border-color: rgba(212,212,216,0.2);
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .stat-value { font-size: 32px; font-weight: 700; color: var(--silver); margin-bottom: 4px }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em }
+  .stat-delta { font-size: 12px; margin-top: 4px }
+  .stat-delta.up { color: var(--green) }
+  .stat-delta.down { color: var(--red) }
+  
+  .section { margin: 40px 0 }
+  .section-header { margin-bottom: 24px }
+  .section-header h2 { font-size: 20px; font-weight: 600; color: var(--silver) }
+  .section-header p { font-size: 13px; color: var(--muted); margin-top: 4px }
+  
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .pipeline-stage {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .pipeline-stage.active { border-color: var(--blue); background: rgba(59,130,246,0.05) }
+  .pipeline-stage .icon { font-size: 28px; margin-bottom: 8px }
+  .pipeline-stage .name { font-size: 13px; font-weight: 600; color: var(--silver) }
+  .pipeline-stage .count { font-size: 24px; font-weight: 700; color: var(--silver-2); margin-top: 4px }
+  .pipeline-stage .label { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-top: 4px }
+  
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .leads-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+  }
+  .leads-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    color: var(--silver-2);
+  }
+  .leads-table tr:hover td { background: rgba(255,255,255,0.02) }
+  .lead-name { font-weight: 600; color: var(--silver) }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+  .badge-new { color: var(--blue); border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.08) }
+  .badge-scored { color: var(--amber); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08) }
+  .badge-ready { color: var(--green); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08) }
+  .badge-sent { color: var(--silver); border-color: rgba(212,212,216,0.3); background: rgba(212,212,216,0.08) }
+  
+  .score-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    width: 80px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .score-high { background: var(--green) }
+  .score-mid { background: var(--amber) }
+  .score-low { background: var(--red) }
+  
+  .activity-feed { 
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none }
+  .activity-time { font-size: 11px; color: var(--muted); min-width: 48px; font-variant-numeric: tabular-nums }
+  .activity-text { font-size: 13px; color: var(--silver-2) }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3 }
+  .empty-state h3 { font-size: 16px; color: var(--silver-2); margin-bottom: 8px }
+  .empty-state p { font-size: 13px; max-width: 400px; margin: 0 auto }
+  
+  .refresh-indicator {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green) }
+  .dot.error { background: var(--red) }
+  
+  @media(max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr) }
+    .pipeline { grid-template-columns: repeat(3, 1fr) }
+    .leads-table { font-size: 12px }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand" onclick="window.location='/'">
+      <svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lg" x1="4" y1="4" x2="44" y2="44"><stop offset="0" stop-color="#fafafa"/><stop offset="0.45" stop-color="#a1a1aa"/><stop offset="0.7" stop-color="#e4e4e7"/><stop offset="1" stop-color="#71717a"/></linearGradient></defs><path d="M24 2.5 42.5 13v22L24 45.5 5.5 35V13L24 2.5Z" stroke="url(#lg)" stroke-width="1.6"/><circle cx="24" cy="24" r="3.4" fill="url(#lg)"/></svg>
+      <div>
+        <h1>Ne<span style="color:#a1a1aa">X</span>ify AI</h1>
+        <span>Puls · Lead Dashboard</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="refresh-indicator">
+        <div class="dot" id="status-dot"></div>
+        <span id="last-refresh">—</span>
+      </div>
+      <button class="btn" onclick="refreshAll()">Aktualisieren</button>
+      <button class="btn btn-primary" onclick="startDiscovery()">Neue Suche</button>
+      <button class="btn" onclick="window.location='/'">Command Center</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-total">0</div>
+      <div class="stat-label">Leads gesamt</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-scored">0</div>
+      <div class="stat-label">Gescoret</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-ready">0</div>
+      <div class="stat-label">Outreach-ready</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-sent">0</div>
+      <div class="stat-label">E-Mails versendet</div>
+    </div>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Lead Pipeline</h2>
+      <p>Automatische Discovery → Enrichment → Scoring → Demo → Outreach</p>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-stage active" id="stage-discover">
+        <div class="icon">🔍</div>
+        <div class="name">Discovery</div>
+        <div class="count">—</div>
+        <div class="label">GPT Researcher</div>
+      </div>
+      <div class="pipeline-stage" id="stage-enrich">
+        <div class="icon">📊</div>
+        <div class="name">Enrichment</div>
+        <div class="count">—</div>
+        <div class="label">Daten anreichern</div>
+      </div>
+      <div class="pipeline-stage" id="stage-score">
+        <div class="icon">⭐</div>
+        <div class="name">Scoring</div>
+        <div class="count">—</div>
+        <div class="label">Qualität bewerten</div>
+      </div>
+      <div class="pipeline-stage" id="stage-demo">
+        <div class="icon">🎨</div>
+        <div class="name">Demo</div>
+        <div class="count">—</div>
+        <div class="label">Landing Page</div>
+      </div>
+      <div class="pipeline-stage" id="stage-outreach">
+        <div class="icon">📧</div>
+        <div class="name">Outreach</div>
+        <div class="count">—</div>
+        <div class="label">Approval Gate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leads Table -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Aktuelle Leads</h2>
+      <p>Neueste Discovery-Ergebnisse mit Score und Status</p>
+    </div>
+    <div id="leads-container">
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>Keine Leads vorhanden</h3>
+        <p>Starte eine neue Discovery-Suche, um potenzielle Kunden zu finden. Der Späher durchsucht Websites und identifiziert Unternehmen ohne KI-Chatbot.</p>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="startDiscovery()">Discovery starten</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Pipeline-Aktivität</h2>
+      <p>Letzte Pipeline-Runs und Status-Updates</p>
+    </div>
+    <div class="activity-feed" id="activity-feed">
+      <div class="empty-state" style="padding:32px">
+        <p>Wird geladen...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services Status -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Integrierte Services</h2>
+    </div>
+    <div id="services-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+      <div class="stat-card"><div class="stat-label">GPT Researcher</div><div class="stat-value" style="font-size:14px" id="svc-gpt">—</div></div>
+      <div class="stat-card"><div class="stat-label">Supabase</div><div class="stat-value" style="font-size:14px" id="svc-supabase">—</div></div>
+      <div class="stat-card"><div class="stat-label">agentmemory</div><div class="stat-value" style="font-size:14px" id="svc-memory">—</div></div>
+      <div class="stat-card"><div class="stat-label">LightRAG</div><div class="stat-value" style="font-size:14px" id="svc-lightrag">—</div></div>
+      <div class="stat-card"><div class="stat-label">Paperclip</div><div class="stat-value" style="font-size:14px" id="svc-paperclip">—</div></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const API = '/api/leads';
+const SPAETHER = 'http://localhost:8900';
+
+async function refreshAll() {
+  await Promise.all([loadStats(), loadLeads(), loadPipelineRuns(), loadServices()]);
+  document.getElementById('last-refresh').textContent = new Date().toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch(`${SPAETHER}/api/leads/`);
+    const data = await r.json();
+    const leads = data.leads || [];
+    document.getElementById('stat-total').textContent = data.total || leads.length;
+    document.getElementById('stat-scored').textContent = leads.filter(l => l.score > 0).length;
+    document.getElementById('stat-ready').textContent = leads.filter(l => l.status === 'enriched' || l.status === 'ready').length;
+    document.getElementById('stat-sent').textContent = leads.filter(l => l.status === 'contacted').length;
+  } catch(e) {
+    console.error('Stats failed:', e);
+  }
+}
+
+function scoreColor(score) {
+  if (score >= 70) return 'score-high';
+  if (score >= 40) return 'score-mid';
+  return 'score-low';
+}
+
+function statusBadge(status) {
+  const map = {
+    'new': 'badge-new',
+    'discovered': 'badge-new',
+    'scored': 'badge-scored',
+    'enriched': 'badge-scored',
+    'ready': 'badge-ready',
+    'contacted': 'badge-sent',
+  };
+  return map[status] || 'badge-new';
+}
+
+async function loadLeads() {
+  try {
+    const r = await fetch(`${SPAETHER}/api/leads/?limit=20`);
+    const data = await r.json();
+    const leads = data.leads || [];
+    
+    if (!leads.length) {
+      document.getElementById('leads-container').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🔍</div>
+          <h3>Keine Leads vorhanden</h3>
+          <p>Starte eine neue Discovery-Suche, um potenzielle Kunden zu finden.</p>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="startDiscovery()">Discovery starten</button>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('leads-container').innerHTML = `
+      <table class="leads-table">
+        <thead>
+          <tr>
+            <th>Unternehmen</th>
+            <th>Region</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Gefunden</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${leads.map(l => `
+            <tr>
+              <td><span class="lead-name">${l.company_name || l.name || l.business_name || 'Unbekannt'}</span></td>
+              <td>${l.region || l.city || '—'}</td>
+              <td>
+                <span style="margin-right:8px">${l.score || 0}</span>
+                <span class="score-bar"><span class="score-fill ${scoreColor(l.score||0)}" style="width:${Math.min(l.score||0, 100)}%"></span></span>
+              </td>
+              <td><span class="badge ${statusBadge(l.status)}">${l.status || 'new'}</span></td>
+              <td>${l.created_at ? new Date(l.created_at).toLocaleDateString('de-DE') : '—'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    console.error('Leads failed:', e);
+  }
+}
+
+async function loadPipelineRuns() {
+  try {
+    const r = await fetch(`${SPAETHER}/api/pipeline/runs`);
+    const data = await r.json();
+    const runs = data.runs || [];
+    
+    const feed = document.getElementById('activity-feed');
+    if (!runs.length) {
+      feed.innerHTML = '<div class="empty-state" style="padding:32px"><p>Keine Pipeline-Aktivität</p></div>';
+      return;
+    }
+    
+    feed.innerHTML = runs.slice(0, 10).map(r => {
+      const time = r.created_at ? new Date(r.created_at).toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'}) : '—';
+      const statusIcon = {completed:'✅', failed:'❌', running:'🔄'}[r.status] || '⏳';
+      const phase = {discover:'Discovery', enrich:'Enrichment', demo:'Demo', outreach:'Outreach'}[r.phase] || r.phase;
+      const error = r.status === 'failed' ? ` — ${(r.error_message||'').substring(0, 80)}` : '';
+      return `<div class="activity-item">
+        <span class="activity-time">${time}</span>
+        <span class="activity-text">${statusIcon} <strong style="color:var(--silver)">${phase}</strong>: ${r.status}${error}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.error('Pipeline runs failed:', e);
+  }
+}
+
+async function loadServices() {
+  try {
+    const r = await fetch(`${SPAETHER}/api/pipeline/status`);
+    const data = await r.json();
+    const comps = data.components || {};
+    for (const [name, status] of Object.entries(comps)) {
+      const el = document.getElementById(`svc-${name.replace('_','')}`);
+      if (el) {
+        el.textContent = status === 'connected' ? 'Verbunden' : status;
+        el.style.color = status === 'connected' ? 'var(--green)' : 'var(--red)';
+      }
+    }
+    document.getElementById('status-dot').className = data.status === 'ok' ? 'dot' : 'dot error';
+  } catch(e) {
+    document.getElementById('status-dot').className = 'dot error';
+  }
+}
+
+async function startDiscovery() {
+  const industry = prompt('Branche (z.B. Automotive, E-Commerce, Gastronomie):', 'Automotive');
+  if (!industry) return;
+  const region = prompt('Region (z.B. Berlin, München, Deutschland):', 'Berlin');
+  if (!region) return;
+  
+  try {
+    const r = await fetch(`${SPAETHER}/api/pipeline/discover`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ industry, region, max_results: 10 })
+    });
+    const result = await r.json();
+    alert(`Discovery gestartet! Status: ${result.status}\nBranche: ${result.industry}\nRegion: ${result.region}\n\nDie Ergebnisse erscheinen in wenigen Minuten.`);
+    setTimeout(refreshAll, 5000);
+  } catch(e) {
+    alert('Fehler beim Starten der Discovery: ' + e.message);
+  }
+}
+
+// Init
+refreshAll();
+setInterval(refreshAll, 30000);
+</script>
+</body>
+</html>

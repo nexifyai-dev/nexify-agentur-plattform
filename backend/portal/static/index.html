@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeXifyAI — Unified Command Center v3</title>
+<link rel="stylesheet" href="/nexifyai-tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --card: #18181b; --border: #27272a; --text: var(--white); --green: var(--success); --orange: var(--warning); --blue: var(--info); --red: var(--error); --purple: #a855f7; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body,'Manrope',system-ui,sans-serif); background: var(--bg); color: var(--text); padding: 1rem; font-size: 14px; }
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:.4rem; }
+.header h1 { font-size:1.3rem; font-weight:700; }
+.header .sub { color:var(--muted); font-size:.78rem; }
+.badges { display:flex; gap:.3rem; flex-wrap:wrap; }
+.badge { padding:.2rem .5rem; border-radius:5px; font-size:.65rem; font-weight:600; }
+.badge.green { background:rgba(34,197,94,.15); color:var(--green); }
+.badge.blue { background:rgba(59,130,246,.15); color:var(--blue); }
+.badge.orange { background:rgba(245,158,11,.15); color:var(--orange); }
+.badge.purple { background:rgba(168,85,247,.15); color:var(--purple); }
+.badge.red { background:rgba(239,68,68,.15); color:var(--red); }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:.7rem; margin-bottom:.7rem; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1rem; }
+.card h3 { font-size:.7rem; color:var(--muted); margin-bottom:.35rem; text-transform:uppercase; letter-spacing:.05em; }
+.val { font-size:1.5rem; font-weight:700; }
+.val.g { color:var(--green); } .val.o { color:var(--orange); } .val.b { color:var(--blue); } .val.r { color:var(--red); } .val.p { color:var(--purple); }
+.row { display:flex; justify-content:space-between; padding:.28rem 0; border-bottom:1px solid var(--border); font-size:.76rem; }
+.row:last-child { border-bottom:none; }
+.tag { display:inline-block; padding:.12rem .4rem; border-radius:3px; font-size:.65rem; font-weight:500; }
+.tag.g { background:rgba(34,197,94,.12); color:var(--green); }
+.tag.o { background:rgba(245,158,11,.12); color:var(--orange); }
+.tag.b { background:rgba(59,130,246,.12); color:var(--blue); }
+.tag.r { background:rgba(239,68,68,.12); color:var(--red); }
+.tag.p { background:rgba(168,85,247,.12); color:var(--purple); }
+.mt1 { margin-top:.6rem; }
+.bar { height:4px; border-radius:2px; background:var(--border); margin:.3rem 0; overflow:hidden; }
+.bar-fill { height:100%; border-radius:2px; transition:width .5s; }
+.flex { display:flex; flex-wrap:wrap; gap:.2rem; }
+.loading { text-align:center; padding:2rem; color:var(--muted); }
+.error { color:var(--red); }
+#ts { font-size:.7rem; color:var(--muted); text-align:center; margin-top:.5rem; }
+.legend { font-size:.65rem; color:var(--muted); display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; }
+.legend span { display:flex; align-items:center; gap:.2rem; }
+.dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+
+@media (max-width: 768px) {
+  body { padding: 12px !important; }
+  .grid { grid-template-columns: 1fr !important; gap: 12px !important; display: flex !important; flex-direction: column !important; }
+  .card { padding: 16px !important; margin: 8px 0 !important; }
+  .container { width: 100% !important; padding: 12px !important; }
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  header, nav { flex-direction: column !important; align-items: stretch !important; }
+  table { display: block !important; overflow-x: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div><h1>NeXifyAI</h1><div class="sub" id="subhead">Unified Command Center v3</div></div>
+  <div class="badges" id="badges">
+    <span class="badge green">● Laden...</span>
+  </div>
+</div>
+<div id="app"><div class="loading">Lade Systemdaten...</div></div>
+<div id="ts"></div>
+<div class="legend" id="legend"></div>
+
+<script>
+function tag(v, goodVals=['ok','healthy','active','true','clean','running']) {
+  let c = 'o';
+  if (goodVals.includes(String(v).toLowerCase())) c = 'g';
+  else if (v === 0 || v === false || String(v).toLowerCase() === 'unreachable' || String(v).toLowerCase() === '?') c = 'o';
+  return `<span class="tag ${c}">${v}</span>`;
+}
+
+function bar(pct, color='g') { 
+  pct = Math.min(Math.max(pct||0,0),100);
+  const col = {g:'var(--green)',o:'var(--orange)',r:'var(--red)',b:'var(--blue)'};
+  return `<div class="bar"><div class="bar-fill" style="width:${pct}%;background:${col[color]||col.g}"></div></div>`;
+}
+
+async function load() {
+  const el = document.getElementById('app');
+  try {
+    const r = await fetch('/api/system/intelligence');
+    const d = await r.json();
+    const m = d.meta || {};
+    const ts = m.generated || '';
+    
+    document.getElementById('ts').textContent = 'Live: ' + (ts ? new Date(ts+'Z').toLocaleString('de-DE') : '?');
+    
+    // Badge counts
+    const valPassed = (d.validation||{}).passed || 0;
+    const valFailed = (d.validation||{}).failed || 0;
+    const valTotal = valPassed + valFailed;
+    const valBadge = valFailed === 0 ? 'green' : 'red';
+    const models = (d.ninerouter||{}).models || 0;
+    const leadsTotal = (d.leads||{}).total || 0;
+    const svcs = (d.services||{}).list || [];
+    const svcFail = (d.services||{}).failed_units || 0;
+    const svcBadge = svcFail === 0 ? 'green' : 'red';
+    const bg = (d.backups||{});
+    const bkAge = bg.latest_age_hours ? Math.round(bg.latest_age_hours) + 'h' : '?';
+    const bkBadge = bg.latest_age_hours && bg.latest_age_hours < 24 ? 'green' : 'orange';
+    const ssl = (d.ssl||{}).expiry || '?';
+    const sslBadge = ssl !== '?' ? 'green' : 'orange';
+    
+    document.getElementById('badges').innerHTML = `
+      <span class="badge ${valBadge}">● ${valPassed}/${valTotal}</span>
+      <span class="badge blue">● ${models} Models</span>
+      <span class="badge orange">● ${leadsTotal} Leads</span>
+      <span class="badge ${svcBadge}">● ${svcFail} Failed</span>
+      <span class="badge ${bkBadge}">● Backup ${bkAge}</span>
+      <span class="badge ${sslBadge}">● SSL ${ssl.slice(0,11)}</span>
+    `;
+    document.getElementById('subhead').textContent = `Unified Command Center v3 — ${d.docker.running} Container / ${d.system.uptime_days}d / ${d.ports.key_ports_up} Ports`;
+
+    const mem = d.system.memory_gb || {};
+    const disk = d.system.disk_gb || {};
+    const load = (d.system.load||[]).map(x => x.toFixed(1)).join('/');
+    const gitClean = (d.git||{}).clean || 0;
+    const gitDirty = (d.git||{}).dirty || 0;
+    const gitTotal = (d.git||{}).repos || 0;
+    const leadsByStatus = (d.leads||{}).by_status || {};
+    const leadsBySource = (d.leads||{}).by_source || {};
+    const lr = d.lightrag || {};
+    const gf = d.grafana || {};
+    const pm = d.prometheus || {};
+    const am = d.agentmemory || {};
+    const fc = d.firecrawl || {};
+    const aw = d.twenty || {};
+    const pp = d.paperclip || {};
+
+    el.innerHTML = `
+      <div class="grid">
+        <div class="card"><h3>🖥️ System</h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val g">${d.docker.running}</div>
+            <div style="font-size:.7rem;color:var(--muted)">Docker Container</div>
+          </div>
+          <div class="row mt1"><span>CPU</span><span>${d.system.cpus || '?'} Cores</span></div>
+          <div class="row"><span>RAM ${mem.used||'?'}G/${mem.total||'?'}G</span><span>${mem.pct||'?'}%</span></div>
+          ${bar(mem.pct, mem.pct > 80 ? 'r' : mem.pct > 60 ? 'o' : 'g')}
+          <div class="row"><span>Disk ${disk.used||'?'}G/${disk.total||'?'}G</span><span>${disk.pct||'?'}%</span></div>
+          ${bar(disk.pct, disk.pct > 80 ? 'r' : disk.pct > 60 ? 'o' : 'g')}
+          <div class="row"><span>Load</span><span>${load}</span></div>
+          <div class="row"><span>Uptime</span><span>${d.system.uptime_days}d</span></div>
+        </div>
+        <div class="card"><h3>📊 Services & Health</h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val ${svcFail === 0 ? 'g' : 'r'}">${svcs.length}</div>
+            <div style="font-size:.7rem;color:var(--muted)">Systemd Services</div>
+          </div>
+          ${svcs.map(s => `<div class="row"><span>${s.name}</span>${tag(s.status)}</div>`).join('')}
+          <div class="row mt1"><span>Failed Units</span>${tag(svcFail, [0])}</div>
+        </div>
+        <div class="card"><h3>🤖 AI Platform</h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val b">${models}</div>
+            <div style="font-size:.7rem;color:var(--muted)">Modelle via 9Router</div>
+          </div>
+          <div class="row mt1"><span>9Router Status</span>${tag((d.ninerouter||{}).ok ? 'active' : 'error')}</div>
+          <div class="row"><span>LightRAG</span>${tag(lr.status||'?')}</div>
+          <div class="row"><span>LR Version</span><span>${lr.version||'?'}</span></div>
+          <div class="row"><span>SPAether</span>${tag((d.spaether||{}).status||'?')}</div>
+          <div class="row"><span>Paperclip Issues</span><span>${pp.issues_total||0} (${pp.lead_issues||0} Lead)</span></div>
+          ${(d.cost||{}).models_available ? `<div class="row"><span>Cost Proxy</span><span>${d.cost.models_available} Models</span></div>` : ''}
+        </div>
+        <div class="card"><h3>📈 Monitoring</h3>
+          <div class="row"><span>Grafana</span>${tag(gf.status||'?')}</div>
+          <div class="row"><span>Grafana Version</span><span>${gf.version||'?'}</span></div>
+          <div class="row"><span>Prometheus</span><span>${pm.targets_up||0}/${pm.targets_total||0} targets</span></div>
+          ${bar(pm.targets_total ? Math.round(pm.targets_up/pm.targets_total*100) : 0, pm.targets_up === pm.targets_total ? 'g' : 'o')}
+          <div class="row mt1"><span>Firecrawl</span>${tag(fc.ok ? 'ok' : 'down')}</div>
+          <div class="row"><span>Twenty CRM</span>${tag(aw.alive ? 'alive' : 'down')}</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card"><h3>💼 Business — Leads</h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val ${leadsTotal > 0 ? 'g' : 'o'}">${leadsTotal}</div>
+            <div style="font-size:.7rem;color:var(--muted)">Erfasste Leads</div>
+          </div>
+          <div class="row mt1"><span style="text-transform:capitalize">Pipeline Status</span>
+            <span class="flex">${Object.entries(leadsByStatus).map(([k,v]) => `<span class="tag ${k==='new'?'b':k==='won'?'g':k==='lost'?'r':'o'}">${k}:${v}</span>`).join('')}</span>
+          </div>
+          <div class="row" style="flex-wrap:wrap"><span>Quellen</span>
+            <span class="flex">${Object.entries(leadsBySource).slice(0,8).map(([k,v]) => `<span class="tag b">${k}:${v}</span>`).join('')}${Object.keys(leadsBySource).length > 8 ? `<span class="tag o">+${Object.keys(leadsBySource).length-8}</span>` : ''}</span>
+          </div>
+          <div class="row mt1"><span>Lead-Pipeline</span>${tag('Aktiv')}</div>
+          <div style="margin-top:.3rem;font-size:.7rem;color:var(--muted)">
+            <a href="/lead-form.html" style="color:var(--blue)">Formular</a> · 
+            <a href="/leads.html" style="color:var(--blue)">Console</a> · 
+            <a href="/business" style="color:var(--blue)">Dashboard</a>
+          </div>
+        </div>
+
+        <div class="card"><h3>📦 Git Repos <span style="font-weight:400;color:var(--muted)">(${gitTotal})</span></h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val g">${gitClean}</div>
+            <div style="font-size:.7rem;color:var(--muted)">Clean / ${gitDirty} Dirty</div>
+          </div>
+          ${bar(gitTotal ? Math.round(gitClean/gitTotal*100) : 0, gitDirty === 0 ? 'g' : 'o')}
+          <div class="mt1" style="max-height:160px;overflow-y:auto">
+            ${Object.entries((d.git||{}).details||{}).map(([k,v]) => 
+              `<div class="row" style="font-size:.7rem"><span>${k}</span>${tag(v,['clean','no-git'])}</div>`
+            ).join('')}
+          </div>
+        </div>
+
+        <div class="card"><h3>🧠 Wissen & Memory</h3>
+          <div style="display:flex;gap:1rem;align-items:center">
+            <div class="val p">${am.entries||0}</div>
+            <div style="font-size:.7rem;color:var(--muted)">agentmemory Einträge / ${am.sessions||0} Sessions</div>
+          </div>
+          <div class="row mt1"><span>LightRAG Queues</span>${tag(lr.queues_idle ? 'idle' : 'busy')}</div>
+          <div class="row"><span>Pipeline Busy</span>${tag(lr.pipeline_busy ? 'yes' : 'no', ['no','false'])}</div>
+        </div>
+
+        <div class="card"><h3>🔐 Security & Data</h3>
+          <div class="row"><span>SSL Zertifikat</span>${tag(ssl === '?' ? 'unbekannt' : ssl.slice(0,17)+'...', [ssl])}</div>
+          <div class="row"><span>Key Ports Up</span>${tag(d.ports.key_ports_up+'/'+d.ports.up.length, [String(d.ports.key_ports_up)])}</div>
+          <div class="row"><span>Total Listening</span><span>${d.ports.total_listening}</span></div>
+          <div class="row mt1"><span>Backups</span><span>${bg.total||0} (${bkAge} alt)</span></div>
+          <div class="row"><span>Letztes Backup</span><span style="font-size:.65rem">${(bg.latest||'?').slice(-20)}</span></div>
+          <div class="row"><span>Backup Größe</span><span>${bg.latest_size_mb||'?'} MB</span></div>
+        </div>
+      </div>
+
+        <div class="card" style="margin-top:0">
+        <h3>Lead Pipeline — Letzte Aktivitäten</h3>
+        <div class="row"><span>Pipeline Status</span>${tag('Aktiv')}</div>
+        <div class="row"><span>Listener</span><span class="tag b">alle 10min</span></div>
+        <div class="row"><span>Paperclip Issues</span><span>${pp.issues_total||0} total (${pp.lead_issues||0} Lead-Issues)</span></div>
+        <div class="row" style="font-size:.7rem;color:var(--muted);border:none">
+          <span>Validation: ${valPassed}/${valTotal} passed · ${d.ports.key_ports_up} Ports online</span>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card" style="grid-column:1/-1">
+          <h3>🤖 Oracle Assessment — SOLL vs IST <span id="oracle-score" style="font-weight:400;font-size:.7rem;color:var(--muted)">Lade...</span></h3>
+          <div id="oracle-content"><div class="loading">Analysiere System...</div></div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    el.innerHTML = '<div class="error">Fehler: ' + e.message + '</div>';
+  }
+}
+load();
+setInterval(load, 10000);
+
+async function loadOracle() {
+  const el = document.getElementById('oracle-content');
+  const scoreEl = document.getElementById('oracle-score');
+  if (!el) return;
+  try {
+    const r = await fetch('/api/system/oracle');
+    const d = await r.json();
+    const assess = d.assessment || {};
+    const gaps = d.gaps || {};
+    const recs = d.recommendations || [];
+    const met = d.metrics || {};
+    
+    const score = assess.health_score || 0;
+    const scoreColor = score >= 90 ? 'green' : score >= 70 ? 'orange' : 'red';
+    scoreEl.innerHTML = `<span class="tag ${scoreColor}">● ${score}/100</span>`;
+    
+    const openGaps = (gaps.open||[]).filter(g => g.status !== '✅');
+    
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.3rem">
+        <div>
+          <div class="row"><span>Health Score</span><span class="tag ${scoreColor}">${score}/100</span></div>
+          <div class="row"><span>Offene Gaps</span><span class="tag ${openGaps.length > 0 ? 'orange' : 'green'}">${openGaps.length}</span></div>
+          <div class="row"><span>Geschlossene Gaps</span><span class="tag green">${assess.gaps_closed||0}</span></div>
+          <div class="row"><span>Health Flags</span><span class="tag ${(assess.health||[]).length > 0 ? 'orange' : 'green'}">${(assess.health||[]).length}</span></div>
+          <div style="margin-top:.4rem">
+            ${(assess.health||[]).map(f => `<div class="row" style="font-size:.7rem"><span class="tag ${f.severity === 'critical' ? 'r' : f.severity === 'error' ? 'r' : 'o'}">●</span> ${f.message}</div>`).join('')}
+          </div>
+        </div>
+        <div>
+          <div style="font-size:.7rem;font-weight:600;color:var(--muted);margin-bottom:.2rem">EMPFEHLUNGEN</div>
+          ${recs.map(r => `<div class="row" style="font-size:.7rem;flex-wrap:wrap"><span class="${r.priority === 'high' ? 'tag r' : 'tag o'}" style="margin-right:.3rem">${r.priority}</span><span>${r.action}</span></div>`).join('')}
+          <div style="font-size:.7rem;color:var(--muted);margin-top:.4rem">
+            ${met.docker_running} dkr · ${met.models} mdls · ${met.leads} leads · ${met.validation} val
+          </div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    if (el) el.innerHTML = '<div class="error">Oracle nicht verfügbar: ' + e.message + '</div>';
+  }
+}
+loadOracle();
+setInterval(loadOracle, 30000);
+</script>
+<script src="/nav-widget.js"></script>
+</body>
+</html>

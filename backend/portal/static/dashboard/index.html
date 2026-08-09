@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/dashboard/logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=public-sans:400,500,600,700" rel="stylesheet" />
+  <title>NeXifyAI Dashboard</title>
+  <meta name="description" content="NeXifyAI Admin Dashboard — System Status, Lead Pipeline, Analytics">
+  <meta property="og:title" content="NeXifyAI Dashboard">
+  <meta property="og:description" content="NeXifyAI Admin Dashboard — System Status, Lead Pipeline, Analytics">
+  <meta property="og:image" content="/dashboard/logo.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>html { background-color: #ffffff } html.dark { background-color: #18181b }</style>
+  <script>
+    (function () {
+      var mode = localStorage.getItem('vueuse-color-scheme') || 'auto'
+      var dark = mode === 'dark' || (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      if (dark) {
+        document.documentElement.classList.add('dark')
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18181b')
+      }
+    })()
+  </script>
+  <script type="module" crossorigin src="/dashboard/assets/index-BHtluieb.js"></script>
+  <link rel="modulepreload" crossorigin href="/dashboard/assets/vendor-vue-oLvxJfD-.js">
+  <link rel="modulepreload" crossorigin href="/dashboard/assets/vendor-charts-BW6FVtym.js">
+  <link rel="modulepreload" crossorigin href="/dashboard/assets/vendor-ui-CYb_hRNH.js">
+  <link rel="stylesheet" crossorigin href="/dashboard/assets/index-CqQeiAVF.css">
+</head>
+
+<body>
+  <div id="app" class="isolate"></div>
+</body>
+
+</html>

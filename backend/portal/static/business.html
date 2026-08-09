@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeXifyAI — Business Intelligence Dashboard</title>
+<link rel="stylesheet" href="/nexifyai-tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --card: #18181b; --border: #27272a; --text: var(--white); --green: var(--success); --orange: var(--warning); --blue: var(--info); --red: var(--error); --purple: #a855f7; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body,'Manrope',system-ui,sans-serif); background: var(--bg); color: var(--text); padding: 1.5rem; }
+h1{font-size:1.6rem;font-weight:700;margin-bottom:.2rem}
+.subtitle{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-bottom:.8rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem}
+.card h3{font-size:.7rem;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+.val{font-size:1.8rem;font-weight:700}
+.val.g{color:var(--green)}.val.o{color:var(--orange)}.val.b{color:var(--blue)}.val.r{color:var(--red)}.val.p{color:var(--purple)}
+.row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.row:last-child{border-bottom:none}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.7rem;font-weight:500}
+.tag.g{background:rgba(34,197,94,.12);color:var(--green)}
+.tag.o{background:rgba(245,158,11,.12);color:var(--orange)}
+.tag.b{background:rgba(59,130,246,.12);color:var(--blue)}
+.tag.r{background:rgba(239,68,68,.12);color:var(--red)}
+.tag.p{background:rgba(168,85,247,.12);color:var(--purple)}
+.bar{height:6px;border-radius:3px;background:var(--border);margin:.3rem 0;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.funnel{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.funnel-step{display:flex;align-items:center;gap:8px;font-size:.8rem}
+.funnel-bar{height:24px;border-radius:4px;min-width:4px;transition:width .5s;display:flex;align-items:center;padding:0 6px;font-size:.65rem;font-weight:600;color:#000;white-space:nowrap}
+.mt1{margin-top:.6rem}
+.loading{color:var(--muted);text-align:center;padding:3rem}
+.error{color:var(--red)}
+#ts{font-size:.75rem;color:var(--muted);text-align:center;margin-top:.8rem}
+.badges{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1rem}
+.badge{padding:.25rem .6rem;border-radius:6px;font-size:.7rem;font-weight:600}
+.badge.g{background:rgba(34,197,94,.15);color:var(--green)}
+.badge.o{background:rgba(245,158,11,.15);color:var(--orange)}
+.badge.b{background:rgba(59,130,246,.15);color:var(--blue)}
+</style>
+</head>
+<body>
+<h1>📊 NeXifyAI Business Intelligence</h1>
+<div class="subtitle">Live-Kennzahlen — Lead Pipeline, System Health & AI Platform</div>
+<div class="badges" id="badges"><span class="badge b">Lade Daten...</span></div>
+<div id="app"><div class="loading">Lade Geschäftsdaten...</div></div>
+<div id="ts"></div>
+<script>
+async function load() {
+  const el = document.getElementById('app');
+  try {
+    const r = await fetch('/api/system/intelligence');
+    const d = await r.json();
+    const o = await (await fetch('/api/system/oracle')).json();
+    
+    const leads = d.leads || {};
+    const totalLeads = leads.total || 0;
+    const byStatus = leads.by_status || {};
+    const bySource = leads.by_source || {};
+    const sys = d.system || {};
+    const mem = sys.memory_gb || {};
+    const disk = sys.disk_gb || {};
+    const val = d.validation || {};
+    const svcs = (d.services||{}).list || [];
+    const svcFail = (d.services||{}).failed_units || 0;
+    const health = (o.assessment||{}).health_score || 0;
+    const opens = (o.gaps||{}).open || [];
+    const models = (d.ninerouter||{}).models || 0;
+    const am = d.agentmemory || {};
+    const bkp = d.backups || {};
+    
+    // Badges
+    document.getElementById('badges').innerHTML = `
+      <span class="badge ${svcFail===0?'g':'o'}">● ${svcs.length} Services</span>
+      <span class="badge b">● ${models} Models</span>
+      <span class="badge b">● ${totalLeads} Leads</span>
+      <span class="badge ${svcFail===0?'g':'o'}">● Health ${health}/100</span>
+      <span class="badge g">● ${val.passed||0}/${(val.passed||0)+(val.failed||0)} Val</span>
+    `;
+    document.getElementById('ts').textContent = 'Live: ' + new Date().toLocaleString('de-DE');
+
+    // Funnel bar chart logic
+    const funnelColors = {new:'var(--blue)',contacted:'var(--orange)',demoed:'var(--purple)',won:'var(--green)',lost:'var(--red)'};
+    const funnelOrder = ['new','contacted','demoed','won','lost'];
+    const funnelMax = Math.max(1, ...funnelOrder.map(s => byStatus[s] || 0));
+    
+    const sourceColors = {website:'var(--green)',direct:'var(--blue)',test:'var(--orange)',other:'var(--muted)'};
+    const sourceTotal = Object.values(bySource).reduce((a,b)=>a+b, 0) || 1;
+    
+    el.innerHTML = `
+      <div class="grid">
+        <div class="card"><h3>📈 Lead Funnel</h3>
+          <div class="val g">${totalLeads}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Gesamt Leads</div>
+          <div class="funnel">
+            ${funnelOrder.map(s => {
+              const cnt = byStatus[s] || 0;
+              const pct = Math.round(cnt / funnelMax * 100);
+              return `<div class="funnel-step"><span style="width:60px;color:var(--muted);font-size:.7rem">${s}</span>
+                <div class="funnel-bar" style="width:${Math.max(pct,8)}%;background:${funnelColors[s]||'var(--muted)'}">${cnt}</div></div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="card"><h3>📡 Lead Quellen</h3>
+          <div class="val b">${Object.keys(bySource).length}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Verschiedene Quellen</div>
+          <div class="mt1">
+            ${Object.entries(bySource).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,v]) => {
+              const pct = Math.round(v / sourceTotal * 100);
+              const col = sourceColors[k] || 'var(--muted)';
+              return `<div class="row" style="font-size:.75rem"><span>${k}</span><span>${v} (${pct}%)</span></div>
+                <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="card"><h3>🤖 AI Plattform</h3>
+          <div class="val b">${models}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Modelle via 9Router</div>
+          <div class="row mt1"><span>agentmemory</span><span>${am.entries||0} Einträge / ${am.sessions||0} Sessions</span></div>
+          <div class="row"><span>LightRAG</span><span class="tag g">v${d.lightrag?.version||'?'}</span></div>
+          <div class="row"><span>Grafana</span><span class="tag g">v${d.grafana?.version||'?'}</span></div>
+          <div class="row"><span>Prometheus</span><span>${d.prometheus?.targets_up||0}/${d.prometheus?.targets_total||0} targets</span></div>
+          <div class="row"><span>Paperclip Issues</span><span>${d.paperclip?.issues_total||0}</span></div>
+        </div>
+        <div class="card"><h3>⚙️ System Health</h3>
+          <div class="val ${health >= 80 ? 'g' : health >= 60 ? 'o' : 'r'}">${health}/100</div>
+          <div style="font-size:.8rem;color:var(--muted)">Oracle Health Score</div>
+          <div class="bar mt1"><div class="bar-fill" style="width:${health}%;background:${health>=80?'var(--green)':health>=60?'var(--orange)':'var(--red)'}"></div></div>
+          <div class="row mt1"><span>RAM</span><span>${mem.used||'?'}G / ${mem.total||'?'}G (${mem.pct||'?'}%)</span></div>
+          <div class="bar"><div class="bar-fill" style="width:${mem.pct||0}%;background:${(mem.pct||0)>80?'var(--red)':(mem.pct||0)>60?'var(--orange)':'var(--green)'}"></div></div>
+          <div class="row"><span>Disk</span><span>${disk.used||'?'}G / ${disk.total||'?'}G (${disk.pct||'?'}%)</span></div>
+          <div class="bar"><div class="bar-fill" style="width:${disk.pct||0}%;background:${(disk.pct||0)>80?'var(--red)':(disk.pct||0)>60?'var(--orange)':'var(--green)'}"></div></div>
+          <div class="row"><span>Uptime</span><span>${sys.uptime_days||'?'}d</span></div>
+          <div class="row"><span>CPU</span><span>${sys.cpus||'?'} Cores</span></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card"><h3>📦 Docker & Services</h3>
+          <div class="val g">${d.docker?.running||0}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Container (${svcs.length} Services managed)</div>
+          <div class="row mt1"><span>Endpoints</span><span class="tag g">${d.ports?.key_ports_up||0} Ports</span></div>
+          <div class="row"><span>SSL</span><span class="tag g">${(d.ssl||{}).expiry||'?'}</span></div>
+          <div class="row"><span>Twenty CRM</span>${d.twenty?.alive?'<span class="tag g">✅ Aktiv</span>':'<span class="tag r">❌</span>'}</div>
+          <div class="row"><span>Firecrawl</span>${d.firecrawl?.ok?'<span class="tag g">✅ OK</span>':'<span class="tag r">❌</span>'}</div>
+        </div>
+        <div class="card"><h3>🔐 Sicherheit & Backups</h3>
+          <div class="row"><span>Backups gesamt</span><span>${bkp.total||0}</span></div>
+          <div class="row"><span>Letztes Backup</span><span style="font-size:.7rem">${(bkp.latest||'?').slice(-20)}</span></div>
+          <div class="row"><span>Backup Alter</span><span>${bkp.latest_age_hours||'?'}h</span></div>
+          <div class="row"><span>Backup Größe</span><span>${bkp.latest_size_mb||'?'} MB</span></div>
+          <div class="row mt1"><span>Failed Units</span><span class="tag ${svcFail===0?'g':'r'}">${svcFail}</span></div>
+          <div class="row"><span>Offene Gaps</span><span class="tag ${opens.length>0?'o':'g'}">${opens.length}</span></div>
+        </div>
+        <div class="card"><h3>💰 Kosten (geschätzt)</h3>
+          <div class="val g">~$${d.cost_total||31}/mo</div>
+          <div style="font-size:.8rem;color:var(--muted)">Gesamt LLM + VPS</div>
+          <div class="row mt1"><span>LLM API</span><span id="cost-llm">lädt...</span></div>
+          <div class="row"><span>VPS Hosting</span><span id="cost-vps">lädt...</span></div>
+          <div class="row"><span>Docker RAM</span><span id="cost-ram">lädt...</span></div>
+          <div id="cost-detail" style="font-size:.7rem;color:var(--muted);margin-top:.3rem"></div>
+        </div>
+        <div class="card"><h3>📋 Pipeline Status</h3>
+          <div class="row"><span>Listener</span><span class="tag b">alle 10min</span></div>
+          <div class="row"><span>Engager</span><span class="tag b">stündlich :30</span></div>
+          <div class="row"><span>Oracle Audit</span><span class="tag b">täglich 07:00</span></div>
+          <div class="row"><span>Health Check</span><span class="tag b">alle 30min</span></div>
+          <div class="row mt1" style="font-size:.75rem;color:var(--muted);border:none">
+            <a href="/" style="color:var(--blue)">← Command Center</a>
+            <a href="/leads.html" style="color:var(--blue)">Lead Console</a>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    el.innerHTML = '<div class="error">Fehler: ' + e.message + '</div>';
+  }
+}
+load();
+setInterval(load, 15000);
+
+async function loadCost() {
+  try {
+    const r = await fetch('/api/system/costs');
+    const d = await r.json();
+    const est = d.estimated_monthly || {};
+    const infra = d.infrastructure || {};
+    const dock = d.docker || {};
+    
+    document.getElementById('cost-llm').textContent = '~$' + (est.total_mid_usd||0) + '/mo';
+    document.getElementById('cost-vps').textContent = '~$' + (infra.est_monthly_vps_usd||0) + '/mo';
+    document.getElementById('cost-ram').textContent = (dock.total_mem_mb||0) + ' MB / ' + (dock.total_cpu_pct||0) + '% CPU';
+    
+    const provs = (est.by_provider||{});
+    const detail = Object.entries(provs).map(([k,v]) => v.label + ': ~$' + v.est_monthly_mid + '/mo').join(' · ');
+    document.getElementById('cost-detail').textContent = detail;
+  } catch(e) {}
+}
+loadCost();
+setInterval(loadCost, 60000);
+</script>
+<script src="/nav-widget.js"></script>
+</body>
+</html>

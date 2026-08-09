@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelle — NeXifyAI Admin</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none'><rect width='48' height='48' rx='10' fill='%230a0a0c'/><defs><linearGradient id='g' x1='4' y1='4' x2='44' y2='44'><stop offset='0' stop-color='%23fafafa'/><stop offset='0.45' stop-color='%23a1a1aa'/><stop offset='0.7' stop-color='%23e4e4e7'/><stop offset='1' stop-color='%2371717a'/></linearGradient></defs><path d='M24 4L41 14v20L24 44 7 34V14L24 4Z' stroke='url(%23g)' stroke-width='1.6'/><path d='M17 17L31 31M31 17L17 31' stroke='url(%23g)' stroke-width='2.6' stroke-linecap='round'/><circle cx='17' cy='17' r='2.4' fill='%230a0a0c' stroke='url(%23g)' stroke-width='1.4'/><circle cx='31' cy='17' r='2.4' fill='%230a0a0c' stroke='url(%23g)' stroke-width='1.4'/><circle cx='17' cy='31' r='2.4' fill='%230a0a0c' stroke='url(%23g)' stroke-width='1.4'/><circle cx='31' cy='31' r='2.4' fill='%230a0a0c' stroke='url(%23g)' stroke-width='1.4'/><circle cx='24' cy='24' r='3.2' fill='url(%23g)'/>">
+<link rel="stylesheet" href="/nexifyai-tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --panel-hover: rgba(255,255,255,0.06);
+  --line-strong: rgba(255,255,255,0.12);
+  --accent: #e4e4e7;
+  --red: #ef4444;
+  --green: #22c55e;
+  --radius: 12px;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content:''; position:fixed; inset:0; z-index:0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.container { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:24px; }
+.header {
+  display:flex; align-items:center; gap:16px; padding:24px 0;
+  border-bottom:1px solid var(--line); margin-bottom:24px;
+}
+.logo { width:40px; height:40px; }
+.header h1 { font-family:var(--font-heading); font-weight:600; font-size:28px; color:var(--white); }
+.header h1 span { color:var(--silver); }
+.header .back {
+  margin-left:auto; padding:8px 16px; border-radius:8px; border:1px solid var(--line);
+  background:var(--panel); color:var(--silver2); text-decoration:none;
+  font-size:13px; transition:all .2s;
+}
+.header .back:hover { background:var(--panel-hover); color:var(--white); }
+.stats { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+.stat {
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px 20px; flex:1; min-width:120px;
+}
+.stat .num { font-family:var(--font-heading); font-size:28px; font-weight:600; color:var(--white); }
+.stat .label { font-size:12px; color:var(--muted); margin-top:4px; }
+.controls { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+.search-box {
+  flex:1; min-width:200px; padding:10px 16px; border-radius:10px;
+  background:var(--panel); border:1px solid var(--line); color:var(--silver);
+  font-family:var(--font-body); font-size:14px; outline:none;
+}
+.search-box:focus { border-color:var(--silver2); }
+.search-box::placeholder { color:var(--muted); }
+.filter-btn {
+  padding:10px 16px; border-radius:10px; border:1px solid var(--line);
+  background:var(--panel); color:var(--silver2); cursor:pointer;
+  font-family:var(--font-body); font-size:13px; transition:all .2s;
+}
+.filter-btn:hover, .filter-btn.active { background:var(--panel-hover); color:var(--white); border-color:var(--silver2); }
+.model-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+.model-card {
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px; cursor:pointer; transition:all .2s; position:relative;
+}
+.model-card:hover { background:var(--panel-hover); border-color:var(--line-strong); }
+.model-card.selected { border-color:var(--silver2); background:rgba(255,255,255,0.06); }
+.model-card .provider {
+  display:inline-block; padding:3px 8px; border-radius:6px;
+  font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;
+  margin-bottom:8px;
+}
+.provider-ds { background:rgba(59,130,246,0.15); color:#60a5fa; }
+.provider-cx { background:rgba(34,197,94,0.15); color:#4ade80; }
+.provider-cc { background:rgba(168,85,247,0.15); color:#c084fc; }
+.provider-cf { background:rgba(251,146,60,0.15); color:#fb923c; }
+.provider-xmtp { background:rgba(236,72,153,0.15); color:#f472b6; }
+.provider-combo { background:rgba(14,165,233,0.15); color:#38bdf8; }
+.provider-databricks { background:rgba(239,68,68,0.15); color:#f87171; }
+.model-card .name {
+  font-family:var(--font-heading); font-size:15px; font-weight:500;
+  color:var(--white); word-break:break-all;
+}
+.model-card .id-text { font-size:11px; color:var(--muted); margin-top:4px; font-family:monospace; }
+.chat-panel {
+  margin-top:32px; background:var(--panel); border:1px solid var(--line);
+  border-radius:var(--radius); padding:24px; display:none;
+}
+.chat-panel.active { display:block; }
+.chat-panel h3 { font-family:var(--font-heading); font-size:18px; color:var(--white); margin-bottom:16px; }
+.chat-panel .selected-model { font-size:13px; color:var(--muted); margin-bottom:16px; }
+.chat-input-row { display:flex; gap:8px; }
+.chat-input-row input {
+  flex:1; padding:12px 16px; border-radius:10px; background:rgba(255,255,255,0.05);
+  border:1px solid var(--line); color:var(--silver); font-family:var(--font-body);
+  font-size:14px; outline:none;
+}
+.chat-input-row input:focus { border-color:var(--silver2); }
+.chat-input-row button {
+  padding:12px 24px; border-radius:10px; border:none;
+  background:linear-gradient(135deg,var(--white),var(--silver),var(--muted));
+  color:var(--bg); font-family:var(--font-heading); font-weight:600;
+  font-size:14px; cursor:pointer; transition:opacity .2s;
+}
+.chat-input-row button:hover { opacity:0.9; }
+.chat-input-row button:disabled { opacity:0.4; cursor:not-allowed; }
+.response-box {
+  margin-top:16px; padding:16px; border-radius:10px;
+  background:rgba(0,0,0,0.3); border:1px solid var(--line);
+  min-height:40px; white-space:pre-wrap; word-break:break-word;
+  font-size:14px; line-height:1.6;
+}
+.response-box .meta { font-size:11px; color:var(--muted); margin-bottom:8px; }
+.loading { color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <svg class="logo" viewBox="0 0 48 48" fill="none">
+    <defs><linearGradient id="ls" x1="4" y1="4" x2="44" y2="44"><stop offset="0" stop-color="#fafafa"/><stop offset="0.45" stop-color="#a1a1aa"/><stop offset="0.7" stop-color="#e4e4e7"/><stop offset="1" stop-color="#71717a"/></linearGradient></defs>
+    <path d="M24 4L41 14v20L24 44 7 34V14L24 4Z" stroke="url(#ls)" stroke-width="1.6"/>
+    <path d="M17 17L31 31M31 17L17 31" stroke="url(#ls)" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="17" cy="17" r="2.4" fill="#09090b" stroke="url(#ls)" stroke-width="1.4"/>
+    <circle cx="31" cy="17" r="2.4" fill="#09090b" stroke="url(#ls)" stroke-width="1.4"/>
+    <circle cx="17" cy="31" r="2.4" fill="#09090b" stroke="url(#ls)" stroke-width="1.4"/>
+    <circle cx="31" cy="31" r="2.4" fill="#09090b" stroke="url(#ls)" stroke-width="1.4"/>
+    <circle cx="24" cy="24" r="3.2" fill="url(#ls)"/>
+  </svg>
+  <h1>NeX<span>ify</span> AI Modelle</h1>
+  <a href="/" class="back">← Dashboard</a>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <input class="search-box" id="search" placeholder="Modell suchen..." oninput="renderModels()">
+  <button class="filter-btn active" data-provider="all" onclick="setProvider('all',this)">Alle</button>
+</div>
+
+<div class="model-grid" id="grid"></div>
+
+<div class="chat-panel" id="chat-panel">
+  <h3>Test-Chat</h3>
+  <div class="selected-model" id="sel-model-display"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" placeholder="Nachricht eingeben..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button id="send-btn" onclick="sendChat()">Senden</button>
+  </div>
+  <div class="response-box" id="response"></div>
+</div>
+
+</div>
+
+<script>
+let models = [];
+let selectedModel = null;
+const PROVIDER_CLASSES = {
+  ds:'provider-ds', cx:'provider-cx', cc:'provider-cc', cf:'provider-cf',
+  xmtp:'provider-xmtp', combo:'provider-combo', databricks:'provider-databricks'
+};
+const PROVIDER_NAMES = {
+  ds:'DeepSeek', cx:'Codex (OpenAI)', cc:'Claude', cf:'Cloudflare',
+  xmtp:'MiMo', combo:'Combo', databricks:'Databricks'
+};
+
+async function loadModels() {
+  try {
+    const res = await fetch('/api/models');
+    const data = await res.json();
+    models = data.data || [];
+    renderStats();
+    renderProviderFilters();
+    renderModels();
+  } catch(e) { console.error(e); }
+}
+
+function renderStats() {
+  const byProvider = {};
+  models.forEach(m => {
+    const p = m.owned_by || '?';
+    byProvider[p] = (byProvider[p]||0) + 1;
+  });
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="num">${models.length}</div><div class="label">Modelle gesamt</div></div>
+    ${Object.entries(byProvider).sort((a,b)=>b[1]-a[1]).map(([p,c])=>`
+      <div class="stat"><div class="num">${c}</div><div class="label">${PROVIDER_NAMES[p]||p}</div></div>
+    `).join('')}
+  `;
+}
+
+function renderProviderFilters() {
+  const providers = [...new Set(models.map(m => m.owned_by))].filter(Boolean);
+  const btns = document.querySelector('.controls');
+  const existingBtns = btns.querySelectorAll('.filter-btn:not([data-provider="all"])');
+  existingBtns.forEach(b => b.remove());
+  providers.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.provider = p;
+    btn.textContent = PROVIDER_NAMES[p] || p;
+    btn.onclick = () => setProvider(p, btn);
+    btns.appendChild(btn);
+  });
+}
+
+let currentProvider = 'all';
+function setProvider(prov, el) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentProvider = prov;
+  renderModels();
+}
+
+function renderModels() {
+  const search = document.getElementById('search').value.toLowerCase();
+  let filtered = models;
+  if (currentProvider !== 'all') filtered = filtered.filter(m => m.owned_by === currentProvider);
+  if (search) filtered = filtered.filter(m => m.id.toLowerCase().includes(search));
+  const grid = document.getElementById('grid');
+  grid.innerHTML = filtered.map(m => `
+    <div class="model-card${selectedModel?.id===m.id?' selected':''}" onclick="selectModel('${m.id}')">
+      <div class="provider ${PROVIDER_CLASSES[m.owned_by]||''}">${PROVIDER_NAMES[m.owned_by]||m.owned_by||'??'}</div>
+      <div class="name">${m.id.replace(/(\/|@\/)/g,'<wbr>$1')}</div>
+      <div class="id-text">${m.id}</div>
+    </div>
+  `).join('');
+}
+
+function selectModel(id) {
+  selectedModel = models.find(m => m.id === id) || {id};
+  document.getElementById('chat-panel').classList.add('active');
+  document.getElementById('sel-model-display').textContent = `Modell: ${selectedModel.id}`;
+  document.getElementById('response').innerHTML = '';
+  document.getElementById('chat-input').focus();
+  renderModels();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg || !selectedModel) return;
+  input.disabled = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('response').innerHTML = '<span class="loading">Warte auf Antwort...</span>';
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: selectedModel.id,
+        messages: [{role:'user',content:msg}],
+        max_tokens: 300
+      })
+    });
+    const data = await res.json();
+    const msg = data.choices?.[0]?.message || {};
+    let content = msg.content || '';
+    const reasoning = msg.reasoning_content || '';
+    if (!content && reasoning) content = '(reasoning model — increase tokens to see final answer)';
+    if (!content && !reasoning) content = data.error?.message || JSON.stringify(data,null,2);
+    const usage = data.usage ? ` (${data.usage.completion_tokens||0} tokens)` : '';
+    const reasoningHtml = reasoning ? `<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--muted);font-size:12px">Reasoning (${reasoning.length} chars)</summary><div style="margin-top:8px;padding:8px;background:rgba(0,0,0,0.2);border-radius:8px;font-size:12px;color:var(--silver2);white-space:pre-wrap">${escapeHtml(reasoning)}</div></details>` : '';
+    document.getElementById('response').innerHTML = `<div class="meta">${selectedModel.id}${usage}</div>${escapeHtml(content)}${reasoningHtml}`;
+  } catch(e) {
+    document.getElementById('response').innerHTML = `<span style="color:var(--red)">Fehler: ${escapeHtml(e.message)}</span>`;
+  }
+  input.disabled = false;
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
+}
+
+function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadModels();
+</script>
+<script src="/nav-widget.js"></script>
+</body>
+</html>

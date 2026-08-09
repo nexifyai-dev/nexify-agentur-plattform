@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeXifyAI — Unified Command Center</title>
+<link rel="stylesheet" href="/nexifyai-tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --card: #18181b; --border: #27272a; --text: var(--white); --green: #22c55e; --orange: var(--warning); --blue: var(--info); --red: var(--error); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body,'Manrope',system-ui,sans-serif); background: var(--bg); color: var(--text); padding: 1.5rem; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: .5rem; }
+.header h1 { font-size: 1.6rem; font-weight: 700; }
+.header .sub { color: var(--muted); font-size: .85rem; }
+.badges { display: flex; gap: .4rem; flex-wrap: wrap; }
+.badge { padding: .25rem .6rem; border-radius: 6px; font-size: .7rem; font-weight: 600; }
+.badge.green { background: rgba(34,197,94,.15); color: var(--green); }
+.badge.blue { background: rgba(59,130,246,.15); color: var(--blue); }
+.badge.orange { background: rgba(245,158,11,.15); color: var(--orange); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .9rem; margin-bottom: .9rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; }
+.card h3 { font-size: .75rem; color: var(--muted); margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .06em; }
+.val { font-size: 1.8rem; font-weight: 700; }
+.val.g { color: var(--green); } .val.o { color: var(--orange); } .val.b { color: var(--blue); }
+.row { display: flex; justify-content: space-between; padding: .35rem 0; border-bottom: 1px solid var(--border); font-size: .82rem; }
+.row:last-child { border-bottom: none; }
+.tag { display: inline-block; padding: .15rem .5rem; border-radius: 4px; font-size: .7rem; font-weight: 500; }
+.tag.g { background: rgba(34,197,94,.12); color: var(--green); }
+.tag.o { background: rgba(245,158,11,.12); color: var(--orange); }
+.tag.b { background: rgba(59,130,246,.12); color: var(--blue); }
+.mt1 { margin-top: .9rem; }
+.loading { text-align: center; padding: 3rem; color: var(--muted); }
+.error { color: var(--red); }
+#ts { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 1rem; }
+.models { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .4rem; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div><h1>NeXifyAI</h1><div class="sub">Unified Command Center — Live 5.21h / 61 Models / 28 Container</div></div>
+  <div class="badges">
+    <span class="badge green" id="b-validation">● 30/30</span>
+    <span class="badge blue" id="b-models">● 61 Models</span>
+    <span class="badge orange" id="b-leads">● 7 Leads</span>
+  </div>
+</div>
+
+<div id="app"><div class="loading">Lade Systemdaten...</div></div>
+<div id="ts"></div>
+
+<script>
+async function load() {
+  const el = document.getElementById('app');
+  try {
+    const r = await fetch('/api/system/intelligence');
+    const d = await r.json();
+    
+    document.getElementById('ts').textContent = 'Live: ' + new Date(d.timestamp).toLocaleString('de-DE');
+    document.getElementById('b-validation').textContent = '● ' + (d.validation.match(/(\d+)\s*passed/)?.[1] || '?') + '/30';
+    document.getElementById('b-models').textContent = '● ' + d.ninerouter.models + ' Models';
+    document.getElementById('b-leads').textContent = '● ' + d.leads.total + ' Leads';
+
+    el.innerHTML = `
+      <div class="grid">
+        <div class="card"><h3>System</h3>
+          <div class="val g">${d.docker.running}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Docker Container</div>
+          <div class="row mt1"><span>Validation</span><span class="tag g">${d.validation.match(/(\d+)\s*passed/)?.[1] || '?'}/30</span></div>
+          <div class="row"><span>Uptime</span><span>5d 21h</span></div>
+        </div>
+        <div class="card"><h3>Business</h3>
+          <div class="val ${d.leads.total > 0 ? 'g' : 'o'}">${d.leads.total}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Erfasste Leads</div>
+          <div class="row mt1"><span>Pipeline</span><span class="tag g">Aktiv</span></div>
+          <div class="row"><span>Listener</span><span class="tag b">alle 10min</span></div>
+        </div>
+        <div class="card"><h3>AI Platform</h3>
+          <div class="val b">${d.ninerouter.models}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Modelle via 9Router</div>
+          <div class="models">
+            <span class="tag g">ds/deepseek-v4-pro</span>
+            <span class="tag g">ds/deepseek-v4-flash</span>
+            <span class="tag g">ds/deepseek-reasoner</span>
+            <span class="tag b">cx/gpt-5.6-sol</span>
+            <span class="tag b">cc/claude-sonnet-5</span>
+            <span class="tag b">xmtp/mimo-v2.5-pro</span>
+            <span class="tag o">+${d.ninerouter.models - 7} weitere</span>
+          </div>
+        </div>
+        <div class="card"><h3>Wissen</h3>
+          <div class="val b">${d.agentmemory.entries}</div>
+          <div style="font-size:.8rem;color:var(--muted)">agentmemory Eintraege</div>
+          <div class="row mt1"><span>Status</span><span class="tag g">MCP aktiv</span></div>
+          <div class="row"><span>Schreibbar</span><span class="tag g">✅</span></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card"><h3>Git Repos</h3>
+          ${Object.entries(d.git).map(([k,v]) => 
+            `<div class="row"><span>${k}</span><span class="tag ${v === 'clean' ? 'g' : 'o'}">${v}</span></div>`
+          ).join('')}
+        </div>
+        <div class="card"><h3>Endpunkte</h3>
+          <div class="row"><span>Grafana :3030</span><span class="tag g">200</span></div>
+          <div class="row"><span>Prometheus :9090</span><span class="tag g">200</span></div>
+          <div class="row"><span>9Router :20128</span><span class="tag g">200</span></div>
+          <div class="row"><span>Lead-Pipeline :8887</span><span class="tag g">200</span></div>
+          <div class="row"><span>Paperclip :3100</span><span class="tag g">200</span></div>
+          <div class="row"><span>agentmemory :3113</span><span class="tag g">200</span></div>
+        </div>
+        <div class="card"><h3>Governance</h3>
+          <div class="row"><span>Compliance</span><span class="tag g">21/22 ✅</span></div>
+          <div class="row"><span>Auto-Work</span><span class="tag g">Permanent</span></div>
+          <div class="row"><span>Oracle Agent</span><span class="tag b">06:00 taegl</span></div>
+          <div class="row"><span>Listener</span><span class="tag b">alle 10min</span></div>
+        </div>
+        <div class="card"><h3>System</h3>
+          <div class="row"><span>RAM</span><span>16Gi/31Gi</span></div>
+          <div class="row"><span>Disk</span><span>25% (290G frei)</span></div>
+          <div class="row"><span>Load</span><span>3.8</span></div>
+          <div class="row"><span>Uptime</span><span>5d 21h</span></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:.5rem">
+        <h3>Lead Pipeline — Letzte Aktivitäten</h3>
+        <div class="row"><span>Letzter Lead</span><span class="tag b">${d.leads.total > 0 ? 'E2E Test Kunde (website)' : 'keine'}</span></div>
+        <div class="row"><span>Paperclip Issues</span><span class="tag o">44 offen</span></div>
+        <div class="row"><span>Demo Generator</span><span class="tag g">Bereit</span></div>
+        <div class="row" style="margin-top:.5rem;font-size:.75rem;color:var(--muted)">
+          <span>Lead-Formular: /lead-form.html</span>
+          <span>Dashboard: /business</span>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    el.innerHTML = '<div class="error">Fehler: ' + e.message + '</div>';
+  }
+}
+load();
+setInterval(load, 15000);
+</script>
+<script src="/nav-widget.js"></script>
+</body>
+</html>

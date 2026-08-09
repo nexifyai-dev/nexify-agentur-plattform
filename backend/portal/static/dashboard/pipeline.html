@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeXifyAI Pipeline Dashboard</title>
+<style>
+:root{--bg:#09090b;--panel:rgba(255,255,255,0.03);--text:#d4d4d8;--sub:#a1a1aa;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--border:rgba(255,255,255,0.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;padding:24px;min-height:100vh}
+h1{font-size:1.5rem;margin-bottom:24px;color:#fafafa}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h2{font-size:0.85rem;color:var(--sub);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px}
+.stat{font-size:2rem;font-weight:700;color:#fafafa}
+.stat-label{font-size:0.8rem;color:var(--sub)}
+.row{display:flex;gap:24px;flex-wrap:wrap}
+.kpi{text-align:center}
+.lead-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.lead-item:last-child{border-bottom:none}
+.lead-name{font-weight:600}
+.badge{padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:600}
+.badge-contacted{background:rgba(34,197,94,0.15);color:var(--green)}
+.badge-demo{background:rgba(59,130,246,0.15);color:var(--blue)}
+.badge-enriched{background:rgba(245,158,11,0.15);color:var(--amber)}
+.pipeline-bar{display:flex;gap:4px;margin-top:12px}
+.step{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.06)}
+.step-done{background:var(--green)}
+.step-active{background:var(--blue);animation:pulse 1.5s infinite}
+.step-blocked{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.metric{font-size:0.85rem;color:var(--sub);margin-top:4px}
+.refresh{font-size:0.7rem;color:var(--sub);text-align:right;margin-top:16px}
+</style>
+</head>
+<body>
+<h1>📊 NeXifyAI Pipeline Dashboard</h1>
+<div class="grid">
+<div class="card">
+<h2>Leads Pipeline</h2>
+<div class="row">
+<div class="kpi"><div class="stat" id="total-leads">—</div><div class="stat-label">Total</div></div>
+<div class="kpi"><div class="stat" id="lead-demo" style="color:var(--blue)">—</div><div class="stat-label">Demo Ready</div></div>
+<div class="kpi"><div class="stat" id="lead-contacted" style="color:var(--green)">—</div><div class="stat-label">Contacted</div></div>
+</div>
+<div class="pipeline-bar">
+<div class="step step-done" title="Discovery"></div>
+<div class="step step-done" title="Enrichment"></div>
+<div class="step step-done" title="Demo"></div>
+<div class="step step-done" title="Outreach"></div>
+</div>
+<div id="lead-list"></div>
+</div>
+<div class="card">
+<h2>Email Outreach</h2>
+<div class="row">
+<div class="kpi"><div class="stat" id="email-sent" style="color:var(--green)">—</div><div class="stat-label">Gesendet</div></div>
+<div class="kpi"><div class="stat" id="email-failed" style="color:var(--red)">—</div><div class="stat-label">Fehlgeschlagen</div></div>
+</div>
+<div class="metric" id="email-rate"></div>
+</div>
+<div class="card">
+<h2>System Health</h2>
+<div id="health-list"></div>
+</div>
+<div class="card">
+<h2>Komponenten</h2>
+<div id="comp-list"></div>
+</div>
+</div>
+<div class="refresh">Auto-refresh 30s | NeXifyAI</div>
+<script>
+async function load(){
+try{
+const lr=await fetch('/api/leads/');
+const leads=await lr.json();
+const ls=Array.isArray(leads)?leads:(leads.leads||[]);
+document.getElementById('total-leads').textContent=ls.length;
+document.getElementById('lead-demo').textContent=ls.filter(l=>l.status==='demo_ready').length;
+document.getElementById('lead-contacted').textContent=ls.filter(l=>l.status==='contacted').length;
+let html='';
+ls.forEach(l=>{
+const b=l.status==='contacted'?'badge-contacted':l.status==='demo_ready'?'badge-demo':'badge-enriched';
+html+=`<div class="lead-item"><span class="lead-name">${l.business_name}</span><span class="badge ${b}">${l.status}</span></div>`;
+});
+document.getElementById('lead-list').innerHTML=html||'<div class="metric">Keine Leads</div>';
+
+const pr=await fetch('/api/pipeline/status');
+const ps=await pr.json();
+let ch='';
+for(const [k,v] of Object.entries(ps.components||{})){
+ch+=`<div class="lead-item"><span>${k}</span><span style="color:${v==='connected'?'var(--green)':'var(--red)'}">${v}</span></div>`;
+}
+document.getElementById('comp-list').innerHTML=ch;
+
+const hr=await fetch('/api/system/intelligence');
+if(hr.ok){
+const hi=await hr.json();
+let hh='';
+const checks=[
+['Docker',hi.docker?.running+' Container'],
+['9Router',hi.ninerouter?.models+' Models'],
+['agentmemory',hi.agentmemory?.entries+' Einträge'],
+['Load',(hi.system?.load||[])[0]||'?'],
+['Uptime',hi.system?.uptime_days+' Tage'],
+['Disk',hi.system?.disk_gb?.percent+'%'],
+];
+checks.forEach(([k,v])=>{hh+=`<div class="lead-item"><span>${k}</span><span>${v}</span></div>`});
+document.getElementById('health-list').innerHTML=hh;
+}
+}catch(e){console.error(e)}
+}
+load();setInterval(load,30000);
+</script>
+</body>
+</html>

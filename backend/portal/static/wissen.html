@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissensbasis — NeXifyAI</title>
+<link rel="stylesheet" href="/nexifyai-tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --panel-hover: rgba(255,255,255,0.06);
+  --green: var(--success);
+  --red: var(--error);
+  --amber: var(--warning);
+  --radius: 14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--silver);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")}
+
+/* Topbar */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 28px;border-bottom:1px solid var(--line);background:var(--panel);
+  backdrop-filter:blur(16px);position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-left svg{width:32px;height:32px}
+.topbar h1{font-family:var(--font-heading);font-size:18px;font-weight:600;color:var(--white);letter-spacing:-0.02em}
+.topbar h1 span{color:var(--silver2);font-weight:400;font-size:14px;margin-left:8px}
+.topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:640px){.topbar{flex-wrap:wrap;gap:10px;padding:12px 16px}.topbar-right{width:100%;justify-content:flex-start}}
+
+/* Status pill */
+.status-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;
+  border:1px solid var(--line);background:var(--panel);
+  transition:all .3s;
+}
+.status-pill.online{border-color:rgba(34,197,94,0.25);color:var(--green)}
+.status-pill.offline{border-color:rgba(239,68,68,0.25);color:var(--red)}
+.status-pill.checking{border-color:rgba(245,158,11,0.25);color:var(--amber)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.status-pill.online .status-dot{animation:pulse-green 2s ease-in-out infinite}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+
+/* Nav links */
+.nav-link{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;
+  color:var(--silver2);text-decoration:none;border:1px solid var(--line);
+  background:transparent;transition:all .2s;cursor:pointer;
+}
+.nav-link:hover{color:var(--white);border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.04)}
+.nav-link svg{width:14px;height:14px}
+
+/* Stats bar */
+.stats-bar{
+  display:flex;gap:1px;padding:0 28px;
+  background:var(--line);border-bottom:1px solid var(--line);
+}
+.stat-card{
+  flex:1;padding:14px 18px;background:var(--bg);
+  display:flex;align-items:center;gap:12px;
+}
+.stat-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--panel);border:1px solid var(--line);
+  color:var(--silver2);flex-shrink:0;
+}
+.stat-icon svg{width:18px;height:18px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.stat-value{font-family:var(--font-heading);font-size:18px;color:var(--white);font-weight:600}
+
+/* Iframe area */
+.iframe-wrap{flex:1;position:relative;margin:12px 28px 28px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.iframe-wrap iframe{width:100%;height:100%;border:none;display:block;min-height:calc(100vh - 220px)}
+.iframe-loading{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;background:var(--bg);z-index:2;
+  transition:opacity .4s;
+}
+.iframe-loading.hidden{opacity:0;pointer-events:none}
+.spinner{width:32px;height:32px;border:2px solid var(--line);border-top-color:var(--silver2);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.iframe-loading p{margin-top:12px;font-size:12px;color:var(--muted)}
+
+/* Fallback */
+.fallback{
+  position:absolute;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:center;background:var(--bg);z-index:3;gap:16px;
+}
+.fallback.show{display:flex}
+.fallback svg{width:48px;height:48px;color:var(--muted)}
+.fallback p{font-size:14px;color:var(--silver2);text-align:center;max-width:400px;line-height:1.6}
+.fallback a{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 22px;
+  border-radius:10px;background:linear-gradient(135deg,var(--white),var(--silver),var(--muted));
+  color:var(--bg);font-family:var(--font-heading);font-weight:600;text-decoration:none;font-size:13px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .stats-bar{flex-wrap:wrap;padding:0 16px}
+  .stat-card{min-width:50%}
+  .iframe-wrap{margin:8px 16px 16px}
+  .topbar{padding:12px 16px}
+  .topbar h1 span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48' fill='none'><rect width='48' height='48' rx='12' fill='%230A0A0A'/><rect x='7' y='7' width='7' height='34' rx='2' fill='%23fafafa'/><rect x='34' y='7' width='7' height='34' rx='2' fill='%23fafafa'/><polygon points='7,7 15,7 41,41 33,41' fill='%23fafafa'/><circle cx='41' cy='7' r='5' fill='%23C8FF00'/><circle cx='41' cy='7' r='5' fill='none' stroke='%230A0A0A' stroke-width='3'/></svg>
+    <h1>Wissensbasis <span>LightRAG</span></h1>
+  </div>
+  <div class="topbar-right">
+    <div id="statusPill" class="status-pill checking">
+      <div class="status-dot"></div>
+      <span id="statusText">Verbinde…</span>
+    </div>
+    <a class="nav-link" href="https://wissen.nexifyai.cloud/docs" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+      API Docs
+    </a>
+    <a class="nav-link" href="https://wissen.nexifyai.cloud/webui" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Vollbild
+    </a>
+    <a class="nav-link" href="/" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- Stats bar -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+    <div><div class="stat-label">Version</div><div class="stat-value" id="statVersion">—</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0022 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+    <div><div class="stat-label">LLM Modell</div><div class="stat-value" id="statModel">—</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+    <div><div class="stat-label">Speicher</div><div class="stat-value" id="statStorage">—</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div><div class="stat-label">Auth</div><div class="stat-value" id="statAuth">—</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div><div class="stat-label">Pipeline</div><div class="stat-value" id="statPipeline">—</div></div>
+  </div>
+</div>
+
+<!-- Iframe embed -->
+<div class="iframe-wrap">
+  <div class="iframe-loading" id="iframeLoading">
+    <div class="spinner"></div>
+    <p>Lade LightRAG WebUI…</p>
+  </div>
+  <div class="fallback" id="fallback">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    <p>LightRAG WebUI konnte nicht eingebettet werden. Der Service läuft möglicherweise nicht oder blockiert iframe-Einbettung.</p>
+    <a href="https://wissen.nexifyai.cloud/webui" target="_blank" rel="noopener">WebUI in neuem Tab öffnen →</a>
+  </div>
+  <iframe id="webuiFrame" src="https://wissen.nexifyai.cloud/webui/" allow="clipboard-write" loading="lazy"></iframe>
+</div>
+
+<script>
+const HEALTH_URL = '/api/proxy/lightrag/health';
+const POLL_INTERVAL = 30000;
+const pill = document.getElementById('statusPill');
+const text = document.getElementById('statusText');
+const frame = document.getElementById('webuiFrame');
+const loading = document.getElementById('iframeLoading');
+const fallback = document.getElementById('fallback');
+
+frame.addEventListener('load', () => {
+  loading.classList.add('hidden');
+});
+frame.addEventListener('error', () => {
+  loading.classList.add('hidden');
+  fallback.classList.add('show');
+});
+// fallback: if iframe doesn't fire load in 8s, assume blocked
+setTimeout(() => {
+  if (!loading.classList.contains('hidden')) {
+    loading.classList.add('hidden');
+    // try reading iframe — if cross-origin blocked, show fallback
+    try { void frame.contentWindow.location; } catch { fallback.classList.add('show'); }
+  }
+}, 8000);
+
+function setPill(cls, msg) {
+  pill.className = 'status-pill ' + cls;
+  text.textContent = msg;
+}
+
+async function pollHealth() {
+  try {
+    const r = await fetch(HEALTH_URL, { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    setPill('online', 'Online');
+    document.getElementById('statVersion').textContent = 'v' + (d.core_version || '?');
+    document.getElementById('statAuth').textContent = d.auth_mode === 'disabled' ? 'Off' : d.auth_mode || '—';
+    // model
+    const model = d.configuration?.llm_model || '—';
+    document.getElementById('statModel').textContent = model.split('/').pop();
+    // storage
+    const kv = d.configuration?.kv_storage || '—';
+    document.getElementById('statStorage').textContent = kv.replace('Storage','');
+    // pipeline
+    if (d.pipeline_busy) document.getElementById('statPipeline').textContent = 'Busy';
+    else if (d.pipeline_active) document.getElementById('statPipeline').textContent = 'Active';
+    else document.getElementById('statPipeline').textContent = 'Idle';
+  } catch {
+    setPill('offline', 'Offline');
+  }
+}
+
+pollHealth();
+setInterval(pollHealth, POLL_INTERVAL);
+</script>
+<script src="/nav-widget.js"></script>
+</body>
+</html>
