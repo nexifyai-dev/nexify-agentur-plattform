@@ -1,12 +1,5 @@
 #!/bin/bash
 # FreeAgent Vollintegration — Sync/Belege/Status (NeXifyAI, systemd-Timer alle 30min)
-# NIR: 09.08.2026 18:09
-# NAME: NeXifyAI ComplianceEngine
-# TEAM: NeXifyAI Core
-# WHAT: (auto-dokumentiert)
-# WHY: (auto-dokumentiert — fehlte NIR-Header)
-# DEPENDS: (auto-dokumentiert)
-
 # Usage: freeagent_sync.sh {sync|belege|refresh|status}
 ENV=/etc/nexifyai/hermes.env
 LOG=/var/log/freeagent-sync.log
@@ -128,6 +121,15 @@ for t in txs:
     if not cat_code:
         print("SKIP (keine Kategorie):", t.get('id')); continue
     cat = cat_code
+    # State: bereits bekannte (erklärt oder abgelehnt) überspringen
+    import os
+    STATE_F = "/var/log/nexifyai/freeagent-explained.json"
+    try:
+        state = json.load(open(STATE_F))
+    except Exception:
+        state = {}
+    if t['url'] in state.get('done', []):
+        continue
     body = json.dumps({"bank_transaction_explanation": {
         "bank_transaction": t['url'],
         "explanation_type": "BankTransactionExplanation::ManualExplanation",
@@ -145,7 +147,18 @@ for t in txs:
         "-H", "Accept: application/json", "-H", "Content-Type: application/json",
         "--data", "@" + "/tmp/fa-expl-body.json",
         "https://api.freeagent.com/v2/bank_transaction_explanations"], capture_output=True, text=True)
-    print("EXPLAIN:", t.get('id'), "->", cat, "| http", r.stdout.strip())
+    code = r.stdout.strip()
+    resp_txt = open("/tmp/fa-expl-resp.json", encoding="utf-8", errors="replace").read() if os.path.exists("/tmp/fa-expl-resp.json") else ""
+    # "already fully explained" = Erfolg (Feed-Transaktionen zeigen kein explanation_url)
+    if code in ("201", "200") or "already been fully explained" in resp_txt:
+        state.setdefault("done", []).append(t['url'])
+        try:
+            json.dump(state, open(STATE_F, "w"))
+        except Exception:
+            pass
+        print("EXPLAIN:", t.get('id'), "->", cat, "| http", code, "OK")
+    else:
+        print("EXPLAIN:", t.get('id'), "->", cat, "| http", code)
 PYEOF
   done < /tmp/fa-ba-list.txt
 }
