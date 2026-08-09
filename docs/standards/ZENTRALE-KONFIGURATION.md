@@ -168,6 +168,18 @@ Notizen/Profil/Agenten-Seele/Project Context) aus Live-Stand übernommen statt n
 
 ## 7. CI (Corporate Identity) — systemweit verbindlich
 
+**CI-Design-Tokens (kanonisch: design_guidelines.json, verbindlich für ALLE Anwendungen — 9Router-UI, AgentMemory-Viewer, LightRAG-WebUI, Hermes-WebUI, Portal, n8n, Paperclip):**
+| Token | Wert |
+|---|---|
+| Theme | Dark, Luxury (Mood: mega elegant, WoW) |
+| bg | #0A0A0A · surface rgba(255,255,255,0.03) · border rgba(255,255,255,0.08) |
+| Akzent | #C8FF00 (+ #e9ff8a, Gradient 120deg #C8FF00→#eaffb0→#C8FF00, Glow rgba(200,255,0,0.05)) |
+| Text | #FFFFFF / #A1A1AA / #71717a / #585858 · Selection rgba(200,255,0,0.25) |
+| Fonts | Outfit (Headings, 300/500/600/700) · Manrope (Body, 17px, lh 1.7) |
+| Radius | 20px Cards · Container min(1280px, 100%-48px) |
+| Logo | N-Marke (LogoMark: 2 Rechtecke + Diagonale, Gradient #d4d4d8→#fafafa, Lime-Punkt) — KEIN Hexagon |
+
+
 | Token | Wert | Verwendung |
 |---|---|---|
 | Hintergrund | #09090B (Seiten), #0A0A0A (Elemente) | alle Flächen |
