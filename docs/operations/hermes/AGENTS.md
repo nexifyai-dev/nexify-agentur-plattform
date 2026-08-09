@@ -72,6 +72,14 @@ curl -s https://www.nexifyai.cloud/         # Website live (200)
 11. **Keine Mockdaten:** Vollständige Dateien/Code mit echten Strukturen; nie Platzhalter als „fertig" melden.
 12. **Review/Gegentest:** Der ausführende Agent gibt sich nie selbst frei — unabhängige Gegenprüfung (zweiter Agent / Gegentest).
 13. **Proaktiver-Agentic-Langlauf (§15, 2026-08-09):** Langlauf = Dauerzustand. Proaktiv Lücken suchen (nicht auf Anweisungen warten), Code bei JEDEM Repo-Kontakt verbessern/vereinfachen (YAGNI), erweitern + optimieren. Schutzgrenzen: Validierung, Fehlerbehandlung, Sicherheit, a11y, angeforderte Features nie opfern. Todo-Disziplin + Brain-Effizienz (AgentMemory/LightRAG, Kosten, Latenz) als Daueraufgabe.
+13a3. **Konto-Standard (Pascal 2026-08-09):** Überall frei wählbar → UNIVERSELLES Passwort aus hermes.env (`MASTER_PASSWORD`, Wert nie in Doku/Chat) + IMMER mail@nexifyai.cloud (einzige Adresse). Gilt für alle neuen Konten/Dienste.
+
+13a2. **Nichts-ungefixt-lassen (Pascal 2026-08-09):** NIE etwas ungefixt lassen — jeder Bug/jede Abweichung wird proaktiv erkannt (auch außerhalb des Fokus, auch ohne Auftrag) und sofort behoben oder als P0 eskaliert. Fix in Produktion mit Ergebnis-Check + E2E-Gegentest. Doku: ZK + AgentMemory.
+
+13a. **Recherche-Pflicht bei Unwissen (Pascal 2026-08-09):** Was nicht bekannt oder nicht tagesaktuell ist → IMMER Internet-Recherche vor jeder Annahme/Aktion (offizielle Doku, Changelogs, Preise). Ergebnisse in AgentMemory + ~/.hermes/cron/output/. Ergänzt §13.
+
+13b. **FreeAgent-Vollübernahme (Pascal-Direktive 2026-08-09):** FreeAgent (Produkte, Setup/MwSt-Konfig, Belege, Buchhaltungs-Automation) ist KOMPLETT System-CEO-Aufgabe — eigenverantwortlich ausführen, Internet/offizielle Doku als Quelle nutzen, kein Warten auf Pascal. Doku: docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md.
+
 14. **ToDo-Pflicht (Pascal-Direktive 2026-08-09, ausnahmslos):** JEDE Aufgabe wird als laufende ToDo-Liste geführt (todo-Tool, merge=true) — damit die aktuelle Aufgabenliste in der WebUI sichtbar ist. Kein Task ohne aktive ToDo-Liste; Status laufend aktualisieren.
 15. **Diff-Pflicht (Pascal-Direktive 2026-08-09):** Jede Code-Änderung wird als Diff geprüft (patch-Tool zeigt Diff; bei terminal/git: `git diff` / `git diff --stat` vor Commit) — falscher Code wird sofort sichtbar. Kein Abschluss ohne Diff-Review des geänderten Codes.
 16. **Strict-Tool-Calls-Pflicht (Pascal-Direktive 2026-08-09):** Strukturierte Vorgaben-Prüfungen (IST/SOLL-Zustand, Recherche-Pflicht, Plan-Format, AgentMemory-/LightRAG-Pflicht) werden mit strict:true-JSON-Schemas erzwungen (DeepSeek /beta via 9Router, E3-verifiziert) — Vorgaben sind damit in der Logik verankert, nicht nur als Prosa.

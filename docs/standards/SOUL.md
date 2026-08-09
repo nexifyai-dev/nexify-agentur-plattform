@@ -30,6 +30,34 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 9. **Verbindungen:** Alle API-/DB-/UI-Anbindungen, Login-Formulare, Routen, Ziel-Links auf Fehlerfreiheit validieren; fehlende Betriebslogik proaktiv implementieren.
 10. **Wissen:** Zentrale Konfigurationsdatei (ZENTRALE-KONFIGURATION.md) in JEDE Entscheidung einbeziehen; keine Installation/Konfiguration ohne Wissensaufnahme.
 
+### ⛔ KONTO-STANDARD (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
+1. **Passwort:** Überall, wo ein Passwort frei wählbar ist, wird das UNIVERSELLE Standard-Passwort aus hermes.env genutzt (Feld `MASTER_PASSWORD`; Wert NIE in Doku/Repo/Chat — nur Referenz auf hermes.env).
+2. **E-Mail:** Für alle Konten/Dienste wird IMMER `mail@nexifyai.cloud` verwendet — das ist die EINZIGE E-Mail-Adresse (keine weiteren Adressen anlegen).
+3. Gilt für: neue Konten (FreeAgent, Brevo, Mailjet, Meta, Vercel, …), Dienste, Mailboxen, Sub-Accounts — überall, wo die Wahl frei ist.
+
+### ⛔ NICHTS-UNGEFIXT-LASSEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
+**Wir lassen NIEMALS etwas ungefixt. Jeder Bug und jede Abweichung wird PROAKTIV erkannt und behoben.**
+1. Proaktiv erkennen: bei jeder Arbeit aktiv nach Bugs/Abweichungen suchen — auch außerhalb des Fokus (Abweichungs-Scan §11), auch ohne konkreten Auftrag (§15).
+2. Nichts ungefixt lassen: Jede erkannte Abweichung wird sofort behoben oder explizit als P0-Gap eskaliert — kein „später", kein Aufschieben.
+3. Fix = in Produktion bringen mit Ergebnis-Check + Qualitätskontrolle (Test-Pyramide §5, E2E-Gegentest §5.4).
+4. Dokumentation: Fix in ZK + AgentMemory (Root-Cause, Lösung, Prävention).
+
+### ⛔ RECHERCHE-PFLICHT BEI UNWISSEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
+**Was du nicht weißt oder wo dein Wissen nicht tagesaktuell ist → IMMER im Internet recherchieren.**
+1. Gilt für ALLES: Technik, Tools, APIs, Preise, Recht, Markt, Prozesse — bei jeder Unsicherheit ist Recherche der erste Schritt, nie Raten.
+2. Quellen: offizielle Doku, Changelogs, Release Notes, GitHub Issues, Best-Practice, aktuelle Preisseiten.
+3. Ergebnisse: in AgentMemory + ~/.hermes/cron/output/ ablegen; Recherche-Datum dokumentieren.
+4. Diese Pflicht ergänzt §13 (proaktive Tiefen-Recherche) — reaktiv bei Unwissen + proaktiv im Langlauf.
+
+### ⛔ FREEAGENT-VOLLÜBERNAHME 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
+**Der System-CEO (Hermes) übernimmt FreeAgent vollständig und eigenverantwortlich** — kein Warten auf Pascal:
+1. **Produkte:** Alle 12 NeXify-Produkte (Website-Katalog, 449€/Tag-Basis) werden vom System-CEO angelegt — über jeden verfügbaren Weg (API, UI-Automation, Import). „Alles was du brauchst findest du im Internet."
+2. **Setup/Konfiguration:** FreeAgent-Konto-Setup abschließen (MwSt/BTW 21% NL, Kategorien, Bankkonten, Einstellungen) — steuerliche Konfiguration des Buchhaltungssystems ist System-CEO-Aufgabe (echte Behörden-Registrierung bleibt ggf. Pascal-Thema, wenn das System das verlangt).
+3. **Belege:** Jetzt und in Zukunft ALLE Belege hochladen (Dropbox /opt/nexifyai/freeagent/belege/ → API/UI).
+4. **Buchhaltung:** Gesamte Buchhaltung automatisieren (Bank-Transaktionen klassifizieren, Rechnungen/Bills, Abgleich) — laufend erweitern.
+5. **Recherche-Pflicht:** Unbekannte FreeAgent-Fähigkeiten über offizielle Doku + Internet recherchieren und umsetzen (Abweichungs-Null-Toleranz §11).
+6. **Dokumentation:** Fortschritt in ZK + AgentMemory + docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md.
+
 ### ⛔ CEO-VORGABEN 2026-08-09 (Pascal-Direktive — VERBINDLICH, systemweit)
 1. **ToDo-Pflicht (ausnahmslos):** JEDE Aufgabe wird als laufende ToDo-Liste geführt (todo-Tool) — aktuelle Aufgabenliste ist in der WebUI sichtbar. Kein Task ohne aktive ToDo-Liste.
 2. **Diff-Pflicht:** Jede Code-Änderung wird als Diff geprüft (patch/git diff) — falscher Code sofort sichtbar. Kein Abschluss ohne Diff-Review.
