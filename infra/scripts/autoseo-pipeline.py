@@ -53,7 +53,7 @@ THEMEN = [
     ("ki-fuer-handwerker", "KI für Handwerker: Angebote, Termine, Nachfassen", "Praktische KI-Einsätze im Handwerk: Angebotserstellung, Auftrags-Tracking, Bewertungen.", "/branchen/handwerk", "Branchen"),
     ("ki-fuer-kanzleien", "KI für Kanzleien und Steuerbüros: konkret umsetzbar", "Steuerkanzlei-Automation: Belegerfassung, E-Mail-Triage, Fristen – DSGVO-sicher.", "/branchen/steuerberater", "Branchen"),
     ("ki-fuer-agenturen", "KI für Werbeagenturen: Mehr Output, gleiches Team", "KI-Workflows für Agenturen: Content, Reporting, Projektmanagement.", "/branchen", "Branchen"),
-    ("ki-fuer-e-commerce", "KI im E-Commerce: Shop, Support, Retouren", "KI-Anwendungen für Onlineshops: Produkttexte, Preise, Support-Automation.", "/leistungen/webshops", "Branchen"),
+    ("ki-fuer-e-commerce", "KI im E-Commerce: Shop, Support, Retouren", "KI-Anwendungen für Onlineshops: Produkttexte, Preise, Support-Automation.", "/leistungen/onlineshops", "Branchen"),
     ("ki-fuer-immobilien", "KI für Immobilienmakler: Exposés, Leads, Besichtigungen", "Immobilien-KI: automatische Exposés, Lead-Pflege, Besichtigungs-Koordination.", "/branchen", "Branchen"),
     ("ki-fuer-gastronomie", "KI in der Gastronomie: Reservierungen, Bewertungen, Einkauf", "Gastro-KI: Reservierungs-Bot, Bewertungs-Management, Bestellprognosen.", "/branchen", "Branchen"),
     ("ki-fuer-medizinpraxen", "KI für Arztpraxen: Termine, Dokumentation, Patientenkommunikation", "Praxen-Automation: Termin-Erinnerungen, Dokumentation, Entlassbriefe – compliant.", "/branchen", "Branchen"),
@@ -68,7 +68,7 @@ THEMEN = [
     ("ki-prozessanalyse", "Prozessanalyse mit KI: Wo sich Automatisierung lohnt", "Prozessaudit: Kandidaten für Automatisierung finden und priorisieren.", "/audit", "Prozess"),
     ("chatgpt-business-alternativen", "ChatGPT Business-Alternativen 2026: Vergleich für KMU", "ChatGPT vs. spezialisierte KI-Plattformen: Datenschutz, Integration, Kosten.", "/leistungen/ki-plattform", "KI-Plattform"),
     ("web-app-ki-integration", "Web-App mit KI: Integration von LLMs Schritt für Schritt", "KI-Funktionen in Web-Apps: Architektur, Kosten, Latenz, Qualität.", "/leistungen/web-apps", "Web-Apps"),
-    ("onlineshop-ki-2026", "Onlineshop mit KI 2026: Trends, Tools, Kosten", "KI im Shop: Personalisierung, Suche, Retouren-Prognose – was sich rechnet.", "/leistungen/webshops", "Branchen"),
+    ("onlineshop-ki-2026", "Onlineshop mit KI 2026: Trends, Tools, Kosten", "KI im Shop: Personalisierung, Suche, Retouren-Prognose – was sich rechnet.", "/leistungen/onlineshops", "Branchen"),
     ("ki-tagessatz-vergleich", "Tagessatz oder Festpreis? KI-Projekte richtig kalkulieren", "Preismodelle für KI-Projekte: Tagessatz, Festpreis, Sprint – Vor- und Nachteile.", "/preise", "Preise"),
     ("kmu-digitalisierung-2026", "KMU-Digitalisierung 2026: Die 10 wichtigsten Schritte", "Digitalisierungs-Roadmap für kleine Unternehmen: von der Website bis zu KI-Agenten.", "/leistungen", "Organisation"),
 ]
