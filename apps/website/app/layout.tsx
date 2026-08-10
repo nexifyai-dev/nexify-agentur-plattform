@@ -5,7 +5,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { DeferredWidgets } from "@/components/deferred-widgets";
 import { PwaRegister } from "@/components/pwa-register";
-import { VercelInsights } from "@/components/vercel-insights";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
@@ -133,7 +132,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <SiteFooter />
           <DeferredWidgets />
           <PwaRegister />
-          <VercelInsights />
           </AuthProvider>
         </LanguageProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
