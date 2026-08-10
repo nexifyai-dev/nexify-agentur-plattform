@@ -5,7 +5,7 @@
 // TEAM: NeXifyAI Dev
 // WHAT: Server-side proxy bridge for public webhook callback URLs
 // WHY: Public Vercel website receives provider callbacks while FastAPI owns validation and processing
-// BEST-PRACTICE: Preserve method/query/body/headers; backend validates signatures; never fake success
+// BEST-PRACTICE: Reject unsigned POST noise before proxying; backend still validates signed callbacks; never fake success
 // PITFALL: V-WEBHOOK-01: Missing BACKEND_ORIGIN must return 503, not 200, so providers retry visibly
 // DEPENDS: lib/backend.ts proxyRequest, BACKEND_ORIGIN
 // DOCS-REF: backend/server.py /webhooks/meta; backend/channel_sync.py /api/webhooks/whatsapp
@@ -14,7 +14,22 @@
 import { NextResponse } from "next/server";
 import { proxyRequest } from "@/lib/backend";
 
+function hasWebhookSignature(request: Request): boolean {
+  const signature = request.headers.get("x-hub-signature-256")?.trim();
+  return Boolean(signature?.startsWith("sha256=") && signature.length > "sha256=".length);
+}
+
 export async function proxyWebhook(request: Request, backendPath: string) {
+  if (request.method.toUpperCase() === "POST" && !hasWebhookSignature(request)) {
+    return NextResponse.json(
+      {
+        detail:
+          "Webhook-Signatur fehlt. Callback wurde vor der Backend-Weiterleitung abgewiesen.",
+      },
+      { status: 403 },
+    );
+  }
+
   const url = new URL(request.url);
   const pathWithQuery = `${backendPath}${url.search}`;
 

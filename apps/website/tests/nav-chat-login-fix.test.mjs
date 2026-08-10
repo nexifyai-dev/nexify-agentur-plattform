@@ -107,6 +107,10 @@ test('public webhook bridge proxies to backend without bypassing signature check
   const singular = read('../app/webhook/route.ts');
   const apiCatchAll = read('../app/api/[...path]/route.ts');
 
+  assert.match(proxy, /function hasWebhookSignature/);
+  assert.match(proxy, /x-hub-signature-256/);
+  assert.match(proxy, /request\.method\.toUpperCase\(\) === \"POST\" && !hasWebhookSignature\(request\)/);
+  assert.match(proxy, /Webhook-Signatur fehlt/);
   assert.match(proxy, /proxyRequest\(pathWithQuery, request\)/);
   assert.match(proxy, /status: 503/);
   assert.match(proxy, /Signaturprüfung bleibt im Backend erzwungen/);
