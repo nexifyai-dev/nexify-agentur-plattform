@@ -50,6 +50,7 @@ MIMO_BASE_URL = os.environ.get("MIMO_BASE_URL_OPENAI")
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL")
 INTERNAL_NOTIFY_EMAIL = os.environ.get("INTERNAL_NOTIFY_EMAIL")
+LEAD_FALLBACK_FILE = os.environ.get("LEAD_FALLBACK_FILE", "/opt/nexifyai/state/leads-fallback.jsonl")
 FOLLOWUP_HOURS = int(os.environ.get("FOLLOWUP_HOURS", "24"))
 
 resend.api_key = RESEND_API_KEY
@@ -1821,6 +1822,30 @@ async def chat(body: ChatMessageIn):
     )
 
 
+def _lead_fallback(body, reason: str) -> None:
+    """P0 2026-08-11: Lead-Verlust verhindern - DB-Fehler => JSONL-Fallback + Alarm-Mail."""
+    record = {
+        "ts": datetime.now(timezone.utc).isoformat(),
+        "reason": reason,
+        "id": str(uuid.uuid4()),
+        "name": body.name, "email": body.email, "company": body.company,
+        "phone": body.phone, "language": body.language, "message": body.message,
+    }
+    try:
+        with open(LEAD_FALLBACK_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        if INTERNAL_NOTIFY_EMAIL:
+            asyncio.create_task(send_email(
+                INTERNAL_NOTIFY_EMAIL,
+                f"LEAD-VERLUST (DB-Fehler): {body.name}",
+                f"<p>Lead konnte nicht in die DB geschrieben werden (<b>{reason}</b>).</p>"
+                f"<p>Gesichert in: <code>{LEAD_FALLBACK_FILE}</code></p>"
+                f"<p><b>{body.name}</b> ({body.email})<br/>Firma: {body.company or '-'}<br/>"
+                f"Telefon: {body.phone or '-'}<br/>Sprache: {body.language}</p><p>{body.message}</p>",
+            ))
+    except Exception as e2:
+        logger.error(f"lead fallback failed: {e2}")
+
 @app.post("/api/contact")
 async def contact(body: ContactIn):
     lead_id = uuid.uuid4()
@@ -1861,6 +1886,10 @@ async def contact(body: ContactIn):
             asyncio.create_task(ai_ticket_reply(str(ticket_id)))
         except Exception as e:
             logger.warning(f"lead insert failed: {e}")
+            _lead_fallback(body, f"insert failed: {e}")
+    else:
+        logger.warning("lead insert skipped: db pool unavailable")
+        _lead_fallback(body, "db pool unavailable")
     nl = body.language == "nl"
     confirm_subject = (
         "Wij hebben uw aanvraag ontvangen – NeXify AI"
