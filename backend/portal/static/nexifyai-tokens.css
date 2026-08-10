@@ -1,0 +1,262 @@
+/* ══════════════════════════════════════════════════════════════
+   NeXifyAI — Canonical Design Tokens v1.0
+   Exakt 1:1 aus nexify-agentur-plattform/apps/website/app/globals.css
+   und https://nexifyai.cloud Homepage
+
+   WIRD VON ALLEN 5 SUBSYSTEMEN REFERENZIERT:
+   Hermes WebUI · Paperclip · 9Router · LightRAG · agentmemory
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── §1 BASE TOKENS ── */
+:root {
+  --bg: #09090b;
+  --bg-2: #0c0c0f;
+  --panel: rgba(255, 255, 255, 0.03);
+  --panel-2: rgba(255, 255, 255, 0.05);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.16);
+  --silver: #d4d4d8;
+  --silver-2: #a1a1aa;
+  --muted: #71717a;
+  --white: #fafafa;
+
+  /* Zinc scale (matches homepage zinc-*) */
+  --zinc-800: #27272a;
+  --zinc-700: #3f3f46;
+  --zinc-600: #52525b;
+  --zinc-500: #71717a;
+  --zinc-400: #a1a1aa;
+  --zinc-300: #d4d4d8;
+  --zinc-200: #e4e4e7;
+  --zinc-100: #f4f4f5;
+
+  /* Typography */
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Gradients */
+  --grad-silver: linear-gradient(120deg, #fafafa 0%, #c8c8d0 30%, #71717a 50%, #e4e4e7 72%, #fafafa 100%);
+  --grad-btn: linear-gradient(120deg, #e4e4e7, #ffffff 45%, #c4c4cc);
+
+  /* Semantic */
+  --success: #34d399;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --info: #60a5fa;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 24px rgba(255, 255, 255, 0.12);
+  --shadow-glow-hover: 0 0 40px rgba(255, 255, 255, 0.22);
+}
+
+/* ── §2 DARK MODE (default) ── */
+:root, .dark, [data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* ── §3 COMPONENT CLASSES ── */
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-lift {
+  transition: border-color 0.3s, transform 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.glass-lift:hover {
+  border-color: var(--line-2);
+  background: var(--panel-2);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 14px 30px;
+  background: var(--grad-btn);
+  color: #09090b;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-glow-hover), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
+  padding: 13px 28px;
+  background: transparent;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s, transform 0.25s;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--silver-2);
+  font-weight: 600;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--silver-2));
+}
+
+.text-silver {
+  background: var(--grad-silver);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 8s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+/* ── §4 APP-SPECIFIC OVERRIDE MAPS ── */
+
+/* Hermes WebUI override map */
+[data-app="hermes-webui"] :root,
+[data-app="hermes-webui"] {
+  --bg: var(--bg);
+  --sidebar: var(--bg-2);
+  --text: var(--white);
+  --muted: var(--muted);
+  --accent: var(--silver);
+  --accent-hover: var(--zinc-400);
+  --accent-bg: var(--panel);
+  --accent-bg-strong: var(--panel-2);
+  --accent-text: var(--silver-2);
+  --code-bg: #1a1a2e;
+  --surface: var(--bg-2);
+}
+
+/* Paperclip shadcn override map */
+[data-app="paperclip"],
+[data-brand="nexifyai"] {
+  --background: var(--bg);
+  --foreground: var(--white);
+  --card: var(--bg-2);
+  --card-foreground: var(--white);
+  --popover: var(--bg-2);
+  --popover-foreground: var(--white);
+  --primary: var(--silver);
+  --primary-foreground: var(--bg);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--white);
+  --muted: var(--muted);
+  --muted-foreground: var(--zinc-400);
+  --accent: var(--panel-2);
+  --accent-foreground: var(--white);
+  --destructive: var(--error);
+  --destructive-foreground: var(--white);
+  --border: var(--line-2);
+  --input: var(--line);
+  --ring: var(--silver);
+  --radius: 0.625rem;
+}
+
+/* 9Router override map */
+[data-app="9router"] {
+  --bg: var(--bg);
+  --surface: var(--bg-2);
+  --text: var(--white);
+  --text-secondary: var(--silver-2);
+  --brand-500: var(--silver);
+  --brand-600: var(--silver-2);
+  --brand-700: var(--muted);
+  --brand-50: var(--panel);
+  --brand-100: var(--panel-2);
+  --border: var(--line-2);
+  --shadow: var(--line);
+}
+
+/* LightRAG shadcn override map */
+[data-app="lightrag"] {
+  --background: var(--bg);
+  --foreground: var(--white);
+  --card: var(--bg-2);
+  --card-foreground: var(--white);
+  --popover: var(--bg-2);
+  --popover-foreground: var(--white);
+  --primary: var(--silver);
+  --primary-foreground: var(--bg);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--white);
+  --muted: var(--muted);
+  --muted-foreground: var(--zinc-400);
+  --accent: var(--panel-2);
+  --accent-foreground: var(--white);
+  --destructive: var(--error);
+  --destructive-foreground: var(--white);
+  --border: var(--line-2);
+  --input: var(--line);
+  --ring: var(--silver);
+  --chart-1: var(--silver);
+  --chart-2: var(--silver-2);
+  --chart-3: var(--muted);
+  --chart-4: var(--zinc-600);
+  --chart-5: var(--zinc-700);
+}
+
+/* agentmemory override map */
+[data-app="agentmemory"] {
+  --abyss: var(--bg);
+  --iron: var(--bg-2);
+  --charcoal: var(--panel-2);
+  --ash: var(--muted);
+  --steel: var(--zinc-400);
+  --mist: var(--silver);
+  --white: var(--white);
+  --gold: var(--silver);
+  --gold-deep: var(--silver-2);
+  --gold-soft: var(--zinc-400);
+  --cyan: var(--info);
+  --blue: var(--info);
+}

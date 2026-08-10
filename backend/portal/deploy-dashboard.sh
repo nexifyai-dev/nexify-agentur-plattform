@@ -41,17 +41,30 @@ mv "$PORTAL_STATIC.new" "$PORTAL_STATIC"
 
 # Verify deployment
 echo "--- Verifying deployment ---"
-HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8880/dashboard/ 2>/dev/null || echo "000")
+# HACK: Portal bindet auf PORT aus hermes.env (4001) — 8880 nur Unit-Default.
+# Last-Write-Wins: Drop-In EnvironmentFile hermes.env ueberschreibt Environment=PORT.
+# Siehe Run 174 Root-Cause. Beide Kandidaten-Ports probieren, erster 200 gewinnt.
+HTTP="000"
+for p in 4001 8880; do
+    code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${p}/dashboard/" 2>/dev/null || echo "000")
+    if [ "$code" = "200" ]; then HTTP="$code"; PORT_ACTIVE="$p"; break; fi
+done
 if [ "$HTTP" = "200" ]; then
     echo "✓ Dashboard serves correctly (HTTP $HTTP)"
 else
     echo "✗ Dashboard returned HTTP $HTTP — portal may be down"
 fi
 
-# Also update root index.html so / serves the same dashboard
-ROOT_STATIC="/opt/nexifyai/portal/static"
-cp "$PORTAL_STATIC/index.html" "$ROOT_STATIC/index.html"
-echo "✓ Synced root index.html"
+# Do NOT overwrite root index.html — it is the Command Center (portal hub).
+# The dashboard lives at /dashboard/ only.
+echo "✓ Dashboard deployed at /dashboard/ (root index.html preserved as Command Center)"
+
+# Deploy Traefik dynamic config
+echo "--- Deploying Traefik dynamic config ---"
+# HACK: Traefik file-provider laedt Verzeichnis /opt/nexifyai/traefik/dynamic/
+# (main-routers.yml), NICHT /opt/nexifyai/traefik/dynamic.yml (Run-174-Befund).
+cp /opt/nexifyai/portal/traefik/dynamic.yml /opt/nexifyai/traefik/dynamic/main-routers.yml
+echo "✓ Traefik dynamic config deployed (dynamic/main-routers.yml)"
 
 echo "=== Deploy complete ==="
 echo "Verify at: https://admin.nexifyai.cloud/dashboard/"

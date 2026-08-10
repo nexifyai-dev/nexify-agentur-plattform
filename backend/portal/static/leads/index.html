@@ -190,13 +190,15 @@
   .dot.error { background: var(--red) }
   
   @media(max-width: 768px) {
+    .header-inner { flex-wrap: wrap; gap: 12px }
+    .header-actions { flex-wrap: wrap; gap: 8px }
     .stats-grid { grid-template-columns: repeat(2, 1fr) }
     .pipeline { grid-template-columns: repeat(3, 1fr) }
     .leads-table { font-size: 12px }
   }
 </style>
 </head>
-<body>
+<body style="overflow-x:hidden">
 
 <header>
   <div class="container header-inner">
@@ -315,7 +317,7 @@
     <div class="section-header">
       <h2>Integrierte Services</h2>
     </div>
-    <div id="services-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+    <div id="services-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
       <div class="stat-card"><div class="stat-label">GPT Researcher</div><div class="stat-value" style="font-size:14px" id="svc-gpt">—</div></div>
       <div class="stat-card"><div class="stat-label">Supabase</div><div class="stat-value" style="font-size:14px" id="svc-supabase">—</div></div>
       <div class="stat-card"><div class="stat-label">agentmemory</div><div class="stat-value" style="font-size:14px" id="svc-memory">—</div></div>

@@ -1,0 +1,720 @@
+http:
+  routers:
+    portal:
+      rule: Host(`admin.nexifyai.cloud`)
+      service: portal
+      priority: 1
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - csp-strict
+      - auth-forward
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    portal-health:
+      rule: Host(`admin.nexifyai.cloud`) && Path(`/health`)
+      service: portal
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    portal-sse:
+      rule: Host(`admin.nexifyai.cloud`) && Path(`/api/sse/events`)
+      service: portal
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    portal-static:
+      rule: Host(`admin.nexifyai.cloud`) && (PathPrefix(`/dashboard/assets`) || PathPrefix(`/dashboard`))
+        || Path(`/favicon.svg`) || Path(`/nexifyai-tokens.css`) || Path(`/logo.svg`)
+        || Path(`/impressum.html`) || Path(`/datenschutz.html`) || Path(`/agb.html`)
+        || Path(`/avv.html`) || Path(`/widerruf.html`) || Path(`/cookie-richtlinie.html`)
+        || Path(`/ki-hinweise.html`) || Path(`/barrierefreiheit.html`) || Path(`/nutzungsbedingungen.html`)
+      service: portal
+      priority: 190
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - csp-strict
+      - auth-forward
+      tls: null
+    api-gateway:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/api`)
+      service: portal
+      priority: 150
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    auth:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/auth`)
+      service: auth-service
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      tls:
+        certResolver: letsencrypt
+    workstation:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/workstation`)
+      service: portal
+      middlewares:
+      - security-headers
+      - redirect-workstation
+      priority: 100
+      entryPoints:
+      - websecure
+      tls:
+        certResolver: letsencrypt
+    factory-path:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/factory`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    router:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/router`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    memory:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/memory`)
+      service: agentmemory-viewer
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      - strip-prefix-memory
+      tls:
+        certResolver: letsencrypt
+    wissen:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/wissen`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    lightrag-webui:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/wissen/webui`)
+      service: lightrag
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      - strip-prefix-lightrag
+      tls:
+        certResolver: letsencrypt
+    spaether-api:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/api/leads`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    demo-viewer:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/api/demo`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    twenty-admin:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/crm`)
+      service: twenty
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-iframe
+      - auth-forward
+      - strip-prefix-twenty
+      tls:
+        certResolver: letsencrypt
+    vitrine:
+      rule: Host(`demo.nexifyai.cloud`)
+      service: vitrine
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    wissen-subdomain:
+      rule: Host(`wissen.nexifyai.cloud`)
+      service: lightrag
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    wiki-subdomain:
+      rule: Host(`wiki.nexifyai.cloud`)
+      service: wiki
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      tls:
+        certResolver: letsencrypt
+    rag-subdomain:
+      rule: Host(`rag.nexifyai.cloud`)
+      service: lightrag
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    agentmemory-acme:
+      rule: Host(`agentmemory.nexifyai.cloud`) && PathPrefix(`/.well-known/acme-challenge/`)
+      service: agentmemory-viewer
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      tls: {}
+    rag-acme:
+      rule: Host(`rag.nexifyai.cloud`) && PathPrefix(`/.well-known/acme-challenge/`)
+      service: lightrag
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      tls: {}
+    design-subdomain:
+      rule: Host(`design.nexifyai.cloud`)
+      service: open-design
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    factory-subdomain:
+      rule: Host(`factory.nexifyai.cloud`)
+      service: portal
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit-factory
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    memory-subdomain:
+      rule: Host(`memory.nexifyai.cloud`)
+      service: agentmemory-viewer
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    monitoring:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/grafana`)
+      service: grafana
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-iframe
+      - auth-forward
+      - strip-prefix-grafana
+      tls:
+        certResolver: letsencrypt
+    grafana:
+      rule: Host(`grafana.nexifyai.cloud`)
+      service: grafana
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    prometheus:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/monitoring`)
+      service: prometheus
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-iframe
+      - auth-forward
+      - strip-prefix-prometheus
+      tls:
+        certResolver: letsencrypt
+    vitrine-path:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/demo`)
+      service: vitrine
+      priority: 90
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      - strip-prefix-demo
+      tls:
+        certResolver: letsencrypt
+    twenty:
+      rule: Host(`crm.nexifyai.cloud`)
+      service: twenty
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls: {}
+    router-subdomain:
+      rule: Host(`router.nexifyai.cloud`)
+      service: portal
+      priority: 200
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - redirect-router-sub
+      tls:
+        certResolver: letsencrypt
+    html-subdomain:
+      rule: Host(`html.nexifyai.cloud`)
+      service: html-anything
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    html-anything:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/html`)
+      service: html-anything
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      - strip-prefix-html
+      tls:
+        certResolver: letsencrypt
+    webui-subdomain:
+      rule: Host(`webui.nexifyai.cloud`)
+      service: hermes-webui
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      tls:
+        certResolver: letsencrypt
+    api-proxy:
+      rule: Host(`admin.nexifyai.cloud`) && PathPrefix(`/api/proxy`)
+      service: portal
+      priority: 120
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      - csp-strict
+      - auth-forward
+      tls:
+        certResolver: letsencrypt
+    gitlab:
+      rule: Host(`gitlab.nexifyai.cloud`)
+      service: gitlab
+      priority: 100
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    vitrine-public:
+      rule: Host(`vitrine.nexifyai.cloud`)
+      service: vitrine-service
+      priority: 210
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    cockpit-router:
+      rule: Host(`cockpit.nexifyai.cloud`)
+      service: cockpit-svc
+      priority: 210
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+    ai-router-subdomain:
+      rule: Host(`ai-router.nexifyai.cloud`)
+      service: ninerouter
+      priority: 300
+      entryPoints:
+      - websecure
+      middlewares:
+      - cors-9router
+      - security-headers
+      - csp-strict
+      tls:
+        certResolver: letsencrypt
+    dashboard-subdomain:
+      rule: Host(`dashboard.nexifyai.cloud`)
+      service: hermes-workspace-svc
+      priority: 350
+      entryPoints:
+      - websecure
+      middlewares:
+      - security-headers
+      - rate-limit
+      tls:
+        certResolver: letsencrypt
+  services:
+    portal:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:4001
+    auth-service:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8881
+    hermes-webui:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8787
+    ninerouter:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:20128
+    agentmemory-viewer:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:3113
+    open-design:
+      loadBalancer:
+        servers:
+        # IST 2026-07-31: OpenDesign/html-anything on :3002 (8902 was stale 404)
+        - url: http://127.0.0.1:3002
+    lightrag:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:9621
+    spaether-api:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8900
+    vitrine:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8901
+    grafana:
+      loadBalancer:
+        servers:
+        # IST 2026-08-10: nexify-grafana bind 127.0.0.1:3030 (GF_SERVER_HTTP_PORT=3030)
+        - url: http://127.0.0.1:3030
+    prometheus:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:9090
+    twenty:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:3001
+    html-anything:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:3002
+    gitlab:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8922
+    vitrine-service:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8901
+    cockpit-svc:
+      loadBalancer:
+        servers:
+        - url: http://127.0.0.1:8904
+    hermes-dashboard-svc:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+        - url: http://127.0.0.1:9119
+    hermes-workspace-svc:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+        - url: http://127.0.0.1:4001
+  middlewares:
+    dashboard-host-fix:
+      headers:
+        customRequestHeaders:
+          Host: "127.0.0.1:9119"
+          X-Forwarded-Host: "127.0.0.1:9119"
+          X-Forwarded-For: "127.0.0.1"
+    security-headers:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        customFrameOptionsValue: SAMEORIGIN
+        contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'"
+        referrerPolicy: strict-origin-when-cross-origin
+        permissionsPolicy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+        customResponseHeaders:
+          X-Powered-By: ''
+          Server: ''
+          Cross-Origin-Opener-Policy: same-origin
+          Cross-Origin-Embedder-Policy: credentialless
+          Cross-Origin-Resource-Policy: same-origin
+    csp-strict:
+      headers:
+        contentSecurityPolicy: 'default-src ''self''; script-src ''self'' ''unsafe-inline'';
+          style-src ''self'' ''unsafe-inline''; img-src ''self'' data: https:; font-src
+          ''self'' https://fonts.bunny.net; connect-src ''self'' https: wss:; frame-ancestors
+          ''self''; base-uri ''self'''
+    csp-iframe:
+      headers:
+        contentSecurityPolicy: 'default-src * ''unsafe-inline'' ''unsafe-eval'' data:
+          blob:; frame-ancestors *; frame-src *'
+        customFrameOptionsValue: ''
+    auth-forward:
+      forwardAuth:
+        address: http://127.0.0.1:8881/verify
+        trustForwardHeader: true
+        authResponseHeaders:
+        - X-User-Id
+        - X-User-Email
+        - X-User-Role
+    strip-prefix-factory:
+      stripPrefix:
+        prefixes:
+        - /factory
+    strip-prefix-wissen:
+      stripPrefix:
+        prefixes:
+        - /wissen
+    strip-prefix-lightrag:
+      stripPrefix:
+        prefixes:
+        - /wissen
+    strip-prefix-leads:
+      stripPrefix:
+        prefixes:
+        - /leads
+    strip-prefix-api-leads:
+      stripPrefix:
+        prefixes:
+        - /api/leads
+    redirect-api-leads-slash:
+      redirectRegex:
+        regex: ^/api/leads$
+        replacement: /api/leads/
+        permanent: true
+    strip-prefix-workstation:
+      stripPrefix:
+        prefixes:
+        - /workstation
+    strip-prefix-router:
+      stripPrefix:
+        prefixes:
+        - /router
+    strip-prefix-auth:
+      stripPrefix:
+        prefixes:
+        - /auth
+    redirect-logout:
+      redirectRegex:
+        regex: ^.*/auth/logout.*
+        replacement: https://www.nexifyai.cloud/
+        permanent: false
+    redirect-router-sub:
+      redirectRegex:
+        regex: ^https://router\.nexifyai\.cloud/(.*)
+        replacement: https://admin.nexifyai.cloud/router/${1}
+        permanent: true
+    strip-prefix-demo:
+      stripPrefix:
+        prefixes:
+        - /demo
+    strip-prefix-memory:
+      stripPrefix:
+        prefixes:
+        - /memory
+    strip-prefix-html:
+      stripPrefix:
+        prefixes:
+        - /html
+    strip-prefix-grafana:
+      stripPrefix:
+        prefixes:
+        - /grafana
+    strip-prefix-twenty:
+      stripPrefix:
+        prefixes:
+        - /crm
+    strip-prefix-prometheus:
+      stripPrefix:
+        prefixes:
+        - /monitoring
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+        period: 1s
+        sourceCriterion:
+          ipStrategy:
+            depth: 1
+    rate-limit-factory:
+      rateLimit:
+        average: 500
+        burst: 600
+        period: 1s
+        sourceCriterion:
+          ipStrategy:
+            depth: 1
+    redirect-workstation:
+      redirectRegex:
+        regex: ^https://admin\.nexifyai\.cloud/workstation(.*)
+        replacement: https://webui.nexifyai.cloud${1}
+        permanent: true
+    cors-9router:
+      headers:
+        accessControlAllowMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+        - PATCH
+        accessControlAllowHeaders:
+        - Content-Type
+        - Authorization
+        - X-Requested-With
+        - Accept
+        accessControlAllowOriginList:
+        - https://ai-router.nexifyai.cloud
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 86400
