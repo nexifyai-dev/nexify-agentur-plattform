@@ -90,6 +90,16 @@ test('chat AI router parsing rejects malformed JSON without raw-slice hacks', ()
   assert.doesNotMatch(chat, /raw\.slice\(0, raw\.lastIndexOf/);
 });
 
+test('root layout defers fixed overlay widgets to reduce early CLS risk', () => {
+  const layout = read('../app/layout.tsx');
+  const deferred = read('../components/deferred-widgets.tsx');
+  assert.match(layout, /import \{ DeferredWidgets \} from "@\/components\/deferred-widgets"/);
+  assert.match(layout, /<DeferredWidgets \/>/);
+  assert.doesNotMatch(layout, /<StickyCta \/>|<ExitIntent \/>|<ChatWidget \/>|<CookieConsent \/>/);
+  assert.match(deferred, /requestIdleCallback|setTimeout/);
+  assert.match(deferred, /if \(!ready\) return null/);
+});
+
 test('root layout instruments Vercel Analytics and Speed Insights with private route filters', () => {
   const layout = read('../app/layout.tsx');
   const insights = read('../components/vercel-insights.tsx');

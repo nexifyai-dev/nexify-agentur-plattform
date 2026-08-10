@@ -22,10 +22,13 @@ test("mobile: chat panel goes full-bleed under 640px", () => {
   assert.match(css, /#main-content\s*\{[\s\S]*?padding-bottom/);
 });
 
-test("mobile: StickyCta mounts once in root layout", () => {
+test("mobile: StickyCta stays in deferred root overlays without locale duplication", () => {
   const rootLayout = read("app/layout.tsx");
   const localeLayout = read("app/[locale]/layout.tsx");
-  assert.match(rootLayout, /StickyCta/);
+  const deferredWidgets = read("components/deferred-widgets.tsx");
+  assert.match(rootLayout, /DeferredWidgets/);
+  assert.doesNotMatch(rootLayout, /<StickyCta \/>/);
+  assert.match(deferredWidgets, /<StickyCta \/>/);
   assert.doesNotMatch(localeLayout, /StickyCta/);
   assert.match(rootLayout, /viewportFit:\s*"cover"/);
 });
