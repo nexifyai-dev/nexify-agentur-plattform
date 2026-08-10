@@ -29,6 +29,12 @@ test('next.config validates BACKEND_ORIGIN before adding /api rewrite', () => {
   assert.match(src, /u\.protocol === "http:" \|\| u\.protocol === "https:"/);
 });
 
+test('next.config disables standalone output on Vercel builds only', () => {
+  const src = read('../next.config.ts');
+  assert.match(src, /const isVercelBuild = process\.env\.VERCEL === "1" \|\| process\.env\.VERCEL === "true"/);
+  assert.match(src, /output:\s*isVercelBuild \? undefined : "standalone"/);
+});
+
 test('chat session + chat routes exist as local handlers', () => {
   const session = read('../app/api/chat/session/route.ts');
   const chat = read('../app/api/chat/route.ts');
