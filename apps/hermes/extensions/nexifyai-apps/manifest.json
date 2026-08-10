@@ -11,6 +11,11 @@
         "assets/app-shared.css"
       ],
       "enabled": true,
+      "sidecar": {
+        "type": "loopback",
+        "origin": "http://127.0.0.1:3113",
+        "health_path": "/health"
+      },
       "permissions": {
         "storage": {
           "owned": true
@@ -36,6 +41,11 @@
         "assets/app-shared.css"
       ],
       "enabled": true,
+      "sidecar": {
+        "type": "loopback",
+        "origin": "http://127.0.0.1:9622",
+        "health_path": "/health"
+      },
       "permissions": {
         "storage": {
           "owned": true
@@ -86,6 +96,11 @@
         "assets/app-shared.css"
       ],
       "enabled": true,
+      "sidecar": {
+        "type": "loopback",
+        "origin": "http://127.0.0.1:5678",
+        "health_path": "/healthz"
+      },
       "permissions": {
         "storage": {
           "owned": true
@@ -103,7 +118,7 @@
     {
       "id": "nexifyai-app-paperclip",
       "name": "NeXify AI Paperclip",
-      "description": "Paperclip als Tab — PLATZHALTER: Factory-API aktiv (Port 3100), Web-UI existiert nicht (API-only, Re-Setup 2026-08-10)",
+      "description": "Paperclip als Tab — Factory-UI v1.1.0 aktiv (Port 3100, CI-Theme, GET / liefert Web-UI; Deploy 2026-08-10)",
       "scripts": [
         "assets/app-paperclip.js"
       ],
@@ -111,6 +126,11 @@
         "assets/app-shared.css"
       ],
       "enabled": true,
+      "sidecar": {
+        "type": "loopback",
+        "origin": "http://127.0.0.1:3100",
+        "health_path": "/api/health"
+      },
       "permissions": {
         "storage": {
           "owned": true
