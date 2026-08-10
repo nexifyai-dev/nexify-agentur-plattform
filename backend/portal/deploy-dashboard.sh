@@ -1,6 +1,10 @@
 #!/bin/bash
 # NeXifyAI Dashboard Build & Deploy Script
 # Builds the Vue dashboard and deploys to portal static directory
+# WARNUNG (2026-08-10): Rebuild überschreibt /opt/nexifyai/portal/static/dashboard/
+# und kann die Mobile-Overrides (@media-Fixes, 390px) zurücksetzen, wenn die
+# Vue-Quelle (/opt/nexifyai/repos/dashboard-vue) nicht denselben Stand hat.
+# Vor Ausführung: Quelle vs. deployed Stand abgleichen (diff), sonst Fix-Verlust.
 set -e
 
 DASHBOARD_DIR="/opt/nexifyai/repos/dashboard-vue"
