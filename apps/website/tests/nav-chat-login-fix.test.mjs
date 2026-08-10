@@ -131,6 +131,15 @@ test('public webhook bridge proxies to backend without bypassing signature check
   assert.match(apiCatchAll, /const backendPath = `\/api\/\$\{segments/);
 });
 
+test('outreach unsubscribe HTML escapes user-controlled email and uses timing-safe token compare', () => {
+  const src = read('../app/api/outreach/unsubscribe/route.ts');
+  assert.match(src, /function escapeHtml/);
+  assert.match(src, /safeTitle = escapeHtml\(title\)/);
+  assert.match(src, /safeBody = escapeHtml\(body\)/);
+  assert.match(src, /timingSafeEqual/);
+  assert.doesNotMatch(src, /expected !== token/);
+});
+
 test('contact and offers use Resend fallback helpers', () => {
   assert.match(read('../lib/mail.ts'), /resendConfigured/);
   assert.match(read('../lib/mail.ts'), /sendContactNotification/);

@@ -11,7 +11,7 @@
 // DOCS-REF: docs/operations/LEAD-OUTREACH-AUTOMATION.md
 // SESSION: lead-outreach-automation-7dd5
 
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
@@ -25,13 +25,30 @@ function tokenFor(email: string, salt: string): string {
     .slice(0, 32);
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function safeTokenEqual(a: string, b: string): boolean {
+  const left = Buffer.from(a, "utf8");
+  const right = Buffer.from(b, "utf8");
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+
 function htmlPage(title: string, body: string): NextResponse {
-  const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title></head>
+  const safeTitle = escapeHtml(title);
+  const safeBody = escapeHtml(body);
+  const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${safeTitle}</title></head>
 <body style="margin:0;background:#0A0A0A;color:#e5e5e5;font-family:Manrope,Arial,sans-serif;padding:48px 16px;">
 <main style="max-width:520px;margin:0 auto;">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><img src="https://www.nexifyai.cloud/logo-mark.png" alt="NeXify" width="34" height="34" style="display:block;width:34px;height:34px;border:0;border-radius:8px;"><div style="font-family:Outfit,Arial,sans-serif;font-size:24px;color:#ffffff;letter-spacing:1px;">Ne<span style="color:#C8FF00;font-weight:700;">X</span>ify <span style="color:#9E9E9E;font-weight:300;">AI</span></div></div>
-  <h1 style="font-size:20px;font-weight:600;">${title}</h1>
-  <p style="line-height:1.6;color:#a1a1aa;">${body}</p>
+  <h1 style="font-size:20px;font-weight:600;">${safeTitle}</h1>
+  <p style="line-height:1.6;color:#a1a1aa;">${safeBody}</p>
   <p style="margin-top:24px;font-size:13px;color:#71717a;"><a href="https://www.nexifyai.cloud/de" style="color:#a1a1aa;">www.nexifyai.cloud</a></p>
 </main></body></html>`;
   return new NextResponse(html, {
@@ -125,7 +142,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
   }
 
   const expected = tokenFor(email, salt);
-  if (expected !== token) {
+  if (!safeTokenEqual(expected, token)) {
     // Generic message — do not leak whether email exists
     if (wantJson) {
       return NextResponse.json({ ok: true, status: "recorded" });
