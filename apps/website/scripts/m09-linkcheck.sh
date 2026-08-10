@@ -25,20 +25,24 @@ for p in \
   /kontakt /rueckruf /faq /ki-roi-rechner /chatbot-kosten-rechner /plattform \
   /venlo /impressum /datenschutz /agb /avv /widerruf /cookie-richtlinie \
   /ki-hinweise /audit /checkliste /ebook /alternativen /partner /botschafter \
-  /sprechstunde /erfahrungen /branchen /stadt/berlin /stadt/hamburg \
-  /stadt/muenchen /stadt/koeln /stadt/frankfurt-am-main /stadt/duesseldorf \
-  /stadt/stuttgart /stadt/leipzig /stadt/dortmund /stadt/hannover \
+  /sprechstunde /erfahrungen /branchen /stadt/ki-agentur-berlin \
+  /stadt/ki-agentur-hamburg \
+  /stadt/ki-agentur-muenchen /stadt/ki-agentur-koeln /stadt/ki-agentur-frankfurt-am-main \
+  /stadt/ki-agentur-duesseldorf /stadt/ki-agentur-stuttgart /stadt/ki-agentur-leipzig \
+  /stadt/ki-agentur-dortmund /stadt/ki-agentur-hannover \
   /leistungen/websites /leistungen/automatisierung /leistungen/ai-agenten \
   /leistungen/ki-begleiter /leistungen/audit /leistungen/beratung \
-  /branchen/handwerk /branchen/steuerberatung /branchen/e-commerce \
+  /branchen/handwerk /branchen/steuerberater /branchen/ecommerce \
   /branchen/immobilien /branchen/agenturen /branchen/kanzleien \
   /branchen/logistik /branchen/pflege /branchen/gastronomie \
   /branchen/produktion /vergleich/chatgpt /vergleich/freelance \
-  /wissen/was-kostet-ki-chatbot-2026 /wissen/ki-automatisierung-kmu \
+  /wissen/ai-automatisierung-kmu /wissen/ki-automatisierung-kmu-7-gewinne \
   /wissen/whatsapp-marketing-handwerk /wissen/ai-agenten-einfuehrung \
   /wissen/chatbot-dsgvo /wissen/website-kosten-2026 \
   /wissen/was-kostet-web-app-2026 /wissen/ki-steuerbuero \
   /wissen/automation-roi /wissen/chatgpt-unternehmen-grenzen \
+  /wissen/geo-llm-seo-2026 /wissen/ki-chatbot-kosten-mittelstand \
+  /wissen/ki-automatisierung-vertrieb \
   ; do
   check "$p"
 done
