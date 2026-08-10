@@ -101,6 +101,26 @@ test('root layout instruments Vercel Analytics and Speed Insights', () => {
   assert.match(pkg, /"@vercel\/speed-insights"/);
 });
 
+test('public webhook bridge proxies to backend without bypassing signature checks', () => {
+  const proxy = read('../lib/webhook-proxy.ts');
+  const meta = read('../app/webhooks/meta/route.ts');
+  const singular = read('../app/webhook/route.ts');
+  const apiCatchAll = read('../app/api/[...path]/route.ts');
+
+  assert.match(proxy, /proxyRequest\(pathWithQuery, request\)/);
+  assert.match(proxy, /status: 503/);
+  assert.match(proxy, /Signaturprüfung bleibt im Backend erzwungen/);
+  assert.doesNotMatch(proxy, /received: true|ok: true/);
+
+  for (const route of [meta, singular]) {
+    assert.match(route, /const META_WEBHOOK_PATH = "\/webhooks\/meta"/);
+    assert.match(route, /export function GET/);
+    assert.match(route, /export function POST/);
+  }
+
+  assert.match(apiCatchAll, /const backendPath = `\/api\/\$\{segments/);
+});
+
 test('contact and offers use Resend fallback helpers', () => {
   assert.match(read('../lib/mail.ts'), /resendConfigured/);
   assert.match(read('../lib/mail.ts'), /sendContactNotification/);
