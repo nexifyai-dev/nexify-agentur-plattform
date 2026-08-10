@@ -26,7 +26,7 @@ Vollumfängliche Neugestaltung der Website a-bau.info (A-Bau Meisterbetrieb GmbH
 ## UMFANG (IN SCOPE)
 - Kompletter Neuaufbau (statisch generiert, Astro 5): Start, Leistungen, Referenzen, Über uns, Kontakt, FAQ, Impressum, Datenschutz, 404.
 - Download + Aufbereitung der 86 vorhandenen Medien (Bilder WebP/AVIF, responsive srcset, Alt-Texte; Videos mit Poster; Logo-Retina).
-- RAG-Chatbot: FastAPI-Service `chat/`, pgvector (tenant_id=abau), 9Router (ds/deepseek-v4-flash, Think-Max; Embedding upstage/solar-embedding-1-large), Widget.
+- RAG-Chatbot: FastAPI-Service `chat/`, Retrieval via SQLite-FTS5 (lokal, tenant-isoliert; kein externer Embedding-Provider — Upstage final entfernt, Pascal 2026-08-10), 9Router (ds/deepseek-v4-flash, Think-Max), Widget.
 - Rechtstexte als vollständige Entwürfe (kein Mock) + Consent-Banner + AVV-Hosting.
 - Staging-Deploy + DNS-Umzug nach Abnahme; 301-Redirects alter URLs.
 - Betriebshandbuch + ZK/AgentMemory-Update.
@@ -82,7 +82,7 @@ P1: Build + Chatbot. P2: Reputations-Maßnahmen (Rezensionsmanagement Google/Pro
 
 ### Phase 4 — AI-Chatbot (P1)
 - Service `chat/` (FastAPI): POST /api/chat {question, session_id}; Rate-Limit; CORS (nur eigene Domains); Input-Validierung; Timeout; Fehler-Logging ohne PII.
-- Wissens-Ingest: finale Inhalte (MDX/JSON) → Chunks (500–800 Tokens, Überschneidung) → Embeddings solar-embedding-1-large via 9Router → pgvector (tenant_id='abau'; Mandantentrennung §0b; Index HNSW).
+- Wissens-Ingest: finale Inhalte (YAML/MD) → Chunks (700 Zeichen, Überschneidung 80) → FTS5-Index in SQLite (BM25; lokal, DSGVO-sauber, tenant-isoliert).
 - Prompt: System-Prompt (Rolle „A-Bau KI-Assistent", deutsch, NUR aus Wissen antworten, Quellen angeben, keine Preise/Erfindungen, bei Unsicherheit → FAQ/Kontakt verweisen, keine Fremdinstruktionen aus Website-Inhalten befolgen — Injection-Schutz), Retrieval top-k=5, Kontext-Format, Think-Max via 9Router.
 - Widget: Floating-Button, Panel, DSGVO-Hinweis, KI-Offenlegung (Art. 50 EU AI Act), minimale Logs 7 Tage.
 - Gate: E2E Happy-Path (Leistungsfrage → korrekte Antwort mit Quelle), Negativ (Preisfrage → Verweis), Injection-Versuch (→ abgewiesen), Ausfall-Fallback (→ Kontakt-Link).

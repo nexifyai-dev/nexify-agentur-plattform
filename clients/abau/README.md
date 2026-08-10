@@ -18,7 +18,7 @@
 ## Kernziele
 1. Vollumfängliche Neugestaltung — hochwertig, umfangreich, vertrauensvoll, Deutsch
 2. Recht/DSGVO/DIN/ISO vollständig (Impressum, Datenschutz, Consent, Barrierefreiheit WCAG 2.2 AA / EN 301 549)
-3. AI-Chatbot über 9Router (deepseek-v4-flash, Think-Max), antwortet aus Website-Wissen (RAG: solar-embedding + pgvector, tenant-getrennt)
+3. AI-Chatbot über 9Router (deepseek-v4-flash, Think-Max), antwortet aus Website-Wissen (RAG: FTS5-Retrieval, lokal — kein externer Embedding-Provider; Upstage final entfernt)
 4. Vorhandene Bilder nutzen, fehlende Daten recherchiert (siehe Recherche-Doku), Rest via Kunden-Klärung
 5. Deploy: **`a-bau.nexifyai.cloud`** (Staging = aktuelles Ziel, Pascal 2026-08-10) — spätere eigene Domain nach Kundenentscheid, kein IONOS-Umzug jetzt.
 
