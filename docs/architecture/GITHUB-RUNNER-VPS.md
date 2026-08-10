@@ -1,3 +1,4 @@
+# DEPRECATED (2026-08-10): GitHub Self-Hosted Runner DEAKTIVIERT — Workflows laufen auf ubuntu-latest oder Host-Timer (website-sync 5min, healthcheck 15min).
 # FILE: docs/architecture/GITHUB-RUNNER-VPS.md
 # NIR: 26.07.2026 13:30
 # NAME: NeXifyAI Agent
