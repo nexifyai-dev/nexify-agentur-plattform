@@ -70,7 +70,6 @@ Self-hosted GitLab wird über MCP `gitlab-oss` angebunden (`@zereight/mcp-gitlab
 | `02_regelwerke/` | VPS | VPS → Repo (manuell) |
 | `03_checklisten/` | VPS | VPS → Repo (manuell) |
 | `03_security/` | VPS | VPS → Repo (manuell) |
-| `04_evidence/` | VPS | VPS → Repo (manuell) |
 | `04_normen/` | VPS | VPS → Repo (manuell) |
 | `04_register/` | VPS | VPS → Repo (manuell) |
 | `05_skills/` | VPS | VPS → Repo (manuell) |

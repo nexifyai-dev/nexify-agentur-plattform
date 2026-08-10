@@ -39,7 +39,6 @@ on:
       - sentry-alert
       - slack-alert
       - linear-issue
-      - vercel-deploy-fail
       - health-alert
       - gitlab-ci-fail
       - gitlab-event

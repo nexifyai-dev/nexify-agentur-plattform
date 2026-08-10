@@ -16,7 +16,6 @@ nexify/
 ├── 02_regelwerke/      # SOPs, Arbeitsanweisungen, Templates
 ├── 03_checklisten/     # Review-Checklisten, Abnahme-Gates
 ├── 03_security/        # Security, Auth, Secrets, Zugriffsmatrix, Verbote
-├── 04_evidence/        # Recovery-Reports, Health-Evidence, Audit-Trail
 ├── 04_normen/          # ISO 27001, ISO 42001, DIN 5008, EU AI Act, Normen
 ├── 04_register/        # Asset-Inventar, Tool-Permission-Matrix, Registers
 ├── 05_skills/          # Skills und Fähigkeitskatalog

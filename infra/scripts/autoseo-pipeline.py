@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """AutoSEO-Pipeline (NeXify, 2026-08-09, nach AutoSEO-Muster getautoseo.com):
-1 Artikel/Tag -> /wissen (wissen-articles.ts) -> Commit+Push -> Vercel-Deploy.
+1 Artikel/Tag -> /wissen (wissen-articles.ts) -> Commit+Push -> CI-Deploy VPS (deploy-vps.yml, kein Vercel).
 DeepSeek via 9Router (ds/deepseek-v4-flash, Think-Max), JSON-Mode.
 State: /opt/nexifyai/autoseo/state.json | Log: /var/log/nexifyai/autoseo.log"""
 import json, os, re, subprocess, sys, datetime

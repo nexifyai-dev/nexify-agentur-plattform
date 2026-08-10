@@ -17,7 +17,6 @@ VPS_SOURCE_DIRS=(
   "02_regelwerke"
   "03_checklisten"
   "03_security"
-  "04_evidence"
   "04_normen"
   "04_register"
   "05_skills"
