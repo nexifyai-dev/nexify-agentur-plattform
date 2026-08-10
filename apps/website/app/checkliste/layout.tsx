@@ -15,7 +15,7 @@ import type { ReactNode } from "react";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Checkliste Website & KI-Projekt — kostenfrei anfordern | NeXify AI",
+  title: "Checkliste Website & KI-Projekt — kostenfrei anfordern",
   description:
     "Kostenlose B2B-Checkliste: Ist Ihre Website und Ihr KI-Vorhaben startklar? Light E-Mail-Gate, kein Paid Funnel. NeXify AI · DACH + NL.",
   path: "/checkliste",

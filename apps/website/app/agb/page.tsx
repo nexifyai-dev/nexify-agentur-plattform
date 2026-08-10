@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "AGB (B2B) / Algemene voorwaarden | NeXify AI",
+  title: "AGB (B2B) / Algemene voorwaarden",
   description: "Allgemeine Geschäftsbedingungen für B2B-Leistungen von NeXify AI.",
   path: "/agb",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "AGB (B2B) | NeXify AI",
+  title: "AGB (B2B)",
   description: "Allgemeine Geschäftsbedingungen für B2B-Leistungen von NeXify AI.",
   path: "/agb",
   dateModified: "2026-08-02",

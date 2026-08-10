@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "AVV / Verwerkersovereenkomst | NeXify AI",
+  title: "AVV / Verwerkersovereenkomst",
   description: "Auftragsverarbeitung nach Art. 28 DSGVO – Struktur und Grundsätze.",
   path: "/avv",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "AVV | NeXify AI",
+  title: "AVV",
   description: "Auftragsverarbeitung nach Art. 28 DSGVO – Struktur und Grundsätze.",
   path: "/avv",
   dateModified: "2026-08-02",

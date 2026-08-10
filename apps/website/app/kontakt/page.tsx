@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ContactPage } from "@/components/pages/contact";
 
 export const metadata = pageMetadata({
-  title: "Kontakt — Anfrage senden, Antwort in 24 Stunden | NeXify AI",
+  title: "Kontakt — Anfrage senden, Antwort in 24 Stunden",
   description: "Beschreiben Sie Ihr Projekt und erhalten Sie innerhalb eines Werktags eine ehrliche Einschätzung mit Aufwandsspanne. Oder chatten Sie sofort mit dem NeXify AI Berater.",
   path: "/kontakt",
   ogTitle: "Kontakt — Projekt anfragen | NeXify AI",

@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "Impressum / Colofon | NeXify AI",
+  title: "Impressum / Colofon",
   description: "Anbieterkennzeichnung gemäß §§ 5, 6 DDG – NeXify AI, Venlo (NL).",
   path: "/impressum",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "Impressum | NeXify AI",
+  title: "Impressum",
   description: "Anbieterkennzeichnung gemäß §§ 5, 6 DDG – NeXify AI, Venlo (NL).",
   path: "/impressum",
   dateModified: "2026-08-02",

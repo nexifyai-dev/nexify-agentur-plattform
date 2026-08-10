@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LegalPageView } from "@/components/legal-page";
 
 export const metadata = pageMetadata({
-  title: "KI-Hinweise / AI-verklaring | NeXify AI",
+  title: "KI-Hinweise / AI-verklaring",
   description: "Transparenz zu KI-Einsatz und Art. 50 AI Act / Art. 22 DSGVO.",
   path: "/ki-hinweise",
 });
@@ -14,7 +14,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd([
 ]);
 
 const pageJsonLd = webPageJsonLd({
-  title: "KI-Hinweise | NeXify AI",
+  title: "KI-Hinweise",
   description: "Transparenz zu KI-Einsatz und Art. 50 AI Act / Art. 22 DSGVO.",
   path: "/ki-hinweise",
   dateModified: "2026-08-02",
