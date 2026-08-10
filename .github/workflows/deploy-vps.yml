@@ -40,7 +40,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Deploy — direkt auf VPS
         run: |
@@ -169,7 +169,7 @@ jobs:
     # normale YAML-Zeilen VOR den Key, `if:` bleibt ein einzeiliger Wert.
     if: false
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Deploy via SSH (Fallback)
         uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2

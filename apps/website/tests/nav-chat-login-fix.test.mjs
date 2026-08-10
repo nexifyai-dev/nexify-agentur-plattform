@@ -29,6 +29,12 @@ test('next.config validates BACKEND_ORIGIN before adding /api rewrite', () => {
   assert.match(src, /u\.protocol === "http:" \|\| u\.protocol === "https:"/);
 });
 
+test('next.config disables standalone output on Vercel builds only', () => {
+  const src = read('../next.config.ts');
+  assert.match(src, /const isVercelBuild = process\.env\.VERCEL === "1" \|\| process\.env\.VERCEL === "true"/);
+  assert.match(src, /output:\s*isVercelBuild \? undefined : "standalone"/);
+});
+
 test('chat session + chat routes exist as local handlers', () => {
   const session = read('../app/api/chat/session/route.ts');
   const chat = read('../app/api/chat/route.ts');
@@ -68,6 +74,20 @@ test('login and register layouts are noindex', () => {
   const reg = read('../app/registrieren/layout.tsx');
   assert.match(login, /index:\s*false/);
   assert.match(reg, /index:\s*false/);
+});
+
+test('chat planner uses same-origin planner route, not external backend fallback', () => {
+  const chat = read('../app/api/chat/route.ts');
+  assert.match(chat, /new URL\("\/api\/planner\/plan", requestUrl\)/);
+  assert.doesNotMatch(chat, /NEXT_PUBLIC_BACKEND_URL \|\| "https:\/\/api\.nexifyai\.cloud"/);
+});
+
+test('chat AI router parsing rejects malformed JSON without raw-slice hacks', () => {
+  const chat = read('../app/api/chat/route.ts');
+  assert.match(chat, /async function readJsonResponse/);
+  assert.match(chat, /JSON\.parse\(raw\)/);
+  assert.match(chat, /chatCompletionText/);
+  assert.doesNotMatch(chat, /raw\.slice\(0, raw\.lastIndexOf/);
 });
 
 test('contact and offers use Resend fallback helpers', () => {

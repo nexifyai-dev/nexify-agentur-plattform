@@ -484,6 +484,21 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, f
 7. **Strict-Tool-Calls-Pflicht (Pascal 2026-08-09):** Vorgaben-Prüfungen (IST/SOLL, Recherche, Plan, AgentMemory/LightRAG) mit strict:true-JSON-Schemas erzwingen (DeepSeek /beta via 9Router, E3).
 6. **Brain-Effizienz (Daueraufgabe):** AgentMemory- und LightRAG-Nutzung, Kosten und Latenz kontinuierlich messen und optimieren.
 
+## §15a — WORKFLOW-AUTOMATISIERUNGSPFLICHT (Pascal-Direktive 2026-08-10, VERBINDLICH)
+
+**Vollintegrierte Workflow-Automatisierung ist Dauerpflicht — in allen Arbeiten fest vorgegeben:**
+
+1. **Automatisieren statt manuell:** Jeder wiederkehrende Prozess wird automatisiert (Cron/Timer/Kanban/Webhook/Systemd). Kein manueller Dauerbetrieb, keine Einmal-Skripte ohne Wiederverwendbarkeit.
+2. **Bestehende Automatisierungen härten:** Bei JEDER Arbeit auf Stabilität/Performance/Zuverlässigkeit prüfen (Log-Watchdogs, Alarme, Restart-Sicherheit, Timeouts). Fehler sofort fixen — nichts ungefixt lassen.
+3. **Fehlende Automatisierungen proaktiv identifizieren:** Lücken suchen, entwickeln, vollintegrieren (ZK-Register + WebUI-Panel + i18n + CI + Doku). Keine Insellösung (§1b).
+4. **Qualität je Automation:** E2E-Nachweis + Gegentest (§5.4), Doku in ZK + Betriebshandbuch.
+5. **Cron-Betriebsregeln (nach P0-Fix 2026-08-10):**
+   - NIE `hermes cron run` für manuelle Tests — setzt fire_claim und blockt den Scheduler 300 s (nur für externen Scheduler/Chronos). Tests: `next_run_at` vordatieren + natürlicher Tick.
+   - Nach Gateway-Kills: executions.db (claimed/unknown) + jobs.json (fire_claim) bereinigen.
+   - Modell-IDs systemweit `ds/deepseek-v4-flash` / `ds/deepseek-v4-pro` (kein `openrouter/...`-Pfad — 9Router lehnt ab).
+   - Jobs IMMER explizit pinnen (model + provider) — sonst Drift-Guard-Skip.
+   - Container-RAM (Cgroup-Limit 8 GB): `cron.max_concurrent=2`, Cron-Toolsets schlank halten, tote MCP-Server deaktivieren.
+
 ---
 
 ## KURZREFERENZ — WORKFLOW-SEQUENZ
@@ -519,6 +534,7 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo). Gilt systemweit, f
 | v3.3 | 2026-08-07 | **Pascal-Direktive Zweiter-CEO-Mandat:** §14 verankert (CEO-MISSION-2026-08-07) — Rolle, Deutsch-Pflicht, No-Mockdaten, Loop Engineering, Sub-Agenten-Netzwerk (eine Anwendung), SOLL/IST kompromisslos, Automatisierungs-Härtung, CI-Pflicht, nahtlose Navigation WebUI↔agentmemory↔lightRAG, Verbindungs-/Betriebslogik-Validierung, ZENTRALE-KONFIGURATION.md als Wissenspflicht |
 | v3.5 | 2026-08-09 | **Pascal-Direktive DeepSeek-Direkt + Vorgaben-Härtung:** §2.3 Modellstack = ds/deepseek-v4-flash (Think-Max) direkt via 9Router, OpenRouter entfernt; §15 erweitert: ToDo-Pflicht (WebUI-sichtbar), Diff-Pflicht, Strict-Tool-Calls-Pflicht; Codex auf DeepSeek-Direkt |
 | v3.4 | 2026-08-09 | **Pascal-Direktive Proaktiver-Agentic-Langlauf:** §15 verankert — Dauerzustand Langlauf, proaktive Lückensuche, Code proaktiv verbessern/vereinfachen (YAGNI), erweitern+optimieren, Schutzgrenzen der Vereinfachung, Todo-Disziplin, Brain-Effizienz als Daueraufgabe |
+| v3.6 | 2026-08-10 | **Pascal-Auftrag Workflow-Automatisierung vollintegrieren:** §15a verankert — Automatisierungspflicht (wiederkehrende Prozesse immer automatisieren, bestehende härten, fehlende proaktiv bauen, E2E-Gegentest je Automation); Cron-Betriebsregeln aus P0-Fix (fire_claim, Modell-IDs ds/..., Pinning, RAM-Grenzen); 9Router-Default-Modell korrigiert |
 
 ---
 
@@ -563,5 +579,5 @@ VERCEL (in hermes.env, Werte hier redigiert)
 9ROUTER
 - Endpoint: http://127.0.0.1:20128/v1 (remote: https://ai-router.nexifyai.cloud/v1)
 - API-Schlüssel: `sk-c71...d013` (gekürzt, voll in hermes.env)
-- Default Model: openrouter/deepseek/deepseek-v4-flash-0731
+- Default Model: ds/deepseek-v4-flash (Think-Max; pro: ds/deepseek-v4-pro — kein openrouter/-Pfad)
 

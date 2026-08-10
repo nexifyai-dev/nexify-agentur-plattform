@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
+const isVercelBuild = process.env.VERCEL === "1" || process.env.VERCEL === "true";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Vercel does not need Next standalone output. Keeping it enabled there
+  // breaks Next 16.3.0 post-build tracing because Vercel expects a root
+  // .next/next-server.js.nft.json that the new build no longer emits.
+  // Self-hosted/Docker builds still produce .next/standalone.
+  output: isVercelBuild ? undefined : "standalone",
   reactStrictMode: true,
   allowedDevOrigins: [
     "rebranding-hub-2.preview.emergentagent.com",

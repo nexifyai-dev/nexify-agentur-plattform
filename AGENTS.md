@@ -35,8 +35,9 @@ Issue (`gtm` + `agent-fix` + `P1`). Rule:
   „Hermes Agent"-Projekt. NICHTS von dort übernehmen. Dritte
   Namenskollision dieser Art — bei jedem Fund mit „Hermes" im Namen zuerst
   gegen NousResearch abgrenzen, bevor irgendetwas integriert wird.
-- **n8n** — laut bestehender Entscheidung abgeschafft. Nicht aufnehmen,
-  sofern nicht ausdrücklich widerrufen.
+- **n8n** — Abschaffung am 2026-08-09/10 von Pascal **widerrufen**; n8n ist
+  wieder aktiver Dienst (Container `nexify-n8n`, Port 5678, CI-Theme + Logo,
+  `docs/operations/N8N-REAKTIVIERT-2026-08-10.md`). Nicht erneut entfernen.
 - **OpenAI Codex** (CLI / ChatGPT Codex / `@openai/codex` / `.codex/`) —
   abgeschaltet 2026-08-02. Primäragent ist **Cursor Agent / Cloud Agent**.
   Details: `docs/operations/CODEX-REMOVED-2026-08-02.md`.

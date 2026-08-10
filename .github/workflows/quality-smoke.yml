@@ -34,7 +34,7 @@ jobs:
     name: Public curl smoke (L1/L2)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Run quality smoke (public + localhost skip notes)
         id: smoke
@@ -62,7 +62,7 @@ jobs:
 
       - name: Upload smoke TSV
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: quality-smoke-${{ github.run_id }}
           path: ${{ runner.temp }}/nexify-quality-smoke.tsv
@@ -74,7 +74,7 @@ jobs:
     # Keep e2e on PR + dispatch for merge confidence (schedule covered by public-smoke).
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
         with:
@@ -100,7 +100,7 @@ jobs:
 
       - name: Upload Playwright report
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: playwright-critical-${{ github.run_id }}
           path: |
