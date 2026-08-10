@@ -76,6 +76,14 @@ test('login and register layouts are noindex', () => {
   assert.match(reg, /index:\s*false/);
 });
 
+test('chat advisor launcher uses the canonical NeXify logo mark', () => {
+  const chat = read('../components/chat-widget.tsx');
+  assert.match(chat, /import \{ LogoMark \} from ['"]@\/components\/logo['"]/);
+  assert.match(chat, /data-testid="chat-launcher-logo"/);
+  assert.match(chat, /<LogoMark size=\{34\} \/>/);
+  assert.doesNotMatch(chat, /width:9,height:9,borderRadius:999,background:'#C8FF00'/);
+});
+
 test('chat planner uses same-origin planner route, not external backend fallback', () => {
   const chat = read('../app/api/chat/route.ts');
   assert.match(chat, /new URL\("\/api\/planner\/plan", requestUrl\)/);
