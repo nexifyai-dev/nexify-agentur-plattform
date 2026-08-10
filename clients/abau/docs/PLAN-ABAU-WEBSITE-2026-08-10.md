@@ -92,13 +92,49 @@ P1: Build + Chatbot. P2: Reputations-Maßnahmen (Rezensionsmanagement Google/Pro
 - **E2E-Gegentest:** Primärnachweis ≠ Wiederholung — Gegenprobe: (a) Fehlerfälle + Injection, (b) Datenintegrität (keine Doppel-Einträge, Logs ohne PII), (c) Rollback-Pfad Deploy, (d) Regression Alt-Site-Redirects. Binär `GEGENTEST BESTANDEN/FEHLGESCHLAGEN`.
 - DSGVO-Checkliste: Consent vor Tracking, Formular-Einwilligung, AVV, Server-DE, Löschkonzept Chat-Logs.
 - Validator schema.org, Lighthouse-Report, axe-Report, Performance unter Last (ab-Light).
-- Gate: alle Qualitätsgates §5.3 grün, Gegentest bestanden, Betriebshandbuch geschrieben.
+- Gate: alle Qualitätsgates §5.3 grün, Gegentest bestanden, Betriebshandbuch geschrieben; mobile-Lighthouse-Gate + Security-Header-Check + NAP-Konsistenz-Check (Sektion „Qualität, Mobile & SEO") dokumentiert.
 
 ### Phase 6 — Deploy & Übergabe (P1)
 - Deploy auf **`a-bau.nexifyai.cloud`** (Caddy, Auto-TLS) — aktuelles Ziel (Pascal 2026-08-10); spätere eigene Domain des Kunden wird nach Kundenentscheid angebunden (Caddy-DNS + 301-Matrix dann), kein IONOS-Zugriff nötig.
 - E3-Nachweis (HTTP 200, TLS, alle Routen) + Kundenabnahme (PDF-Report via `nexify-pdf-ci-report`, Versand via Hostinger-SMTP + IMAP-Nachweis).
 - Backup + Rollback-Doku; 301-Matrix Alt-URLs (a-bau.info → neue Struktur) erst beim späteren Domain-Umzug aktivieren, jetzt nur vorbereiten.
 - Übergabe: Betriebshandbuch (Betrieb, Chatbot-Wartung, Content-Pflege, Troubleshooting), Doku in ZK + AgentMemory, Angebot/Rechnung über Kundenkonto-Prozess (Einladungs-Mail, GDOK §10).
+
+## QUALITÄT, MOBILE & SEO — PRÄVENTION (Pascal 2026-08-10: „alle Dinge + gesamtes gelerntes Wissen, Fehler vor Entstehung vermeiden")
+
+Gelernte Pitfalls aus NeXify-Betrieb (E3, 2026) aktiv als Build-Regeln — nicht erst in QA finden:
+
+### Mobile (Pflicht)
+- Mobile-first-Build (nicht Desktop→Shrink); Breakpoints ≤ 360 px testen (iPhone SE-Klasse), kein horizontaler Scroll (Test: `document.scrollingElement.scrollWidth <= innerWidth`).
+- Touch-Targets ≥ 44×44 px (WCAG 2.5.5/2.5.8), Abstände zwischen tappbaren Elementen; sticky mobile CTA (Anruf/Kontakt) nur mit Fokus-/Aria-Management; Drawer-Menü mit Apple-Design-Springs + `setPointerCapture`, bei `prefers-reduced-motion` Cross-Fade.
+- Bilder: `srcset`/`sizes` + WebP/AVIF, Lazy-Loading (`loading="lazy"` unterhalb des Folds, Hero `eager`+`fetchpriority=high`), feste `width`/`height`/`aspect-ratio` → **kein CLS** (Alt-Site-Befund: 2,5 MB unoptimierte Bilder).
+- Videos: `<video>` mit Poster, `preload="none"`/`metadata`, mp4-H.264, Größen-Attribute, Untertitel (EN 301 549).
+- Fonts self-hosted, `font-display: swap`, Subsets, Preload kritischer Fonts; kein Google-Fonts-CDN (DSGVO + Latenz).
+- LCP-Ziel < 2,5 s auf 4G (Lighthouse mobile als eigener Gate-Run, nicht nur Desktop).
+
+### SEO (Pflicht, On-Page vollständig)
+- Je Seite: 1×H1, unique Title 50–60 Zeichen, Meta-Description 140–160 (nicht autogeneriert — Alt-Site-Fehler), Canonical, OG/Twitter, Breadcrumb.
+- URL-Struktur kurz & sprechend (`/leistungen/denkmalrestaurierung/`); 301-Matrix Alt→Neu vorbereitet; 404-Seite mit Navigation; Sitemap.xml + robots (Allow, Sitemap-Verweis) + `index.html`-redirect.
+- Schema.org: LocalService/LocalBusiness (geo, openingHours, areaServed: Mönchengladbach/NRW, telephone, email), FAQPage, BreadcrumbList — via validator.schema.org prüfen.
+- **Local-SEO/NAP-Disziplin (Kern-Lektion aus Audit):** Adresse/Telefon/E-Mail exakt EINMAL zentral (`data/kontakt.yaml`) und identisch überall; Alt-Einträge (Cylex Pastorsgasse, doppelte Telefonnummern, tote E-Mail a-bau.de) beim Kunden bereinigen lassen; Google-Business-Profile beanspruchen + Rezensionsmanagement (11880 5/5 als Vertrauensanker; ProvenExpert 1/5 adressieren, nicht verstecken).
+- Keywords (aus Audit): „Bauunternehmen Mönchengladbach", „Denkmalrestaurierung", „Innenausbau NRW", „Krankenhausbau", „Schlüsselfertigbau" — in Titles/H2/Body natürlich (kein Keyword-Stuffing); regionale Landing-Intents (Geistenbeck/NRW).
+- Technik-Ranking: Kompression (brotli/gzip — Alt-Site hatte KEINE), HTTP/2/3, CWV (LCP/INP/CLS), TTFB < 600 ms (statisch + Caddy), semantisches HTML5.
+- Nach Deploy: Indexierbarkeit prüfen (Google Search Console einrichten = Kunden-Empfehlung, Screaming-Frog/Free-Proxy-Test); kein `noindex`-Leak; Staging vor Crawl schützen (`X-Robots-Tag: noindex` auf a-bau.nexifyai.cloud bis Abnahme!).
+
+### Security & Betrieb (aus heutigen Befunden + Betriebshandbuch-Pflicht §12)
+- Security-Header (Caddy/App): HSTS, CSP, X-Frame-Options/`frame-ancestors`, X-Content-Type-Options, Referrer-Policy, Permissions-Policy — Alt-Site hatte keine (E3).
+- Formular-Mailversand: **Hostinger-SMTP 465 (Mailbox-Login), NICHT Resend** — Resend sendet mit Return-Path `send.nexifyai.cloud` = NXDOMAIN → „Sender address rejected" (heute E3 bewiesen). Zustellnachweis via IMAP.
+- Formular: Server-seitige Validierung (Trust-Boundary), Honeypot + Rate-Limit, DSGVO-Einwilligung (Checkbox, Art. 6/7), keine PII in Logs (7-Tage-Löschung), Erfolgs-/Fehler-UX.
+- Analytics: kein Google Analytics ohne Consent; Empfehlung: DSGVO-freundliche Option (Plausible/Matomo self-hosted) NACH Consent-Entscheid; Banner = TDDDG §25.
+- Karte: OpenStreetMap/OSM-Embed statt Google-Maps-API (kein Tracking ohne Einwilligung), DSGVO-Hinweis.
+- Deploy: Caddy Auto-TLS, www→non-www + http→https (Alt-Site: 301-Kette ok), gzip/brotli, Cache-Control (immutable für gehashte Assets), **Service-Worker vorsichtig** (Pitfall service-worker-cache-ops: falsche Strategie = kaputtes Frontend — nur mit Versions-Hash + Stale-while-revalidate, sonst weglassen).
+- Monitoring: Uptime-Probe (Cron/Healthcheck), Chatbot-Service als systemd-Unit mit Restart=always + Health-Endpoint, Log-Rotation, Backup = Repo/Build-Artefakt + wöchentliches Offsite (ZK).
+- Chatbot-Betrieb: Wissens-Re-Ingest bei Content-Änderungen (skriptgesteuert), Token-Kosten-Monitoring, Rate-Limit, Fallback Kontakt.
+
+### Content-Qualität (aus Audit-Lektionen)
+- Keine Template-Platzhalter, keine Fake-Zitate (Alt-Site: „Elisabeth Müller", „Projektleiter: Müller" — entfernen), keine demo-Seiten (`hello-world`, `sample-page`), keine generischen Social-Links (nur echte Profile oder weglassen).
+- DIN-5008-konforme deutsche Texte (Skill `din-iso-deutsche-texte`), tatsächliche Leistungsbeschreibungen aus Register-Gegenstand + Kundenabgleich.
+- KI-Offenlegung Chatbot (EU AI Act Art. 50), DSGVO-Hinweis im Widget.
 
 ## PRÜFVERFAHREN (Zusammenfassung)
 Binäre Akzeptanzkriterien je Phase (✅/❌), dokumentiert in `docs/QA-PROTOKOLL.md`; jeder Eintrag mit Timestamp, Input, Output, Statuscode; E2E-Gegentest §5.4 als Abschlussbedingung; Qualitätsgates §5.3 vollständig.
