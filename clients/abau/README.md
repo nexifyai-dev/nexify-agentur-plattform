@@ -20,6 +20,6 @@
 2. Recht/DSGVO/DIN/ISO vollständig (Impressum, Datenschutz, Consent, Barrierefreiheit WCAG 2.2 AA / EN 301 549)
 3. AI-Chatbot über 9Router (deepseek-v4-flash, Think-Max), antwortet aus Website-Wissen (RAG: solar-embedding + pgvector, tenant-getrennt)
 4. Vorhandene Bilder nutzen, fehlende Daten recherchiert (siehe Recherche-Doku), Rest via Kunden-Klärung
-5. Deploy: Staging `abau.nexifyai.cloud` → Live `a-bau.info` nach Kundenabnahme
+5. Deploy: **`a-bau.nexifyai.cloud`** (Staging = aktuelles Ziel, Pascal 2026-08-10) — spätere eigene Domain nach Kundenentscheid, kein IONOS-Umzug jetzt.
 
 **Vorgaben-Konformität:** Arbeitsvorgaben v3.3 (§3 Queen-Mode, §5 Test-Pyramide + E2E-Gegentest, §7 Doku, §11 Abweichungs-Null-Toleranz, §12 Betriebshandbuch), DSGVO/TDDDG, BFSG/EN 301 549, DIN 5008/ISO-Formate.

@@ -15,7 +15,7 @@ Vollumfängliche Neugestaltung der Website a-bau.info (A-Bau Meisterbetrieb GmbH
 - Infrastruktur: VPS 72.62.152.47 (Frankfurt, DE — DSGVO-freundlich), 9Router 127.0.0.1:20128 (E3), lokales Supabase mit pgvector, Caddy, Cloudflare.
 
 ## ZIEL (verifizierbar, binär)
-1. Neue Website live unter `a-bau.info` (Staging vorab `abau.nexifyai.cloud`): ✅ HTTP 200, CWV LCP < 2,5 s, Lighthouse ≥ 90 (Perf/SEO/A11y/Best Practices), keine 404 auf öffentlichen Seiten.
+1. Neue Website live unter **`a-bau.nexifyai.cloud`** (aktuelles Ziel; spätere eigene Domain nach Kundenentscheid): ✅ HTTP 200, CWV LCP < 2,5 s, Lighthouse ≥ 90 (Perf/SEO/A11y/Best Practices), keine 404 auf öffentlichen Seiten.
 2. Alle Rechtssseiten vorhanden und vollständig: Impressum (§5 DDG/§18 MStV, HRB 18836, GF, USt-IdNr.), Datenschutz (Art. 12–14 DSGVO, TDDDG §25), Cookie-Consent-Banner (kein Tracking-Cookie vor Einwilligung), 404-Seite. ✅ DSGVO-Checkliste abgehakt (Tool-Check + manuelle Prüfung).
 3. Barrierefreiheit: WCAG 2.2 AA / EN 301 549 (BFSG) — axe-Scan 0 kritische/seriöse Fehler, Tastaturbedienung, Kontraste, Fokus-Styles, Alt-Texte, Video-Untertitel. ✅
 4. AI-Chatbot auf allen Seiten: antwortet deutsch, ausschließlich aus Website-Wissen (RAG), nennt Quellen, keine erfundenen Preise, DSGVO-Hinweis, KI-Offenlegung (EU AI Act Art. 50), Fallback auf Kontaktformular. ✅ E2E: Happy-Path + Negativ + Injection-Test.
@@ -48,9 +48,9 @@ P1: Build + Chatbot. P2: Reputations-Maßnahmen (Rezensionsmanagement Google/Pro
 |---|---|---|
 | 9Router 127.0.0.1:20128 (LLM+Embedding) | E3 (ZK/AGENTS.md) | Chatbot |
 | Supabase-lokal, pgvector verfügbar | E1/E2 — vor Phase 4 verifizieren | RAG |
-| Caddy + Domain abau.nexifyai.cloud | E2 prüfen | Staging |
+| Caddy + Domain a-bau.nexifyai.cloud | E2 prüfen | Staging |
 | Kunden-Klärung offener Datenpunkte | OFFEN — P0, via VP/Kunde | Phase 2 Inhalte |
-| IONOS-DNS-Zugriff (Kunde) für a-bau.info-Umzug | OFFEN — Kunde | Go-Live |
+| Eigene Domain (Kunde, später — kein IONOS-Umzug jetzt) | OFFEN — später | späterer Umzug |
 | Asset-Download von a-bau.info (wp-json) | E3 (86 Medien inventarisiert) | Phase 1 |
 | Skills: vps-website-hosting, din-iso-deutsche-texte, dsgvo-tdddg-compliance, website-audit-de | installiert | QA |
 
@@ -95,8 +95,9 @@ P1: Build + Chatbot. P2: Reputations-Maßnahmen (Rezensionsmanagement Google/Pro
 - Gate: alle Qualitätsgates §5.3 grün, Gegentest bestanden, Betriebshandbuch geschrieben.
 
 ### Phase 6 — Deploy & Übergabe (P1)
-- Staging `abau.nexifyai.cloud` (Caddy, Auto-TLS) → E3-Nachweis + Kundenabnahme (PDF-Report via `nexify-pdf-ci-report`, Versand via Hostinger-SMTP + IMAP-Nachweis).
-- DNS-Umzug `a-bau.info` (IONOS, Kunde/Freigabe), 301-Matrix alter URLs (z. B. /dienstleistungen → /leistungen/...), Backup + Rollback-Doku.
+- Deploy auf **`a-bau.nexifyai.cloud`** (Caddy, Auto-TLS) — aktuelles Ziel (Pascal 2026-08-10); spätere eigene Domain des Kunden wird nach Kundenentscheid angebunden (Caddy-DNS + 301-Matrix dann), kein IONOS-Zugriff nötig.
+- E3-Nachweis (HTTP 200, TLS, alle Routen) + Kundenabnahme (PDF-Report via `nexify-pdf-ci-report`, Versand via Hostinger-SMTP + IMAP-Nachweis).
+- Backup + Rollback-Doku; 301-Matrix Alt-URLs (a-bau.info → neue Struktur) erst beim späteren Domain-Umzug aktivieren, jetzt nur vorbereiten.
 - Übergabe: Betriebshandbuch (Betrieb, Chatbot-Wartung, Content-Pflege, Troubleshooting), Doku in ZK + AgentMemory, Angebot/Rechnung über Kundenkonto-Prozess (Einladungs-Mail, GDOK §10).
 
 ## PRÜFVERFAHREN (Zusammenfassung)
