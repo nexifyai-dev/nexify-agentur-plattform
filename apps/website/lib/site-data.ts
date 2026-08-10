@@ -233,7 +233,7 @@ export const faqs = [
   },
   {
     q: "Welche Technologien werden eingesetzt?",
-    a: "Je nach Ziel unter anderem Next.js, React, TypeScript, Shadcn-basierte Designsysteme, moderne Datenbanken und APIs, Vercel oder geeignete Self-Hosting-Infrastruktur. Technologie folgt dem Betrieb – nicht umgekehrt.",
+    a: "Je nach Ziel unter anderem Next.js, React, TypeScript, Shadcn-basierte Designsysteme, moderne Datenbanken und APIs, geeignete Self-Hosting-Infrastruktur auf eigenem VPS. Technologie folgt dem Betrieb – nicht umgekehrt.",
   },
   {
     q: "Was passiert nach der Übergabe?",

@@ -5,7 +5,7 @@
 # TEAM: NeXifyAI GTM
 # WHAT: M-09 Link-Check — validiert alle Header-/Footer-/Sitemap-Ziellinks gegen die Live-Site
 # WHY: Prüfverfahren t_d3a3f169 Ziffer 4 (0 tote Links in Header/Footer) + §14.9
-# DEPENDS: Live-Site www.nexifyai.cloud (Vercel)
+# DEPENDS: Live-Site www.nexifyai.cloud (Host-VPS, Port 8880)
 # DOCS-REF: docs/plans/FREWERT-MARKETING-MASSNAHMENKATALOG-2026-08-08.md M-09
 
 BASE="https://www.nexifyai.cloud"

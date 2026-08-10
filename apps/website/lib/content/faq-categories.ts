@@ -173,7 +173,7 @@ export const faqCategoriesDe: FaqCategory[] = [
       },
       {
         q: "Wo werden Daten gehostet?",
-        a: "Je nach Architektur Vercel, Self-Hosting (z. B. Docker) oder EU-nahe Cloud-Dienste — Technologie folgt dem Betrieb. Ziel ist ein nachvollziehbarer, DSGVO-bewusster Betrieb ohne unnötige Drittlandtransfers.",
+        a: "Je nach Architektur Self-Hosting auf eigenem VPS (z. B. Docker) oder EU-nahe Cloud-Dienste — Technologie folgt dem Betrieb. Ziel ist ein nachvollziehbarer, DSGVO-bewusster Betrieb ohne unnötige Drittlandtransfers.",
       },
       {
         q: "Schließen Sie Auftragsverarbeitungsverträge (AVV)?",
@@ -237,7 +237,7 @@ export const faqCategoriesDe: FaqCategory[] = [
     items: [
       {
         q: "Welche Technologien werden eingesetzt?",
-        a: "Je nach Ziel u. a. Next.js, React, TypeScript, Supabase/PostgreSQL, moderne APIs, Vercel oder Self-Hosting. Technologie folgt dem Betrieb — nicht umgekehrt. Überblick: /plattform.",
+        a: "Je nach Ziel u. a. Next.js, React, TypeScript, Supabase/PostgreSQL, moderne APIs, Self-Hosting auf eigenem VPS. Technologie folgt dem Betrieb — nicht umgekehrt. Überblick: /plattform.",
       },
       {
         q: "Ist die Lösung SEO- und performance-tauglich?",
@@ -492,7 +492,7 @@ export const faqCategoriesNl: FaqCategory[] = [
       },
       {
         q: "Waar worden data gehost?",
-        a: "Afhankelijk van architectuur: Vercel, self-hosting of EU-nahe cloud. Doel is traceerbare, AVG-bewuste exploitatie.",
+        a: "Afhankelijk van architectuur: self-hosting op eigen VPS of EU-nahe cloud. Doel is traceerbare, AVG-bewuste exploitatie.",
       },
       {
         q: "Sluiten jullie verwerkersovereenkomsten (AV)?",
@@ -556,7 +556,7 @@ export const faqCategoriesNl: FaqCategory[] = [
     items: [
       {
         q: "Welke technologieën worden ingezet?",
-        a: "O.a. Next.js, React, TypeScript, Supabase/PostgreSQL, moderne API’s, Vercel of self-hosting. Technologie volgt het bedrijf. Overzicht: /plattform.",
+        a: "O.a. Next.js, React, TypeScript, Supabase/PostgreSQL, moderne API’s, self-hosting op eigen VPS. Technologie volgt het bedrijf. Overzicht: /plattform.",
       },
       {
         q: "Is de oplossing SEO- en performance-geschikt?",
@@ -811,7 +811,7 @@ export const faqCategoriesEn: FaqCategory[] = [
       },
       {
         q: "Where is data hosted?",
-        a: "Depending on architecture: Vercel, self-hosting or EU-near cloud. Goal: traceable, GDPR-aware operations.",
+        a: "Depending on architecture: self-hosting on own VPS or EU-near cloud. Goal: traceable, GDPR-aware operations.",
       },
       {
         q: "Do you sign data processing agreements (DPA/AVV)?",
@@ -875,7 +875,7 @@ export const faqCategoriesEn: FaqCategory[] = [
     items: [
       {
         q: "Which technologies are used?",
-        a: "Depending on goals: Next.js, React, TypeScript, Supabase/PostgreSQL, modern APIs, Vercel or self-hosting. Technology follows operations. Overview: /plattform.",
+        a: "Depending on goals: Next.js, React, TypeScript, Supabase/PostgreSQL, modern APIs, self-hosting on own VPS. Technology follows operations. Overview: /plattform.",
       },
       {
         q: "Is the solution SEO- and performance-ready?",

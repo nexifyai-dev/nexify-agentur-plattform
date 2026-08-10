@@ -291,7 +291,7 @@ export const nl: Dict = {
         icon: "ShieldCheck",
         title: "Beheer & veiligheid",
         text: "Betrouwbaar beheer met duidelijke verantwoordelijkheden en AVG-conformiteit.",
-        points: ["Vercel & self-hosting (Docker/Traefik)", "Cloudflare CDN & bescherming", "SSL, security-headers, hardening", "Monitoring (Prometheus/Grafana)", "Dagelijkse back-ups & AVG-conforme datastromen", "24/7-monitoring & statuspagina", "Backups & restore-tests"],
+        points: ["self-hosting op eigen VPS (Docker/Traefik)", "Cloudflare CDN & bescherming", "SSL, security-headers, hardening", "Monitoring (Prometheus/Grafana)", "Dagelijkse back-ups & AVG-conforme datastromen", "24/7-monitoring & statuspagina", "Backups & restore-tests"],
       },
     ],
     novaTitle: "NeXify AI – uw AI-adviseur op deze website",

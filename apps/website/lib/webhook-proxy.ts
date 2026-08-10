@@ -4,7 +4,7 @@
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
 // WHAT: Server-side proxy bridge for public webhook callback URLs
-// WHY: Public Vercel website receives provider callbacks while FastAPI owns validation and processing
+// WHY: Public website (Host-VPS, Port 8880) receives provider callbacks while FastAPI owns validation and processing
 // BEST-PRACTICE: Reject unsigned POST noise before proxying; backend still validates signed callbacks; never fake success
 // PITFALL: V-WEBHOOK-01: Missing BACKEND_ORIGIN must return 503, not 200, so providers retry visibly
 // DEPENDS: lib/backend.ts proxyRequest, BACKEND_ORIGIN
