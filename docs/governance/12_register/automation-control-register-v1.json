@@ -138,21 +138,21 @@
     },
     {
       "id": "AUTO-CICD-004",
-      "name": "GitHub Vercel Deployment",
+      "name": "GitHub VPS Deployment",
       "owner": "DevOps / Frontend",
       "layer": "L2",
       "status": "active",
       "trigger": {
         "type": "git-manual",
         "event": "push,workflow_dispatch",
-        "source": ".github/workflows/deploy-vercel.yml"
+        "source": ".github/workflows/deploy-vps.yml"
       },
       "gate": "Production website deploy with design-system integrity gate.",
-      "executor": ".github/workflows/deploy-vercel.yml",
+      "executor": ".github/workflows/deploy-vps.yml",
       "healthcheck": "Design-system validation + /api/health post-deploy check",
-      "evidence": "GitHub Actions logs + Vercel deployment URL",
-      "rollback": "Redeploy previous Vercel production version or revert commit.",
-      "abort": "Abort on missing Vercel secrets, design-system mismatch, or failing deployment command."
+      "evidence": "GitHub Actions logs + VPS deployment status",
+      "rollback": "Redeploy previous VPS version or revert commit.",
+      "abort": "Abort on missing VPS secrets, design-system mismatch, or failing deployment command."
     },
     {
       "id": "AUTO-CICD-006",

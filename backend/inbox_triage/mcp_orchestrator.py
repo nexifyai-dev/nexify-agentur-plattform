@@ -5,7 +5,7 @@
 # WHY: Act-Phase — Aktionen über MCP-Server ausführen
 # BEST-PRACTICE: Phasengesteuert; Status-Check vor Call; Graceful Degradation
 # PITFALL: V-20: Nie alle MCPs auf einmal aufrufen — nur phasenrelevante
-# DEPENDS: Alle MCP-Server (agentmemory, context7, filesystem, firecrawl, github, gitlab, lightrag, supabase, vercel)
+# DEPENDS: Alle MCP-Server (agentmemory, context7, filesystem, firecrawl, github, gitlab, lightrag, supabase)
 # DOCS-REF: /root/.hermes/config.yaml mcp_servers section
 
 """MCP-Server-Orchestrator — Act-Phase."""
@@ -26,7 +26,6 @@ class MCPServer(Enum):
     GITLAB = "gitlab"
     LIGHTRAG = "lightrag"
     SUPABASE = "supabase"
-    VERCEL = "vercel"
 
 
 @dataclass
@@ -75,7 +74,6 @@ WORKFLOW_MCP_MATRIX: dict[str, list[MCPServer]] = {
         MCPServer.GITHUB,  # Issues/PRs
         MCPServer.GITLAB,  # CI/CD
         MCPServer.SUPABASE,  # Daten-Persistenz
-        MCPServer.VERCEL,  # Deployments
         MCPServer.FILESYSTEM,  # Dateien schreiben
     ],
     "verify": [
@@ -103,7 +101,6 @@ def get_mcp_status() -> dict[str, MCPStatus]:
         "gitlab": True,
         "lightrag": True,
         "supabase": True,
-        "vercel": True,
         "linear": False,  # disabled
         "n8n": False,  # disabled
     }

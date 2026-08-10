@@ -49,7 +49,6 @@ die harten Grenzen für Daten, Code, Repos, Memory, Agenten und Tools.
 |--------------|---------|-----------|
 | Hostinger VDS | ✅ | Getrennte Docker-Compose Projekte |
 | Cloudflare DNS | ✅ | Getrennte Zonen |
-| Vercel | ✅ | Getrennte Teams/Projekte |
 | Brain (Read) | ✅ | Nur Metadaten |
 | 9Router | ✅ | Getrennte API-Keys |
 | Resend | ✅ | Getrennte API-Keys |

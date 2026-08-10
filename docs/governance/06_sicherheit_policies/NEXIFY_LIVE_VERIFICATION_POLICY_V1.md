@@ -30,7 +30,7 @@ Diese Policy gilt für:
 - Goose AI (CLI + ACC)
 - Hermes (CLI + WebUI)
 - GitHub Actions Workflows
-- Vercel Previews und Deployments
+- VPS-Deployments (nexifyai-website.service)
 - Lokale Entwicklungsumgebungen
 - CI/CD-Pipelines
 - Runtime-Überwachung (OTel, Sentry/GlitchTip, Prometheus/Grafana)
@@ -80,7 +80,7 @@ Diese Aktionen benötigen ein bestandenes Gate:
 
 - **Git Push** — typecheck, lint, build, test, security criticals
 - **Deployment** — alle Gates + API-Contract + E2E + Lighthouse
-- **DNS/Cloudflare/Vercel produktiv** — Preview-Check + Rollback-Plan
+- **DNS/Cloudflare/VPS produktiv** — Deploy-Check + Rollback-Plan
 - **Secrets** — Gitleaks + Semgrep + Brain-Benachrichtigung
 - **Produktive Kundenmails** — Preview + Sandbox + DSGVO
 - **Irreversible Löschung** — Change Intent + Backup + Bestätigung
@@ -157,7 +157,7 @@ Gates entscheiden per Ampellogik:
 | Sentry oder GlitchTip | Error Tracking | sofort |
 | Prometheus + Grafana | Metriken/Dashboards | sofort |
 | Uptime Kuma | Uptime Checks | sofort |
-| Vercel Logs | Deployment/Runtime-Logs | bei Vercel |
+| VPS-Logs (journald) | Deployment/Runtime-Logs | bei Hostinger |
 | Brain Logs | Service-Monitoring | sofort |
 | 9Router Logs | Provider-Routing | sofort |
 
@@ -222,7 +222,7 @@ Jeder erkannte Fehler wird strukturiert dokumentiert:
 ```json
 {
   "finding_id": "NLVL-YYYYMMDD-0001",
-  "source_tool": "playwright|eslint|tsc|semgrep|gitleaks|vercel|runtime",
+  "source_tool": "playwright|eslint|tsc|semgrep|gitleaks|runtime",
   "severity": "P0|P1|P2|P3",
   "category": "type|lint|ui|api|security|secret|runtime|deployment",
   "file": "",
@@ -261,7 +261,7 @@ Verboten:
 | Goose AI | System-CLI, MCP, lokale Runtime |
 | Hermes | Webhook-Gateway, Agent-Delegation |
 | GitHub Actions | CI/CD-Gates, SARIF-Upload |
-| Vercel | Preview-Deployment, Smoke-Checks |
+| VPS (Hostinger) | Production-Deployment, Smoke-Checks |
 | Workstation | Live-Panel, Ampeln, Finding-Anzeige |
 
 ---

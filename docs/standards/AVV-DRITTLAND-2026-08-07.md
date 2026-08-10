@@ -19,22 +19,22 @@
 | Bewertung | Ergebnis |
 |---|---|
 | Kritischster Verarbeiter | **DeepSeek** (direkte API / via OpenRouter-Routing): Speicherung in **Volksrepublik China**, kein AVV/DPA, kein EU-/US-Residency-Angebot, China ohne EU-Angemessenheitsbeschluss |
-| Provider mit belastbarem AVV | OpenRouter (Enterprise-DPA mit EU-SCCs, mutual execution via Trust Portal), Resend (DPA inkl. SCCs), Vercel (DPA inkl. SCCs + UK IDTA), Hostinger (DPA, EU-ansässig) |
+| Provider mit belastbarem AVV | OpenRouter (Enterprise-DPA mit EU-SCCs, mutual execution via Trust Portal), Resend (DPA inkl. SCCs), Hostinger (DPA, EU-ansässig) |
 | Upstage | Privacy Policy (PIPA + EU/UK-Supplementary, Stand 21.05.2026); Verarbeitung in **AWS US**; expliziter DPA-Pfad nicht öffentlich dokumentiert |
 | EU-AI-Act Art. 50 | Chat-Erstkontakt-Offenlegung ✅, /ki-hinweise ✅ (WEB-01); **Lücke:** KI-Hinweise/AVV-Seite nennen veralteten VPS-Hoster („Hetzner" statt Hostinger), keine ZDR-Erwähnung |
-| Kern-Mitigation | OpenRouter **ZDR (Zero Data Retention)** aktivieren; PII-Minimierung in Prompts; DPA-Anfrage bei OpenRouter/Upstage; EU-Hosting (Vercel fra1, Hostinger DE) nutzen |
+| Kern-Mitigation | OpenRouter **ZDR (Zero Data Retention)** aktivieren; PII-Minimierung in Prompts; DPA-Anfrage bei OpenRouter/Upstage; EU-Hosting (Hostinger DE, VPS) nutzen |
 
 ## 2. Bestandsaufnahme: Wo fließen personenbezogene Daten?
 
 | # | Datenfluss | Endpoint/Code | Anbieter-Kette | PII im Prompt/Payload |
 |---|---|---|---|---|
-| 1 | Website-Chat (KI-Berater) | `apps/website/app/api/chat/route.ts` → `NINEROUTER_ENDPOINT` = `ai-router.nexifyai.cloud/v1` | Vercel (Serverless) → 9Router → **OpenRouter → DeepSeek** | Chat-Nachrichten (Name, E-Mail, Projektbedarf möglich) |
+| 1 | Website-Chat (KI-Berater) | `apps/website/app/api/chat/route.ts` → `NINEROUTER_ENDPOINT` = `ai-router.nexifyai.cloud/v1` | Host-VPS (Next.js, Port 8880) → 9Router → **OpenRouter → DeepSeek** | Chat-Nachrichten (Name, E-Mail, Projektbedarf möglich) |
 | 2 | Backend-Chat (Stream) | `backend/server.py` `POST /api/chat` → `nine.stream()` → 9Router | Backend (Hostinger-VPS) → **OpenRouter/DeepSeek** | Chat-Historie inkl. vom Nutzer eingegebener Kontaktdaten |
 | 3 | AI-Projektplaner | `POST /api/planner/plan` → `llm_complete()` → `PLANNER_PROMPT` + `brief` | → 9Router → **OpenRouter/DeepSeek** | project_type, industry, goal, features, details (Freitext — kann PII enthalten) |
 | 4 | Angebots-Erstellung | `POST /api/offers/request` → `OFFER_PROMPT.format(language, **name**)` + Chat-Historie | → 9Router → **OpenRouter/DeepSeek** | **Name, E-Mail, Firma, Telefon** (body.name direkt im Prompt!), Chat-Historie |
 | 5 | Embeddings (Vektor-Index) | LightRAG/AgentMemory → Upstage `solar-embedding-1-large` | → **Upstage → AWS (US)** | Dokumentschnipsel/Kontext — je nach Inhalt PII (Lead-/Kunden-Daten in Wissensbasis) |
 | 6 | E-Mail-Versand | `backend/server.py` `resend.Emails.send` (Offer-/Follow-up-Mails), Bulk-/Drip-Skripte | **Resend** (US; Versand eu-west-1, Kontodaten US) | Name, E-Mail, Angebotsinhalte, Lead-Daten |
-| 7 | Website-Hosting/Serverless | Vercel, Region **fra1 (Frankfurt)** | **Vercel** (US-Konzern, SCCs) | Logs, Serverless-Payloads (Formulardaten bei Proxy-Routen) |
+| 7 | Website-Hosting | Hostinger VPS (Frankfurt, DE) | **Hostinger** (EU, DPA) | Logs, Formular-Payloads (Proxy-Routen) |
 | 8 | VPS + DB | Hostinger VPS srv1243952, Frankfurt | **Hostinger** (EU, DPA) | Supabase-lokal/PostgreSQL — PII-Speicherung (Leads, Chats, Offers) |
 
 **Kernbefund:** PII fließt real in LLM-Prompts (Pfade 1–4: Name/E-Mail bei Angeboten, Freitext-Details beim Planner) und in Embeddings (5). Das ist für die Auftragserfüllung funktional nötig, muss aber per Minimierung + Provider-Wahl abgesichert werden.
@@ -47,7 +47,7 @@
 | **DeepSeek** | VR China | LLM-Inferenz (v4 flash/pro via OpenRouter-Routing) | **Kein AVV/DPA, kein BAA** | **China** — Verarbeitung/Speicherung in PRC; kein EU-Adequacy-Beschluss für China | Keine SCCs angeboten (direkte API); via OpenRouter-Route nur OpenRouter-Layer abgedeckt — **Upstream-Provider nicht durch OpenRouter-DPA erfasst** (infercheck) | cdn.deepseek.com/policies/.../deepseek-privacy-policy.html; sonomos.ai + aipolicydesk (2026): kein DPA/BAA/Residency |
 | **Upstage Co., Ltd.** | Südkorea (Seoul) | Embeddings (solar-embedding-1-large), Nicht-LLM-Ausnahme | Privacy Policy (PIPA Art. 30 + **EU/UK-Supplementary Provisions**); **expliziter DPA-Pfad nicht öffentlich dokumentiert** | **Südkorea hat EU-Angemessenheitsbeschluss (2021/2072)** — aber: Verarbeitung in **AWS US** (Subcontractor), d. h. EU→US-Transfer über AWS | AWS US via AWS-DPF/SCCs; Korea selbst: Adequacy | upstage.ai/ko/privacy-policy (Last Revised 21.05.2026); §4 „Personal data transfer abroad": AWS Inc. (US) |
 | **Resend (Plus Five Five, Inc.)** | USA | E-Mail-Versand (Offers, Follow-ups, Bulk/Drip) | **DPA inkl. SCCs** (Last update 31.12.2025) | USA — „All account data ... stored in the United States regardless of the sending region" (Versand kann eu-west-1/Irland sein) | EU-SCCs im DPA; Subprozessoren-Liste (15.07.2026): AWS, Anthropic, Cloudflare, Datadog, Google, PlanetScale, RunPod, Stripe, Supabase, Vercel u. a. | resend.com/legal/dpa (31.12.2025); resend.com/legal/subprocessors (15.07.2026); resend.com/docs/dashboard/domains/regions |
-| **Vercel, Inc.** | USA | Website-Hosting/Serverless (Region fra1 = Frankfurt) | **DPA inkl. EU-SCCs + UK IDTA** (Last Updated 17.03.2026, eff. 31.03.2026) | USA (US-Konzern) trotz EU-Deployment-Region | EU-SCCs + UK IDTA im DPA | vercel.com/legal/dpa (17.03.2026); eurocomply.app/is-vercel-gdpr-compliant |
+| ~~Vercel, Inc.~~ | — | **ENTFERNT 2026-08-11** — Hosting läuft auf Hostinger VPS (Host-VPS, systemd `nexifyai-website.service`, Port 8880); kein Vercel | — | — | — | — |
 | **Hostinger** | EU (Litauen; VPS Frankfurt, DE) | VPS-Infrastruktur (Backend, DB, Dienste) | **DPA (Anhang zur Datenverarbeitung)** | EU-intern (Frankfurt) | EU; Subprozessoren als EU-EMEA-Gesellschaften (AWS EMEA SARL, Google Cloud EMEA, Cloudflare, Anthropic Ireland u. a.) | hostinger.com/de/legal/dpa; scan.meetergo.com/en/vendors/hostinger |
 | **Cloudflare, Inc.** | USA | CDN/WAF/DNS (Tunnel, nexifyai.cloud-Domains) | SCCs (in Datenschutzerklärung referenziert) | USA | DPF/SCCs | apps/website/lib/legal/de.ts (Stand 04.08.2026) |
 
@@ -59,7 +59,7 @@
 | Upstage Embeddings (AWS US) | **MITTEL** | Korea hat Adequacy, aber konkrete Verarbeitung in AWS US → EU→US-Transfer; DPA-Status von Upstage unklar |
 | Resend (USA) | **MITTEL** | DPA+SCCs vorhanden, aber alle Kontodaten/E-Mail-Metadaten in US; E-Mail-Inhalte (PII) durchlaufen US-Infrastruktur |
 | OpenRouter (USA) | **MITTEL** | DPA+SCCs vorhanden, ZDR verfügbar (nicht aktiviert); US-Gateway-Passage zwingend |
-| Vercel (USA) | **NIEDRIG** | DPA+SCCs, EU-Region fra1; verbleibendes US-Konzernrisiko |
+| ~~Vercel (USA)~~ | — | entfernt 2026-08-11 (Hosting auf Hostinger-VPS) |
 | Hostinger (EU) | **NIEDRIG** | EU-ansässig, DPA, Frankfurt |
 
 ## 5. Mitigationen

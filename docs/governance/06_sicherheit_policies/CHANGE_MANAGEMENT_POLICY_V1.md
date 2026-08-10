@@ -22,7 +22,7 @@ Diese Policy definiert den verbindlichen Change-Management-Prozess für alle Än
 | Konfiguration | env-Dateien, docker-compose, settings.json, Traefik-Labels |
 | Secrets | API-Keys, Token, Zertifikate, OAuth-Credentials |
 | Code | Governance-Dokumente, SOPs, Policies, Regelwerke |
-| Deployment | VPS, Docker-Container, Cloudflare-Tunnel, Vercel |
+| Deployment | VPS, Docker-Container, Cloudflare-Tunnel |
 
 ---
 

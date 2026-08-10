@@ -119,9 +119,6 @@ IMPLEMENTATION_MARKERS: dict[str, list[str]] = {
         ".github/workflows/mirror-to-gitlab.yml",
         "docs/operations/REPO-SYNC-STRATEGY.md",
     ],
-    "vercel": [
-        ".github/workflows/deploy-vercel.yml",
-    ],
 }
 
 

@@ -96,7 +96,7 @@
       "category": "build_deployment",
       "description": "Build-, Deployment- und Preview-Fehler",
       "severity": "P0-P1",
-      "tools": ["nextjs-build", "lighthouse-ci", "vercel", "hadolint", "checkov"],
+      "tools": ["nextjs-build", "lighthouse-ci", "hadolint", "checkov"],
       "immediate_visibility": true
     },
     {

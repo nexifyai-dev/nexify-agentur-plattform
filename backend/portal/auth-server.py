@@ -2,7 +2,7 @@
 
 Supports two JWT sources:
 1. Supabase Auth tokens (ECC P-256 via JWKS) — for Supabase-native auth
-2. NeXifyAI Backend tokens (HS256 with JWT_SECRET) — for Vercel app backend auth
+2. NeXifyAI Backend tokens (HS256 with JWT_SECRET) — for website app backend auth
 
 This service validates JWTs from either source and provides forward-auth for Traefik.
 """

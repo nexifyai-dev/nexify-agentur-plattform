@@ -21,7 +21,7 @@ Register aller offiziellen Dokumentationsquellen für NeXify-AI-relevante Tools,
 | DOC-006 | agentmemory | `https://github.com/rohitg00/agentmemory` | GitHub | aktuell | — |
 | DOC-007 | Qdrant | `https://qdrant.tech/documentation/` | Hersteller-Docs | v1.18.2 | — |
 | DOC-008 | Supabase | `https://supabase.com/docs` | Hersteller-Docs | aktuell | — |
-| DOC-009 | Vercel | `https://vercel.com/docs` | Hersteller-Docs | aktuell | — |
+| DOC-009 | Hostinger | `https://support.hostinger.com` | Hersteller-Docs | aktuell | — |
 | DOC-010 | Cloudflare | `https://developers.cloudflare.com/` | Hersteller-Docs | aktuell | — |
 | DOC-011 | Resend | `https://resend.com/docs` | Hersteller-Docs | aktuell | — |
 | DOC-012 | FastAPI | `https://fastapi.tiangolo.com/` | Hersteller-Docs | aktuell | — |

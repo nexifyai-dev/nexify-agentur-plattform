@@ -67,7 +67,6 @@
   "shared_infrastructure": [
     { "service": "Hostinger VDS", "allowed": true, "condition": "Getrennte Docker-Compose Projekte" },
     { "service": "Cloudflare DNS", "allowed": true, "condition": "Getrennte Zonen" },
-    { "service": "Vercel", "allowed": true, "condition": "Getrennte Teams/Projekte" },
     { "service": "Brain (Read)", "allowed": true, "condition": "Nur Metadaten" },
     { "service": "9Router", "allowed": true, "condition": "Getrennte API-Keys" },
     { "service": "Resend", "allowed": true, "condition": "Getrennte API-Keys" }

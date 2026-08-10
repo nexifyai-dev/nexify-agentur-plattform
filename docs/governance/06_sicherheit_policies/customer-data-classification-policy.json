@@ -48,7 +48,6 @@
     { "type": "Brain Write Token", "classification": "RESTRICTED", "brain": false },
     { "type": "9Router API Keys", "classification": "RESTRICTED", "brain": false },
     { "type": "Cloudflare Tokens", "classification": "RESTRICTED", "brain": false },
-    { "type": "Vercel Tokens", "classification": "RESTRICTED", "brain": false },
     { "type": "Supabase Credentials", "classification": "RESTRICTED", "brain": false },
     { "type": "Resend API Keys", "classification": "RESTRICTED", "brain": false }
   ],

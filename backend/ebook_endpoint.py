@@ -3,7 +3,7 @@
 NIR: 08.08.2026 15:45
 WHAT: Schreibt Opt-in-Lead in Drip-Tabelle `leads` (PostgREST) + `nexify_leads` (Pool),
       sendet E-Book-Mail via send_email (Resend→SMTP-Fallback).
-WHY: Vercel-Lambda kann 127.0.0.1:8000 (Supabase-Kong) nicht erreichen → 500.
+WHY: Serverless-Kontext kann 127.0.0.1:8000 (Supabase-Kong) nicht erreichen → 500.
       Backend läuft auf dem VPS mit Zugriff.
 DEPENDS: server.py (send_email, db-Pool, hmac/hashlib/time), Env: SUPABASE_URL,
       SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET.

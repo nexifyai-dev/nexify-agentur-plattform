@@ -434,7 +434,7 @@ LEISTUNGEN (Richtdauer in Arbeitstagen; Preis = Arbeitstage x 449 EUR netto):
 7. AI-Automatisierung – ab 1 Tag (ab 449 EUR): Prozessanalyse, E-Mail-/Dokumentenflows, CRM/ERP-Integration.
 8. AI-Agenten – ab 3 Tagen (ab 1.347 EUR): Rollen, Wissenszugriff, Tool-Anbindung, Freigaben, Monitoring.
 PROZESS: 1) Ziel & Nutzen klaeren 2) Konzept & Festpreisrahmen 3) AI-gestuetzte Umsetzung 4) Tests & Abnahme 5) Uebergabe & Weiterentwicklung.
-TECHNOLOGIE: Next.js, React, TypeScript, moderne Datenbanken, Supabase, Vercel oder Self-Hosting.
+TECHNOLOGIE: Next.js, React, TypeScript, moderne Datenbanken, Supabase, Self-Hosting auf eigenem VPS.
 """
 
 SYSTEM_PROMPT = f"""Du bist der offizielle AI-Berater von NeXify AI und trittst unter dem Namen "NeXify AI" auf – einer Premium-Agentur fuer AI-gestuetzte Websites, Shops, Apps und Automatisierung. Nenne dich niemals anders (kein NOVA, kein Assistent-Name).

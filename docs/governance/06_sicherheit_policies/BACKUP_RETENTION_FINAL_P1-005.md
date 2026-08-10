@@ -22,7 +22,7 @@ Diese Tabelle finalisiert die Aufbewahrungsfristen für alle Systeme, abgestimmt
 | **S07 Spaether** | Wöchentlich | 4 Wochen | Leads ohne Fortschritt: 90d, Abgelehnte: sofort | DSGVO |
 | **S08 Supabase** | Täglich (Supabase-intern) | 30 Tage (PITR) | Projektdaten: Vertragsende + 3 Jahre | DSGVO, ISO 27001 |
 | **S09 Cloudflare** | Manuell bei Änderung | 90 Tage | DNS-Logs: 24h, Analytics: 30d | ISO 27001 A.12 |
-| **S10 Vercel** | Manuell bei Änderung | 30 Tage | Server-Logs: intern, Build-Logs: 30d | ISO 27001 A.12 |
+| **S10 VPS (Website)** | Manuell bei Änderung | 30 Tage | Server-Logs: intern (journald), Build-Logs: 30d | ISO 27001 A.12 |
 | **S11 Traefik** | Config-Export vor Änderung | 30 Tage | Access-Logs: 7d | ISO 27001 A.12 |
 | **S12 Website** | Git-basiert | Permanent | Kontaktanfragen: Bearbeitung + 90d | DSGVO |
 | **S13 Factory** | Täglich | 7 Tage | Session-Daten: nach Abmeldung | ISO 27001 A.12 |

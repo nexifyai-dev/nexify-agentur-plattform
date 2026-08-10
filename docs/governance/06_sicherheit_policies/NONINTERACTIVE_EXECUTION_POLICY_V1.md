@@ -26,7 +26,7 @@ NEXIFY_GATE_TASKS_DO_NOT_BLOCK_SAFE_WORK = TRUE
 | GATED | WAITING_FOR_APPROVAL | git push, docker compose down, rm -rf |
 | SECRET_RISK | BLOCKED | Jeder Befehl mit Secret-Werten |
 | DESTRUCTIVE | BLOCKED | docker system prune, git clean -fd, chmod -R 777 |
-| EXTERNAL_WRITE | WAITING_FOR_APPROVAL | Production deploy, DNS change, Vercel deploy |
+| EXTERNAL_WRITE | WAITING_FOR_APPROVAL | Production deploy, DNS change, VPS deploy |
 | UNKNOWN | REGISTER + HOLD | Unbekannter Prompt erfassen, abbrechen |
 
 ## Tool-spezifische Noninteractive-Regeln

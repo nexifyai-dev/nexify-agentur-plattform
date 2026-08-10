@@ -43,7 +43,6 @@
       "Cloudflare-docs",
       "Cloudflare-builds",
       "Cloudflare-observability",
-      "Vercel",
       "Linear",
       "Supabase",
       "Neon",
@@ -56,15 +55,6 @@
     "needsAuth": ["Gitlab"]
   },
   "cloud_inventory_snapshot": {
-    "vercel_team": "Agentur",
-    "vercel_projects": [
-      "website",
-      "nexifyai-nextjs-template",
-      "vercel-relay-01",
-      "lv-ai",
-      "bookando-de",
-      "bookando-api"
-    ],
     "cloudflare_workers": ["nexifyai-login-redirect", "cloudflare-relay"],
     "supabase_projects": [
       "opencarbox-gmbh-2026",

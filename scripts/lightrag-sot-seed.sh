@@ -26,7 +26,6 @@ DOC_IDS=(
   "docs/operations/STATUS-DASHBOARD.md"
   "docs/operations/ACTIVATION-OVERLOOKED.md"
   "docs/operations/CLOUD-AGENT-EVENT-INGEST.md"
-  "docs/operations/VERCEL-ENV.md"
 )
 
 if ! curl -sf --max-time 3 "$LIGHTRAG_URL/documents/pipeline_status" >/dev/null 2>&1 \

@@ -123,8 +123,7 @@ Arbeite exakt nach diesem Ablauf — kein Schritt darf übersprungen werden:
    2s/4s/8s/16s Backoff wiederholen.
 5. **PR**: `gh pr create` mit Body-Struktur Problem → Fix → Verifikation
    (mit echten Messwerten/Statuscodes) → offene Punkte.
-6. **Checks abwarten**: `gh pr checks <nr> --watch`. Erst mergen, wenn Vercel
-   „Ready" und Secret-Scan grün sind. Bei Rot: selbst diagnostizieren, fixen,
+6. **Checks abwarten**: `gh pr checks <nr> --watch`. Erst mergen, wenn der VPS-Deploy (deploy-vps.yml) grün ist und der Secret-Scan grün ist. Bei Rot: selbst diagnostizieren, fixen,
    erneut pushen — nicht liegen lassen.
 7. **Merge**: `gh pr merge <nr> --merge`. Danach Live-Verifikation (Website:
    Production-Deployment-Status + Stichproben-curl; VPS-Dienste:

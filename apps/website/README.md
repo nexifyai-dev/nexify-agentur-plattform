@@ -8,7 +8,7 @@
 | **Stack** | Next.js 16 · React 19 · Tailwind v4 · pnpm |
 | **Paketname** | `nexifyai-agency-website` (privat) |
 | **Live** | https://www.nexifyai.cloud |
-| **Vercel** | https://nexify-agentur-plattform.vercel.app |
+| **Hosting** | Host-VPS (systemd `nexifyai-website.service`, Port 8880) |
 | **Design** | Root-`design_guidelines.json` — Dark/Luxury, Outfit/Manrope, `#0A0A0A` |
 
 ## Befehle (immer aus diesem Verzeichnis)
@@ -33,4 +33,4 @@ Oder vom Repo-Root: `pnpm --dir apps/website <script>`.
 
 ## Deploy
 
-Push auf `main` → GitHub Action `deploy-vercel.yml` (Credentials müssen als Secrets gesetzt sein). Docker-Image: `ghcr.io/nexifyai-dev/nexify-agentur-plattform:website-*`.
+Push auf `main` → GitHub Action `deploy-vps.yml`; Host-Timer `nexifyai-website-sync.timer` (alle 5 min) zieht origin/main, baut und startet `nexifyai-website.service` (Port 8880). Kein Vercel.

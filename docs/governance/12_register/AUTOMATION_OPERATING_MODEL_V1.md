@@ -23,7 +23,7 @@ Es ergänzt das bestehende SOP-Runbook, konsolidiert den Ist-Stand und setzt die
 | Dev-Workflow | Lokale Schutzgates vor Commit/Push | `.pre-commit-config.yaml`, dokumentierte pre-push Boundary-Checks |
 | CI/CD | Build-, Test-, Scan-, Deploy- und Mirror-Automationen | `.github/workflows/*.yml`, `.gitlab-ci.yml` |
 | Runtime-Worker | Laufende Poller, Task-Scheduler, Healthchecks | `backend/email_agent.py`, `backend/agent.py`, `infra/scripts/health-check.sh` |
-| Integrationen/Webhooks | Externe oder interne Events und deren Verarbeitung | `backend/server.py`, GitHub/GitLab/Vercel/VPS-Deploy-Flows |
+| Integrationen/Webhooks | Externe oder interne Events und deren Verarbeitung | `backend/server.py`, GitHub/GitLab/VPS-Deploy-Flows |
 | Governance/Audit | Nachweis, Register, Runbooks, Review-Zyklen, Eskalationen | `docs/governance/**`, Evidence, Register, SOPs |
 
 ---
@@ -35,7 +35,7 @@ Es ergänzt das bestehende SOP-Runbook, konsolidiert den Ist-Stand und setzt die
 - `test.yml` — Lint, Unit-Tests, Security-Checks, Docker-Build-Validierung
 - `build.yml` — Docker Image Build + GHCR Push
 - `deploy-vps.yml` — SSH-Deploy auf VPS mit Post-Deploy-Prüfung
-- `deploy-vercel.yml` — Vercel-Production-Deploy für `apps/website`
+- `deploy-vps.yml` — VPS-Production-Deploy für `apps/website` (Host-Timer `nexifyai-website-sync.timer`, alle 5 min)
 - `mirror-to-gitlab.yml` — vollständiges Git-Mirror nach VPS GitLab; Fehler sind blockierend
 - `secret-scan.yml` — Gitleaks-basierter Secret-Scan
 - `design-system-guard.yml` — Integritäts-Gate für `apps/website/app/globals.css`

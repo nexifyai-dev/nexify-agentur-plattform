@@ -29,7 +29,6 @@
         "reboot_required": true,
         "mcp_ready": [
             "Cloudflare",
-            "Vercel",
             "Linear",
             "Supabase",
             "Neon",

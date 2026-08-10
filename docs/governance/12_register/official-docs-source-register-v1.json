@@ -11,7 +11,7 @@
     {"id": "DOC-006", "tool": "agentmemory", "url": "https://github.com/rohitg00/agentmemory", "type": "github"},
     {"id": "DOC-007", "tool": "Qdrant", "url": "https://qdrant.tech/documentation/", "type": "vendor-docs"},
     {"id": "DOC-008", "tool": "Supabase", "url": "https://supabase.com/docs", "type": "vendor-docs"},
-    {"id": "DOC-009", "tool": "Vercel", "url": "https://vercel.com/docs", "type": "vendor-docs"},
+    {"id": "DOC-009", "tool": "Hostinger", "url": "https://support.hostinger.com", "type": "vendor-docs"},
     {"id": "DOC-010", "tool": "Cloudflare", "url": "https://developers.cloudflare.com/", "type": "vendor-docs"},
     {"id": "DOC-011", "tool": "Resend", "url": "https://resend.com/docs", "type": "vendor-docs"},
     {"id": "DOC-012", "tool": "FastAPI", "url": "https://fastapi.tiangolo.com/", "type": "vendor-docs"},

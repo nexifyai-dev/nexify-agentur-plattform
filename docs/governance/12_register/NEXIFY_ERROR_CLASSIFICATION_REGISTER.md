@@ -150,8 +150,8 @@
 |--------|----------------|----------|-----------------|
 | Build-Failure | Next.js build, tsc | P0 | ✅ `pnpm build` |
 | Bundle-Size-Over-Budget | Lighthouse CI, bundle-analyzer | P1 | ✅ `lhci` |
-| Preview-Deploy-Failure | Vercel | P0 | ✅ Vercel Logs |
-| Missing-Env-Var | Next.js build, Vercel | P0 | ✅ Build Logs |
+| Preview-Deploy-Failure | VPS (Preview) | P0 | ✅ VPS-Logs |
+| Missing-Env-Var | Next.js build, VPS | P0 | ✅ Build Logs |
 | Dockerfile-Syntax | Hadolint | P1 | ✅ `hadolint` |
 | IaC-Drift | Checkov, Trivy | P1 | ✅ `checkov` |
 
@@ -227,7 +227,7 @@ Performance:
   Lighthouse CI, Web Vitals, React Scan, bundle analyzer
 
 Deployment:
-  GitHub Actions, Vercel Preview, Playwright Preview Tests
+  GitHub Actions, VPS-Deploy, Playwright Preview Tests
 
 Runtime:
   OpenTelemetry, Sentry/GlitchTip, Prometheus, Grafana

@@ -40,7 +40,7 @@ Diese Policy definiert das verbindliche Vorgehen bei Sicherheitsvorfällen, Ausf
 | Merkmal | Beschreibung |
 |---------|-------------|
 | Definition | Nicht-kritisches System gestört, Workaround verfügbar |
-| Beispiele | Vercel-Deployment fehlgeschlagen, einzelner MCP-Server down |
+| Beispiele | VPS-Website-Deployment fehlgeschlagen, einzelner MCP-Server down |
 | Reaktionszeit | < 60 Minuten |
 | Eskalation | Systemmaster bearbeitet eigenständig |
 | Dokumentation | Incident-Report im Brain |

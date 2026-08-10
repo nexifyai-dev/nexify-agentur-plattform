@@ -24,7 +24,7 @@ getesteten und evidenzbasierten sicheren Pfad haben.
 | Hermes WebUI / Workstation | **HOCH** | MEDIUM |
 | Auto-Chat / User-Chat Driver | **HOCH** | MEDIUM |
 | Cloudflare / Tunnel / DNS | **KRITISCH** | HIGH |
-| Vercel | **HOCH** | MEDIUM |
+| VPS (Website) | **HOCH** | MEDIUM |
 | Supabase | **KRITISCH** | HIGH |
 | Redis / Postgres | **KRITISCH** | HIGH |
 | Goose ACC | **HOCH** | MEDIUM |

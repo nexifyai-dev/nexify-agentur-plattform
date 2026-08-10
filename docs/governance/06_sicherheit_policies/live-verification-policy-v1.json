@@ -34,7 +34,7 @@
     ],
     "runtime_monitoring": [
       "opentelemetry", "sentry-glitchtip", "prometheus-grafana",
-      "uptime-kuma", "vercel-logs", "brain-logs", "9router-logs"
+      "uptime-kuma", "vps-logs", "brain-logs", "9router-logs"
     ]
   },
   "gate_checks": {

@@ -309,7 +309,7 @@ export const de = {
         icon: "ShieldCheck",
         title: "Betrieb & Sicherheit",
         text: "Zuverlässiger Betrieb mit klaren Verantwortlichkeiten und DSGVO-Konformität.",
-        points: ["Vercel & Self-Hosting (Docker/Traefik)", "Cloudflare CDN & Schutz", "SSL, Security-Header, Hardening", "Monitoring (Prometheus/Grafana)", "Tägliche Backups & DSGVO-konforme Datenflüsse", "24/7-Monitoring & Status-Seite", "Backup & Restore-Tests"],
+        points: ["Self-Hosting auf eigenem VPS (Docker/Traefik)", "Cloudflare CDN & Schutz", "SSL, Security-Header, Hardening", "Monitoring (Prometheus/Grafana)", "Tägliche Backups & DSGVO-konforme Datenflüsse", "24/7-Monitoring & Status-Seite", "Backup & Restore-Tests"],
       },
     ],
     novaTitle: "NeXify AI – Ihr AI-Berater auf dieser Website",

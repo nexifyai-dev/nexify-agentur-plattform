@@ -17,7 +17,7 @@ Bei systemweiten Aufgaben müssen Subagenten in diesen Rollen eingesetzt werden:
 5. Designer/UX Reviewer: Design, Layout, CI, Nutzerführung, Conversion, Barrierefreiheit
 6. Platform Architect: Gesamtplattform, Portale, Kundenprojekte, Infra, Runtime, Datenflüsse
 7. Resource Reuse Auditor: prüft vorhandene Ressourcen, verhindert Neubau
-8. Network/Cloud Infrastructure Expert: Netzwerk, DNS, Cloudflare, Vercel, Supabase, Ports
+8. Network/Cloud Infrastructure Expert: Netzwerk, DNS, Cloudflare, Supabase, Ports
 9. Fullstack Expert: Next.js, React, Supabase, API, Auth, Datenfluss
 10. Security/Compliance Reviewer: Secrets, Auth, RLS, DSGVO, ISO/DIN, MCP-Risiken
 11. QA/Evidence Reviewer: Tests, Build, Deployment, Runtime Evidence, DoD

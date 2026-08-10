@@ -5,7 +5,7 @@
 # NAME: NeXifyAI Agent
 # TEAM: NeXifyAI DevOps
 # WHAT: VPS Webhook-Ingest Stub → repository_dispatch / Cloud Agent / AgentMemory.
-# WHY: Slack/Linear/Sentry/Vercel/Health/GitLab müssen ohne Desktop in Cursor einlaufen.
+# WHY: Slack/Linear/Sentry/Health/GitLab müssen ohne Desktop in Cursor einlaufen.
 # BEST-PRACTICE: Shared-secret header; normalize → GitHub repository_dispatch.
 # PITFALL: V-WH-01: Keine Secrets in Logs; dedupe_key Pflicht.
 # DEPENDS: EVENT_INGEST_SHARED_SECRET, GITHUB_TOKEN|GH_PAT, CURSOR_API_KEY (optional)
@@ -16,7 +16,7 @@
 Bind: 127.0.0.1 only (Traefik/CF tunnel terminates TLS in front).
 POST /ingest/{source} with header X-Nexify-Ingest-Secret.
 
-Sources: slack|linear|sentry|vercel|health|gitlab|cloudflare|resend|website|generic
+Sources: slack|linear|sentry|health|gitlab|cloudflare|resend|website|generic
 """
 
 from __future__ import annotations
@@ -46,7 +46,6 @@ SOURCE_TO_DISPATCH = {
     "slack": "slack-alert",
     "linear": "linear-issue",
     "sentry": "sentry-alert",
-    "vercel": "vercel-deploy-fail",
     "health": "health-alert",
     "gitlab": "gitlab-event",
     "cloudflare": "cloudflare-alert",

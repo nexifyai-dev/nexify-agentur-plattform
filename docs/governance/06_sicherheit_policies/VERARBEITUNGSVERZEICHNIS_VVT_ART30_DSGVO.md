@@ -21,9 +21,9 @@
 | S07 | Spaether | Lead-Pipeline | VPS (Python) | 8900 |
 | S08 | Supabase | Datenbank (PostgreSQL) | Supabase Cloud (EU) | supabase.com |
 | S09 | Cloudflare | DNS, Proxy, CDN | Cloudflare (EU) | cloudflare.com |
-| S10 | Vercel | Website-Hosting | Vercel (EU) | vercel.com |
+| S10 | Hostinger VPS | Website-Hosting | Hostinger (EU, Frankfurt) | hostinger.de |
 | S11 | Traefik | Reverse-Proxy | VPS (Docker) | 80/443 |
-| S12 | NeXifyAI Website | Öffentliche Website | Vercel | nexifyai.cloud |
+| S12 | NeXifyAI Website | Öffentliche Website | Hostinger VPS | nexifyai.cloud |
 | S13 | Paperclip Factory | Mandanten-Dashboard | VPS (Traefik) | factory.nexifyai.cloud |
 
 ---
@@ -156,7 +156,7 @@
 | **Drittland** | USA (Cloudflare Inc.). Angemessenheitsbeschluss: EU-US DPF |
 | **TOM** | TLS 1.3, DDoS-Schutz, AVV mit Cloudflare |
 
-### S10 — Vercel
+### S10 — Hostinger VPS (Website-Hosting)
 
 | Feld | Inhalt |
 |------|--------|
@@ -164,11 +164,11 @@
 | **Zweck** | Bereitstellung der Unternehmenswebsite |
 | **Datenkategorien** | Webserver-Logs, Deployment-Daten, Build-Logs |
 | **Betroffene Personen** | Website-Besucher |
-| **Empfänger** | Vercel Inc. (USA), Cloudflare (Proxy) |
-| **Löschfrist** | Server-Logs: standardmäßig Vercel-intern. Build-Logs: 30 Tage |
+| **Empfänger** | Hostinger (EU, Frankfurt), Cloudflare (Proxy) |
+| **Löschfrist** | Server-Logs: journald (Rotation). Build-Logs: 30 Tage |
 | **Rechtsgrundlage** | Art. 6(1)(f) DSGVO (Berechtigtes Interesse: Webpräsenz) |
-| **Drittland** | USA (Vercel Inc.). EU-US DPF |
-| **TOM** | HTTPS, GitHub-Integration, AVV mit Vercel |
+| **Drittland** | EU (kein Drittland) |
+| **TOM** | HTTPS, SSH-Härtung, fail2ban, Backups |
 
 ### S11 — Traefik
 
@@ -192,10 +192,10 @@
 | **Zweck** | Unternehmensdarstellung, Kundenakquise, Kontaktaufnahme |
 | **Datenkategorien** | Seitenaufrufe (anonym), Kontaktformular-Daten (Name, E-Mail, Nachricht) |
 | **Betroffene Personen** | Website-Besucher, potenzielle Kunden |
-| **Empfänger** | Vercel (Hosting), Cloudflare (Proxy), Hermes Agent (Kontaktanfragen) |
+| **Empfänger** | Hostinger (Hosting), Cloudflare (Proxy), Hermes Agent (Kontaktanfragen) |
 | **Löschfrist** | Kontaktanfragen: nach Bearbeitung + 90 Tage |
 | **Rechtsgrundlage** | Art. 6(1)(a) DSGVO (Einwilligung bei Kontaktformular), Art. 6(1)(f) (Webpräsenz) |
-| **Drittland** | USA (Vercel, Cloudflare). EU-US DPF |
+| **Drittland** | EU (Hostinger); USA (Cloudflare) EU-US DPF |
 | **TOM** | HTTPS, kein Tracking ohne Einwilligung, Cookie-frei (keine Analytics-Cookies) |
 
 ### S13 — Paperclip Factory
@@ -228,7 +228,7 @@
 | nscale | EU (Norwegen) | Angemessenheitsbeschluss | S04, S06 |
 | Supabase | EU | AVV vorhanden | S08 |
 | Cloudflare | USA | EU-US DPF + AVV | S09 |
-| Vercel | USA | EU-US DPF + AVV | S10 |
+| Hostinger | EU | DPA EU | S10 |
 
 ---
 
@@ -253,7 +253,7 @@
 |-------|-------|
 | < 24h | DNS-Logs (Cloudflare) |
 | 7 Tage | Error-Logs (9Router), Access-Logs (Traefik) |
-| 30 Tage | Session-Archive (Hermes), Chat-Verläufe (WebUI), Analytics (Cloudflare), Build-Logs (Vercel) |
+| 30 Tage | Session-Archive (Hermes), Chat-Verläufe (WebUI), Analytics (Cloudflare), Build-Logs (VPS) |
 | 90 Tage | Chat-Verläufe nach Projektende, Observations nach Projektende, Kontaktanfragen, Leads ohne Fortschritt |
 | 365 Tage | Inaktive agentmemory Memories |
 | 3 Jahre | Projektbezogene Daten nach Vertragsende (gesetzl. Aufbewahrung), Supabase-Projektdaten |

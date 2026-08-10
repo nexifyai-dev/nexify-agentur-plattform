@@ -47,7 +47,6 @@
 | Brain Write Token | RESTRICTED | ❌ |
 | 9Router API Keys | RESTRICTED | ❌ |
 | Cloudflare Tokens | RESTRICTED | ❌ |
-| Vercel Tokens | RESTRICTED | ❌ |
 | Supabase Credentials | RESTRICTED | ❌ |
 | Resend API Keys | RESTRICTED | ❌ |
 

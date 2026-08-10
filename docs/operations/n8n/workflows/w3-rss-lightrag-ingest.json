@@ -1,0 +1,74 @@
+{
+  "name": "W3 RSS-LightRAG-Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e20",
+      "name": "Cron 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://hnrss.org/newest?points=100"
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e21",
+      "name": "RSS-Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.3,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// RSS-Items zu LightRAG-Text bauen\n// WHAT: Titel/Link/Inhalt je Item zu kompaktem Text für RAG-Ingest\nconst items = $input.all();\nconst lines = [];\nfor (const item of items) {\n  const j = item.json;\n  const title = j.title || j.guid || 'Unbekannt';\n  const link = j.link || j.url || '';\n  const content = (j.contentSnippet || j.description || '').toString().slice(0, 500);\n  lines.push('## ' + title + '\\nQuelle: ' + link + '\\n' + content);\n}\nreturn [{ json: { text: lines.join('\\n\\n'), itemCount: lines.length } }];"
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e22",
+      "name": "Items-zu-Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:9622/documents/text",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.text, file_source: 'rss-ingest-' + new Date().toISOString().slice(0,10) }) }}",
+        "options": {}
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e23",
+      "name": "LightRAG-Ingest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Cron 06:00": {
+      "main": [[{ "node": "RSS-Read", "type": "main", "index": 0 }]]
+    },
+    "RSS-Read": {
+      "main": [[{ "node": "Items-zu-Text", "type": "main", "index": 0 }]]
+    },
+    "Items-zu-Text": {
+      "main": [[{ "node": "LightRAG-Ingest", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [],
+  "pinData": {}
+}

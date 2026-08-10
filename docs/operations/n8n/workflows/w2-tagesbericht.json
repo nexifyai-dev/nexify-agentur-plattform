@@ -1,0 +1,99 @@
+{
+  "name": "W2 Tagesbericht",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * *"
+            }
+          ]
+        }
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e10",
+      "name": "Cron 18:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://172.17.0.1:3113/health",
+        "options": {}
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e11",
+      "name": "AgentMemory-Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://172.17.0.1:9622/health",
+        "options": {}
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e12",
+      "name": "LightRAG-Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tagesbericht bauen aus Service-Health + Systemzeit\n// WHAT: Zahlen sammeln, kompakten Report-Text erzeugen\nconst am = $('AgentMemory-Health').first().json;\nconst lr = $('LightRAG-Health').first().json;\nconst amOk = am && (am.status === 'ok' || am.status === 'healthy') ? 'OK' : 'DEGRADED';\nconst lrOk = lr && (lr.status === 'ok' || lr.status === 'healthy' || lr.status === 'up') ? 'OK' : 'DEGRADED';\nconst now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });\nconst report = [\n  'NeXify AI — Tagesbericht ' + now,\n  '------------------------------------',\n  'AgentMemory: ' + amOk,\n  'LightRAG:    ' + lrOk\n].join('\\n');\nreturn [{ json: { report, agentMemory: amOk, lightrag: lrOk, generatedAt: now } }];"
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e13",
+      "name": "Bericht-Bauen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_HOME_CHANNEL }}",
+        "text": "={{ $json.report }}",
+        "additionalFields": {}
+      },
+      "id": "9f3c1b2e-1a01-4a5e-9c2d-1a2b3c4d5e14",
+      "name": "Telegram-Senden",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [660, 0],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-api",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cron 18:00": {
+      "main": [
+        [
+          { "node": "AgentMemory-Health", "type": "main", "index": 0 },
+          { "node": "LightRAG-Health", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "AgentMemory-Health": {
+      "main": [[{ "node": "Bericht-Bauen", "type": "main", "index": 0 }]]
+    },
+    "LightRAG-Health": {
+      "main": [[{ "node": "Bericht-Bauen", "type": "main", "index": 0 }]]
+    },
+    "Bericht-Bauen": {
+      "main": [[{ "node": "Telegram-Senden", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [],
+  "pinData": {}
+}
