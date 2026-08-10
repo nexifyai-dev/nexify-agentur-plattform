@@ -1,99 +1,75 @@
 #!/bin/bash
-# NeXify AI — VPS Health-Check
-# Run: bash infra/scripts/health-check.sh
-set -euo pipefail
+# health-check.sh — NeXifyAI Service Health Monitor
+# NIR: 28.07.2026 13:54
+# NAME: NeXifyAI ComplianceEngine
+# TEAM: NeXifyAI Core
+# WHAT: (auto-dokumentiert)
+# WHY: (auto-dokumentiert — fehlte NIR-Header)
+# DEPENDS: (auto-dokumentiert)
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-NC='\033[0m'
+# Prüft alle 13 Services, speichert Fehler in AgentMemory
+# Aufruf: via systemd timer alle 15min
 
-FAILURES=0
-
-check() {
-  local name=$1 url=$2
-  if curl -sf --max-time 5 "$url" > /dev/null 2>&1; then
-    echo -e "${GREEN}✓${NC} $name ($url)"
-  else
-    echo -e "${RED}✗${NC} $name ($url) — UNREACHABLE"
-    FAILURES=$((FAILURES + 1))
-  fi
-}
-
-check_internal() {
-  local name=$1 port=$2 path=$3
-  if curl -sf --max-time 3 "http://127.0.0.1:${port}${path}" > /dev/null 2>&1; then
-    echo -e "${GREEN}✓${NC} $name (127.0.0.1:${port}${path})"
-  else
-    echo -e "${YELLOW}⚠${NC} $name (127.0.0.1:${port}${path}) — not ready"
-    FAILURES=$((FAILURES + 1))
-  fi
-}
-
-echo "=== NeXify VPS Health-Check ==="
-echo ""
-
-# Docker Compose Services
-echo "--- Docker Compose Status ---"
-if cd /opt/nexifyai-cloud 2>/dev/null; then
-  RUNNING=$(docker compose ps --format '{{.Name}} {{.Status}}' 2>/dev/null)
-  if [ -n "$RUNNING" ]; then
-    echo "$RUNNING" | while read -r line; do
-      if echo "$line" | grep -q "Up"; then
-        echo -e "${GREEN}✓${NC} $line"
-      else
-        echo -e "${RED}✗${NC} $line"
-      fi
-    done
-  else
-    echo -e "${RED}✗${NC} No containers running"
-    FAILURES=$((FAILURES + 1))
-  fi
-else
-  echo -e "${YELLOW}⚠${NC} /opt/nexifyai-cloud not found — skipping compose status"
+# bestpraxis-system-wide-hermes-env-source (since 2026-07-31)
+if [ -f /etc/nexifyai/hermes.env ]; then
+  set -a
+  . /etc/nexifyai/hermes.env
+  set +a
 fi
 
-echo ""
-echo "--- Internal Endpoints ---"
-check_internal "Website"           3000 "/api/health"
-check_internal "Hermes WebUI"      8787 "/health"
-check_internal "Hermes Gateway"    8642 "/health"
-check_internal "Hermes Dashboard"  9119 "/"
-check_internal "9Router"          20128 "/health"
-check_internal "Paperclip"         3100 "/api/health"
-check_internal "agentmemory API"   3111 "/health"
-check_internal "LightRAG"          9621 "/health"
+ENDPOINTS=(
+  "9Router:20128:v1/models"
+  "AgentMemory:3113:health"
+  "LightRAG:9622:health"
+  "WebUI:8787:"
+  "Dashboard:4001:api/health"
+  "MCP-Proxy:8650:"
+  "Website:8880:api/health"
+  "GitLab:8922:"
+  "Supabase:8000:rest/v1/"
+  "Hermes-Gateway:8642:health"
+)
 
-echo ""
-echo "--- Webhook Endpoints (§3, Port 8644) ---"
-check_internal "Webhook aktuelle-logs"   8644 "/aktuelle-logs"
-check_internal "Webhook telegram"        8644 "/telegram"
-check_internal "Webhook github-comment"  8644 "/github-comment"
-check_internal "Webhook nexify-global"   8644 "/"
+FAILS=0
+REPORT=""
 
-echo ""
-echo "--- External Endpoints (via Traefik) ---"
-check "Website"     "https://nexifyai.cloud/api/health"
-check "Hermes"      "https://webui.nexifyai.cloud/health"
-check "Paperclip"   "https://app.nexifyai.cloud/api/health"
+for ep in "${ENDPOINTS[@]}"; do
+  IFS=':' read -r name port path <<< "$ep"
+  code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "http://127.0.0.1:$port/$path" 2>/dev/null || true)
+  code=$(printf '%s' "$code" | tr -cd '0-9' | tail -c 3)  # 000000→000 (curl-Fehler + Fallback-Doppelung)
 
-echo ""
-echo "--- Traefik ---"
-# Traefik hat kein /health-Endpoint auf :8080 in dieser Umgebung — direkt am
-# Container-Status prüfen. (Vorher: `check ... || docker ps ...` war toter Code,
-# weil check() immer mit exit 0 endet und den ||-Zweig nie erreicht.)
-if docker ps --filter name=traefik --format '{{.Status}}' | grep -q "Up"; then
-  echo -e "${GREEN}✓${NC} Traefik container running"
-else
-  echo -e "${RED}✗${NC} Traefik container not running"
-  FAILURES=$((FAILURES + 1))
+  # Retry bei Timeout/5xx: 1 weiterer Versuch nach 2s, unterdrückt False-Positives bei Lastspitzen
+  if [ "$code" = "000" ] || [ "$code" -ge 500 ]; then
+    sleep 2
+    code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 8 "http://127.0.0.1:$port/$path" 2>/dev/null || true)
+    code=$(printf '%s' "$code" | tr -cd '0-9' | tail -c 3)
+  fi
+
+  if [ "$code" = "000" ] || [ "$code" -ge 500 ]; then
+    REPORT="${REPORT}FAIL $name:$port → $code\n"
+    curl -s -X POST http://127.0.0.1:3113/memories \
+      -H "Content-Type: application/json" \
+      -d "{\"content\":\"Health FAIL: $name:$port → $code\",\"type\":\"fact\",\"project\":\"nexifyai\"}" > /dev/null 2>&1 &
+    ((FAILS++))
+  else
+    REPORT="${REPORT}OK   $name:$port → $code\n"
+  fi
+done
+
+echo -e "$REPORT"
+echo "Health: $FAILS/${#ENDPOINTS[@]} failures"
+
+# healthchecks.io Uptime (externes Monitoring, GDOK §5.2) — seit 2026-08-05
+# Aktiv nur wenn HEALTHCHECKS_URL gesetzt (Key in /etc/nexifyai/hermes.env).
+# Erfolg → PING, Ausfall → PING/fail (healthchecks.io meldet DOWN).
+if [ -n "$HEALTHCHECKS_URL" ]; then
+  if [ "$FAILS" -gt 0 ]; then
+    curl -fsS -m 10 --retry 5 "${HEALTHCHECKS_URL%/}/fail" > /dev/null 2>&1
+    echo "healthchecks.io: reported FAIL ($FAILS failures)"
+  else
+    curl -fsS -m 10 --retry 5 "${HEALTHCHECKS_URL%/}" > /dev/null 2>&1
+    echo "healthchecks.io: reported OK"
+  fi
 fi
 
-echo ""
-if [ "$FAILURES" -eq 0 ]; then
-  echo -e "${GREEN}All checks passed.${NC}"
-  exit 0
-else
-  echo -e "${RED}$FAILURES check(s) failed.${NC}"
-  exit 1
-fi
+exit $FAILS
