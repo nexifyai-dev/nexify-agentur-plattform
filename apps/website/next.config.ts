@@ -79,6 +79,8 @@ const nextConfig: NextConfig = {
     },
   ],
   redirects: async () => [
+    // apex → www (konsistente Domain, Hosting auf VPS seit 2026-08-10)
+    { source: "/:path*", has: [{ type: "host", value: "nexifyai.cloud" }], destination: "https://www.nexifyai.cloud/:path*", permanent: true },
     // Locale-prefixed → unprefixed (Seiten existieren direkt, nicht in [locale])
     { source: "/:locale(de|en|nl)/:page(login|admin|konto|registrieren|rueckruf)", destination: "/:page", permanent: false },
     // EN/NL main pages redirect to direct DE versions (keine locale-Varianten)
