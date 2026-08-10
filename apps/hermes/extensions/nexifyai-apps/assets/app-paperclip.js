@@ -10,6 +10,7 @@
 
   const APP_ID = 'nexifyai-app-paperclip';
   const LABEL = 'Paperclip';
+  const DEFAULT_URL = '/api/extensions/nexifyai-app-paperclip/sidecar/';
   const ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
 
   function createPanel() {
@@ -17,12 +18,8 @@
     panel.className = 'nexifyai-app-panel';
     panel.id = APP_ID + '-panel';
     panel.innerHTML = `
-      <div class="nexifyai-app-info" style="padding:40px 32px;font-family:Manrope,system-ui,sans-serif;color:#A1A1AA;line-height:1.6">
-        <h2 style="font-family:Outfit,sans-serif;font-weight:600;font-size:20px;color:#FFF;margin:0 0 12px">NeXify AI Paperclip Factory</h2>
-        <p style="margin:0 0 8px">Skill-Factory-API aktiv (Port 3100).</p>
-        <p style="margin:0 0 20px">Endpunkte: <code style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:2px 8px;color:#C8FF00">/api/health</code> · <code style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:2px 8px;color:#C8FF00">/api/skills</code></p>
-        <p style="margin:0;font-size:13px">Web-Oberfläche folgt — API-Nutzung direkt oder &uuml;ber Agenten.</p>
-      </div>`;
+      <iframe src="${DEFAULT_URL}" title="${LABEL}" loading="lazy"></iframe>
+    `;
     document.body.appendChild(panel);
     return panel;
   }

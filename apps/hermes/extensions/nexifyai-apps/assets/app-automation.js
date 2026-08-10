@@ -1,7 +1,8 @@
 /**
  * NeXify AI Automation — External App Tab
- * n8n Workflow-Editor: Iframe-Blockade durch n8n (X-Frame-Options: sameorigin,
- * Server-seitig hardcoded). Panel zeigt CI-gestyltes Info mit Öffnen-Link.
+ * n8n Workflow-Editor als Iframe (https://n8n.nexifyai.cloud/).
+ * Einbettung ermoeglicht seit 2026-08-10: Cloudflare Transform Rule entfernt
+ * X-Frame-Options + Cross-Origin-Resource-Policy auf n8n.nexifyai.cloud.
  * CI: design_guidelines.json Dark/Luxury (#0A0A0A, #C8FF00, Outfit/Manrope)
  */
 (function() {
@@ -17,12 +18,7 @@
     panel.className = 'nexifyai-app-panel';
     panel.id = APP_ID + '-panel';
     panel.innerHTML = `
-      <div class="nexifyai-app-info" style="padding:40px 32px;font-family:Manrope,system-ui,sans-serif;color:#A1A1AA;line-height:1.6">
-        <h2 style="font-family:Outfit,sans-serif;font-weight:600;font-size:20px;color:#FFF;margin:0 0 12px">NeXify AI Workflow Automation (n8n)</h2>
-        <p style="margin:0 0 8px">n8n l&auml;uft (Port 5678, <a href="${DEFAULT_URL}" target="_blank" rel="noopener" style="color:#C8FF00">n8n.nexifyai.cloud</a>).</p>
-        <p style="margin:0 0 20px">Der Editor blockt die Einbettung per X-Frame-Options — &ouml;ffnen im neuen Tab.</p>
-        <a href="${DEFAULT_URL}" target="_blank" rel="noopener" style="display:inline-block;padding:10px 20px;border-radius:999px;background:linear-gradient(120deg,#C8FF00,#eaffb0 50%,#C8FF00);color:#0A0A0A;font-weight:700;text-decoration:none">n8n &ouml;ffnen &#8599;</a>
-      </div>`;
+      <iframe src="${DEFAULT_URL}" title="${LABEL}" loading="lazy"></iframe>`;
     document.body.appendChild(panel);
     return panel;
   }
