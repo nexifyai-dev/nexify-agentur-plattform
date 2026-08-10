@@ -90,13 +90,19 @@ test('chat AI router parsing rejects malformed JSON without raw-slice hacks', ()
   assert.doesNotMatch(chat, /raw\.slice\(0, raw\.lastIndexOf/);
 });
 
-test('root layout instruments Vercel Analytics and Speed Insights', () => {
+test('root layout instruments Vercel Analytics and Speed Insights with private route filters', () => {
   const layout = read('../app/layout.tsx');
+  const insights = read('../components/vercel-insights.tsx');
   const pkg = read('../package.json');
-  assert.match(layout, /import \{ Analytics \} from "@vercel\/analytics\/next"/);
-  assert.match(layout, /import \{ SpeedInsights \} from "@vercel\/speed-insights\/next"/);
-  assert.match(layout, /<Analytics \/>/);
-  assert.match(layout, /<SpeedInsights \/>/);
+  assert.match(layout, /import \{ VercelInsights \} from "@\/components\/vercel-insights"/);
+  assert.match(layout, /<VercelInsights \/>/);
+  assert.match(insights, /import \{ Analytics, type BeforeSendEvent \} from "@vercel\/analytics\/next"/);
+  assert.match(insights, /import \{ SpeedInsights \} from "@vercel\/speed-insights\/next"/);
+  for (const path of ['/admin', '/konto', '/login', '/registrieren', '/api']) {
+    assert.match(insights, new RegExp(`"${path}"`));
+  }
+  assert.match(insights, /<Analytics beforeSend=\{\(event: BeforeSendEvent\) => beforeSendPublicOnly\(event\)\} \/>/);
+  assert.match(insights, /<SpeedInsights beforeSend=\{beforeSendPublicOnly\} \/>/);
   assert.match(pkg, /"@vercel\/analytics"/);
   assert.match(pkg, /"@vercel\/speed-insights"/);
 });
