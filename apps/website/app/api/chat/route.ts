@@ -216,9 +216,25 @@ function detectPlanIntent(message: string): { triggered: boolean; projectType: s
   };
 }
 
-const PLANNER_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.nexifyai.cloud") + "/api/planner/plan";
+type ChatCompletionResponse = { choices?: { message?: { content?: string } }[] };
 
-async function callPlanner(projectType: string, message: string, language: string) {
+async function readJsonResponse(response: Response): Promise<unknown | null> {
+  const raw = await response.text();
+  if (!raw.trim()) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function chatCompletionText(data: unknown): string | null {
+  const first = (data as ChatCompletionResponse | null)?.choices?.[0];
+  const text = first?.message?.content?.trim();
+  return text || null;
+}
+
+async function callPlanner(projectType: string, message: string, language: string, requestUrl: string) {
   // Extrahiere Branche und Ziel aus der Nachricht (einfache Heuristik)
   const industryPatterns: Record<string, RegExp> = {
     de: /(?:für|für eine[nr]?|branche|praxis|kanzlei|agentur|handel|bau|arzt|zahnarzt|maschinenbau|industrie|gastronomie|hotel|einzelhandel|logistik|bildung|versicherung|immobilien)\s+(\S+(?:\s+\S+){0,4})/i,
@@ -245,7 +261,7 @@ async function callPlanner(projectType: string, message: string, language: strin
     language: lang,
   };
 
-  const res = await fetch(PLANNER_URL, {
+  const res = await fetch(new URL("/api/planner/plan", requestUrl), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -271,7 +287,7 @@ export async function POST(request: Request) {
     const planIntent = detectPlanIntent(msg);
     if (planIntent.triggered && planIntent.projectType) {
       try {
-        const planResult = await callPlanner(planIntent.projectType, msg, lang);
+        const planResult = await callPlanner(planIntent.projectType, msg, lang, request.url);
         const planText = `${planResult.plan.summary}\n\nModule & Preisspanne:\n${planResult.plan.modules.map((m: { name: string; days_min: number; days_max: number }) => `– ${m.name}: ${m.days_min === m.days_max ? m.days_min : `${m.days_min}–${m.days_max}`} Tag(e) · ${m.days_min === m.days_max ? `${(m.days_min * 449).toLocaleString("de-DE")} €` : `${(m.days_min * 449).toLocaleString("de-DE")} – ${(m.days_max * 449).toLocaleString("de-DE")} €`}`).join("\n")}\n\nRichtpreis gesamt: ${planResult.price_min.toLocaleString("de-DE")} – ${planResult.price_max.toLocaleString("de-DE")} € netto\n\n[BTN:Verbindliches Angebot per E-Mail|/angebot?session=${planResult.session_id}]\n[BTN:Preise & Ablauf|/preise]\n[BTN:Rückruf vereinbaren|/rueckruf]`;
 
         const out = withButtons(planText);
@@ -313,9 +329,8 @@ export async function POST(request: Request) {
     });
 
     if (response.ok) {
-      const raw = await response.text();
-      const data = JSON.parse(raw.slice(0, raw.lastIndexOf("}") + 1));
-      const text = data?.choices?.[0]?.message?.content?.trim();
+      const data = await readJsonResponse(response);
+      const text = chatCompletionText(data);
       if (text) {
         const out = withButtons(text);
         return Response.json({

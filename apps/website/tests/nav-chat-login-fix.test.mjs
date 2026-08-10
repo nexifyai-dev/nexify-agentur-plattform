@@ -70,6 +70,20 @@ test('login and register layouts are noindex', () => {
   assert.match(reg, /index:\s*false/);
 });
 
+test('chat planner uses same-origin planner route, not external backend fallback', () => {
+  const chat = read('../app/api/chat/route.ts');
+  assert.match(chat, /new URL\("\/api\/planner\/plan", requestUrl\)/);
+  assert.doesNotMatch(chat, /NEXT_PUBLIC_BACKEND_URL \|\| "https:\/\/api\.nexifyai\.cloud"/);
+});
+
+test('chat AI router parsing rejects malformed JSON without raw-slice hacks', () => {
+  const chat = read('../app/api/chat/route.ts');
+  assert.match(chat, /async function readJsonResponse/);
+  assert.match(chat, /JSON\.parse\(raw\)/);
+  assert.match(chat, /chatCompletionText/);
+  assert.doesNotMatch(chat, /raw\.slice\(0, raw\.lastIndexOf/);
+});
+
 test('contact and offers use Resend fallback helpers', () => {
   assert.match(read('../lib/mail.ts'), /resendConfigured/);
   assert.match(read('../lib/mail.ts'), /sendContactNotification/);
