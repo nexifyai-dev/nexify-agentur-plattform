@@ -1,6 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "@fontsource-variable/manrope";
 import "@fontsource-variable/outfit";
 import { SiteFooter } from "@/components/site-footer";
@@ -10,6 +8,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { StickyCta } from "@/components/sticky-cta";
 import { ExitIntent } from "@/components/exit-intent";
 import { PwaRegister } from "@/components/pwa-register";
+import { VercelInsights } from "@/components/vercel-insights";
 import { LanguageProvider } from "@/lib/lang-context";
 import { AuthProvider } from "@/lib/auth";
 import { company } from "@/lib/company";
@@ -140,8 +139,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <ChatWidget />
           <CookieConsent />
           <PwaRegister />
-          <Analytics />
-          <SpeedInsights />
+          <VercelInsights />
           </AuthProvider>
         </LanguageProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
