@@ -45,6 +45,11 @@
 | Worker-Protokoll | Letzter Tool-Call jedes Workers MUSS `kanban_complete(artifacts=...)` / `kanban_block` sein |
 | Modell | NUR `openrouter/deepseek/deepseek-v4-flash-0731` via 9Router (Think-Max); Ausnahmen nur mit schriftlicher Freigabe (§2.3 Vorgaben) |
 
+## 1a1. Kundenprojekte (Pascal 2026-08-10)
+> Jedes Kundenprojekt bekommt ein EIGENES GitHub-Repo `nexifyai-dev/<kunde>` (Beispiel: `a-bau` für A-Bau Meisterbetrieb GmbH, https://github.com/nexifyai-dev/a-bau).
+> Hosting: IMMER auf eigenem VPS (72.62.152.47). Deployment-Pfad: `/workspace/nexifyai/clients/<kunde>` (Container) ↔ `/opt/nexifyai/repos/<kunde>` (Host-Spiegel).
+> Kein `clients/`-Ordner im Hauptrepo (ausgelagert 2026-08-10).
+
 ## 1b. Grundprinzip: Erweitern statt Aushebeln (Vollintegrationspflicht)
 
 > **Pascal-Direktive 2026-08-07 — generelle Vorgabe für JEDE Arbeit, systemweit.**
