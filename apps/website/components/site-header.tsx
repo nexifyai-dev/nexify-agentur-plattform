@@ -139,6 +139,21 @@ export function SiteHeader() {
 
       {open && (
         <div id="mobile-nav-menu" className="max-h-[min(80vh,calc(100dvh-64px))] overflow-y-auto border-t border-white/10 bg-black/90 backdrop-blur-2xl xl:hidden" data-testid="mobile-menu" role="dialog" aria-label="Navigation">
+          <div className="site-container flex items-center justify-center gap-1.5 border-b border-white/10 py-3" data-testid="mobile-lang-switcher">
+            {(["de", "en", "nl"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                data-testid={`mobile-lang-switcher-${l}`}
+                aria-current={lang === l ? "true" : undefined}
+                className={`min-h-10 min-w-14 rounded-full px-4 py-2 text-[12px] font-bold uppercase tracking-wider transition-all ${
+                  lang === l ? "bg-white text-black shadow-[0_0_14px_rgba(255,255,255,0.25)]" : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
           <nav className="site-container flex flex-col gap-1 py-4" aria-label="Mobile">
             {NAV[lang].map((item) => (
               <Link
