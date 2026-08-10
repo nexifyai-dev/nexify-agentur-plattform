@@ -84,6 +84,17 @@ test('chat AI router parsing rejects malformed JSON without raw-slice hacks', ()
   assert.doesNotMatch(chat, /raw\.slice\(0, raw\.lastIndexOf/);
 });
 
+test('root layout instruments Vercel Analytics and Speed Insights', () => {
+  const layout = read('../app/layout.tsx');
+  const pkg = read('../package.json');
+  assert.match(layout, /import \{ Analytics \} from "@vercel\/analytics\/next"/);
+  assert.match(layout, /import \{ SpeedInsights \} from "@vercel\/speed-insights\/next"/);
+  assert.match(layout, /<Analytics \/>/);
+  assert.match(layout, /<SpeedInsights \/>/);
+  assert.match(pkg, /"@vercel\/analytics"/);
+  assert.match(pkg, /"@vercel\/speed-insights"/);
+});
+
 test('contact and offers use Resend fallback helpers', () => {
   assert.match(read('../lib/mail.ts'), /resendConfigured/);
   assert.match(read('../lib/mail.ts'), /sendContactNotification/);
