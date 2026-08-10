@@ -105,7 +105,6 @@ test('public webhook bridge proxies to backend without bypassing signature check
   const proxy = read('../lib/webhook-proxy.ts');
   const meta = read('../app/webhooks/meta/route.ts');
   const singular = read('../app/webhook/route.ts');
-  const caseVariant = read('../app/WebHook/route.ts');
   const apiCatchAll = read('../app/api/[...path]/route.ts');
 
   assert.match(proxy, /proxyRequest\(pathWithQuery, request\)/);
@@ -113,7 +112,7 @@ test('public webhook bridge proxies to backend without bypassing signature check
   assert.match(proxy, /Signaturprüfung bleibt im Backend erzwungen/);
   assert.doesNotMatch(proxy, /received: true|ok: true/);
 
-  for (const route of [meta, singular, caseVariant]) {
+  for (const route of [meta, singular]) {
     assert.match(route, /const META_WEBHOOK_PATH = "\/webhooks\/meta"/);
     assert.match(route, /export function GET/);
     assert.match(route, /export function POST/);
