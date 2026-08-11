@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { company } from "./company";
 
-/** Primär-Host laut Audit/Decision: www (apex → www via CF/Vercel). */
+/** Primär-Host laut Audit/Decision: www (apex → www via Cloudflare). */
 export const CANONICAL_ORIGIN = "https://www.nexifyai.cloud";
 
 /**

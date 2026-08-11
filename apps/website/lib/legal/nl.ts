@@ -126,7 +126,7 @@ export const legalPagesNl: Record<string, LegalPageData> = {
         heading: "3. Hosting, CDN en technische loggegevens",
         paragraphs: [
           "Bij het bezoeken van de website kunnen technisch noodzakelijke gegevens worden verwerkt, met name IP-adres, tijdstip, opgevraagde bron, referrer, browser-/apparaatinformatie en statuscodes. Dit dient de levering, stabiliteit, foutanalyse en bescherming tegen misbruik.",
-          "Voor de levering en beveiliging van de website kunnen content-delivery- en beschermingsdiensten (bijv. Cloudflare) en hostinginfrastructuur (bijv. Vercel of eigen servers in de EU) worden ingezet. Met de aanbieders bestaan, voor zover vereist, verwerkersovereenkomsten.",
+          "Voor de levering en beveiliging van de website kunnen content-delivery- en beschermingsdiensten (bijv. Cloudflare) en hostinginfrastructuur op eigen EU-servers worden ingezet. Met de aanbieders bestaan, voor zover vereist, verwerkersovereenkomsten.",
           "Rechtsgrond is art. 6 lid 1 sub f AVG (gerechtvaardigd belang bij een veilig en functioneel webaanbod). Logs worden beperkt tot het noodzakelijke en na afloop van operationele of wettelijke vereisten verwijderd of geanonimiseerd.",
         ],
       },
@@ -488,7 +488,7 @@ export const legalPagesNl: Record<string, LegalPageData> = {
       {
         heading: "Typische subverwerkers",
         paragraphs: [
-          "Afhankelijk van het project kunnen met name de volgende categorieën subverwerkers worden ingezet: hosting- en cloudinfrastructuur (bijv. Vercel, Hetzner, EU-datacenters), databasediensten (bijv. Supabase), e-mailverzenddiensten (bijv. Resend), CDN- en beveiligingsdiensten (bijv. Cloudflare) en – bij AI-functies – aanbieders van AI-taalmodellen.",
+          "Afhankelijk van het project kunnen met name de volgende categorieën subverwerkers worden ingezet: hosting- en cloudinfrastructuur (bijv. eigen EU-datacenters), databasediensten (bijv. Supabase), e-mailverzenddiensten (bijv. Resend), CDN- en beveiligingsdiensten (bijv. Cloudflare) en – bij AI-functies – aanbieders van AI-taalmodellen.",
           "De concrete, projectgebonden lijst wordt in de betreffende verwerkersovereenkomst gedocumenteerd en actueel gehouden.",
         ],
       },

@@ -10,7 +10,6 @@ Kurzer Index der öffentlichen und betrieblichen Docs in diesem Monorepo. Verbin
 |-----------|------------|
 | Website (Live) | https://www.nexifyai.cloud |
 | API | https://api.nexifyai.cloud |
-| Vercel Preview/Prod-App | https://nexify-agentur-plattform.vercel.app |
 | Produkt-README | [`../README.md`](../README.md) |
 | Agenten-Hinweise | [`../AGENTS.md`](../AGENTS.md) |
 | Design SoT | [`../design_guidelines.json`](../design_guidelines.json) |
@@ -36,7 +35,7 @@ Die Dateien `GESAMT-INTEGRATION-STATUS.md`, `GITHUB-WORKER-GUIDE.md` und `GITHUB
 
 ## Dual-VCS (Kurz)
 
-GitHub = Source of Truth (PR, Actions, Vercel). GitLab OSS = Mirror + CI/VPS-Pfad. Details: [`operations/REPO-SYNC-STRATEGY.md`](operations/REPO-SYNC-STRATEGY.md).
+GitHub = Source of Truth (PR, Actions, VPS-Deploy). GitLab OSS = Mirror + CI/VPS-Pfad. Details: [`operations/REPO-SYNC-STRATEGY.md`](operations/REPO-SYNC-STRATEGY.md).
 
 ## Absichtlich nicht hier
 

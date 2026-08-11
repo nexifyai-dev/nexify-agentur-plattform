@@ -41,7 +41,7 @@ export async function api<T = any>(path: string, options: RequestInit = {}): Pro
   }
 
   if (!res.ok) {
-    // Vercel HTML 502 (DNS_HOSTNAME_EMPTY) previously surfaced as a useless generic error
+    // HTML 502 (DNS_HOSTNAME_EMPTY) surfaced previously as a useless generic error
     if (res.status === 502 || /DNS_HOSTNAME_EMPTY/i.test(raw)) {
       throw new Error(
         "Anmeldung derzeit nicht möglich: API-Backend nicht erreichbar. Bitte später erneut versuchen oder mail@nexifyai.cloud kontaktieren.",

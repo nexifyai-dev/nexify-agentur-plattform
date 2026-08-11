@@ -4,7 +4,7 @@
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
 // WHAT: Chat session create — proxy backend or local UUID fallback
-// WHY: Without a local route, Vercel rewrite hit empty BACKEND_ORIGIN → DNS_HOSTNAME_EMPTY
+// WHY: Without a local route, rewrite hit empty BACKEND_ORIGIN → DNS_HOSTNAME_EMPTY
 // BEST-PRACTICE: Prefer FastAPI when configured; local session id keeps UI usable offline
 // PITFALL: V-XX: client expects { session_id: string }
 // DEPENDS: lib/backend.ts

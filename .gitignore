@@ -8,7 +8,6 @@ out/
 .env.staging
 *.log
 .DS_Store
-.vercel
 *.env
 !.env.example
 credentials.json
@@ -52,4 +51,3 @@ data/leads/*
 !data/leads/README.md
 !data/leads/seeds/
 !data/leads/seeds/**
-
