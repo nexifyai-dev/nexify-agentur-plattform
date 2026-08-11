@@ -261,7 +261,7 @@ async function callPlanner(projectType: string, message: string, language: strin
     language: lang,
   };
 
-  const res = await fetch(new URL("/api/planner/plan", requestUrl), {
+  const res = await fetch(new URL("/api/planner/plan", "http://127.0.0.1:8880"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
