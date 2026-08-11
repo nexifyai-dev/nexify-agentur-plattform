@@ -9,7 +9,7 @@
 // PITFALL: V-WEBHOOK-01: Missing BACKEND_ORIGIN must return 503, not 200, so providers retry visibly
 // DEPENDS: lib/backend.ts proxyRequest, BACKEND_ORIGIN
 // DOCS-REF: backend/server.py /webhooks/meta; backend/channel_sync.py /api/webhooks/whatsapp
-// SESSION: vercel-agent-webhook-bridge
+// SESSION: website-webhook-bridge
 
 import { NextResponse } from "next/server";
 import { proxyRequest } from "@/lib/backend";

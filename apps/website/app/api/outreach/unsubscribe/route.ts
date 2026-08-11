@@ -121,7 +121,7 @@ async function handle(req: NextRequest): Promise<NextResponse> {
   await persistUnsub(email);
 
   // Art. 21 DSGVO: Opt-out zusätzlich in der leads-Tabelle persistieren
-  // (PostgREST, env-gesteuert — auf Vercel nicht gesetzt, lokal via pipeline.env).
+  // (PostgREST, env-gesteuert — in lokalen Umgebungen via pipeline.env).
   const sbUrl = process.env.SUPABASE_URL?.trim();
   const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || process.env.SUPABASE_SERVICE_KEY?.trim();
   if (sbUrl && sbKey) {

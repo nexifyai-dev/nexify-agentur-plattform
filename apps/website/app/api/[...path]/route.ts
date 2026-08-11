@@ -4,7 +4,7 @@
 // NAME: NeXifyAI Agent
 // TEAM: NeXifyAI Dev
 // WHAT: Catch-all API proxy for auth/chat and other backend-only paths
-// WHY: Missing local routes + invalid BACKEND_ORIGIN rewrite produced Vercel DNS_HOSTNAME_EMPTY 502
+// WHY: Missing local routes + invalid BACKEND_ORIGIN rewrite produced DNS_HOSTNAME_EMPTY 502
 // BEST-PRACTICE: Specific app/api/*/route.ts handlers take precedence; this catches the rest
 // PITFALL: V-XX: never rewrite to empty hostname; return honest JSON 503 when backend unset
 // DEPENDS: lib/backend.ts proxyRequest, BACKEND_ORIGIN

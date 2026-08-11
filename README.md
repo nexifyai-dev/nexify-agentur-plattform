@@ -6,7 +6,6 @@
 |---|---|
 | **Live** | [https://www.nexifyai.cloud](https://www.nexifyai.cloud) |
 | **API** | [https://api.nexifyai.cloud](https://api.nexifyai.cloud) |
-| **Vercel** | [https://nexify-agentur-plattform.vercel.app](https://nexify-agentur-plattform.vercel.app) |
 | **GitHub (SoT)** | [nexifyai-dev/nexify-agentur-plattform](https://github.com/nexifyai-dev/nexify-agentur-plattform) |
 | **GitLab (Mirror)** | `gitlab.nexifyai.cloud/nexifyai_group/nexifyai` |
 
@@ -26,7 +25,6 @@ Dieses Repo enthält die **öffentliche Website** (`apps/website`), ein **FastAP
 | Governance | `docs/governance/` | Verbindliche Regeln & SOPs (Primärquelle) |
 | Design | `design_guidelines.json` | Dark/Luxury · Outfit/Manrope · `#0A0A0A` |
 | Deploy | `deploy/` | Dockerfiles, MCP, Cursor/SSH-Hilfen — **kein** `deploy/docker-compose.yml` |
-| Root Compose | `docker-compose.yml` | Harness/CI-Infra, **nicht** der Produkt-Stack |
 
 **Sprachen-Mix (ungefähre Repo-Realität):** TypeScript/TSX (Website), Python (Backend/Agentik), Markdown (Governance), YAML (CI/Deploy).
 
@@ -77,14 +75,14 @@ Details und Stolpersteine: `AGENTS.md` (Abschnitt „Cursor Cloud specific instr
 ## Dual-VCS & Deploy
 
 ```
-GitHub (Source of Truth)  →  PR, Actions CI, Vercel Deploy
+GitHub (Source of Truth)  →  PR, Actions CI, VPS Deploy
         │
         │  .github/workflows/mirror-to-gitlab.yml
         ▼
 GitLab OSS (Mirror)       →  CI, VPS-Deploy-Pfad
 ```
 
-- **Website Production:** Vercel (`deploy-vercel.yml` auf `main`) + Live unter `www.nexifyai.cloud`
+- **Website Production:** Hostinger VPS (Docker, standalone Output) — Live unter `www.nexifyai.cloud`
 - **API:** `api.nexifyai.cloud` (Backend auf VPS)
 - **Sync-Doku:** `docs/operations/REPO-SYNC-STRATEGY.md`
 

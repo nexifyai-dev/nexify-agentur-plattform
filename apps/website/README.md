@@ -33,4 +33,4 @@ Oder vom Repo-Root: `pnpm --dir apps/website <script>`.
 
 ## Deploy
 
-Push auf `main` → GitHub Action `deploy-vps.yml`; Host-Timer `nexifyai-website-sync.timer` (alle 5 min) zieht origin/main, baut und startet `nexifyai-website.service` (Port 8880). Kein Vercel.
+Push auf `main` → GitHub Action `deploy-vps.yml`; Host-Timer `nexifyai-website-sync.timer` (alle 5 min) zieht origin/main, baut und startet `nexifyai-website.service` (Port 8880). Nur VPS-Deployment.

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { proxyPost } from "@/lib/backend";
 
 export const dynamic = "force-dynamic";
-// LLM-Calls (DeepSeek Think-Max via 9Router) brauchen 8–22s; Vercel-Hobby-Limit sonst 10s.
+// LLM-Calls (DeepSeek Think-Max via 9Router) brauchen 8–22s; daher maxDuration=60.
 export const maxDuration = 60;
 
 type Module = { name: string; description: string; days_min: number; days_max: number };

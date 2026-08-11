@@ -1,7 +1,7 @@
 // FILE: apps/website/app/webhooks/meta/route.ts
 // UPDATED: 10.08.2026 08:18
 // WHAT: Public Meta webhook bridge to FastAPI signature-validated handler
-// WHY: Meta callback URLs hit the Vercel website domain; FastAPI owns verify-token and HMAC validation
+// WHY: Meta callback URLs treffen die Website-Domain; FastAPI verantwortet Verify-Token und HMAC-Validierung
 // DEPENDS: lib/webhook-proxy.ts, backend /webhooks/meta
 
 import { proxyWebhook } from "@/lib/webhook-proxy";

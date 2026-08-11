@@ -29,10 +29,10 @@ test('next.config validates BACKEND_ORIGIN before adding /api rewrite', () => {
   assert.match(src, /u\.protocol === "http:" \|\| u\.protocol === "https:"/);
 });
 
-test('next.config disables standalone output on Vercel builds only', () => {
+test('next.config enforces standalone output for VPS Docker hosting', () => {
   const src = read('../next.config.ts');
-  assert.match(src, /const isVercelBuild = process\.env\.VERCEL === "1" \|\| process\.env\.VERCEL === "true"/);
-  assert.match(src, /output:\s*isVercelBuild \? undefined : "standalone"/);
+  assert.match(src, /output:\s*"standalone"/);
+  assert.doesNotMatch(src, /output:\s*.+\?.+:/);
 });
 
 test('chat session + chat routes exist as local handlers', () => {
@@ -106,23 +106,6 @@ test('root layout defers fixed overlay widgets to reduce early CLS risk', () => 
   assert.doesNotMatch(layout, /<StickyCta \/>|<ExitIntent \/>|<ChatWidget \/>|<CookieConsent \/>/);
   assert.match(deferred, /requestIdleCallback|setTimeout/);
   assert.match(deferred, /if \(!ready\) return null/);
-});
-
-test('root layout instruments Vercel Analytics and Speed Insights with private route filters', () => {
-  const layout = read('../app/layout.tsx');
-  const insights = read('../components/vercel-insights.tsx');
-  const pkg = read('../package.json');
-  assert.match(layout, /import \{ VercelInsights \} from "@\/components\/vercel-insights"/);
-  assert.match(layout, /<VercelInsights \/>/);
-  assert.match(insights, /import \{ Analytics, type BeforeSendEvent \} from "@vercel\/analytics\/next"/);
-  assert.match(insights, /import \{ SpeedInsights \} from "@vercel\/speed-insights\/next"/);
-  for (const path of ['/admin', '/konto', '/login', '/registrieren', '/api']) {
-    assert.match(insights, new RegExp(`"${path}"`));
-  }
-  assert.match(insights, /<Analytics beforeSend=\{\(event: BeforeSendEvent\) => beforeSendPublicOnly\(event\)\} \/>/);
-  assert.match(insights, /<SpeedInsights beforeSend=\{beforeSendPublicOnly\} \/>/);
-  assert.match(pkg, /"@vercel\/analytics"/);
-  assert.match(pkg, /"@vercel\/speed-insights"/);
 });
 
 test('public webhook bridge proxies to backend without bypassing signature checks', () => {

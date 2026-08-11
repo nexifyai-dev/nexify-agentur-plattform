@@ -100,7 +100,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "hosting", heading: "4. Hosting und Server-Logfiles",
         paragraphs: [
-          "Hosting: Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA (EU-Standardvertragsklauseln gemäß Art. 46 DSGVO abgeschlossen).",
+          "Hosting: Hostinger International Ltd. (VPS Frankfurt/DE, EU-Hosting).",
           "Content Delivery Network und Web Application Firewall: Cloudflare Inc., 101 Townsend St, San Francisco, CA 94107, USA (SCC).",
           "Bei jedem Aufruf dieser Website verarbeitet der Hosting-Anbieter automatisiert folgende Daten: IP-Adresse (gekürzt), Datum und Uhrzeit des Zugriffs, aufgerufene URL, HTTP-Statuscode, Referrer-URL, User-Agent, Browsertyp und -version, Betriebssystem.",
           "Diese Logfiles dienen der Betriebssicherheit, Fehleranalyse und Missbrauchsabwehr (berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO).",
@@ -123,7 +123,7 @@ export const legalDe: Record<string, LegalPageData> = {
       { id: "empfaenger", heading: "7. Auftragsverarbeiter",
         paragraphs: ["Folgende Auftragsverarbeiter (Art. 28 DSGVO) sind eingesetzt. Mit allen wurden AVV geschlossen:"],
         bullets: [
-          "Vercel Inc. (USA) – Hosting und Deployment (SCC)",
+          "Hostinger (EU, VPS Frankfurt/DE) – Hosting und Deployment",
           "Cloudflare Inc. (USA) – CDN, WAF, DNS (SCC)",
           "Resend Inc. (USA) – Versand von E-Mails (SCC)",
           "Supabase Inc. (USA) – Datenbank, EU-Region (SCC)",
@@ -342,7 +342,7 @@ export const legalDe: Record<string, LegalPageData> = {
         ] },
       { id: "uav", heading: "§ 3 Unterauftragsverarbeiter",
         paragraphs: [
-          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Vercel Inc., Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek, OpenRouter und Upstage (über 9Router), Hostinger (VPS Frankfurt/DE).",
+          "Folgende Unterauftragsverarbeiter (Sub-Processor) sind aktuell eingesetzt: Cloudflare Inc., Supabase Inc., Resend Inc., DeepSeek, OpenRouter und Upstage (über 9Router), Hostinger (VPS Frankfurt/DE).",
           "Änderungen der Unterauftragsverarbeiter werden dem Auftraggeber mit einer Frist von 14 Tagen in Textform angekündigt. Erfolgt kein Widerspruch, gilt die Änderung als genehmigt.",
           "Mit allen Unterauftragsverarbeitern bestehen vertragliche Verpflichtungen auf dem Niveau dieses AVV.",
         ] },
