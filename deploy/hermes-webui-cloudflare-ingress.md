@@ -88,9 +88,9 @@ curl -sI https://hermes-dash.nexifyai.cloud/health
 YAML-Bug (`if:`-Block-Scalar mit eingebetteten Kommentarzeilen), der die
 GESAMTE Workflow-Datei ungültig machte — jeder Deploy zu main seit ~14:00 Uhr
 schlug mit 0 ausgeführten Jobs fehl. Das betrifft primär die Website
-(nexifyai.cloud → Vercel laut memory/VPS_INFRA.md:21, unklar ob zusätzlich
-VPS-Container betroffen sind) und alle über diese Pipeline verwalteten
-Dienste — NICHT direkt Hermes, da Hermes laut memory/VPS_INFRA.md:90
+(nexifyai.cloud → VPS, systemd `nexifyai-website.service` Port 8880 — kein
+Vercel mehr; Vercel-Entfernung 2026-08-11) und alle über diese Pipeline
+verwalteten Dienste — NICHT direkt Hermes, da Hermes laut memory/VPS_INFRA.md:90
 (`/root/hermes-webui-nexify`) außerhalb dieser Repo-Pipeline separat verwaltet
 wird. Beide Ursachen (fehlender Ingress + kaputte Deploy-Pipeline) sind
 unabhängig voneinander und sollten beide behoben werden.

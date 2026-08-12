@@ -206,4 +206,3 @@ nexifyai.cloud
 ---
 
 *Ende des Reserved Domain Plans für nexifyai.cloud.*
-*Nächstes Dokument: `VERCEL_DOMAIN_PLAN_V1.md`*

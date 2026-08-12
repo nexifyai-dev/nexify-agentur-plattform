@@ -33,7 +33,7 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 ### ⛔ KONTO-STANDARD (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
 1. **Passwort:** Überall, wo ein Passwort frei wählbar ist, wird das UNIVERSELLE Standard-Passwort aus hermes.env genutzt (Feld `MASTER_PASSWORD`; Wert NIE in Doku/Repo/Chat — nur Referenz auf hermes.env).
 2. **E-Mail:** Für alle Konten/Dienste wird IMMER `mail@nexifyai.cloud` verwendet — das ist die EINZIGE E-Mail-Adresse (keine weiteren Adressen anlegen).
-3. Gilt für: neue Konten (FreeAgent, Brevo, Mailjet, Meta, Vercel, …), Dienste, Mailboxen, Sub-Accounts — überall, wo die Wahl frei ist.
+3. Gilt für: neue Konten (FreeAgent, Brevo, Mailjet, Meta, …), Dienste, Mailboxen, Sub-Accounts — überall, wo die Wahl frei ist.
 
 ### ⛔ NICHTS-UNGEFIXT-LASSEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
 **Wir lassen NIEMALS etwas ungefixt. Jeder Bug und jede Abweichung wird PROAKTIV erkannt und behoben.**
@@ -550,7 +550,6 @@ Live-Doku: `/opt/nexifyai/docs/live/AGENT-TOOLING-PRODUCTION-READY-2026-07-25.md
 | **github** | stdio | ✅/🔧 | PAT aus `GITHUB_TOKEN` verdrahten |
 | **gitlab** | stdio | ✅ | Self-hosted `127.0.0.1:8922` |
 | **supabase** | stdio | ✅ | read-only project-ref |
-| **vercel** | wrapper | ✅ | |
 | **firecrawl** | stdio | ✅ enabled | lokal :3003 — Key+URL via Volumen-.env (OPS-04, 07.08.2026) |
 | **linear** | stdio | ⏸ disabled | `LINEAR_API_KEY` fehlt |
 | **n8n** | — | ❌ abgeschafft — keine Vollintegration (Autopilot ersetzt) |

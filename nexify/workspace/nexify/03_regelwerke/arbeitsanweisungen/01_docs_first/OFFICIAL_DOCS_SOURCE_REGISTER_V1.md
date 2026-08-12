@@ -40,10 +40,6 @@
 ## Vercel — docs-vercel
 
 - Typ: `official_docs`
-- Offizielle Quelle: https://vercel.com/docs
-- Pflichtnutzung: Deployments, domains, env vars, logs, previews, rollback
-- Pflichtausgaben: VERCEL_DEPLOYMENT_RUNBOOK.md, VERCEL_DOMAIN_ENV_REGISTER.md
-
 ## Cloudflare — docs-cloudflare
 
 - Typ: `official_docs`

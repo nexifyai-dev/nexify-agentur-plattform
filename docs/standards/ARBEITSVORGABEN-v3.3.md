@@ -573,8 +573,7 @@ CLOUDFLARE (in hermes.env, Werte hier redigiert)
 - Account ID: a112f895c19e0d65f6f64b3e89f747f8 (kein Secret — öffentlich via DNS)
 - API Token: `***` · Master Key: `***` · API-Schlüssel: `***`
 
-VERCEL (in hermes.env, Werte hier redigiert)
-- Admin Token: `***` · User ID: PQnMvUrBh0qqxETK6q3BiClp (kein Secret)
+VERCEL — ENTFERNT 2026-08-11 (kein Vercel mehr, Website auf Host-VPS; keine Secrets)
 
 9ROUTER
 - Endpoint: http://127.0.0.1:20128/v1 (remote: https://ai-router.nexifyai.cloud/v1)

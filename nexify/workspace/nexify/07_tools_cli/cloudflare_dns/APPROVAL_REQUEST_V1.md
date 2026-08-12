@@ -249,7 +249,6 @@ Test 7: SSL-Labs-Test (SSLLabs.com) → Bewertung A oder besser
 | 4 | `TUNNEL_REDUCTION_PLAN_V1.md` | Tunnel-Reduktionsstrategie | ✅ Erstellt |
 | 5 | `NEXIFY_AUTOMATE_ACTIVE_WEBSITE_PLAN_V1.md` | Hauptdomain-Strategie | ✅ Erstellt |
 | 6 | `NEXIFYAI_CLOUD_RESERVED_DOMAIN_PLAN_V1.md` | nexifyai.cloud Reservierungsplan | ✅ Erstellt |
-| 7 | `VERCEL_DOMAIN_PLAN_V1.md` | Vercel Custom Domains, Env-Vars, Hooks | ✅ Erstellt |
 | 8 | `MAIL_DNS_SPF_DKIM_DMARC_FIX_PLAN_V1.md` | SPF/DKIM/DMARC Fix-Plan | ✅ Erstellt |
 | 9 | `ROLLBACK_PLAN_V1.md` | Notfall- und Wiederherstellungsplan | ✅ Erstellt |
 | 10 | **`APPROVAL_REQUEST_V1.md`** | **Diese Freigabeanfrage** | ✅ **Erstellt — WAITING_FOR_APPROVAL** |

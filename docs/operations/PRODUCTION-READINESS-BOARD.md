@@ -56,7 +56,7 @@ Legend: 🟢 green · 🟡 yellow (degraded/pending CI) · 🔴 red (blocked hum
 | Item | Status | URL / Path | Notes |
 |------|--------|------------|-------|
 | Open PR merge queue | 🟡 | https://github.com/nexifyai-dev/nexify-agentur-plattform/pulls | Automerge labeled; waiting 7 required checks |
-| CI skip≠success (Vercel) | 🟢 | merged #147 | Honest fail without secrets — OK |
+| CI skip≠success (Deploy) | 🟢 | merged #147 | Honest fail without secrets — OK |
 | Issues lifecycle | 🟢 | merged #152 | label→agent→close→stale on main |
 | Draft→ready→automerge | 🟡 | PR #157 / related | Conflicts resolved on draft loop; needs green CI on main |
 | Daily smoke hosted | 🟢 | merged #156 (+ #158 follow-up) | hosted smoke path on main |
@@ -100,7 +100,7 @@ Legend: 🟢 green · 🟡 yellow (degraded/pending CI) · 🔴 red (blocked hum
 5. **Cursor Automations** — open drafts under `.cursor/automations/` → Enable.  
 6. After 1–2: re-run Daily Smoke workflow + Event→Cloud Agent dry-run; comment evidence on #123.
 
-Optional same session: Linear/Slack MCP auth, Vercel project env (`VERCEL-ENV.md`).
+Optional same session: Linear/Slack MCP auth.
 
 ---
 

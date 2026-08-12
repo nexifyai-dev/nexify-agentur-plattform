@@ -8,7 +8,7 @@
 ## Fix-Loop (automatisch)
 
 ```
-Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
+Event (GH/Linear/Slack/Sentry/Health/…)
   → GitHub Actions event-to-cloud-agent  OR  VPS webhook :8791
   → Circuit Breaker + AgentMemory Action
   → Cursor Cloud Agent (PC-off)
@@ -51,7 +51,7 @@ Event (GH/Linear/Slack/Sentry/Vercel/Health/…)
 | GitHub Plugin MCP | fehlt oft | Dashboard MCP | User: Settings → MCP → GitHub |
 | Linear | MCP auth ok (Desktop) | Issue→Agent | Cursor Automation + webhook `/ingest/linear` |
 | Slack | MCP auth ok (Desktop) | Msg→Agent | Automation + `/ingest/slack` |
-| Sentry/Vercel/CF/Resend | — | Webhook→Agent | `/ingest/{source}` + Shared Secret |
+| Sentry/CF/Resend | — | Webhook→Agent | `/ingest/{source}` + Shared Secret |
 | Auto-Push | Hook | Hook | aktiv (kein Diff-Tab) |
 | Auto Draft-PR | Hook+Workflow | Hook+Workflow | aktiv nach Push `cursor/**` |
 | Draft→ready | fehlte (#135) | pr-auto-merge | aktiv wenn automerge + checks green |

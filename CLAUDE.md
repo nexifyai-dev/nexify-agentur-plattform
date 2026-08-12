@@ -158,7 +158,6 @@ agentmemory.save(
 | `agentmemory` | Brain save/recall, Session-Kontext |
 | `firecrawl` | Dokumentation-Scraping, Web-Inhalte |
 | `supabase` | Datenbank-Queries (wenn nötig) |
-| `vercel` | Preview-Deployment von Frontend-Changes |
 
 **Beispiel:**
 ```bash

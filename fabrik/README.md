@@ -5,7 +5,7 @@ Dies ist der **portable Export** der aktiven Paperclip-Fabrik-Konfiguration (Sou
 - **Format**: Paperclip Agent-Company v1 (`.paperclip.yaml`)
 - **Ordner**: `/app/fabrik/nexify-ai/`
 - **Agents**: 6 (nexify-ai-ceo, nexify-ai-developer, nexify-analyst, nexify-architekt, nexify-ops, nexify-qa)
-- **Skills**: 74 (davila7/claude-code-templates, paperclipai/paperclip, vercel-labs/skills)
+- **Skills**: 74 (davila7/claude-code-templates, paperclipai/paperclip)
 
 ## Deployment
 

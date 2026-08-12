@@ -24,7 +24,7 @@
 | LightRAG | 9621 (WebUI) / 9622 (API) | **AKTIV seit 05.08.2026** (keyless, DeepSeek via 9Router); public `rag.nexifyai.cloud` → 307 `/lightrag/webui/` |
 | Backend API | 8901 | public `api.nexifyai.cloud`; DB lokal (supabase-db, supabase_admin, IP volatil) |
 | GitLab | 8922 | public `gitlab.nexifyai.cloud`, CI-Runner ✅ |
-| Website | Vercel (Next.js) | `www.nexifyai.cloud` (DE/EN/NL) |
+| Website | Host-VPS (Next.js, systemd `nexifyai-website.service`, Port 8880) | `www.nexifyai.cloud` (DE/EN/NL) — kein Vercel (2026-08-11) |
 
 ## Pfade
 - Repo (Haupt): `/root/nexify-agentur-plattform` (origin: github nexifyai-dev, gitlab: gitlab.nexifyai.cloud)
@@ -49,7 +49,7 @@
 |---|---|---|
 | agentmemory | stdio `@agentmemory/mcp` | ✅ (REST :3111) |
 | lightrag | stdio `lightrag-mcp.py` | ✅ (:9622, DeepSeek-only) |
-| github / gitlab / supabase / vercel | stdio / wrapper | ✅ |
+| github / gitlab / supabase | stdio / wrapper | ✅ |
 | firecrawl / linear | stdio | ⏸ bei fehlendem Key |
 | n8n | — | abgeschafft (keine Vollintegration) |
 

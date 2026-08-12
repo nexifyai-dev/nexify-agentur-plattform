@@ -22,7 +22,7 @@
 | 4 | GitHub MCP OAuth | Cursor → **Settings → MCP** → GitHub Plugin install/auth | MCP `plugin-github-github` / GitHub ready (nicht `needsAuth`) |
 | 5 | Cursor Automations UI | Cursor → **Automations** → Drafts aus `.cursor/automations/` öffnen → Trigger/Channel wählen → **Enable** | 3 Automations aktiv (nicht nur Draft-Markdown) |
 
-Optional parallel (nicht im 5-Min-Kern, aber gleiche Session): Linear + Slack MCP auth, Vercel Project Env laut [`VERCEL-ENV.md`](./VERCEL-ENV.md).
+Optional parallel (nicht im 5-Min-Kern, aber gleiche Session): Linear + Slack MCP auth.
 
 ---
 
@@ -37,9 +37,6 @@ Pfad: `https://github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 | `CURSOR_API_KEY` | Cursor Dashboard → Cloud Agents → API Key | `event-to-cloud-agent.yml` |
 | `AGENTMEMORY_SECRET` | VPS `/etc/nexifyai/` bzw. AgentMemory Bearer | Event-Ingest + AM Actions |
 | `AGENTMEMORY_URL` | z. B. `https://agentmemory.nexifyai.cloud` oder intern | Event-Ingest |
-| `VERCEL_TOKEN` | Vercel → Account → Tokens | `deploy-vercel.yml` |
-| `VERCEL_ORG_ID` | Vercel Project Settings → General | `deploy-vercel.yml` |
-| `VERCEL_PROJECT_ID` | Vercel Project Settings → General | `deploy-vercel.yml` |
 
 ### Stark empfohlen
 
@@ -59,8 +56,6 @@ Pfad: `https://github.com/nexifyai-dev/nexify-agentur-plattform/settings/secrets
 | `VPS_USER` | Deploy SSH User |
 | `VPS_PORT` | Deploy SSH Port |
 | `DEPLOY_KEY_VPS` | Private Key für Deploy |
-
-Legacy-Alias: `VERCEL_ACCESS_TOKEN` wird von Deploy-Workflow akzeptiert, wenn `VERCEL_TOKEN` fehlt (als Secret **oder** Variable) — **nicht beide nötig**.
 
 Vollständige Matrix: [`GITHUB-ACTIONS-SECRET-REGISTRY.md`](./GITHUB-ACTIONS-SECRET-REGISTRY.md).
 

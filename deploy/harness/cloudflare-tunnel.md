@@ -17,11 +17,12 @@
 
 Der bestehende `cloudflared`-Tunnel verbindet folgende Domains (korrigiert
 gegen `memory/VPS_INFRA.md:54-55` — die ursprüngliche Version dieser Tabelle
-nannte fälschlich `nexifyai.cloud` als Hermes-Ziel, das ist laut
-`deploy/website-routes.yml` bzw. `memory/VPS_INFRA.md:21` die Website
-[Vercel, nicht auf dem VPS]; außerdem widersprach der 9Router-Port dem in
-`memory/VPS_INFRA.md:55` dokumentierten Wert — bitte vor Anwendung dieses
-Patches gegen den tatsächlichen Tunnel-Ingress verifizieren):
+nannte fälschlich `nexifyai.cloud` als Hermes-Ziel; das ist laut
+`deploy/website-routes.yml` bzw. `memory/VPS_INFRA.md:21` die Website auf dem
+VPS [systemd `nexifyai-website.service`, Port 8880, kein Vercel]; außerdem
+widersprach der 9Router-Port dem in `memory/VPS_INFRA.md:55` dokumentierten
+Wert — bitte vor Anwendung dieses Patches gegen den tatsächlichen
+Tunnel-Ingress verifizieren):
 
 | Domain | Ziel | Port |
 |--------|------|------|

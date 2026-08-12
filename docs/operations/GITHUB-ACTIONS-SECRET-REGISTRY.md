@@ -14,10 +14,6 @@
 | `CURSOR_API_KEY` | P0 laptop-off | `event-to-cloud-agent.yml` | Cursor Cloud Agents API |
 | `AGENTMEMORY_SECRET` | P0 | `event-to-cloud-agent.yml`, dual-write hook | Bearer, never log |
 | `AGENTMEMORY_URL` | P0 | `event-to-cloud-agent.yml` | Public or tunnel URL for hosted runners |
-| `VERCEL_TOKEN` | P0 website deploy | `deploy-vercel.yml` | Preferred name |
-| `VERCEL_ACCESS_TOKEN` | alias | `deploy-vercel.yml` | Legacy alias; either/or with `VERCEL_TOKEN` |
-| `VERCEL_ORG_ID` | P0 | `deploy-vercel.yml` | Also accepted as repo **variable** |
-| `VERCEL_PROJECT_ID` | P0 | `deploy-vercel.yml` | Also accepted as repo **variable** |
 | `LINEAR_API_KEY` | recommended | `linear-pr-sync.yml` | Skip sync if unset |
 | `CIRCUIT_BREAKER_URL` | optional | `event-to-cloud-agent.yml` | Default soft-allow if missing |
 | `VPS_GITLAB_TOKEN` | P1 mirror | `mirror-to-gitlab.yml` | GitLab OSS PAT |
@@ -32,10 +28,6 @@
 
 | Name | Used for |
 |------|----------|
-| `VERCEL_TOKEN` | Discouraged — prefer secret |
-| `VERCEL_ACCESS_TOKEN` | Legacy alias for deploy-vercel token |
-| `VERCEL_ORG_ID` | OK as variable |
-| `VERCEL_PROJECT_ID` | OK as variable |
 | `SMOKE_BASE_URL` | Optional override for daily smoke (default production site) |
 | `SMOKE_API_HEALTH_URL` | Optional backend health URL for hosted smoke |
 

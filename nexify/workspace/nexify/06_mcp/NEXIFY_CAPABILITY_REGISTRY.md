@@ -69,7 +69,6 @@ Jeder Eintrag enthält folgende Felder:
 | 13 | `rollback_exec` | Rollback-Execution | NeXify | — | — | S4 | selten | Oracle, Admin | rollback, restore | — | `mcp://nexify/tools/rollback_exec` | `rollback-cli` | — | — | kritisch | ja | getestet | `07_tools_cli/cloudflare_dns/ROLLBACK_PLAN_V1.md` |
 | 14 | `tunnel_reduction` | Tunnel-Reduction | Cloudflare | — | — | S4 | selten | Oracle, Infra | tunnel, config | tunnel_delete_all | `mcp://nexify/tools/tunnel_reduction` | — | — | — | hoch | ja | teilweise | `07_tools_cli/cloudflare_dns/TUNNEL_REDUCTION_PLAN_V1.md` |
 | 15 | `subdomain_mgmt` | Subdomain-Management | Cloudflare | — | — | S3 | selten | Oracle, Infra | subdomain, record | — | `mcp://nexify/tools/subdomain_mgmt` | — | — | — | mittel | nein | getestet | `07_tools_cli/cloudflare_dns/SUBDOMAIN_A_RECORD_PLAN_V1.md` |
-| 16 | `vercel_domain` | Vercel Domain Management | Vercel | — | — | S3 | selten | Oracle, Infra | domain, deploy | deploy_prod_ohne_gate | `mcp://nexify/tools/vercel_domain` | — | — | — | hoch | ja | getestet | `07_tools_cli/cloudflare_dns/VERCEL_DOMAIN_PLAN_V1.md` |
 
 ### 3.3 Agenten-Fähigkeiten (S1–S3)
 

@@ -24,7 +24,7 @@
 
 | Pfad | Status | Hinweis |
 |------|--------|---------|
-| `www` health + `/de` | ✅ | Vercel live |
+| `www` health + `/de` | ✅ | VPS live (seit 2026-08-10) |
 | `api` health/full + DB pool | ✅ | Supabase pool ok; email_agent errors>0 |
 | Contact POST | ✅ | Lead erstellt |
 | Planner | ✅ | lokale Schätzung |

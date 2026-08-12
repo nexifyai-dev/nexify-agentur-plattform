@@ -4,7 +4,7 @@ Kurzkonzept für die Agentur- und Operations-Plattform in diesem Monorepo.
 
 ## Produkt (IST)
 
-- **Öffentliche Website:** `apps/website` (Next.js) — Live: https://www.nexifyai.cloud · Vercel: https://nexify-agentur-plattform.vercel.app
+- **Öffentliche Website:** `apps/website` (Next.js) — Live: https://www.nexifyai.cloud · Host-VPS (systemd `nexifyai-website.service`, Port 8880, kein Vercel)
 - **API:** FastAPI unter `backend/` — https://api.nexifyai.cloud
 - **Workstation-Ziel:** eine native Hermes-basierte WebUI (Konsolidierung; Cutover nur nach Freigabe)
 - **Brand / Design:** `design_guidelines.json` — Dark/Luxury, Outfit/Manrope, `#0A0A0A` (nicht „Graphite Premium“)
@@ -34,7 +34,7 @@ Legacy-Ordner `nexify/` enthält historisches Wissens-/Regelwerksmaterial; bei W
 
 - Dual-VCS: GitHub SoT ↔ GitLab Mirror — siehe `docs/operations/REPO-SYNC-STRATEGY.md`
 - Brain-Dienste (9Router, AgentMemory, LightRAG, …) laufen auf dem VPS, **nicht** als Quellcode in diesem Repo
-- CI: GitHub Actions (+ Mirror/GitLab); Website-Deploy: Vercel
+- CI: GitHub Actions (+ Mirror/GitLab); Website-Deploy: `deploy-vps.yml` + Host-Timer `nexifyai-website-sync.timer`
 
 ## Prinzipien
 

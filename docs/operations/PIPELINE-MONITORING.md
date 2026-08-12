@@ -15,7 +15,7 @@
 | `ci.yml` | push main, PR main | backend, website, hermes, secret-scan, agentic-governance | — |
 | `pr-auto-merge.yml` | labeled, synchronize, workflow_run(CI), check_suite | enable-automerge | Ruleset/Branch Protection |
 | `mirror-to-gitlab.yml` | push main, workflow_dispatch | mirror | VPS_GITLAB_* Secrets |
-| `deploy-vercel.yml` | (via Vercel Git Integration) | — | Vercel Token |
+| `deploy-vps.yml` | push main → Host-Timer sync (Website) | deploy-vps.yml | VPS_* Secrets |
 | `quality-smoke.yml` | schedule 05:30 UTC, PR, workflow_dispatch | public-smoke, website-critical-e2e | SMOKE_* vars |
 
 ### 1.2 Automation (P1 — Agent-Betrieb)
@@ -41,8 +41,7 @@
 
 | Workflow | Trigger | Funktion |
 |---|---|---|
-| `deploy-vercel.yml` | push main | Vercel Deploy (Website) |
-| `deploy-vps.yml` | workflow_dispatch | VPS Deploy (Backend) |
+| `deploy-vps.yml` | push main | VPS Deploy (Website, self-hosted runner/SSH) |
 | `vps-worker.yml` | schedule, workflow_dispatch | VPS Worker Jobs |
 
 ### 1.5 GTM/Operations (P2)
@@ -70,7 +69,7 @@
 | `AGENTMEMORY_SECRET` | event-to-cloud-agent.yml | ⚠️ fehlt |
 | `CIRCUIT_BREAKER_URL` | event-to-cloud-agent.yml | ⚠️ fehlt |
 
-### 2.2 Required Vercel Env
+### 2.2 Required Env
 
 | Variable | Verwendung |
 |---|---|
@@ -179,7 +178,7 @@ curl -s https://webui.nexifyai.cloud/webhooks/health
 | Mirror-Latenz | >30min nach push | manueller workflow_dispatch |
 | PR-Merge-Backlog | >10 open mit automerge | Branch-Protection-Check |
 | Webhook-Health | 3xx/4xx/5xx | Gateway-Neustart |
-| Vercel-Deploy-Fail | 2+ konsekutiv | Build-Logs prüfen |
+| Website-Deploy-Fail | 2+ konsekutiv | Build-Logs prüfen (Host /var/log/nexifyai/website-sync.log) |
 
 ---
 

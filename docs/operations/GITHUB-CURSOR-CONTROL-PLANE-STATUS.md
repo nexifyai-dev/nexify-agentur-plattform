@@ -53,7 +53,7 @@ Script for future dry-run/delete: `scripts/github-zombie-branch-cleanup.py`.
 | `event-to-cloud-agent.yml` | Event → Cursor Cloud |
 | `agent-branch-autopilot.yml` | Draft-PR on agent branches |
 | `secret-scan.yml` / `test.yml` / `build.yml` | Quality / images |
-| `deploy-vercel.yml` / `deploy-vps.yml` / `vps-worker.yml` | Deploy (need secrets + runner) |
+| `deploy-vps.yml` / `vps-worker.yml` | Deploy (need secrets + runner) |
 | Copilot / Copilot cloud agent | Leave enabled; not duplicate of Cursor path |
 
 ## Settings flipped this session
@@ -72,7 +72,7 @@ Script for future dry-run/delete: `scripts/github-zombie-branch-cleanup.py`.
 1. **Org/billing:** Advanced Security extras if desired (validity checks, non-provider patterns); CodeQL enable if wanted.
 2. **Projects:** PAT/App with Projects write → create „NeXify Ops“ and attach #123–#127.
 3. **Wiki (optional):** Create first page in GitHub UI to initialize wiki, or leave unused (recommended: README SoT).
-4. **Secrets (#123/#127):** `VERCEL_*`, `CURSOR_API_KEY`, `LINEAR_API_KEY`, `AGENTMEMORY_*` — values only in GitHub Settings.
+4. **Secrets (#123/#127):** `CURSOR_API_KEY`, `LINEAR_API_KEY`, `AGENTMEMORY_*` — values only in GitHub Settings.
 5. **Self-hosted runner:** 0 registered — needed for VPS deploy/worker.
 6. **GitHub MCP plugin (#126):** Cursor OAuth/install on operator machines + Cloud.
 7. **Dependabot #129:** litellm bump — review before merge.
