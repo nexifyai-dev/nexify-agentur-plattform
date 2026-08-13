@@ -220,13 +220,13 @@ Herstellerdokumentation recherchieren; Lücken/Risiken der bestehenden Konfigura
 | **COMPLEX / DEEP** | `ds/deepseek-v4-pro` | ✅ max | 9Router (DeepSeek) |
 | **PLAN / FORMULIEREN** | `ds/deepseek-v4-flash` | ✅ max | 9Router (DeepSeek) |
 | **REVIEW / PRÜFEN** | `ds/deepseek-v4-flash` | ✅ max | 9Router (DeepSeek) |
-| **EMBED** | `upstage/solar-embedding-1-large` — einzige Nicht-LLM-Ausnahme (kein DeepSeek-Äquivalent) | — | Upstage (nur Embedding) |
+| **EMBED** | `Qwen/Qwen3-Embedding-8B` via Nscale (OpenAI-kompatibel `https://inference.api.nscale.com/v1/embeddings`, `encoding_format: float`) | — | Nscale (nur Embedding; Pascal 2026-08-13, Modell-ID von Pascal bestätigt) |
 
 #### Provider-Hierarchie
 
 ```
 1. 9Router / DeepSeek     →  ALLE Rollen (flash = Standard, pro = nur bei echter Komplexität)
-2. Upstage / Solar        →  NUR Embedding (Nicht-LLM-Ausnahme); sonst keine anderen Modelle systemweit
+2. Nscale                 →  NUR Embedding (OpenAI-kompatibel `/v1/embeddings`, Qwen3-Embedding-Familie; Pascal 2026-08-13); sonst keine anderen Modelle systemweit
 ```
 
 #### 9Router-Endpunkte
@@ -312,7 +312,7 @@ Hochkomplexe Analyse / Multi-Step-Reasoning
   → ds/deepseek-v4-pro          [think max]
 
 Vektorisierung / Embedding
-  → upstage/solar-embedding-1-large  (Nicht-LLM-Ausnahme, nur Embedding)
+  → `Qwen/Qwen3-Embedding-8B` via Nscale (`https://inference.api.nscale.com/v1/embeddings` — nur Embedding, Pascal 2026-08-13)
 ```
 
 #### Governance-Dokumente (bindend)
@@ -638,7 +638,7 @@ neue `quen` — lückenlose Chat- und Workflow-Automatisierung.
 | v3.6b | 2026-08-12 | **Pascal-Direktive WebUI-Automatisierung (§15b quen-Queue):** `/quen`-Befehl im Chat-UI 8787 (Extension quen-command), Autopilot-Cron every 30m (gepinnt, self-healing, cronjob-Toolset), selbstgenerierende Auftrags-Queue (Pool + Pool-Pflege), show_cron_sessions=true. E3-Nachweis 2026-08-12: Erstlauf completed, Self-Healing-Pass, Rundenbericht. Detail: HERMES.md §4a |
 | v3.6c | 2026-08-12 | **Pascal-Auftrag Frontend-Skill-Kombination (§0d):** Skill `frontend-engineering` als Pflicht für ALLE Frontend-/Design-Arbeiten verankert — kombiniert aus davila7/claude-code-templates (senior-architect → senior-fullstack → ui-ux-pro-max → senior-frontend → code-reviewer; Quell-Skills unverändert, Daten/Referenzen minimiert/kollisionsfrei). Pipeline inkl. Design-System-Search, A11y/Touch/Performance-Pflichtregeln, Pre-Delivery-Checkliste |
 | v3.6d | 2026-08-12 | **Pascal-Auftrag Normen/Recherche/Isolation (§0e):** DIN/ISO/EU-Normen verpflichtend zu den Skills (EN 301 549/WCAG 2.2 AA, ISO 9241-110/-210, DIN 5008, ISO 9001-Qualitätsprozess, DSGVO/TDDDG/EU-AI-Act) — Checkliste `frontend-engineering/references/normen.md`; generelle proaktive Recherche-Pflicht (Tools/Best-Praxis/Skill-Erweiterungen/Templates, §13); Kundenprojekt-Isolation verpflichtend (Mandantentrennung, AVV/TOM, Repo-/CI-Trennung, P0 bei Vermischung) |
-| v3.6f | 2026-08-13 | **Pascal-Auftrag Hosting/Server/MCP (§0f Punkte 7–8):** VPS-Härtung (UFW/iptables, Fail2Ban, Auto-Security-Updates, Ressourcen-Limits, Backup-Strategie), Live-Überwachung + Alarmierung (Uptime/CPU/RAM/Disk/Dienste/Logs/SSL), Dienst-Autorestart (systemd/pm2) + Log-Rotation + Fehlerbehandlung, SSH-Key-only + Zugriffs-Doku, MCP-Verfügbarkeit (AgentMemory/Gateway/WebUI: Health-Checks, Auto-Neustart, Port-Absicherung), Recherche vor Konfig-Änderungen |
+| v3.6f | 2026-08-13 | **Pascal-Auftrag Hosting/Server/MCP (§0f Punkte 7–8):** VPS-Härtung (UFW/iptables, Fail2Ban, Auto-Security-Updates, Ressourcen-Limits, Backup-Strategie), Live-Überwachung + Alarmierung (Uptime/CPU/RAM/Disk/Dienste/Logs/SSL), Dienst-Autorestart (systemd/pm2) + Log-Rotation + Fehlerbehandlung, SSH-Key-only + Zugriffs-Doku, MCP-Verfügbarkeit (AgentMemory/Gateway/WebUI: Health-Checks, Auto-Neustart, Port-Absicherung), Recherche vor Konfig-Änderungen. **Embedding-Provider = Nscale** (OpenAI-kompatibel `/v1/embeddings`, Qwen3-Embedding-Familie; löst Upstage ab — Pascal 2026-08-13) |
 | v3.6e | 2026-08-13 | **Pascal-Auftrag Dauerhafte System-Vorgabe (Lang-Version, §0f):** Recherche-Pflicht via Google/API-Doku (Gesamt-Möglichkeiten, nicht nur naheliegendste Lösung), systemweite Arbeitsweise (nichts unbeachtet/unentdeckt/ungefixt, Seiteneffekte/Randfälle mitdenken, Stabilität vor Schnelligkeit, Risiko-Frühkommunikation, nachhaltige Lösungen), Repo-/Doku-Sync-Pflicht lokal↔GitLab↔GitHub 1:1, Code-Doku-Pflicht (DE-Zeitstempel Europe/Berlin + Begründung je Änderung), technische Absicherung (Pre-Commit-Hooks/CI/CD/Sync-Diff-Checks, Hinweis-Pflicht bei nur manueller Umsetzbarkeit + konkreter Lösungsvorschlag). Zusätzlich Repo-Kopien-Drift behoben: ARBEITSVORGABEN-Kopie fehlten §0d/§0e, HERMES-/AGENTS-Kopien veraltet → synchronisiert |
 ---
 

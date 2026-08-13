@@ -29,7 +29,7 @@
 
 - **AUSSCHLIESSLICH:** `ds/deepseek-v4-flash` (Standard, Think-Max) und `ds/deepseek-v4-pro` (nur echte Komplexität) via **9Router** (`http://127.0.0.1:20128/v1`).
 - **KEIN** `openrouter/...`-Pfad (9Router lehnt ab), kein Upstage/OpenRouter systemweit.
-- Embedding: keine externen Provider — lokale Retrieval-Lösungen (FTS5).
+- Embedding: via **Nscale** (OpenAI-kompatibel `/v1/embeddings`, Modell `Qwen/Qwen3-Embedding-8B`, `NSCALE_SERVICE_TOKEN`; Pascal 2026-08-13) — keine Upstage-/OpenRouter-Embeddings; lokale Retrieval-Lösungen (FTS5) für Kurzpfade bleiben.
 - Jeder Job/Agent explizit pinnen (model + provider) — sonst Drift-Guard-Skip.
 - Abweichung = P0-Eskalation, keine Ausnahme ohne schriftliche Pascal-Freigabe.
 
