@@ -8,8 +8,11 @@
 **Agent-Arbeitsweise:** `AGENTS.md` (Session-Start-Instruktion, Workflow, Betriebsregeln)
 **Benutzerprofil:** `USER.md` (Pascal Caveman-Stil, Arbeitsweise, Erwartungen)
 **Fallstricke:** `MEMORY.md` (V-Register V-01 bis V-14, laufende Session-Befunde)
-**Stand:** 16.07.2026 — Foundation-Skill aktiv (auto-work + auto tasks Standard), Model Tiering v2, Dokumentationspflicht
+**Stand:** 13.08.2026 — Foundation-Skill aktiv (auto-work + auto tasks Standard), Model Tiering v2, Dokumentationspflicht, Repo-Synchronität-Systemvorgabe (Lang-Version)
 <!-- @NEXIFYAI-MARKER:LOOP-ACTIVE-20260716 -->
+
+### ⛔ SYSTEMVORGABEN 2026-08-13 (Pascal-Direktive — VERBINDLICH, systemweit)
+**Dauerhafte System-Vorgabe (Lang-Version):** Livebetrieb — Fehler unbedingt vermeiden. Recherche via Google/offizielle Doku vor jeder Arbeit (Gesamt-Möglichkeiten, nicht nur naheliegendste Lösung). Systemweit arbeiten, nichts unbeachtet/unentdeckt/ungefixt lassen. Jede Änderung: Seiteneffekte prüfen, Randfälle + Grenzwerte, Annahmen hinterfragen, Stabilität vor Schnelligkeit, testen vor „erledigt", Risiken früh kommunizieren, nachhaltig statt Workaround, Gesamtarchitektur im Blick, Prüfung wiederholen bis kein offener Punkt. **Repo-Synchronität:** lokal ↔ GitLab ↔ GitHub 1:1 (alle Bereiche); Dokumentation, Fehler-/Systemmeldungen A-Z aktuell. **Jede Änderung im Code dokumentieren:** Zeitstempel (DE, Europe/Berlin) + Begründung. **Technische Absicherung:** Pre-Commit-Hooks, CI/CD, Sync-/Diff-Checks (lokal↔GitLab↔GitHub), Code↔Doku-Konsistenzprüfung; wo nicht automatisierbar → proaktiv melden + konkrete Lösung vorschlagen. Ziel: SOLL-Vorgaben vollumfänglich + aktuell, bei neuen Erkenntnissen anpassen. Kanonisch: SOUL.md §Repo-Synchronität, ARBEITSVORGABEN-v3.3.md, AgentMemory.
 
 ### ⛔ SYSTEMVORGABEN 2026-08-06 (Pascal-Direktive — VERBINDLICH, systemweit)
 Kanonisch: `SOUL.md` (Arbeitsvorgaben v3.3, §5.4 + §11–§13 + §14) · `docs/standards/ARBEITSVORGABEN-v3.3.md` · AgentMemory.
@@ -33,7 +36,7 @@ Kanonisch: `docs/standards/CEO-MISSION-2026-08-07.md` (Repo) — vollständiger 
 ### ⛔ KONTO-STANDARD (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
 1. **Passwort:** Überall, wo ein Passwort frei wählbar ist, wird das UNIVERSELLE Standard-Passwort aus hermes.env genutzt (Feld `MASTER_PASSWORD`; Wert NIE in Doku/Repo/Chat — nur Referenz auf hermes.env).
 2. **E-Mail:** Für alle Konten/Dienste wird IMMER `mail@nexifyai.cloud` verwendet — das ist die EINZIGE E-Mail-Adresse (keine weiteren Adressen anlegen).
-3. Gilt für: neue Konten (FreeAgent, Brevo, Mailjet, Meta, …), Dienste, Mailboxen, Sub-Accounts — überall, wo die Wahl frei ist.
+3. Gilt für: neue Konten (FreeAgent, Brevo, Mailjet, Meta, Vercel, …), Dienste, Mailboxen, Sub-Accounts — überall, wo die Wahl frei ist.
 
 ### ⛔ NICHTS-UNGEFIXT-LASSEN (Pascal-Direktive 2026-08-09 — VERBINDLICH, systemweit)
 **Wir lassen NIEMALS etwas ungefixt. Jeder Bug und jede Abweichung wird PROAKTIV erkannt und behoben.**
@@ -277,9 +280,9 @@ Weitere Modelle existieren NUR in 9Router (manuelle Nutzung durch Pascal).
 |---|---|---|
 | ALLE LLM-Rollen | deepseek-v4-flash-0731 | Standard |
 | Wirklich tiefe Aufgaben | deepseek-v4-pro | Nur bei echter Komplexität |
-| Embedding (einzige Ausnahme) | solar-embedding-1-large | Kein DeepSeek-Äquivalent; Vektor-Index kompatibel halten |
+| Embedding | — (kein externer Provider) | Upstage final entfernt (Pascal 2026-08-10); DeepSeek hat kein Embedding — lokale Retrieval-Lösungen (FTS5) |
 
-Upstage: NUR Embedding. Chat-/Dokumenten-/Vision-Modelle von Upstage sind systemweit gesperrt.
+Upstage: FINAL ENTFERNT (Pascal 2026-08-10) — kein Upstage in Vorgaben/Configs. DeepSeek-only systemweit.
 
 ---
 
@@ -550,6 +553,7 @@ Live-Doku: `/opt/nexifyai/docs/live/AGENT-TOOLING-PRODUCTION-READY-2026-07-25.md
 | **github** | stdio | ✅/🔧 | PAT aus `GITHUB_TOKEN` verdrahten |
 | **gitlab** | stdio | ✅ | Self-hosted `127.0.0.1:8922` |
 | **supabase** | stdio | ✅ | read-only project-ref |
+| **vercel** | wrapper | ✅ | |
 | **firecrawl** | stdio | ✅ enabled | lokal :3003 — Key+URL via Volumen-.env (OPS-04, 07.08.2026) |
 | **linear** | stdio | ⏸ disabled | `LINEAR_API_KEY` fehlt |
 | **n8n** | — | ❌ abgeschafft — keine Vollintegration (Autopilot ersetzt) |
@@ -1064,7 +1068,7 @@ ds/deepseek-v4-pro-max (9Router)
 ABBRUCH + Pascal-Alert via Telegram
 ```
 
-**Sonderfall:** Keine Upstage-LLMs. Nur Embedding via Upstage (embedding-passage/query).
+**Sonderfall:** Keine Upstage-Modelle (final entfernt 2026-08-10).
 
 ---
 
@@ -1137,7 +1141,6 @@ model:
 
 **Täglich prüfen:**
 - 9Router-Health: `curl -s http://127.0.0.1:20128/health`
-- Upstage-API-Health: `curl -s https://api.upstage.ai/v1/health`
 - Provider-Quota-Status (V-10-Gefahr)
 - Kosten-Tracking via agentburn + agenttrace
 
