@@ -220,7 +220,7 @@ Herstellerdokumentation recherchieren; Lücken/Risiken der bestehenden Konfigura
 | **COMPLEX / DEEP** | `ds/deepseek-v4-pro` | ✅ max | 9Router (DeepSeek) |
 | **PLAN / FORMULIEREN** | `ds/deepseek-v4-flash` | ✅ max | 9Router (DeepSeek) |
 | **REVIEW / PRÜFEN** | `ds/deepseek-v4-flash` | ✅ max | 9Router (DeepSeek) |
-| **EMBED** | `solar-embedding-1-large` (passage/query-Varianten) via Upstage (OpenAI-kompatibel `https://api.upstage.ai/v1/embeddings`) | — | Upstage (Embedding + Document-AI; Pascal 2026-08-13 — vollintegriert lt. API-Doku) |
+| **EMBED** | `solar-embedding-1-large-passage` / `-query` (Aliase `embedding-passage` / `embedding-query`) via Upstage (OpenAI-kompatibel `https://api.upstage.ai/v1/embeddings`, 4096 dim). **OHNE Suffix `solar-embedding-1-large` ist INVALID** (E3-verifiziert 2026-08-13) | — | Upstage (Embedding + Document-AI; Pascal 2026-08-13 — vollintegriert lt. API-Doku) |
 
 #### Provider-Hierarchie
 
@@ -312,7 +312,7 @@ Hochkomplexe Analyse / Multi-Step-Reasoning
   → ds/deepseek-v4-pro          [think max]
 
 Vektorisierung / Embedding
-  → `solar-embedding-1-large` via Upstage (`https://api.upstage.ai/v1/embeddings` — Embedding + Document-AI; Pascal 2026-08-13)
+  → `solar-embedding-1-large-passage`/`-query` (Aliase `embedding-passage`/`embedding-query`; OHNE Suffix invalid — E3 2026-08-13) via Upstage (`https://api.upstage.ai/v1/embeddings` — Embedding + Document-AI; Pascal 2026-08-13)
 ```
 
 #### Governance-Dokumente (bindend)

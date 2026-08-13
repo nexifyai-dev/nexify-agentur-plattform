@@ -29,7 +29,7 @@
 
 - **AUSSCHLIESSLICH:** `ds/deepseek-v4-flash` (Standard, Think-Max) und `ds/deepseek-v4-pro` (nur echte Komplexität) via **9Router** (`http://127.0.0.1:20128/v1`).
 - **KEIN** `openrouter/...`-Pfad (9Router lehnt ab), kein Upstage/OpenRouter systemweit.
-- Embedding: via **Upstage** (OpenAI-kompatibel `/v1/embeddings` auf `api.upstage.ai`, Modell `solar-embedding-1-large` passage/query, `UPSTAGE_API_KEY` in hermes.env; Pascal 2026-08-13, vollintegriert lt. API-Doku) + Upstage-Document-AI (Layout/OCR) wo passend — keine Upstage-LLM; lokale FTS5-Kurzpfade bleiben.
+- Embedding: via **Upstage** (OpenAI-kompatibel `/v1/embeddings` auf `api.upstage.ai`, Modell `solar-embedding-1-large-passage`/`-query` bzw. Alias `embedding-passage`/`embedding-query` — 4096 dim, `UPSTAGE_API_KEY` in hermes.env; OHNE Suffix `solar-embedding-1-large` ist INVALID, E3 2026-08-13; Pascal 2026-08-13, vollintegriert lt. API-Doku) + Upstage-Document-AI (Layout/OCR) wo passend — keine Upstage-LLM; lokale FTS5-Kurzpfade bleiben.
 - Jeder Job/Agent explizit pinnen (model + provider) — sonst Drift-Guard-Skip.
 - Abweichung = P0-Eskalation, keine Ausnahme ohne schriftliche Pascal-Freigabe.
 
