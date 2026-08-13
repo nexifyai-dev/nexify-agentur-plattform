@@ -47,13 +47,13 @@ curl -s http://127.0.0.1:3111/api/mcp       # AgentMemory-Engine (POST-only MCP,
 curl -s http://127.0.0.1:3113/health        # AgentMemory Viewer (200)
 curl -s http://127.0.0.1:9622/health        # LightRAG (200)
 curl -s http://127.0.0.1:8787/              # Hermes WebUI (302→Login = normal)
-curl -s http://127.0.0.1:8642/              # Hermes Gateway HOST (404 auf / = Dienst läuft, kein /health)
+curl -s http://127.0.0.1:8642/health      # Hermes Gateway HOST (200 {"status":"ok"} = Dienst läuft; /api/health/agent existiert NICHT mehr — 13.08.2026)
 curl -s http://127.0.0.1:9119/              # Hermes Dashboard (302→Login = normal)
 curl -s https://hermes-dash.nexifyai.cloud/ # Dashboard public (302→/login = normal)
 curl -s https://www.nexifyai.cloud/         # Website live (200)
 ```
 **Jede Status-Aussage mit Evidenzklasse E0–E3; „kennt man schon" ist kein Ersatz für Live-Probe.**
-**Hinweis:** 404 auf `/` bei 8901/8902/8642/3000/3111 ist NORMAL (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP). Nur Connection-Refused ist ein echter Ausfall.
+**Hinweis:** 404 auf `/` bei 8901/8902/3000/3111 ist NORMAL (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP). Gateway: `/health` = 200 (seit 13.08.2026 verifiziert). Nur Connection-Refused ist ein echter Ausfall.
 **MCP-Container-Grenze (12.08.2026):** stdio-MCP-Tools (agentmemory, filesystem, firecrawl, github, gitlab, hostinger-email, lightrag) sind im WebUI-Container NICHT verfügbar — Wrapper `/opt/nexifyai/scripts/*` fehlen (Host-Mount weg seit 11.08). Wissenspflicht: Hermes-`memory`-Tool + Doku-Dateien statt MCP. Host-Fix: `HOST-TO-DO-2026-08-12.md` (Bundle), P1.
 
 ---
