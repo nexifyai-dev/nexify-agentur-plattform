@@ -946,6 +946,97 @@ async def admin_stats(_: dict = Depends(get_admin)):
     }
 
 
+# 2026-08-13 (Europe/Berlin): Kunden-CRUD (Vollintegration, Pascal-Auftrag „KundenGesamt-Lösung"):
+# Admin kann Kunden direkt anlegen/auflisten — schema-adaptiv, da customers-DDL nicht im Repo liegt
+# (Spalten werden live aus information_schema ermittelt; Mehrfach-Kandidaten pro Feld gegen Schema-Drift).
+
+class CustomerIn(BaseModel):
+    name: str
+    email: EmailStr | None = None
+    company: str | None = None
+    address: str | None = None
+    vat_id: str | None = None
+    contact_name: str | None = None
+    phone: str | None = None
+    daily_rate_eur: float | None = None
+    reverse_charge: bool = True
+    status: str = "active"
+    notes: str | None = None
+
+
+_CUSTOMER_FIELD_CANDIDATES = {
+    "name": ["name", "customer_name", "company_name"],
+    "email": ["email", "contact_email"],
+    "company": ["company", "company_name"],
+    "address": ["address", "street_address", "full_address"],
+    "vat_id": ["vat_id", "tax_id", "vat_number", "ust_id"],
+    "contact_name": ["contact_name", "contact_person"],
+    "phone": ["phone", "phone_number"],
+    "daily_rate_eur": ["daily_rate_eur"],
+    "reverse_charge": ["reverse_charge"],
+    "status": ["status"],
+    "notes": ["notes", "comment"],
+}
+
+
+async def _customer_columns(con) -> set[str]:
+    rows = await con.fetch(
+        "select column_name from information_schema.columns where table_name = 'customers'"
+    )
+    return {r["column_name"] for r in rows}
+
+
+async def _map_customer_fields(payload: dict, known: set[str]) -> tuple[dict, list[str]]:
+    fields: dict = {}
+    skipped: list[str] = []
+    for key, value in payload.items():
+        if value is None:
+            continue
+        hit = next((c for c in _CUSTOMER_FIELD_CANDIDATES.get(key, []) if c in known), None)
+        if hit:
+            fields[hit] = value
+        else:
+            skipped.append(key)
+    return fields, skipped
+
+
+@router.get("/api/admin/customers")
+async def admin_customers(_: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        known = await _customer_columns(con)
+        select_cols = ", ".join(sorted(known))
+        rows = await con.fetch(
+            f"select {select_cols} from customers order by created_at desc nulls last limit 200"
+        )
+    return {"customers": [dict(r) for r in rows]}
+
+
+@router.post("/api/admin/customers")
+async def admin_customer_create(body: CustomerIn, _: dict = Depends(get_admin)):
+    pool = await _DB()
+    async with pool.acquire() as con:
+        known = await _customer_columns(con)
+        fields, skipped = await _map_customer_fields(body.model_dump(), known)
+        if "name" not in fields and body.company:
+            fields.setdefault("name", body.company)
+        if not fields:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Keine passenden Spalten in 'customers' gefunden — übersprungen: {skipped}",
+            )
+        keys = list(fields)
+        placeholders = ", ".join(f"${i}" for i in range(1, len(keys) + 1))
+        sql = (
+            f"insert into customers ({', '.join(keys)}) values ({placeholders}) "
+            "on conflict do nothing returning *"
+        )
+        row = await con.fetchrow(sql, *[fields[k] for k in keys])
+    if not row:
+        raise HTTPException(status_code=409, detail="Kunde existiert bereits (kein Insert)")
+    return {"customer": dict(row), "skipped_fields": skipped}
+
+
 @router.get("/api/admin/leads")
 async def admin_leads(_: dict = Depends(get_admin)):
     pool = await _DB()
