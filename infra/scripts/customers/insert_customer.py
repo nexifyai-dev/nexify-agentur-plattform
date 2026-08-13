@@ -50,6 +50,18 @@ CUSTOMER = {
 }
 
 
+def map_fields(payload: dict, known: set) -> tuple[dict, list]:
+    """Mapping Payload → echte customers-Spalten (Kandidatenliste). (2026-08-13, Europe/Berlin)"""
+    fields, skipped = {}, []
+    for key, value in payload.items():
+        hit = next((c for c in CANDIDATES.get(key, []) if c in known), None)
+        if hit:
+            fields[hit] = value
+        else:
+            skipped.append(key)
+    return fields, skipped
+
+
 async def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -77,13 +89,7 @@ async def main() -> None:
         known = {r["column_name"] for r in cols}
         print(f"customers-Spalten ({len(known)}): {sorted(known)}")
 
-        fields, skipped = {}, []
-        for key, value in CUSTOMER.items():
-            hit = next((c for c in CANDIDATES.get(key, []) if c in known), None)
-            if hit:
-                fields[hit] = value
-            else:
-                skipped.append(key)
+        fields, skipped = map_fields(CUSTOMER, known)
         print("Mapped:", json.dumps(fields, ensure_ascii=False, default=str))
         if skipped:
             print("WARNUNG übersprungene Felder (Spalte fehlt):", skipped)
