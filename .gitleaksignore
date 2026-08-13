@@ -1,0 +1,41 @@
+# .gitleaksignore — Baseline für bewusste Fake-/Beispiel-Werte (kein echtes Secret)
+# UPDATED: 13.08.2026 09:15 (Europe/Berlin) — Fingerprint-Format path:rule:line (gitleaks-Doku), generiert aus lokalem v8.21.2-Scan.
+# Alle 37 Findings manuell geprüft: Test-Fixtures (Fake-Keys) + Doku-Beispiele (Platzhalter). Bei echten Secret-Meldungen NIE blind ignorieren.
+
+apps/hermes/tests/test_issue1094_provider_bugs.py:generic-api-key:191
+apps/hermes/tests/test_issue1094_provider_bugs.py:generic-api-key:216
+apps/hermes/tests/test_issue1094_provider_bugs.py:generic-api-key:301
+apps/hermes/tests/test_security_redaction.py:aws-access-token:44
+backend/tests/test_iter10_ceo_health.py:generic-api-key:12
+backend/tests/test_iter9_email_agent_sso.py:generic-api-key:14
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/features/combos.md:curl-auth-header:383
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/getting-started/installation.md:curl-auth-header:149
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/getting-started/installation.md:curl-auth-header:171
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/integration/other-tools.md:curl-auth-header:92
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/troubleshooting.md:curl-auth-header:246
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/en/troubleshooting.md:curl-auth-header:341
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/features/combos.md:curl-auth-header:383
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/getting-started/installation.md:curl-auth-header:149
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/getting-started/installation.md:curl-auth-header:171
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/integration/other-tools.md:curl-auth-header:92
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/troubleshooting.md:curl-auth-header:246
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/es/troubleshooting.md:curl-auth-header:341
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/features/combos.md:curl-auth-header:383
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/getting-started/installation.md:curl-auth-header:149
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/getting-started/installation.md:curl-auth-header:171
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/integration/other-tools.md:curl-auth-header:92
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/troubleshooting.md:curl-auth-header:246
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/ja/troubleshooting.md:curl-auth-header:341
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/features/combos.md:curl-auth-header:383
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/getting-started/installation.md:curl-auth-header:149
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/getting-started/installation.md:curl-auth-header:171
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/integration/other-tools.md:curl-auth-header:92
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/troubleshooting.md:curl-auth-header:246
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/vi/troubleshooting.md:curl-auth-header:341
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/features/combos.md:curl-auth-header:383
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/getting-started/installation.md:curl-auth-header:149
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/getting-started/installation.md:curl-auth-header:171
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/integration/other-tools.md:curl-auth-header:92
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/troubleshooting.md:curl-auth-header:246
+nexify/workspace/nexify/07_tools_cli/9router/source/9router/gitbook/content/zh-CN/troubleshooting.md:curl-auth-header:341
+nexify/workspace/nexify/07_tools_cli/rtk/source/rtk/SECURITY.md:stripe-access-token:153
