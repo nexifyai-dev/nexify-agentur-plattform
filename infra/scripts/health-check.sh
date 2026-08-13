@@ -27,7 +27,7 @@ ENDPOINTS=(
   "Website:8880:api/health"
   "GitLab:8922:"
   "Supabase:8000:rest/v1/"
-  "Hermes-Gateway:8642:health"
+  "Hermes-Gateway:8644:health"
 )
 
 FAILS=0
@@ -53,6 +53,24 @@ for ep in "${ENDPOINTS[@]}"; do
     ((FAILS++))
   else
     REPORT="${REPORT}OK   $name:$port → $code\n"
+  fi
+done
+
+# SSL-Expiry-Check (§0f Punkt 7 — 2026-08-13, Europe/Berlin: SSL-Ablauf überwachen + alarmieren)
+SSL_DOMAINS=("www.nexifyai.cloud" "agentmemory.nexifyai.cloud" "ai-router.nexifyai.cloud")
+for d in "${SSL_DOMAINS[@]}"; do
+  ENDDATE=$(echo | timeout 8 openssl s_client -servername "$d" -connect "$d":443 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null | cut -d= -f2)
+  if [ -z "$ENDDATE" ]; then
+    REPORT="${REPORT}FAIL SSL $d → nicht pruefbar\n"
+    ((FAILS++))
+  else
+    LEFT=$(( ($(date -d "$ENDDATE" +%s) - $(date +%s)) / 86400 ))
+    if [ "$LEFT" -lt 20 ]; then
+      REPORT="${REPORT}FAIL SSL $d → $LEFT Tage\n"
+      ((FAILS++))
+    else
+      REPORT="${REPORT}OK   SSL $d → $LEFT Tage\n"
+    fi
   fi
 done
 
