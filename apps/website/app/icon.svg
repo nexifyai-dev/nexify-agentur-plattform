@@ -1,5 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-<rect width="1024" height="1024" rx="184" fill="#0A0A0A"/>
-<g fill="#C8FF00"><rect x="164" y="225" width="133" height="574" rx="20"/><rect x="346" y="225" width="133" height="574" rx="20"/><polygon points="225,225 389,225 840,799 676,799"/></g>
-<circle cx="835" cy="189" r="58" fill="#C8FF00"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="nxg" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e4e4e7"/>
+      <stop offset="100%" stop-color="#71717a"/>
+    </linearGradient>
+    <linearGradient id="nxg2" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#d4d4d8"/>
+      <stop offset="100%" stop-color="#52525b"/>
+    </linearGradient>
+  </defs>
+  <polygon points="24,6 40,15 40,33 24,42 8,33 8,15" fill="none" stroke="url(#nxg)" stroke-width="1.5"/>
+  <line x1="16.5" y1="17.5" x2="31.5" y2="30.5" stroke="url(#nxg2)" stroke-width="2" stroke-linecap="round"/>
+  <line x1="31.5" y1="17.5" x2="16.5" y2="30.5" stroke="url(#nxg2)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="24" cy="7.5" r="1.3" fill="url(#nxg)"/>
+  <circle cx="38.5" cy="16.5" r="1.3" fill="url(#nxg)"/>
+  <circle cx="38.5" cy="31.5" r="1.3" fill="url(#nxg)"/>
+  <circle cx="24" cy="40.5" r="1.3" fill="url(#nxg)"/>
+  <circle cx="9.5" cy="31.5" r="1.3" fill="url(#nxg)"/>
 </svg>
