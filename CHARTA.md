@@ -1,7 +1,7 @@
 # NeXifyAI — Betriebs-Charta (final konsolidiert)
 
 > **Ergänzung 2026-08-07 (verbindlich):** Zweiter-CEO-Mandat gemäß
-> `docs/standards/CEO-MISSION-2026-08-07.md` + `docs/standards/ARBEITSVORGABEN-v3.3.md`
+> `docs/standards/CEO-MISSION-2026-08-07.md` + `docs/standards/ARBEITSVORGABEN-v3.6.md`
 > (§14) — geht dieser Charta im Konfliktfall vor (Pascal-Direktive, neuestes Datum).
 >
 > Governance-Dokument (vom Betreiber verfasst). Bei Widerspruch zwischen dieser

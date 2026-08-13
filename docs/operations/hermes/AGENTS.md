@@ -1,8 +1,8 @@
 # AGENTS.md — Agent Session-Start-Instruktion & Betriebsregeln (NeXifyAI)
 
-**Kanonischer Pfad:** `/root/.hermes/AGENTS.md` (Symlink → `/workspace/nexifyai/hermes/AGENTS.md`)
+**Kanonischer Pfad:** `docs/operations/hermes/AGENTS.md` (Repo-Master) · Laufzeit-Spiegel: `/root/.hermes/AGENTS.md` (Symlink → `/workspace/nexifyai/hermes/AGENTS.md`), `/home/hermeswebui/.hermes/AGENTS.md` (Container)
 **NIR:** 07.08.2026 16:45
-**UPDATED:** 07.08.2026 16:45
+**UPDATED:** 12.08.2026 (CEO-Direktive-Alignment: v3.6-Referenz, HERMES.md-Anker)
 **NAME:** NeXifyAI Agent (NeXifyAI System-CEO / NeXifyAI Zweiter CEO)
 **TEAM:** NeXifyAI Core
 **WHAT:** Pflicht-Session-Start-Dokument für jeden NeXifyAI-Agenten
@@ -34,7 +34,7 @@
 ### 2. Verbindliche Dokumente (bei Konflikt gewinnt die höhere Ebene)
 | Ebene | Dokument | Ort |
 |---|---|---|
-| 1 | Arbeitsvorgaben (v3.3) | `docs/standards/ARBEITSVORGABEN-v3.3.md` (Repo) = `/home/hermeswebui/.hermes/SOUL.md` (WebUI) |
+| 1 | Arbeitsvorgaben (v3.6) | `docs/standards/ARBEITSVORGABEN-v3.6.md` (Repo) = `/home/hermeswebui/.hermes/SOUL.md` (WebUI) |
 | 2 | CEO-MISSION 2026-08-07 (Zweiter-CEO-Mandat) | `docs/standards/CEO-MISSION-2026-08-07.md` |
 | 3 | HERMES.md (Governance/Dienste) | `/root/.hermes/HERMES.md` |
 | 4 | ZENTRALE-KONFIGURATION.md (Wissens-Hub) | `docs/standards/ZENTRALE-KONFIGURATION.md` |
@@ -54,6 +54,7 @@ curl -s https://www.nexifyai.cloud/         # Website live (200)
 ```
 **Jede Status-Aussage mit Evidenzklasse E0–E3; „kennt man schon" ist kein Ersatz für Live-Probe.**
 **Hinweis:** 404 auf `/` bei 8901/8902/8642/3000/3111 ist NORMAL (Health-Pfade: Backend `/openapi.json`, 3111 = POST-only MCP). Nur Connection-Refused ist ein echter Ausfall.
+**MCP-Container-Grenze (12.08.2026):** stdio-MCP-Tools (agentmemory, filesystem, firecrawl, github, gitlab, hostinger-email, lightrag) sind im WebUI-Container NICHT verfügbar — Wrapper `/opt/nexifyai/scripts/*` fehlen (Host-Mount weg seit 11.08). Wissenspflicht: Hermes-`memory`-Tool + Doku-Dateien statt MCP. Host-Fix: `HOST-TO-DO-2026-08-12.md` (Bundle), P1.
 
 ---
 
@@ -79,6 +80,15 @@ curl -s https://www.nexifyai.cloud/         # Website live (200)
 13a. **Recherche-Pflicht bei Unwissen (Pascal 2026-08-09):** Was nicht bekannt oder nicht tagesaktuell ist → IMMER Internet-Recherche vor jeder Annahme/Aktion (offizielle Doku, Changelogs, Preise). Ergebnisse in AgentMemory + ~/.hermes/cron/output/. Ergänzt §13.
 
 13b. **FreeAgent-Vollübernahme (Pascal-Direktive 2026-08-09):** FreeAgent (Produkte, Setup/MwSt-Konfig, Belege, Buchhaltungs-Automation) ist KOMPLETT NeXifyAI System-CEO-Aufgabe — eigenverantwortlich ausführen, Internet/offizielle Doku als Quelle nutzen, kein Warten auf Pascal. Doku: docs/operations/FREEAGENT-VOLLINTEGRATION-2026-08-09.md.
+
+13c. **WebUI-Autopilot / quen-Queue (§15b, CEO-Direktive 2026-08-12):** Permanente autonome Auftrags-Schleife im WebUI-Container (Port 8787). ZWEI Wege, beide aktiv:
+    (A) **Cron-Loop** `webui-autopilot-quen` (every 30m, gepinnt ds/deepseek-v4-flash + custom:9Router, deliver local): Pool `state/webui-team/autopilot/pool.md` lesen → 1–2 Container-ausführbare Aufgaben bearbeiten → pool.md + Rundenbericht aktualisieren → **Queue-Niemals-Leer** (ohne offene Container-Aufgaben 1–2 neue strategische Tasks in pool.md generieren). Self-Healing-Korrektur (12.08., offizielle Doku): Cron-Recursion-Guard blockt cronjob-Tools in Cron-Executions → Self-Check per read_file auf jobs.json, bei Verlust ALARM + P0-Pool-Eintrag.
+    (B) **User-Chat-Loop (finales Ziel, Pascal 12.08.):** Extension `quen-command` v2 (`webui-data/extensions/quen-command/assets/quen.js`) = Slash `/quen` + **Auto-Trigger**: MutationObserver auf `#messages`, erkennt letzte Assistant-Antwortzeile `/quen <task>` → sendet automatisch `[quen-Auftrag] <task>` → unendliche Chat-Schleife. Guards: `quen_auto_off=1` (localStorage) stoppt, 3×-Wiederholung stoppt, Busy-Wait, 8 s-Cooldown, greift nicht in User-Tippeingabe. **AGENT-PFLICHT im User-Chat: Jede Antwort mit letzter Zeile `/quen [nächster Task]` beenden** (Aufgabe konkret + container-ausführbar ODER Pool-Status + Host-Pflicht), sonst stoppt die Schleife.
+    Grenzen: KEINE Host-Apply-/Update-/Lösch-/Pay-Aktionen ohne Freigabe; Host-abhängige Pool-Aufgaben nur Status pflegen. Chat-Slash `/quen` = Extension (client-seitig); Cron-Engine bleibt Queue-Backbone.
+
+13d. **Repo-/Doku-Sync + Code-Doku (§0f, Pascal 2026-08-13, Dauerhafte System-Vorgabe Lang-Version):** Repos lokal ↔ GitLab ↔ GitHub IMMER 1:1 synchron (alle Bereiche, keine Abweichung); Dokumentation/Fehler-/Systemmeldungen/Inhalte A–Z aktuell. JEDE Änderung im Code direkt dokumentieren: DE-Zeitstempel (Europe/Berlin) + kurze Begründung (Muster: `# 2026-08-13 14:30 (Europe/Berlin): <Begründung>`). Sync technisch absichern (Pre-Commit-Hooks, CI/CD, Diff-Checks, Konsistenzprüfung Code↔Doku); wo nur manuell möglich → proaktiv melden + konkrete Lösung vorschlagen. Recherche-Pflicht: Google zur Fehlervermeidung + API-Doku-Konfiguration, Gesamt-Möglichkeiten, nicht nur naheliegendste Lösung.
+
+13e. **Hosting/Server/MCP-Pflicht (Pascal 2026-08-13, §0f Punkte 7–8):** VPS nach Best Practice (OS-Härtung, UFW/Fail2Ban, Auto-Security-Updates, Ressourcen-Limits, Backup); Live-Überwachung + Alarmierung (Uptime/CPU/RAM/Disk/Dienste/Logs/SSL); Dienst-Autorestart (systemd/pm2) + Log-Rotation + Fehlerbehandlung; SSH-Key-only + Zugriffs-Doku. MCP-Endpunkte (AgentMemory/Gateway/WebUI) dauerhaft verfügbar: Health-Checks, Auto-Neustart, Port-Absicherung; vor Konfig-Änderungen Hersteller-/Best-Practice-Doku recherchieren; Lücken proaktiv melden.
 
 14. **ToDo-Pflicht (Pascal-Direktive 2026-08-09, ausnahmslos):** JEDE Aufgabe wird als laufende ToDo-Liste geführt (todo-Tool, merge=true) — damit die aktuelle Aufgabenliste in der WebUI sichtbar ist. Kein Task ohne aktive ToDo-Liste; Status laufend aktualisieren.
 15. **Diff-Pflicht (Pascal-Direktive 2026-08-09):** Jede Code-Änderung wird als Diff geprüft (patch-Tool zeigt Diff; bei terminal/git: `git diff` / `git diff --stat` vor Commit) — falscher Code wird sofort sichtbar. Kein Abschluss ohne Diff-Review des geänderten Codes.
