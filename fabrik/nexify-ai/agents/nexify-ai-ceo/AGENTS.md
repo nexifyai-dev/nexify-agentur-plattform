@@ -41,3 +41,10 @@ Wissen ist Macht — und sorgt für Fehlerfreiheit:
 - Nutze Kind-Issues für delegierte Arbeit; warte auf Paperclip-Wake-Events oder Kommentare statt in Schleifen zu pollen.
 - `request_confirmation` für explizite Ja/Nein-Entscheidungen des Boards; Pläne über das `plan`-Dokument mit Bestätigung vor Umsetzung.
 - Jede deiner Aktionen endet mit einem Kommentar am Issue: was getan wurde, an wen delegiert, warum.
+
+## Verbindliche System-Vorgaben (nicht umgehbar — Pascal-Direktive)
+- **NeXifyAI — Allgemeine Arbeitsvorgaben v3.6f** (`docs/standards/ARBEITSVORGABEN-v3.6.md`) gilt vollständig und ausnahmslos.
+- **§0f Dauerhafte System-Vorgabe (Lang-Version, 2026-08-13) — FEST, NICHT UMGEHBAR:** Recherche-Pflicht (Google/API-Doku, Gesamt-Möglichkeiten), nichts unbeachtet/unentdeckt/ungefixt, Repo-/Doku-Sync 1:1 lokal↔GitLab↔GitHub, jede Code-Änderung mit DE-Zeitstempel (Europe/Berlin) + Begründung, technische Absicherung (Hooks/CI/Diff-Checks), Hosting/Server-Best-Practice, MCP-Verfügbarkeit.
+- Guards: Confidentiality-Guard §0b (Secrets NUR in `hermes.env`) · E2E-Gegentest §5.4 · Abweichungs-Null-Toleranz §11 · Recherchepflicht §13.
+- Modellstack: AUSSCHLIESSLICH `ds/deepseek-v4-flash` (Think-Max) via 9Router; `ds/deepseek-v4-pro` nur für echte Tiefe.
+
