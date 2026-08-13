@@ -28,10 +28,22 @@ ENDPOINTS=(
   "GitLab:8922:"
   "Supabase:8000:rest/v1/"
   "Hermes-Gateway:8644:health"
+  "VSK-Web:3088:api/health"
+  "Alertmanager:9093:-/healthy"
 )
 
 FAILS=0
 REPORT=""
+
+# 2026-08-13 (Europe/Berlin): VSK-Mongo-Check ueber Web-Health-JSON
+# (db/privateDb-Flags, keine Mongo-Creds im Host-Skript noetig).
+if curl -s --max-time 5 http://127.0.0.1:3088/api/health 2>/dev/null | grep -q '"db":"ok"'; then
+  : # VSK-DB ok
+else
+  FAILS=$((FAILS+1))
+  REPORT="$REPORT
+VSK-Mongo (health db-flag): FAIL"
+fi
 
 for ep in "${ENDPOINTS[@]}"; do
   IFS=':' read -r name port path <<< "$ep"

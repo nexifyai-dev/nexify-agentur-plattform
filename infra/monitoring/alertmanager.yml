@@ -1,0 +1,17 @@
+# NeXifyAI Alertmanager-Konfiguration (2026-08-14, Europe/Berlin)
+# Empfängt Prometheus-Alerts, gruppiert und routet an Telegram-Relay (9094).
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: telegram-relay
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+- name: telegram-relay
+  webhook_configs:
+  - url: http://127.0.0.1:9094/alert
+    send_resolved: true

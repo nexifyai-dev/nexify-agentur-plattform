@@ -1,0 +1,79 @@
+# UPDATED: 13.08.2026 18:50 (Europe/Berlin): Targets auf echte 2xx-Health-Pfade korrigiert (20128/v1/models, 9621/health, 8787/health, 8080/healthz); tote Domains factory/wissen/router/crm (kein DNS) + Endpoints ohne 2xx-Pfad (3111/8922) entfernt; router->ai-router, nexifyai->www, admin->admin/health. APIUnreachable-Fehlerursache: Regel zu scharf fuer 302/307/401-Endpoints.
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ["127.0.0.1:9093"]
+rule_files:
+- /prometheus/alerting_rules.yml
+scrape_configs:
+- job_name: prometheus
+  static_configs:
+  - targets:
+    - localhost:9090
+- job_name: node
+  static_configs:
+  - targets:
+    - localhost:9100
+- job_name: cadvisor
+  static_configs:
+  - targets:
+    - localhost:8080
+- job_name: traefik
+  static_configs:
+  - targets:
+    - localhost:8082
+- job_name: probe_local_services
+  metrics_path: /probe
+  params:
+    module:
+    - http_2xx
+  static_configs:
+  - targets:
+    - http://127.0.0.1:20128/v1/models
+    - http://127.0.0.1:9621/health
+    - http://127.0.0.1:3113/health
+    - http://127.0.0.1:8787/health
+    - http://127.0.0.1:8080/healthz
+  relabel_configs:
+  - source_labels:
+    - __address__
+    target_label: __param_target
+  - source_labels:
+    - __param_target
+    target_label: instance
+  - target_label: __address__
+    replacement: localhost:9115
+  - source_labels:
+    - __param_target
+    regex: http://localhost:(\d+)/.*
+    target_label: service_port
+    replacement: $1
+  - source_labels:
+    - __param_target
+    regex: http://localhost:\d+/(.*)
+    target_label: service_path
+    replacement: /$1
+- job_name: blackbox_http
+  metrics_path: /probe
+  params:
+    module:
+    - http_2xx
+  static_configs:
+  - targets:
+    - https://www.nexifyai.cloud
+    - https://admin.nexifyai.cloud/health
+    - https://rag.nexifyai.cloud/health
+    - https://ai-router.nexifyai.cloud/api/health
+  relabel_configs:
+  - source_labels:
+    - __address__
+    target_label: __param_target
+  - source_labels:
+    - __param_target
+    target_label: instance
+  - target_label: __address__
+    replacement: localhost:9115

@@ -1,0 +1,132 @@
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus:v3.13.1
+    container_name: nexify-prometheus
+    restart: unless-stopped
+    environment:
+    - TZ=Europe/Berlin
+    network_mode: host
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
+    - --storage.tsdb.retention.time=30d
+    - --web.enable-lifecycle
+    - --web.listen-address=127.0.0.1:9090
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9090/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    volumes:
+    - /opt/nexifyai/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - /opt/nexifyai/monitoring/prometheus/alerting_rules.yml:/prometheus/alerting_rules.yml:ro
+    - prometheus_data:/prometheus
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.9.1
+    container_name: nexify-node-exporter
+    restart: unless-stopped
+    environment:
+    - TZ=Europe/Berlin
+    command:
+    - --path.rootfs=/host
+    - --collector.filesystem.mount-points-exclude=^(sys|proc|dev|host|etc)($$|/)
+    - --collector.textfile.directory=/metrics
+    - --web.listen-address=127.0.0.1:9100
+    volumes:
+    - /:/host:ro,rslave
+    - /opt/nexifyai/monitoring/metrics:/metrics:ro
+    network_mode: host
+    pid: host
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.52.0
+    container_name: nexify-cadvisor
+    restart: unless-stopped
+    environment:
+    - TZ=Europe/Berlin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8080/containers || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:ro
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /dev/disk/:/dev/disk:ro
+    ports:
+    - 127.0.0.1:8080:8080
+    privileged: true
+    devices:
+    - /dev/kmsg
+  alertmanager:
+    image: prom/alertmanager:v0.28.1
+    container_name: nexify-alertmanager
+    restart: unless-stopped
+    environment:
+    - TZ=Europe/Berlin
+    network_mode: host
+    command:
+    - --config.file=/etc/alertmanager/alertmanager.yml
+    - --web.listen-address=127.0.0.1:9093
+    - --cluster.listen-address=
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9093/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    volumes:
+    - /opt/nexifyai/monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    - alertmanager_data:/alertmanager
+  blackbox_exporter:
+    image: quay.io/prometheus/blackbox-exporter:v0.26.0
+    container_name: nexify-blackbox-exporter
+    restart: unless-stopped
+    environment:
+    - TZ=Europe/Berlin
+    network_mode: host
+    command:
+    - --config.file=/etc/blackbox/blackbox.yml
+    - --web.listen-address=127.0.0.1:9115
+    volumes:
+    - /opt/nexifyai/monitoring/prometheus/blackbox.yml:/etc/blackbox/blackbox.yml:ro
+  grafana:
+    image: grafana/grafana:13.1.0
+    container_name: nexify-grafana
+    restart: unless-stopped
+    network_mode: host
+    env_file:
+    - /opt/nexifyai/monitoring/grafana/.env
+    environment:
+    - TZ=Europe/Berlin
+    - GF_INSTALL_PLUGINS=
+    - GF_SERVER_ROOT_URL=https://dashboard.nexifyai.cloud/grafana
+    - GF_SERVER_HTTP_ADDR=0.0.0.0
+    - GF_SERVER_HTTP_PORT=3030
+    - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    - GF_AUTH_ANONYMOUS_ENABLED=false
+    - GF_USERS_ALLOW_SIGN_UP=false
+    - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/nexifyai-system.json
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3030/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    volumes:
+    - grafana_data:/var/lib/grafana
+    - /opt/nexifyai/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    - /opt/nexifyai/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    secrets:
+    - grafana_admin_password
+secrets:
+  grafana_admin_password:
+    file: /opt/nexifyai/monitoring/grafana/.admin_password
+volumes:
+  prometheus_data: null
+  alertmanager_data: null
+  grafana_data: null
