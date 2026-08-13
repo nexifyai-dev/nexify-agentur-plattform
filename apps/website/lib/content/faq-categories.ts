@@ -25,7 +25,7 @@ export const faqCategoriesDe: FaqCategory[] = [
     items: [
       {
         q: "Was ist NeXify AI?",
-        a: "NeXify AI by NeXify — AUTOMATE IT. — ist die Marke für Premium-Websites, Onlineshops, Web-Apps und KI-Automatisierungen. Ein erfahrener Fachmann verantwortet Konzeption bis Übergabe; moderne AI-Werkzeuge beschleunigen Umsetzung und Prüfung. Zielmarkt ist der deutschsprachige DACH-Raum (DE/AT/CH), Sitz in Venlo (NL).",
+        a: "NeXify AI by NeXify — AUTOMATE IT. — ist die Marke für Premium-Websites, Onlineshops, Web-Apps und KI-Automatisierungen. Ein erfahrener Fachmann verantwortet Konzeption bis Übergabe; moderne AI-Werkzeuge beschleunigen Umsetzung und Prüfung. Zielmarkt ist der deutschsprachige DACH-Raum (Deutschland, Österreich, Schweiz), Sitz in Venlo (NL).",
       },
       {
         q: "Was unterscheidet NeXify AI von einer klassischen Agentur?",
