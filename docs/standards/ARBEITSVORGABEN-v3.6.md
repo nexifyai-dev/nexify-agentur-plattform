@@ -129,7 +129,7 @@ Cron-Jobs, Langläufer).
 - Bestehende Lösungen stetig stabilisieren; unnötig komplexe Strukturen vereinfachen.
 
 **3. Repo- und Dokumentations-Synchronität (1:1-Pflicht):**
-- Lokale Repos, GitLab und GitHub stets 1:1 synchron halten — in allen Bereichen, ohne Abweichung.
+- **2026-08-14 (Pascal-Direktive):** GitLab-Sync entfällt — Quelle der Wahrheit sind NUR lokales Repo + GitHub (nexifyai-dev-Org), 1:1 synchron, in allen Bereichen, ohne Abweichung. Kein Parallelbetrieb, kein Diff-Abgleich zweier Remote-Systeme mehr.
 - Gesamte Dokumentation, alle Fehler- und Systemmeldungen sowie sämtliche Inhalte von A bis Z durchgängig aktuell halten.
 
 **4. Code-Dokumentation (DE-Zeitstempel):**
@@ -140,8 +140,8 @@ Cron-Jobs, Langläufer).
 
 **5. Technische Absicherung (Synchronität technisch erzwingen):**
 - Synchronität und Aktualität sind nicht nur Verhaltensregel, sondern technisch sicherzustellen:
-  Pre-Commit-Hooks, CI/CD-Pipelines, automatisierte Sync- und Diff-Checks zwischen lokalem Repo,
-  GitLab und GitHub sowie Konsistenzprüfungen zwischen Code und Dokumentation — prüfen und einrichten,
+  Pre-Commit-Hooks, GitHub-Actions-CI, automatisierte Sync- und Diff-Checks zwischen lokalem Repo
+  und GitHub (1:1, seit 2026-08-14 ohne GitLab) sowie Konsistenzprüfungen zwischen Code und Dokumentation — prüfen und einrichten,
   wo im jeweiligen System möglich; vorhandene Mechanismen nutzen.
 - Ist eine geforderte Synchronität/Absicherung mit den verfügbaren Werkzeugen nur manuell umsetzbar:
   **proaktiv darauf hinweisen** und eine konkrete technische Lösung vorschlagen.
@@ -625,6 +625,7 @@ neue `quen` — lückenlose Chat- und Workflow-Automatisierung.
 
 | Version | Datum | Änderung |
 |---------|-------|----------|
+| v3.6g | 2026-08-14 | **Pascal-Direktive GitLab-Sync entfällt:** §0f.3/§0f.5 neu gefasst — Quelle der Wahrheit NUR lokal + GitHub (nexifyai-dev-Org), 1:1 synchron; kein Parallelbetrieb, kein Diff-Abgleich zweier Remote-Systeme. Technische Absicherung: Pre-Commit-Hooks, GitHub-Actions-CI, automatisierte Sync-/Diff-Checks lokal↔GitHub, Konsistenzprüfung Code↔Doku |
 | v2.0 | 2026-08-03 | Initiale Fassung, Vollstruktur §0–§10 |
 | v2.1 | 2026-08-03 | Modellstack auf DeepSeek + Upstage konsolidiert; Poolside/Laguna vollständig entfernt; §2.3 + §4.3 neu gefasst |
 | v2.2 | 2026-08-06 | **Pascal-Direktive verankert:** §11 Abweichungs-Null-Toleranz (systemweit, auch außerhalb Fokus → fixen → Produktion mit Ergebnis-Check/Qualitätskontrolle), §12 Betriebshandbuch-Pflicht (Fehler/Optimierungen umsetzen), §13 Online-Recherchepflicht (proaktiv, Tiefen-Recherche); Kurzreferenz erweitert |

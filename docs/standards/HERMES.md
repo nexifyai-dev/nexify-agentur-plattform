@@ -106,7 +106,7 @@ selbstständig als neue Queue-Einträge".
 8. **ToDo-Pflicht (§15):** Jede Aufgabe als laufende Todo-Liste (todo-Tool).
 9. **Diff-Pflicht (§15):** Jede Code-Änderung als Diff prüfen, kein Abschluss ohne Diff-Review.
 10. **Cron-Betriebsregeln (§15a):** NIE `hermes cron run` für manuelle Tests (fire_claim blockt Scheduler 300s); Modell-IDs `ds/...`; Jobs pinnen; RAM-Grenzen (cron.max_concurrent=2).
-11. **Repo-/Doku-Sync + Code-Doku (§0f, Pascal 2026-08-13):** Repos lokal ↔ GitLab ↔ GitHub 1:1; Doku/Fehler-/Systemmeldungen A–Z aktuell; jede Änderung im Code mit DE-Zeitstempel (Europe/Berlin) + kurzer Begründung; Sync-Mechanismen (Hooks/CI/Diff-Checks) einrichten, wo möglich — nur-manuell-Fälle proaktiv melden + Lösung vorschlagen.
+11. **Repo-/Doku-Sync + Code-Doku (§0f, Pascal 2026-08-13; GitLab-Entfall 2026-08-14):** Repos lokal ↔ GitHub 1:1 (GitLab-Sync entfällt); Doku/Fehler-/Systemmeldungen A–Z aktuell; jede Änderung im Code mit DE-Zeitstempel (Europe/Berlin) + kurzer Begründung; Sync-Mechanismen (Hooks/CI/Diff-Checks) einrichten, wo möglich — nur-manuell-Fälle proaktiv melden + Lösung vorschlagen.
 
 ## 6. Container-/Host-Asymmetrie
 
@@ -118,7 +118,7 @@ selbstständig als neue Queue-Einträge".
 
 1. **Recherche:** Google-Recherche zur Fehlervermeidung + API-Doku-Konfiguration (vorgeschriebene Einstellungen); Gesamt-Möglichkeiten recherchieren, nicht nur die naheliegendste Lösung.
 2. **Arbeitsweise:** systemweit — nichts unbeachtet, nichts unentdeckt, nichts ungefixt; Seiteneffekte + Randfälle/Grenzwerte prüfen; Annahmen hinterfragen; Stabilität vor Schnelligkeit; testen vor „erledigt"; Risiken früh kommunizieren; nachhaltige Lösungen vor Workarounds; Gesamtarchitektur im Blick.
-3. **Repo-/Doku-Sync (1:1):** lokale Repos ↔ GitLab ↔ GitHub ohne Abweichung; Dokumentation, Fehler-/Systemmeldungen, Inhalte A–Z durchgängig aktuell.
+3. **Repo-/Doku-Sync (1:1):** lokale Repos ↔ GitHub ohne Abweichung (GitLab-Sync entfällt seit 2026-08-14); Dokumentation, Fehler-/Systemmeldungen, Inhalte A–Z durchgängig aktuell.
 4. **Code-Doku:** jede Änderung im Code direkt dokumentieren — DE-Zeitstempel (Europe/Berlin) + kurze Begründung; kein unbemerktes Überschreiben, volle Nachvollziehbarkeit.
 5. **Technische Absicherung:** Pre-Commit-Hooks, CI/CD-Pipelines, automatisierte Sync-/Diff-Checks + Konsistenzprüfung Code↔Doku einrichten bzw. nutzen; wo nur manuell möglich → proaktiv hinweisen + konkrete technische Lösung vorschlagen.
 6. **Hosting/Server-Betrieb (Best Practice, Pascal 2026-08-13):** Hostinger-VPS vollständig + dauerhaft nach Best Practice: OS-Härtung, Firewall (UFW/iptables), Fail2Ban, automatische Sicherheitsupdates, Ressourcen-Limits, Backup-Strategie. Live-Überwachung (Uptime, CPU/RAM/Disk, Prozess-/Dienststatus, Logs, SSL-Ablauf) + Alarmierung bei Abweichung. Dienste: Autorestart (systemd/pm2), Log-Rotation, saubere Fehlerbehandlung. SSH: Key-only, Passwort-Login aus, restriktive Rechte, Zugriffs-Doku.

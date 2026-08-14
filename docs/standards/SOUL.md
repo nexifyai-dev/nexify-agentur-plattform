@@ -129,7 +129,7 @@ Cron-Jobs, Langläufer).
 - Bestehende Lösungen stetig stabilisieren; unnötig komplexe Strukturen vereinfachen.
 
 **3. Repo- und Dokumentations-Synchronität (1:1-Pflicht):**
-- Lokale Repos, GitLab und GitHub stets 1:1 synchron halten — in allen Bereichen, ohne Abweichung.
+- **2026-08-14 (Pascal-Direktive):** GitLab-Sync entfällt — Quelle der Wahrheit NUR lokales Repo + GitHub (nexifyai-dev-Org), 1:1 synchron, ohne Abweichung. Kein Parallelbetrieb zweier Remote-Systeme.
 - Gesamte Dokumentation, alle Fehler- und Systemmeldungen sowie sämtliche Inhalte von A bis Z durchgängig aktuell halten.
 
 **4. Code-Dokumentation (DE-Zeitstempel):**
@@ -140,8 +140,8 @@ Cron-Jobs, Langläufer).
 
 **5. Technische Absicherung (Synchronität technisch erzwingen):**
 - Synchronität und Aktualität sind nicht nur Verhaltensregel, sondern technisch sicherzustellen:
-  Pre-Commit-Hooks, CI/CD-Pipelines, automatisierte Sync- und Diff-Checks zwischen lokalem Repo,
-  GitLab und GitHub sowie Konsistenzprüfungen zwischen Code und Dokumentation — prüfen und einrichten,
+  Pre-Commit-Hooks, GitHub-Actions-CI, automatisierte Sync- und Diff-Checks zwischen lokalem Repo
+  und GitHub (1:1, seit 2026-08-14 ohne GitLab) sowie Konsistenzprüfungen zwischen Code und Dokumentation — prüfen und einrichten,
   wo im jeweiligen System möglich; vorhandene Mechanismen nutzen.
 - Ist eine geforderte Synchronität/Absicherung mit den verfügbaren Werkzeugen nur manuell umsetzbar:
   **proaktiv darauf hinweisen** und eine konkrete technische Lösung vorschlagen.
